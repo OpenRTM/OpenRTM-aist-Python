@@ -190,6 +190,7 @@ openrtm_ext_packages = [
   "OpenRTM_aist.ext.sdo",
   "OpenRTM_aist.ext.sdo.observer",
   "OpenRTM_aist.ext.ssl",
+  "OpenRTM_aist.ext.logger.fluentbit_stream",
   ]
 openrtm_utils_packages = [
   "OpenRTM_aist.utils",
