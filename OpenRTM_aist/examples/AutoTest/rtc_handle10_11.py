@@ -12,7 +12,7 @@ import OpenRTM_aist
 import RTC
 
 
-from CorbaNaming import *
+from OpenRTM_aist.CorbaNaming import *
 import SDOPackage
 # from EmbryonicRtc import *
 
@@ -344,9 +344,9 @@ class RtcOutport(Port) :
         if self.ref :
            try :
                 tmp1=self.ref.get()
-           	tmp2= cdrUnmarshal(self.data_tc,tmp1[1], 1)
-#           return tmp2.data
-           	return tmp2
+                tmp2= cdrUnmarshal(self.data_tc,tmp1[1], 1)
+#                return tmp2.data
+                return tmp2
            except :
                 return None
         else :
