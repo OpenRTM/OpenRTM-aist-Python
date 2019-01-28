@@ -347,9 +347,8 @@ class Throughput_py(OpenRTM_aist.DataFlowComponentBase):
 			self._record = []
 			
 			if seq_length < self._size:
-				
-				async = OpenRTM_aist.Async_tInvoker(self, Throughput_py.exit)
-				async.invoke()
+				async_ = OpenRTM_aist.Async_tInvoker(self, Throughput_py.exit)
+				async_.invoke()
 				return
 		send_time = OpenRTM_aist.TimeValue(tm.sec, tm.nsec/1000)
 		if record_ptr == self._maxsample[0]:
@@ -467,8 +466,8 @@ class Throughput_py(OpenRTM_aist.DataFlowComponentBase):
 		self._logmulcnt = 0
 		
 		if self.getInPortConnectorSize() == 0:
-			async = OpenRTM_aist.Async_tInvoker(self, Throughput_py.exit)
-			async.invoke()
+			async_ = OpenRTM_aist.Async_tInvoker(self, Throughput_py.exit)
+			async_.invoke()
 		return RTC.RTC_OK
 	
 		##
