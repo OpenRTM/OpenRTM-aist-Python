@@ -11,7 +11,7 @@ import OpenRTM_aist
 import RTC
 
 
-from CorbaNaming import *
+from OpenRTM_aist.CorbaNaming import *
 import SDOPackage
 
 # class RtmEnv :
