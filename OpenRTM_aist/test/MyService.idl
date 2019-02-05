@@ -1,4 +1,0 @@
-interface MyService
-{
-  string echo(in string msg);
-};
