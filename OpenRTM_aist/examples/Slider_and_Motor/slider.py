@@ -24,6 +24,7 @@ class SliderMulti(Frame):
 		self._channels = channels
 		self.var = []
 		self.scales = []
+		self.option_add('*font', 'system 9')
 		
 		i = 0
 		for channel in self._channels:
