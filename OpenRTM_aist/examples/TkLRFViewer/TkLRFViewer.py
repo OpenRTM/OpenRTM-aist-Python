@@ -539,6 +539,7 @@ class TkLRFViewer(Frame):
   def init(self):
     self.canvas = Canvas(self, bg="#000000",
                          width = self.width, height = self.height)
+    self.canvas.option_add('*font', 'system 9')
     self.canvas.pack(side=LEFT)
 
     self.can_grid = CanvasGrid(self.canvas, self.x0, self.y0,
