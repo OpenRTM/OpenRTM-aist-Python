@@ -18,8 +18,6 @@
 #
 
 
-from omniORB import cdrUnmarshal
-from omniORB import any
 
 import OpenRTM_aist
 import threading
@@ -157,6 +155,13 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     self._writecompleted_worker = InPortPushConnector.WorkerThreadCtrl()
     self._readcompleted_worker = InPortPushConnector.WorkerThreadCtrl()
     self._readready_worker = InPortPushConnector.WorkerThreadCtrl()
+
+    self._marshalling_type = info.properties.getProperty("marshalling_type", "corba")
+    self._marshalling_type = self._marshalling_type.strip()
+
+    self._serializer = OpenRTM_aist.SerializerFactory.instance().createObject(self._marshalling_type)
+    
+
     return
 
     
@@ -252,14 +257,23 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
     if not self._dataType:
       return self.PRECONDITION_NOT_MET
-    if self._endian is not None:
+    self._serializer.isLittleEndian(self._endian)
+    ser_ret, _data = self._serializer.deserialize(cdr[0], self._dataType)
+
+    if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
       if ret == OpenRTM_aist.BufferStatus.BUFFER_OK:
-        _data = cdrUnmarshal(any.to_any(self._dataType).typecode(),cdr[0],self._endian)
         if type(data) == list:
           data[0] = _data
-    else:
+    elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
       self._rtcout.RTC_ERROR("unknown endian from connector")
       return self.PRECONDITION_NOT_MET
+    elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR:
+      self._rtcout.RTC_ERROR("unknown error")
+      return self.PRECONDITION_NOT_MET
+    elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
+      self._rtcout.RTC_ERROR("unknown serializer from connector")
+      return self.PRECONDITION_NOT_MET
+    
 
 
             
@@ -319,6 +333,10 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
       bfactory.deleteObject(self._buffer)
     
     self._buffer = None
+
+    if self._serializer:
+      OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
+    self._serializer = None
     
     return self.PORT_OK
 

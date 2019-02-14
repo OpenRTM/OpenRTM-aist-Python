@@ -51,4 +51,5 @@ def FactoryInit():
     OpenRTM_aist.OutPortDSConsumerInit()
     OpenRTM_aist.InPortDSProviderInit()
     OpenRTM_aist.InPortDSConsumerInit()
+    OpenRTM_aist.CORBA_CdrMemoryStreamInit()
     ComponentObserverConsumer.ComponentObserverConsumerInit()

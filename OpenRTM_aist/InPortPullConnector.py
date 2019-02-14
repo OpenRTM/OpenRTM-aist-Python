@@ -16,8 +16,6 @@
 #     All rights reserved.
 #
 
-from omniORB import cdrUnmarshal
-from omniORB import any
 
 import OpenRTM_aist
 
@@ -143,6 +141,12 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     self._consumer.setBuffer(self._buffer)
     self._consumer.setListener(info, self._listeners)
     self.onConnect()
+
+    self._marshalling_type = info.properties.getProperty("marshalling_type", "corba")
+    self._marshalling_type = self._marshalling_type.strip()
+
+    self._serializer = OpenRTM_aist.SerializerFactory.instance().createObject(self._marshalling_type)
+    
     return
 
 
@@ -234,12 +238,18 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     ret = self._consumer.get(cdr_data)
 
     if ret == self.PORT_OK:
-      # CDR -> (conversion) -> data
-      if self._endian is not None:
-        data[0] = cdrUnmarshal(any.to_any(data[0]).typecode(),cdr_data[0],self._endian)
-
-      else:
+      
+      self._serializer.isLittleEndian(self._endian)
+      ser_ret, data[0] = self._serializer.deserialize(cdr_data[0], data[0])
+      
+      if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
         self._rtcout.RTC_ERROR("unknown endian from connector")
+        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
+      elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR:
+        self._rtcout.RTC_ERROR("unknown error")
+        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
+      elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
+        self._rtcout.RTC_ERROR("unknown serializer from connector")
         return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
     
     return ret
@@ -265,7 +275,12 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     # delete consumer
     if self._consumer:
       OpenRTM_aist.OutPortConsumerFactory.instance().deleteObject(self._consumer)
-    self._consumer = 0
+    self._consumer = None
+
+    if self._serializer:
+      OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
+    self._serializer = None
+
 
     return self.PORT_OK
         
