@@ -142,10 +142,10 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     self._consumer.setListener(info, self._listeners)
     self.onConnect()
 
-    self._marshalling_type = info.properties.getProperty("marshalling_type", "corba")
-    self._marshalling_type = self._marshalling_type.strip()
+    self._marshaling_type = info.properties.getProperty("marshaling_type", "corba")
+    self._marshaling_type = self._marshaling_type.strip()
 
-    self._serializer = OpenRTM_aist.SerializerFactory.instance().createObject(self._marshalling_type)
+    self._serializer = OpenRTM_aist.SerializerFactory.instance().createObject(self._marshaling_type)
     
     return
 

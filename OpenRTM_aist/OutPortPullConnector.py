@@ -152,10 +152,10 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
     self._readcompleted_worker = OutPortPullConnector.WorkerThreadCtrl()
     self._readready_worker = OutPortPullConnector.WorkerThreadCtrl()
     
-    self._marshalling_type = info.properties.getProperty("marshalling_type", "corba")
-    self._marshalling_type = self._marshalling_type.strip()
+    self._marshaling_type = info.properties.getProperty("marshaling_type", "corba")
+    self._marshaling_type = self._marshaling_type.strip()
 
-    self._serializer = OpenRTM_aist.SerializerFactory.instance().createObject(self._marshalling_type)
+    self._serializer = OpenRTM_aist.SerializerFactory.instance().createObject(self._marshaling_type)
     
     
     return
@@ -210,7 +210,7 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
       self._rtcout.RTC_ERROR("unkown error.")
       return self.UNKNOWN_ERROR
     elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
-      self._rtcout.RTC_ERROR("write(): serializer %s is not support.",self._marshalling_type)
+      self._rtcout.RTC_ERROR("write(): serializer %s is not support.",self._marshaling_type)
       return self.UNKNOWN_ERROR
 
     if self._buffer:

@@ -334,11 +334,11 @@ class ConnectorDataListenerT(ConnectorDataListener):
     else:
       endian = True
 
-    marshalling_type = info.properties.getProperty("marshalling_type", "corba")
-    marshalling_type = marshalling_type.strip()
+    marshaling_type = info.properties.getProperty("marshaling_type", "corba")
+    marshaling_type = marshaling_type.strip()
 
 
-    serializer = OpenRTM_aist.SerializerFactory.instance().createObject(marshalling_type)
+    serializer = OpenRTM_aist.SerializerFactory.instance().createObject(marshaling_type)
 
     serializer.isLittleEndian(endian)
     ret, _data = serializer.deserialize(cdrdata, data)
