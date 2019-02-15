@@ -238,6 +238,9 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     ret = self._consumer.get(cdr_data)
 
     if ret == self.PORT_OK:
+      if len(data) == 0:
+        self._rtcout.RTC_ERROR("argument is invalid")
+        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
       
       self._serializer.isLittleEndian(self._endian)
       ser_ret, data[0] = self._serializer.deserialize(cdr_data[0], data[0])

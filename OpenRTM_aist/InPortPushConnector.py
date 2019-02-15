@@ -257,22 +257,23 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
     if not self._dataType:
       return self.PRECONDITION_NOT_MET
-    self._serializer.isLittleEndian(self._endian)
-    ser_ret, _data = self._serializer.deserialize(cdr[0], self._dataType)
 
-    if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
-      if ret == OpenRTM_aist.BufferStatus.BUFFER_OK:
+    if ret == OpenRTM_aist.BufferStatus.BUFFER_OK:
+      self._serializer.isLittleEndian(self._endian)
+      ser_ret, _data = self._serializer.deserialize(cdr[0], self._dataType)
+
+      if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
         if type(data) == list:
           data[0] = _data
-    elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
-      self._rtcout.RTC_ERROR("unknown endian from connector")
-      return self.PRECONDITION_NOT_MET
-    elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR:
-      self._rtcout.RTC_ERROR("unknown error")
-      return self.PRECONDITION_NOT_MET
-    elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
-      self._rtcout.RTC_ERROR("unknown serializer from connector")
-      return self.PRECONDITION_NOT_MET
+      elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
+        self._rtcout.RTC_ERROR("unknown endian from connector")
+        return self.PRECONDITION_NOT_MET
+      elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR:
+        self._rtcout.RTC_ERROR("unknown error")
+        return self.PRECONDITION_NOT_MET
+      elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
+        self._rtcout.RTC_ERROR("unknown serializer from connector")
+        return self.PRECONDITION_NOT_MET
     
 
 
