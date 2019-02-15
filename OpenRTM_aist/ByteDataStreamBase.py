@@ -99,14 +99,14 @@ class ByteDataStreamBase:
   # @endif
   ## virtual bool serialize(const DataType& data) = 0;
   def serialize(self, data):
-    return ByteDataStreamBase.SERIALIZE_NOTFOUND
+    return ByteDataStreamBase.SERIALIZE_NOTFOUND, ""
 
 
   ##
   # @if jp
   # @brief データの復号化
   #
-  # 
+  # @param cdr バイト列
   # @param data_type データ型
   # @return ret、value
   # ret：SERIALIZE_OK：成功、SERIALIZE_ERROR：失敗、SERIALIZE_NOTFOUND：指定のシリアライザがない
@@ -116,14 +116,14 @@ class ByteDataStreamBase:
   #
   # @brief 
   #
-  #
+  # @param cdr
   # @param data_type 
   # @return 
   #
   # @endif
   ## virtual bool deserialize(DataType& data) = 0;
-  def deserialize(self, data_type):
-    return ByteDataStreamBase.SERIALIZE_NOTFOUND
+  def deserialize(self, cdr, data_type):
+    return ByteDataStreamBase.SERIALIZE_NOTFOUND, data_type
 
 
 
