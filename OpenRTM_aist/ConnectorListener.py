@@ -15,8 +15,6 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
-from omniORB import cdrUnmarshal
-from omniORB import any
 
 import OpenRTM_aist
 import OpenRTM_aist.Guard
@@ -336,7 +334,17 @@ class ConnectorDataListenerT(ConnectorDataListener):
     else:
       endian = True
 
-    _data = cdrUnmarshal(any.to_any(data).typecode(), cdrdata, endian)
+    marshaling_type = info.properties.getProperty("marshaling_type", "corba")
+    marshaling_type = marshaling_type.strip()
+
+
+    serializer = OpenRTM_aist.SerializerFactory.instance().createObject(marshaling_type)
+
+    serializer.isLittleEndian(endian)
+    ret, _data = serializer.deserialize(cdrdata, data)
+
+    OpenRTM_aist.SerializerFactory.instance().deleteObject(serializer)
+
     return _data
 
 

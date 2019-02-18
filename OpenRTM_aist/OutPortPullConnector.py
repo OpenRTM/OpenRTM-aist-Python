@@ -17,8 +17,6 @@
 #     All rights reserved.
 #
 
-from omniORB import cdrMarshal
-from omniORB import any
 
 import OpenRTM_aist
 import threading
@@ -154,6 +152,12 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
     self._readcompleted_worker = OutPortPullConnector.WorkerThreadCtrl()
     self._readready_worker = OutPortPullConnector.WorkerThreadCtrl()
     
+    self._marshaling_type = info.properties.getProperty("marshaling_type", "corba")
+    self._marshaling_type = self._marshaling_type.strip()
+
+    self._serializer = OpenRTM_aist.SerializerFactory.instance().createObject(self._marshaling_type)
+    
+    
     return
 
 
@@ -197,12 +201,18 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
     if self._directMode:
       return self.PORT_OK
     # data -> (conversion) -> CDR stream
-    cdr_data = None
-    if self._endian is not None:
-      cdr_data = cdrMarshal(any.to_any(data).typecode(), data, self._endian)
-    else:
+    self._serializer.isLittleEndian(self._endian)
+    ser_ret, cdr_data = self._serializer.serialize(data)
+    if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
       self._rtcout.RTC_ERROR("write(): endian %s is not support.",self._endian)
       return self.UNKNOWN_ERROR
+    elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR:
+      self._rtcout.RTC_ERROR("unkown error.")
+      return self.UNKNOWN_ERROR
+    elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
+      self._rtcout.RTC_ERROR("write(): serializer %s is not support.",self._marshaling_type)
+      return self.UNKNOWN_ERROR
+
     if self._buffer:
       if self._sync_readwrite:
         self._readready_worker._cond.acquire()
@@ -287,13 +297,17 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
     if self._provider:
       OpenRTM_aist.OutPortProviderFactory.instance().deleteObject(self._provider)
       self._provider.exit()
-    self._provider = 0
+    self._provider = None
 
     # delete buffer
     if self._buffer:
       OpenRTM_aist.CdrBufferFactory.instance().deleteObject(self._buffer)
-    self._buffer = 0
+    self._buffer = None
 
+
+    if self._serializer:
+      OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
+    self._serializer = None
 
 
     return self.PORT_OK

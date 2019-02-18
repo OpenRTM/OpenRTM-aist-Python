@@ -17,8 +17,6 @@
 #     All rights reserved.
 #
 
-from omniORB import cdrMarshal
-from omniORB import any
 
 import OpenRTM_aist
 
@@ -171,6 +169,12 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     self._publisher.setBuffer(self._buffer)
     self._publisher.setListener(self._profile, self._listeners)
 
+    self._marshaling_type = info.properties.getProperty("marshaling_type", "corba")
+    self._marshaling_type = self._marshaling_type.strip()
+
+    self._serializer = OpenRTM_aist.SerializerFactory.instance().createObject(self._marshaling_type)
+    
+
     self.onConnect()
     return
 
@@ -257,11 +261,16 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
       self._rtcout.RTC_TRACE("callback called in direct mode.")
       return self.PORT_OK
     # data -> (conversion) -> CDR stream
-    cdr_data = None
-    if self._endian is not None:
-      cdr_data = cdrMarshal(any.to_any(data).typecode(), data, self._endian)
-    else:
+    self._serializer.isLittleEndian(self._endian)
+    ser_ret, cdr_data = self._serializer.serialize(data)
+    if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
       self._rtcout.RTC_ERROR("write(): endian %s is not support.",self._endian)
+      return self.UNKNOWN_ERROR
+    elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR:
+      self._rtcout.RTC_ERROR("unkown error.")
+      return self.UNKNOWN_ERROR
+    elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
+      self._rtcout.RTC_ERROR("write(): serializer %s is not support.",self._marshaling_type)
       return self.UNKNOWN_ERROR
 
     return self._publisher.write(cdr_data, -1, 0)
@@ -309,6 +318,13 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
       bfactory.deleteObject(self._buffer)
 
     self._buffer = None
+
+    if self._serializer:
+      self._rtcout.RTC_DEBUG("delete serializer")
+      OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
+    self._serializer = None
+
+
     self._rtcout.RTC_TRACE("disconnect() done")
 
     return self.PORT_OK
