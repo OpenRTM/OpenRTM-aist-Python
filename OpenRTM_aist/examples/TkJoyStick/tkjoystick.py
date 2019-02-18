@@ -62,12 +62,14 @@ class CanvasText(ToggleItem):
         self.text = text
         self.x = x
         self.y = y
+        self.font = ('system', 9)
         self.draw_text(x, y, text)
 
     def draw(self):
         if self.active == False: return
         self.delete()
-        self.id = self.canvas.create_text(self.x, self.y, text=self.text)
+        self.id = self.canvas.create_text(self.x, self.y, text=self.text,
+                                          font=self.font)
 
     def draw_text(self, x, y, text):
         self.x = x
@@ -88,6 +90,7 @@ class CanvasAxis(ToggleItem):
         self.height = height
         self.canvas = canvas
         self.id = [None] * 4
+        self.font = ('system', 9)
         self.draw()
 
     def draw(self):
@@ -97,11 +100,11 @@ class CanvasAxis(ToggleItem):
                                              self.width, self.height/2)
         self.id[1] = self.canvas.create_text(self.width - 10,
                                              self.height/2 + 10,
-                                             text="x")
+                                             text="x", font=self.font)
         self.id[2] = self.canvas.create_line(self.width/2, 0, 
                                              self.width/2, self.height)
         self.id[3] = self.canvas.create_text(self.width/2 + 10,
-                                             + 10, text="y")
+                                             + 10, text="y", font=self.font)
         return
 
     def delete(self):
@@ -373,6 +376,7 @@ class TkJoystick(Frame):
     def init(self):
         self.canvas = Canvas(self, bg="white", \
                                  width = self.width, height = self.height)
+        self.canvas.option_add('*font', 'system 9')
         self.canvas.pack(side=LEFT)
 
         # coaxial pattern
