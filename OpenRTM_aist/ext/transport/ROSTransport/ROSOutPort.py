@@ -409,32 +409,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         self._rtcout.RTC_ERROR("socket shutdown error")
 
 
-  ##
-  # @if jp
-  # @brief リターンコード変換
-  # @else
-  # @brief Return codes conversion
-  # @endif
-  #
-    # ReturnCode convertReturnCode(OpenRTM::PortStatus ret)
-  def convertReturnCode(self, ret):
-    if ret == OpenRTM.PORT_OK:
-      return self.PORT_OK
 
-    elif ret == OpenRTM.PORT_ERROR:
-      return self.PORT_ERROR
-
-    elif ret == OpenRTM.BUFFER_FULL:
-      return self.SEND_FULL
-
-    elif ret == OpenRTM.BUFFER_TIMEOUT:
-      return self.SEND_TIMEOUT
-
-    elif ret == OpenRTM.UNKNOWN_ERROR:
-      return self.UNKNOWN_ERROR
-
-    else:
-      return self.UNKNOWN_ERROR
 
 ##
 # @if jp
