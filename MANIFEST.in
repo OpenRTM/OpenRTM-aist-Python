@@ -4,7 +4,7 @@ include setup.py
 include README
 recursive-include packages Makefile
 recursive-include packages/deb *.sh copyright changelog rules README* compat control control.* files
-recursive-include packages/rpm *.sh openrtm-aist.spec.in openrtm-aist_fc19.spec.in
+recursive-include packages/rpm *.sh openrtm-aist.spec.in openrtm-aist_py3.spec.in
 recursive-include OpenRTM_aist *.conf *.exe *.idl *.py *.pth *.sh
 recursive-include OpenRTM_aist *.bat *.exe *.sample README
 recursive-include OpenRTM_aist/docs *.css *.gif *.png *.html *.hhc *.hhk *.hhp Doxyfile_en.in Doxyfile_jp.in
