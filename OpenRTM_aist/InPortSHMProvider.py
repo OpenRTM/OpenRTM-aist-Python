@@ -164,17 +164,13 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
       
       shm_data = self.read()
 
-      if not self._buffer:
+      if not self._connector:
         self.onReceiverError(shm_data)
         return OpenRTM.PORT_ERROR
 
       self._rtcout.RTC_PARANOID("received data size: %d", len(shm_data))
 
       self.onReceived(shm_data)
-
-      if not self._connector:
-        return OpenRTM.PORT_ERROR
-
 
 
       ret = self._connector.write(shm_data)
