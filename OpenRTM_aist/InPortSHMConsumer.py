@@ -57,14 +57,13 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
   #
   def __init__(self):
     OpenRTM_aist.InPortCorbaCdrConsumer.__init__(self)
+    OpenRTM_aist.CorbaConsumer.__init__(self, OpenRTM__POA.PortSharedMemory)
     self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortSHMConsumer")
     self._properties = None
     
     self._shm_address = str(OpenRTM_aist.uuid1())
     
     self._shmem = OpenRTM_aist.SharedMemory()
-    
-    
 
     self._mutex = threading.RLock()
       
@@ -152,12 +151,9 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
 
   def setObject(self, obj):
     if OpenRTM_aist.CorbaConsumer.setObject(self, obj):
-      ref_ = self.getObject()
-      if ref_:
-        inportcdr = ref_._narrow(OpenRTM__POA.PortSharedMemory)
-        if inportcdr is None:
-          return False
-        self._shmem.setInterface(inportcdr)
+      portshmem = self._ptr()
+      if portshmem:
+        self._shmem.setInterface(portshmem)
 
         return True
     return False
@@ -190,9 +186,8 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
     self._rtcout.RTC_PARANOID("put()")
 
     try:
-      ref_ = self.getObject()
-      if ref_:
-        inportcdr = ref_._narrow(OpenRTM__POA.PortSharedMemory)
+      portshmem = self._ptr()
+      if portshmem:
         
         guard = OpenRTM_aist.ScopedLock(self._mutex)
         
@@ -201,7 +196,7 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
         self._shmem.write(data)
         
         
-        ret = inportcdr.put()
+        ret = portshmem.put()
         del guard
         return self.convertReturnCode(ret)
       return self.CONNECTION_LOST

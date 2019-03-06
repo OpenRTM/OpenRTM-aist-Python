@@ -70,7 +70,7 @@ class OutPortCorbaCdrConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaCon
   # @endif
   #
   def __init__(self):
-    OpenRTM_aist.CorbaConsumer.__init__(self)
+    OpenRTM_aist.CorbaConsumer.__init__(self, OpenRTM.OutPortCdr)
     self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OutPortCorbaCdrConsumer")
     self._buffer = None
     self._profile = None
@@ -196,7 +196,7 @@ class OutPortCorbaCdrConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaCon
     self._rtcout.RTC_PARANOID("get()")
 
     try:
-      outportcdr = self.getObject()._narrow(OpenRTM.OutPortCdr)
+      outportcdr = self._ptr()
       ret,cdr_data = outportcdr.get()
       
       if ret == OpenRTM.PORT_OK:
