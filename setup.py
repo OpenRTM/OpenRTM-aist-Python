@@ -184,6 +184,8 @@ openrtm_core_packages = [
   "OpenRTM_aist.RTM_IDL.device_interfaces",
   "OpenRTM_aist.RTM_IDL._GlobalIDL",
   "OpenRTM_aist.RTM_IDL._GlobalIDL__POA",
+  "OpenRTM_aist.RTM_IDL.CSP",
+  "OpenRTM_aist.RTM_IDL.CSP__POA",
   ]
 openrtm_ext_packages = [
   "OpenRTM_aist.ext",
@@ -217,7 +219,8 @@ baseidl_files = [
   "IORProfile.idl",
   "../ext/sdo/observer/ComponentObserver.idl",
   "ExtendedFsmService.idl",
-  "DataPort_OpenRTM.idl"
+  "DataPort_OpenRTM.idl",
+  "CSPPort.idl"
   ]
 baseidl_mods  = ["RTM", "RTC", "SDOPackage", "OpenRTM"]
 baseidl_path  = os.path.normpath(current_dir + "/" + baseidl_dir)
