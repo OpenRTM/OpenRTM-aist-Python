@@ -71,7 +71,7 @@ class InPortCorbaCdrConsumer(OpenRTM_aist.InPortConsumer,OpenRTM_aist.CorbaConsu
   # @endif
   #
   def __init__(self):
-    OpenRTM_aist.CorbaConsumer.__init__(self)
+    OpenRTM_aist.CorbaConsumer.__init__(self, OpenRTM.InPortCdr)
     self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortCorbaCdrConsumer")
     self._properties = None
     return
@@ -151,9 +151,8 @@ class InPortCorbaCdrConsumer(OpenRTM_aist.InPortConsumer,OpenRTM_aist.CorbaConsu
     self._rtcout.RTC_PARANOID("put()")
 
     try:
-      ref_ = self.getObject()
-      if ref_:
-        inportcdr = ref_._narrow(OpenRTM.InPortCdr)
+      inportcdr = self._ptr()
+      if inportcdr:
         return self.convertReturnCode(inportcdr.put(data))
       return self.CONNECTION_LOST
     except:

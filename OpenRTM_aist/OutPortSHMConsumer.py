@@ -55,12 +55,12 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
   #
   def __init__(self):
     OpenRTM_aist.OutPortCorbaCdrConsumer.__init__(self)
+    OpenRTM_aist.CorbaConsumer.__init__(self, OpenRTM__POA.PortSharedMemory)
     self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OutPortSHMConsumer")
 
     self._shmem = OpenRTM_aist.SharedMemory()
       
     self._mutex = threading.RLock()
-    self._outportcdr = OpenRTM.PortSharedMemory._nil
 
     return
 
@@ -81,8 +81,8 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
     self._rtcout.RTC_PARANOID("~OutPortSHMConsumer()")
     CorbaConsumer.__del__(self)
     try:
-      if not CORBA.is_nil(self._outportcdr):
-        self._outportcdr.close_memory(True)
+      if not self._ptr():
+        self._ptr().close_memory(True)
     except:
       self._rtcout.RTC_WARN("Exception caught from PortSharedMemory.close_memory().")
       self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
@@ -118,12 +118,9 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
 
   def setObject(self, obj):
     if OpenRTM_aist.CorbaConsumer.setObject(self, obj):
-      ref_ = self.getObject()
-      if ref_:
-        outportcdr = self.getObject()._narrow(OpenRTM__POA.PortSharedMemory)
-        if outportcdr is None:
-          return False
-        outportcdr.setInterface(self._shmem._this())
+      portshmem = self._ptr()
+      if portshmem:
+        portshmem.setInterface(self._shmem._this())
         return True
     return False
   
@@ -158,12 +155,10 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
     self._rtcout.RTC_PARANOID("get()")
     
     try:
-      outportcdr = self.getObject()._narrow(OpenRTM__POA.PortSharedMemory)
-      
-      self._outportcdr = outportcdr
+      portshmem = self._ptr()
 
       guard = OpenRTM_aist.ScopedLock(self._mutex)
-      ret = outportcdr.get()
+      ret = portshmem.get()
       
       if ret == OpenRTM.PORT_OK:
         self._rtcout.RTC_DEBUG("get() successful")
