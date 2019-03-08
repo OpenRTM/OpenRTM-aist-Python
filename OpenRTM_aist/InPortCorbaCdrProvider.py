@@ -179,9 +179,6 @@ class InPortCorbaCdrProvider(OpenRTM_aist.InPortProvider,
 
       self.onReceived(data)
 
-      if not self._connector:
-        return OpenRTM.PORT_ERROR
-
       ret = self._connector.write(data)
 
       return self.convertReturn(ret, data)
