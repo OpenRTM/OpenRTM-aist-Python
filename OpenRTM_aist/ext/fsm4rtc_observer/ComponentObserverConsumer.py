@@ -275,7 +275,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
              "FSM_STATUS",
              "FSM_STRUCTURE",
              "USER_DEFINED"]
-    if kind._v < RTC.STATUS_KIND_NUM._v:
+    if kind._v < len(kinds):
       return kinds[kind._v]
     return ""
 
@@ -730,7 +730,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
                                                        self._ecaction.ecAttached)
 
     if self._ecaction.ecDetached:
-      self._rtobj.removeExecutionContextActionListener(ectype_.EC_ATTACHED,
+      self._rtobj.removeExecutionContextActionListener(ectype_.EC_DETACHED,
                                                        self._ecaction.ecDetached)
 
     pcaltype_ = OpenRTM_aist.PostComponentActionListenerType
