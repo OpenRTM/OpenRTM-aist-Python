@@ -188,7 +188,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
              "PORT_PROFILE",
              "CONFIGURATION",
              "HEARTBEAT"]
-    if kind._v < OpenRTM.STATUS_KIND_NUM._v:
+    if kind._v < len(kinds):
       return kinds[kind._v]
     return ""
 
@@ -603,7 +603,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
                                                        self._ecaction.ecAttached)
 
     if self._ecaction.ecDetached:
-      self._rtobj.removeExecutionContextActionListener(ectype_.EC_ATTACHED,
+      self._rtobj.removeExecutionContextActionListener(ectype_.EC_DETACHED,
                                                        self._ecaction.ecDetached)
 
     pcaltype_ = OpenRTM_aist.PostComponentActionListenerType
