@@ -5420,7 +5420,6 @@ class RTObject_impl:
       try:
         if not CORBA.is_nil(ec) and not ec._non_existent():
           ec.deactivate_component(self._comp)
-          ec.stop()
       except:
         print(OpenRTM_aist.Logger.print_exception())
 
