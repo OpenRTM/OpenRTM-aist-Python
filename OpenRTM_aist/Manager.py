@@ -1119,16 +1119,6 @@ class Manager:
       self._namingManager.unbindObject(name)
     self._listeners.naming_.postUnbind(comp, names)
 
-    try:
-      poa = self._orb.resolve_initial_references("omniINSPOA")
-      poa._get_the_POAManager().activate()
-      id = comp.getCategory() + "/" + comp.getInstanceName()
-      poa.deactivate_object(id)
-    except:
-      self._rtcout.RTC_DEBUG(OpenRTM_aist.Logger.print_exception())
-
-
-
     return True
 
 
