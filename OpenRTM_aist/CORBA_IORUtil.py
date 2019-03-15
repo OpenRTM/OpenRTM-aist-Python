@@ -220,6 +220,46 @@ TAGS=("IOP::TAG_INTERNET_IOP",
       "IOP::TAG_MULTIPLE_COMPONENTS",
       "IOP::TAG_SCCP_IOP")
 
+def toString(ior):
+  global endian
+  
+  data = cdrMarshal(any.to_any(ior).typecode(), ior, endian)
+  result = [0]*(12+len(data)*2)
+  result[0] = "I"
+  result[1] = "O"
+  result[2] = "R"
+  result[3] = ":"
+
+  result[4] = "0"
+  if endian:
+    result[5] = "1"
+  else:
+    result[5] = "0"
+  result[6] = "0"
+  result[7] = "0"
+  result[8] = "0"
+  result[9] = "0"
+  result[10] = "0"
+  result[11] = "0"
+  
+  for i in range(len(data)):
+    d = ord(data[i])
+    j = 12 + i * 2
+    v = (d & 0xf0)
+    v = v >> 4
+    if v < 10:
+      result[j] = chr(ord('0') + v)
+    else:
+      result[j] = chr(ord('a') + (v - 10))
+    v = ((d & 0xf))
+    if v < 10:
+      result[j+1] = chr(ord('0') + v)
+    else:
+      result[j+1] = chr(ord('a') + (v - 10))
+
+
+  iorstr = "".join(result)
+  return iorstr
 
 def toIOR(iorstr):
   global endian
@@ -302,6 +342,50 @@ def extractAddrs(comps):
         orb_type = cdrUnmarshal(CORBA.TC_ulong,
                                 c.component_data[4:8], endian)
   return addr
+
+##
+# @if jp
+#
+# @brief IROのエンドポイント置き換え
+#
+# 
+# @param iorstr IOR文字列
+# @param endpoint エンドポイント
+# @return 置き換え後の文字列
+#
+# @else
+#
+# @brief
+#
+# @param iorstr 
+# @param endpoint 
+# @return 
+#
+# @endif
+def replaceEndpoint(iorstr, endpoint):
+  global endian
+  ior = toIOR(iorstr)
+  for p in ior.profiles:
+    # TAG_INTERNET_IOP
+    if p.tag == IOP.TAG_INTERNET_IOP:
+      if sys.version_info[0] == 2:
+        pbody = cdrUnmarshal(_0__GlobalIDL._tc_ProfileBody,
+                             "".join(p.profile_data), endian)
+      else:
+        pbody = cdrUnmarshal(_0__GlobalIDL._tc_ProfileBody,
+                             p.profile_data, endian)
+        
+      pbody.address_.host = endpoint
+      p.profile_data = cdrMarshal(any.to_any(pbody).typecode(), pbody, endian)
+
+    # TAG_MULTIPLE_COMPONENTS
+    elif p.tag == IOP.TAG_MULTIPLE_COMPONENTS:
+      pass
+    else:
+      print("Other Profile")
+  iorstr = toString(ior)
+  return iorstr
+
 
 iorstr = "IOR:000000000000003549444c3a6f70656e72746d2e616973742e676f2e6a702f4f70656e52544d2f44617461466c6f77436f6d706f6e656e743a312e3000000000000000010000000000000064000102000000000d31302e3231312e35352e31350000ffa90000000efed593815800002090000000000100000000000200000000000000080000000041545400000000010000001c00000000000100010000000105010001000101090000000100010109"
 

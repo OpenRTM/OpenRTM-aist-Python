@@ -70,7 +70,7 @@ class InPortDSConsumer(OpenRTM_aist.InPortConsumer,OpenRTM_aist.CorbaConsumer):
   # @endif
   #
   def __init__(self):
-    OpenRTM_aist.CorbaConsumer.__init__(self)
+    OpenRTM_aist.CorbaConsumer.__init__(self, RTC.DataPushService)
     self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortDSConsumer")
     self._properties = None
     return
@@ -150,10 +150,9 @@ class InPortDSConsumer(OpenRTM_aist.InPortConsumer,OpenRTM_aist.CorbaConsumer):
     self._rtcout.RTC_PARANOID("put()")
 
     try:
-      ref_ = self.getObject()
-      if ref_:
-        ds = ref_._narrow(RTC.DataPushService)
-        return self.convertReturnCode(ds.push(data))
+      dataservice = self._ptr()
+      if dataservice:
+        return self.convertReturnCode(dataservice.push(data))
       return self.CONNECTION_LOST
     except:
       self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())

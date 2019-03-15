@@ -69,7 +69,7 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
   # @endif
   #
   def __init__(self):
-    OpenRTM_aist.CorbaConsumer.__init__(self)
+    OpenRTM_aist.CorbaConsumer.__init__(self, RTC.DataPullService)
     self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OutPortDSConsumer")
     self._buffer = None
     self._profile = None
@@ -195,8 +195,8 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
     self._rtcout.RTC_PARANOID("get()")
 
     try:
-      ds = self.getObject()._narrow(RTC.DataPullService)
-      ret,cdr_data = ds.pull()
+      dataservice = self._ptr()
+      ret,cdr_data = dataservice.pull()
       
       if ret == RTC.PORT_OK:
         self._rtcout.RTC_DEBUG("get() successful")

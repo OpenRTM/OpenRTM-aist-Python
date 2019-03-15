@@ -173,16 +173,13 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
     try:
       self._rtcout.RTC_PARANOID("InPortDSProvider.push()")
             
-      if not self._buffer:
+      if not self._connector:
         self.onReceiverError(data)
         return RTC.PORT_ERROR
 
       self._rtcout.RTC_PARANOID("received data size: %d", len(data))
 
       self.onReceived(data)
-
-      if not self._connector:
-        return RTC.PORT_ERROR
 
       ret = self._connector.write(data)
 
