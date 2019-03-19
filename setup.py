@@ -78,8 +78,8 @@
 #==============================
 # Package version definition
 #==============================
-pkg_major_version = "1"
-pkg_minor_version = "2"
+pkg_major_version = "2"
+pkg_minor_version = "0"
 pkg_revision_num  = "0"
 
 #============================================================
@@ -293,14 +293,14 @@ document_path         = os.path.normpath(current_dir + "/" + document_dir)
 # Now we assume that the following arguments are set to create_filelist()
 # start_path  = OpenRTM_aist/examples/
 # subs_path   = OpenRTM_aist/examples/
-# target_path = share/openrtm-1.2/components/python/
+# target_path = share/openrtm-2.0/components/python/
 # regex_match = .*\.py$
 #
 # A file matched: OpenRTM_aist/examples/SimpleIO/ConsoleIn.py
 # "OpenRTM_aist/examples" (subs_path) is removed from the
 # path. obtained file path: SimpleIO/ConsoleIn.py is merged
 # target_path, and then we get final target path
-# <prefix>/share/openrtm-1.2/components/python/SimpleIO/ConsoleIn.py
+# <prefix>/share/openrtm-2.0/components/python/SimpleIO/ConsoleIn.py
 #
 #------------------------------------------------------------
 def create_filelist(start_path, subs_path, target_path, regex_match, 
