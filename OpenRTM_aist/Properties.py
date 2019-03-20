@@ -189,14 +189,11 @@ class Properties:
     # Properties::Properties(const char* key, const char* value)
     if key:
       self.name = key
-      if value is None:
-        self.value = ""
-      else:
-        self.value = value
+      self.value = value
       return
 
     self.name  = ""
-    self.value = ""
+    self.value = None
 
     # Properties::Properties(std::map<std::string, std::string>& defaults)
     if defaults_map:
@@ -392,7 +389,7 @@ class Properties:
 
       node = self._getNode(keys, 0, self)
       if node:
-        if node.value:
+        if node.value is not None:
           return node.value
         else:
           return node.default_value
@@ -400,7 +397,7 @@ class Properties:
 
     else:
       value = self.getProperty(key)
-      if value:
+      if value is not None:
         return value
       else:
         return default
@@ -1289,7 +1286,7 @@ class Properties:
         
     else:
       val = curr.value
-      if val == "":
+      if val is None:
         val = curr.default_value
       out.write(curr_name+": "+val+"\n")
 
@@ -1342,7 +1339,7 @@ class Properties:
       out[0]+=self.indent(index)+"- "+curr.name
 
     if curr.leaf == []:
-      if curr.value == "":
+      if curr.value is None:
         #out.write(": "+curr.default_value+"\n")
         out[0]+=": "+curr.default_value+"\n"
       else:
