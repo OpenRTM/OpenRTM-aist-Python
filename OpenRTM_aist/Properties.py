@@ -397,7 +397,7 @@ class Properties:
 
     else:
       value = self.getProperty(key)
-      if value is not None:
+      if value:
         return value
       else:
         return default
