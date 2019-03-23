@@ -431,8 +431,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     global manager
     global mutex
     
+    guard = OpenRTM_aist.ScopedLock(mutex)
     if manager is None:
-      guard = OpenRTM_aist.ScopedLock(mutex)
       manager = ROSTopicManager()
       manager.start()
 
