@@ -69,7 +69,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     self._properties = None
     self._callerid = ""
     self._messageType = "Float32"
-    self._topic = "/chatter"
+    self._topic = "chatter"
     self._roscorehost = "localhost"
     self._roscoreport = "11311"
     self._tcp_connecters = {}
