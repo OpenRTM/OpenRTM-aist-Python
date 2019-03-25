@@ -436,7 +436,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
       return
 
     elif status == OpenRTM_aist.BufferStatus.BUFFER_EMPTY:
-      return OpenRTM.BUFFER_EMPTY
+      return
 
     elif status == OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET:
       self.onReceiverError(data)
