@@ -283,6 +283,8 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
     self._consumerTypes = ""
     self._connector_mutex = threading.RLock()
 
+    self._properties.setProperty("data_type", data_type)
+
     self._listeners = OpenRTM_aist.ConnectorListeners()
     return
 
