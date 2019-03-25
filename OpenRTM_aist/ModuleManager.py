@@ -19,6 +19,7 @@
 import sys,os
 import glob
 import encodings.aliases
+import codecs
 
 import OpenRTM_aist
 
@@ -285,10 +286,12 @@ class ModuleManager:
 
     for _, alias in encodings.aliases.aliases.items():
       try:
-        with open(str(file_path), "r", encoding = alias) as f:
+        with codecs.open(str(file_path), "r", encoding = alias) as f:
           if init_func is not None:
             if f.read().find(init_func) == -1:
               raise ModuleManager.FileNotFound(file_name)
+            else:
+              break
       except:
         pass
           
