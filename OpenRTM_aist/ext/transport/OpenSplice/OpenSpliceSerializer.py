@@ -178,10 +178,10 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief データの符号化
+  # @brief データの変換(omniORB->OpenSplice)
   #
   # 
-  # @param data 符号化前のデータ
+  # @param data omniORB定義のデータ
   # @return ret、value
   # ret：SERIALIZE_OK：成功、SERIALIZE_ERROR：失敗、SERIALIZE_NOTFOUND：指定のシリアライザがない
   # value：OpenSplice定義のデータ
@@ -216,19 +216,19 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief データの復号化
+  # @brief データの変換(OpenSplice->omniORB)
   #
   # @param bdata OpenSplice定義のデータ
   # @param data_type omniORB定義のデータ型
   # @return ret、value
   # ret：SERIALIZE_OK：成功、SERIALIZE_ERROR：失敗、SERIALIZE_NOTFOUND：指定のシリアライザがない
-  # value：復号化後のデータ
+  # value：omniORB定義のデータ
   #
   # @else
   #
   # @brief 
   #
-  # @param cdr
+  # @param bdata
   # @param data_type 
   # @return 
   #

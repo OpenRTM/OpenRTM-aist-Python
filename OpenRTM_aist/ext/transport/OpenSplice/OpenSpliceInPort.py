@@ -337,16 +337,12 @@ class SubListener(dds.Listener):
   #
   # @param self
   # @param sub OpenSpliceInPort
-  # @param sock ソケット
-  # @param uri 接続先のURI
   #
   # @else
   # @brief Constructor
   #
   # @param self
   # @param sub 
-  # @param sock 
-  # @param uri 
   #
   # @endif
   #
