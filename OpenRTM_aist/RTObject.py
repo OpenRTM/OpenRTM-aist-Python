@@ -5419,8 +5419,10 @@ class RTObject_impl:
     def __call__(self, ec):
       try:
         if not CORBA.is_nil(ec) and not ec._non_existent():
-          ec.deactivate_component(self._comp)
-          ec.stop()
+          if ec.get_component_state(self._comp) == RTC.ACTIVE_STATE:
+            ec.deactivate_component(self._comp)
+          elif ec.get_component_state(self._comp) == RTC.ERROR_STATE:
+            ec.reset_component(self._comp)
       except:
         print(OpenRTM_aist.Logger.print_exception())
 

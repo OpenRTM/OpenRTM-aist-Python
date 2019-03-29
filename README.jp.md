@@ -1,4 +1,4 @@
-これは OpenRTM-aist-Python のリリースバージョン 1.1.2 です。  
+これは OpenRTM-aist-Python のリリースバージョン 2.0.0 です。  
 OpenRTM-aist-Python はデュアルライセンスのオープンソースのRTミドルウエアです。  
 
 OpenRTM の設定、ビルド、インストールおよび RTコンポーネントの作成を行う前に、  
