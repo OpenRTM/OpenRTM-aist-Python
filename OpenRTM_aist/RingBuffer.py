@@ -367,7 +367,6 @@ class RingBuffer(OpenRTM_aist.BufferBase):
   def write(self, value, sec = -1, nsec = 0):
     try:
       self._full_cond.acquire()
-      self.full()
       if self.full():
         timedwrite = self._timedwrite # default is False
         overwrite  = self._overwrite  # default is True

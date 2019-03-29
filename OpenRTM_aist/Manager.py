@@ -2044,6 +2044,20 @@ class Manager:
     self.initCpuAffinity()
     return True
 
+  ##
+  # @if jp
+  # @brief CPUアフィニティの設定
+  #
+  # manager.cpu_affinityで指定したプロセスのCPUアフィニティに設定する
+  #
+  # @param self
+  #
+  #
+  # @else
+  #
+  # @param self
+  #
+  # @endif
   def initCpuAffinity(self):
     self._rtcout.RTC_TRACE("Manager.initCpuAffinity()")
     

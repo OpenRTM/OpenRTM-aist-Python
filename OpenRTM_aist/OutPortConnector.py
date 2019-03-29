@@ -190,3 +190,18 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
     pass
   def read(self, data):
     pass
+
+  def isWritable(self):
+    return False
+
+  def isReadable(self):
+    return False
+
+  def setReadListener(self, listener):
+    pass
+
+  def setIsReadableListener(self, listener):
+    pass
+
+  def setConsumer(self, consumer):
+    pass
