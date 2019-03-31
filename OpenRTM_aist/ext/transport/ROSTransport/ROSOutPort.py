@@ -36,8 +36,8 @@ import time
 ##
 # @if jp
 # @class ROSOutPort
-# @brief ROS Publisherã«å¯¾å¿œã™ã‚‹ã‚¯ãƒ©ã‚¹
-# InPortConsumerã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã—ã¦ä½¿ç”¨ã™ã‚‹
+# @brief ROS Publisher¤ËÂĞ±ş¤¹¤ë¥¯¥é¥¹
+# InPortConsumer¥ª¥Ö¥¸¥§¥¯¥È¤È¤·¤Æ»ÈÍÑ¤¹¤ë
 #
 # @else
 # @class ROSOutPort
@@ -51,9 +51,9 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
   #
-  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # ¥³¥ó¥¹¥È¥é¥¯¥¿
   #
   # @param self
   #
@@ -77,9 +77,9 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
   #
-  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # ¥Ç¥¹¥È¥é¥¯¥¿
   #
   # @param self
   #
@@ -97,16 +97,16 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     
   ##
   # @if jp
-  # @brief è¨­å®šåˆæœŸåŒ–
+  # @brief ÀßÄê½é´ü²½
   #
-  # InPortConsumerã®å„ç¨®è¨­å®šã‚’è¡Œã†
+  # InPortConsumer¤Î³Æ¼ïÀßÄê¤ò¹Ô¤¦
   #
   # @param self
-  # @param prop æ¥ç¶šè¨­å®š
-  # marshaling_type ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®ç¨®é¡ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šROSFloat32
-  # topic ãƒˆãƒ”ãƒƒã‚¯å ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ chatter
-  # roscore_host roscoreã®ãƒ›ã‚¹ãƒˆå ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šlocalhost
-  # roscore_port roscoreã®ãƒãƒ¼ãƒˆç•ªå· ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼š11311
+  # @param prop ÀÜÂ³ÀßÄê
+  # marshaling_type ¥·¥ê¥¢¥é¥¤¥¶¤Î¼ïÎà ¥Ç¥Õ¥©¥ë¥È¡§ROSFloat32
+  # topic ¥È¥Ô¥Ã¥¯Ì¾ ¥Ç¥Õ¥©¥ë¥È chatter
+  # roscore_host roscore¤Î¥Û¥¹¥ÈÌ¾ ¥Ç¥Õ¥©¥ë¥È¡§localhost
+  # roscore_port roscore¤Î¥İ¡¼¥ÈÈÖ¹æ ¥Ç¥Õ¥©¥ë¥È¡§11311
   #
   # @else
   # @brief Initializing configuration
@@ -162,10 +162,10 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ãƒˆãƒ”ãƒƒã‚¯åå–å¾—
+  # @brief ¥È¥Ô¥Ã¥¯Ì¾¼èÆÀ
   #
   #
-  # @return ãƒˆãƒ”ãƒƒã‚¯å
+  # @return ¥È¥Ô¥Ã¥¯Ì¾
   #
   # @else
   # @brief get topic name
@@ -180,12 +180,12 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief Subscriberã¨ã®æ¥ç¶š
+  # @brief Subscriber¤È¤ÎÀÜÂ³
   #
   #
   # @param self
-  # @param client_sock ã‚½ã‚±ãƒƒãƒˆ
-  # @param addr æ¥ç¶šå…ˆã®URI
+  # @param client_sock ¥½¥±¥Ã¥È
+  # @param addr ÀÜÂ³Àè¤ÎURI
   #
   # @else
   # @brief 
@@ -269,20 +269,20 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief æ¥ç¶šå…ˆã¸ã®ãƒ‡ãƒ¼ã‚¿é€ä¿¡
+  # @brief ÀÜÂ³Àè¤Ø¤Î¥Ç¡¼¥¿Á÷¿®
   #
-  # æ¥ç¶šå…ˆã®ãƒãƒ¼ãƒˆã¸ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹ãŸã‚ã®ç´”ç²‹ä»®æƒ³é–¢æ•°ã€‚
+  # ÀÜÂ³Àè¤Î¥İ¡¼¥È¤Ø¥Ç¡¼¥¿¤òÁ÷¿®¤¹¤ë¤¿¤á¤Î½ã¿è²¾ÁÛ´Ø¿ô¡£
   # 
-  # ã“ã®é–¢æ•°ã¯ã€ä»¥ä¸‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™ã€‚
+  # ¤³¤Î´Ø¿ô¤Ï¡¢°Ê²¼¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É¤òÊÖ¤¹¡£
   #
-  # - PORT_OK:       æ­£å¸¸çµ‚äº†ã€‚
-  # - PORT_ERROR:    ãƒ‡ãƒ¼ã‚¿é€ä¿¡ã®éç¨‹ã§ä½•ã‚‰ã‹ã®ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ãŸã€‚
-  # - SEND_FULL:     ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã—ãŸãŒã€ç›¸æ‰‹å´ãƒãƒƒãƒ•ã‚¡ãŒãƒ•ãƒ«ã ã£ãŸã€‚
-  # - SEND_TIMEOUT:  ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã—ãŸãŒã€ç›¸æ‰‹å´ãƒãƒƒãƒ•ã‚¡ãŒã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ãŸã€‚
-  # - UNKNOWN_ERROR: åŸå› ä¸æ˜ã®ã‚¨ãƒ©ãƒ¼
+  # - PORT_OK:       Àµ¾ï½ªÎ»¡£
+  # - PORT_ERROR:    ¥Ç¡¼¥¿Á÷¿®¤Î²áÄø¤Ç²¿¤é¤«¤Î¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+  # - SEND_FULL:     ¥Ç¡¼¥¿¤òÁ÷¿®¤·¤¿¤¬¡¢Áê¼êÂ¦¥Ğ¥Ã¥Õ¥¡¤¬¥Õ¥ë¤À¤Ã¤¿¡£
+  # - SEND_TIMEOUT:  ¥Ç¡¼¥¿¤òÁ÷¿®¤·¤¿¤¬¡¢Áê¼êÂ¦¥Ğ¥Ã¥Õ¥¡¤¬¥¿¥¤¥à¥¢¥¦¥È¤·¤¿¡£
+  # - UNKNOWN_ERROR: ¸¶°øÉÔÌÀ¤Î¥¨¥é¡¼
   #
-  # @param data é€ä¿¡ã™ã‚‹ãƒ‡ãƒ¼ã‚¿
-  # @return ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
+  # @param data Á÷¿®¤¹¤ë¥Ç¡¼¥¿
+  # @return ¥ê¥¿¡¼¥ó¥³¡¼¥É
   #
   # @else
   # @brief Send data to the destination port
@@ -319,14 +319,14 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
+  # @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë
   #
-  # InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹ã€‚
-  # å¼•æ•°ã§æŒ‡å®šã™ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±å†…ã® NameValue ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®
-  # dataport.interface_type å€¤ã‚’èª¿ã¹ã€å½“è©²ãƒãƒ¼ãƒˆã«è¨­å®šã•ã‚Œã¦ã„ã‚‹
-  # ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—ã¨ä¸€è‡´ã™ã‚‹å ´åˆã®ã¿æƒ…å ±ã‚’å–å¾—ã™ã‚‹ã€‚
+  # InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë¡£
+  # °ú¿ô¤Ç»ØÄê¤¹¤ë¥×¥í¥Ñ¥Æ¥£¾ğÊóÆâ¤Î NameValue ¥ª¥Ö¥¸¥§¥¯¥È¤Î
+  # dataport.interface_type ÃÍ¤òÄ´¤Ù¡¢Åö³º¥İ¡¼¥È¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ë
+  # ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¿¥¤¥×¤È°ìÃ×¤¹¤ë¾ì¹ç¤Î¤ß¾ğÊó¤ò¼èÆÀ¤¹¤ë¡£
   #
-  # @param properties InterfaceProfileæƒ…å ±ã‚’å—ã‘å–ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+  # @param properties InterfaceProfile¾ğÊó¤ò¼õ¤±¼è¤ë¥×¥í¥Ñ¥Æ¥£
   #
   # @else
   # @brief Publish InterfaceProfile information
@@ -346,13 +346,13 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ãƒ‡ãƒ¼ã‚¿é€ä¿¡é€šçŸ¥ã¸ã®ç™»éŒ²
+  # @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤Ø¤ÎÅĞÏ¿
   #
-  # æŒ‡å®šã•ã‚ŒãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«åŸºã¥ã„ã¦ã€ãƒ‡ãƒ¼ã‚¿é€å‡ºé€šçŸ¥ã®å—ã‘å–ã‚Šã«ç™»éŒ²ã™ã‚‹ã€‚
+  # »ØÄê¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¤Ë´ğ¤Å¤¤¤Æ¡¢¥Ç¡¼¥¿Á÷½ĞÄÌÃÎ¤Î¼õ¤±¼è¤ê¤ËÅĞÏ¿¤¹¤ë¡£
   #
-  # @param properties ç™»éŒ²æƒ…å ±
+  # @param properties ÅĞÏ¿¾ğÊó
   #
-  # @return ç™»éŒ²å‡¦ç†çµæœ(ç™»éŒ²æˆåŠŸ:trueã€ç™»éŒ²å¤±æ•—:false)
+  # @return ÅĞÏ¿½èÍı·ë²Ì(ÅĞÏ¿À®¸ù:true¡¢ÅĞÏ¿¼ºÇÔ:false)
   #
   # @else
   # @brief Subscribe to the data sending notification
@@ -372,11 +372,11 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     
   ##
   # @if jp
-  # @brief ãƒ‡ãƒ¼ã‚¿é€ä¿¡é€šçŸ¥ã‹ã‚‰ã®ç™»éŒ²è§£é™¤
+  # @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½ü
   #
-  # ãƒ‡ãƒ¼ã‚¿é€å‡ºé€šçŸ¥ã®å—ã‘å–ã‚Šã‹ã‚‰ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹ã€‚
+  # ¥Ç¡¼¥¿Á÷½ĞÄÌÃÎ¤Î¼õ¤±¼è¤ê¤«¤éÅĞÏ¿¤ò²ò½ü¤¹¤ë¡£
   #
-  # @param properties ç™»éŒ²è§£é™¤æƒ…å ±
+  # @param properties ÅĞÏ¿²ò½ü¾ğÊó
   #
   # @else
   # @brief Unsubscribe the data send notification
@@ -413,7 +413,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
 ##
 # @if jp
-# @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ç™»éŒ²é–¢æ•°
+# @brief ¥â¥¸¥å¡¼¥ëÅĞÏ¿´Ø¿ô
 #
 #
 # @else
