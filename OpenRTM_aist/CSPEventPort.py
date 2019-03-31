@@ -287,7 +287,6 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
       if self._ctrl._writing:
         self._ctrl._cond.wait(self._channeltimeout)
       if not self._eventbuffer.full():
-        del guard_ctrl
         if con.isReadable():
           ret, _ = con.readBuff()
           if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
@@ -378,7 +377,6 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
             self._rtcout.RTC_ERROR("read timeout")
             return False, None
         else:
-          del guard_ctrl
           readable = con.isReadable()
           if readable:
             ret, _ = con.readBuff()
