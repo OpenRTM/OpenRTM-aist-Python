@@ -1,0 +1,1 @@
+python DataIn_port3.py -f rtc_out3in1.conf

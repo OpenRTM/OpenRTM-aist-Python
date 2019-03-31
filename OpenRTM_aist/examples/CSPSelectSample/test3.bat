@@ -1,1 +1,0 @@
-python DataInOut.py -f rtc_test3.conf

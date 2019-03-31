@@ -1,1 +1,0 @@
-python DataIn_port3.py -f rtc_test2.conf
