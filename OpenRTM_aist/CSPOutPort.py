@@ -333,8 +333,9 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
       value = self._OnWriteConvert(value)
 
     guard_con = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-    if not self._ctrl._waiting:
-      del guard_con
+    waiting = self._ctrl._waiting
+    del guard_con
+    if not waiting:
       ret, con = self.dataWritable()
       if ret:
         retcon = con.write(value)
@@ -344,6 +345,8 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
           self._rtcout.RTC_ERROR("write error %d", (retcon))
           return False
 
+    
+    guard_con = OpenRTM_aist.ScopedLock(self._ctrl._cond)
     ret, cdr_data = self._connectors[0].serializeData(value)
     if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
       self.setData(cdr_data)
