@@ -194,6 +194,7 @@ openrtm_ext_packages = [
   "OpenRTM_aist.ext.ssl",
   "OpenRTM_aist.ext.logger.fluentbit_stream",
   "OpenRTM_aist.ext.transport.ROSTransport",
+  "OpenRTM_aist.ext.transport.ROS2Transport",
   "OpenRTM_aist.ext.transport.OpenSplice",
   ]
 openrtm_utils_packages = [
