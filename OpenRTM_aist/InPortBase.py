@@ -101,6 +101,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
     self._rtcout.RTC_DEBUG("setting port.data_type: %s", data_type)
     self.addProperty("dataport.data_type", data_type)
+    self._properties.setProperty("data_type", data_type)
 
     self.addProperty("dataport.subscription_type", "Any")
     self._value = None

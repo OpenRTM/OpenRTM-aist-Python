@@ -68,7 +68,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("ROSOutPort")
     self._properties = None
     self._callerid = ""
-    self._messageType = "Float32"
+    self._messageType = "ROSFloat32"
     self._topic = "chatter"
     self._roscorehost = "localhost"
     self._roscoreport = "11311"
