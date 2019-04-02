@@ -167,8 +167,7 @@ class OutPort(OpenRTM_aist.OutPortBase):
       self._OnWrite(value)
 
     # check number of connectors
-    conn_size = len(self._connectors)
-    if not conn_size > 0:
+    if not self._connectors:
       return False
   
     # set timestamp

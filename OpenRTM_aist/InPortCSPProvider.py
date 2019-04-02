@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: euc-jp -*-
+# -*- coding: utf-8 -*-
 
 ##
 # @file  InPortSHMProvider.py
@@ -13,36 +13,37 @@
 
 import OpenRTM_aist
 import OpenRTM
+import CSP__POA
 
 
 ##
 # @if jp
-# @class InPortSHMProvider
-# @brief InPortSHMProvider ¥¯¥é¥¹
+# @class InPortCSPProvider
+# @brief InPortCSPProvider ã‚¯ãƒ©ã‚¹
 #
-# ÄÌ¿®¼êÃÊ¤Ë ¶¦Í­¥á¥â¥ê ¤òÍøÍÑ¤·¤¿ÆşÎÏ¥İ¡¼¥È¥×¥í¥Ğ¥¤¥À¡¼¤Î¼ÂÁõ¥¯¥é¥¹¡£
+# é€šä¿¡æ‰‹æ®µã« å…±æœ‰ãƒ¡ãƒ¢ãƒª ã‚’åˆ©ç”¨ã—ãŸå…¥åŠ›ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒã‚¤ãƒ€ãƒ¼ã®å®Ÿè£…ã‚¯ãƒ©ã‚¹ã€‚
 #
 #
 # @else
-# @class InPortSHMProvider
-# @brief InPortSHMProvider class
+# @class InPortCSPProvider
+# @brief InPortCSPProvider class
 #
 #
 #
 # @endif
 #
-class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
+class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     
   """
   """
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
-  # Interface Type¤Ë¤Ïshared_memory¤ò»ØÄê¤¹¤ë
-  # ¶¦Í­¥á¥â¥ê¤Î¶õ´ÖÌ¾¤ÏUUID¤ÇºîÀ®¤·¡¢¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë¤Îdataport.shared_memory.address¤ËÊİÂ¸¤¹¤ë
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # Interface Typeã«ã¯shared_memoryã‚’æŒ‡å®šã™ã‚‹
+  # å…±æœ‰ãƒ¡ãƒ¢ãƒªã®ç©ºé–“åã¯UUIDã§ä½œæˆã—ã€ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã®dataport.shared_memory.addressã«ä¿å­˜ã™ã‚‹
   #
   # self
   #
@@ -56,10 +57,10 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
   #
   def __init__(self):
     OpenRTM_aist.InPortProvider.__init__(self)
-    OpenRTM_aist.SharedMemory.__init__(self)
+    self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("CSPOutPort")
 
     # PortProfile setting
-    self.setInterfaceType("shared_memory")
+    self.setInterfaceType("csp_channel")
     self._objref = self._this()
     
     
@@ -75,18 +76,13 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
     self._properties.append(OpenRTM_aist.NVUtil.newNV("dataport.corba_cdr.inport_ref",
                                                       self._objref))
     
-
-    
-    
-    
-
     return
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -104,7 +100,7 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
 
   ##
   # @if jp
-  # @brief ½ªÎ»½èÍı
+  # @brief çµ‚äº†å‡¦ç†
   #
   # @else
   # @brief 
@@ -120,7 +116,6 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
   
   # void init(coil::Properties& prop)
   def init(self, prop):
-          
     pass
 
   def setBuffer(self, buffer):
@@ -132,15 +127,17 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
     self._listeners = listeners
     return
 
-
+  def setConnector(self, connector):
+    self._connector = connector
+    return
   ##
   # @if jp
-  # @brief ¥Ğ¥Ã¥Õ¥¡¤Ë¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à
+  # @brief ãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
   #
-  # ¥Ç¡¼¥¿¤Î¥µ¥¤¥º¤Ï¶¦Í­¥á¥â¥ê¤âÀèÆ¬8byte¤«¤é¼èÆÀ¤¹¤ë
-  # ¶¦Í­¥á¥â¥ê¤«¤é¥Ç¡¼¥¿¤ò¼è¤ê½Ğ¤·¥Ğ¥Ã¥Õ¥¡¤Ë½ñ¤­¹ş¤à
+  # ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚ºã¯å…±æœ‰ãƒ¡ãƒ¢ãƒªã‚‚å…ˆé ­8byteã‹ã‚‰å–å¾—ã™ã‚‹
+  # å…±æœ‰ãƒ¡ãƒ¢ãƒªã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã—ãƒãƒƒãƒ•ã‚¡ã«æ›¸ãè¾¼ã‚€
   #
-  # @param data ½ñ¹şÂĞ¾İ¥Ç¡¼¥¿
+  # @param data æ›¸è¾¼å¯¾è±¡ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   # @brief 
@@ -153,32 +150,53 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
   #
   # ::OpenRTM::PortStatus put()
   #  throw (CORBA::SystemException);
-  def put(self):
+  def put(self, data):
     
     try:
-      self._rtcout.RTC_PARANOID("InPortCorbaCdrProvider.put()")
+      self._rtcout.RTC_PARANOID("InPortCSPProvider.put()")
       
-      shm_data = self.read()
-
       if not self._connector:
-        self.onReceiverError(shm_data)
+        self.onReceiverError(data)
         return OpenRTM.PORT_ERROR
 
-      self._rtcout.RTC_PARANOID("received data size: %d", len(shm_data))
+      self._rtcout.RTC_PARANOID("received data size: %d", len(data))
 
-      self.onReceived(shm_data)
+      self.onReceived(data)
 
+      ret = self._connector.write(data)
 
-      ret = self._connector.write(shm_data)
-      
-
-      return self.convertReturn(ret, shm_data)
+      return self.convertReturn(ret, data)
 
     except:
       self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
       return OpenRTM.UNKNOWN_ERROR
 
-    
+
+  ##
+  # @if jp
+  # @brief ãƒ‡ãƒ¼ã‚¿æ›¸ãè¾¼ã¿å¯èƒ½ã‹ã‚’ç¢ºèª
+  #
+  # @param self 
+  # @return Trueï¼šæ›¸ãè¾¼ã¿å¯èƒ½ã€Falseï¼šæ›¸ãè¾¼ã¿ä¸å¯
+  # 
+  #
+  # @else
+  # @brief 
+  #
+  # @param self 
+  # @return 
+  #
+  # @endif
+  #
+  def is_writable(self):
+    self._rtcout.RTC_PARANOID("is_writable()")
+    if self._connector:
+      return self._connector.isWritable()
+    return False
+
+  def notify(self):
+    pass
+
 
 
       
@@ -257,8 +275,8 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
 
   
 
-def InPortSHMProviderInit():
+def InPortCSPProviderInit():
   factory = OpenRTM_aist.InPortProviderFactory.instance()
-  factory.addFactory("shared_memory",
-                     OpenRTM_aist.InPortSHMProvider,
+  factory.addFactory("csp_channel",
+                     OpenRTM_aist.InPortCSPProvider,
                      OpenRTM_aist.Delete)

@@ -133,3 +133,12 @@ from MultilayerCompositeEC import *
 #from MultilayerCompositeChildEC import *
 from ByteDataStreamBase import *
 from CORBA_CdrMemoryStream import *
+from InPortCSPConsumer import *
+from OutPortCSPConsumer import *
+from InPortCSPProvider import *
+from OutPortCSPProvider import *
+from InPortDuplexConnector import *
+from OutPortDuplexConnector import *
+from CSPInPort import *
+from CSPOutPort import *
+from CSPManager import *

@@ -1,0 +1,1 @@
+python DataInOut.py -f rtc_out3in3.conf

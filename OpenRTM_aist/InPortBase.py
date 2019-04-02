@@ -169,6 +169,8 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
     self.initProviders()
     self.initConsumers()
+    if self._consumerTypes and self._providerTypes:
+      self.appendProperty("dataport.dataflow_type", "duplex")
 
     num = [-1]
     if not OpenRTM_aist.stringTo(num, self._properties.getProperty("connection_limit","-1")):
@@ -910,6 +912,28 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
       self._rtcout.RTC_DEBUG("dataflow_type = pull .... do nothing")
       return RTC.RTC_OK
 
+    elif dflow_type == "duplex":
+      self._rtcout.RTC_DEBUG("dataflow_type = duplex .... create DuplexConnector")
+
+      # create InPortProvider
+      provider = self.createProvider(cprof, prop)
+      if not provider:
+        self._rtcout.RTC_ERROR("InPort provider creation failed.")
+        return RTC.BAD_PARAMETER
+
+      # create InPortDuplexConnector
+      connector = self.createDuplexConnector(cprof, prop, provider)
+      if not connector:
+        self._rtcout.RTC_ERROR("PushConnector creation failed.")
+        return RTC.RTC_ERROR
+
+      connector.setDataType(self._value)
+      provider.setConnector(connector) # So that a provider gets endian information from a connector.
+
+      self._rtcout.RTC_DEBUG("publishInterfaces() successfully finished.")
+      return RTC.RTC_OK
+
+
     self._rtcout.RTC_ERROR("unsupported dataflow_type")
     return RTC.BAD_PARAMETER
 
@@ -1003,6 +1027,25 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
       return ret
 
+    elif dflow_type == "duplex":
+      self._rtcout.RTC_DEBUG("dataflow_type = duplex .... set Consumer Object")
+      # create OutPortConsumer
+      consumer = self.createConsumer(cprof, prop)
+      if not consumer:
+        return RTC.BAD_PARAMETER
+
+      connector = self.getConnectorById(cprof.connector_id)
+      if not connector:
+        return RTC.RTC_ERROR
+
+      connector.setConsumer(consumer)
+      ret = connector.setConnectorInfo(profile)
+
+      if ret == RTC.RTC_OK:
+        self._rtcout.RTC_DEBUG("publishInterface() successfully finished.")
+
+      return ret
+
     self._rtcout.RTC_ERROR("unsupported dataflow_type")
     return RTC.BAD_PARAMETER
         
@@ -1085,7 +1128,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
       provider_types = provider_types + list(set_ptypes)
 
     # InPortProvider supports "push" dataflow type
-    if len(provider_types) > 0:
+    if provider_types:
       self._rtcout.RTC_DEBUG("dataflow_type push is supported")
       self.appendProperty("dataport.dataflow_type", "push")
       for provider_type in provider_types:
@@ -1129,7 +1172,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
       consumer_types = consumer_types + list(set_ctypes)
 
     # OutPortConsumer supports "pull" dataflow type
-    if len(consumer_types) > 0:
+    if consumer_types:
       self._rtcout.RTC_PARANOID("dataflow_type pull is supported")
       self.appendProperty("dataport.dataflow_type", "pull")
       for consumer_type in consumer_types:
@@ -1225,7 +1268,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
   # @brief InPortPushConnector の生成
   #
   # Connector を生成し、生成が成功すれば m_connectors に保存する。
-  # 生成に失敗した場合 0 を返す。
+  # 生成に失敗した場合 None を返す。
   #
   # @else
   # @brief InPortPushConnector creation
@@ -1293,6 +1336,55 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
       return connector
     except:
       self._rtcout.RTC_ERROR("InPortPushConnector creation failed")
+      self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+      return None
+
+  ##
+  # @if jp
+  # @brief InPortDuplexConnector の生成
+  #
+  # 双方向通信用コネクタを生成し、生成が成功すれば m_connectors に保存する。
+  # 
+  #
+  # @param cprof コネクタプロファイル
+  # @param prop コネクタプロファイルをプロパティに変換
+  # @param provider_ プロバイダ
+  # @return 生成したコネクタ。生成に失敗した場合 None を返す。
+  #
+  # @else
+  # @brief InPortDuplexConnector creation
+  #
+  # @param cprof 
+  # @param prop 
+  # @param provider_ 
+  # @return 
+  #
+  # @endif
+  #
+  def createDuplexConnector(self, cprof, prop, provider_):
+    profile = OpenRTM_aist.ConnectorInfo(cprof.name,
+                                         cprof.connector_id,
+                                         OpenRTM_aist.CORBA_SeqUtil.refToVstring(cprof.ports),
+                                         prop)
+    connector = None
+    try:
+      if self._singlebuffer:
+        connector = OpenRTM_aist.InPortDuplexConnector(profile, provider_,
+                                                      self._listeners,
+                                                      self._thebuffer)
+      else:
+        connector = OpenRTM_aist.InPortDuplexConnector(profile, provider_,
+                                                      self._listeners)
+
+      self._rtcout.RTC_TRACE("InPortDuplexConnector created")
+          
+
+      # guard = OpenRTM_aist.ScopedLock(self._connector_mutex)
+      self._connectors.append(connector)
+      self._rtcout.RTC_PARANOID("connector duplex backed: %d", len(self._connectors))
+      return connector
+    except:
+      self._rtcout.RTC_ERROR("InPortDuplexConnector creation failed")
       self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
       return None
 
