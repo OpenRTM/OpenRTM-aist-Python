@@ -39,6 +39,11 @@ import OpenRTM_aist
 class OutPortConsumer(OpenRTM_aist.DataPortStatus):
   """
   """
+  
+  def get(self, data):
+    return self.CONNECTION_LOST
+  def isReadable(self):
+    return True
 
   ##
   # @if jp

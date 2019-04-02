@@ -71,16 +71,6 @@ class InPort(OpenRTM_aist.InPortBase):
   # @param self
   # @param name InPort 名。InPortBase:name() により参照される。
   # @param value この InPort にバインドされる変数
-  # @param read_block 読込ブロックフラグ。
-  #        データ読込時に未読データがない場合、次のデータ受信までブロックする
-  #        かどうかを設定(デフォルト値:False)
-  # @param write_block 書込ブロックフラグ。
-  #        データ書込時にバッファがフルであった場合、バッファに空きができる
-  #        までブロックするかどうかを設定(デフォルト値:False)
-  # @param read_timeout 読込ブロックを指定していない場合の、データ読取タイム
-  #        アウト時間(ミリ秒)(デフォルト値:0)
-  # @param write_timeout 書込ブロックを指定していない場合の、データ書込タイム
-  #        アウト時間(ミリ秒)(デフォルト値:0)
   #
   # @else
   #
@@ -92,15 +82,9 @@ class InPort(OpenRTM_aist.InPortBase):
   # @param name A name of the InPort. This name is referred by
   #             InPortBase::name().
   # @param value A channel value related with the channel.
-  # @param read_block
-  # @param write_block
-  # @param read_timeout
-  # @param write_timeout
   #
   # @endif
-  def __init__(self, name, value, buffer=None,
-               read_block=False, write_block=False,
-               read_timeout=0, write_timeout = 0):
+  def __init__(self, name, value):
     OpenRTM_aist.InPortBase.__init__(self, name, OpenRTM_aist.toTypename(value))
     self._name           = name
     self._value          = value
@@ -362,7 +346,7 @@ class InPort(OpenRTM_aist.InPortBase):
 
 
 
-    if len(self._connectors) == 0:
+    if not self._connectors:
       self._rtcout.RTC_DEBUG("no connectors")
       return self._value
 

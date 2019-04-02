@@ -58,7 +58,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     self._profile = info
     self._buffer = buffer
     self._dataType = None
-    self._endian = None
+    self._endian = True
     
 
   ##
@@ -216,4 +216,66 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
   def write(self, data):
     pass
   def read(self, data):
+    pass
+  #
+  # @if jp
+  # @brief データ書き込み時のリスナ設定
+  # @param self
+  # @param listener リスナ
+  # @else
+  # @brief 
+  # @param self
+  # @param listener
+  # @endif
+  def setWriteListener(self, listener):
+    pass
+
+  #
+  # @if jp
+  # @brief データ書き込み判定時のリスナ設定
+  # @param self
+  # @param listener リスナ
+  # @else
+  # @brief 
+  # @param self
+  # @param listener
+  # @endif
+  def setIsWritableListener(self, listener):
+    pass
+
+  #
+  # @if jp
+  # @brief データを書き込める状態かを判定
+  # @param self
+  # @return True：書き込み可能
+  # @else
+  # @brief 
+  # @param self
+  # @return 
+  # @endif
+  def isWritable(self):
+    return False
+
+
+  #
+  # @if jp
+  # @brief データを書き込める状態かを判定
+  # @param self
+  # @return True：書き込み可能
+  # @else
+  # @brief 
+  # @param self
+  # @return 
+  # @return 
+  # @endif
+  def isReadable(self):
+    return False
+
+  ##
+  # @if jp
+  # @brief コンシューマの設定
+  # @else
+  # @brief set Consumer
+  # @endif
+  def setConsumer(self, consumer):
     pass

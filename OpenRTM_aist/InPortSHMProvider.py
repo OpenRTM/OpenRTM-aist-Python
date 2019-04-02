@@ -24,8 +24,8 @@ import OpenRTM
 #
 #
 # @else
-# @class InPortCorbaCdrProvider
-# @brief InPortCorbaCdrProvider class
+# @class InPortSHMProvider
+# @brief InPortSHMProvider class
 #
 #
 #
@@ -157,10 +157,6 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
     
     try:
       self._rtcout.RTC_PARANOID("InPortCorbaCdrProvider.put()")
-            
-      
-      
-
       
       shm_data = self.read()
 
