@@ -2874,12 +2874,12 @@ class Manager:
         name += ".outport"
       elif prop.getProperty("port.port_type") == "DataInPort":
         name  = "dataports.port_cxt/"
-        name += str(prop.getProperty("publish_topic")) + ".topic_cxt/"
+        name += str(prop.getProperty("subscribe_topic")) + ".topic_cxt/"
         name += prof.name
         name += ".inport"
       elif prop.getProperty("port.port_type") == "CorbaPort":
         name  = "svcports.port_cxt/"
-        name += str(prop.getProperty("publish_topic")) + ".topic_cxt/"
+        name += str(prop.getProperty("rendezvous_point")) + ".topic_cxt/"
         name += prof.name
         name += ".svc"
 
@@ -2935,13 +2935,13 @@ class Manager:
       
       elif prop.getProperty("port.port_type") == "DataInPort":
         name  = "dataports.port_cxt/"
-        name += str(prop.getProperty("publish_topic")) + ".topic_cxt"
+        name += str(prop.getProperty("subscribe_topic")) + ".topic_cxt"
         nsports = self.getPortsOnNameServers(name, "outport")
         self.connectDataPorts(p, nsports)
       
       elif prop.getProperty("port.port_type") == "CorbaPort":
         name  = "svcports.port_cxt/"
-        name += str(prop.getProperty("publish_topic")) + ".topic_cxt"
+        name += str(prop.getProperty("rendezvous_point")) + ".topic_cxt"
         nsports = self.getPortsOnNameServers(name, "svc")
         self.connectServicePorts(p, nsports)
 
