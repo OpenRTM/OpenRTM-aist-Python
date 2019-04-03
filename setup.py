@@ -223,7 +223,7 @@ baseidl_files = [
   "SDOPackage.idl",
   "SharedMemory.idl",
   "IORProfile.idl",
-  "../ext/sdo/observer/ComponentObserver.idl",
+  "../ext/sdo/observer/ComponentObserver_OpenRTM.idl",
   "ExtendedFsmService.idl",
   "DataPort_OpenRTM.idl",
   "CSPPort.idl",
