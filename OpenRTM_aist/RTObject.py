@@ -2606,6 +2606,8 @@ class RTObject_impl:
         self._properties.getNode(propkey).mergeProperties(self._properties.getNode("port.corba"))
       port.init(self._properties.getNode(propkey))
       port.setOwner(self.getObjRef())
+      port.setPortConnectListenerHolder(self._portconnListeners)
+      self.onAddPort(port.getPortProfile())
 
     elif isinstance(port, OpenRTM_aist.PortBase):
       self._rtcout.RTC_TRACE("addPort(PortBase)")
