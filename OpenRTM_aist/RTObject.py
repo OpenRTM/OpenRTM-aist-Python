@@ -1128,7 +1128,7 @@ class RTObject_impl:
     # owned       ec index = ID
     # participate ec index = ID - offset
     if (int(ec_id) < int(ECOTHER_OFFSET)) or \
-          (int(ec_id - ECOTHER_OFFSET) > len_):
+          (int(ec_id - ECOTHER_OFFSET) >= len_):
       return RTC.BAD_PARAMETER
     
     index = int(ec_id - ECOTHER_OFFSET)
