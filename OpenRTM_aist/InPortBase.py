@@ -158,6 +158,10 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
   def init(self,prop):
     self._rtcout.RTC_TRACE("init()")
     self._properties.mergeProperties(prop)
+    prop_list = []
+    OpenRTM_aist.NVUtil.copyFromProperties(prop_list, self._properties)
+    self._profile.properties.extend(prop_list)
+
     if self._singlebuffer:
       self._rtcout.RTC_DEBUG("single buffer mode.")
       self._thebuffer = OpenRTM_aist.CdrBufferFactory.instance().createObject("ring_buffer")
