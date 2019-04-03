@@ -1726,7 +1726,7 @@ class Manager:
       args = []
       for i in range(len(tmp_args)):
         if i%2 == 0:
-          args.extend(tmp_args[i].split(" "))
+          args.extend(tmp_args[i].strip().split(" "))
         else:
           args.append(tmp_args[i])
         
