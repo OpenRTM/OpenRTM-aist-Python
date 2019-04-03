@@ -665,6 +665,10 @@ class CorbaPort(OpenRTM_aist.PortBase):
 
     self._properties.mergeProperties(prop)
 
+    prop_list = []
+    OpenRTM_aist.NVUtil.copyFromProperties(prop_list, self._properties)
+    self._profile.properties.extend(prop_list)
+
     num = [-1]
     if not OpenRTM_aist.stringTo([num], 
                                  self._properties.getProperty("connection_limit","-1")):
