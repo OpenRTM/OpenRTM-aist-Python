@@ -196,7 +196,7 @@ openrtm_ext_packages = [
   "OpenRTM_aist.ext.transport.ROSTransport",
   "OpenRTM_aist.ext.transport.ROS2Transport",
   "OpenRTM_aist.ext.transport.OpenSplice",
-  "OpenRTM_aist.ext.transport.local_service.nameservice_file",
+  "OpenRTM_aist.ext.local_service.nameservice_file",
   "OpenRTM_aist.ext.extended_fsm",
   "OpenRTM_aist.ext.fsm4rtc_observer",
   ]
