@@ -332,6 +332,10 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
 
     self._properties.mergeProperties(prop)
 
+    prop_list = []
+    OpenRTM_aist.NVUtil.copyFromProperties(prop_list, self._properties)
+    self._profile.properties.extend(prop_list)
+
     self.configure()
 
     self.initConsumers()
