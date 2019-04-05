@@ -596,10 +596,6 @@ class RTObject_impl:
     # Return RTC::PRECONDITION_NOT_MET,
     # When the component is registered in ExecutionContext.
     if len(self._ecOther) != 0:
-      #for ec in self._ecOther:
-        #if not CORBA.is_nil(ec):
-          #return RTC.PRECONDITION_NOT_MET
-      
       self._ecOther = []
   
     ret = self.on_finalize()
@@ -687,7 +683,7 @@ class RTObject_impl:
           # ec.stop()
           ec.remove_component(self._this())
       except:
-        pass
+        self._rtcout.RTC_ERROR("Unknown error")
         
 
     self._exiting = True
@@ -3454,6 +3450,12 @@ class RTObject_impl:
     len_ = len(self._eclist)
     for ec in self._eclist:
       ec.stop()
+      rtcs = ec.getComponentList()
+      for rtc in rtcs:
+        try:
+          ec.removeComponent(rtc)
+        except:
+          self._rtcout.RTC_ERROR("UnKonwn error()")
       try:
         self._poa.deactivate_object(self._poa.servant_to_id(ec))
       except:
