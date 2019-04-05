@@ -388,6 +388,8 @@ def is_in_error(rtc, ec_id=0):
 # @endif
 def get_default_rate(rtc):
   ec = get_actual_ec(rtc)
+  if CORBA.is_nil(ec):
+    return RTC.BAD_PARAMETER
   return ec.get_rate()
 
 
@@ -410,6 +412,8 @@ def get_default_rate(rtc):
 # @endif
 def set_default_rate(rtc, rate):
   ec = get_actual_ec(rtc)
+  if CORBA.is_nil(ec):
+    return RTC.BAD_PARAMETER
   return ec.set_rate(rate)
 
 
@@ -432,6 +436,8 @@ def set_default_rate(rtc, rate):
 # @endif
 def get_current_rate(rtc, ec_id):
   ec = get_actual_ec(rtc, ec_id)
+  if CORBA.is_nil(ec):
+    return RTC.BAD_PARAMETER
   return ec.get_rate()
 
 
@@ -455,6 +461,8 @@ def get_current_rate(rtc, ec_id):
 # @endif
 def set_current_rate(rtc, ec_id, rate):
   ec = get_actual_ec(rtc, ec_id)
+  if CORBA.is_nil(ec):
+    return RTC.BAD_PARAMETER
   return ec.set_rate(rate)
 
 
