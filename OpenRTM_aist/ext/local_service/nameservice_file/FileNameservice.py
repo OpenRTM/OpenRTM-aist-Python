@@ -198,7 +198,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
       self._rtcout.RTC_DEBUG("file path: %s", filepath_)
       self._rtcout.RTC_DEBUG("directory: %s", directory_)
       if not self.createDirectory(directory_):
-        continue;
+        continue
       try:
         filename_ = os.path.basename(filepath_)
         self._rtcout.RTC_DEBUG("file name: %s", filename_)
@@ -275,7 +275,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     if not os.path.exists(directory):
       self._rtcout.RTC_DEBUG("Directory %s not found", directory)
       try:
-        os.mkdir(directory)
+        os.makedirs(directory)
         self._rtcout.RTC_DEBUG("Creating directory: %s", directory)
       except:
         self._rtcout.RTC_ERROR("Creating directory has been failed. %s",

@@ -196,6 +196,9 @@ openrtm_ext_packages = [
   "OpenRTM_aist.ext.transport.ROSTransport",
   "OpenRTM_aist.ext.transport.ROS2Transport",
   "OpenRTM_aist.ext.transport.OpenSplice",
+  "OpenRTM_aist.ext.local_service.nameservice_file",
+  "OpenRTM_aist.ext.extended_fsm",
+  "OpenRTM_aist.ext.fsm4rtc_observer",
   ]
 openrtm_utils_packages = [
   "OpenRTM_aist.utils",
@@ -220,10 +223,11 @@ baseidl_files = [
   "SDOPackage.idl",
   "SharedMemory.idl",
   "IORProfile.idl",
-  "../ext/sdo/observer/ComponentObserver.idl",
+  "../ext/sdo/observer/ComponentObserver_OpenRTM.idl",
   "ExtendedFsmService.idl",
   "DataPort_OpenRTM.idl",
-  "CSPPort.idl"
+  "CSPPort.idl",
+  "../ext/fsm4rtc_observer/ComponentObserver.idl"
   ]
 baseidl_mods  = ["RTM", "RTC", "SDOPackage", "OpenRTM"]
 baseidl_path  = os.path.normpath(current_dir + "/" + baseidl_dir)
