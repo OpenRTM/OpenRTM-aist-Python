@@ -116,9 +116,9 @@ class OpenSpliceTopicManager(object):
   # @param qosxml
   #
   # @endif
-  def start(self, qosxml):
-    if qosxml:
-      self._qosProfile = dds.QosProfile(qosxml, 'DDS DefaultQosProfile')
+  def start(self, qosxml, qosprofile):
+    if qosxml and qosprofile:
+      self._qosProfile = dds.QosProfile(qosxml, qosprofile)
       self._domainParticipant = dds.DomainParticipant(qos = self._qosProfile.get_participant_qos())
       self._publisher = self._domainParticipant.create_publisher(qos=self._qosProfile.get_publisher_qos())
       self._subscriber = self._domainParticipant.create_subscriber(qos=self._qosProfile.get_subscriber_qos())
@@ -143,6 +143,11 @@ class OpenSpliceTopicManager(object):
   #
   # @endif
   def shutdown(self):
+    global manager
+    global mutex
+    
+    guard = OpenRTM_aist.ScopedLock(mutex)
+    manager = None
     for _,v in self._topic.items():
       v.close()
     if self._publisher:
@@ -151,6 +156,11 @@ class OpenSpliceTopicManager(object):
       self._subscriber.close()
     if self._domainParticipant:
       self._domainParticipant.close()
+
+    self._qosProfile = None
+    self._domainParticipant = None
+    self._topic = {}
+    self._info = {}
 
   ##
   # @if jp
@@ -303,6 +313,28 @@ class OpenSpliceTopicManager(object):
 
   ##
   # @if jp
+  # @brief Topicオブジェクト取得
+  #
+  # @param self
+  # @param topicname トピック名
+  # @return Topicオブジェクト
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param topicname 
+  # @return 
+  #
+  # @endif
+  def getTopic(self, topicname):
+    if topicname in self._topic:
+      return self._topic[topicname]
+    return None
+
+  ##
+  # @if jp
   # @brief インスタンス取得
   #
   # @return インスタンス
@@ -314,14 +346,14 @@ class OpenSpliceTopicManager(object):
   # @return インスタンス
   #
   # @endif
-  def instance(qosxml=""):
+  def instance(qosxml="", qosprofile=""):
     global manager
     global mutex
     
     guard = OpenRTM_aist.ScopedLock(mutex)
     if manager is None:
       manager = OpenSpliceTopicManager()
-      manager.start(qosxml)
+      manager.start(qosxml, qosprofile)
 
     return manager
   

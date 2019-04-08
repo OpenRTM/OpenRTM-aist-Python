@@ -67,8 +67,7 @@ def OmniDataToDDSData(data, gen_info):
         datatype = gen_info.get_class(data_name)
         cv = OmniDataToDDSData(cdata, gen_info)
         arg[attr] = datatype(**cv)
-        return arg
-    return None
+    return arg
 
 if sys.version_info[0] == 3:
     long = int

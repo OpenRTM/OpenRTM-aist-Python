@@ -116,7 +116,8 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
     self._properties = prop
 
     qosxml = prop.getProperty("QOSXML")
-    self._topicmgr = OpenSpliceTopicManager.instance(qosxml)
+    qosprofile = prop.getProperty("QOSPrfile")
+    self._topicmgr = OpenSpliceTopicManager.instance(qosxml, qosprofile)
 
     self._dataType = prop.getProperty("data_type", self._dataType)
 
