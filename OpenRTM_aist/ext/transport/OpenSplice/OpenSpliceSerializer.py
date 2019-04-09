@@ -67,8 +67,7 @@ def OmniDataToDDSData(data, gen_info):
         datatype = gen_info.get_class(data_name)
         cv = OmniDataToDDSData(cdata, gen_info)
         arg[attr] = datatype(**cv)
-        return arg
-    return None
+    return arg
 
 if sys.version_info[0] == 3:
     long = int
@@ -285,13 +284,7 @@ def OpenSpliceSerializerInit():
                                                       OpenSpliceSerializer,
                                                       OpenRTM_aist.Delete)
 
-  site_dirs = site.getsitepackages()
-  OpenRTM_dir = ""
-  for site_dir in site_dirs:
-    d = os.path.join(site_dir, "OpenRTM_aist")
-    if os.path.exists(d):
-      OpenRTM_dir = d
-      break
+  OpenRTM_dir = OpenRTM_aist.__path__[0]
 
   idl_dir = os.path.join(OpenRTM_dir, "RTM_IDL")
   basicdatatypefile = os.path.join(idl_dir, "BasicDataType.idl")
