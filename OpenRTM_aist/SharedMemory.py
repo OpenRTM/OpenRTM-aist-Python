@@ -202,7 +202,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
         self.rt.close( self.fd )
 
       
-      if not CORBA.is_nil(self._smInterface):
+      if self._smInterface is not None:
           self._smInterface.open_memory(self._memory_size, self._shm_address)
 
 
@@ -274,7 +274,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
       self._shmem = None
 
       try:
-        if not CORBA.is_nil(self._smInterface) and self._smInterface._non_existent():
+        if self._smInterface is not None and self._smInterface._non_existent():
           self._smInterface.close_memory(False)
       except:
         pass
@@ -314,7 +314,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
       if data_size + SharedMemory.default_size > self._memory_size:
         self._memory_size = data_size + SharedMemory.default_size
 
-        if not CORBA.is_nil(self._smInterface):
+        if self._smInterface is not None:
           self._smInterface.close_memory(False)
 
 
@@ -384,7 +384,11 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
   #
   # void setInterface(::OpenRTM::PortSharedMemory_var sm);
   def setInterface(self, sm):
-    self._smInterface = sm
+    if isinstance(sm, SharedMemory):
+      self._smInterface = sm
+    else:
+      if not CORBA.is_nil(sm):
+        self._smInterface = sm
 
 
   ##
@@ -407,7 +411,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
   # void setEndian(bool endian);
   def setEndian(self, endian):
     self._endian = endian
-    if not CORBA.is_nil(self._smInterface):
+    if self._smInterface is not None:
       self._smInterface.setEndian(self._endian)
 
   ##
