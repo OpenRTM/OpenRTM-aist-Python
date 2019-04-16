@@ -144,9 +144,7 @@ class OpenSpliceTopicManager(object):
   # @endif
   def shutdown(self):
     global manager
-    global mutex
     
-    guard = OpenRTM_aist.ScopedLock(mutex)
     manager = None
     for _,v in self._topic.items():
       v.close()
@@ -180,6 +178,8 @@ class OpenSpliceTopicManager(object):
   #
   # @endif
   def genInfo(self, datatype):
+    global mutex
+    guard = OpenRTM_aist.ScopedLock(mutex)
     if datatype in self._info:
       return self._info[datatype]
     factory = OpenSpliceMessageInfo.OpenSpliceMessageInfoFactory.instance()
@@ -211,6 +211,8 @@ class OpenSpliceTopicManager(object):
   #
   # @endif
   def createWriter(self, topic):
+    global mutex
+    guard = OpenRTM_aist.ScopedLock(mutex)
     if self._qosProfile:
       return self._publisher.create_datawriter(topic, self._qosProfile.get_writer_qos())
     else:
@@ -248,6 +250,8 @@ class OpenSpliceTopicManager(object):
   #
   # @endif
   def createReader(self, topic, listener):
+    global mutex
+    guard = OpenRTM_aist.ScopedLock(mutex)
     if self._qosProfile:
       return self._subscriber.create_datareader(topic, self._qosProfile.get_reader_qos(), listener)
     else:
@@ -285,6 +289,8 @@ class OpenSpliceTopicManager(object):
   #
   # @endif
   def createTopic(self, datatype, topicname):
+    global mutex
+    guard = OpenRTM_aist.ScopedLock(mutex)
     if topicname in self._topic:
       return self._topic[topicname]
     else:
@@ -343,7 +349,7 @@ class OpenSpliceTopicManager(object):
   #
   # @brief 
   #
-  # @return インスタンス
+  # @return 
   #
   # @endif
   def instance(qosxml="", qosprofile=""):
@@ -354,59 +360,30 @@ class OpenSpliceTopicManager(object):
     if manager is None:
       manager = OpenSpliceTopicManager()
       manager.start(qosxml, qosprofile)
-
     return manager
   
   instance = staticmethod(instance)
 
 
-##
-# @if jp
-# @class ManagerActionListener
-# @brief OpenSpliceTopicManagerに関するマネージャアクションリスナ
-#
-#
-# @else
-# @class ManagerActionListener
-# @brief 
-#
-#
-# @endif
-class ManagerActionListener:
   ##
   # @if jp
-  # @brief コンストラクタ
+  # @brief OpenSpliceTopicManagerを初期化している場合に終了処理を呼び出す
   #
-  #
-  # @param self
   #
   # @else
   #
-  # @brief self
+  # @brief 
+  #
   #
   # @endif
-  def __init__(self, topic_manager):
-    self._topic_manager = topic_manager
+  def shutdown_global():
+    global manager
+    global mutex
+    
+    guard = OpenRTM_aist.ScopedLock(mutex)
+    if manager is not None:
+      manager.shutdown()
 
-  def preShutdown(self):
-    pass
-  ##
-  # @if jp
-  # @brief RTMマネージャ終了後にOpenSpliceTopicManagerの終了処理を実行
-  #
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @brief self
-  #
-  # @endif
-  def postShutdown(self):
-    self._topic_manager.shutdown()
-
-  def preReinit(self):
-    pass
-
-  def postReinit(self):
-    pass
+    manager = None
+  
+  shutdown_global = staticmethod(shutdown_global)
