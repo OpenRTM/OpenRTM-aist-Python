@@ -22,16 +22,21 @@ import rosgraph.xmlrpc
 import socket
 import threading
 import select
-import xmlrpclib
+try:
+  import xmlrpclib
+except:
+  import xmlrpc.client as xmlrpclib
+
 from rosgraph.network import read_ros_handshake_header, write_ros_handshake_header
 from ROSTopicManager import ROSTopicManager
 import ROSMessageInfo
 import struct
+import sys
 
 try:
   from cStringIO import StringIO
 except ImportError:
-  from io import StringIO
+  from io import StringIO, BytesIO
 
 
 ##
@@ -139,11 +144,11 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
           self._rtcout.RTC_ERROR("unregister subscriber error")
       except xmlrpclib.Fault as err:
         self._rtcout.RTC_ERROR("XML-RPC Error:%s", err.faultString)
-
+    
     if self._topicmgr is not None:
       self._rtcout.RTC_VERBOSE("remove subscriber")
       self._topicmgr.removeSubscriber(self)
-
+    
     for k, connector in self._tcp_connecters.items():
       try:
         self._rtcout.RTC_VERBOSE("connection close")
@@ -227,10 +232,13 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
     factory = ROSMessageInfo.ROSMessageInfoFactory.instance()
     info = factory.createObject(self._messageType)
+    if info:
+      info_type = info.datatype()
 
-    info_type = info.datatype()
-
-    factory.deleteObject(info)
+      factory.deleteObject(info)
+    else:
+      self._rtcout.RTC_ERROR("can not found %s", self._messageType)
+      return
 
 
 
@@ -245,7 +253,6 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
     except xmlrpclib.Fault as err:
       self._rtcout.RTC_ERROR("XML-RPC ERROR: %s", err.faultString)
       return
-    
     self.connect(self._callerid, self._topic, val)
 
   ##
@@ -273,13 +280,16 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
       self._rtcout.RTC_WARN("Topic name is not match(%s:%s)",(topic, self._topic))
       return
     
-    
     for uri in publishers:
       if uri in self._tcp_connecters:
         continue
       self._rtcout.RTC_PARANOID("connectTCP(%s, %s, %s)", (caller_id, topic, uri))
-      pub = xmlrpclib.ServerProxy(uri)
-      ret, message, result = pub.requestTopic(caller_id, topic, [['TCPROS']])
+      try:
+        pub = xmlrpclib.ServerProxy(uri)
+        ret, message, result = pub.requestTopic(caller_id, topic, [['TCPROS']])
+      except:
+        self._rtcout.RTC_ERROR("Failed connect %s", uri)
+        continue
       
       if ret == -1:
         self._rtcout.RTC_WARN("requestTopic error: %s",message)
@@ -297,28 +307,37 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
         sock.settimeout(1)
         sock.connect((dest_addr, dest_port))
         
-        
         fileno = sock.fileno()
-        poller = select.poll()
-        poller.register(fileno, select.POLLOUT)
-        ready = False
-        
-        while not ready:
-          events = poller.poll()
-          for _, flag in events:
-            if flag & select.POLLOUT:
-              ready = True
+        if hasattr(select, 'poll'):
+          poller = select.poll()
+          poller.register(fileno, select.POLLOUT)
+          ready = False
+          
+          while not ready:
+            events = poller.poll()
+            for _, flag in events:
+              if flag & select.POLLOUT:
+                ready = True
+        else:
+          ready = None
+          while not ready:
+            try:
+              _, ready, _ = select.select([], [fileno], [])
+            except ValueError:
+              self._rtcout.RTC_ERROR("ValueError")
+              return
         
 
 
         factory = ROSMessageInfo.ROSMessageInfoFactory.instance()
         info = factory.createObject(self._messageType)
-
-        info_type = info.datatype()
-        info_md5sum = info.md5sum()
-        info_message_definition = info.message_definition()
-
-        factory.deleteObject(info)
+        if(info):
+          info_type = info.datatype()
+          info_md5sum = info.md5sum()
+          info_message_definition = info.message_definition()
+          factory.deleteObject(info)
+        else:
+          self._rtcout.RTC_ERROR("Can not found %s", self._messageType)
 
         sock.setblocking(1)
         fields = {'topic': topic,
@@ -333,7 +352,10 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
         except rosgraph.network.ROSHandshakeException:
           self._rtcout.RTC_ERROR("write ROS handshake header")
           continue
-        read_buff = StringIO()
+        if sys.version_info[0] == 3:
+          read_buff = BytesIO()
+        else:
+          read_buff = StringIO()
         sock.setblocking(1)
 
         try:

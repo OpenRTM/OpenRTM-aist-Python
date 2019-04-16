@@ -22,8 +22,9 @@ import OpenRTM_aist
 try:
   from cStringIO import StringIO
 except ImportError:
-  from io import StringIO
+  from io import StringIO, BytesIO
 
+import sys
 import struct
 import ROSMessageInfo
 
@@ -71,7 +72,12 @@ from sensor_msgs.msg import Image
 #
 # @endif
 #
-def ros_serialize(msg, buf):
+def ros_serialize(msg):
+  if sys.version_info[0] == 3:
+    buf = BytesIO()
+  else:
+    buf = StringIO()
+
   start = buf.tell()
   buf.seek(start+4)
   msg.serialize(buf)
@@ -105,12 +111,16 @@ def ros_serialize(msg, buf):
 #
 # @endif
 #
-def ros_deserialize(bdata, message_type, buf):
+def ros_deserialize(bdata, message_type):
+  if sys.version_info[0] == 3:
+    buf = BytesIO()
+  else:
+    buf = StringIO()
+    
   buf.write(bdata)
   buf.seek(0)
   (size,) = struct.unpack('<I', buf.read(4))
   data = buf.read(size)
-
   message = message_type().deserialize(data)
 
   return message
@@ -159,7 +169,7 @@ def ros_basic_data(message_type):
     #
     # @endif
     def __init__(self):
-      self._buff = StringIO()
+      pass
 
     ##
     # @if jp
@@ -218,11 +228,12 @@ def ros_basic_data(message_type):
     ## virtual bool serialize(const DataType& data) = 0;
     def serialize(self, data):
       msg = message_type()
+
       msg.data = data.data
 
-      buf = ros_serialize(msg, self._buff)
+      bytedata = ros_serialize(msg)
 
-      return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, buf
+      return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, bytedata
 
     ##
     # @if jp
@@ -246,8 +257,17 @@ def ros_basic_data(message_type):
     ## virtual bool deserialize(DataType& data) = 0;
     def deserialize(self, bdata, data_type):
       try:
-        message = ros_deserialize(bdata, message_type, self._buff)
-        data_type.data = message.data
+        message = ros_deserialize(bdata, message_type)
+        if isinstance(data_type.data, bytes):
+         data_type.data = bytes(message.data)
+        elif isinstance(data_type.data, str):
+          data_type.data = str(message.data)
+        elif isinstance(data_type.data, list):
+          data_type.data = list(message.data)
+        elif isinstance(data_type.data, tuple):
+          data_type.data = tuple(message.data)
+        else:
+          data_type.data = message.data
         return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, data_type
       except:
         return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, data_type
@@ -309,7 +329,7 @@ class ROSPoint3DData(OpenRTM_aist.ByteDataStreamBase):
   #
   # @endif
   def __init__(self):
-    self._buff = StringIO()
+    pass
 
   ##
   # @if jp
@@ -374,7 +394,7 @@ class ROSPoint3DData(OpenRTM_aist.ByteDataStreamBase):
     msg.point.y = data.data.y
     msg.point.z = data.data.z
 
-    buf = ros_serialize(msg, self._buff)
+    buf = ros_serialize(msg)
     
 
     return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, buf
@@ -401,7 +421,7 @@ class ROSPoint3DData(OpenRTM_aist.ByteDataStreamBase):
   ## virtual bool deserialize(DataType& data) = 0;
   def deserialize(self, bdata, data_type):
     try:
-      message = ros_deserialize(bdata, PointStamped, self._buff)
+      message = ros_deserialize(bdata, PointStamped)
       data_type.tm.sec = message.header.stamp.secs
       data_type.tm.nsec = message.header.stamp.nsecs
       data_type.data.x = message.point.x
@@ -462,7 +482,7 @@ class ROSQuaternionData(OpenRTM_aist.ByteDataStreamBase):
   #
   # @endif
   def __init__(self):
-    self._buff = StringIO()
+    pass
 
   ##
   # @if jp
@@ -528,7 +548,7 @@ class ROSQuaternionData(OpenRTM_aist.ByteDataStreamBase):
     msg.quaternion.z = data.data.z
     msg.quaternion.w = data.data.w
 
-    buf = ros_serialize(msg, self._buff)
+    buf = ros_serialize(msg)
     
 
     return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, buf
@@ -555,7 +575,7 @@ class ROSQuaternionData(OpenRTM_aist.ByteDataStreamBase):
   ## virtual bool deserialize(DataType& data) = 0;
   def deserialize(self, bdata, data_type):
     try:
-      message = ros_deserialize(bdata, QuaternionStamped, self._buff)
+      message = ros_deserialize(bdata, QuaternionStamped)
       data_type.tm.sec = message.header.stamp.secs
       data_type.tm.nsec = message.header.stamp.nsecs
       data_type.data.x = message.quaternion.x
@@ -618,7 +638,7 @@ class ROSVector3DData(OpenRTM_aist.ByteDataStreamBase):
   #
   # @endif
   def __init__(self):
-    self._buff = StringIO()
+    pass
 
   ##
   # @if jp
@@ -683,7 +703,7 @@ class ROSVector3DData(OpenRTM_aist.ByteDataStreamBase):
     msg.vector.y = data.data.y
     msg.vector.z = data.data.z
 
-    buf = ros_serialize(msg, self._buff)
+    buf = ros_serialize(msg)
     
 
     return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, buf
@@ -710,7 +730,7 @@ class ROSVector3DData(OpenRTM_aist.ByteDataStreamBase):
   ## virtual bool deserialize(DataType& data) = 0;
   def deserialize(self, bdata, data_type):
     try:
-      message = ros_deserialize(bdata, Vector3Stamped, self._buff)
+      message = ros_deserialize(bdata, Vector3Stamped)
       data_type.tm.sec = message.header.stamp.secs
       data_type.tm.nsec = message.header.stamp.nsecs
       data_type.data.x = message.vector.x
@@ -771,7 +791,7 @@ class ROSCameraImageData(OpenRTM_aist.ByteDataStreamBase):
   #
   # @endif
   def __init__(self):
-    self._buff = StringIO()
+    pass
 
   ##
   # @if jp
@@ -841,7 +861,7 @@ class ROSCameraImageData(OpenRTM_aist.ByteDataStreamBase):
     msg.step = 1920
     msg.data = data.pixels
 
-    buf = ros_serialize(msg, self._buff)
+    buf = ros_serialize(msg)
     
 
     return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, buf
@@ -868,11 +888,11 @@ class ROSCameraImageData(OpenRTM_aist.ByteDataStreamBase):
   ## virtual bool deserialize(DataType& data) = 0;
   def deserialize(self, bdata, data_type):
     try:
-      message = ros_deserialize(bdata, Image, self._buff)
+      message = ros_deserialize(bdata, Image)
 
       data_type.tm.sec = message.header.stamp.secs
       data_type.tm.nsec = message.header.stamp.nsecs
-      data.height = message.height
+      data_type.height = message.height
       data_type.width = message.width
       data_type.format = message.encoding 
       data_type.pixels = message.data
