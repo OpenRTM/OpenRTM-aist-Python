@@ -306,6 +306,12 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     # delete consumer
     if self._consumer:
       self._rtcout.RTC_DEBUG("delete consumer")
+      prop_list = []
+      prop = OpenRTM_aist.Properties()
+      node = prop.getNode("dataport")
+      node.mergeProperties(self._profile.properties)
+      OpenRTM_aist.NVUtil.copyFromProperties(prop_list, prop)
+      self._consumer.unsubscribeInterface(prop_list)
       cfactory = OpenRTM_aist.InPortConsumerFactory.instance()
       cfactory.deleteObject(self._consumer)
 

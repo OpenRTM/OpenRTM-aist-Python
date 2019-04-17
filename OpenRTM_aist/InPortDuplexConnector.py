@@ -227,6 +227,17 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
       self._provider.exit()
       
     self._provider = None
+
+
+    if self._consumer:
+      prop_list = []
+      prop = OpenRTM_aist.Properties()
+      node = prop.getNode("dataport")
+      node.mergeProperties(self._profile.properties)
+      OpenRTM_aist.NVUtil.copyFromProperties(prop_list, prop)
+      self._consumer.unsubscribeInterface(prop_list)
+      OpenRTM_aist.OutPortConsumerFactory.instance().deleteObject(self._consumer)
+    self._consumer = None
     
     return self.PORT_OK
 
