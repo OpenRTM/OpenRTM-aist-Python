@@ -196,7 +196,16 @@ def ros2_basic_data(message_type):
     # @endif
     def deserialize(self, bdata, data_type):
       try:
-        data_type.data = bdata.data
+        if isinstance(data_type.data, bytes):
+         data_type.data = bytes(bdata.data)
+        elif isinstance(data_type.data, str):
+          data_type.data = str(bdata.data)
+        elif isinstance(data_type.data, list):
+          data_type.data = list(bdata.data)
+        elif isinstance(data_type.data, tuple):
+          data_type.data = tuple(bdata.data)
+        else:
+          data_type.data = bdata.data
         return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, data_type
       except:
         return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, data_type
@@ -316,11 +325,11 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
   # @endif
   def serialize(self, data):
     msg = PointStamped()
-    msg.header.stamp.secs = data.tm.sec
-    msg.header.stamp.nsecs = data.tm.nsec
-    msg.point.x = data.data.x
-    msg.point.y = data.data.y
-    msg.point.z = data.data.z
+    msg.header.stamp.sec = data.tm.sec
+    msg.header.stamp.nanosec = data.tm.nsec
+    msg.point.x = float(data.data.x)
+    msg.point.y = float(data.data.y)
+    msg.point.z = float(data.data.z)
 
     return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, msg
 
@@ -346,8 +355,8 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
   # @endif
   def deserialize(self, bdata, data_type):
     try:
-      data_type.tm.sec = bdata.header.stamp.secs
-      data_type.tm.nsec = bdata.header.stamp.nsecs
+      data_type.tm.sec = bdata.header.stamp.sec
+      data_type.tm.nsec = bdata.header.stamp.nanosec
       data_type.data.x = bdata.point.x
       data_type.data.y = bdata.point.y
       data_type.data.z = bdata.point.z
@@ -464,12 +473,12 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
   # @endif
   def serialize(self, data):
     msg = QuaternionStamped()
-    msg.header.stamp.secs = data.tm.sec
-    msg.header.stamp.nsecs = data.tm.nsec
-    msg.quaternion.x = data.data.x
-    msg.quaternion.y = data.data.y
-    msg.quaternion.z = data.data.z
-    msg.quaternion.w = data.data.w
+    msg.header.stamp.sec = data.tm.sec
+    msg.header.stamp.nanosec = data.tm.nsec
+    msg.quaternion.x = float(data.data.x)
+    msg.quaternion.y = float(data.data.y)
+    msg.quaternion.z = float(data.data.z)
+    msg.quaternion.w = float(data.data.w)
 
     return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, msg
 
@@ -495,8 +504,8 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
   # @endif
   def deserialize(self, bdata, data_type):
     try:
-      data_type.tm.sec = bdata.header.stamp.secs
-      data_type.tm.nsec = bdata.header.stamp.nsecs
+      data_type.tm.sec = bdata.header.stamp.sec
+      data_type.tm.nsec = bdata.header.stamp.nanosec
       data_type.data.x = bdata.quaternion.x
       data_type.data.y = bdata.quaternion.y
       data_type.data.z = bdata.quaternion.z
@@ -615,11 +624,11 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
   # @endif
   def serialize(self, data):
     msg = Vector3Stamped()
-    msg.header.stamp.secs = data.tm.sec
-    msg.header.stamp.nsecs = data.tm.nsec
-    msg.vector.x = data.data.x
-    msg.vector.y = data.data.y
-    msg.vector.z = data.data.z
+    msg.header.stamp.sec = data.tm.sec
+    msg.header.stamp.nanosec = data.tm.nsec
+    msg.vector.x = float(data.data.x)
+    msg.vector.y = float(data.data.y)
+    msg.vector.z = float(data.data.z)
 
     return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, msg
 
@@ -645,8 +654,8 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
   # @endif
   def deserialize(self, bdata, data_type):
     try:
-      data_type.tm.sec = bdata.header.stamp.secs
-      data_type.tm.nsec = bdata.header.stamp.nsecs
+      data_type.tm.sec = bdata.header.stamp.sec
+      data_type.tm.nsec = bdata.header.stamp.nanosec
       data_type.data.x = bdata.vector.x
       data_type.data.y = bdata.vector.y
       data_type.data.z = bdata.vector.z
@@ -763,8 +772,8 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
   # @endif
   def serialize(self, data):
     msg = Image()
-    msg.header.stamp.secs = data.tm.sec
-    msg.header.stamp.nsecs = data.tm.nsec
+    msg.header.stamp.sec = data.tm.sec
+    msg.header.stamp.nanosec = data.tm.nsec
     msg.height = data.height
     msg.width = data.width
     if not data.format:
@@ -798,9 +807,9 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
   # @endif
   def deserialize(self, bdata, data_type):
     try:
-      data_type.tm.sec = bdata.header.stamp.secs
-      data_type.tm.nsec = bdata.header.stamp.nsecs
-      data.height = bdata.height
+      data_type.tm.sec = bdata.header.stamp.sec
+      data_type.tm.nsec = bdata.header.stamp.nanosec
+      data_type.height = bdata.height
       data_type.width = bdata.width
       data_type.format = bdata.encoding 
       data_type.pixels = bdata.data

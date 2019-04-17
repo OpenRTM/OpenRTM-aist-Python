@@ -59,10 +59,7 @@ class ROS2TopicManager(object):
   #
   # @endif
   def __init__(self):
-    self._qosProfile = None
-    self._domainParticipant = None
-    self._topic = {}
-    self._info = {}
+    self._thread = None
 
     #mgr = OpenRTM_aist.Manager.instance()
     #mgr.addManagerActionListener(ManagerActionListener(self))
@@ -104,8 +101,11 @@ class ROS2TopicManager(object):
     rclpy.init(args=args)
     self._node = Node("openrtm")
     def spin():
+      while True:
         rclpy.spin(self._node)
-    threading.Thread(target=spin).start()
+    self._thread = threading.Thread(target=spin)
+    self._thread.daemon = True
+    self._thread.start()
     
       
 
@@ -126,7 +126,9 @@ class ROS2TopicManager(object):
   def shutdown(self):
     if self._node:
       self._node.destroy_node()
-      rclpy.shutdown()
+      #rclpy.try_shutdown()
+      #if self._thread:
+      #  self._thread.join()
 
 
   ##
@@ -149,6 +151,8 @@ class ROS2TopicManager(object):
   #
   # @endif
   def createPublisher(self, msgtype, topic):
+    global mutex
+    guard = OpenRTM_aist.ScopedLock(mutex)
     if self._node:
       return self._node.create_publisher(msgtype, topic)
     return None
@@ -175,12 +179,14 @@ class ROS2TopicManager(object):
   #
   # @endif
   def createSubscriber(self, msgtype, topic, listener):
+    global mutex
+    guard = OpenRTM_aist.ScopedLock(mutex)
     if self._node:
       return self._node.create_subscription(msgtype, topic, listener)
     return None
 
 
-  def deletePublisher(self, sub):
+  def deletePublisher(self, pub):
     pass
 
   def deleteSubscriber(self, sub):
@@ -214,53 +220,26 @@ class ROS2TopicManager(object):
   instance = staticmethod(instance)
 
 
-##
-# @if jp
-# @class ManagerActionListener
-# @brief ROS2TopicManagerに関するマネージャアクションリスナ
-#
-#
-# @else
-# @class ManagerActionListener
-# @brief 
-#
-#
-# @endif
-class ManagerActionListener:
   ##
   # @if jp
-  # @brief コンストラクタ
+  # @brief ROS2TopicManagerを初期化している場合に終了処理を呼び出す
   #
-  #
-  # @param self
   #
   # @else
   #
-  # @brief self
+  # @brief 
+  #
   #
   # @endif
-  def __init__(self, topic_manager):
-    self._topic_manager = topic_manager
+  def shutdown_global():
+    global manager
+    global mutex
+    
+    guard = OpenRTM_aist.ScopedLock(mutex)
+    if manager is not None:
+      manager.shutdown()
 
-  def preShutdown(self):
-    pass
-  ##
-  # @if jp
-  # @brief RTMマネージャ終了後にROS2TopicManagerの終了処理を実行
-  #
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @brief self
-  #
-  # @endif
-  def postShutdown(self):
-    self._topic_manager.shutdown()
+    manager = None
+  
+  shutdown_global = staticmethod(shutdown_global)
 
-  def preReinit(self):
-    pass
-
-  def postReinit(self):
-    pass
