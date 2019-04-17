@@ -1088,6 +1088,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
       # guard = OpenRTM_aist.ScopedLock(self._connector_mutex)
       if id == self._connectors[idx].id():
         # Connector's dtor must call disconnect()
+        self._connectors[idx].unsubscribeInterface(connector_profile.properties)
         self._connectors[idx].deactivate()
         self._connectors[idx].disconnect()
         del self._connectors[idx]

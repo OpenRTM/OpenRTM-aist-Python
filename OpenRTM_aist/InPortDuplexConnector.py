@@ -227,6 +227,11 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
       self._provider.exit()
       
     self._provider = None
+
+
+    if self._consumer:
+      OpenRTM_aist.OutPortConsumerFactory.instance().deleteObject(self._consumer)
+    self._consumer = None
     
     return self.PORT_OK
 
@@ -449,6 +454,18 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
       self._rtcout.RTC_ERROR("unknown serializer from connector")
       return self.UNKNOWN_ERROR, None
     return self.PRECONDITION_NOT_MET, None
+
+  ##
+  # @if jp
+  # @brief コンシューマのインターフェースの登録を取り消す
+  # @param prop コネクタプロファイルのプロパティ
+  # @else
+  # @brief 
+  # @param prop
+  # @endif
+  def unsubscribeInterface(self, prop):
+    if self._consumer:
+      self._consumer.unsubscribeInterface(prop)
 
 
 ##

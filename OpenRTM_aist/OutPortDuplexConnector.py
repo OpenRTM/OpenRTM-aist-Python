@@ -294,6 +294,14 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
       OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
     self._serializer = None
 
+
+    if self._consumer:
+      self._rtcout.RTC_DEBUG("delete consumer")
+      cfactory = OpenRTM_aist.InPortConsumerFactory.instance()
+      cfactory.deleteObject(self._consumer)
+
+    self._consumer = None
+
     return self.PORT_OK
 
 
@@ -432,6 +440,18 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
       self._rtcout.RTC_ERROR("write(): serializer %s is not support.",self._marshaling_type)
       return self.UNKNOWN_ERROR, cdr_data
     return self.PORT_OK, cdr_data
+
+  ##
+  # @if jp
+  # @brief コンシューマのインターフェースの登録を取り消す
+  # @param prop コネクタプロファイルのプロパティ
+  # @else
+  # @brief 
+  # @param prop
+  # @endif
+  def unsubscribeInterface(self, prop):
+    if self._consumer:
+      self._consumer.unsubscribeInterface(prop)
 
 
 ##
