@@ -27,7 +27,7 @@ from OpenSpliceTopicManager import OpenSpliceTopicManager
 ##
 # @if jp
 # @class ManagerActionListener
-# @brief OpenSpliceTopicManagerに関するマネージャアクションリスナ
+# @brief OpenSpliceTopicManagerの終了処理を行うマネージャアクションリスナ
 #
 #
 # @else
