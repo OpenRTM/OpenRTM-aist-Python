@@ -437,3 +437,27 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     return manager
   
   instance = staticmethod(instance)
+
+
+  ##
+  # @if jp
+  # @brief ROSTopicManagerを初期化している場合に終了処理を呼び出す
+  #
+  #
+  # @else
+  #
+  # @brief 
+  #
+  #
+  # @endif
+  def shutdown_global():
+    global manager
+    global mutex
+    
+    guard = OpenRTM_aist.ScopedLock(mutex)
+    if manager is not None:
+      manager.shutdown()
+
+    manager = None
+  
+  shutdown_global = staticmethod(shutdown_global)
