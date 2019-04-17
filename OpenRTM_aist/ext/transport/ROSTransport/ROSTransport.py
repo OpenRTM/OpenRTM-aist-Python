@@ -28,7 +28,7 @@ from ROSTopicManager import ROSTopicManager
 ##
 # @if jp
 # @class ManagerActionListener
-# @brief OpenSpliceTopicManagerに関するマネージャアクションリスナ
+# @brief ROSTopicManagerの終了処理を行うマネージャアクションリスナ
 #
 #
 # @else
