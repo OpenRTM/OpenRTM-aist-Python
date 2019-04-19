@@ -20,16 +20,20 @@
 import OpenRTM_aist
 from ROSTopicManager import ROSTopicManager
 import ROSMessageInfo
-import xmlrpclib
+try:
+  import xmlrpclib
+except:
+  import xmlrpc.client as xmlrpclib
 from rosgraph.network import read_ros_handshake_header, write_ros_handshake_header
 import rosgraph.network
 try:
   from cStringIO import StringIO
 except ImportError:
-  from io import StringIO
+  from io import StringIO, BytesIO
 import socket
 import select
 import time
+import sys
 
 
 
@@ -203,13 +207,16 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
       return
     
     try:
-      header = read_ros_handshake_header(client_sock, StringIO(), 65536)
+      if sys.version_info[0] == 3:
+        header = read_ros_handshake_header(client_sock, BytesIO(), 65536)
+      else:
+        header = read_ros_handshake_header(client_sock, StringIO(), 65536)
     except rosgraph.network.ROSHandshakeException:
       self._rtcout.RTC_DEBUG("read ROS handshake exception")
       return
-    
+    except:
+      print(traceback.format_exc()) 
 
-    
     topic_name = header['topic']
     md5sum = header['md5sum']
     type_name = header['type']
@@ -221,11 +228,14 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     factory = ROSMessageInfo.ROSMessageInfoFactory.instance()
     info = factory.createObject(self._messageType)
 
-    info_type = info.datatype()
-    info_md5sum = info.md5sum()
-    info_message_definition = info.message_definition()
-
-    factory.deleteObject(info)
+    if info:
+      info_type = info.datatype()
+      info_md5sum = info.md5sum()
+      info_message_definition = info.message_definition()
+      factory.deleteObject(info)
+    else:
+      self._rtcout.RTC_ERROR("can not found %s", self._messageType)
+      return
     
     if info_type != type_name:
       self._rtcout.RTC_WARN("topic name in not match(%s:%s)",(info_type, type_name))
@@ -234,17 +244,25 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
       self._rtcout.RTC_WARN("MD5sum in not match(%s:%s)",(info_md5sum, md5sum))
       return
 
-
-    ready = False
-    poller = select.poll()
     fileno = client_sock.fileno()
-    poller.register(fileno, select.POLLOUT)
-    while not ready:
-      events = poller.poll()
-      for _, flag in events:
-        if flag & select.POLLOUT:
-          ready = True
-
+    poller = None
+    if hasattr(select, 'poll'):
+      ready = False
+      poller = select.poll()
+      poller.register(fileno, select.POLLOUT)
+      while not ready:
+        events = poller.poll()
+        for _, flag in events:
+          if flag & select.POLLOUT:
+            ready = True
+    else:
+      ready = None
+      while not ready:
+        try:
+          _, ready, _ = select.select([], [fileno], [])
+        except ValueError:
+          self._rtcout.RTC_ERROR("ValueError")
+          return
     client_sock.setblocking(1)
     fields = {'topic': topic_name,
               'message_definition': info_message_definition,
@@ -252,7 +270,6 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
               'md5sum': info_md5sum,
               'type': info_type,
               'callerid': header['callerid']}
-
     try:
       write_ros_handshake_header(client_sock, fields)
     except rosgraph.network.ROSHandshakeException:
@@ -261,7 +278,6 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     if poller:
       poller.unregister(fileno)
 
-    
 
     self._tcp_connecters[addr] = client_sock
     

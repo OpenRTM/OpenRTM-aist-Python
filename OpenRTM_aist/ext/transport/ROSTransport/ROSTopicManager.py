@@ -64,13 +64,14 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
   #
   # @endif
   def __init__(self):
+    super(ROSTopicManager, self).__init__()
     self._node = None
     self._server_sock = None
     self._publishers = []
     self._subscribers = []
     self._addr = ""
     self._port = 0
-    self._shutdown = False
+    self._shutdownflag = False
     self._thread = None
     self._old_uris = []
 
@@ -284,10 +285,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
       for lost_uri in lost_uris:
         subscriber.deleteSocket(lost_uri)
     self._old_uris = publishers[:]
-    
-    
 
-    
     return 1, "", 0
 
   ##
@@ -304,7 +302,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
   #
   # @endif
   def run(self):
-    while not self._shutdown:
+    while not self._shutdownflag:
       try:
         (client_sock, client_addr) = self._server_sock.accept()
         addr = client_addr[0] + ":" + str(client_addr[1])
@@ -327,12 +325,11 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
   #
   # @endif
   def shutdown(self):
-    self._shutdown = True
-    self._server_sock.shutdown(socket.SHUT_RDWR)
+    self._shutdownflag = True
+    #self._server_sock.shutdown(socket.SHUT_RDWR)
     self._server_sock.close()
     self._thread.join()
-    
-    #self._node.shutdown("")
+    self._node.shutdown(True)
 
 
   ##
@@ -413,6 +410,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
       if self._node.uri:
         return self._node.uri
       time.sleep(1)
+    return None
 
   ##
   # @if jp
