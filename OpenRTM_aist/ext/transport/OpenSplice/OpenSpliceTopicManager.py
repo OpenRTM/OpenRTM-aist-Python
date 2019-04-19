@@ -118,7 +118,7 @@ class OpenSpliceTopicManager(object):
   # @endif
   def start(self, qosxml, qosprofile):
     if qosxml and qosprofile:
-      self._qosProfile = dds.QosProfile(qosxml, qosprofile)
+      self._qosProfile = dds.QosProvider(qosxml, qosprofile)
       self._domainParticipant = dds.DomainParticipant(qos = self._qosProfile.get_participant_qos())
       self._publisher = self._domainParticipant.create_publisher(qos=self._qosProfile.get_publisher_qos())
       self._subscriber = self._domainParticipant.create_subscriber(qos=self._qosProfile.get_subscriber_qos())
