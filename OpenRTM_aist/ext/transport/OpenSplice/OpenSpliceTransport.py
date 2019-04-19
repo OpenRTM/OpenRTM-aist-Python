@@ -21,6 +21,59 @@ import OpenRTM_aist
 import OpenSpliceInPort
 import OpenSpliceOutPort
 import OpenSpliceSerializer
+from OpenSpliceTopicManager import OpenSpliceTopicManager
+
+
+##
+# @if jp
+# @class ManagerActionListener
+# @brief OpenSpliceTopicManagerの終了処理を行うマネージャアクションリスナ
+#
+#
+# @else
+# @class ManagerActionListener
+# @brief 
+#
+#
+# @endif
+class ManagerActionListener:
+  ##
+  # @if jp
+  # @brief コンストラクタ
+  #
+  #
+  # @param self
+  #
+  # @else
+  #
+  # @brief self
+  #
+  # @endif
+  def __init__(self):
+    pass
+
+  def preShutdown(self):
+    pass
+  ##
+  # @if jp
+  # @brief RTMマネージャ終了後にOpenSpliceTopicManagerの終了処理を実行
+  #
+  #
+  # @param self
+  #
+  # @else
+  #
+  # @brief self
+  #
+  # @endif
+  def postShutdown(self):
+    OpenSpliceTopicManager.shutdown_global()
+
+  def preReinit(self):
+    pass
+
+  def postReinit(self):
+    pass
 
 
 
@@ -39,4 +92,6 @@ def OpenSpliceTransportInit(mgr):
   OpenSpliceInPort.OpenSpliceInPortInit()
   OpenSpliceOutPort.OpenSpliceOutPortInit()
   OpenSpliceSerializer.OpenSpliceSerializerInit()
+
+  mgr.addManagerActionListener(ManagerActionListener())
 

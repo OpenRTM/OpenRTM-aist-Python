@@ -165,7 +165,7 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
     self._rtcout.RTC_VERBOSE("data type: %s", self._dataType)
     self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
 
-    self._writer = self._topicmgr.createReader(topic, SubListener(self))
+    self._reader = self._topicmgr.createReader(topic, SubListener(self))
 
 
   ## virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
