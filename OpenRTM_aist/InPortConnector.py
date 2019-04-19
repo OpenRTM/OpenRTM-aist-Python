@@ -259,9 +259,9 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   #
   # @if jp
-  # @brief データを書き込める状態かを判定
+  # @brief データを読み込める状態かを判定
   # @param self
-  # @return True：書き込み可能
+  # @return True：読み込み可能
   # @else
   # @brief 
   # @param self
@@ -278,4 +278,15 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
   # @brief set Consumer
   # @endif
   def setConsumer(self, consumer):
+    pass
+
+  ##
+  # @if jp
+  # @brief コンシューマのインターフェースの登録を取り消す
+  # @param prop コネクタプロファイルのプロパティ
+  # @else
+  # @brief 
+  # @param prop
+  # @endif
+  def unsubscribeInterface(self, prop):
     pass

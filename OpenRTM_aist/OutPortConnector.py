@@ -191,17 +191,76 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
   def read(self, data):
     pass
 
+  #
+  # @if jp
+  # @brief データを書き込める状態かを判定
+  # @param self
+  # @return True：書き込み可能
+  # @else
+  # @brief 
+  # @param self
+  # @return 
+  # @endif
   def isWritable(self):
     return False
 
+  #
+  # @if jp
+  # @brief データを読み込める状態かを判定
+  # @param self
+  # @return True：読み込み可能
+  # @else
+  # @brief 
+  # @param self
+  # @return 
+  # @return 
+  # @endif
   def isReadable(self):
     return False
 
+  #
+  # @if jp
+  # @brief データを書き込める状態かを判定
+  # @param self
+  # @return True：書き込み可能
+  # @else
+  # @brief 
+  # @param self
+  # @return 
+  # @endif
   def setReadListener(self, listener):
     pass
 
+  #
+  # @if jp
+  # @brief データを読み込める状態かを判定
+  # @param self
+  # @return True：読み込み可能
+  # @else
+  # @brief 
+  # @param self
+  # @return 
+  # @return 
+  # @endif
   def setIsReadableListener(self, listener):
     pass
 
+  ##
+  # @if jp
+  # @brief コンシューマの設定
+  # @else
+  # @brief set Consumer
+  # @endif
   def setConsumer(self, consumer):
+    pass
+
+  ##
+  # @if jp
+  # @brief コンシューマのインターフェースの登録を取り消す
+  # @param prop コネクタプロファイルのプロパティ
+  # @else
+  # @brief 
+  # @param prop
+  # @endif
+  def unsubscribeInterface(self, prop):
     pass

@@ -397,3 +397,14 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     return True
 
 
+  ##
+  # @if jp
+  # @brief コンシューマのインターフェースの登録を取り消す
+  # @param prop コネクタプロファイルのプロパティ
+  # @else
+  # @brief 
+  # @param prop
+  # @endif
+  def unsubscribeInterface(self, prop):
+    if self._consumer:
+      self._consumer.unsubscribeInterface(prop)
