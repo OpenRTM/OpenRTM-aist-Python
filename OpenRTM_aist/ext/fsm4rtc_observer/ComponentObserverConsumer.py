@@ -227,8 +227,6 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     self.unsetPortProfileListeners()
     self.unsetExecutionContextListeners()
     self.unsetConfigurationListeners()
-    self.unsetRTCHeartbeat()
-    self.unsetECHeartbeat()
     return
 
 
@@ -392,7 +390,8 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
   #
   # void rtcHeartbeat();
   def rtcHeartbeat(self):
-    self.updateStatus(RTC.RTC_HEARTBEAT, "")
+    if self._rtcHeartbeat:
+      self.updateStatus(RTC.RTC_HEARTBEAT, "")
     return
 
 
@@ -443,10 +442,23 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
   # void unsetRTCHeartbeat();
   def unsetRTCHeartbeat(self):
     self._timer.unregisterListener(self._rtcHblistenerid)
-    self._rtcHblistenerid = 0
-    self._timer.stop()
+    self._rtcHblistenerid = None
     self._rtcHeartbeat = False
     return
+
+  ##
+  # @if jp
+  # @brief タイマースレッドを停止する
+  # @else
+  # @brief Stop timer thread
+  # @endif
+  #
+  # void stopTimer();
+  def stopTimer(self):
+    self._timer.stop()
+    self._timer.join()
+
+
 
 
   ##
@@ -458,7 +470,14 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
   #
   # void ecHeartbeat();
   def ecHeartbeat(self):
-    self.updateStatus(RTC.EC_HEARTBEAT, "")
+    if self._ecHeartbeat:
+      ecs = self._rtobj.get_owned_contexts()
+      for i in range(len(ecs)):
+        self.updateStatus(RTC.EC_HEARTBEAT, "HEARTBEAT:"+str(i))
+      ecs = self._rtobj.get_participating_contexts()
+      for i in range(len(ecs)):
+        self.updateStatus(RTC.EC_HEARTBEAT, "HEARTBEAT:"+str(i+OpenRTM_aist.ECOTHER_OFFSET))
+      
     return
 
 
@@ -505,8 +524,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
   # void unsetECHeartbeat();
   def unsetECHeartbeat(self):
     self._timer.unregisterListener(self._ecHblistenerid)
-    self._ecHblistenerid = 0
-    self._timer.stop()
+    self._ecHblistenerid = None
     self._ecHeartbeat = False
     return
 
@@ -1038,6 +1056,9 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
 
     #void onFinalize(UniqueId ec_id, ReturnCode_t ret)
     def onFinalize(self, ec_id, ret):
+      self._coc.unsetRTCHeartbeat()
+      self._coc.unsetECHeartbeat()
+      self._coc.stopTimer()
       self.onGeneric("FINALIZE:", ec_id, ret)
       return
 
