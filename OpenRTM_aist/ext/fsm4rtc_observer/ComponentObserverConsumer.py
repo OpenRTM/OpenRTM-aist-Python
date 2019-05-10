@@ -137,7 +137,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     self._ecHblistenerid = None
 
     # このタイマーはいずれグローバルなタイマにおきかえる
-    self._timer = OpenRTM_aist.Timer(self._rtcInterval)
+    self._timer = OpenRTM_aist.Timer(OpenRTM_aist.TimeValue(0, 100000))
     return
 
 
@@ -456,7 +456,6 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
   # void stopTimer();
   def stopTimer(self):
     self._timer.stop()
-    self._timer.join()
 
 
 
