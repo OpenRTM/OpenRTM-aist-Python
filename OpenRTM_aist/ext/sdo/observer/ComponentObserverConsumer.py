@@ -51,7 +51,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     self._ecaction = self.ECAction(self)
     self._configMsg = self.ConfigAction(self)
 
-    self._interval = OpenRTM_aist.TimeValue(1, 0)
+    self._interval = OpenRTM_aist.TimeValue(0, 100000)
     self._heartbeat = False
     self._hblistenerid = None
 
@@ -152,7 +152,6 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     self.unsetPortProfileListeners()
     self.unsetExecutionContextListeners()
     self.unsetConfigurationListeners()
-
     del self._timer
     return
 
@@ -327,13 +326,12 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
   def setHeartbeat(self, prop):
     if OpenRTM_aist.toBool(prop.getProperty("heartbeat.enable"), "YES", "NO", False):
       interval_ = prop.getProperty("heartbeat.interval")
-      if not interval_:
-        self._interval.set_time(1.0)
-      else:
-        tmp_ = float(interval_)
-        self._interval.set_time(tmp_)
+      tm_ = OpenRTM_aist.TimeValue(1, 0)
 
-      tm_ = self._interval
+      if interval_:
+        tmp_ = float(interval_)
+        tm_.set_time(tmp_)
+
       self._hblistenerid = self._timer.registerListenerObj(self,
                                                            ComponentObserverConsumer.heartbeat,
                                                            tm_)
@@ -359,9 +357,8 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
   def unsetHeartbeat(self):
     self._timer.unregisterListener(self._hblistenerid)
     self._hblistenerid = None
-    self._timer.stop()
-    self._timer.join()
     self._heartbeat = False
+    self._timer.stop()
     return
 
 
