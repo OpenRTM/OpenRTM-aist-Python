@@ -193,6 +193,8 @@ class RTObjectStateMachine:
   # RTC::DataflowComponentAction
   # void onExecute(const ExecContextStates& st);
   def onExecute(self, st):
+    if self.isNextState(RTC.ERROR_STATE):
+      return
     if self._rtObjPtr:
       if self._rtObjPtr.on_execute(self._id) != RTC.RTC_OK:
         self._sm.goTo(RTC.ERROR_STATE)
@@ -207,6 +209,8 @@ class RTObjectStateMachine:
 
   # void onStateUpdate(const ExecContextStates& st);
   def onStateUpdate(self, st):
+    if self.isNextState(RTC.ERROR_STATE):
+      return
     if self._rtObjPtr:
       if self._rtObjPtr.on_state_update(self._id) != RTC.RTC_OK:
         self._sm.goTo(RTC.ERROR_STATE)
