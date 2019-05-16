@@ -887,6 +887,8 @@ def create_connector(name, prop_arg, port0, port1):
 # @endif
 
 def already_connected(localport, otherport):
+  if localport._is_equivalent(otherport):
+    return False
   conprof = localport.get_connector_profiles()
   for c in conprof:
     for p in c.ports:
