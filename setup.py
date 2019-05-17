@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: euc-jp -*-
 #
 # @file setup.py
 # @author Noriaki Ando <n-ando@aist.go.jp>
