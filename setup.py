@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: euc-jp -*-
 #
 # @file setup.py
 # @author Noriaki Ando <n-ando@aist.go.jp>
@@ -131,7 +132,7 @@ import string
 if sys.version_info[0] == 2:
   import commands
 else:
-  import subprocess as commands
+  import subprocess
 import glob
 import shutil
 from distutils import core
@@ -433,8 +434,16 @@ def compile_idl(idl_compiler, include_dirs, current_dir, files):
       os.system(cmdline)
       return
     log.info(cmdline)
-    status, output = commands.getstatusoutput(cmdline)
-    log.info(output)
+    if sys.version_info[0] == 2:
+      status, output = commands.getstatusoutput(cmdline)
+      log.info(output)
+    else:
+      try:
+        proc = subprocess.run(cmdline, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        status = 0
+        log.info(proc.stdout.decode("UTF-8"))
+      except:
+        status = 1
     if status != 0:
       raise errors.DistutilsExecError("Return status of %s is %d" %
                                       (cmd, status))
@@ -465,8 +474,17 @@ def create_doc(doxygen_conf, target_dir):
       os.system(cmdline)
       return
     log.info(cmdline)
-    status, output = commands.getstatusoutput(cmdline)
-    log.info(output)
+    if sys.version_info[0] == 2:
+      status, output = commands.getstatusoutput(cmdline)
+      log.info(output)
+    else:
+      try:
+        proc = subprocess.run(cmdline, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        status = 0
+        log.info(proc.stdout.decode("UTF-8"))
+      except:
+        status = 1
+      
     if status != 0:
       raise errors.DistutilsExecError("Return status of %s is %d" %
                                       (cmd, status))
