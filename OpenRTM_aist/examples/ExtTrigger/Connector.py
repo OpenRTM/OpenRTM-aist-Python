@@ -18,6 +18,10 @@ def main():
   subs_type = "Flush"
 
   # initialization of ORB
+  manager = OpenRTM_aist.Manager.init(sys.argv + ["-o", "manager.shutdown_auto:NO", "-o", "manager.shutdown_on_nortcs:NO"])
+  manager.activateManager()
+  manager.runManager(True)
+
   orb = CORBA.ORB_init(sys.argv)
 
   # get NamingService
@@ -97,6 +101,8 @@ def main():
     except:
       print("Exception.")
       pass
+
+  manager.shutdown()
 
 if __name__ == "__main__":
   main()
