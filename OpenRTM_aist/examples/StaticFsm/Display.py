@@ -42,7 +42,7 @@ class DataListener(OpenRTM_aist.ConnectorDataListenerT):
     print("dtor of ", self._name)
 
   def __call__(self, info, cdrdata):
-    data = OpenRTM_aist.ConnectorDataListenerT.__call__(self, info, cdrdata, RTC.TimedLong(RTC.Time(0,0),0))
+    data = OpenRTM_aist.ConnectorDataListenerT.__call__(self, info, cdrdata, RTC.TimedLong(RTC.Time(0,0),0), OpenRTM_aist.PortType.InPortType)
     print("------------------------------")
     print("Listener:       ", self._name)
     print("Profile::name:  ", info.name)
