@@ -107,6 +107,11 @@ class OutPort(OpenRTM_aist.OutPortBase):
     self._directNewData = False
     self._valueMutex = threading.RLock()
     self._directValue = value
+
+    factory = OpenRTM_aist.SerializerFactory.instance()
+    serializer_types = OpenRTM_aist.flatten(factory.getIdentifiers())
+    serializer_types = serializer_types.lstrip()
+    self.addProperty("dataport.serializer_type", serializer_types)
     
     
 
