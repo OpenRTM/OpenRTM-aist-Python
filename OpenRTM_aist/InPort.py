@@ -97,10 +97,6 @@ class InPort(OpenRTM_aist.InPortBase):
     self.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED, OpenRTM_aist.Timestamp("on_received"))
     self.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ, OpenRTM_aist.Timestamp("on_read"))
 
-    factory = OpenRTM_aist.SerializerFactory.instance()
-    serializer_types = OpenRTM_aist.flatten(factory.getIdentifiers())
-    serializer_types = serializer_types.lstrip()
-    self.addProperty("dataport.serializer_type", serializer_types)
 
 
   def __del__(self, InPortBase=OpenRTM_aist.InPortBase):
