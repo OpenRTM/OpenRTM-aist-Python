@@ -444,10 +444,10 @@ class ROSPoint3DData(OpenRTM_aist.ByteDataStreamBase):
 # @endif
 #
 def ROSPoint3DInit():
-  OpenRTM_aist.SerializerFactory.instance().addFactory("ROSPointStamped",
+  OpenRTM_aist.SerializerFactory.instance().addFactory("ros:geometry_msgs/PointStamped",
                                                       ROSPoint3DData,
                                                       OpenRTM_aist.Delete)
-  ROSMessageInfo.ROSMessageInfoFactory.instance().addFactory("ROSPointStamped",
+  ROSMessageInfo.ROSMessageInfoFactory.instance().addFactory("ros:geometry_msgs/PointStamped",
                                                       ROSMessageInfo.ros_message_info(PointStamped),
                                                       OpenRTM_aist.Delete)
 
@@ -599,10 +599,10 @@ class ROSQuaternionData(OpenRTM_aist.ByteDataStreamBase):
 # @endif
 #
 def ROSQuaternionInit():
-  OpenRTM_aist.SerializerFactory.instance().addFactory("ROSQuaternionStamped",
+  OpenRTM_aist.SerializerFactory.instance().addFactory("ros:geometry_msgs/QuaternionStamped",
                                                       ROSQuaternionData,
                                                       OpenRTM_aist.Delete)
-  ROSMessageInfo.ROSMessageInfoFactory.instance().addFactory("ROSQuaternionStamped",
+  ROSMessageInfo.ROSMessageInfoFactory.instance().addFactory("ros:geometry_msgs/QuaternionStamped",
                                                       ROSMessageInfo.ros_message_info(QuaternionStamped),
                                                       OpenRTM_aist.Delete)
 
@@ -753,10 +753,10 @@ class ROSVector3DData(OpenRTM_aist.ByteDataStreamBase):
 # @endif
 #
 def ROSVector3DInit():
-  OpenRTM_aist.SerializerFactory.instance().addFactory("ROSVector3Stamped",
+  OpenRTM_aist.SerializerFactory.instance().addFactory("ros:geometry_msgs/Vector3Stamped",
                                                       ROSVector3DData,
                                                       OpenRTM_aist.Delete)
-  ROSMessageInfo.ROSMessageInfoFactory.instance().addFactory("ROSVector3Stamped",
+  ROSMessageInfo.ROSMessageInfoFactory.instance().addFactory("ros:geometry_msgs/Vector3Stamped",
                                                       ROSMessageInfo.ros_message_info(Vector3Stamped),
                                                       OpenRTM_aist.Delete)
 
@@ -913,10 +913,10 @@ class ROSCameraImageData(OpenRTM_aist.ByteDataStreamBase):
 # @endif
 #
 def ROSCameraImageInit():
-  OpenRTM_aist.SerializerFactory.instance().addFactory("ROSImage",
+  OpenRTM_aist.SerializerFactory.instance().addFactory("ros:sensor_msgs/Image",
                                                       ROSCameraImageData,
                                                       OpenRTM_aist.Delete)
-  ROSMessageInfo.ROSMessageInfoFactory.instance().addFactory("ROSImage",
+  ROSMessageInfo.ROSMessageInfoFactory.instance().addFactory("ros:sensor_msgs/Image",
                                                       ROSMessageInfo.ros_message_info(Image),
                                                       OpenRTM_aist.Delete)
 
@@ -933,28 +933,28 @@ def ROSCameraImageInit():
 # @endif
 #
 def ROSSerializerInit():
-  ROSBasicDataInit(Float32, "ROSFloat32")
-  ROSBasicDataInit(Float64, "ROSFloat64")
-  ROSBasicDataInit(Int8, "ROSInt8")
-  ROSBasicDataInit(Int16, "ROSInt16")
-  ROSBasicDataInit(Int32, "ROSInt32")
-  ROSBasicDataInit(Int64, "ROSInt64")
-  ROSBasicDataInit(UInt8, "ROSUInt8")
-  ROSBasicDataInit(UInt16, "ROSUInt16")
-  ROSBasicDataInit(UInt32, "ROSUInt32")
-  ROSBasicDataInit(UInt64, "ROSUInt64")
-  ROSBasicDataInit(String, "ROSString")
+  ROSBasicDataInit(Float32, "ros:std_msgs/Float32")
+  ROSBasicDataInit(Float64, "ros:std_msgs/Float64")
+  ROSBasicDataInit(Int8, "ros:std_msgs/Int8")
+  ROSBasicDataInit(Int16, "ros:std_msgs/Int16")
+  ROSBasicDataInit(Int32, "ros:std_msgs/Int32")
+  ROSBasicDataInit(Int64, "ros:std_msgs/Int64")
+  ROSBasicDataInit(UInt8, "ros:std_msgs/UInt8")
+  ROSBasicDataInit(UInt16, "ros:std_msgs/UInt16")
+  ROSBasicDataInit(UInt32, "ros:std_msgs/UInt32")
+  ROSBasicDataInit(UInt64, "ros:std_msgs/UInt64")
+  ROSBasicDataInit(String, "ros:std_msgs/String")
 
-  ROSBasicDataInit(Float32MultiArray, "ROSFloat32MultiArray")
-  ROSBasicDataInit(Float64MultiArray, "ROSFloat64MultiArray")
-  ROSBasicDataInit(Int8MultiArray, "ROSInt8MultiArray")
-  ROSBasicDataInit(Int16MultiArray, "ROSInt16MultiArray")
-  ROSBasicDataInit(Int32MultiArray, "ROSInt32MultiArray")
-  ROSBasicDataInit(Int64MultiArray, "ROSInt64MultiArray")
-  ROSBasicDataInit(UInt8MultiArray, "ROSUInt8MultiArray")
-  ROSBasicDataInit(UInt16MultiArray, "ROSUInt16MultiArray")
-  ROSBasicDataInit(UInt32MultiArray, "ROSUInt32MultiArray")
-  ROSBasicDataInit(UInt64MultiArray, "ROSUInt64MultiArray")
+  ROSBasicDataInit(Float32MultiArray, "ros:std_msgs/Float32MultiArray")
+  ROSBasicDataInit(Float64MultiArray, "ros:std_msgs/Float64MultiArray")
+  ROSBasicDataInit(Int8MultiArray, "ros:std_msgs/Int8MultiArray")
+  ROSBasicDataInit(Int16MultiArray, "ros:std_msgs/Int16MultiArray")
+  ROSBasicDataInit(Int32MultiArray, "ros:std_msgs/Int32MultiArray")
+  ROSBasicDataInit(Int64MultiArray, "ros:std_msgs/Int64MultiArray")
+  ROSBasicDataInit(UInt8MultiArray, "ros:std_msgs/UInt8MultiArray")
+  ROSBasicDataInit(UInt16MultiArray, "ros:std_msgs/UInt16MultiArray")
+  ROSBasicDataInit(UInt32MultiArray, "ros:std_msgs/UInt32MultiArray")
+  ROSBasicDataInit(UInt64MultiArray, "ros:std_msgs/UInt64MultiArray")
 
   ROSPoint3DInit()
   ROSQuaternionInit()
