@@ -56,6 +56,10 @@ class ConnectorListenerStatus:
   BOTH_CHANGED = INFO_CHANGED | DATA_CHANGED
 
 
+class PortType:
+  OutPortType = 0
+  InPortType = 1
+
 ##
 # @if jp
 # @brief ConnectorDataListener のタイプ
@@ -306,6 +310,8 @@ class ConnectorDataListenerT(ConnectorDataListener):
   #
   # @param info ConnectorInfo 
   # @param cdrdata cdrMemoryStream型のデータ
+  # @param data 元のデータ型
+  # @param porttype ポートの種類
   #
   # @else
   #
@@ -316,12 +322,14 @@ class ConnectorDataListenerT(ConnectorDataListener):
   #
   # @param info ConnectorInfo 
   # @param cdrdata Data of cdrMemoryStream type
+  # @param data 
+  # @param porttype 
   #
   # @endif
   #
   # virtual ReturnCode operator()(const ConnectorInfo& info,
   #                         const cdrMemoryStream& cdrdata)
-  def __call__(self, info, cdrdata, data):
+  def __call__(self, info, cdrdata, data, porttype):
     endian = info.properties.getProperty("serializer.cdr.endian","little")
     if endian is not "little" and endian is not None:
       endian = OpenRTM_aist.split(endian, ",") # Maybe endian is ["little","big"]
@@ -335,6 +343,10 @@ class ConnectorDataListenerT(ConnectorDataListener):
       endian = True
 
     marshaling_type = info.properties.getProperty("marshaling_type", "corba")
+    if porttype == PortType.OutPortType:
+      marshaling_type = info.properties.getProperty("out.marshaling_type", marshaling_type)
+    elif porttype == PortType.InPortType:
+      marshaling_type = info.properties.getProperty("in.marshaling_type", marshaling_type)
     marshaling_type = marshaling_type.strip()
 
 
