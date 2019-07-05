@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file CSPOutPort.py
@@ -25,7 +25,7 @@ import threading
 #
 # @class EventInPort
 #
-# @brief EventInPort �ƥ�ץ졼�ȥ��饹
+# @brief EventInPort テンプレートクラス
 # 
 #
 # @since 2.0.0
@@ -45,13 +45,13 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯����
-  # �ѥ�᡼���Ȥ���Ϳ������ T �����ѿ��˥Х���ɤ���롣
+  # コンストラクタ。
+  # パラメータとして与えられる T 型の変数にバインドされる。
   #
-  # @param name EventInPort ̾��EventInPortBase:name() �ˤ�껲�Ȥ���롣
-  # @param value ���� EventInPort �˥Х���ɤ���� T �����ѿ�
+  # @param name EventInPort 名。EventInPortBase:name() により参照される。
+  # @param value この EventInPort にバインドされる T 型の変数
   #
   # @else
   #
@@ -85,9 +85,9 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
-  # �ǥ��ȥ饯����
+  # デストラクタ。
   #
   # @else
   #
@@ -103,12 +103,12 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �ݡ���̾�Τ�������롣
+  # @brief ポート名称を取得する。
   #
-  # �ݡ���̾�Τ�������롣
+  # ポート名称を取得する。
   #
   # @param self
-  # @return �ݡ���̾��
+  # @return ポート名称
   #
   # @else
   #
@@ -127,11 +127,11 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ������ؿ�
+  # @brief 初期化関数
   #
   # @param self
-  # @param prop �������
-  # channel_timeout���ǡ����񤭹��ߡ��ɤ߹��߻��Υ����ॢ����
+  # @param prop 設定情報
+  # channel_timeout：データ書き込み、読み込み時のタイムアウト
   #
   # @else
   #
@@ -160,16 +160,16 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ���ͥ�����³�ؿ�
-  # OutPortBase����³�����Τۤ��ˡ����ͥ������ɤ߹��߳�ǧ�����ɤ߹��߻��Υ�����Хå��ؿ������ꤹ��
+  # @brief コネクタ接続関数
+  # OutPortBaseの接続処理のほかに、コネクタに読み込み確認時、読み込み時のコールバック関数を設定する
   #
   # @param self
-  # @param connector_profile ���ͥ����ץ��ե�����
+  # @param connector_profile コネクタプロファイル
   # @return ret, prof
-  # ret���꥿���󥳡���
-  # prof�����ͥ����ץ��ե�����
+  # ret：リターンコード
+  # prof：コネクタプロファイル
   # 
-  # @return �ݡ���̾��
+  # @return ポート名称
   #
   # @else
   #
@@ -192,12 +192,12 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �ǡ������񤭹��߲�ǽ�����ǧ
+  # @brief データが書き込み可能かを確認
   #
   # @param self
   # @return ret, con
-  # ret��True(�񤭹��߲�ǽ)��False(�񤭹����Բ�)
-  # con���񤭹��߲�ǽ�ʥ��ͥ������񤭹����ԲĤξ���None
+  # ret：True(書き込み可能)、False(書き込み不可)
+  # con：書き込み可能なコネクタ。書き込み不可の場合はNone
   #
   # @else
   #
@@ -217,10 +217,10 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �񤭹��߲�ǽ�ʥ��ͥ��������򤷤�self._writableConnector�˳�Ǽ����
+  # @brief 書き込み可能なコネクタを選択してself._writableConnectorに格納する
   #
   # @param self
-  # @return True���񤭹��߲�ǽ��False���񤭹����Բ�
+  # @return True：書き込み可能、False：書き込み不可
   #
   # @else
   #
@@ -245,11 +245,11 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief self._writableConnector�˳�Ǽ�������ͥ����˥ǡ�����񤭹���
-  # ���Τ��ᡢ������select�ؿ���¹Ԥ���ɬ�פ�����
+  # @brief self._writableConnectorに格納したコネクタにデータを書き込む
+  # このため、事前にselect関数を実行する必要がある
   #
   # @param self
-  # @param value �ǡ���
+  # @param value データ
   #
   # @else
   #
@@ -286,10 +286,10 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �Ե����ֻ��˰ܹԤ������˥ǡ�������Ū���ѿ��˳�Ǽ����
+  # @brief 待機状態時に移行した場合にデータを一時的に変数に格納する
   #
   # @param self
-  # @param data �ǡ���
+  # @param data データ
   #
   # @else
   #
@@ -306,14 +306,14 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �ǡ�����񤭹���
-  # �񤭹��߲�ǽ�ʥ��ͥ�����¸�ߤ�����ϡ��ǡ�����񤭹���ǽ�����λ����
-  # �񤭹��߲�ǽ�ʥ��ͥ�����¸�ߤ��ʤ����ϡ�InPort¦����ǡ������ɤ߹���ޤ��Ե�����
+  # @brief データを書き込む
+  # 書き込み可能なコネクタが存在する場合は、データを書き込んで処理を終了する
+  # 書き込み可能なコネクタが存在しない場合は、InPort側からデータを読み込むまで待機する
   #
   # @param self
-  # @param value �ǡ���
-  # @return True�����ﴰλ��False�����顼
-  # �ǡ����Υޡ������󥰡��񤭹��ߤΥ����ॢ���Ȥǥ��顼��ȯ������
+  # @param value データ
+  # @return True：正常完了、False：エラー
+  # データのマーシャリング、書き込みのタイムアウトでエラーが発生する
   #
   # @else
   #
@@ -382,7 +382,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   #
   # @class IsReadableListener
   #
-  # @brief �ǡ����ɤ߹��߳�ǧ�ꥹ�ʴ��쥯�饹
+  # @brief データ読み込み確認リスナ基底クラス
   # 
   #
   # @since 2.0.0
@@ -402,14 +402,14 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     ##
     # @if jp
     #
-    # @brief ���󥹥ȥ饯��
+    # @brief コンストラクタ
     # 
     #
     # @param self
-    # @param control WorkerThreadCtrl���֥�������
-    # @param timeout �ɤ߹����Ե��Υ����ॢ���Ȼ���
-    # @param manager CSP����ͥ�����ޥ͡�����
-    # manager����ꤷ�����ϡ�manager���Ե���ξ��˥��å���������Τ�Ԥ�
+    # @param control WorkerThreadCtrlオブジェクト
+    # @param timeout 読み込み待機のタイムアウト時間
+    # @param manager CSPチャネル管理マネージャ
+    # managerを指定した場合は、managerが待機中の場合にロック解除の通知を行う
     # 
     #
     #
@@ -433,15 +433,15 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     ##
     # @if jp
     #
-    # @brief �ɤ߹��߳�ǧ���Υ�����Хå��ؿ�
-    # ¾�Υ��ͥ������ǡ����ɤ߹�����ξ��ϴ�λ�ޤ��Ե�����
-    # �ǡ����񤭹��ߤ��Ե����Ƥ���ξ����ɤ߹��߾��֤˰ܹԤ���
-    # ���Τ��ᡢ�ɤ߹��߲�ǽ�ʾ���ɬ���ǡ������ɤ߹���ɬ�פ�����
+    # @brief 読み込み確認時のコールバック関数
+    # 他のコネクタがデータ読み込み中の場合は完了まで待機する
+    # データ書き込みで待機しているの場合は読み込み状態に移行する
+    # このため、読み込み可能な場合は必ずデータを読み込み必要がある
     # 
     #
     # @param self
     # @param con OutPortConnector
-    # @return True���ɤ߹��߲�ǽ��False���ɤ߹����Բ�
+    # @return True：読み込み可能、False：読み込み不可
     # 
     #
     #
@@ -479,7 +479,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   #
   # @class ReadListener
   #
-  # @brief �ǡ����ɤ߹��߻��Υꥹ�ʴ��쥯�饹
+  # @brief データ読み込み時のリスナ基底クラス
   # 
   #
   # @since 2.0.0
@@ -499,12 +499,12 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     ##
     # @if jp
     #
-    # @brief ���󥹥ȥ饯��
+    # @brief コンストラクタ
     # 
     #
     # @param self
-    # @param data �ǡ������Ǽ�����ѿ�
-    # @param control WorkerThreadCtrl���֥�������
+    # @param data データを格納する変数
+    # @param control WorkerThreadCtrlオブジェクト
     # 
     #
     #
@@ -525,16 +525,16 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     ##
     # @if jp
     #
-    # @brief �ɤ߹��߻��Υ�����Хå��ؿ�
-    # �ǡ������ѿ�������Ф����ɤ߹��߾��֤�������
+    # @brief 読み込み時のコールバック関数
+    # データを変数から取り出し、読み込み状態を解除する
     # 
     #
     # @param self
     # @return ret, data
-    # ret���꥿���󥳡���
-    # BUFFER_OK�����ﴰλ
-    # BUFFER_ERROR���ǡ�������Ǽ����Ƥ��ʤ�
-    # data���ǡ���
+    # ret：リターンコード
+    # BUFFER_OK：正常完了
+    # BUFFER_ERROR：データが格納されていない
+    # data：データ
     # 
     #
     #

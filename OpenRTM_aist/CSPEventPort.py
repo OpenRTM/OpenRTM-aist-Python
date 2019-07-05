@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file CSPEventPort.py
@@ -25,7 +25,7 @@ import threading
 #
 # @class CSPEventPort
 #
-# @brief CSPEventPort �ƥ�ץ졼�ȥ��饹
+# @brief CSPEventPort テンプレートクラス
 # 
 #
 # @since 2.0.0
@@ -45,13 +45,13 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯����
-  # �ѥ�᡼���Ȥ���Ϳ������ T �����ѿ��˥Х���ɤ���롣
+  # コンストラクタ。
+  # パラメータとして与えられる T 型の変数にバインドされる。
   #
   # @param self
-  # @param name EventInPort ̾��EventInPortBase:name() �ˤ�껲�Ȥ���롣
+  # @param name EventInPort 名。EventInPortBase:name() により参照される。
   # @param fsm FSM
   #
   # @else
@@ -95,9 +95,9 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
-  # �ǥ��ȥ饯����
+  # デストラクタ。
   #
   # @param self
   #
@@ -120,12 +120,12 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �ݡ���̾�Τ�������롣
+  # @brief ポート名称を取得する。
   #
-  # �ݡ���̾�Τ�������롣
+  # ポート名称を取得する。
   #
   # @param self
-  # @return �ݡ���̾��
+  # @return ポート名称
   #
   # @else
   #
@@ -146,14 +146,14 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �����ʤ��Υ��٥�ȥϥ�ɥ����Ͽ����
+  # @brief 引数なしのイベントハンドラを登録する
   #
   # @param self
-  # @param name ���٥��̾
-  # @param handler ���٥�ȥϥ�ɥ�
-  # ���ͥ�����³����fsm_event_name�Ȥ������Ǥ����ꤹ�롣
-  # fsm_event_name�ȥ��٥��̾�����פ���ȥ��٥�Ȥ��¹Ԥ���롣
-  # ���٥�ȥϥ�ɥ�ˤ�Macho��������������٥�Ȥ����Ϥ���
+  # @param name イベント名
+  # @param handler イベントハンドラ
+  # コネクタ接続時にfsm_event_nameという要素を設定する。
+  # fsm_event_nameとイベント名が一致するとイベントが実行される。
+  # イベントハンドラにはMacho等で定義したイベントを入力する
   # 
   #
   # @else
@@ -171,12 +171,12 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ��������Υ��٥�ȥϥ�ɥ����Ͽ����
+  # @brief 引数ありのイベントハンドラを登録する
   #
   # @param self
-  # @param name ���٥��̾
-  # @param handler ���٥�ȥϥ�ɥ�
-  # @param data_type ���ϥǡ���
+  # @param name イベント名
+  # @param handler イベントハンドラ
+  # @param data_type 入力データ
   #
   # @else
   #
@@ -196,15 +196,15 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ������ؿ�
+  # @brief 初期化関数
   #
   # @param self
-  # @param prop ���ͥ����Υץ��ѥƥ�
-  # buffer(dataport.buffer)���ǤǥХåե�Ĺ����������
-  # channel_timeout(dataport.channel_timeout)���Ǥǡ�
-  # ������ǽ�ʥ����ȥݡ��Ȥ�¸�ߤ��ʤ����Υ֥��å��Υ����ॢ���Ȥ�����
+  # @param prop コネクタのプロパティ
+  # buffer(dataport.buffer)要素でバッファ長さ等を設定
+  # channel_timeout(dataport.channel_timeout)要素で、
+  # 送信可能なアウトポートが存在しない場合のブロックのタイムアウトを設定
   # 
-  # @return �ݡ���̾��
+  # @return ポート名称
   #
   # @else
   #
@@ -252,7 +252,7 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##  
   # @if jp
   #
-  # @brief �񤭹��߽����򳫻Ϥ������ͥ�������Ͽ
+  # @brief 書き込み処理を開始したコネクタを登録
   #
   # @param self
   # @param con InPortConnector
@@ -273,9 +273,9 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ��³���OutPort�����ϲ�ǽ�Ǥ��뤳�Ȥ�����
-  # �Хåե����ե�ˤʤ롢�⤷�����Ե����OutPort���ʤ��ʤ�ޤǡ���³��Υ��ͥ����Υǡ������ɤ߹���
-  # �Хåե�����ǡ������ɤ߹�������ϡ����δؿ���ƤӽФ�ɬ�פ�����
+  # @brief 接続先のOutPortに入力可能であることを通知
+  # バッファがフルになる、もしくは待機中のOutPortがなくなるまで、接続先のコネクタのデータを読み込む
+  # バッファからデータを読み込んだ場合は、この関数を呼び出す必要がある
   #
   # @param self
   # 
@@ -304,16 +304,16 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ���ͥ�����³�ؿ�
-  # InPortBase����³�����Τۤ��ˡ����ͥ����˽񤭹��߳�ǧ�����񤭹��߻��Υ�����Хå��ؿ������ꤹ��
+  # @brief コネクタ接続関数
+  # InPortBaseの接続処理のほかに、コネクタに書き込み確認時、書き込み時のコールバック関数を設定する
   #
   # @param self
-  # @param connector_profile ���ͥ����ץ��ե�����
+  # @param connector_profile コネクタプロファイル
   # @return ret, prof
-  # ret���꥿���󥳡���
-  # prof�����ͥ����ץ��ե�����
+  # ret：リターンコード
+  # prof：コネクタプロファイル
   # 
-  # @return �ݡ���̾��
+  # @return ポート名称
   #
   # @else
   #
@@ -336,16 +336,16 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ��󥰥Хåե����ѥ⡼�ɻ��Υǡ����ɤ߹��߽���
-  # �Хåե���empty�ǤϤʤ����ϥХåե������ɤ߹���
-  # ���ͥ���������ɤ߹��߲�ǽ�ʤ�Τ�������ϡ����Υ��ͥ��������ɤ߹���
-  # ���������񤭹�����ξ��Ͻ񤭹��߽�λ�ޤǥ֥��å�����
+  # @brief リングバッファ使用モード時のデータ読み込み処理
+  # バッファがemptyではない場合はバッファから読み込む
+  # コネクタの中に読み込み可能なものがある場合は、そのコネクタから読み込む
+  # ただし、書き込み中の場合は書き込み終了までブロックする
   #
   # @param self
-  # @param connector_profile ���ͥ����ץ��ե�����
+  # @param connector_profile コネクタプロファイル
   # @return ret, prof
-  # ret��True���ɤ߹���������False���Хåե���empty�Ǥ����ɤ߹��߲�ǽ�ʥ��ͥ�����¸�ߤ��ʤ�
-  # data���ǡ���
+  # ret：True：読み込み成功、False：バッファがemptyでかつ読み込み可能なコネクタが存在しない
+  # data：データ
   # 
   #
   # @else
@@ -412,15 +412,15 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ���󥰥Хåե����ѥ⡼�ɻ��Υǡ����ɤ߹��߽���
-  # �ǡ����ɤ߹��߲�ǽ�ʥ��ͥ�����¸�ߤ�����ϡ����Υ��ͥ�������ǡ������ɤ߹���
+  # @brief 非リングバッファ使用モード時のデータ読み込み処理
+  # データ読み込み可能なコネクタが存在する場合は、そのコネクタからデータを読み込む
   # 
   #
   # @param self
-  # @param connector_profile ���ͥ����ץ��ե�����
+  # @param connector_profile コネクタプロファイル
   # @return ret, data
-  # ret��True���ɤ߹���������False���ǡ����ɤ߹��߲�ǽ�ʥ��ͥ�����¸�ߤ��ʤ�
-  # data���ǡ���(�ɤ߹��߼��Ԥξ���None)
+  # ret：True：読み込み成功、False：データ読み込み可能なコネクタが存在しない
+  # data：データ(読み込み失敗の場合はNone)
   # 
   #
   # @else
@@ -450,12 +450,12 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �ǡ����ɤ߹��߲�ǽ�ʥ��ͥ��������򤷡�
-  # self._value���ɤ߹�����ǡ������Ǽ����
+  # @brief データ読み込み可能なコネクタを選択し、
+  # self._valueに読み込んだデータを格納する
   # 
   #
   # @param self
-  # @return True���ɤ߹���������False���ɤ߹����Բ�
+  # @return True：読み込み成功、False：読み込み不可
   #
   #
   # @else
@@ -481,11 +481,11 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief select�ؿ��ǳ�Ǽ�����ǡ����μ���
+  # @brief select関数で格納したデータの取得
   # 
   #
   # @param self
-  # @return �ǡ���
+  # @return データ
   #
   #
   # @else
@@ -517,12 +517,12 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �ǡ������ɤ߹��߲�ǽ�ʥ��ͥ��������򤷥ǡ������������
-  # �ɤ߹��߲�ǽ�ʥ��ͥ�����¸�ߤ��ʤ������Ե�����
+  # @brief データを読み込み可能なコネクタを選択しデータを取得する
+  # 読み込み可能なコネクタが存在しない場合は待機する
   # 
   #
   # @param self
-  # @return �ǡ���(�����ॢ���Ȥ�������None)
+  # @return データ(タイムアウトした場合はNone)
   #
   #
   # @else
@@ -553,12 +553,12 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ��󥰥Хåե����ѥ⡼�ɻ��Υǡ����ɤ߹��߽���
-  # �ɤ߹��߲�ǽ�ʥ��ͥ�����¸�ߤ��ʤ������Ե�����
+  # @brief リングバッファ使用モード時のデータ読み込み処理
+  # 読み込み可能なコネクタが存在しない場合は待機する
   # 
   #
   # @param self
-  # @return �ǡ���(�����ॢ���Ȥ�������None)
+  # @return データ(タイムアウトした場合はNone)
   #
   #
   # @else
@@ -590,12 +590,12 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ���󥰥Хåե����ѥ⡼�ɻ��Υǡ����ɤ߹��߽���
-  # �ɤ߹��߲�ǽ�ʥ��ͥ�����¸�ߤ��ʤ������Ե�����
+  # @brief 非リングバッファ使用モード時のデータ読み込み処理
+  # 読み込み可能なコネクタが存在しない場合は待機する
   # 
   #
   # @param self
-  # @return �ǡ���(�����ॢ���Ȥ�������None)
+  # @return データ(タイムアウトした場合はNone)
   #
   #
   # @else
@@ -633,7 +633,7 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   #
   # @class IsWritableListener
   #
-  # @brief �ǡ����񤭹��߻��γ�ǧ�ꥹ�ʴ��쥯�饹(��󥰥Хåե����ѥ⡼��)
+  # @brief データ書き込み時の確認リスナ基底クラス(リングバッファ使用モード)
   # 
   #
   # @since 2.0.0
@@ -653,15 +653,15 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
     ##
     # @if jp
     #
-    # @brief ���󥹥ȥ饯��
+    # @brief コンストラクタ
     # 
     #
     # @param self
-    # @param buff ��󥰥Хåե�
-    # @param control WorkerThreadCtrl���֥�������
-    # @param timeout �񤭹����Ե��Υ����ॢ����
-    # @param manager CSP����ͥ�����ޥ͡�����
-    # manager����ꤷ�����ϡ�manager���Ե���ξ��˥��å���������Τ�Ԥ�
+    # @param buff リングバッファ
+    # @param control WorkerThreadCtrlオブジェクト
+    # @param timeout 書き込み待機のタイムアウト
+    # @param manager CSPチャネル管理マネージャ
+    # managerを指定した場合は、managerが待機中の場合にロック解除の通知を行う
     # 
     #
     #
@@ -686,15 +686,15 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
     ##
     # @if jp
     #
-    # @brief �񤭹��߳�ǧ���Υ�����Хå��ؿ�
-    # ¾�Υ��ͥ������ǡ����񤭹�����ξ��ϴ�λ�ޤ��Ե�����
-    # �Хåե����ե�ǤϤʤ����Ͻ񤭹��߾��֤˰ܹԤ���
-    # ���Τ��ᡢ�񤭹��߲�ǽ�ʾ���ɬ���ǡ�����񤭹���ɬ�פ�����
+    # @brief 書き込み確認時のコールバック関数
+    # 他のコネクタがデータ書き込み中の場合は完了まで待機する
+    # バッファがフルではない場合は書き込み状態に移行する
+    # このため、書き込み可能な場合は必ずデータを書き込む必要がある
     # 
     #
     # @param self
     # @param con InPortConnector
-    # @return True���񤭹��߲�ǽ��False���񤭹����Բ�
+    # @return True：書き込み可能、False：書き込み不可
     # 
     #
     #
@@ -730,7 +730,7 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   #
   # @class WriteListener
   #
-  # @brief �ǡ����񤭹��߻��Υꥹ�ʴ��쥯�饹(��󥰥Хåե����ѥ⡼��)
+  # @brief データ書き込み時のリスナ基底クラス(リングバッファ使用モード)
   # 
   #
   # @since 2.0.0
@@ -750,11 +750,11 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
     ##
     # @if jp
     #
-    # @brief ���󥹥ȥ饯��
+    # @brief コンストラクタ
     # 
     #
     # @param self
-    # @param control WorkerThreadCtrl���֥�������
+    # @param control WorkerThreadCtrlオブジェクト
     # 
     #
     #
@@ -772,15 +772,15 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
     ##
     # @if jp
     #
-    # @brief �񤭹��߻��Υ�����Хå��ؿ�
-    # CSPEventPort�ǤϥХåե��ؤν񤭹��ߤ�ON_RECEIVED������Хå��Ǽ¹Ԥ��뤿�ᡢ
-    # �񤭹��߾��֤β���Τߤ�Ԥ���
+    # @brief 書き込み時のコールバック関数
+    # CSPEventPortではバッファへの書き込みはON_RECEIVEDコールバックで実行するため、
+    # 書き込み状態の解除のみを行う。
     # 
     #
     # @param self
-    # @param data �ǡ���
-    # @return �꥿���󥳡���
-    # BUFFER_OK�����ﴰλ
+    # @param data データ
+    # @return リターンコード
+    # BUFFER_OK：正常完了
     # 
     #
     #
@@ -805,7 +805,7 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   #
   # @class IsWritableZeroModeListener
   #
-  # @brief �ǡ����񤭹��߳�ǧ�ꥹ�ʴ��쥯�饹(���󥰥Хåե����ѥ⡼��)
+  # @brief データ書き込み確認リスナ基底クラス(非リングバッファ使用モード)
   # 
   #
   # @since 2.0.0
@@ -825,15 +825,15 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
     ##
     # @if jp
     #
-    # @brief ���󥹥ȥ饯��
+    # @brief コンストラクタ
     # 
     #
     # @param self
-    # @param buff ��󥰥Хåե�
-    # @param control WorkerThreadCtrl���֥�������
-    # @param timeout �񤭹����Ե��Υ����ॢ����
-    # @param manager CSP����ͥ�����ޥ͡�����
-    # manager����ꤷ�����ϡ�manager���Ե���ξ��˥��å���������Τ�Ԥ�
+    # @param buff リングバッファ
+    # @param control WorkerThreadCtrlオブジェクト
+    # @param timeout 書き込み待機のタイムアウト
+    # @param manager CSPチャネル管理マネージャ
+    # managerを指定した場合は、managerが待機中の場合にロック解除の通知を行う
     # 
     #
     #
@@ -857,15 +857,15 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
     ##
     # @if jp
     #
-    # @brief �񤭹��߳�ǧ���Υ�����Хå��ؿ�
-    # ¾�Υ��ͥ������ǡ����񤭹�����ξ��ϴ�λ�ޤ��Ե�����
-    # �Хåե����ե�ǤϤʤ����Ͻ񤭹��߾��֤˰ܹԤ���
-    # ���Τ��ᡢ�񤭹��߲�ǽ�ʾ���ɬ���ǡ�����񤭹���ɬ�פ�����
+    # @brief 書き込み確認時のコールバック関数
+    # 他のコネクタがデータ書き込み中の場合は完了まで待機する
+    # バッファがフルではない場合は書き込み状態に移行する
+    # このため、書き込み可能な場合は必ずデータを書き込む必要がある
     # 
     #
     # @param self
     # @param con InPortConnector
-    # @return True���񤭹��߲�ǽ��False���񤭹����Բ�
+    # @return True：書き込み可能、False：書き込み不可
     # 
     #
     #
@@ -901,7 +901,7 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   #
   # @class WriteZeroModeListener
   #
-  # @brief �ǡ����񤭹��߻��Υꥹ�ʴ��쥯�饹(���󥰥Хåե����ѥ⡼��)
+  # @brief データ書き込み時のリスナ基底クラス(非リングバッファ使用モード)
   # 
   #
   # @since 2.0.0
@@ -921,11 +921,11 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
     ##
     # @if jp
     #
-    # @brief ���󥹥ȥ饯��
+    # @brief コンストラクタ
     # 
     #
     # @param self
-    # @param control WorkerThreadCtrl���֥�������
+    # @param control WorkerThreadCtrlオブジェクト
     # 
     #
     #
@@ -943,15 +943,15 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
     ##
     # @if jp
     #
-    # @brief �񤭹��߻��Υ�����Хå��ؿ�
-    # CSPEventPort�ǤϥХåե��ؤν񤭹��ߤ�ON_RECEIVED������Хå��Ǽ¹Ԥ��뤿�ᡢ
-    # �񤭹��߾��֤β���Τߤ�Ԥ���
+    # @brief 書き込み時のコールバック関数
+    # CSPEventPortではバッファへの書き込みはON_RECEIVEDコールバックで実行するため、
+    # 書き込み状態の解除のみを行う。
     # 
     #
     # @param self
-    # @param data �ǡ���
-    # @return �꥿���󥳡���
-    # BUFFER_OK�����ﴰλ
+    # @param data データ
+    # @return リターンコード
+    # BUFFER_OK：正常完了
     # 
     #
     #
