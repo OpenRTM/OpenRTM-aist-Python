@@ -56,12 +56,12 @@ class Inputbutton(OpenRTM_aist.DataFlowComponentBase):
     self._stopOut = OpenRTM_aist.CSPOutPort("stop", self._stop)
     self._tickOut = OpenRTM_aist.CSPOutPort("tick", self._tick)
     # Set OutPort buffer
-    self.addOutPort("out", self._openOut)
-    self.addOutPort("out", self._closeOut)
-    self.addOutPort("out", self._minuteOut)
-    self.addOutPort("out", self._startOut)
-    self.addOutPort("out", self._stopOut)
-    self.addOutPort("out", self._tickOut)
+    self.addOutPort("open", self._openOut)
+    self.addOutPort("close", self._closeOut)
+    self.addOutPort("minute", self._minuteOut)
+    self.addOutPort("start", self._startOut)
+    self.addOutPort("stop", self._stopOut)
+    self.addOutPort("tick", self._tickOut)
 
 
     return RTC.RTC_OK
