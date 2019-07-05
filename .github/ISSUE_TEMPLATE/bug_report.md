@@ -1,11 +1,28 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to help us improve (Note! This is Python repository)
 title: ''
 labels: bug
 assignees: ''
 
 ---
+
+
+<!--
+***********************************************************************
+*                           << NOTE >>                                *
+*  This repository have been programmed in Python.                    *
+*                                                                     *
+*  Please do not create tickets for other programming languages here. *
+*  If you will create tickets for other programming language,         *
+*  please see below:                                                  *
+*                                                                     *
+*  - C++    : https://github.com/OpenRTM/OpenRTM-aist/issues          *
+*  - Java   : https://github.com/OpenRTM/OpenRTM-aist-Java/issues     *
+*                                                                     *
+***********************************************************************
+-->
+
 
 **Describe the bug**
 A clear and concise description of what the bug is.
