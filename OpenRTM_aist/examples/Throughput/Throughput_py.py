@@ -93,7 +93,7 @@ class DataListener(OpenRTM_aist.ConnectorDataListenerT):
     pass
 
   def __call__(self, info, cdrdata):
-    data = OpenRTM_aist.ConnectorDataListenerT.__call__(self, info, cdrdata, self._data)
+    data = OpenRTM_aist.ConnectorDataListenerT.__call__(self, info, cdrdata, self._data, OpenRTM_aist.PortType.InPortType)
     self._comp.receiveData(data.tm, len(data.data))
 
 

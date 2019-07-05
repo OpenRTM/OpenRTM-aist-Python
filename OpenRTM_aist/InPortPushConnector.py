@@ -157,6 +157,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     self._readready_worker = InPortPushConnector.WorkerThreadCtrl()
 
     self._marshaling_type = info.properties.getProperty("marshaling_type", "corba")
+    self._marshaling_type = info.properties.getProperty("in.marshaling_type", self._marshaling_type)
     self._marshaling_type = self._marshaling_type.strip()
 
     self._serializer = OpenRTM_aist.SerializerFactory.instance().createObject(self._marshaling_type)

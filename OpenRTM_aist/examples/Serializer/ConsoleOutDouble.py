@@ -10,8 +10,8 @@ import time
 import RTC
 import OpenRTM_aist
 
-consoleout_spec = ["implementation_id", "ConsoleOut",
-                   "type_name",         "ConsoleOut",
+consoleoutdouble_spec = ["implementation_id", "ConsoleOutDouble",
+                   "type_name",         "ConsoleOutDouble",
                    "description",       "Console output component",
                    "version",           "1.0",
                    "vendor",            "Shinji Kurihara",
@@ -31,7 +31,7 @@ class DataListener(OpenRTM_aist.ConnectorDataListenerT):
     print("dtor of ", self._name)
 
   def __call__(self, info, cdrdata):
-    data = OpenRTM_aist.ConnectorDataListenerT.__call__(self, info, cdrdata, RTC.TimedLong(RTC.Time(0,0),0), OpenRTM_aist.PortType.InPortType)
+    data = OpenRTM_aist.ConnectorDataListenerT.__call__(self, info, cdrdata, RTC.TimedDouble(RTC.Time(0,0),0), OpenRTM_aist.PortType.InPortType)
     print("------------------------------")
     print("Listener:       ", self._name)
     print("Profile::name:  ", info.name)
@@ -58,13 +58,13 @@ class ConnListener(OpenRTM_aist.ConnectorListener):
 
 
 
-class ConsoleOut(OpenRTM_aist.DataFlowComponentBase):
+class ConsoleOutDouble(OpenRTM_aist.DataFlowComponentBase):
   def __init__(self, manager):
     OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
     return
 
   def onInitialize(self):
-    self._data = RTC.TimedLong(RTC.Time(0,0),0)
+    self._data = RTC.TimedDouble(RTC.Time(0,0),0)
     self._inport = OpenRTM_aist.InPort("in", self._data)
     # Set InPort buffer
     self.addInPort("in", self._inport)
@@ -118,17 +118,17 @@ class ConsoleOut(OpenRTM_aist.DataFlowComponentBase):
     return RTC.RTC_OK
 
 
-def ConsoleOutInit(manager):
-  profile = OpenRTM_aist.Properties(defaults_str=consoleout_spec)
+def ConsoleOutDoubleInit(manager):
+  profile = OpenRTM_aist.Properties(defaults_str=consoleoutdouble_spec)
   manager.registerFactory(profile,
-                          ConsoleOut,
+                          ConsoleOutDouble,
                           OpenRTM_aist.Delete)
 
 def MyModuleInit(manager):
-  ConsoleOutInit(manager)
+  ConsoleOutDoubleInit(manager)
 
   # Create a component
-  comp = manager.createComponent("ConsoleOut")
+  comp = manager.createComponent("ConsoleOutDouble")
 
 
 def main():

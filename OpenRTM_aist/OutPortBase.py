@@ -285,6 +285,26 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
 
     self._properties.setProperty("data_type", data_type)
 
+    
+    factory = OpenRTM_aist.SerializerFactory.instance()
+    serializer_list = factory.getIdentifiers()
+    ds = data_type.split(":")
+    serializer_types = []
+    if len(ds) == 3:
+      data_name = ds[1]
+      for s in serializer_list:
+        s = s.lstrip()
+        v = s.split(":")
+        if len(v) == 3:
+          if v[2] == data_name:
+            serializer_types.append(s)
+        else:
+          serializer_types.append(s)
+
+    serializer_types = OpenRTM_aist.flatten(serializer_types)
+    serializer_types = serializer_types.lstrip()
+    self.addProperty("dataport.serializer_type", serializer_types)
+
     self._listeners = OpenRTM_aist.ConnectorListeners()
     return
 

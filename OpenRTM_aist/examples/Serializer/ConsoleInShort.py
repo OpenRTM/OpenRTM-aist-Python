@@ -8,8 +8,8 @@ import sys
 import RTC
 import OpenRTM_aist
 
-consolein_spec = ["implementation_id", "ConsoleIn",
-                  "type_name",         "ConsoleIn",
+consoleinshort_spec = ["implementation_id", "ConsoleInShort",
+                  "type_name",         "ConsoleInShort",
                   "description",       "Console input component",
                   "version",           "1.0",
                   "vendor",            "Shinji Kurihara",
@@ -29,7 +29,7 @@ class DataListener(OpenRTM_aist.ConnectorDataListenerT):
     print("dtor of ", self._name)
 
   def __call__(self, info, cdrdata):
-    data = OpenRTM_aist.ConnectorDataListenerT.__call__(self, info, cdrdata, RTC.TimedLong(RTC.Time(0,0),0), OpenRTM_aist.PortType.OutPortType)
+    data = OpenRTM_aist.ConnectorDataListenerT.__call__(self, info, cdrdata, RTC.TimedShort(RTC.Time(0,0),0), OpenRTM_aist.PortType.OutPortType)
     print("------------------------------")
     print("Listener:       ", self._name)
     print("Profile::name:  ", info.name)
@@ -54,13 +54,13 @@ class ConnListener(OpenRTM_aist.ConnectorListener):
     return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
 
 
-class ConsoleIn(OpenRTM_aist.DataFlowComponentBase):
+class ConsoleInShort(OpenRTM_aist.DataFlowComponentBase):
   def __init__(self, manager):
     OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
     return
 
   def onInitialize(self):
-    self._data = RTC.TimedLong(RTC.Time(0,0),0)
+    self._data = RTC.TimedShort(RTC.Time(0,0),0)
     self._outport = OpenRTM_aist.OutPort("out", self._data)
     # Set OutPort buffer
     self.addOutPort("out", self._outport)
@@ -103,18 +103,18 @@ class ConsoleIn(OpenRTM_aist.DataFlowComponentBase):
     return RTC.RTC_OK
 
 
-def ConsoleInInit(manager):
-  profile = OpenRTM_aist.Properties(defaults_str=consolein_spec)
+def ConsoleInShortInit(manager):
+  profile = OpenRTM_aist.Properties(defaults_str=consoleinshort_spec)
   manager.registerFactory(profile,
-                          ConsoleIn,
+                          ConsoleInShort,
                           OpenRTM_aist.Delete)
 
 
 def MyModuleInit(manager):
-  ConsoleInInit(manager)
+  ConsoleInShortInit(manager)
 
   # Create a component
-  comp = manager.createComponent("ConsoleIn")
+  comp = manager.createComponent("ConsoleInShort")
 
 def main():
   # Initialize manager

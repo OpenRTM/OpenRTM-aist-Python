@@ -61,7 +61,7 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListenerT):
   def __del__(self):
     pass
   def __call__(self, info, data):
-    data_ = OpenRTM_aist.ConnectorDataListenerT.__call__(self, info, data, self._data_type)
+    data_ = OpenRTM_aist.ConnectorDataListenerT.__call__(self, info, data, self._data_type, OpenRTM_aist.PortType.InPortType)
     
     if info.properties.getProperty("fsm_event_name") == self._eventName or info.name == self._eventName:
       self._buffer.write(Event1(self, data_))
