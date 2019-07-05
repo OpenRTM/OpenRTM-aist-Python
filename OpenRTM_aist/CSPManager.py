@@ -82,6 +82,14 @@ class CSPManager(object):
   def __del__(self):
     pass
 
+  def reset(self):
+    for port in self._outports:
+      port.setManager(None)
+    for port in self._inports:
+      port.setManager(None)
+    self._outports = []
+    self._inports = []
+
   ##
   # @if jp
   #
@@ -164,22 +172,24 @@ class CSPManager(object):
     if ret:
       return ret, None, port
 
-    guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-    self._ctrl._waiting = True
-    self._ctrl._timeout = True
-    self._ctrl._cond.wait(timeout)
-    self._ctrl._waiting = False
-    del guard
-    if self._ctrl._timeout:
-      return False, None, None
-    else:
-      if self._writableOutPort or self._readableInPort:
-        inport = self._readableInPort
-        outport = self._writableOutPort
-        self._writableOutPort = None
-        self._readableInPort = None
-        return True, outport, inport
-      return False, None, None
+    
+    if timeout >= 0:
+      guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+      self._ctrl._waiting = True
+      self._ctrl._timeout = True
+      self._ctrl._cond.wait(timeout)
+      self._ctrl._waiting = False
+      del guard
+      if self._ctrl._timeout:
+        return False, None, None
+      else:
+        if self._writableOutPort or self._readableInPort:
+          inport = self._readableInPort
+          outport = self._writableOutPort
+          self._writableOutPort = None
+          self._readableInPort = None
+          return True, outport, inport
+    return False, None, None
 
 
   ##

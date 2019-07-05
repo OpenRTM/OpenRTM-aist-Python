@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -75,7 +75,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
       raise
 
     self._buffer = buffer
-
+    self._info = info
     self._provider.init(info.properties)
     self._provider.setConnector(self)
     self._provider.setListener(info, self._listeners)
@@ -408,6 +408,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
   # @endif
   def setConsumer(self, consumer):
     self._consumer = consumer
+    self._consumer.setListener(self._info, self._listeners)
 
 
   ##

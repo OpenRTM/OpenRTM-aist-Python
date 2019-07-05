@@ -69,7 +69,7 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
   #
   # @endif
   #
-  def __init__(self, name, fsm=None):
+  def __init__(self, name, fsm=None, manager=None):
     super(CSPEventPort, self).__init__(name, "any")
     self._ctrl = CSPEventPort.WorkerThreadCtrl()
     self._name = name
@@ -84,8 +84,9 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
     self._bufferzeromode = False
     self._fsm = fsm
     
-    if fsm:
-      fsm.addInPort(self)
+    self._manager = manager
+    if manager:
+      self._manager.addInPort(self)
     self._writingConnector = None
 
 
@@ -236,11 +237,17 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
 
 
     if not self._bufferzeromode:
-      self._writable_listener = CSPEventPort.IsWritableListener(self._eventbuffer, self._ctrl, self._channeltimeout, self, self._fsm)
+      self._writable_listener = CSPEventPort.IsWritableListener(self._eventbuffer, self._ctrl, self._channeltimeout, self, self._manager)
       self._write_listener = CSPEventPort.WriteListener(self._ctrl)
     else:
-      self._writable_listener = CSPEventPort.IsWritableZeroModeListener(self._ctrl, self._channeltimeout, self, self._fsm)
+      self._writable_listener = CSPEventPort.IsWritableZeroModeListener(self._ctrl, self._channeltimeout, self, self._manager)
       self._write_listener = CSPEventPort.WriteZeroModeListener(self._ctrl)
+
+  def setManager(self, manager):
+    self._writable_listener.setManager(manager)
+    self._manager = manager
+    if manager:
+      self._manager.addInPort(self)
 
   ##  
   # @if jp
@@ -499,13 +506,11 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
 
     if self._ctrl._writing:
       self._ctrl._cond.wait(self._channeltimeout)
-
-    if self._writingConnector:
-      self._writingConnector = None
-      if not self._eventbuffer.empty():
-        value = [None]
-        self._eventbuffer.read(value)
-        return value[0]
+      
+    if not self._eventbuffer.empty():
+      value = [None]
+      self._eventbuffer.read(value)
+      return value[0]
 
     return self._value
 
@@ -717,6 +722,9 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
         self._ctrl._writing = False
         return False
 
+    def setManager(self, manager):
+      self._manager = manager
+
   ##
   # @if jp
   #
@@ -884,6 +892,9 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
       else:
         self._ctrl._writing = False
         return False
+
+    def setManager(self, manager):
+      self._manager = manager
         
   ##
   # @if jp

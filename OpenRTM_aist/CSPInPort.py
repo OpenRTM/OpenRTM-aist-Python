@@ -178,6 +178,12 @@ class CSPInPort(OpenRTM_aist.InPortBase):
       self._writable_listener = OpenRTM_aist.CSPInPort.IsWritableZeroModeListener(self._thebuffer, self._ctrl, self._channeltimeout, self, self._manager)
       self._write_listener = OpenRTM_aist.CSPInPort.WriteZeroModeListener(self._thebuffer,self._ctrl)
 
+  def setManager(self, manager):
+    self._writable_listener.setManager(manager)
+    self._manager = manager
+    if manager:
+      self._manager.addInPort(self)
+
   ##  
   # @if jp
   #
@@ -688,6 +694,9 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         self._ctrl._writing = False
         return False
 
+    def setManager(self, manager):
+      self._manager = manager
+
   ##
   # @if jp
   #
@@ -862,6 +871,9 @@ class CSPInPort(OpenRTM_aist.InPortBase):
       else:
         self._ctrl._writing = False
         return False
+  
+    def setManager(self, manager):
+      self._manager = manager
         
   ##
   # @if jp

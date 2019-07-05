@@ -151,6 +151,11 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     self._readable_listener = OpenRTM_aist.CSPOutPort.IsReadableListener(self._buffdata, self._ctrl, self._channeltimeout, self, self._manager)
     self._read_listener = OpenRTM_aist.CSPOutPort.ReadListener(self._buffdata, self._ctrl, self._channeltimeout)
 
+  def setManager(self, manager):
+    self._readable_listener.setManager(manager)
+    self._manager = manager
+    if manager:
+      self._manager.addOutPort(self)
 
   ##
   # @if jp
@@ -465,6 +470,9 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
       else:
         self._ctrl._reading = True
         return True
+
+    def setManager(self, manager):
+      self._manager = manager
 
   ##
   # @if jp
