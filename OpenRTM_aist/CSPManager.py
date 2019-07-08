@@ -82,11 +82,26 @@ class CSPManager(object):
   def __del__(self):
     pass
 
+  ##
+  # @if jp
+  #
+  # @brief CSPポートに設定したCSPManagerとの関連付けを解除
+  #
+  # @param self
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  #
+  # @endif
+  #
   def reset(self):
     for port in self._outports:
-      port.setManager(None)
+      port.releaseManager()
     for port in self._inports:
-      port.setManager(None)
+      port.releaseManager()
     self._outports = []
     self._inports = []
 

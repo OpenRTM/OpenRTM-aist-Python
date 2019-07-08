@@ -151,11 +151,47 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     self._readable_listener = OpenRTM_aist.CSPOutPort.IsReadableListener(self._buffdata, self._ctrl, self._channeltimeout, self, self._manager)
     self._read_listener = OpenRTM_aist.CSPOutPort.ReadListener(self._buffdata, self._ctrl, self._channeltimeout)
 
+  ##
+  # @if jp
+  #
+  # @brief CSPManagerの設定
+  #
+  # @param self
+  # @param manager CSPManager
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param manager
+  #
+  # @endif
+  #
   def setManager(self, manager):
     self._readable_listener.setManager(manager)
     self._manager = manager
     if manager:
       self._manager.addOutPort(self)
+
+  ##
+  # @if jp
+  #
+  # @brief CSPManagerの設定解除
+  #
+  # @param self
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  #
+  # @endif
+  #
+  def releaseManager(self):
+    self._readable_listener.releaseManager()
+    self._manager = None
 
   ##
   # @if jp
@@ -430,6 +466,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
       self._channeltimeout = timeout
       self._port = port
       self._manager = manager
+      self._mutex = threading.RLock()
     ##
     # @if jp
     #
@@ -456,11 +493,13 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     # @endif
     #
     def __call__(self, con):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
       if self._manager:
         if self._manager.notify(outport=self._port):
           guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
           self._ctrl._reading = True
           return True
+      del guard_manager
       guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
       if self._ctrl._reading:
         self._ctrl._cond.wait(self._channeltimeout)
@@ -471,8 +510,49 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         self._ctrl._reading = True
         return True
 
+    ##
+    # @if jp
+    #
+    # @brief CSPManagerの設定
+    #
+    # @param self
+    # @param manager CSPManager
+    # 
+    #
+    #
+    # @else
+    #
+    # @brief 
+    #
+    # @param self
+    # @param manager
+    #
+    # @endif
+    #
     def setManager(self, manager):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
       self._manager = manager
+
+    ##
+    # @if jp
+    #
+    # @brief CSPManagerの解除
+    #
+    # @param self
+    # 
+    #
+    #
+    # @else
+    #
+    # @brief 
+    #
+    # @param self
+    #
+    # @endif
+    #
+    def releaseManager(self):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+      self._manager = None
 
   ##
   # @if jp

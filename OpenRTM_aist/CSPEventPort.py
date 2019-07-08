@@ -243,11 +243,48 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
       self._writable_listener = CSPEventPort.IsWritableZeroModeListener(self._ctrl, self._channeltimeout, self, self._manager)
       self._write_listener = CSPEventPort.WriteZeroModeListener(self._ctrl)
 
+  ##
+  # @if jp
+  #
+  # @brief CSPManagerの設定
+  #
+  # @param self
+  # @param manager CSPManager
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param manager
+  #
+  # @endif
+  #
   def setManager(self, manager):
     self._writable_listener.setManager(manager)
     self._manager = manager
     if manager:
       self._manager.addInPort(self)
+
+  ##
+  # @if jp
+  #
+  # @brief CSPManagerの設定解除
+  #
+  # @param self
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  #
+  # @endif
+  #
+  def releaseManager(self):
+    self._writable_listener.releaseManager()
+    self._manager = None
+
 
   ##  
   # @if jp
@@ -683,6 +720,7 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
       self._channeltimeout = timeout
       self._manager = manager
       self._port = port
+      self._mutex = threading.RLock()
     ##
     # @if jp
     #
@@ -709,9 +747,11 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
     # @endif
     #
     def __call__(self, con):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
       if self._manager:
         if self._manager.notify(inport=self._port):
           return True
+      del guard_manager
       guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
       if self._ctrl._writing:
         self._ctrl._cond.wait(self._channeltimeout)
@@ -722,8 +762,49 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
         self._ctrl._writing = False
         return False
 
+    ##
+    # @if jp
+    #
+    # @brief CSPManagerの設定
+    #
+    # @param self
+    # @param manager CSPManager
+    # 
+    #
+    #
+    # @else
+    #
+    # @brief 
+    #
+    # @param self
+    # @param manager
+    #
+    # @endif
+    #
     def setManager(self, manager):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
       self._manager = manager
+
+    ##
+    # @if jp
+    #
+    # @brief CSPManagerの解除
+    #
+    # @param self
+    # 
+    #
+    #
+    # @else
+    #
+    # @brief 
+    #
+    # @param self
+    #
+    # @endif
+    #
+    def releaseManager(self):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+      self._manager = None
 
   ##
   # @if jp
@@ -854,6 +935,7 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
       self._channeltimeout = timeout
       self._manager = manager
       self._port = port
+      self._mutex = threading.RLock()
     ##
     # @if jp
     #
@@ -880,9 +962,11 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
     # @endif
     #
     def __call__(self, con):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
       if self._manager:
         if self._manager.notify(inport=self._port):
           return True
+      del guard_manager
       guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
       if self._ctrl._waiting and self._ctrl._writing:
         self._ctrl._cond.wait(self._channeltimeout)
@@ -893,8 +977,49 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
         self._ctrl._writing = False
         return False
 
+    ##
+    # @if jp
+    #
+    # @brief CSPManagerの設定
+    #
+    # @param self
+    # @param manager CSPManager
+    # 
+    #
+    #
+    # @else
+    #
+    # @brief 
+    #
+    # @param self
+    # @param manager
+    #
+    # @endif
+    #
     def setManager(self, manager):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
       self._manager = manager
+
+    ##
+    # @if jp
+    #
+    # @brief CSPManagerの解除
+    #
+    # @param self
+    # 
+    #
+    #
+    # @else
+    #
+    # @brief 
+    #
+    # @param self
+    #
+    # @endif
+    #
+    def releaseManager(self):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+      self._manager = None
         
   ##
   # @if jp
