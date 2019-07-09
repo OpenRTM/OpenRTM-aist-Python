@@ -41,7 +41,7 @@ import RTC
 #
 # @endif
 #
-class CSPMachine(OpenRTM_aist.StaticFSM.Machine, OpenRTM_aist.CSPManager):
+class CSPMachine(OpenRTM_aist.StaticFSM.Machine):
   ##
   # @if jp
   #
@@ -59,10 +59,7 @@ class CSPMachine(OpenRTM_aist.StaticFSM.Machine, OpenRTM_aist.CSPManager):
   #
   def __init__(self, TOP, comp):
     OpenRTM_aist.StaticFSM.Machine.__init__(self, TOP, comp)
-    OpenRTM_aist.CSPManager.__init__(self)
-    self._outports = []
-    self._inports = []
-    self._ctrl = OpenRTM_aist.CSPManager.CSPThreadCtrl()
+    #self._ctrl = OpenRTM_aist.CSPManager.CSPThreadCtrl()
     
   ##
   # @if jp
@@ -129,7 +126,7 @@ class CSPMachine(OpenRTM_aist.StaticFSM.Machine, OpenRTM_aist.CSPManager):
   # @endif
   #
   def run_event(self, timeout=10):
-    ret, outport, inport = self.select(timeout)
+    ret, outport, inport = self._manager.select(timeout)
     if ret:
       if inport:
         event = inport.readData()

@@ -72,6 +72,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
       raise
 
     self._buffer = None
+    self._info = info
     self._provider.init(info.properties)
     self._provider.setListener(info, self._listeners)
     self.onConnect()
@@ -407,6 +408,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
   # @endif
   def setConsumer(self, consumer):
     self._consumer = consumer
+    self._consumer.setListener(self._info, self._listeners)
 
   def onBufferRead(self, data):
     if self._listeners and self._profile:

@@ -50,7 +50,8 @@ class Microwave(OpenRTM_aist.DataFlowComponentBase):
   def onInitialize(self):
     self._fsm = CSPMachine.CSPMachine(MicrowaveFsm.TOP, self)
     #self._fsm.init()
-    self._eventIn = CSPEventPort.CSPEventPort("event", self._fsm)
+    self._cspmanager = OpenRTM_aist.CSPManager()
+    self._eventIn = CSPEventPort.CSPEventPort("event", self._fsm, self._cspmanager)
     
     self.addInPort("event", self._eventIn)
     self._eventIn.bindEvent0("open", MicrowaveFsm.TOP.open)
@@ -71,9 +72,19 @@ class Microwave(OpenRTM_aist.DataFlowComponentBase):
 
         
   def onExecute(self, ec_id):
-    self._fsm.run_event()
-    
+    #self._fsm.run_event()
+    ret, outport, inport = self._cspmanager.select(10)
+    if ret:
+      if inport:
+        event = inport.readData()
+        event()
+        return RTC.RTC_OK
+      elif outport:
+        outport.write()
+        return RTC.RTC_OK
     return RTC.RTC_OK
+    
+    
 
 
 def MicrowaveInit(manager):

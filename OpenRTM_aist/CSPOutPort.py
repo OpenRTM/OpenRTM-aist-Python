@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file CSPOutPort.py
@@ -25,7 +25,7 @@ import threading
 #
 # @class EventInPort
 #
-# @brief EventInPort ¥Æ¥ó¥×¥ì¡¼¥È¥¯¥é¥¹
+# @brief EventInPort ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚¯ãƒ©ã‚¹
 # 
 #
 # @since 2.0.0
@@ -45,13 +45,13 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿¡£
-  # ¥Ñ¥é¥á¡¼¥¿¤È¤·¤ÆÍ¿¤¨¤é¤ì¤ë T ·¿¤ÎÊÑ¿ô¤Ë¥Ğ¥¤¥ó¥É¤µ¤ì¤ë¡£
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
+  # ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¨ã—ã¦ä¸ãˆã‚‰ã‚Œã‚‹ T å‹ã®å¤‰æ•°ã«ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã‚‹ã€‚
   #
-  # @param name EventInPort Ì¾¡£EventInPortBase:name() ¤Ë¤è¤ê»²¾È¤µ¤ì¤ë¡£
-  # @param value ¤³¤Î EventInPort ¤Ë¥Ğ¥¤¥ó¥É¤µ¤ì¤ë T ·¿¤ÎÊÑ¿ô
+  # @param name EventInPort åã€‚EventInPortBase:name() ã«ã‚ˆã‚Šå‚ç…§ã•ã‚Œã‚‹ã€‚
+  # @param value ã“ã® EventInPort ã«ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã‚‹ T å‹ã®å¤‰æ•°
   #
   # @else
   #
@@ -85,9 +85,9 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿¡£
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
   #
   # @else
   #
@@ -103,12 +103,12 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ¥İ¡¼¥ÈÌ¾¾Î¤ò¼èÆÀ¤¹¤ë¡£
+  # @brief ãƒãƒ¼ãƒˆåç§°ã‚’å–å¾—ã™ã‚‹ã€‚
   #
-  # ¥İ¡¼¥ÈÌ¾¾Î¤ò¼èÆÀ¤¹¤ë¡£
+  # ãƒãƒ¼ãƒˆåç§°ã‚’å–å¾—ã™ã‚‹ã€‚
   #
   # @param self
-  # @return ¥İ¡¼¥ÈÌ¾¾Î
+  # @return ãƒãƒ¼ãƒˆåç§°
   #
   # @else
   #
@@ -127,11 +127,11 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ½é´ü²½´Ø¿ô
+  # @brief åˆæœŸåŒ–é–¢æ•°
   #
   # @param self
-  # @param prop ÀßÄê¾ğÊó
-  # channel_timeout¡§¥Ç¡¼¥¿½ñ¤­¹ş¤ß¡¢ÆÉ¤ß¹ş¤ß»ş¤Î¥¿¥¤¥à¥¢¥¦¥È
+  # @param prop è¨­å®šæƒ…å ±
+  # channel_timeoutï¼šãƒ‡ãƒ¼ã‚¿æ›¸ãè¾¼ã¿ã€èª­ã¿è¾¼ã¿æ™‚ã®ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ
   #
   # @else
   #
@@ -151,20 +151,61 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     self._readable_listener = OpenRTM_aist.CSPOutPort.IsReadableListener(self._buffdata, self._ctrl, self._channeltimeout, self, self._manager)
     self._read_listener = OpenRTM_aist.CSPOutPort.ReadListener(self._buffdata, self._ctrl, self._channeltimeout)
 
+  ##
+  # @if jp
+  #
+  # @brief CSPManagerã®è¨­å®š
+  #
+  # @param self
+  # @param manager CSPManager
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param manager
+  #
+  # @endif
+  #
+  def setManager(self, manager):
+    self._readable_listener.setManager(manager)
+    self._manager = manager
+    if manager:
+      self._manager.addOutPort(self)
 
   ##
   # @if jp
   #
-  # @brief ¥³¥Í¥¯¥¿ÀÜÂ³´Ø¿ô
-  # OutPortBase¤ÎÀÜÂ³½èÍı¤Î¤Û¤«¤Ë¡¢¥³¥Í¥¯¥¿¤ËÆÉ¤ß¹ş¤ß³ÎÇ§»ş¡¢ÆÉ¤ß¹ş¤ß»ş¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¤òÀßÄê¤¹¤ë
+  # @brief CSPManagerã®è¨­å®šè§£é™¤
   #
   # @param self
-  # @param connector_profile ¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  #
+  # @endif
+  #
+  def releaseManager(self):
+    self._readable_listener.releaseManager()
+    self._manager = None
+
+  ##
+  # @if jp
+  #
+  # @brief ã‚³ãƒã‚¯ã‚¿æ¥ç¶šé–¢æ•°
+  # OutPortBaseã®æ¥ç¶šå‡¦ç†ã®ã»ã‹ã«ã€ã‚³ãƒã‚¯ã‚¿ã«èª­ã¿è¾¼ã¿ç¢ºèªæ™‚ã€èª­ã¿è¾¼ã¿æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’è¨­å®šã™ã‚‹
+  #
+  # @param self
+  # @param connector_profile ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
   # @return ret, prof
-  # ret¡§¥ê¥¿¡¼¥ó¥³¡¼¥É
-  # prof¡§¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë
+  # retï¼šãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
+  # profï¼šã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
   # 
-  # @return ¥İ¡¼¥ÈÌ¾¾Î
+  # @return ãƒãƒ¼ãƒˆåç§°
   #
   # @else
   #
@@ -187,12 +228,12 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ¥Ç¡¼¥¿¤¬½ñ¤­¹ş¤ß²ÄÇ½¤«¤ò³ÎÇ§
+  # @brief ãƒ‡ãƒ¼ã‚¿ãŒæ›¸ãè¾¼ã¿å¯èƒ½ã‹ã‚’ç¢ºèª
   #
   # @param self
   # @return ret, con
-  # ret¡§True(½ñ¤­¹ş¤ß²ÄÇ½)¡¢False(½ñ¤­¹ş¤ßÉÔ²Ä)
-  # con¡§½ñ¤­¹ş¤ß²ÄÇ½¤Ê¥³¥Í¥¯¥¿¡£½ñ¤­¹ş¤ßÉÔ²Ä¤Î¾ì¹ç¤ÏNone
+  # retï¼šTrue(æ›¸ãè¾¼ã¿å¯èƒ½)ã€False(æ›¸ãè¾¼ã¿ä¸å¯)
+  # conï¼šæ›¸ãè¾¼ã¿å¯èƒ½ãªã‚³ãƒã‚¯ã‚¿ã€‚æ›¸ãè¾¼ã¿ä¸å¯ã®å ´åˆã¯None
   #
   # @else
   #
@@ -212,10 +253,10 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ½ñ¤­¹ş¤ß²ÄÇ½¤Ê¥³¥Í¥¯¥¿¤òÁªÂò¤·¤Æself._writableConnector¤Ë³ÊÇ¼¤¹¤ë
+  # @brief æ›¸ãè¾¼ã¿å¯èƒ½ãªã‚³ãƒã‚¯ã‚¿ã‚’é¸æŠã—ã¦self._writableConnectorã«æ ¼ç´ã™ã‚‹
   #
   # @param self
-  # @return True¡§½ñ¤­¹ş¤ß²ÄÇ½¡¢False¡§½ñ¤­¹ş¤ßÉÔ²Ä
+  # @return Trueï¼šæ›¸ãè¾¼ã¿å¯èƒ½ã€Falseï¼šæ›¸ãè¾¼ã¿ä¸å¯
   #
   # @else
   #
@@ -240,11 +281,11 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief self._writableConnector¤Ë³ÊÇ¼¤·¤¿¥³¥Í¥¯¥¿¤Ë¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à
-  # ¤³¤Î¤¿¤á¡¢»öÁ°¤Ëselect´Ø¿ô¤ò¼Â¹Ô¤¹¤ëÉ¬Í×¤¬¤¢¤ë
+  # @brief self._writableConnectorã«æ ¼ç´ã—ãŸã‚³ãƒã‚¯ã‚¿ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
+  # ã“ã®ãŸã‚ã€äº‹å‰ã«selecté–¢æ•°ã‚’å®Ÿè¡Œã™ã‚‹å¿…è¦ãŒã‚ã‚‹
   #
   # @param self
-  # @param value ¥Ç¡¼¥¿
+  # @param value ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   #
@@ -281,10 +322,10 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ÂÔµ¡¾õÂÖ»ş¤Ë°Ü¹Ô¤·¤¿¾ì¹ç¤Ë¥Ç¡¼¥¿¤ò°ì»şÅª¤ËÊÑ¿ô¤Ë³ÊÇ¼¤¹¤ë
+  # @brief å¾…æ©ŸçŠ¶æ…‹æ™‚ã«ç§»è¡Œã—ãŸå ´åˆã«ãƒ‡ãƒ¼ã‚¿ã‚’ä¸€æ™‚çš„ã«å¤‰æ•°ã«æ ¼ç´ã™ã‚‹
   #
   # @param self
-  # @param data ¥Ç¡¼¥¿
+  # @param data ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   #
@@ -301,14 +342,14 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à
-  # ½ñ¤­¹ş¤ß²ÄÇ½¤Ê¥³¥Í¥¯¥¿¤¬Â¸ºß¤¹¤ë¾ì¹ç¤Ï¡¢¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤ó¤Ç½èÍı¤ò½ªÎ»¤¹¤ë
-  # ½ñ¤­¹ş¤ß²ÄÇ½¤Ê¥³¥Í¥¯¥¿¤¬Â¸ºß¤·¤Ê¤¤¾ì¹ç¤Ï¡¢InPortÂ¦¤«¤é¥Ç¡¼¥¿¤òÆÉ¤ß¹ş¤à¤Ş¤ÇÂÔµ¡¤¹¤ë
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
+  # æ›¸ãè¾¼ã¿å¯èƒ½ãªã‚³ãƒã‚¯ã‚¿ãŒå­˜åœ¨ã™ã‚‹å ´åˆã¯ã€ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚“ã§å‡¦ç†ã‚’çµ‚äº†ã™ã‚‹
+  # æ›¸ãè¾¼ã¿å¯èƒ½ãªã‚³ãƒã‚¯ã‚¿ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ã€InPortå´ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ã¾ã§å¾…æ©Ÿã™ã‚‹
   #
   # @param self
-  # @param value ¥Ç¡¼¥¿
-  # @return True¡§Àµ¾ï´°Î»¡¢False¡§¥¨¥é¡¼
-  # ¥Ç¡¼¥¿¤Î¥Ş¡¼¥·¥ã¥ê¥ó¥°¡¢½ñ¤­¹ş¤ß¤Î¥¿¥¤¥à¥¢¥¦¥È¤Ç¥¨¥é¡¼¤¬È¯À¸¤¹¤ë
+  # @param value ãƒ‡ãƒ¼ã‚¿
+  # @return Trueï¼šæ­£å¸¸å®Œäº†ã€Falseï¼šã‚¨ãƒ©ãƒ¼
+  # ãƒ‡ãƒ¼ã‚¿ã®ãƒãƒ¼ã‚·ãƒ£ãƒªãƒ³ã‚°ã€æ›¸ãè¾¼ã¿ã®ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã™ã‚‹
   #
   # @else
   #
@@ -377,7 +418,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   #
   # @class IsReadableListener
   #
-  # @brief ¥Ç¡¼¥¿ÆÉ¤ß¹ş¤ß³ÎÇ§¥ê¥¹¥Ê´ğÄì¥¯¥é¥¹
+  # @brief ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿ç¢ºèªãƒªã‚¹ãƒŠåŸºåº•ã‚¯ãƒ©ã‚¹
   # 
   #
   # @since 2.0.0
@@ -397,14 +438,14 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     ##
     # @if jp
     #
-    # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     # 
     #
     # @param self
-    # @param control WorkerThreadCtrl¥ª¥Ö¥¸¥§¥¯¥È
-    # @param timeout ÆÉ¤ß¹ş¤ßÂÔµ¡¤Î¥¿¥¤¥à¥¢¥¦¥È»ş´Ö
-    # @param manager CSP¥Á¥ã¥Í¥ë´ÉÍı¥Ş¥Í¡¼¥¸¥ã
-    # manager¤ò»ØÄê¤·¤¿¾ì¹ç¤Ï¡¢manager¤¬ÂÔµ¡Ãæ¤Î¾ì¹ç¤Ë¥í¥Ã¥¯²ò½ü¤ÎÄÌÃÎ¤ò¹Ô¤¦
+    # @param control WorkerThreadCtrlã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    # @param timeout èª­ã¿è¾¼ã¿å¾…æ©Ÿã®ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆæ™‚é–“
+    # @param manager CSPãƒãƒ£ãƒãƒ«ç®¡ç†ãƒãƒãƒ¼ã‚¸ãƒ£
+    # managerã‚’æŒ‡å®šã—ãŸå ´åˆã¯ã€managerãŒå¾…æ©Ÿä¸­ã®å ´åˆã«ãƒ­ãƒƒã‚¯è§£é™¤ã®é€šçŸ¥ã‚’è¡Œã†
     # 
     #
     #
@@ -425,18 +466,19 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
       self._channeltimeout = timeout
       self._port = port
       self._manager = manager
+      self._mutex = threading.RLock()
     ##
     # @if jp
     #
-    # @brief ÆÉ¤ß¹ş¤ß³ÎÇ§»ş¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
-    # Â¾¤Î¥³¥Í¥¯¥¿¤¬¥Ç¡¼¥¿ÆÉ¤ß¹ş¤ßÃæ¤Î¾ì¹ç¤Ï´°Î»¤Ş¤ÇÂÔµ¡¤¹¤ë
-    # ¥Ç¡¼¥¿½ñ¤­¹ş¤ß¤ÇÂÔµ¡¤·¤Æ¤¤¤ë¤Î¾ì¹ç¤ÏÆÉ¤ß¹ş¤ß¾õÂÖ¤Ë°Ü¹Ô¤¹¤ë
-    # ¤³¤Î¤¿¤á¡¢ÆÉ¤ß¹ş¤ß²ÄÇ½¤Ê¾ì¹ç¤ÏÉ¬¤º¥Ç¡¼¥¿¤òÆÉ¤ß¹ş¤ßÉ¬Í×¤¬¤¢¤ë
+    # @brief èª­ã¿è¾¼ã¿ç¢ºèªæ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+    # ä»–ã®ã‚³ãƒã‚¯ã‚¿ãŒãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿ä¸­ã®å ´åˆã¯å®Œäº†ã¾ã§å¾…æ©Ÿã™ã‚‹
+    # ãƒ‡ãƒ¼ã‚¿æ›¸ãè¾¼ã¿ã§å¾…æ©Ÿã—ã¦ã„ã‚‹ã®å ´åˆã¯èª­ã¿è¾¼ã¿çŠ¶æ…‹ã«ç§»è¡Œã™ã‚‹
+    # ã“ã®ãŸã‚ã€èª­ã¿è¾¼ã¿å¯èƒ½ãªå ´åˆã¯å¿…ãšãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿å¿…è¦ãŒã‚ã‚‹
     # 
     #
     # @param self
     # @param con OutPortConnector
-    # @return True¡§ÆÉ¤ß¹ş¤ß²ÄÇ½¡¢False¡§ÆÉ¤ß¹ş¤ßÉÔ²Ä
+    # @return Trueï¼šèª­ã¿è¾¼ã¿å¯èƒ½ã€Falseï¼šèª­ã¿è¾¼ã¿ä¸å¯
     # 
     #
     #
@@ -451,11 +493,13 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     # @endif
     #
     def __call__(self, con):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
       if self._manager:
         if self._manager.notify(outport=self._port):
           guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
           self._ctrl._reading = True
           return True
+      del guard_manager
       guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
       if self._ctrl._reading:
         self._ctrl._cond.wait(self._channeltimeout)
@@ -466,12 +510,56 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         self._ctrl._reading = True
         return True
 
+    ##
+    # @if jp
+    #
+    # @brief CSPManagerã®è¨­å®š
+    #
+    # @param self
+    # @param manager CSPManager
+    # 
+    #
+    #
+    # @else
+    #
+    # @brief 
+    #
+    # @param self
+    # @param manager
+    #
+    # @endif
+    #
+    def setManager(self, manager):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+      self._manager = manager
+
+    ##
+    # @if jp
+    #
+    # @brief CSPManagerã®è§£é™¤
+    #
+    # @param self
+    # 
+    #
+    #
+    # @else
+    #
+    # @brief 
+    #
+    # @param self
+    #
+    # @endif
+    #
+    def releaseManager(self):
+      guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+      self._manager = None
+
   ##
   # @if jp
   #
   # @class ReadListener
   #
-  # @brief ¥Ç¡¼¥¿ÆÉ¤ß¹ş¤ß»ş¤Î¥ê¥¹¥Ê´ğÄì¥¯¥é¥¹
+  # @brief ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿æ™‚ã®ãƒªã‚¹ãƒŠåŸºåº•ã‚¯ãƒ©ã‚¹
   # 
   #
   # @since 2.0.0
@@ -491,12 +579,12 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     ##
     # @if jp
     #
-    # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     # 
     #
     # @param self
-    # @param data ¥Ç¡¼¥¿¤ò³ÊÇ¼¤¹¤ëÊÑ¿ô
-    # @param control WorkerThreadCtrl¥ª¥Ö¥¸¥§¥¯¥È
+    # @param data ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+    # @param control WorkerThreadCtrlã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     # 
     #
     #
@@ -517,16 +605,16 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     ##
     # @if jp
     #
-    # @brief ÆÉ¤ß¹ş¤ß»ş¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
-    # ¥Ç¡¼¥¿¤òÊÑ¿ô¤«¤é¼è¤ê½Ğ¤·¡¢ÆÉ¤ß¹ş¤ß¾õÂÖ¤ò²ò½ü¤¹¤ë
+    # @brief èª­ã¿è¾¼ã¿æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+    # ãƒ‡ãƒ¼ã‚¿ã‚’å¤‰æ•°ã‹ã‚‰å–ã‚Šå‡ºã—ã€èª­ã¿è¾¼ã¿çŠ¶æ…‹ã‚’è§£é™¤ã™ã‚‹
     # 
     #
     # @param self
     # @return ret, data
-    # ret¡§¥ê¥¿¡¼¥ó¥³¡¼¥É
-    # BUFFER_OK¡§Àµ¾ï´°Î»
-    # BUFFER_ERROR¡§¥Ç¡¼¥¿¤¬³ÊÇ¼¤µ¤ì¤Æ¤¤¤Ê¤¤
-    # data¡§¥Ç¡¼¥¿
+    # retï¼šãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
+    # BUFFER_OKï¼šæ­£å¸¸å®Œäº†
+    # BUFFER_ERRORï¼šãƒ‡ãƒ¼ã‚¿ãŒæ ¼ç´ã•ã‚Œã¦ã„ãªã„
+    # dataï¼šãƒ‡ãƒ¼ã‚¿
     # 
     #
     #

@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file CSPManager.py
@@ -24,7 +24,7 @@ import threading
 #
 # @class CSPManager
 #
-# @brief CSPOutPort¡¢CSPInPort¤ò´ÉÍı¤¹¤ë¥¯¥é¥¹
+# @brief CSPOutPortã€CSPInPortã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
 # 
 #
 # @since 2.0.0
@@ -44,7 +44,7 @@ class CSPManager(object):
   ##
   # @if jp
   #
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -67,9 +67,9 @@ class CSPManager(object):
   ##
   # @if jp
   #
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿¡£
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
   #
   # @else
   #
@@ -85,12 +85,35 @@ class CSPManager(object):
   ##
   # @if jp
   #
-  # @brief ½ñ¤­¹ş¤ß²ÄÇ½¤ÊOutPort¤òÁªÂò¤¹¤ë
+  # @brief CSPãƒãƒ¼ãƒˆã«è¨­å®šã—ãŸCSPManagerã¨ã®é–¢é€£ä»˜ã‘ã‚’è§£é™¤
+  #
+  # @param self
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  #
+  # @endif
+  #
+  def reset(self):
+    for port in self._outports:
+      port.releaseManager()
+    for port in self._inports:
+      port.releaseManager()
+    self._outports = []
+    self._inports = []
+
+  ##
+  # @if jp
+  #
+  # @brief æ›¸ãè¾¼ã¿å¯èƒ½ãªOutPortã‚’é¸æŠã™ã‚‹
   #
   # @param self
   # @return ret, port
-  # ret¡§True(½ñ¤­¹ş¤ß²ÄÇ½¤ÊOutPort¤¬Â¸ºß¤¹¤ë)¡¢False(Â¸ºß¤·¤Ê¤¤)
-  # port¡§½ñ¤­¹ş¤ß²ÄÇ½¤ÊOutPort¡£ÁªÂò¤Ç¤­¤Ê¤«¤Ã¤¿¾ì¹ç¤ÏNone
+  # retï¼šTrue(æ›¸ãè¾¼ã¿å¯èƒ½ãªOutPortãŒå­˜åœ¨ã™ã‚‹)ã€False(å­˜åœ¨ã—ãªã„)
+  # portï¼šæ›¸ãè¾¼ã¿å¯èƒ½ãªOutPortã€‚é¸æŠã§ããªã‹ã£ãŸå ´åˆã¯None
   #
   # @else
   #
@@ -110,12 +133,12 @@ class CSPManager(object):
   ##
   # @if jp
   #
-  # @brief ÆÉ¤ß¹ş¤ß²ÄÇ½¤ÊInPort¤òÁªÂò¤¹¤ë
+  # @brief èª­ã¿è¾¼ã¿å¯èƒ½ãªInPortã‚’é¸æŠã™ã‚‹
   #
   # @param self
   # @return ret, port
-  # ret¡§True(ÆÉ¤ß¹ş¤ß²ÄÇ½¤ÊInPort¤¬Â¸ºß¤¹¤ë)¡¢False(Â¸ºß¤·¤Ê¤¤)
-  # port¡§ÆÉ¤ß¹ş¤ß²ÄÇ½¤ÊInPort¡£ÁªÂò¤Ç¤­¤Ê¤«¤Ã¤¿¾ì¹ç¤ÏNone
+  # retï¼šTrue(èª­ã¿è¾¼ã¿å¯èƒ½ãªInPortãŒå­˜åœ¨ã™ã‚‹)ã€False(å­˜åœ¨ã—ãªã„)
+  # portï¼šèª­ã¿è¾¼ã¿å¯èƒ½ãªInPortã€‚é¸æŠã§ããªã‹ã£ãŸå ´åˆã¯None
   #
   # @else
   #
@@ -135,16 +158,16 @@ class CSPManager(object):
   ##
   # @if jp
   #
-  # @brief ÆÉ¤ß¹ş¤ß²ÄÇ½¤ÊInPort¡¢¤â¤·¤¯¤Ï½ñ¤­¹ş¤ß²ÄÇ½¤ÊOutPort¤òÁªÂò¤¹¤ë
-  # ÆÉ¤ß¹ş¤ß²ÄÇ½¤ÊInPort¡¢½ñ¤­¹ş¤ß²ÄÇ½¤ÊOutPort¤¬Â¸ºß¤·¤Ê¤¤¾ì¹ç¤Ï¥¿¥¤¥à¥¢¥¦¥È¤Ş¤ÇÂÔµ¡¤¹¤ë
-  # ÂÔµ¡²ò½ü¸å¡¢ÆÉ¤ß¹ş¤ß²ÄÇ½¤ÊInPort¡¢¤â¤·¤¯¤Ï½ñ¤­¹ş¤ß²ÄÇ½¤ÊOutPort¤òºÆÅÙÁªÂò¤¹¤ë
+  # @brief èª­ã¿è¾¼ã¿å¯èƒ½ãªInPortã€ã‚‚ã—ãã¯æ›¸ãè¾¼ã¿å¯èƒ½ãªOutPortã‚’é¸æŠã™ã‚‹
+  # èª­ã¿è¾¼ã¿å¯èƒ½ãªInPortã€æ›¸ãè¾¼ã¿å¯èƒ½ãªOutPortãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã¾ã§å¾…æ©Ÿã™ã‚‹
+  # å¾…æ©Ÿè§£é™¤å¾Œã€èª­ã¿è¾¼ã¿å¯èƒ½ãªInPortã€ã‚‚ã—ãã¯æ›¸ãè¾¼ã¿å¯èƒ½ãªOutPortã‚’å†åº¦é¸æŠã™ã‚‹
   #
   # @param self
-  # @param timeout ÂÔµ¡¤Î¥¿¥¤¥à¥¢¥¦¥È»ş´Ö
+  # @param timeout å¾…æ©Ÿã®ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆæ™‚é–“
   # @return ret, outport, inport
-  # ret¡§Ture(½ñ¤­¹ş¤ß¡¢ÆÉ¤ß¹ş¤ß²ÄÇ½¤Ê¥İ¡¼¥È¤¬Â¸ºß)¡¢False(¥¿¥¤¥à¥¢¥¦¥È)
-  # outport¡§OutPort¤òÁªÂò¤·¤¿¾ì¹ç¤Ë¡¢½ñ¤­¹ş¤ß²ÄÇ½¤ÊOutPort¤ò³ÊÇ¼
-  # inport¡§InPort¤òÁªÂò¤·¤¿¾ì¹ç¤Ë¡¢ÆÉ¤ß¹ş¤ß²ÄÇ½¤ÊInort¤ò³ÊÇ¼
+  # retï¼šTure(æ›¸ãè¾¼ã¿ã€èª­ã¿è¾¼ã¿å¯èƒ½ãªãƒãƒ¼ãƒˆãŒå­˜åœ¨)ã€False(ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ)
+  # outportï¼šOutPortã‚’é¸æŠã—ãŸå ´åˆã«ã€æ›¸ãè¾¼ã¿å¯èƒ½ãªOutPortã‚’æ ¼ç´
+  # inportï¼šInPortã‚’é¸æŠã—ãŸå ´åˆã«ã€èª­ã¿è¾¼ã¿å¯èƒ½ãªInortã‚’æ ¼ç´
   #
   # @else
   #
@@ -164,32 +187,34 @@ class CSPManager(object):
     if ret:
       return ret, None, port
 
-    guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-    self._ctrl._waiting = True
-    self._ctrl._timeout = True
-    self._ctrl._cond.wait(timeout)
-    self._ctrl._waiting = False
-    del guard
-    if self._ctrl._timeout:
-      return False, None, None
-    else:
-      if self._writableOutPort or self._readableInPort:
-        inport = self._readableInPort
-        outport = self._writableOutPort
-        self._writableOutPort = None
-        self._readableInPort = None
-        return True, outport, inport
-      return False, None, None
+    
+    if timeout >= 0:
+      guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+      self._ctrl._waiting = True
+      self._ctrl._timeout = True
+      self._ctrl._cond.wait(timeout)
+      self._ctrl._waiting = False
+      del guard
+      if self._ctrl._timeout:
+        return False, None, None
+      else:
+        if self._writableOutPort or self._readableInPort:
+          inport = self._readableInPort
+          outport = self._writableOutPort
+          self._writableOutPort = None
+          self._readableInPort = None
+          return True, outport, inport
+    return False, None, None
 
 
   ##
   # @if jp
   #
-  # @brief ÂÔµ¡¾õÂÖ²ò½ü¤òÄÌÃÎ
-  # select´Ø¿ô¤ÇÂÔµ¡¤·¤Æ¤¤¤ë¾ì¹ç¤Ë¡¢ÂÔµ¡¤ò²ò½ü¤¹¤ë
+  # @brief å¾…æ©ŸçŠ¶æ…‹è§£é™¤ã‚’é€šçŸ¥
+  # selecté–¢æ•°ã§å¾…æ©Ÿã—ã¦ã„ã‚‹å ´åˆã«ã€å¾…æ©Ÿã‚’è§£é™¤ã™ã‚‹
   #
   # @param self
-  # @return True¡§ÂÔµ¡¾õÂÖ¤ò²ò½ü¡¢False¡§ÂÔµ¡¾õÂÖ¤Ç¤Ï¤Ê¤¤
+  # @return Trueï¼šå¾…æ©ŸçŠ¶æ…‹ã‚’è§£é™¤ã€Falseï¼šå¾…æ©ŸçŠ¶æ…‹ã§ã¯ãªã„
   #
   # @else
   #
@@ -216,7 +241,7 @@ class CSPManager(object):
   ##
   # @if jp
   #
-  # @brief InPort¤òÄÉ²Ã
+  # @brief InPortã‚’è¿½åŠ 
   #
   # @param self
   # @param port InPort
@@ -236,7 +261,7 @@ class CSPManager(object):
   ##
   # @if jp
   #
-  # @brief OutPort¤òÄÉ²Ã
+  # @brief OutPortã‚’è¿½åŠ 
   #
   # @param self
   # @param port OutPort
@@ -256,7 +281,7 @@ class CSPManager(object):
   ##
   # @if jp
   #
-  # @brief InPort¤òºï½ü
+  # @brief InPortã‚’å‰Šé™¤
   #
   # @param self
   # @param port InPort
@@ -276,7 +301,7 @@ class CSPManager(object):
   ##
   # @if jp
   #
-  # @brief Outort¤òºï½ü
+  # @brief Outortã‚’å‰Šé™¤
   #
   # @param self
   # @param port OutPort

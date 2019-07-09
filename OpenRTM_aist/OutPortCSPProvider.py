@@ -21,7 +21,7 @@ import CSP__POA
 # @class OutPortCSPProvider
 # @brief OutPortCSPProvider クラス
 #
-# 通信手段に 共有メモリ を利用した入力ポートプロバイダーの実装クラス。
+# CSPモデルのチャネルを模擬した出力ポートプロバイダーの実装クラス。
 #
 #
 # @else
