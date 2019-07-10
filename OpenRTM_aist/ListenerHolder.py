@@ -198,5 +198,7 @@ class ListenerHolder:
     for listener in self.listeners:
       for (l,f) in listener.items():
         func_ = getattr(l,func,None)
-        func_(*args)
-    return
+        ret = func_(*args)
+        if ret is not None:
+          args = ret
+    return args
