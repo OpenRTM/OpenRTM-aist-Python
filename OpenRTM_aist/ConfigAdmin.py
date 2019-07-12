@@ -1340,7 +1340,6 @@ class ConfigAdmin:
   #             ON_UPDATE_CONFIG_PARAM がある。
   #
   # @param listener ConfigurationParamListener 型のリスナオブジェクト。
-  # @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
   # 
   # @else
   #
@@ -1355,15 +1354,13 @@ class ConfigAdmin:
   #             ON_UPDATE_CONFIG_PARAM is only allowed.
   #
   # @param listener ConfigurationParamListener listener object.
-  # @param autoclean a flag whether if the listener object autocleaned.
   #
   # @endif
   #
   # void addConfigurationParamListener(ConfigurationParamListenerType type,
-  #                                    ConfigurationParamListener* listener,
-  #                                    bool autoclean = true);
-  def addConfigurationParamListener(self, type, listener, autoclean = True):
-    self._listeners.configparam_[type].addListener(listener, autoclean)
+  #                                    ConfigurationParamListener* listener);
+  def addConfigurationParamListener(self, type, listener):
+    self._listeners.configparam_[type].addListener(listener)
     return
 
 
@@ -1414,7 +1411,6 @@ class ConfigAdmin:
   #
   # @param type ConfigurationSetListenerType型の値。
   # @param listener ConfigurationSetListener 型のリスナオブジェクト。
-  # @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
   # 
   # @else
   #
@@ -1425,15 +1421,13 @@ class ConfigAdmin:
   #
   # @param type ConfigurationSetListenerType value
   # @param listener ConfigurationSetListener listener object.
-  # @param autoclean a flag whether if the listener object autocleaned.
   #
   # @endif
   #
   # void addConfigurationSetListener(ConfigurationSetListenerType type,
-  #                                  ConfigurationSetListener* listener,
-  #                                  bool autoclean = true);
-  def addConfigurationSetListener(self, type, listener, autoclean = True):
-    self._listeners.configset_[type].addListener(listener, autoclean)
+  #                                  ConfigurationSetListener* listener);
+  def addConfigurationSetListener(self, type, listener):
+    self._listeners.configset_[type].addListener(listener)
     return
 
 
@@ -1480,7 +1474,6 @@ class ConfigAdmin:
   #
   # @param type ConfigurationSetNameListenerType型の値。
   # @param listener ConfigurationSetNameListener 型のリスナオブジェクト。
-  # @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
   # 
   # @else
   #
@@ -1495,15 +1488,13 @@ class ConfigAdmin:
   #
   # @param type ConfigurationSetNameListenerType value
   # @param listener ConfigurationSetNameListener listener object.
-  # @param autoclean a flag whether if the listener object autocleaned.
   #
   # @endif
   # void 
   # addConfigurationSetNameListener(ConfigurationSetNameListenerType type,
-  #                                 ConfigurationSetNameListener* listener,
-  #                                 bool autoclean = true);
-  def addConfigurationSetNameListener(self, type, listener, autoclean = True):
-    self._listeners.configsetname_[type].addListener(listener, autoclean)
+  #                                 ConfigurationSetNameListener* listener);
+  def addConfigurationSetNameListener(self, type, listener):
+    self._listeners.configsetname_[type].addListener(listener)
     return
 
 

@@ -746,7 +746,6 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
   #
   # @param listener_type リスナタイプ
   # @param listener リスナオブジェクトへのポインタ
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding BufferDataListener type listener
@@ -782,19 +781,17 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
   #
   # @param listener_type A listener type
   # @param listener A pointer to a listener object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
   # void addConnectorDataListener(ConnectorDataListenerType listener_type,
-  #                               ConnectorDataListener* listener,
-  #                               bool autoclean = true);
-  def addConnectorDataListener(self, listener_type, listener, autoclean = True):
+  #                               ConnectorDataListener* listener);
+  def addConnectorDataListener(self, listener_type, listener):
     self._rtcout.RTC_TRACE("addConnectorDataListener()")
     if listener_type < OpenRTM_aist.ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM:
       self._rtcout.RTC_TRACE("addConnectorDataListener(%s)",
                              OpenRTM_aist.ConnectorDataListener.toString(listener_type))
-      self._listeners.connectorData_[listener_type].addListener(listener, autoclean)
+      self._listeners.connectorData_[listener_type].addListener(listener)
       return
 
     self._rtcout.RTC_ERROR("addConnectorDataListener(): Unknown Listener Type")
@@ -858,7 +855,6 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
   #
   # @param listener_type リスナタイプ
   # @param listener リスナオブジェクトへのポインタ
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding ConnectorListener type listener
@@ -883,20 +879,18 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
   #
   # @param listener_type A listener type
   # @param listener A pointer to a listener object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
   # void addConnectorListener(ConnectorListenerType callback_type,
-  #                           ConnectorListener* listener,
-  #                           bool autoclean = true);
-  def addConnectorListener(self, callback_type, listener, autoclean = True):
+  #                           ConnectorListener* listener);
+  def addConnectorListener(self, callback_type, listener):
     self._rtcout.RTC_TRACE("addConnectorListener()")
 
     if callback_type < OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM:
       self._rtcout.RTC_TRACE("addConnectorListener(%s)",
                              OpenRTM_aist.ConnectorListener.toString(callback_type))
-      self._listeners.connector_[callback_type].addListener(listener, autoclean)
+      self._listeners.connector_[callback_type].addListener(listener)
       return
     self._rtcout.RTC_ERROR("addConnectorListener(): Unknown Listener Type")
     return

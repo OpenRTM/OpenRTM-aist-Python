@@ -694,11 +694,6 @@ class ConnectorDataListenerHolder:
   # @endif
   #
   def __del__(self):
-    #guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    #for listener in self._listeners:
-    #  for (k,v) in listener.items():
-    #    if v:
-    #      del k
     return
 
     
@@ -711,8 +706,6 @@ class ConnectorDataListenerHolder:
   #
   # @param self
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -721,14 +714,12 @@ class ConnectorDataListenerHolder:
   #
   # @param self
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
   #
-  # void addListener(ConnectorDataListener* listener, bool autoclean);
-  def addListener(self, listener, autoclean):
+  # void addListener(ConnectorDataListener* listener);
+  def addListener(self, listener):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append({listener:autoclean})
+    self._listeners.append(listener)
     return
 
     
@@ -755,9 +746,8 @@ class ConnectorDataListenerHolder:
   def removeListener(self, listener):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
     for (i, _listener) in enumerate(self._listeners):
-      if listener in _listener:
-        del self._listeners[i][listener]
-        return
+      del self._listeners[i]
+      return
 
     
   ##
@@ -787,8 +777,7 @@ class ConnectorDataListenerHolder:
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
     ret = ConnectorListenerStatus.NO_CHANGE
     for listener in self._listeners:
-      for (k,v) in listener.items():
-        ret = ret | k(info, cdrdata)
+      ret = ret | listener(info, cdrdata)
     return ret
 
 
@@ -830,11 +819,6 @@ class ConnectorListenerHolder:
   # @endif
   #
   def __del__(self):
-    #guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    #for listener in self._listeners:
-    #  for (k,v) in listener.items():
-    #    if v:
-    #      del k
     return
         
     
@@ -847,8 +831,6 @@ class ConnectorListenerHolder:
   #
   # @param self
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -857,14 +839,12 @@ class ConnectorListenerHolder:
   #
   # @param self
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
   #
-  # void addListener(ConnectorListener* listener, bool autoclean);
-  def addListener(self, listener, autoclean):
+  # void addListener(ConnectorListener* listener);
+  def addListener(self, listener):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append({listener:autoclean})
+    self._listeners.append(listener)
     return
 
 
@@ -891,9 +871,8 @@ class ConnectorListenerHolder:
   def removeListener(self, listener):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
     for (i, _listener) in enumerate(self._listeners):
-      if listener in _listener:
-        del self._listeners[i][listener]
-        return
+      del self._listeners[i]
+      return
 
 
   ##
@@ -922,8 +901,7 @@ class ConnectorListenerHolder:
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
     ret = ConnectorListenerStatus.NO_CHANGE
     for listener in self._listeners:
-      for (k,v) in listener.items():
-        ret = ret | k(info)
+      ret = ret | listener(info)
     return ret
 
 

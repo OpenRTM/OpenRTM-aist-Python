@@ -155,14 +155,7 @@ class ListenerHolder:
   # @brief ListenerHolder class dtor 
   # @endif
   def __del__(self):
-    guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
-    
-    for listener_ in self.listeners:
-      for (l,f) in listener_.items():
-        if f:
-          del l
-    #del guard
-    #return
+    pass
   
   ##
   # @if jp
@@ -170,11 +163,10 @@ class ListenerHolder:
   # @else
   # @brief add listener object
   # @endif
-  # virtual void addListener(ListenerClass* listener,
-  #                          bool autoclean)
-  def addListener(self, listener, autoclean):
+  # virtual void addListener(ListenerClass* listener)
+  def addListener(self, listener):
     guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
-    self.listeners.append({listener:autoclean})
+    self.listeners.append(listener)
     del guard
     return
     
@@ -188,7 +180,7 @@ class ListenerHolder:
   def removeListener(self, listener):
     guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
     for (i, listener_) in enumerate(self.listeners):
-      if listener == listener:
+      if self.listeners[i] == listener:
         del self.listeners[i]
         return
     return

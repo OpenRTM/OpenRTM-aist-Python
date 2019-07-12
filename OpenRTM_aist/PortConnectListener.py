@@ -328,12 +328,6 @@ class PortConnectRetListener:
 
 
 
-class Entry:
-  def __init__(self,listener, autoclean):
-    self.listener  = listener
-    self.autoclean = autoclean
-    return
-
 #============================================================
 ##
 # @if jp
@@ -384,8 +378,6 @@ class PortConnectListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -393,13 +385,11 @@ class PortConnectListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
-  #void addListener(PortConnectListener* listener, bool autoclean);
-  def addListener(self, listener, autoclean):
+  #void addListener(PortConnectListener* listener);
+  def addListener(self, listener):
     guard = Lock(self._mutex)
-    self._listeners.append(Entry(listener, autoclean))
+    self._listeners.append(listener)
     del guard
     return
 
@@ -425,8 +415,7 @@ class PortConnectListenerHolder:
     guard = Lock(self._mutex)
     len_ = len(self._listeners)
     for i in range(len_):
-      if (self._listeners[i].listener == listener) and self._listeners[i].autoclean:
-        self._listeners[i].listener = None
+      if (self._listeners[i] == listener):
         del self._listeners[i]
         del guard
         return
@@ -454,7 +443,7 @@ class PortConnectListenerHolder:
   def notify(self, portname, profile):
     guard = Lock(self._mutex)
     for listener in self._listeners:
-      listener.listener(portname, profile)
+      listener(portname, profile)
     del guard
     return
 
@@ -510,8 +499,6 @@ class PortConnectRetListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -519,13 +506,11 @@ class PortConnectRetListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
-  #void addListener(PortConnectRetListener* listener, bool autoclean);
-  def addListener(self, listener, autoclean):
+  #void addListener(PortConnectRetListener* listener);
+  def addListener(self, listener):
     guard = Lock(self._mutex)
-    self._listeners.append(Entry(listener, autoclean))
+    self._listeners.append(listener)
     del guard
     return
 
@@ -551,8 +536,7 @@ class PortConnectRetListenerHolder:
     guard = Lock(self._mutex)
     len_ = len(self._listeners)
     for i in range(len_):
-      if (self._listeners[i].listener == listener) and self._listeners[i].autoclean:
-        self._listeners[i].listener = None
+      if (self._listeners[i] == listener):
         del self._listeners[i]
         del guard
         return
@@ -583,7 +567,7 @@ class PortConnectRetListenerHolder:
   def notify(self, portname, profile, ret):
     guard = Lock(self._mutex)
     for listener in self._listeners:
-      listener.listener(portname, profile, ret)
+      listener(portname, profile, ret)
     del guard
     return
 

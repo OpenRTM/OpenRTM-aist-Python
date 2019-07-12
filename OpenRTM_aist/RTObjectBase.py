@@ -3473,7 +3473,6 @@ class RTObjectBase:
   #
   # @param listener_type リスナタイプ
   # @param memfunc 関数オブジェクト
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding PreComponentAction type listener
@@ -3507,17 +3506,15 @@ class RTObjectBase:
   #
   # @param listener_type A listener type
   # @param memfunc  member function object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
   # template <class Listener>
   # PreComponentActionListener*
   # addPreComponentActionListener(PreCompActionListenerType listener_type,
-  #                               void (Listener::*memfunc)(UniqueId ec_id),
-  #                               bool autoclean = true)
+  #                               void (Listener::*memfunc)(UniqueId ec_id))
   def addPreComponentActionListener(self, listener_type,
-                                    memfunc, autoclean = True):
+                                    memfunc):
     class Noname(OpenRTM_aist.PreComponentActionListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -3527,7 +3524,7 @@ class RTObjectBase:
         return
 
     listener = Noname(memfunc)
-    self._actionListeners.preaction_[listener_type].addListener(listener, autoclean)
+    self._actionListeners.preaction_[listener_type].addListener(listener)
     return listener
 
 
@@ -3592,7 +3589,6 @@ class RTObjectBase:
   #
   # @param listener_type リスナタイプ
   # @param memfunc 関数オブジェクト
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding PostComponentAction type listener
@@ -3626,7 +3622,6 @@ class RTObjectBase:
   #
   # @param listener_type A listener type
   # @param memfunc  member function object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
@@ -3634,10 +3629,9 @@ class RTObjectBase:
   # PostComponentActionListener*
   # addPostComponentActionListener(PostCompActionListenerType listener_type,
   #                                void (Listener::*memfunc)(UniqueId ec_id,
-  #                                                          ReturnCode_t ret),
-  #                                bool autoclean = true)
+  #                                                          ReturnCode_t ret))
   def addPostComponentActionListener(self, listener_type,
-                                     memfunc, autoclean = True):
+                                     memfunc):
     class Noname(OpenRTM_aist.PostComponentActionListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -3647,7 +3641,7 @@ class RTObjectBase:
         return
       
     listener = Noname(memfunc)
-    self._actionListeners.postaction_[listener_type].addListener(listener, autoclean)
+    self._actionListeners.postaction_[listener_type].addListener(listener)
     return listener
 
 
@@ -3702,7 +3696,6 @@ class RTObjectBase:
   #
   # @param listener_type リスナタイプ
   # @param memfunc 関数オブジェクト
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding PortAction type listener
@@ -3727,17 +3720,15 @@ class RTObjectBase:
   #
   # @param listener_type A listener type
   # @param memfunc  member function object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
   # template <class Listener>
   # PortActionListener*
   # addPortActionListener(PortActionListenerType listener_type,
-  #                       void (Listener::*memfunc)(const RTC::PortProfile&),
-  #                       bool autoclean=true)
+  #                       void (Listener::*memfunc)(const RTC::PortProfile&))
   def addPortActionListener(self, listener_type,
-                            memfunc, autoclean = True):
+                            memfunc):
     class Noname(OpenRTM_aist.PortActionListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -3749,7 +3740,7 @@ class RTObjectBase:
 
     listener = Noname(memfunc)
     
-    self._actionListeners.portaction_[listener_type].addListener(listener, autoclean)
+    self._actionListeners.portaction_[listener_type].addListener(listener)
     return listener
 
 
@@ -3803,7 +3794,6 @@ class RTObjectBase:
   #
   # @param listener_type リスナタイプ
   # @param memfunc 関数オブジェクト
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding ExecutionContextAction type listener
@@ -3828,17 +3818,15 @@ class RTObjectBase:
   #
   # @param listener_type A listener type
   # @param memfunc  member function object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
   # template <class Listener>
   # ECActionListener*
   # addExecutionContextActionListener(ECActionListenerType listener_type,
-  #                                   void (Listener::*memfunc)(UniqueId),
-  #                                   bool autoclean = true);
+  #                                   void (Listener::*memfunc)(UniqueId));
   def addExecutionContextActionListener(self, listener_type,
-                                        memfunc, autoclean = True):
+                                        memfunc):
     class Noname(OpenRTM_aist.ExecutionContextActionListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -3849,7 +3837,7 @@ class RTObjectBase:
         return
 
     listener = Noname(memfunc)
-    self._actionListeners.ecaction_[listener_type].addListener(listener, autoclean)
+    self._actionListeners.ecaction_[listener_type].addListener(listener)
     return listener
     
 
@@ -3905,7 +3893,6 @@ class RTObjectBase:
   #
   # @param listener_type リスナタイプ
   # @param memfunc 関数オブジェクト
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding PortConnect type listener
@@ -3930,7 +3917,6 @@ class RTObjectBase:
   #
   # @param listener_type A listener type
   # @param memfunc  member function object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
@@ -3938,10 +3924,9 @@ class RTObjectBase:
   # PortConnectListener*
   # addPortConnectListener(PortConnectListenerType listener_type,
   #                        void (Listener::*memfunc)(const char*,
-  #                                                  ConnectorProfile&),
-  #                        bool autoclean = true)
+  #                                                  ConnectorProfile&))
   def addPortConnectListener(self, listener_type,
-                             memfunc, autoclean = True):
+                             memfunc):
     class Noname(OpenRTM_aist.PortConnectListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -3952,7 +3937,7 @@ class RTObjectBase:
         return
 
     listener = Noname(memfunc)
-    self._portconnListeners.portconnect_[listener_type].addListener(listener, autoclean)
+    self._portconnListeners.portconnect_[listener_type].addListener(listener)
     return listener
     
 
@@ -4010,7 +3995,6 @@ class RTObjectBase:
   #
   # @param listener_type リスナタイプ
   # @param memfunc 関数オブジェクト
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding PortConnectRet type listener
@@ -4037,7 +4021,6 @@ class RTObjectBase:
   #
   # @param listener_type A listener type
   # @param memfunc  member function object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
@@ -4048,7 +4031,7 @@ class RTObjectBase:
   #                                                     ConnectorProfile&,
   #                                                     ReturnCode_t))
   def addPortConnectRetListener(self, listener_type,
-                                memfunc, autoclean = True):
+                                memfunc):
     class Noname(OpenRTM_aist.PortConnectRetListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -4059,7 +4042,7 @@ class RTObjectBase:
         return
 
     listener = Noname(memfunc)
-    self._portconnListeners.portconnret_[listener_type].addListener(listener, autoclean)
+    self._portconnListeners.portconnret_[listener_type].addListener(listener)
     return listener
     
 
@@ -4103,7 +4086,6 @@ class RTObjectBase:
   #             ON_UPDATE_CONFIG_PARAM がある。
   #
   # @param memfunc 関数オブジェクト
-  # @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
   # 
   # @else
   #
@@ -4118,7 +4100,6 @@ class RTObjectBase:
   #             ON_UPDATE_CONFIG_PARAM is only allowed.
   #
   # @param memfunc  member function object
-  # @param autoclean a flag whether if the listener object autocleaned.
   #
   # @endif
   #
@@ -4126,10 +4107,9 @@ class RTObjectBase:
   # ConfigurationParamListener*
   # addConfigurationParamListener(ConfigurationParamListenerType listener_type,
   #                               void (Listener::*memfunc)(const char*,
-  #                                                         const char*),
-  #                               bool autoclean = true)
+  #                                                         const char*))
   def addConfigurationParamListener(self, type,
-                                    memfunc, autoclean = True):
+                                    memfunc):
     class Noname(OpenRTM_aist.ConfigurationParamListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -4140,7 +4120,7 @@ class RTObjectBase:
         return
 
     listener = Noname(memfunc)
-    self._configsets.addConfigurationParamListener(type, listener, autoclean)
+    self._configsets.addConfigurationParamListener(type, listener)
     return listener
 
 
@@ -4191,7 +4171,6 @@ class RTObjectBase:
   #
   # @param type ConfigurationSetListenerType型の値。
   # @param memfunc 関数オブジェクト
-  # @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
   # 
   # @else
   #
@@ -4202,7 +4181,6 @@ class RTObjectBase:
   #
   # @param type ConfigurationSetListenerType value
   # @param memfunc  member function object
-  # @param autoclean a flag whether if the listener object autocleaned.
   #
   # @endif
   #
@@ -4212,7 +4190,7 @@ class RTObjectBase:
   #                             void (Listener::*memfunc)
   #                             (const coil::Properties& config_set))
   def addConfigurationSetListener(self, listener_type,
-                                  memfunc, autoclean = True):
+                                  memfunc):
     class Noname(OpenRTM_aist.ConfigurationSetListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -4223,7 +4201,7 @@ class RTObjectBase:
         return
 
     listener = Noname(memfunc)
-    self._configsets.addConfigurationSetListener(listener_type, listener, autoclean)
+    self._configsets.addConfigurationSetListener(listener_type, listener)
     return listener
 
 
@@ -4271,7 +4249,6 @@ class RTObjectBase:
   #
   # @param type ConfigurationSetNameListenerType型の値。
   # @param memfunc 関数オブジェクト
-  # @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
   # 
   # @else
   #
@@ -4286,7 +4263,6 @@ class RTObjectBase:
   #
   # @param type ConfigurationSetNameListenerType value
   # @param memfunc  member function object
-  # @param autoclean a flag whether if the listener object autocleaned.
   #
   # @endif
   #
@@ -4294,7 +4270,7 @@ class RTObjectBase:
   # ConfigurationSetNameListener*
   # addConfigurationSetNameListener(ConfigurationSetNameListenerType type,
   #                                 void (Listener::*memfunc)(const char*))
-  def addConfigurationSetNameListener(self, type, memfunc, autoclean = True):
+  def addConfigurationSetNameListener(self, type, memfunc):
     class Noname(OpenRTM_aist.ConfigurationSetNameListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -4305,7 +4281,7 @@ class RTObjectBase:
         return
 
     listener = Noname(memfunc)
-    self._configsets.addConfigurationSetNameListener(type, listener, autoclean)
+    self._configsets.addConfigurationSetNameListener(type, listener)
     return listener
 
 
@@ -4375,7 +4351,6 @@ class RTObjectBase:
   #
   # @param listener_type リスナタイプ
   # @param listener リスナオブジェクトへのポインタ
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding PreFsmAction type listener
@@ -4409,12 +4384,11 @@ class RTObjectBase:
   #
   # @param listener_type A listener type
   # @param listener A pointer to a listener object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
   def addPreFsmActionListener(self, listener_type,
-                             memfunc, autoclean = True):
+                             memfunc):
     class Noname(OpenRTM_aist.PreFsmActionListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -4425,7 +4399,7 @@ class RTObjectBase:
         return
 
     listener = Noname(memfunc)
-    self._fsmActionListeners.preaction_[listener_type].addListener(listener, autoclean)
+    self._fsmActionListeners.preaction_[listener_type].addListener(listener)
     return listener
 
   ##
@@ -4486,7 +4460,6 @@ class RTObjectBase:
   #
   # @param listener_type リスナタイプ
   # @param listener リスナオブジェクトへのポインタ
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding PostFsmAction type listener
@@ -4520,12 +4493,11 @@ class RTObjectBase:
   #
   # @param listener_type A listener type
   # @param listener A pointer to a listener object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
   def addPostFsmActionListener(self, listener_type,
-                             memfunc, autoclean = True):
+                             memfunc):
     class Noname(OpenRTM_aist.PostFsmActionListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -4536,7 +4508,7 @@ class RTObjectBase:
         return
 
     listener = Noname(memfunc)
-    self._fsmActionListeners.postaction_[listener_type].addListener(listener, autoclean)
+    self._fsmActionListeners.postaction_[listener_type].addListener(listener)
     return listener
 
 
@@ -4597,7 +4569,6 @@ class RTObjectBase:
   #
   # @param listener_type リスナタイプ
   # @param listener リスナオブジェクトへのポインタ
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding FsmProfile type listener
@@ -4630,12 +4601,11 @@ class RTObjectBase:
   #
   # @param listener_type A listener type
   # @param listener A pointer to a listener object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
   def addFsmProfileListener(self, listener_type,
-                             memfunc, autoclean = True):
+                             memfunc):
     class Noname(OpenRTM_aist.FsmProfileListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -4646,7 +4616,7 @@ class RTObjectBase:
         return
 
     listener = Noname(memfunc)
-    self._fsmActionListeners.profile_[listener_type].addListener(listener, autoclean)
+    self._fsmActionListeners.profile_[listener_type].addListener(listener)
     return listener
 
 
@@ -4699,7 +4669,6 @@ class RTObjectBase:
   #
   # @param listener_type リスナタイプ
   # @param listener リスナオブジェクトへのポインタ
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding FsmStructure type listener
@@ -4725,12 +4694,11 @@ class RTObjectBase:
   #
   # @param listener_type A listener type
   # @param listener A pointer to a listener object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
   def addFsmStructureListener(self, listener_type,
-                             memfunc, autoclean = True):
+                             memfunc):
     class Noname(OpenRTM_aist.FsmStructureListener):
       def __init__(self, memfunc):
         self._memfunc = memfunc
@@ -4741,7 +4709,7 @@ class RTObjectBase:
         return
 
     listener = Noname(memfunc)
-    self._fsmActionListeners.structure_[listener_type].addListener(listener, autoclean)
+    self._fsmActionListeners.structure_[listener_type].addListener(listener)
     return listener
 
 

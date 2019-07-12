@@ -1248,10 +1248,9 @@ class Manager:
 
 
   # void Manager::
-  # addManagerActionListener(RTM::ManagerActionListener* listener,
-  #                          bool autoclean)
-  def addManagerActionListener(self, listener,autoclean=True):
-    self._listeners.manager_.addListener(listener, autoclean)
+  # addManagerActionListener(RTM::ManagerActionListener* listener)
+  def addManagerActionListener(self, listener):
+    self._listeners.manager_.addListener(listener)
     return
 
 
@@ -1263,10 +1262,9 @@ class Manager:
   
 
   # void Manager::
-  # addModuleActionListener(RTM::ModuleActionListener* listener,
-  #                          bool autoclean)
-  def addModuleActionListener(self, listener, autoclean=True):
-    self._listeners.module_.addListener(listener, autoclean)
+  # addModuleActionListener(RTM::ModuleActionListener* listener)
+  def addModuleActionListener(self, listener):
+    self._listeners.module_.addListener(listener)
     return
 
 
@@ -1278,10 +1276,9 @@ class Manager:
 
 
   # void Manager::
-  # addRtcLifecycleActionListener(RTM::RtcLifecycleActionListener* listener,
-  #                               bool autoclean)
-  def addRtcLifecycleActionListener(self, listener, autoclean=True):
-    self._listeners.rtclifecycle_.addListener(listener, autoclean)
+  # addRtcLifecycleActionListener(RTM::RtcLifecycleActionListener* listener)
+  def addRtcLifecycleActionListener(self, listener):
+    self._listeners.rtclifecycle_.addListener(listener)
     return
 
 
@@ -1293,10 +1290,9 @@ class Manager:
 
   
   # void Manager::
-  # addNamingActionListener(RTM::NamingActionListener* listener,
-  #                         bool autoclean)
-  def addNamingActionListener(self, listener, autoclean=True):
-    self._listeners.naming_.addListener(listener, autoclean)
+  # addNamingActionListener(RTM::NamingActionListener* listener)
+  def addNamingActionListener(self, listener):
+    self._listeners.naming_.addListener(listener)
     return
 
 
@@ -1308,10 +1304,9 @@ class Manager:
   
 
   # void Manager::
-  # addLocalServiceActionListener(RTM::LocalServiceActionListener* listener,
-  #                               bool autoclean)
-  def addLocalServiceActionListener(self, listener, autoclean=True):
-    self._listeners.localservice_.addListener(listener, autoclean)
+  # addLocalServiceActionListener(RTM::LocalServiceActionListener* listener)
+  def addLocalServiceActionListener(self, listener):
+    self._listeners.localservice_.addListener(listener)
     return
 
 
