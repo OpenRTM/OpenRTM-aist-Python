@@ -227,6 +227,8 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     self.unsetPortProfileListeners()
     self.unsetExecutionContextListeners()
     self.unsetConfigurationListeners()
+    self.unsetRTCHeartbeat()
+    self.stopTimer()
     return
 
 
@@ -441,8 +443,9 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
   #
   # void unsetRTCHeartbeat();
   def unsetRTCHeartbeat(self):
-    self._timer.unregisterListener(self._rtcHblistenerid)
-    self._rtcHblistenerid = None
+    if self._rtcHblistenerid:
+      self._timer.unregisterListener(self._rtcHblistenerid)
+      self._rtcHblistenerid = None
     self._rtcHeartbeat = False
     return
 
