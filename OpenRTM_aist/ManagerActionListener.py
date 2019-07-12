@@ -42,6 +42,7 @@ class ManagerActionListener:
   # @endif
   # virtual void preShutdown();
   def preShutdown(self):
+    # type: () -> None
     pass
   ##
   # @if jp
@@ -53,6 +54,7 @@ class ManagerActionListener:
   # @endif
   # virtual void postShutdown();
   def postShutdown(self):
+    # type: () -> None
     pass
   ##
   # @if jp
@@ -64,6 +66,7 @@ class ManagerActionListener:
   # @endif
   # virtual void preReinit();
   def preReinit(self):
+    # type: () -> None
     pass
   ##
   # @if jp
@@ -75,6 +78,7 @@ class ManagerActionListener:
   # @endif
   # virtual void postReinit();
   def postReinit(self):
+    # type: () -> None
     pass
 
 
@@ -173,8 +177,9 @@ class ModuleActionListener:
   # @param funcname 
   # @return 
   # @endif
-  # virtual void preLoad();
+  # virtual void preLoad(std::string& modname, std::string& funcname);
   def preLoad(self, modname, funcname):
+    # type: (str, str) -> str, str
     return modname, funcname
   ##
   # @if jp
@@ -190,8 +195,9 @@ class ModuleActionListener:
   # @param funcname 
   # @return 
   # @endif
-  # virtual void postLoad();
+  # virtual void postLoad(std::string& modname, std::string& funcname);
   def postLoad(self, modname, funcname):
+    # type: (str, str) -> str, str
     return modname, funcname
   ##
   # @if jp
@@ -205,9 +211,10 @@ class ModuleActionListener:
   # @param modname 
   # @return 
   # @endif 
-  # virtual void preUnload();
+  # virtual void preUnload(std::string& modname));
   def preUnload(self, modname):
-    return modname,
+    # type: (str) -> str
+    return modname
   ##
   # @if jp
   # @brief postUnload コールバック関数
@@ -216,9 +223,10 @@ class ModuleActionListener:
   # @brief postUnload callback function
   # @param self 
   # @endif 
-  # virtual void postUnload();
+  # virtual void postUnload(std::string& modname));
   def postUnload(self, modname):
-    return modname,
+    # type: (str) -> str
+    return modname
   
 ##
 # @if jp
@@ -289,8 +297,7 @@ class ModuleActionListenerHolder(OpenRTM_aist.ListenerHolder):
   # @endif
   # virtual void preUnload(std::string& modname);
   def preUnload(self, modname):
-    modname, = self.LISTENERHOLDER_CALLBACK("preUnload", modname)
-    return modname
+    return self.LISTENERHOLDER_CALLBACK("preUnload", modname)
     
 
   ##
@@ -303,8 +310,7 @@ class ModuleActionListenerHolder(OpenRTM_aist.ListenerHolder):
   # @endif
   # virtual void postUnload(std::string& modname);
   def postUnload(self, modname):
-    modname, = self.LISTENERHOLDER_CALLBACK("postUnload", modname)
-    return modname
+    return self.LISTENERHOLDER_CALLBACK("postUnload", modname)
   
   
 ##
@@ -340,9 +346,10 @@ class RtcLifecycleActionListener:
   # @param args
   # @return 
   # @endif
-  # virtual void preCreate();
+  # virtual void preCreate(std::string& args);
   def preCreate(self, args):
-    return args,
+    # type: (str) -> str
+    return args
   ##
   # @if jp
   # @brief postCreate コールバック関数
@@ -353,8 +360,9 @@ class RtcLifecycleActionListener:
   # @param self 
   # @param rtobj 
   # @endif
-  # virtual void postCreate();
+  # virtual void postCreate(RTC::RTObject_impl*);
   def postCreate(self, rtobj):
+    # type: (OpenRTM_aist.RTObject_impl) -> None
     pass
   ##
   # @if jp
@@ -366,8 +374,9 @@ class RtcLifecycleActionListener:
   # @param self 
   # @param prop 
   # @endif 
-  # virtual void preConfigure();
+  # virtual void preConfigure(coil::Properties& prop);
   def preConfigure(self, prop):
+    # type: (OpenRTM_aist.Properties) -> None
     pass
   ##
   # @if jp
@@ -379,8 +388,9 @@ class RtcLifecycleActionListener:
   # @param self 
   # @param prop 
   # @endif 
-  # virtual void postConfigure();
+  # virtual void postConfigure(coil::Properties& prop);
   def postConfigure(self, prop):
+    # type: (OpenRTM_aist.Properties) -> None
     pass
 
   ##
@@ -393,6 +403,7 @@ class RtcLifecycleActionListener:
   # @endif 
   # virtual void preInitialize();
   def preInitialize(self):
+    # type: () -> None
     pass
 
   ##
@@ -405,6 +416,7 @@ class RtcLifecycleActionListener:
   # @endif 
   # virtual void postInitialize();
   def postInitialize(self):
+    # type: () -> None
     pass
 
 ##
@@ -449,8 +461,7 @@ class RtcLifecycleActionListenerHolder(OpenRTM_aist.ListenerHolder):
   # @endif
   # virtual void preCreate(std::string& args);
   def preCreate(self, args):
-    args, = self.LISTENERHOLDER_CALLBACK("preCreate", args)
-    return args
+    return self.LISTENERHOLDER_CALLBACK("preCreate", args)
     
     
 
@@ -555,8 +566,9 @@ class NamingActionListener:
   # @param rtobj
   # @param name
   # @endif
-  # virtual void preBind();
+  # virtual void preBind(RTC::RTObject_impl* rtobj, coil::vstring& name);
   def preBind(self, rtobj, name):
+    # type: (OpenRTM_aist.RTObject_impl, list) -> None
     pass
   ##
   # @if jp
@@ -570,8 +582,9 @@ class NamingActionListener:
   # @param rtobj 
   # @param name
   # @endif
-  # virtual void postBind();
+  # virtual void postBind(RTC::RTObject_impl* rtobj, coil::vstring& name);
   def postBind(self, rtobj, name):
+    # type: (OpenRTM_aist.RTObject_impl, list) -> None
     pass
   ##
   # @if jp
@@ -585,8 +598,9 @@ class NamingActionListener:
   # @param rtobj 
   # @param name
   # @endif 
-  # virtual void preUnbind();
+  # virtual void preUnbind(RTC::RTObject_impl* rtobj, coil::vstring& name);
   def preUnbind(self, rtobj, name):
+    # type: (OpenRTM_aist.RTObject_impl, list) -> None
     pass
   ##
   # @if jp
@@ -598,8 +612,9 @@ class NamingActionListener:
   # @param self 
   # @param prop 
   # @endif 
-  # virtual void postUnbind();
+  # virtual void postUnbind(RTC::RTObject_impl* rtobj, coil::vstring& name);
   def postUnbind(self, rtobj, name):
+    # type: (OpenRTM_aist.RTObject_impl, list) -> None
     pass
 
 
@@ -721,8 +736,9 @@ class LocalServiceActionListener:
   # @param service_name
   # @return
   # @endif
-  # virtual void preServiceRegister();
+  # virtual void preServiceRegister(std::string service_name);
   def preServiceRegister(self, service_name):
+    # type: (str) -> None
     pass
   ##
   # @if jp
@@ -738,8 +754,9 @@ class LocalServiceActionListener:
   # @param service
   # @return 
   # @endif
-  # virtual void postBind();
+  # virtual void postBind(std::string service_name, RTM::LocalServiceBase* service);
   def postServiceRegister(self, service_name, service):
+    # type: (str, OpenRTM_aist.LocalServiceBase) -> None
     pass
   ##
   # @if jp
@@ -753,8 +770,9 @@ class LocalServiceActionListener:
   # @param prop 
   # @param service
   # @endif 
-  # virtual void preServiceInit();
+  # virtual void preServiceInit(coil::Properties& prop, RTM::LocalServiceBase* service);
   def preServiceInit(self, prop, service):
+    # type: (OpenRTM_aist.Properties,  OpenRTM_aist.LocalServiceBase) -> None
     pass
   ##
   # @if jp
@@ -768,8 +786,9 @@ class LocalServiceActionListener:
   # @param prop 
   # @param service 
   # @endif 
-  # virtual void preServiceReinit();
+  # virtual void preServiceReinit(coil::Properties& prop, RTM::LocalServiceBase* service);
   def preServiceReinit(self, prop, service):
+    # type: (OpenRTM_aist.Properties,  OpenRTM_aist.LocalServiceBase) -> None
     pass
 
   ##
@@ -784,8 +803,9 @@ class LocalServiceActionListener:
   # @param prop 
   # @param service 
   # @endif 
-  # virtual void postServiceFinalize();
+  # virtual void postServiceFinalize(coil::Properties& prop, RTM::LocalServiceBase* service);
   def postServiceFinalize(self, prop, service):
+    # type: (OpenRTM_aist.Properties,  OpenRTM_aist.LocalServiceBase) -> None
     pass
 
   ##
@@ -800,8 +820,9 @@ class LocalServiceActionListener:
   # @param service_name 
   # @param service 
   # @endif 
-  # virtual void preServiceFinalize();
+  # virtual void preServiceFinalize(std::string service_name, RTM::LocalServiceBase* service);
   def preServiceFinalize(self, service_name, service):
+    # type: (str,  OpenRTM_aist.LocalServiceBase) -> None
     pass
 
   
