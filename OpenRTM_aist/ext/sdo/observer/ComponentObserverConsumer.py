@@ -152,6 +152,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     self.unsetPortProfileListeners()
     self.unsetExecutionContextListeners()
     self.unsetConfigurationListeners()
+    self.unsetHeartbeat()
     del self._timer
     return
 
