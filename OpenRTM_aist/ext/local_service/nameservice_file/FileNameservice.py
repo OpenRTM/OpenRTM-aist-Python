@@ -317,9 +317,8 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     if fs_ == "flat":
       self._rtcout.RTC_DEBUG("file_structure = flat")
       d_ = self._profile.properties.getProperty("context_delimiter")
-      ns_path_ = [path]
-      OpenRTM_aist.replaceString(ns_path_, "/", d_)
-      pathstring_ += ns_path_[0]
+      ns_path_ = OpenRTM_aist.replaceString(path, "/", d_)
+      pathstring_ += ns_path_
 
     elif fs_ == "tree":
       self._rtcout.RTC_DEBUG("file_structure = tree")
