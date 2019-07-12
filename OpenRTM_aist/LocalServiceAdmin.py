@@ -183,16 +183,16 @@ class LocalServiceAdmin:
   # @endif
   # bool getServiceProfile(std::string name,
   #                        ::RTM::LocalServiceProfile& prof);
-  def getServiceProfile(self, name, prof):
+  def getServiceProfile(self, name):
     global services_mutex
     guard_ = OpenRTM_aist.ScopedLock(services_mutex)
     for svc_ in self._services:
       if name == svc_.getProfile().name:
-        prof[0] = svc_.getProfile()
+        prof = svc_.getProfile()
         del guard_
-        return True
+        return True, prof
     del guard_
-    return False
+    return False, None
     
 
   ##

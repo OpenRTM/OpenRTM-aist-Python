@@ -496,10 +496,8 @@ class ManagerServant(RTM__POA.Manager):
 
 
     #module_name = module_name.split("&")[0]
-    module_name = [module_name]
-    self.getParameterByModulename("manager_address",module_name)
-    manager_name = self.getParameterByModulename("manager_name",module_name)
-    module_name = module_name[0]
+    _, module_name = self.getParameterByModulename("manager_address",module_name)
+    manager_name, module_name = self.getParameterByModulename("manager_name",module_name)
 
     comp_param = CompParam(module_name)
     
@@ -1041,9 +1039,7 @@ class ManagerServant(RTM__POA.Manager):
     wait_time = 1.0
     if self._mgr.getConfig().findNode("manager.termination_waittime"):
       s = self._mgr.getConfig().getProperty("manager.termination_waittime")
-      ret = [wait_time]
-      if OpenRTM_aist.stringTo(ret, s):
-        wait_time = ret[0]
+      ret, wait_time = OpenRTM_aist.stringTo(wait_time, s)
     
     
     self._mgr.createShutdownThread(wait_time)
@@ -1172,9 +1168,7 @@ class ManagerServant(RTM__POA.Manager):
     self._rtcout.RTC_TRACE("get_components_by_name()")
     rtcs = self._mgr.getComponents()
     crtcs = []
-    tmp = [name]
-    OpenRTM_aist.eraseHeadBlank(tmp)
-    name = tmp[0]
+    name = OpenRTM_aist.eraseHeadBlank(name)
     rtc_name = name.split("/")
     for rtc in rtcs:
       if len(rtc_name) == 1:
@@ -1285,14 +1279,14 @@ class ManagerServant(RTM__POA.Manager):
   # @endif
   # std::string getParameterByModulename(string param_name, string &module_name)
   def getParameterByModulename(self, param_name, module_name):
-    arg = module_name[0]
+    arg = module_name
     pos0 = arg.find("&"+param_name+"=")
     pos1 = arg.find("?"+param_name+"=")
     
     
 
     if pos0 == -1 and pos1 == -1:
-      return ""
+      return "", module_name
 
     pos = 0
     if pos0 == -1:
@@ -1327,9 +1321,9 @@ class ManagerServant(RTM__POA.Manager):
     else:
       arg = arg[:pos] + arg[endpos:]
 
-    module_name[0] = arg
+    module_name = arg
 
-    return paramstr
+    return paramstr, module_name
 
 
     
@@ -1354,10 +1348,7 @@ class ManagerServant(RTM__POA.Manager):
     
     arg = module_name
     
-
-    tmp = [arg]
-    mgrstr = self.getParameterByModulename("manager_name",tmp)
-    arg = tmp[0]
+    mgrstr, arg = self.getParameterByModulename("manager_name",arg)
 
     if not mgrstr:
       return RTC.RTObject._nil
@@ -1525,9 +1516,7 @@ class ManagerServant(RTM__POA.Manager):
   def createComponentByAddress(self, module_name):
 
     arg = module_name
-    tmp = [arg]
-    mgrstr = self.getParameterByModulename("manager_address",tmp)
-    arg = tmp[0]
+    mgrstr, arg = self.getParameterByModulename("manager_address",arg)
 
     if not mgrstr:
       return RTC.RTObject._nil

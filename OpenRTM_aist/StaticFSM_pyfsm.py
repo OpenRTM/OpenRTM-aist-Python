@@ -79,7 +79,7 @@ class Machine(pyfsm.Machine):
     return self._rtComponent
   def run_event(self):
     while self._buffer.readable() > 0:
-      event = self._buffer.get()
+      _, event = self._buffer.get()
       event()
       self._buffer.advanceRptr()
 

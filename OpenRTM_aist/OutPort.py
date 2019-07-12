@@ -306,22 +306,24 @@ class OutPort(OpenRTM_aist.OutPortBase):
   # @brief データをダイレクトに読み込む
   #
   # @param self
-  # @param data 読み込むデータ
+  # @return 読み込んだデータ
   #
   # @else
   # @brief 
   #
   # @param self
-  # @param data 
+  # @return
   # @endif
   # void read(const DataType& data)
-  def read(self, data):
+  def read(self):
     guard = OpenRTM_aist.ScopedLock(self._valueMutex)
     self._directNewData = False
-    data[0] = self._directValue
+    data = self._directValue
     if self._OnWriteConvert:
-      data[0] = self._OnWriteConvert(data[0])
+      data = self._OnWriteConvert(data)
     del guard
+    return data
+
   def isEmpty(self):
     return (not self._directNewData)
     

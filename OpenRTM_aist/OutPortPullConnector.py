@@ -239,7 +239,7 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
       return self.UNKNOWN_ERROR
     return self.PORT_OK
 
-  def read(self, data):
+  def read(self, data=None):
 
     if self._sync_readwrite:
       self._readcompleted_worker._completed = False
@@ -257,11 +257,10 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
 
     if self._buffer.empty():
       self._rtcout.RTC_ERROR("buffer is empty.")
-      data[0] = ""
-      return OpenRTM_aist.BufferStatus.BUFFER_EMPTY
+      return OpenRTM_aist.BufferStatus.BUFFER_EMPTY, ""
       
       
-    ret = self._buffer.read(data)
+    ret, data = self._buffer.read()
 
     if self._sync_readwrite:
       self._readcompleted_worker._completed = True
@@ -272,7 +271,7 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
       self._readready_worker._completed = False
 
 
-    return ret
+    return ret, data
     
 
   ##

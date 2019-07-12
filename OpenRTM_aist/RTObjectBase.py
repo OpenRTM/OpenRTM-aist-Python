@@ -5042,7 +5042,7 @@ class RTObjectBase:
     default_opts_ = OpenRTM_aist.Properties()
     self.getInheritedECOptions(default_opts_)
     for ec_tmp in ecs_tmp_:
-      if OpenRTM_aist.normalize([ec_tmp]) == "none":
+      if OpenRTM_aist.normalize(ec_tmp) == "none":
         self._rtcout.RTC_INFO("EC none. EC will not be bound to the RTC.")
         ec_args = []
         return RTC.RTC_OK

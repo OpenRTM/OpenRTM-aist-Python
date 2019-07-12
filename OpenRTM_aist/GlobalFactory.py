@@ -223,12 +223,12 @@ class Factory:
   #                        FACTORY_OK: normal return
   # @endif
   # ReturnCode objectToIdentifier(AbstractClass* obj, Identifier& id)
-  def objectToIdentifier(self, obj, id):
+  def objectToIdentifier(self, obj):
     if not obj in self._objects:
-      return self.NOT_FOUND
+      return self.NOT_FOUND, -1
 
-    id[0] = self._objects[obj].id_
-    return self.FACTORY_OK
+    id = self._objects[obj].id_
+    return self.FACTORY_OK, id
 
 
   ##

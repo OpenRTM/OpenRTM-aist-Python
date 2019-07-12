@@ -294,8 +294,8 @@ class ManagerConfig :
           self._argprop.setProperty(key,value)
 
       if opt == "-p":
-        num = [-1]
-        ret = OpenRTM_aist.stringTo(num, arg)
+        num = -1
+        ret, num = OpenRTM_aist.stringTo(num, arg)
         if ret:
           arg_ = ":" + arg
           self._argprop.setProperty("corba.endpoints",arg_)

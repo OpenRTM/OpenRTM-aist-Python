@@ -435,15 +435,17 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
     task.setPeriod(0.0)
     task.executionMeasure(OpenRTM_aist.toBool(mprop.getProperty("exec_time"),
                                                     "enable", "disable", True))
-    ecount = [0]
-    if OpenRTM_aist.stringTo(ecount, mprop.getProperty("exec_count")):
-      task.executionMeasureCount(ecount[0])
+    ecount = 0
+    ret, ecount = OpenRTM_aist.stringTo(ecount, mprop.getProperty("exec_count"))
+    if ret:
+      task.executionMeasureCount(ecount)
 
     task.periodicMeasure(OpenRTM_aist.toBool(mprop.getProperty("period_time"),
                                                    "enable", "disable", True))
-    pcount = [0]
-    if OpenRTM_aist.stringTo(pcount, mprop.getProperty("period_count")):
-      task.periodicMeasureCount(pcount[0])
+    pcount = 0
+    ret, pcount = OpenRTM_aist.stringTo(pcount, mprop.getProperty("period_count"))
+    if ret:
+      task.periodicMeasureCount(pcount)
 
     for rtc in rtcs:
       self.addRTCToTask(ct, rtc)

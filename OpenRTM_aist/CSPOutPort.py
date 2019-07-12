@@ -144,9 +144,10 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
   #
   def init(self, prop):
     super(CSPOutPort, self).init(prop)
-    num = [10]
-    if OpenRTM_aist.stringTo(num, self._properties.getProperty("channel_timeout","10")):
-      self._channeltimeout = num[0]
+    num = 10
+    ret, num = OpenRTM_aist.stringTo(num, self._properties.getProperty("channel_timeout","10"))
+    if ret:
+      self._channeltimeout = num
 
     self._readable_listener = OpenRTM_aist.CSPOutPort.IsReadableListener(self._buffdata, self._ctrl, self._channeltimeout, self, self._manager)
     self._read_listener = OpenRTM_aist.CSPOutPort.ReadListener(self._buffdata, self._ctrl, self._channeltimeout)

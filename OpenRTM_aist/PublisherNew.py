@@ -121,7 +121,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     push_policy = prop.getProperty("publisher.push_policy","new")
     self._rtcout.RTC_DEBUG("push_policy: %s", push_policy)
 
-    push_policy = OpenRTM_aist.normalize([push_policy])
+    push_policy = OpenRTM_aist.normalize(push_policy)
 
     if push_policy == "all":
       self._pushPolicy = self.PUBLISHER_POLICY_ALL
@@ -142,10 +142,10 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     skip_count = prop.getProperty("publisher.skip_count","0")
     self._rtcout.RTC_DEBUG("skip_count: %s", skip_count)
 
-    skipn = [self._skipn]
-    ret = OpenRTM_aist.stringTo(skipn, skip_count)
+    skipn = self._skipn
+    ret, skipn = OpenRTM_aist.stringTo(skipn, skip_count)
     if ret:
-      self._skipn = skipn[0]
+      self._skipn = skipn
     else:
       self._rtcout.RTC_ERROR("invalid skip_count value: %s", skip_count)
       self._skipn = 0
@@ -186,15 +186,17 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     self._task.setPeriod(0.0)
     self._task.executionMeasure(OpenRTM_aist.toBool(mprop.getProperty("exec_time"),
                                                     "enable", "disable", True))
-    ecount = [0]
-    if OpenRTM_aist.stringTo(ecount, mprop.getProperty("exec_count")):
-      self._task.executionMeasureCount(ecount[0])
+    ecount = 0
+    ret, ecount = OpenRTM_aist.stringTo(ecount, mprop.getProperty("exec_count"))
+    if ret:
+      self._task.executionMeasureCount(ecount)
 
     self._task.periodicMeasure(OpenRTM_aist.toBool(mprop.getProperty("period_time"),
                                                    "enable", "disable", True))
-    pcount = [0]
-    if OpenRTM_aist.stringTo(pcount, mprop.getProperty("period_count")):
-      self._task.periodicMeasureCount(pcount[0])
+    pcount = 0
+    ret, pcount = OpenRTM_aist.stringTo(pcount, mprop.getProperty("period_count"))
+    if ret:
+      self._task.periodicMeasureCount(pcount)
 
     self._task.suspend()
     self._task.activate()
@@ -617,7 +619,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     try:
 
       while self._buffer.readable() > 0:
-        cdr = self._buffer.get()
+        _, cdr = self._buffer.get()
         self.onBufferRead(cdr)
 
         self.onSend(cdr)
@@ -645,7 +647,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     self._rtcout.RTC_TRACE("pushFifo()")
 
     try:
-      cdr = self._buffer.get()
+      _, cdr = self._buffer.get()
       self.onBufferRead(cdr)
 
       self.onSend(cdr)
@@ -680,7 +682,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
       for i in range(int(loopcnt)):
         self._buffer.advanceRptr(postskip)
-        cdr = self._buffer.get()
+        _, cdr = self._buffer.get()
         self.onBufferRead(cdr)
 
         self.onSend(cdr)
@@ -723,7 +725,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     try:
       self._buffer.advanceRptr(self._buffer.readable() - 1)
         
-      cdr = self._buffer.get()
+      _, cdr = self._buffer.get()
       self.onBufferRead(cdr)
 
       self.onSend(cdr)

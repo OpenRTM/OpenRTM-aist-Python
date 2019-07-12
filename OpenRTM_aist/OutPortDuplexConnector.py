@@ -194,11 +194,11 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
   #
   # @endif
   #
-  def read(self, data):
+  def read(self, data=None):
     if self._readCallback:
-      ret, data[0] = self._readCallback()
-      return ret
-    return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
+      ret, data = self._readCallback()
+      return ret, data
+    return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
 
   ##
   # @if jp

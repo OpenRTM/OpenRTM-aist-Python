@@ -329,11 +329,11 @@ class ConnectorDataListenerT(ConnectorDataListener):
   #
   # virtual ReturnCode operator()(const ConnectorInfo& info,
   #                         const cdrMemoryStream& cdrdata)
-  def __call__(self, info, cdrdata, data, porttype):
+  def __call__(self, info, cdrdata, data, porttype=PortType.OutPortType):
     endian = info.properties.getProperty("serializer.cdr.endian","little")
     if endian is not "little" and endian is not None:
       endian = OpenRTM_aist.split(endian, ",") # Maybe endian is ["little","big"]
-      endian = OpenRTM_aist.normalize(endian) # Maybe self._endian is "little" or "big"
+      endian = OpenRTM_aist.normalize(endian[0]) # Maybe self._endian is "little" or "big"
 
     if endian == "little":
       endian = True

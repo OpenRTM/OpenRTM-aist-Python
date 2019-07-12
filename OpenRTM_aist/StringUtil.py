@@ -224,11 +224,9 @@ def unescape(_str):
 #
 # @endif
 #
-def eraseBlank(str):
-    if len(str) == 0:
-        return
-    str[0] = str[0].strip(" ")
-    l_str = str[0].split(" ")
+def eraseBlank(_str):
+    _str = _str.strip(" ")
+    l_str = _str.split(" ")
     tmp_str = ""
     for s in l_str:
         if s:
@@ -241,7 +239,8 @@ def eraseBlank(str):
         if s:
             tmp_str+=s.strip('\t')
 
-    str[0] = tmp_str
+    _str = tmp_str
+    return _str
 
 
 ##
@@ -257,8 +256,8 @@ def eraseBlank(str):
 # @brief Erase the head blank characters of string
 # @endif
 def eraseHeadBlank(_str):
-  _str[0] = _str[0].lstrip('\t ')
-
+  _str = _str.lstrip('\t ')
+  return _str
 
 ##
 # @if jp
@@ -273,13 +272,13 @@ def eraseHeadBlank(_str):
 # @brief Erase the tail blank characters of string
 # @endif
 def eraseTailBlank(_str):
-  #_str[0] = _str[0].rstrip('\t ')
-  if _str[0] == "":
-    return
+  #_str = _str.rstrip('\t ')
+  if _str == "":
+    return _str
 
-  while (_str[0][-1] == " " or _str[0][-1] == '\t') and not isEscaped(_str[0], len(_str[0]) - 1):
-    _str[0] = _str[0][:-1]
-
+  while (_str[-1] == " " or _str[-1] == '\t') and not isEscaped(_str, len(_str) - 1):
+    _str = _str[:-1]
+  return _str
 
 #
 # @if jp
@@ -289,8 +288,8 @@ def eraseTailBlank(_str):
 # @endif
 #
 def normalize(_str):
-  _str[0] = _str[0].strip().lower()
-  return _str[0]
+  _str = _str.strip().lower()
+  return _str
 
 
 ##
@@ -302,12 +301,13 @@ def normalize(_str):
 # @param str 置き換え処理対象文字列
 # @param _from 置換元文字
 # @param _to 置換先文字
+# @return 置き換え結果文字列
 #
 # @else
 # @brief Replace string
 # @endif
-def replaceString(str, _from, _to):
-  str[0] = str[0].replace(_from, _to)
+def replaceString(_str, _from, _to):
+  return _str.replace(_from, _to)
 
 
 ##
@@ -337,10 +337,10 @@ def split(input, delimiter):
     if del_result[i] == "" or del_result[i] == " ":
       continue
       
-    str_ = [del_result[i]]
-    eraseHeadBlank(str_)
-    eraseTailBlank(str_)
-    result.append(str_[0])
+    str_ = del_result[i]
+    str_ = eraseHeadBlank(str_)
+    str_ = eraseTailBlank(str_)
+    result.append(str_)
     
   return result
 
@@ -500,7 +500,6 @@ def otos(n):
 #
 # 引数で指定された文字列を｢,｣で分割し、リストに変換する。
 #
-# @param _type 変換結果リスト
 # @param _str 変換元文字列
 #
 # @return リスト変換処理結果
@@ -512,36 +511,34 @@ def _stringToList(_type, _str):
   list_ = split(_str,",")
   len_ = len(list_)
 
-  if len(_type[0]) < len(list_):
-    sub = len(list_) - len(_type[0])
+  if len(_type) < len(list_):
+    sub = len(list_) - len(_type)
     for i in range(sub):
-      _type[0].append(_type[0][0])
-  elif len(_type[0]) > len(list_):
-    sub = len(_type[0]) - len(list_)
+      _type.append(_type[0])
+  elif len(_type) > len(list_):
+    sub = len(_type) - len(list_)
     for i in range(sub):
-      del _type[0][-1]
+      del _type[-1]
 
   for i in range(len_):
-    str_ = [list_[i]]
-    eraseHeadBlank(str_)
-    eraseTailBlank(str_)
-    list_[i] = str_[0]
+    list_[i] = eraseHeadBlank(list_[i])
+    list_[i] = eraseTailBlank(list_[i])
 
   for i in range(len(list_)):
-    if type(_type[0][i]) == int:
-      _type[0][i] = int(list_[i])
-    elif type(_type[0][i]) == long:
-      _type[0][i] = long(list_[i])
-    elif type(_type[0][i]) == float:
-      _type[0][i] = float(list_[i])
-    elif type(_type[0][i]) == str:
-      _type[0][i] = str(list_[i])
+    if type(_type[i]) == int:
+      _type[i] = int(list_[i])
+    elif type(_type[i]) == long:
+      _type[i] = long(list_[i])
+    elif type(_type[i]) == float:
+      _type[i] = float(list_[i])
+    elif type(_type[i]) == str:
+      _type[i] = str(list_[i])
     
       
     else:
-      return False
+      return False, _type
 
-  return True
+  return True, _type
 
 
 ##
@@ -550,7 +547,6 @@ def _stringToList(_type, _str):
 #
 # 引数で与えられた文字列を指定されたオブジェクトに変換する。
 #
-# @param _type 変換先オブジェクト
 # @param _str 変換元文字列
 #
 # @return 変換処理実行結果
@@ -560,30 +556,30 @@ def _stringToList(_type, _str):
 # @endif
 def stringTo(_type, _str):
   if not _str:
-    return False
+    return False, _type
 
   try:
-    if type(_type[0]) == int:
-      _type[0] = int(_str)
-      return True
-    elif type(_type[0]) == long:
-      _type[0] = long(_str)
-      return True
-    elif type(_type[0]) == float:
-      _type[0] = float(_str)
-      return True
-    elif type(_type[0]) == list:
+    if type(_type) == int:
+      _type = int(_str)
+      return True, _type
+    elif type(_type) == long:
+      _type = long(_str)
+      return True, _type
+    elif type(_type) == float:
+      _type = float(_str)
+      return True, _type
+    elif type(_type) == list:
       return _stringToList(_type, _str)
-    elif type(_type[0]) == str:
-      _type[0] = str(_str)
-      return True
+    elif type(_type) == str:
+      _type = str(_str)
+      return True, _type
 
   #except ValueError:
-  #  return False
+  #  return False, _type
   except:
-    return False
+    return False, _type
   
-  return False
+  return False, _type
 
 
 ##
@@ -764,14 +760,14 @@ def replaceEnv(_str):
 #
 # @endif
 def findFile(dir, filename, filelist):
-	dirs = glob.glob(os.path.join(dir,"*"))
-	for d in dirs:
-		if os.path.isdir(d):
-			findFile(d, filename, filelist)
-	files = glob.glob(os.path.join(dir,filename))
-	for f in files:
-		if os.path.isfile(d):
-			filelist.append(f)
+    dirs = glob.glob(os.path.join(dir,"*"))
+    for d in dirs:
+        if os.path.isdir(d):
+            findFile(d, filename, filelist)
+        files = glob.glob(os.path.join(dir,filename))
+        for f in files:
+            if os.path.isfile(d):
+                filelist.append(f)
 
 
 ##
@@ -793,12 +789,15 @@ def findFile(dir, filename, filelist):
 #
 #
 # @endif
-def getFileList(dir, ext, filelist):
+def getFileList(dir, ext, filelist=None):
+    if filelist is None:
+        filelist = []
     dirs = glob.glob(os.path.join(dir,"*"))
     for d in dirs:
         if os.path.isdir(d):
-          getFileList(d, ext, filelist)
+            filelist = getFileList(d, ext, filelist)
     files = glob.glob(os.path.join(dir,"*."+ext))
     for f in files:
         if os.path.isfile(f):
-          filelist.append(f)
+            filelist.append(f)
+    return filelist

@@ -288,11 +288,10 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
       return (OpenRTM.UNKNOWN_ERROR, "")
 
     try:
-      cdr = [None]
-      ret = self._connector.read(cdr)
+      ret, cdr = self._connector.read()
 
       if ret == OpenRTM_aist.BufferStatus.BUFFER_OK:
-        if not cdr[0]:
+        if not cdr:
           self._rtcout.RTC_ERROR("buffer is empty.")
           return (OpenRTM.BUFFER_EMPTY, "")
       
@@ -300,7 +299,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
       self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
       return (OpenRTM.UNKNOWN_ERROR, "")
 
-    return self.convertReturn(ret, cdr[0])
+    return self.convertReturn(ret, cdr)
     
   ##
   # @if jp

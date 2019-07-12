@@ -365,12 +365,13 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
     if self._consumerTypes and self._providerTypes:
       self.appendProperty("dataport.dataflow_type", "duplex")
 
-    num = [-1]
-    if not OpenRTM_aist.stringTo(num, self._properties.getProperty("connection_limit","-1")):
+    num = -1
+    ret, num = OpenRTM_aist.stringTo(num, self._properties.getProperty("connection_limit","-1"))
+    if not ret:
       self._rtcout.RTC_ERROR("invalid connection_limit value: %s",
                              self._properties.getProperty("connection_limit"))
 
-    self.setConnectionLimit(num[0])
+    self.setConnectionLimit(num)
     return
 
   ##
@@ -472,16 +473,16 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
     
 
     _str = node.getProperty("fan_out")
-    _type = [int(100)]
+    _type = int(100)
     
-    OpenRTM_aist.stringTo(_type, _str)
+    _, _type = OpenRTM_aist.stringTo(_type, _str)
     
     
 
     _str = prop.getProperty("dataport.fan_out")
-    OpenRTM_aist.stringTo(_type, _str)
+    _, _type = OpenRTM_aist.stringTo(_type, _str)
     
-    value =  _type[0]
+    value =  _type
 
     if value <= len(self._connectors):
       return (RTC.PRECONDITION_NOT_MET, connector_profile)
@@ -650,16 +651,16 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
   #
   # bool OutPortBase::getConnectorProfileById(const char* id,
   #                                           ConnectorInfo& prof)
-  def getConnectorProfileById(self, id, prof):
+  def getConnectorProfileById(self, id):
     self._rtcout.RTC_TRACE("getConnectorProfileById(id = %s)", id)
 
     conn = self.getConnectorById(id)
 
     if not conn:
-      return False
+      return False, None
 
-    prof[0] = conn.profile()
-    return True
+    prof = conn.profile()
+    return True, prof
 
 
   ##
@@ -671,16 +672,16 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
   #
   # bool OutPortBase::getConnectorProfileByName(const char* name,
   #                                             ConnectorInfo& prof)
-  def getConnectorProfileByName(self, name, prof):
+  def getConnectorProfileByName(self, name):
     self._rtcout.RTC_TRACE("getConnectorProfileByName(name = %s)", name)
 
     conn = self.getConnectorByName(name)
 
     if not conn:
-      return False
+      return False, None
 
-    prof[0] = conn.profile()
-    return True
+    prof = conn.profile()
+    return True, prof
 
 
   ##
@@ -985,7 +986,7 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
     # prop["dataflow_type"]: データフロータイプ
     # prop["interface_type"]: インターフェースタイプ
     # などがアクセス可能になる。
-    dflow_type = OpenRTM_aist.normalize([prop.getProperty("dataflow_type")])
+    dflow_type = OpenRTM_aist.normalize(prop.getProperty("dataflow_type"))
 
     if dflow_type == "push":
       self._rtcout.RTC_PARANOID("dataflow_type = push .... do nothing")
@@ -1066,7 +1067,7 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
     # prop["interface_type"]: インターフェースタイプ
     # などがアクセス可能になる。
     #
-    dflow_type = OpenRTM_aist.normalize([prop.getProperty("dataflow_type")])
+    dflow_type = OpenRTM_aist.normalize(prop.getProperty("dataflow_type"))
     
     profile = OpenRTM_aist.ConnectorInfo(cprof.name,
                                          cprof.connector_id,
@@ -1180,7 +1181,7 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
                               OpenRTM_aist.flatten(provider_types))
 
     if self._properties.hasKey("provider_types") and \
-          OpenRTM_aist.normalize([self._properties.getProperty("provider_types")]) != "all":
+          OpenRTM_aist.normalize(self._properties.getProperty("provider_types")) != "all":
       self._rtcout.RTC_DEBUG("allowed providers: %s",
                              self._properties.getProperty("provider_types"))
 
@@ -1222,7 +1223,7 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
                               OpenRTM_aist.flatten(consumer_types))
 
     if self._properties.hasKey("consumer_types") and \
-          OpenRTM_aist.normalize([self._properties.getProperty("consumer_types")]) != "all":
+          OpenRTM_aist.normalize(self._properties.getProperty("consumer_types")) != "all":
       self._rtcout.RTC_DEBUG("allowed consumers: %s",
                              self._properties.getProperty("consumer_types"))
 
@@ -1358,7 +1359,7 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
         self._rtcout.RTC_TRACE("OutPortPullConnector created")
 
         
-      if OpenRTM_aist.StringUtil.normalize([prop.getProperty("interface_type")]) == "direct":
+      if OpenRTM_aist.StringUtil.normalize(prop.getProperty("interface_type")) == "direct":
         if consumer_ is not None:
           inport = self.getLocalInPort(profile)
         

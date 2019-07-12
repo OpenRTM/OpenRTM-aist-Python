@@ -202,7 +202,7 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
   # @endif
   #
   # virtual ReturnCode read(cdrMemoryStream& data);
-  def read(self, data):
+  def read(self, data=None):
     self._rtcout.RTC_TRACE("InPortPullConnector.read()")
 
     if self._directOutPort is not None:
@@ -213,50 +213,49 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
         self._rtcout.RTC_TRACE("ON_SENDER_EMPTY(InPort,OutPort) ")
         self._rtcout.RTC_TRACE("callback called in direct mode.")
 
-      self._directOutPort.read(data)
-      #self._outPortListeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ].notify(self._profile, data[0])
+      data = self._directOutPort.read()
+      #self._outPortListeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ].notify(self._profile, data)
       self._rtcout.RTC_TRACE("ON_BUFFER_READ(OutPort), ")
       self._rtcout.RTC_TRACE("callback called in direct mode.")
-      #self._outPortListeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(self._profile, data[0])
+      #self._outPortListeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(self._profile, data)
       self._rtcout.RTC_TRACE("ON_SEND(OutPort), ")
       self._rtcout.RTC_TRACE("callback called in direct mode.")
-      #self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED].notify(self._profile, data[0])
+      #self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED].notify(self._profile, data)
       self._rtcout.RTC_TRACE("ON_RECEIVED(InPort), ")
       self._rtcout.RTC_TRACE("callback called in direct mode.")
-      #self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(self._profile, data[0])
+      #self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(self._profile, data)
       self._rtcout.RTC_TRACE("ON_BUFFER_WRITE(InPort), ")
       self._rtcout.RTC_TRACE("callback called in direct mode.")
-      return self.PORT_OK
+      return self.PORT_OK, data
 
 
 
     if not self._consumer:
-      return self.PORT_ERROR
+      return self.PORT_ERROR, data
 
 
 
-    cdr_data = [None]
-    ret = self._consumer.get(cdr_data)
+    ret, cdr_data = self._consumer.get()
 
     if ret == self.PORT_OK:
-      if len(data) == 0:
+      if data is None:
         self._rtcout.RTC_ERROR("argument is invalid")
-        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
+        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
       
       self._serializer.isLittleEndian(self._endian)
-      ser_ret, data[0] = self._serializer.deserialize(cdr_data[0], data[0])
+      ser_ret, data = self._serializer.deserialize(cdr_data, data)
       
       if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
         self._rtcout.RTC_ERROR("unknown endian from connector")
-        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
+        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
       elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR:
         self._rtcout.RTC_ERROR("unknown error")
-        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
+        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
       elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
         self._rtcout.RTC_ERROR("unknown serializer from connector")
-        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
+        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
     
-    return ret
+    return ret, data
 
 
   ##

@@ -541,16 +541,16 @@ class Properties:
       if i > num or i > (len_ - 1) or defaults[i] == "":
         break
 
-      key = [defaults[i]]
-      value = [defaults[i+1]]
+      key = defaults[i]
+      value = defaults[i+1]
 
-      OpenRTM_aist.eraseHeadBlank(key)
-      OpenRTM_aist.eraseTailBlank(key)
+      key = OpenRTM_aist.eraseHeadBlank(key)
+      key = OpenRTM_aist.eraseTailBlank(key)
 
-      OpenRTM_aist.eraseHeadBlank(value)
-      OpenRTM_aist.eraseTailBlank(value)
+      value = OpenRTM_aist.eraseHeadBlank(value)
+      value = OpenRTM_aist.eraseTailBlank(value)
 
-      self.setDefault(key[0], value[0])
+      self.setDefault(key, value)
 
       i +=2
 
@@ -754,9 +754,7 @@ class Properties:
       if not readStr:
         continue
       
-      tmp = [readStr]
-      OpenRTM_aist.eraseHeadBlank(tmp)
-      _str = tmp[0]
+      _str = OpenRTM_aist.eraseHeadBlank(readStr)
       
       if _str[0] == "#" or _str[0] == "!" or _str[0] == "\n" or (_str[0] == "\r" and _str[1] == "\n"):
         continue
@@ -768,11 +766,7 @@ class Properties:
         continue
 
       if _str[len(_str)-1] == "\\" and not OpenRTM_aist.isEscaped(_str, len(_str)-1):
-        #_str = _str[0:len(_str)-1]
-        tmp = [_str[0:len(_str)-1]]
-        OpenRTM_aist.eraseTailBlank(tmp)
-        #pline += _str
-        pline += tmp[0]
+        pline += OpenRTM_aist.eraseTailBlank(_str[0:len(_str)-1])
         continue
       pline += _str
       #if pline == "":

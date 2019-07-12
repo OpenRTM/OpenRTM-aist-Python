@@ -155,17 +155,19 @@ class CSPInPort(OpenRTM_aist.InPortBase):
   def init(self,prop):
     super(CSPInPort, self).init(prop)
 
-    num = [10]
-    if OpenRTM_aist.stringTo(num, self._properties.getProperty("channel_timeout","10")):
-      self._channeltimeout = num[0]
+    num = 10
+    ret, num = OpenRTM_aist.stringTo(num, self._properties.getProperty("channel_timeout","10"))
+    if ret:
+      self._channeltimeout = num
 
     buff_prop = prop.getNode("buffer")
-    length = [8]
-    OpenRTM_aist.stringTo(length, buff_prop.getProperty("length","8"))
+    length = 8
+    ret, length = OpenRTM_aist.stringTo(length, buff_prop.getProperty("length","8"))
 
-    if length[0] == 0:
+    if length == 0:
       buff_prop.setProperty("length","1")
       self._bufferzeromode = True
+
 
     
     self._thebuffer.init(buff_prop)
@@ -339,20 +341,18 @@ class CSPInPort(OpenRTM_aist.InPortBase):
       for con in self._connectors:
         guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
         if not self._thebuffer.empty():
-          value = [None]
-          self._thebuffer.read(value)
+          _, value = self._thebuffer.read(value)
           del guard_ctrl
           self.notify()
-          ret, data = con.deserializeData(value[0])
+          ret, data = con.deserializeData(value)
           if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
             return True, data
           else:
             self._rtcout.RTC_ERROR("deserialize error")
         elif self._ctrl._writing:
           self._ctrl._cond.wait(self._channeltimeout)
-          value = [None]
           if not self._thebuffer.empty():
-            self._thebuffer.read(value)
+            _, value = self._thebuffer.read()
             del guard_ctrl
             self.notify()
             ret, data = con.deserializeData(value[0])
@@ -367,21 +367,19 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         else:
           readable = con.isReadable()
           if readable:
-            value = [None]
-            ret = con.read(value)
+            ret, value = con.read()
             if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
-              return True, value[0]
+              return True, value
             else:
               self._rtcout.RTC_ERROR("empty read error:%s",(OpenRTM_aist.DataPortStatus.toString(ret)))
               return False, None
     else:
-      value = [None]
       guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
       if not self._thebuffer.empty():
-        self._thebuffer.read(value)
+        _, value = self._thebuffer.read()
         del guard_ctrl
         self.notify()
-        ret, data = self._connectors[0].deserializeData(value[0])
+        ret, data = self._connectors[0].deserializeData(value)
         if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
           return True, data
         else:
@@ -424,10 +422,9 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     for con in self._connectors:
       if con.isReadable():
         guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-        value = [None]
-        ret = con.read(value)
+        ret, value = con.read()
         if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
-          return True, value[0]
+          return True, value
         else:
           self._rtcout.RTC_ERROR("read error:%s",(OpenRTM_aist.DataPortStatus.toString(ret)))
           return False, None
@@ -498,9 +495,8 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     if self._writingConnector:
       self._writingConnector = None
       if not self._thebuffer.empty():
-        value = [None]
-        self._thebuffer.read(value)
-        ret, data = self._connectors[0].deserializeData(value[0])
+        _, value = self._thebuffer.read()
+        ret, data = self._connectors[0].deserializeData(value)
         if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
           return data
 
@@ -567,14 +563,13 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     if ret:
       return data
     else:
-      value = [None]
       guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
       if self._ctrl._writing or self._thebuffer.empty():
         self._ctrl._cond.wait(self._channeltimeout)
       if not self._thebuffer.empty():
-        self._thebuffer.read(value)
+        _, value = self._thebuffer.read()
 
-        ret, data = self._connectors[0].deserializeData(value[0])
+        ret, data = self._connectors[0].deserializeData(value)
         if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
           return data
         else:
@@ -613,10 +608,9 @@ class CSPInPort(OpenRTM_aist.InPortBase):
       self._ctrl._waiting = True
       self._ctrl._cond.wait(self._channeltimeout)
       self._ctrl._waiting = False
-      value = [None]
       if not self._thebuffer.empty():
-        self._thebuffer.read(value)
-        ret, data = self._connectors[0].deserializeData(value[0])
+        _, value = self._thebuffer.read()
+        ret, data = self._connectors[0].deserializeData(value)
         if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
           return data
         else:
