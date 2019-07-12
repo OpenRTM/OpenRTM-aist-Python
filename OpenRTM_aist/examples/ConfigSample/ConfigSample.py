@@ -116,8 +116,8 @@ class ConfigSample(OpenRTM_aist.DataFlowComponentBase):
     print(str_)
 
 
-    if self._int_param0 > 1000 and self._int_param0 < 1000000:
-      time.sleep(self._int_param0/1000000.0)
+    if self._int_param0[0] > 1000 and self._int_param0[0] < 1000000:
+      time.sleep(self._int_param0[0]/1000000.0)
     else:
       time.sleep(0.1)
 
