@@ -676,7 +676,6 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
   #
   # @param listener_type リスナタイプ
   # @param listener リスナオブジェクトへのポインタ
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding BufferDataListener type listener
@@ -712,19 +711,17 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
   #
   # @param listener_type A listener type
   # @param listener A pointer to a listener object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
   # void 
   # addConnectorDataListener(ConnectorDataListenerType type,
-  #                          ConnectorDataListener* listener,
-  #                          bool autoclean)
-  def addConnectorDataListener(self, listener_type, listener, autoclean = True):
+  #                          ConnectorDataListener* listener)
+  def addConnectorDataListener(self, listener_type, listener):
     self._rtcout.RTC_TRACE("addConnectorDataListener()")
 
     if listener_type < OpenRTM_aist.ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM:
-      self._listeners.connectorData_[listener_type].addListener(listener, autoclean)
+      self._listeners.connectorData_[listener_type].addListener(listener)
       return
 
     self._rtcout.RTC_ERROR("addConnectorDataListener(): Invalid listener type.")
@@ -786,7 +783,6 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
   #
   # @param listener_type リスナタイプ
   # @param listener リスナオブジェクトへのポインタ
-  # @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
   #
   # @else
   # @brief Adding ConnectorListener type listener
@@ -811,18 +807,16 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
   #
   # @param listener_type A listener type
   # @param listener A pointer to a listener object
-  # @param autoclean A flag for automatic listener destruction
   #
   # @endif
   #
   # void addConnectorListener(ConnectorListenerType type,
-  #                           ConnectorListener* listener,
-  #                           bool autoclean)
-  def addConnectorListener(self, listener_type, listener, autoclean = True):
+  #                           ConnectorListener* listener)
+  def addConnectorListener(self, listener_type, listener):
     self._rtcout.RTC_TRACE("addConnectorListener()")
 
     if listener_type < OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM:
-      self._listeners.connector_[listener_type].addListener(listener, autoclean)
+      self._listeners.connector_[listener_type].addListener(listener)
       return
 
     self._rtcout.RTC_ERROR("addConnectorListener(): Invalid listener type.")

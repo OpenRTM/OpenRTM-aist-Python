@@ -381,31 +381,6 @@ class ConfigurationSetNameListener:
 
 ##
 # @if jp
-#
-# @class Entry
-# @brief リスナーと自動削除フラグ格納用の汎用クラス
-#
-# リスナーオブジェクトと自動削除のためのフラグを格納するための汎用クラス
-#  
-# @else
-#
-# @class Entry
-# @brief Listner and autoclean-flag holder class
-#
-# A general-purpose class to store away a listener object and
-# a flag for automatic deletion
-#
-# @endif
-class Entry:
-  def __init__(self,listener,autoclean):
-    self.listener  = listener
-    self.autoclean = autoclean
-    return
-
-
-
-##
-# @if jp
 # @class ConfigurationParamListenerHolder
 # @brief ConfigurationParamListener ホルダクラス
 #
@@ -443,9 +418,7 @@ class ConfigurationParamListenerHolder:
   # @endif
   def __del__(self):
     for (idx, listener) in enumerate(self._listeners):
-      if listener.autoclean:
-        del self._listeners[idx]
-        #self._listeners[idx] = None
+      del self._listeners[idx]
     return
   
 
@@ -457,8 +430,6 @@ class ConfigurationParamListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -466,12 +437,10 @@ class ConfigurationParamListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
-  # void addListener(ConfigurationParamListener* listener, bool autoclean);
-  def addListener(self, listener, autoclean):
-    self._listeners.append(Entry(listener, autoclean))
+  # void addListener(ConfigurationParamListener* listener);
+  def addListener(self, listener):
+    self._listeners.append(listener)
     return
 
 
@@ -496,11 +465,9 @@ class ConfigurationParamListenerHolder:
     len_ = len(self._listeners)
     for i in range(len_):
       idx = (len_ - 1) - i
-      if self._listeners[idx].listener == listener:
-        if self._listeners[idx].autoclean:
-          self._listeners[idx].listener = None
-          del self._listeners[idx]
-          return
+      if self._listeners[idx] == listener:
+        del self._listeners[idx]
+        return
     return
     
 
@@ -525,7 +492,7 @@ class ConfigurationParamListenerHolder:
   # void notify(const char* config_set_name, const char* config_param_name);
   def notify(self, config_set_name, config_param_name):
     for listener in self._listeners:
-      listener.listener(config_set_name, config_param_name)
+      listener(config_set_name, config_param_name)
     return
     
 
@@ -569,10 +536,6 @@ class ConfigurationSetListenerHolder:
   # @brief Destructor
   # @endif
   def __del__(self):
-    for (idx, listener) in enumerate(self._listeners):
-      if listener.autoclean:
-        del self._listeners[idx]
-        #self._listeners[idx] = None
     return
     
 
@@ -584,8 +547,6 @@ class ConfigurationSetListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -593,12 +554,10 @@ class ConfigurationSetListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
-  # void addListener(ConfigurationSetListener* listener, bool autoclean);
-  def addListener(self, listener, autoclean):
-    self._listeners.append(Entry(listener, autoclean))
+  # void addListener(ConfigurationSetListener* listener);
+  def addListener(self, listener):
+    self._listeners.append(listener)
     return
   
     
@@ -623,11 +582,9 @@ class ConfigurationSetListenerHolder:
     len_ = len(self._listeners)
     for i in range(len_):
       idx = (len_ - 1) - i
-      if self._listeners[idx].listener == listener:
-        if self._listeners[idx].autoclean:
-          self._listeners[idx].listener = None
-          del self._listeners[idx]
-          return
+      if self._listeners[idx] == listener:
+        del self._listeners[idx]
+        return
     return
     
 
@@ -652,7 +609,7 @@ class ConfigurationSetListenerHolder:
   # void notify(const coil::Properties& config_set);
   def notify(self, config_set):
     for listener in self._listeners:
-      listener.listener(config_set)
+      listener(config_set)
     return
     
 
@@ -696,10 +653,6 @@ class ConfigurationSetNameListenerHolder:
   # @brief Destructor
   # @endif
   def __del__(self):
-    for (idx, listener) in enumerate(self._listeners):
-      if listener.autoclean:
-        del self._listeners[idx]
-        #self._listeners[idx] = None
     return
 
 
@@ -711,8 +664,6 @@ class ConfigurationSetNameListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -720,12 +671,10 @@ class ConfigurationSetNameListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
-  # void addListener(ConfigurationSetNameListener* listener, bool autoclean);
-  def addListener(self, listener, autoclean):
-    self._listeners.append(Entry(listener, autoclean))
+  # void addListener(ConfigurationSetNameListener* listener);
+  def addListener(self, listener):
+    self._listeners.append(listener)
     return
     
 
@@ -750,11 +699,9 @@ class ConfigurationSetNameListenerHolder:
     len_ = len(self._listeners)
     for i in range(len_):
       idx = (len_ - 1) - i
-      if self._listeners[idx].listener == listener:
-        if self._listeners[idx].autoclean:
-          self._listeners[idx].listener = None
-          del self._listeners[idx]
-          return
+      if self._listeners[idx] == listener:
+        del self._listeners[idx]
+        return
     return
 
 
@@ -777,7 +724,7 @@ class ConfigurationSetNameListenerHolder:
   # void notify(const char* config_set_name);
   def notify(self, config_set_name):
     for listener in self._listeners:
-      listener.listener(config_set_name)
+      listener(config_set_name)
     return
      
 

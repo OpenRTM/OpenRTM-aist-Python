@@ -1041,13 +1041,6 @@ class FsmStructureListener:
 
     return ""
   toString = staticmethod(toString)
-
-
-class Entry:
-  def __init__(self,listener, autoclean):
-    self.listener  = listener
-    self.autoclean = autoclean
-    return
   
 
 ##
@@ -1086,10 +1079,7 @@ class PreFsmActionListenerHolder:
   # @endif
   #
   def __del__(self):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    for (idx, listener) in enumerate(self._listeners):
-      if listener.autoclean:
-        self._listeners[idx] = None
+    pass
 
 
 
@@ -1101,8 +1091,6 @@ class PreFsmActionListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -1110,13 +1098,11 @@ class PreFsmActionListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
   #
-  def addListener(self, listener, autoclean):
+  def addListener(self, listener):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append(Entry(listener, autoclean))
+    self._listeners.append(listener)
 
   ##
   # @if jp
@@ -1140,11 +1126,9 @@ class PreFsmActionListenerHolder:
     len_ = len(self._listeners)
     for i in range(len_):
       idx = (len_ - 1) - i
-      if self._listeners[idx].listener == listener:
-        if self._listeners[idx].autoclean:
-          self._listeners[idx].listener = None
-          del self._listeners[idx]
-          return
+      if self._listeners[idx] == listener:
+        del self._listeners[idx]
+        return
 
   ##
   # @if jp
@@ -1166,7 +1150,7 @@ class PreFsmActionListenerHolder:
   def notify(self, state):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
     for listener in self._listeners:
-      listener.listener(state)
+      listener(state)
     return
 
 
@@ -1209,12 +1193,7 @@ class PostFsmActionListenerHolder:
   # @endif
   #
   def __del__(self):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    for (idx, listener) in enumerate(self._listeners):
-      if listener.autoclean:
-        self._listeners[idx] = None
-
-
+    pass
 
   ##
   # @if jp
@@ -1224,8 +1203,6 @@ class PostFsmActionListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -1233,13 +1210,11 @@ class PostFsmActionListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
   #
-  def addListener(self, listener, autoclean):
+  def addListener(self, listener):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append(Entry(listener, autoclean))
+    self._listeners.append(listener)
 
   ##
   # @if jp
@@ -1263,11 +1238,9 @@ class PostFsmActionListenerHolder:
     len_ = len(self._listeners)
     for i in range(len_):
       idx = (len_ - 1) - i
-      if self._listeners[idx].listener == listener:
-        if self._listeners[idx].autoclean:
-          self._listeners[idx].listener = None
-          del self._listeners[idx]
-          return
+      if self._listeners[idx] == listener:
+        del self._listeners[idx]
+        return
 
   ##
   # @if jp
@@ -1289,7 +1262,7 @@ class PostFsmActionListenerHolder:
   def notify(self, state, ret):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
     for listener in self._listeners:
-      listener.listener(state, ret)
+      listener(state, ret)
     return
 
 
@@ -1329,10 +1302,7 @@ class FsmProfileListenerHolder:
   # @endif
   #
   def __del__(self):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    for (idx, listener) in enumerate(self._listeners):
-      if listener.autoclean:
-        self._listeners[idx] = None
+    pass
 
 
 
@@ -1344,8 +1314,6 @@ class FsmProfileListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -1353,13 +1321,11 @@ class FsmProfileListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
   #
-  def addListener(self, listener, autoclean):
+  def addListener(self, listener):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append(Entry(listener, autoclean))
+    self._listeners.append(listener)
 
   ##
   # @if jp
@@ -1383,11 +1349,9 @@ class FsmProfileListenerHolder:
     len_ = len(self._listeners)
     for i in range(len_):
       idx = (len_ - 1) - i
-      if self._listeners[idx].listener == listener:
-        if self._listeners[idx].autoclean:
-          self._listeners[idx].listener = None
-          del self._listeners[idx]
-          return
+      if self._listeners[idx] == listener:
+        del self._listeners[idx]
+        return
 
   ##
   # @if jp
@@ -1409,7 +1373,7 @@ class FsmProfileListenerHolder:
   def notify(self, state):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
     for listener in self._listeners:
-      listener.listener(state)
+      listener(state)
     return
 
 ##
@@ -1448,11 +1412,7 @@ class FsmStructureListenerHolder:
   # @endif
   #
   def __del__(self):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    for (idx, listener) in enumerate(self._listeners):
-      if listener.autoclean:
-        self._listeners[idx] = None
-
+    pass
 
 
   ##
@@ -1463,8 +1423,6 @@ class FsmStructureListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -1472,13 +1430,11 @@ class FsmStructureListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
   #
-  def addListener(self, listener, autoclean):
+  def addListener(self, listener):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append(Entry(listener, autoclean))
+    self._listeners.append(listener)
 
   ##
   # @if jp
@@ -1502,11 +1458,9 @@ class FsmStructureListenerHolder:
     len_ = len(self._listeners)
     for i in range(len_):
       idx = (len_ - 1) - i
-      if self._listeners[idx].listener == listener:
-        if self._listeners[idx].autoclean:
-          self._listeners[idx].listener = None
-          del self._listeners[idx]
-          return
+      if self._listeners[idx] == listener:
+        del self._listeners[idx]
+        return
 
   ##
   # @if jp
@@ -1528,7 +1482,7 @@ class FsmStructureListenerHolder:
   def notify(self, state):
     guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
     for listener in self._listeners:
-      listener.listener(state)
+      listener(state)
     return
 
 

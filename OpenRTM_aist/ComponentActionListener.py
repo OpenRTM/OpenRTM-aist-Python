@@ -576,12 +576,6 @@ class ExecutionContextActionListener:
     pass
 
 
-class Entry:
-  def __init__(self,listener, autoclean):
-    self.listener  = listener
-    self.autoclean = autoclean
-    return
-
 
 #============================================================
 ##
@@ -621,10 +615,7 @@ class PreComponentActionListenerHolder:
   # @brief Destructor
   # @endif
   def __del__(self):
-    for (idx, listener) in enumerate(self._listeners):
-      if listener.autoclean:
-        self._listeners[idx] = None
-    return
+    pass
 
   ##
   # @if jp
@@ -634,8 +625,6 @@ class PreComponentActionListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -643,12 +632,10 @@ class PreComponentActionListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
-  #void addListener(PreComponentActionListener* listener, bool autoclean);
-  def addListener(self, listener, autoclean):
-    self._listeners.append(Entry(listener, autoclean))
+  #void addListener(PreComponentActionListener* listener);
+  def addListener(self, listener):
+    self._listeners.append(listener)
     return
     
   ##
@@ -672,11 +659,9 @@ class PreComponentActionListenerHolder:
     len_ = len(self._listeners)
     for i in range(len_):
       idx = (len_ - 1) - i
-      if self._listeners[idx].listener == listener:
-        if self._listeners[idx].autoclean:
-          self._listeners[idx].listener = None
-          del self._listeners[idx]
-          return
+      if self._listeners[idx] == listener:
+        del self._listeners[idx]
+        return
     return
 
   ##
@@ -698,7 +683,7 @@ class PreComponentActionListenerHolder:
   #void notify(UniqueId ec_id);
   def notify(self, ec_id):
     for listener in self._listeners:
-      listener.listener(ec_id)
+      listener(ec_id)
     return
 
       
@@ -740,9 +725,6 @@ class PostComponentActionListenerHolder:
   # @brief Destructor
   # @endif
   def __del__(self):
-    for (idx, listener) in enumerate(self._listeners):
-      if listener.autoclean:
-        self._listeners[idx] = None
     return
     
   ##
@@ -753,8 +735,6 @@ class PostComponentActionListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -762,12 +742,10 @@ class PostComponentActionListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
-  #void addListener(PostComponentActionListener* listener, bool autoclean);
-  def addListener(self, listener, autoclean):
-    self._listeners.append(Entry(listener, autoclean))
+  #void addListener(PostComponentActionListener* listener);
+  def addListener(self, listener):
+    self._listeners.append(listener)
     return
     
   ##
@@ -791,11 +769,9 @@ class PostComponentActionListenerHolder:
     len_ = len(self._listeners)
     for i in range(len_):
       idx = (len_ - 1) - i
-      if self._listeners[idx].listener == listener:
-        if self._listeners[idx].autoclean:
-          self._listeners[idx].listener = None
-          del self._listeners[idx]
-          return
+      if self._listeners[idx] == listener:
+        del self._listeners[idx]
+        return
     return
     
   
@@ -820,7 +796,7 @@ class PostComponentActionListenerHolder:
   #void notify(UniqueId ec_id, ReturnCode_t ret);
   def notify(self, ec_id, ret):
     for listener in self._listeners:
-      listener.listener(ec_id, ret)
+      listener(ec_id, ret)
     return
     
 
@@ -863,9 +839,6 @@ class PortActionListenerHolder:
   # @brief Destructor
   # @endif
   def __del__(self):
-    for (idx, listener) in enumerate(self._listeners):
-      if listener.autoclean:
-        self._listeners[idx] = None
     pass
     
   ##
@@ -876,8 +849,6 @@ class PortActionListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -885,12 +856,10 @@ class PortActionListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
-  #void addListener(PortActionListener* listener, bool autoclean);
-  def addListener(self, listener, autoclean):
-    self._listeners.append(Entry(listener, autoclean))
+  #void addListener(PortActionListener* listener);
+  def addListener(self, listener):
+    self._listeners.append(listener)
     return
     
 
@@ -915,11 +884,9 @@ class PortActionListenerHolder:
     len_ = len(self._listeners)
     for i in range(len_):
       idx = (len_ - 1) - i
-      if self._listeners[idx].listener == listener:
-        if self._listeners[idx].autoclean:
-          self._listeners[idx].listener = None
-          del self._listeners[idx]
-          return
+      if self._listeners[idx] == listener:
+        del self._listeners[idx]
+        return
     return
     
   ##
@@ -943,7 +910,7 @@ class PortActionListenerHolder:
   #void notify(const RTC::PortProfile& pprofile);
   def notify(self, pprofile):
     for listener in self._listeners:
-      listener.listener(pprofile)
+      listener(pprofile)
     return
 
     
@@ -985,9 +952,6 @@ class ExecutionContextActionListenerHolder:
   # @brief Destructor
   # @endif
   def __del__(self):
-    for (idx, listener) in enumerate(self._listeners):
-      if listener.autoclean:
-        self._listeners[idx] = None
     pass
     
 
@@ -999,8 +963,6 @@ class ExecutionContextActionListenerHolder:
   # リスナーを追加する。
   #
   # @param listener 追加するリスナ
-  # @param autoclean true:デストラクタで削除する,
-  #                  false:デストラクタで削除しない
   # @else
   #
   # @brief Add the listener.
@@ -1008,12 +970,10 @@ class ExecutionContextActionListenerHolder:
   # This method adds the listener. 
   #
   # @param listener Added listener
-  # @param autoclean true:The listener is deleted at the destructor.,
-  #                  false:The listener is not deleted at the destructor. 
   # @endif
-  #void addListener(ExecutionContextActionListener* listener, bool autoclean);
-  def addListener(self, listener, autoclean):
-    self._listeners.append(Entry(listener, autoclean))
+  #void addListener(ExecutionContextActionListener* listener);
+  def addListener(self, listener):
+    self._listeners.append(listener)
     return
 
     
@@ -1038,11 +998,9 @@ class ExecutionContextActionListenerHolder:
     len_ = len(self._listeners)
     for i in range(len_):
       idx = (len_ - 1) - i
-      if self._listeners[idx].listener == listener:
-        if self._listeners[idx].autoclean:
-          self._listeners[idx].listener = None
-          del self._listeners[idx]
-          return
+      if self._listeners[idx] == listener:
+        del self._listeners[idx]
+        return
     return
 
 
@@ -1067,7 +1025,7 @@ class ExecutionContextActionListenerHolder:
   #void notify(UniqueId ec_id);
   def notify(self, ec_id):
     for listener in self._listeners:
-      listener.listener(ec_id)
+      listener(ec_id)
     return
 
 
