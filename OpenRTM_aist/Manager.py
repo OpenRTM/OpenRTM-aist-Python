@@ -564,7 +564,7 @@ class Manager:
                            (fname, initfunc))
     fname = fname.replace("/", os.sep)
     fname = fname.replace("\\", os.sep)
-    self._listeners.module_.preLoad(fname, initfunc)
+    fname, initfunc = self._listeners.module_.preLoad(fname, initfunc)
     try:
       fname_ = fname.split(os.sep)
       
@@ -578,7 +578,7 @@ class Manager:
         initfunc = mod[0]+"Init"
       path = self._module.load(fname, initfunc)
       self._rtcout.RTC_DEBUG("module path: %s", path)
-      self._listeners.module_.postLoad(path, initfunc)
+      path, initfunc = self._listeners.module_.postLoad(path, initfunc)
     except OpenRTM_aist.ModuleManager.NotAllowedOperation as e:
       self._rtcout.RTC_ERROR("Operation not allowed: %s",(e.reason))
       return RTC.PRECONDITION_NOT_MET
@@ -623,9 +623,9 @@ class Manager:
   # @endif
   def unload(self, fname):
     self._rtcout.RTC_TRACE("Manager.unload()")
-    self._listeners.module_.preUnload(fname)
+    fname = self._listeners.module_.preUnload(fname)
     self._module.unload(fname)
-    self._listeners.module_.postUnload(fname)
+    fname = self._listeners.module_.postUnload(fname)
     return
 
 
@@ -888,7 +888,7 @@ class Manager:
       if comp:
         return comp
     
-    self._listeners.rtclifecycle_.preCreate(comp_args)
+    comp_args = self._listeners.rtclifecycle_.preCreate(comp_args)
 
     if comp_prop.findNode("exported_ports"):
       exported_ports = OpenRTM_aist.split(comp_prop.getProperty("exported_ports"),

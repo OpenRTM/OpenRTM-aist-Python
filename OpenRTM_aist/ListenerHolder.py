@@ -198,5 +198,14 @@ class ListenerHolder:
     for listener in self.listeners:
       for (l,f) in listener.items():
         func_ = getattr(l,func,None)
-        func_(*args)
-    return
+        if len(args) == 1:
+          ret = func_(args[0])
+          args = (ret,)
+        else:
+          ret = func_(*args)
+          if ret is not None:
+            args = ret
+    if len(args) == 1:
+      return args[0]
+    else:
+      return args
