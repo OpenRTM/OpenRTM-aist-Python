@@ -90,15 +90,13 @@ class ManagerConfig :
   if os.name == 'nt':
 
     config_file_path = ["./rtc.conf",
-                        "${APPDATA}/OpenRTM-aist/rtc.conf",
-                        None]
+                        "${APPDATA}/OpenRTM-aist/rtc.conf"]
   else:
     config_file_path = ["./rtc.conf",
                         "/etc/rtc.conf",
                         "/etc/rtc/rtc.conf",
                         "/usr/local/etc/rtc.conf",
-                        "/usr/local/etc/rtc/rtc.conf",
-                        None]
+                        "/usr/local/etc/rtc/rtc.conf"]
 
 
   ##
@@ -361,13 +359,11 @@ class ManagerConfig :
         self._configFile = env
         return True
 
-    i = 0
-    while (self.config_file_path[i]):
-      self.config_file_path[i] = OpenRTM_aist.replaceEnv(self.config_file_path[i])
-      if self.fileExist(self.config_file_path[i]):
-        self._configFile = self.config_file_path[i]
+    for file_path in self.config_file_path:
+      file_path = OpenRTM_aist.replaceEnv(file_path)
+      if self.fileExist(file_path):
+        self._configFile = file_path
         return True
-      i += 1
 
     return False
 
