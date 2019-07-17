@@ -16,7 +16,6 @@
 #
 # $Id$
 #
-
 import OpenRTM_aist
 import threading
 import rosgraph.xmlrpc
@@ -277,8 +276,6 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     for uri in self._old_uris:
       if not (uri in publishers):
         lost_uris.append(uri)
-    
-
 
     for subscriber in self._subscribers:
       subscriber.connect(caller_id, topic, publishers)
@@ -326,7 +323,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
   # @endif
   def shutdown(self):
     self._shutdownflag = True
-    #self._server_sock.shutdown(socket.SHUT_RDWR)
+    self._server_sock.shutdown(socket.SHUT_RDWR)
     self._server_sock.close()
     self._thread.join()
     self._node.shutdown(True)
@@ -366,6 +363,131 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
         port = self._port
         return 1, "ready on %s:%s"%(addr, port), ["TCPROS", addr, port]
     return 0, "no supported protocol implementations", []
+
+  ##
+  # @if jp
+  # @brief getSubscriptionsコールバック関数
+  #
+  # @param self
+  # @param caller_id 呼び出しID
+  # @return ret, msg, subs
+  # ret：リターンコード(1)
+  # msg：メッセージ
+  # subs：Subscriber一覧
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param caller_id
+  # @return ret, msg, subs
+  #
+  # @endif
+  def getSubscriptions(self, caller_id):
+    subs = []
+    for subscriber in self._subscribers:
+      sub = [subscriber.getName(), subscriber.datatype()]
+      subs.append(sub)
+
+    return 1, "subscriptions", subs
+
+  ##
+  # @if jp
+  # @brief getPublicationsコールバック関数
+  #
+  # @param self
+  # @param caller_id 呼び出しID
+  # @return ret, msg, pubs
+  # ret：リターンコード(1)
+  # msg：メッセージ
+  # pubs：Publisher一覧
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param caller_id
+  # @return ret, msg, pubs
+  #
+  # @endif
+  def getPublications(self, caller_id):
+    pubs = []
+    for publisher in self._publishers:
+      pub = [publisher.getName(), publisher.datatype()]
+      pubs.append(pub)
+
+    return 1, "subscriptions", pubs
+
+  ##
+  # @if jp
+  # @brief getBusStatsコールバック関数
+  #
+  # @param self
+  # @param caller_id 呼び出しID
+  # @return
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param caller_id
+  # @return
+  #
+  # @endif
+  def getBusStats(self, caller_id):
+    return 1, "" , []
+
+  ##
+  # @if jp
+  # @brief getBusInfoコールバック関数
+  #
+  # @param self
+  # @param caller_id 呼び出しID
+  # @return ret, msg, info
+  # ret：リターンコード(1)
+  # msg：メッセージ
+  # pubs：コネクタの情報一覧
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param caller_id
+  # @return ret, msg, info
+  #
+  # @endif
+  def getBusInfo(self, caller_id):
+    info = []
+    for subscriber in self._subscribers:
+      info.extend(subscriber.getInfo())
+    for publisher in self._publishers:
+      info.extend(publisher.getInfo())
+
+    return 1, "bus info", info
+  
+  ##
+  # @if jp
+  # @brief getMasterUriコールバック関数
+  #
+  # @param self
+  # @param caller_id 呼び出しID
+  # @return
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param caller_id
+  # @return
+  #
+  # @endif
+  #def getMasterUri(self, caller_id):
+  #  return 0, "master URI not set", ""
 
   ##
   # @if jp

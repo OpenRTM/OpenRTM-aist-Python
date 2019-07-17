@@ -97,6 +97,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
     self._roscoreport = "11311"
 
     self._tcp_connecters = {}
+    self._pubnum = 0
 
     self._mutex = threading.RLock()
 
@@ -152,7 +153,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
     for k, connector in self._tcp_connecters.items():
       try:
         self._rtcout.RTC_VERBOSE("connection close")
-        #connector["socket"].shutdown(socket.SHUT_RDWR)
+        connector["socket"].shutdown(socket.SHUT_RDWR)
         connector["socket"].close()
         connector["listener"].shutdown()
         connector["thread"].join()
@@ -218,17 +219,19 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
       return
 
     self._messageType = prop.getProperty("marshaling_type", "ROSFloat32")
-    self._topic = prop.getProperty("topic", "chatter")
+    self._topic = prop.getProperty("ros.topic", "chatter")
     self._topic = "/"+self._topic
-    self._roscorehost = prop.getProperty("roscore_host", "localhost")
-    self._roscoreport = prop.getProperty("roscore_port", "11311")
+    self._roscorehost = prop.getProperty("ros.roscore.host", "localhost")
+    self._roscoreport = prop.getProperty("ros.roscore.port", "11311")
 
     
     self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
     self._rtcout.RTC_VERBOSE("roscore address: %s:%s", (self._roscorehost, self._roscoreport))
 
+    self._callerid = prop.getProperty("ros.node.name")
     if not self._callerid:
       self._callerid = str(OpenRTM_aist.uuid1())
+    self._callerid = "/"+self._callerid
 
     factory = ROSMessageInfo.ROSMessageInfoFactory.instance()
     info = factory.createObject(self._messageType)
@@ -286,7 +289,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
       self._rtcout.RTC_PARANOID("connectTCP(%s, %s, %s)", (caller_id, topic, uri))
       try:
         pub = xmlrpclib.ServerProxy(uri)
-        ret, message, result = pub.requestTopic(caller_id, topic, [['TCPROS']])
+        ret, message, result = pub.requestTopic(self._callerid, topic, [['TCPROS']])
       except:
         self._rtcout.RTC_ERROR("Failed connect %s", uri)
         continue
@@ -345,7 +348,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
                   'tcp_nodelay': '0',
                   'md5sum': info_md5sum,
                   'type': info_type,
-                  'callerid': caller_id}
+                  'callerid': self._callerid}
 
         try:
           write_ros_handshake_header(sock, fields)
@@ -372,7 +375,8 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
         task = threading.Thread(target=listener.recieve, args=())
         task.start()
         
-        self._tcp_connecters[uri] = {"socket":sock, "listener": listener, "thread": task}
+        self._tcp_connecters[uri] = {"socket":sock, "listener": listener, "thread": task, "id": self._pubnum}
+        self._pubnum += 1
         
       
       
@@ -530,6 +534,60 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
     if self._listeners is not None and self._profile is not None:
       self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR].notify(self._profile, data)
     return
+
+  ##
+  # @if jp
+  # @brief ノード名の取得
+  #
+  # @return ノード名
+  #
+  # @else
+  # @brief 
+  #
+  # @return
+  #
+  # @endif
+  #
+  def getName(self):
+    self._rtcout.RTC_VERBOSE("getName")
+    return self._callerid
+
+  ##
+  # @if jp
+  # @brief メッセージ型の取得
+  #
+  # @return メッセージ型
+  #
+  # @else
+  # @brief 
+  #
+  # @return
+  #
+  # @endif
+  #
+  def datatype(self):
+    self._rtcout.RTC_VERBOSE("datatype")
+    return self._messageType
+
+  ##
+  # @if jp
+  # @brief コネクタの情報取得
+  #
+  # @return コネクタの情報のリスト
+  #
+  # @else
+  # @brief 
+  #
+  # @return
+  #
+  # @endif
+  #
+  def getInfo(self):
+    self._rtcout.RTC_VERBOSE("getInfo")
+    cons = []
+    for k, connector in self._tcp_connecters.items():
+      cons.append([connector["id"], k, "i", "TCPROS", self._topic, True, ""])
+    return cons
 
 ##
 # @if jp
