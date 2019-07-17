@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ROSInPort.py
@@ -42,8 +42,8 @@ except ImportError:
 ##
 # @if jp
 # @class ROSInPort
-# @brief ROS Subscriber¤ËÂĞ±ş¤¹¤ë¥¯¥é¥¹
-# InPortProvider¥ª¥Ö¥¸¥§¥¯¥È¤È¤·¤Æ»ÈÍÑ¤¹¤ë
+# @brief ROS Subscriberã«å¯¾å¿œã™ã‚‹ã‚¯ãƒ©ã‚¹
+# InPortProviderã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã—ã¦ä½¿ç”¨ã™ã‚‹
 #
 # @else
 # @class ROSInPort
@@ -57,12 +57,12 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
-  # ¥İ¡¼¥È¥×¥í¥Ñ¥Æ¥£¤Ë°Ê²¼¤Î¹àÌÜ¤òÀßÄê¤¹¤ë¡£
-  #  - ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¿¥¤¥× : ros
-  #  - ¥Ç¡¼¥¿¥Õ¥í¡¼¥¿¥¤¥× : Push
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«ä»¥ä¸‹ã®é …ç›®ã‚’è¨­å®šã™ã‚‹ã€‚
+  #  - ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ— : ros
+  #  - ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚¿ã‚¤ãƒ— : Push
   #
   # @param self 
   #
@@ -102,9 +102,9 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self 
   #
@@ -123,7 +123,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ½ªÎ»½èÍı
+  # @brief çµ‚äº†å‡¦ç†
   #
   # @param self 
   #
@@ -161,10 +161,10 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ÀÜÂ³ºÑ¤ß¤Î¥½¥±¥Ã¥È¤ò½ªÎ»¤µ¤»¤ë
+  # @brief æ¥ç¶šæ¸ˆã¿ã®ã‚½ã‚±ãƒƒãƒˆã‚’çµ‚äº†ã•ã›ã‚‹
   #
   # @param self 
-  # @param uri ¥½¥±¥Ã¥È¤ÎÀÜÂ³Àè¤ÎURI
+  # @param uri ã‚½ã‚±ãƒƒãƒˆã®æ¥ç¶šå…ˆã®URI
   #
   # @else
   # @brief 
@@ -188,14 +188,14 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ½é´ü²½
+  # @brief åˆæœŸåŒ–
   #
   # @param self 
-  # @param prop ÀÜÂ³ÀßÄê
-  # marshaling_type ¥·¥ê¥¢¥é¥¤¥¶¤Î¼ïÎà ¥Ç¥Õ¥©¥ë¥È¡§ROSFloat32
-  # topic ¥È¥Ô¥Ã¥¯Ì¾ ¥Ç¥Õ¥©¥ë¥È chatter
-  # roscore_host roscore¤Î¥Û¥¹¥ÈÌ¾ ¥Ç¥Õ¥©¥ë¥È¡§localhost
-  # roscore_port roscore¤Î¥İ¡¼¥ÈÈÖ¹æ ¥Ç¥Õ¥©¥ë¥È¡§11311
+  # @param prop æ¥ç¶šè¨­å®š
+  # marshaling_type ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®ç¨®é¡ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šROSFloat32
+  # topic ãƒˆãƒ”ãƒƒã‚¯å ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ chatter
+  # roscore_host roscoreã®ãƒ›ã‚¹ãƒˆå ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šlocalhost
+  # roscore_port roscoreã®ãƒãƒ¼ãƒˆç•ªå· ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼š11311
   #
   # @else
   # @brief 
@@ -257,12 +257,12 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief publisher¤ÈÀÜÂ³
+  # @brief publisherã¨æ¥ç¶š
   #
   # @param self 
-  # @param caller_id ¸Æ¤Ó½Ğ¤·ID
-  # @param topic ¥È¥Ô¥Ã¥¯Ì¾
-  # @param publishers publisher¤ÎURI¤Î¥ê¥¹¥È
+  # @param caller_id å‘¼ã³å‡ºã—ID
+  # @param topic ãƒˆãƒ”ãƒƒã‚¯å
+  # @param publishers publisherã®URIã®ãƒªã‚¹ãƒˆ
   #
   # @else
   # @brief 
@@ -383,10 +383,10 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ¥³¥Í¥¯¥¿¥ê¥¹¥Ê¤ÎÀßÄê
+  # @brief ã‚³ãƒã‚¯ã‚¿ãƒªã‚¹ãƒŠã®è¨­å®š
   #
-  # @param info ÀÜÂ³¾ğÊó
-  # @param listeners ¥ê¥¹¥Ê
+  # @param info æ¥ç¶šæƒ…å ±
+  # @param listeners ãƒªã‚¹ãƒŠ
   #
   # @else
   # @brief 
@@ -406,11 +406,11 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ¥Ğ¥Ã¥Õ¥¡¤Ë¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à
+  # @brief ãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
   #
-  # ÀßÄê¤µ¤ì¤¿¥Ğ¥Ã¥Õ¥¡¤Ë¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à¡£
+  # è¨­å®šã•ã‚ŒãŸãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€ã€‚
   #
-  # @param data ½ñ¹şÂĞ¾İ¥Ç¡¼¥¿
+  # @param data æ›¸è¾¼å¯¾è±¡ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   # @brief Write data into the buffer
@@ -534,7 +534,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 ##
 # @if jp
 # @class SubListener
-# @brief ROS Subscriber¤Î¥Ç¡¼¥¿¼õ¿®»ş¤Î¥ê¥¹¥Ê
+# @brief ROS Subscriberã®ãƒ‡ãƒ¼ã‚¿å—ä¿¡æ™‚ã®ãƒªã‚¹ãƒŠ
 # 
 #
 # @else
@@ -546,12 +546,12 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 class SubListener:
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   # @param sub ROSInPort
-  # @param sock ¥½¥±¥Ã¥È
-  # @param uri ÀÜÂ³Àè¤ÎURI
+  # @param sock ã‚½ã‚±ãƒƒãƒˆ
+  # @param uri æ¥ç¶šå…ˆã®URI
   #
   # @else
   # @brief Constructor
@@ -570,7 +570,7 @@ class SubListener:
     self._shutdown = False
   ##
   # @if jp
-  # @brief ½ªÎ»½èÍı³«»Ï
+  # @brief çµ‚äº†å‡¦ç†é–‹å§‹
   #
   # @param self
   #
@@ -586,7 +586,7 @@ class SubListener:
 
   ##
   # @if jp
-  # @brief ¼õ¿®½èÍı
+  # @brief å—ä¿¡å‡¦ç†
   #
   # @param self
   #
@@ -611,7 +611,7 @@ class SubListener:
 
 ##
 # @if jp
-# @brief ¥â¥¸¥å¡¼¥ëÅĞÏ¿´Ø¿ô
+# @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ç™»éŒ²é–¢æ•°
 #
 #
 # @else
