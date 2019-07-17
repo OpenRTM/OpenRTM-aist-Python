@@ -179,7 +179,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
     if uri in self._tcp_connecters:
       try:
         self._rtcout.RTC_VERBOSE("close socket")
-        #self._tcp_connecters[uri].shutdown(socket.SHUT_RDWR)
+        self._tcp_connecters[uri].shutdown(socket.SHUT_RDWR)
         self._tcp_connecters[uri]["socket"].close()
         self._tcp_connecters[uri]["listener"].shutdown()
         self._tcp_connecters[uri]["thread"].join()
