@@ -211,8 +211,6 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     if not self._buffer:
       return self.PRECONDITION_NOT_MET, None
 
-    cdr = [None]
-
     if self._sync_readwrite:
       self._readcompleted_worker._completed = False
       
@@ -226,7 +224,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
         self._writecompleted_worker._cond.wait()
       self._writecompleted_worker._cond.release()
 
-    ret = self._buffer.read(cdr)
+    ret, cdr = self._buffer.read()
 
     if self._sync_readwrite:
       self._readcompleted_worker._completed = True
@@ -237,20 +235,20 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
       self._readready_worker._completed = False
 
     if ret == OpenRTM_aist.BufferStatus.BUFFER_OK:
-      return self.PORT_OK, cdr[0]
+      return self.PORT_OK, cdr
 
     if ret == OpenRTM_aist.BufferStatus.BUFFER_EMPTY:
-      self.onBufferEmpty(cdr[0])
-      return self.BUFFER_EMPTY, cdr[0]
+      self.onBufferEmpty(cdr)
+      return self.BUFFER_EMPTY, cdr
 
     elif ret == OpenRTM_aist.BufferStatus.TIMEOUT:
-      self.onBufferReadTimeout(cdr[0])
-      return self.BUFFER_TIMEOUT, cdr[0]
+      self.onBufferReadTimeout(cdr)
+      return self.BUFFER_TIMEOUT, cdr
 
     elif ret == OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET:
-      return self.PRECONDITION_NOT_MET, cdr[0]
+      return self.PRECONDITION_NOT_MET, cdr
 
-    return self.PORT_ERROR, cdr[0]
+    return self.PORT_ERROR, cdr
 
   ##
   # @if jp
@@ -285,36 +283,35 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
   # @endif
   #
   # virtual ReturnCode read(cdrMemoryStream& data);
-  def read(self, data):
+  def read(self, data=None):
     self._rtcout.RTC_TRACE("read()")
 
     if not self._dataType:
-      return self.PRECONDITION_NOT_MET
+      return self.PRECONDITION_NOT_MET, data
 
     ret, cdr = self.readBuff()
 
     if ret != self.PORT_OK:
-      return ret
+      return ret, data
     else:
       self._serializer.isLittleEndian(self._endian)
       ser_ret, _data = self._serializer.deserialize(cdr, self._dataType)
 
       if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
-        if type(data) == list:
-          data[0] = _data
+        data = _data
         self.onBufferRead(cdr)
-        return self.PORT_OK
+        return self.PORT_OK, data
       elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
         self._rtcout.RTC_ERROR("unknown endian from connector")
-        return self.PRECONDITION_NOT_MET
+        return self.PRECONDITION_NOT_MET, data
       elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR:
         self._rtcout.RTC_ERROR("unknown error")
-        return self.PRECONDITION_NOT_MET
+        return self.PRECONDITION_NOT_MET, data
       elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
         self._rtcout.RTC_ERROR("unknown serializer from connector")
-        return self.PRECONDITION_NOT_MET
+        return self.PRECONDITION_NOT_MET, data
     
-    return self.PORT_ERROR
+    return self.PORT_ERROR, data
         
 
   ##

@@ -835,10 +835,10 @@ class CorbaNaming:
       raise CosNaming.NamingContext.InvalidName
 
     slen = self.getNameLength(name_list)
-    string_name = [""]
-    self.nameToString(name_list, string_name, slen)
+    string_name = ""
+    string_name = self.nameToString(name_list, string_name, slen)
 
-    return string_name[0]
+    return string_name
 
 
   ##
@@ -1125,18 +1125,19 @@ class CorbaNaming:
     for i in range(len(name_list)):
       for id_ in name_list[i].id:
         if id_ == "/" or id_ == "." or id_ == "\\":
-          string_name[0] += "\\"
-        string_name[0] += id_
+          string_name += "\\"
+        string_name += id_
 
       if name_list[i].id == "" or name_list[i].kind != "":
-        string_name[0] += "."
+        string_name += "."
 
       for kind_ in name_list[i].kind:
         if kind_ == "/" or kind_ == "." or kind_ == "\\":
-          string_name[0] += "\\"
-        string_name[0] += kind_
+          string_name += "\\"
+        string_name += kind_
 
-      string_name[0] += "/"
+      string_name += "/"
+    return string_name
 
 
   ##

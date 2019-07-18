@@ -146,7 +146,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
   #
   # ::OpenRTM::PortStatus put()
   #  throw (CORBA::SystemException);
-  def get(self, data):
+  def get(self):
     self._rtcout.RTC_PARANOID("get()")
 
     try:
@@ -155,17 +155,17 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
       
       if ret == OpenRTM.PORT_OK:
         self._rtcout.RTC_DEBUG("get() successful")
-        data[0] = cdr_data
-        self.onReceived(data[0])
-        self.onBufferWrite(data[0])
+        data = cdr_data
+        self.onReceived(data)
+        self.onBufferWrite(data)
 
-        return self.PORT_OK
-      return self.convertReturn(ret,data[0])
+        return self.PORT_OK, data
+      return self.convertReturn(ret,data)
 
     except:
       self._rtcout.RTC_WARN("Exception caught from OutPort.get().")
       self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
-      return self.CONNECTION_LOST
+      return self.CONNECTION_LOST, None
 
   ##
   # @if jp

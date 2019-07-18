@@ -170,14 +170,14 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
   # Buffer からデータを InPort へ read する関数
   #
   # @else
-  # @brief Destructor
+  # @brief 
   #
   # The read function to read data from buffer to InPort
   #
   # @endif
   #
   # virtual ReturnCode read(cdrMemoryStream& data) = 0;
-  def read(self, data):
+  def read(self, data=None):
     pass
 
   # void setConnectorInfo(ConnectorInfo profile);
@@ -191,7 +191,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
         return RTC.RTC_ERROR
         
       endian = OpenRTM_aist.split(endian, ",") # Maybe endian is ["little","big"]
-      endian = OpenRTM_aist.normalize(endian) # Maybe self._endian is "little" or "big"
+      endian = OpenRTM_aist.normalize(endian[0]) # Maybe self._endian is "little" or "big"
 
       if endian == "little":
         self._endian = True
@@ -215,8 +215,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   def write(self, data):
     pass
-  def read(self, data):
-    pass
+
   #
   # @if jp
   # @brief データ書き込み時のリスナ設定

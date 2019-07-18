@@ -80,14 +80,10 @@ class ModuleManager:
 
     self._configPath = prop.getProperty(CONFIG_PATH).split(",")
     for i in range(len(self._configPath)):
-      tmp = [self._configPath[i]]
-      OpenRTM_aist.eraseHeadBlank(tmp)
-      self._configPath[i] = tmp[0]
+      self._configPath[i] = OpenRTM_aist.eraseHeadBlank(self._configPath[i])
     self._loadPath = prop.getProperty(MOD_LOADPTH,"./").split(",")
     for i in range(len(self._loadPath)):
-      tmp = [self._loadPath[i]]
-      OpenRTM_aist.eraseHeadBlank(tmp)
-      self._loadPath[i] = tmp[0]
+      self._loadPath[i] = OpenRTM_aist.eraseHeadBlank(self._loadPath[i])
 
     self._absoluteAllowed = OpenRTM_aist.toBool(prop.getProperty(ALLOW_ABSPATH),
                                                 "yes", "no", False)
@@ -564,9 +560,7 @@ class ModuleManager:
       self._rtcout.RTC_DEBUG("Module load path: %s", path)
       flist = []
       for suffix in suffixes:
-        tmp = [suffix]
-        OpenRTM_aist.eraseHeadBlank(tmp)
-        suffix = tmp[0]
+        suffix = OpenRTM_aist.eraseHeadBlank(suffix)
         
         tmp = []
         OpenRTM_aist.getFileList(path,suffix,tmp)
@@ -662,14 +656,10 @@ class ModuleManager:
             if r.find(":") != -1:
               count += 1
               key = r[0:pos]
-              tmp = [key]
-              OpenRTM_aist.eraseHeadBlank(tmp)
-              key = tmp[0]
+              key = OpenRTM_aist.eraseHeadBlank(key)
               
               value = r[pos+1:]
-              tmp = [value]
-              OpenRTM_aist.eraseHeadBlank(tmp)
-              value = tmp[0]
+              value = OpenRTM_aist.eraseHeadBlank(value)
 
               prop.setProperty(key, value)
           if count > 0:
@@ -750,9 +740,7 @@ class ModuleManager:
     self._rtcout.RTC_DEBUG("langs: %s",self._properties.getProperty("manager.supported_languages"))
 
     for lang in langs:
-      tmp = [lang]
-      OpenRTM_aist.eraseHeadBlank(tmp)
-      lang = tmp[0]
+      lang = OpenRTM_aist.eraseHeadBlank(lang)
       
       modules_ = []
       self.getModuleList(lang, modules_)

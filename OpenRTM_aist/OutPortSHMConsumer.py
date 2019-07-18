@@ -151,7 +151,7 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
   # @endif
   #
   # virtual ReturnCode get(cdrMemoryStream& data);
-  def get(self, data):
+  def get(self):
     self._rtcout.RTC_PARANOID("get()")
     
     try:
@@ -159,6 +159,8 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
 
       guard = OpenRTM_aist.ScopedLock(self._mutex)
       ret = portshmem.get()
+
+      data = None
       
       if ret == OpenRTM.PORT_OK:
         self._rtcout.RTC_DEBUG("get() successful")
@@ -168,26 +170,26 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
         shm_data = self._shmem.read()
         
 
-        data[0] = shm_data
-        self.onReceived(data[0])
-        self.onBufferWrite(data[0])
+        data = shm_data
+        self.onReceived(data)
+        self.onBufferWrite(data)
         
         if self._buffer.full():
           self._rtcout.RTC_INFO("InPort buffer is full.")
-          self.onBufferFull(data[0])
-          self.onReceiverFull(data[0])
+          self.onBufferFull(data)
+          self.onReceiverFull(data)
         
-        self._buffer.put(data[0])
+        self._buffer.put(data)
         self._buffer.advanceWptr()
         self._buffer.advanceRptr()
 
-        return self.PORT_OK
-      return self.convertReturn(ret,data[0])
+        return self.PORT_OK, data
+      return self.convertReturn(ret,data)
 
     except:
       self._rtcout.RTC_WARN("Exception caught from OutPort.get().")
       self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
-      return self.CONNECTION_LOST
+      return self.CONNECTION_LOST, None
 
 
 

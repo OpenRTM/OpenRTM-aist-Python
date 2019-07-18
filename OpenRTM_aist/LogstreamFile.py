@@ -158,17 +158,14 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
   #
   def addHandler(self, f):
     formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s')
-    tmp = [f]
-    OpenRTM_aist.eraseHeadBlank(tmp)
-    OpenRTM_aist.eraseTailBlank(tmp)
-    f = tmp[0]
+    f = OpenRTM_aist.eraseHeadBlank(f)
+    f = OpenRTM_aist.eraseTailBlank(f)
     handlers = self.logger.handlers
     for h in handlers:
       if h.get_name() == f:
         return False
 
-    tmp = [f]
-    fname = OpenRTM_aist.StringUtil.normalize(tmp)
+    fname = OpenRTM_aist.StringUtil.normalize(f)
       
     if fname == "stdout":
       ch = logging.StreamHandler()

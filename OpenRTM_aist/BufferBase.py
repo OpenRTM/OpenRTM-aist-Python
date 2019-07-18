@@ -359,16 +359,17 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   # ※サブクラスでの実装参照用
   # 
   # @param self 
-  # @param value 読み出しデータ
   # 
-  # @return データ読み出し結果(true:読み出し成功，false:読み出し失敗)
+  # @return ret, data
+  # ret :   データ読み出し結果(true:読み出し成功，false:読み出し失敗)
+  # value : 読み出しデータ
   # 
   # @else
   # 
   # @brief Read data from the buffer
   # 
   # @endif
-  def read(self, value, sec = -1, nsec = -1):
+  def read(self, sec = -1, nsec = -1):
     pass
 
 
@@ -515,20 +516,21 @@ class NullBuffer(BufferBase):
   # バッファに格納されたデータを読み出す。
   # 
   # @param self 
-  # @param value 読み出したデータ
   # 
-  # @return データ読み出し結果(true:読み出し成功，false:読み出し失敗)
+  # @return ret, data
+  # ret : データ読み出し結果(true:読み出し成功，false:読み出し失敗)
+  # data 読み出したデータ
   # 
   # @else
   # 
   # @brief Read data from the buffer
   # 
   # @endif
-  def read(self, value):
+  def read(self):
     if not self._inited:
-      return False
-    value[0] = self.get()
-    return True
+      return False, None
+    _, value = self.get()
+    return True, value
 
 
   ##
@@ -622,7 +624,10 @@ class NullBuffer(BufferBase):
   # 
   # @param self 
   # 
-  # @return 取得データ
+  # @return ret, value
+  #   ret : BUFFER_OK: 正常終了
+  #         BUFFER_ERROR: 異常終了
+  # value : 読み出しデータ
   # 
   # @else
   # 
@@ -631,7 +636,7 @@ class NullBuffer(BufferBase):
   # @endif
   def get(self):
     self._is_new = False
-    return self._data
+    return OpenRTM_aist.BufferStatus.BUFFER_OK, self._data
 
 
   ##

@@ -373,38 +373,40 @@ class ExecutionContextBase:
     self.setExecutionRate(props)
     
     # getting sync/async mode flag
-    transitionMode_ = [False]
-    if self.setTransitionMode(props, "sync_transition", transitionMode_):
-      self._syncActivation   = transitionMode_[0]
-      self._syncDeactivation = transitionMode_[0]
-      self._syncReset        = transitionMode_[0]
+    transitionMode_ = False
+    ret, transitionMode_ = self.setTransitionMode(props, "sync_transition", transitionMode_)
+    if ret:
+      self._syncActivation   = transitionMode_
+      self._syncDeactivation = transitionMode_
+      self._syncReset        = transitionMode_
 
-    syncactivation_   = [self._syncActivation]
-    syncdeactivation_ = [self._syncDeactivation]
-    syncreset_        = [self._syncReset]
-    self.setTransitionMode(props, "sync_activation", syncactivation_)
-    self.setTransitionMode(props, "sync_deactivation", syncdeactivation_)
-    self.setTransitionMode(props, "sync_reset", syncreset_)
-    self._syncActivation   = syncactivation_[0]
-    self._syncDeactivation = syncdeactivation_[0]
-    self._syncReset        = syncreset_[0]
+    syncactivation_   = self._syncActivation
+    syncdeactivation_ = self._syncDeactivation
+    syncreset_        = self._syncReset
+    _, syncactivation_ = self.setTransitionMode(props, "sync_activation", syncactivation_)
+    _, syncdeactivation_ = self.setTransitionMode(props, "sync_deactivation", syncdeactivation_)
+    _, syncreset_ = self.setTransitionMode(props, "sync_reset", syncreset_)
+    self._syncActivation   = syncactivation_
+    self._syncDeactivation = syncdeactivation_
+    self._syncReset        = syncreset_
     
     # getting transition timeout
-    timeout_ = [0.0]
-    if self.setTimeout(props, "transition_timeout", timeout_):
-      self._activationTimeout   = timeout_[0]
-      self._deactivationTimeout = timeout_[0]
-      self._resetTimeout        = timeout_[0]
+    timeout_ = 0.0
+    ret, timeout_ = self.setTimeout(props, "transition_timeout", timeout_)
+    if ret:
+      self._activationTimeout   = timeout_
+      self._deactivationTimeout = timeout_
+      self._resetTimeout        = timeout_
 
-    activationTO_   = [self._activationTimeout]
-    deactivationTO_ = [self._deactivationTimeout]
-    resetTO_        = [self._resetTimeout]
-    self.setTimeout(props, "activation_timeout",   activationTO_)
-    self.setTimeout(props, "deactivation_timeout", deactivationTO_)
-    self.setTimeout(props, "reset_timeout",        resetTO_)
-    self._activationTimeout   = activationTO_[0]
-    self._deactivationTimeout = deactivationTO_[0]
-    self._resetTimeout        = resetTO_[0]
+    activationTO_   = self._activationTimeout
+    deactivationTO_ = self._deactivationTimeout
+    resetTO_        = self._resetTimeout
+    _, activationTO_ = self.setTimeout(props, "activation_timeout",   activationTO_)
+    _, deactivationTO_ = self.setTimeout(props, "deactivation_timeout", deactivationTO_)
+    _, resetTO_ = self.setTimeout(props, "reset_timeout",        resetTO_)
+    self._activationTimeout   = activationTO_
+    self._deactivationTimeout = deactivationTO_
+    self._resetTimeout        = resetTO_
 
     self._rtcout.RTC_DEBUG("ExecutionContext's configurations:")
     self._rtcout.RTC_DEBUG("Exec rate   : %f [Hz]", self.getRate())
@@ -717,13 +719,12 @@ class ExecutionContextBase:
       self._rtcout.RTC_ERROR("onActivating() failed.")
       return ret_
 
-    rtobj_ = [None]
-    ret_ = self._worker.activateComponent(comp, rtobj_) # Actual activateComponent()
+    ret_, rtobj_ = self._worker.activateComponent(comp) # Actual activateComponent()
     if ret_ != RTC.RTC_OK:
       return ret_
 
     if not self._syncActivation: # Asynchronous activation mode
-      ret_ = self.onActivated(rtobj_[0], -1)
+      ret_ = self.onActivated(rtobj_, -1)
       if ret_ != RTC.RTC_OK:
         self._rtcout.RTC_ERROR("onActivated() failed.")
 
@@ -733,7 +734,7 @@ class ExecutionContextBase:
     # Synchronized activation mode
     self._rtcout.RTC_DEBUG("Synchronous activation mode. "
                            "Waiting for the RTC to be ACTIVE state. ")
-    return self.waitForActivated(rtobj_[0])
+    return self.waitForActivated(rtobj_)
 
 
   # RTC::ReturnCode_t ExecutionContextBase::
@@ -798,13 +799,12 @@ class ExecutionContextBase:
       return ret_
 
     # Deactivate all the RTCs
-    rtobj_ = [None]
-    ret_ = self._worker.deactivateComponent(comp, rtobj_)
+    ret_, rtobj_ = self._worker.deactivateComponent(comp)
     if ret_ != RTC.RTC_OK:
       return ret_
 
     if not self._syncDeactivation:
-      ret_ = self.onDeactivated(rtobj_[0], -1)
+      ret_ = self.onDeactivated(rtobj_, -1)
       if ret_ != RTC.RTC_OK:
         self._rtcout.RTC_ERROR("onDeactivated() failed.")
       return ret_
@@ -813,7 +813,7 @@ class ExecutionContextBase:
     # Waiting for synchronized deactivation
     self._rtcout.RTC_DEBUG("Synchronous deactivation mode. "
                            "Waiting for the RTC to be INACTIVE state. ")
-    return self.waitForDeactivated(rtobj_[0])
+    return self.waitForDeactivated(rtobj_)
 
 
   # RTC::ReturnCode_t ExecutionContextBase::
@@ -875,12 +875,11 @@ class ExecutionContextBase:
       self._rtcout.RTC_ERROR("onResetting() failed.")
       return ret_
 
-    rtobj_ = [None]
-    ret_ = self._worker.resetComponent(comp, rtobj_) # Actual resetComponent()
+    ret_, rtobj_ = self._worker.resetComponent(comp) # Actual resetComponent()
     if ret_ != RTC.RTC_OK:
       return ret_
     if not self._syncReset:
-      ret_ = self.onReset(rtobj_[0], -1)
+      ret_ = self.onReset(rtobj_, -1)
       if ret_ != RTC.RTC_OK:
         self._rtcout.RTC_ERROR("onReset() failed.")
       return ret_
@@ -889,7 +888,7 @@ class ExecutionContextBase:
     # Waiting for synchronized reset
     self._rtcout.RTC_DEBUG("Synchronous reset mode. "
                            "Waiting for the RTC to be INACTIVE state. ")
-    return self.waitForReset(rtobj_[0])
+    return self.waitForReset(rtobj_)
 
   
   # RTC::ReturnCode_t ExecutionContextBase::
@@ -1445,9 +1444,10 @@ class ExecutionContextBase:
   # bool ExecutionContextBase::setExecutionRate(coil::Properties& props)
   def setExecutionRate(self, props):
     if props.findNode("rate"):
-      rate_ = [0.0]
-      if OpenRTM_aist.stringTo(rate_, props.getProperty("rate")):
-        self.setRate(rate_[0])
+      rate_ = 0.0
+      ret, rate_ = OpenRTM_aist.stringTo(rate_, props.getProperty("rate"))
+      if ret:
+        self.setRate(rate_)
         return True
     return False
 
@@ -1460,17 +1460,17 @@ class ExecutionContextBase:
   # @endif
   # bool ExecutionContextBase::
   # setTransitionMode(coil::Properties& props, const char* key, bool& flag)
-  def setTransitionMode(self, props, key, flag):
+  def setTransitionMode(self, props, key, flag=False):
     self._rtcout.RTC_TRACE("setTransitionMode(%s)", key)
     toSTR_ = lambda x: "YES" if x else "NO"
     if props.findNode(key):
-      flag[0] = OpenRTM_aist.toBool(props.getProperty(key), "YES", "NO", "YES")
+      flag = OpenRTM_aist.toBool(props.getProperty(key), "YES", "NO", "YES")
       self._rtcout.RTC_DEBUG("Transition Mode: %s = %s",
-                             (key, toSTR_(flag[0])))
-      return True
+                             (key, toSTR_(flag)))
+      return True, flag
 
     self._rtcout.RTC_DEBUG("Configuration %s not found.", key)
-    return False
+    return False, flag
 
   
   ##
@@ -1482,16 +1482,17 @@ class ExecutionContextBase:
   # bool ExecutionContextBase::
   # setTimeout(coil::Properties& props, const char* key,
   #            coil::TimeValue& timevalue)
-  def setTimeout(self, props, key, timevalue):
+  def setTimeout(self, props, key, timevalue=0.0):
     self._rtcout.RTC_TRACE("setTimeout(%s)", key)
     if props.findNode(key):
-      timeout_ = [0.0]
-      if OpenRTM_aist.stringTo(timeout_, props.getProperty(key)):
-        timevalue[0] = OpenRTM_aist.TimeValue(timeout_[0])
-        self._rtcout.RTC_DEBUG("Timeout (%s): %f [s]", (key, timeout_[0]))
-        return True
+      timeout_ = 0.0
+      ret, timeout_ = OpenRTM_aist.stringTo(timeout_, props.getProperty(key))
+      if ret:
+        timevalue = OpenRTM_aist.TimeValue(timeout_)
+        self._rtcout.RTC_DEBUG("Timeout (%s): %f [s]", (key, timeout_))
+        return True, timevalue
     self._rtcout.RTC_DEBUG("Configuration %s not found.", key)
-    return False
+    return False, timevalue
 
   def is_running(self):
     self._rtcout.RTC_TRACE("is_running()")

@@ -17,6 +17,7 @@
 # $Id$
 #
 
+import sys
 import OpenRTM_aist
 from omniORB import cdrMarshal
 from omniORB import cdrUnmarshal
@@ -129,10 +130,19 @@ class CORBA_CdrMemoryStream(OpenRTM_aist.ByteDataStreamBase):
   ## virtual bool serialize(const DataType& data) = 0;
   def serialize(self, data):
     if self._endian is not None:
-      cdr = cdrMarshal(any.to_any(data).typecode(), data, self._endian)
-      return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, cdr
+      try:
+        cdr = cdrMarshal(any.to_any(data).typecode(), data, self._endian)
+        return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, cdr
+      except:
+        if sys.version_info[0] == 3:
+          return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR, b""
+        else:
+          return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR, ""
     else:
-      return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, ""
+      if sys.version_info[0] == 3:
+        return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, b""
+      else:
+        return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, ""
 
 
   ##
@@ -157,8 +167,11 @@ class CORBA_CdrMemoryStream(OpenRTM_aist.ByteDataStreamBase):
   ## virtual bool deserialize(DataType& data) = 0;
   def deserialize(self, cdr, data_type):
     if self._endian is not None:
-      data = cdrUnmarshal(any.to_any(data_type).typecode(), cdr ,self._endian)
-      return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, data
+      try:
+        data = cdrUnmarshal(any.to_any(data_type).typecode(), cdr ,self._endian)
+        return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, data
+      except:
+        return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR, data_type
     else:
       return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, data_type
 

@@ -559,10 +559,11 @@ class RingBuffer(OpenRTM_aist.BufferBase):
   # 
   # バッファからデータを読みだす。読み出しポインタの位置は変更されない。
   # 
-  # @param value 読み出しデータ
   #
-  # @return BUFFER_OK: 正常終了
+  # @return ret, value
+  #   ret : BUFFER_OK: 正常終了
   #         BUFFER_ERROR: 異常終了
+  # value : 読み出しデータ
   # 
   # @else
   #
@@ -577,13 +578,9 @@ class RingBuffer(OpenRTM_aist.BufferBase):
   # @endif
   #
   # ReturnCode get(DataType& value)
-  def get(self, value=None):
+  def get(self):
     guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
-    if value is None:
-      return self._buffer[self._rpos]
-
-    value[0] = self._buffer[self._rpos]
-    return OpenRTM_aist.BufferStatus.BUFFER_OK
+    return OpenRTM_aist.BufferStatus.BUFFER_OK, self._buffer[self._rpos]
     
     
   ##
@@ -593,13 +590,13 @@ class RingBuffer(OpenRTM_aist.BufferBase):
   # 
   # バッファに格納されたデータを読み出す。
   #
-  # 第2引数(sec)、第3引数(nsec)が指定されていない場合、バッファ空状
+  # 第1引数(sec)、第2引数(nsec)が指定されていない場合、バッファ空状
   # 態での読み出しモード (readback, do_nothing, block) は init() で設
   # 定されたモードに従う。
   #
-  # 第2引数(sec) に引数が指定された場合は、init() で設定されたモード
+  # 第1引数(sec) に引数が指定された場合は、init() で設定されたモード
   # に関わらず、block モードとなり、バッファが空状態であれば指定時間
-  # 待ち、タイムアウトする。第3引数(nsec)は指定されない場合0として扱
+  # 待ち、タイムアウトする。第2引数(nsec)は指定されない場合0として扱
   # われる。タイムアウト待ち中に、書込みスレッド側でバッファへ書込み
   # があれば、ブロッキングは解除されデータが読みだされる。
   #
@@ -629,7 +626,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
   #
   # ReturnCode read(DataType& value,
   #                 long int sec = -1, long int nsec = 0)
-  def read(self, value, sec = -1, nsec = 0):
+  def read(self, sec = -1, nsec = 0):
     self._empty_cond.acquire()
       
     if self.empty():
@@ -645,12 +642,12 @@ class RingBuffer(OpenRTM_aist.BufferBase):
       if readback and  not timedread:      # "readback" mode
         if not self._wcount > 0:
           self._empty_cond.release()
-          return OpenRTM_aist.BufferStatus.BUFFER_EMPTY
+          return OpenRTM_aist.BufferStatus.BUFFER_EMPTY, None
         self.advanceRptr(-1)
 
       elif not readback and not timedread: # "do_nothing" mode
         self._empty_cond.release()
-        return OpenRTM_aist.BufferStatus.BUFFER_EMPTY
+        return OpenRTM_aist.BufferStatus.BUFFER_EMPTY, None
 
       elif not readback and timedread:     # "block" mode
         if sec < 0:
@@ -665,29 +662,24 @@ class RingBuffer(OpenRTM_aist.BufferBase):
         if sys.version_info[0] == 3:
           if not ret:
             self._empty_cond.release()
-            return OpenRTM_aist.BufferStatus.TIMEOUT
+            return OpenRTM_aist.BufferStatus.TIMEOUT, None
         else:
           if self.empty():
             self._empty_cond.release()
-            return OpenRTM_aist.BufferStatus.TIMEOUT
+            return OpenRTM_aist.BufferStatus.TIMEOUT, None
 
       else:                              # unknown condition
         self._empty_cond.release()
-        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
+        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, None
       
     self._empty_cond.release()
 
-    val = self.get()
-
-    if len(value) > 0:
-      value[0] = val
-    else:
-      value.append(val)
+    _, value = self.get()
 
     self.advanceRptr()
 
 
-    return OpenRTM_aist.BufferStatus.BUFFER_OK
+    return OpenRTM_aist.BufferStatus.BUFFER_OK, value
 
     
   ##
@@ -748,16 +740,16 @@ class RingBuffer(OpenRTM_aist.BufferBase):
   ## void initLength(const coil::Properties& prop)
   def __initLength(self, prop):
     if prop.getProperty("length"):
-      n = [0]
-      if OpenRTM_aist.stringTo(n, prop.getProperty("length")):
-        n = n[0]
+      n = 0
+      ret, n = OpenRTM_aist.stringTo(n, prop.getProperty("length"))
+      if ret:
         if n > 0:
           self.length(n)
 
     
   ## void initWritePolicy(const coil::Properties& prop)
   def __initWritePolicy(self, prop):
-    policy = OpenRTM_aist.normalize([prop.getProperty("write.full_policy")])
+    policy = OpenRTM_aist.normalize(prop.getProperty("write.full_policy"))
 
     if policy == "overwrite":
       self._overwrite  = True
@@ -771,9 +763,9 @@ class RingBuffer(OpenRTM_aist.BufferBase):
       self._overwrite  = False
       self._timedwrite = True
 
-      tm = [0.0]
-      if OpenRTM_aist.stringTo(tm, prop.getProperty("write.timeout")):
-        tm = tm[0]
+      tm = 0.0
+      ret, tm = OpenRTM_aist.stringTo(tm, prop.getProperty("write.timeout"))
+      if ret:
         if not (tm < 0):
           self._wtimeout.set_time(tm)
 
@@ -793,6 +785,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     elif policy == "block":
       self._readback  = False
       self._timedread = True
-      tm = [0.0]
-      if OpenRTM_aist.stringTo(tm, prop.getProperty("read.timeout")):
-        self._rtimeout.set_time(tm[0])
+      tm = 0.0
+      ret, tm = OpenRTM_aist.stringTo(tm, prop.getProperty("read.timeout"))
+      if ret:
+        self._rtimeout.set_time(tm)

@@ -152,7 +152,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
         raise
         
       endian = OpenRTM_aist.split(endian, ",") # Maybe endian is ["little","big"]
-      endian = OpenRTM_aist.normalize(endian) # Maybe self._endian is "little" or "big"
+      endian = OpenRTM_aist.normalize(endian[0]) # Maybe self._endian is "little" or "big"
       if endian == "little":
         self._endian = True
       elif endian == "big":
@@ -413,7 +413,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     pub_type = info.properties.getProperty("io_mode")
     if not pub_type:
       pub_type = info.properties.getProperty("subscription_type","flush")
-      pub_type = OpenRTM_aist.normalize([pub_type])
+      pub_type = OpenRTM_aist.normalize(pub_type)
       if pub_type == "flush":
         info.properties.setProperty("io_mode","block")
       elif pub_type == "new":

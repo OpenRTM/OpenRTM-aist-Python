@@ -375,9 +375,11 @@ class InPortCorbaCdrConsumer(OpenRTM_aist.InPortConsumer,OpenRTM_aist.CorbaConsu
     
     orb = OpenRTM_aist.Manager.instance().getORB()
     var = orb.string_to_object(ior)
-    if not self._ptr(True)._is_equivalent(var):
-      self._rtcout.RTC_ERROR("connector property inconsistency")
-      return False
+    ptr = self._ptr(True)
+    if ptr:
+      if not ptr._is_equivalent(var):
+        self._rtcout.RTC_ERROR("connector property inconsistency")
+        return False
     
     self.releaseObject()
     return True

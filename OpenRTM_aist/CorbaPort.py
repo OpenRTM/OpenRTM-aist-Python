@@ -668,13 +668,14 @@ class CorbaPort(OpenRTM_aist.PortBase):
     OpenRTM_aist.NVUtil.copyFromProperties(prop_list, self._properties)
     self._profile.properties.extend(prop_list)
 
-    num = [-1]
-    if not OpenRTM_aist.stringTo([num], 
-                                 self._properties.getProperty("connection_limit","-1")):
+    num = -1
+    ret, num = OpenRTM_aist.stringTo(num, 
+                                 self._properties.getProperty("connection_limit","-1"))
+    if not ret:
       self._rtcout.RTC_ERROR("invalid connection_limit value: %s", 
                              self._properties.getProperty("connection_limit"))
 
-    self.setConnectionLimit(num[0])
+    self.setConnectionLimit(num)
 
 
   ##
@@ -1105,14 +1106,14 @@ class CorbaPort(OpenRTM_aist.PortBase):
       self._rtcout.RTC_DEBUG("Connetion strictness is: %s",strictness)
 
     for consumer in self._consumers:
-      ior = []
-      if self.findProvider(nv, consumer, ior) and len(ior) > 0:
-        self.setObject(ior[0], consumer)
+      ret, ior = self.findProvider(nv, consumer)
+      if ret:
+        self.setObject(ior, consumer)
         continue
 
-      ior = []
-      if self.findProviderOld(nv, consumer, ior) and len(ior) > 0:
-        self.setObject(ior[0], consumer)
+      ret, ior = self.findProviderOld(nv, consumer)
+      if ret:
+        self.setObject(ior, consumer)
         continue
 
       # never come here without error
@@ -1154,16 +1155,16 @@ class CorbaPort(OpenRTM_aist.PortBase):
     nv = connector_profile.properties
 
     for consumer in self._consumers:
-      ior = []
-      if self.findProvider(nv, consumer, ior) and len(ior) > 0:
+      ret, ior = self.findProvider(nv, consumer)
+      if ret:
         self._rtcout.RTC_DEBUG("Correspoinding consumer found.")
-        self.releaseObject(ior[0], consumer)
+        self.releaseObject(ior, consumer)
         continue
 
-      ior = []
-      if self.findProviderOld(nv, consumer, ior) and len(ior) > 0:
+      ret, ior = self.findProviderOld(nv, consumer)
+      if ret:
         self._rtcout.RTC_DEBUG("Correspoinding consumer found.")
-        self.releaseObject(ior[0], consumer)
+        self.releaseObject(ior, consumer)
         continue
 
     return
@@ -1202,7 +1203,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
   # virtual bool findProvider(const NVList& nv, 
   #                           CorbaConsumerHolder& cons,
   #                           std::string& iorstr);
-  def findProvider(self, nv, cons, iorstr):
+  def findProvider(self, nv, cons):
     # new consumer interface descriptor
     newdesc = self._profile.name[:len(self._ownerInstanceName)] + \
         ".port" +  self._profile.name[len(self._ownerInstanceName):]
@@ -1211,29 +1212,26 @@ class CorbaPort(OpenRTM_aist.PortBase):
     # find a NameValue of the consumer
     cons_index = OpenRTM_aist.NVUtil.find_index(nv, newdesc)
     if cons_index < 0:
-      return False
+      return False, ""
 
     provider = str(any.from_any(nv[cons_index].value, keep_structs=True))
     if not provider:
       self._rtcout.RTC_WARN("Cannot extract Provider interface descriptor")
-      return False
+      return False, ""
 
     # find a NameValue of the provider
     prov_index = OpenRTM_aist.NVUtil.find_index(nv, provider)
     if prov_index < 0:
-      return False
+      return False, ""
 
     ior_ = str(any.from_any(nv[prov_index].value, keep_structs=True))
     if not ior_:
       self._rtcout.RTC_WARN("Cannot extract Provider IOR string")
-      return False
- 
-    if isinstance(iorstr, list):
-      iorstr.append(ior_)
+      return False, ior_
 
     self._rtcout.RTC_ERROR("interface matched with new descriptor: %s", newdesc)
 
-    return True
+    return True, ior_
 
 
   ##
@@ -1273,26 +1271,23 @@ class CorbaPort(OpenRTM_aist.PortBase):
   # virtual bool findProviderOld(const NVList&nv,
   #                              CorbaConsumerHolder& cons,
   #                              std::string& iorstr);
-  def findProviderOld(self, nv, cons, iorstr):
+  def findProviderOld(self, nv, cons):
     # old consumer interface descriptor
     olddesc = "port." + cons.descriptor()
 
     # find a NameValue of the provider same as olddesc
     index = OpenRTM_aist.NVUtil.find_index(nv, olddesc)
     if index < 0:
-      return False
+      return False, ""
 
     ior_ = str(any.from_any(nv[index].value, keep_structs=True))
     if not ior_:
       self._rtcout.RTC_WARN("Cannot extract Provider IOR string")
-      return False
-
-    if isinstance(iorstr, list):
-      iorstr.append(ior_)
+      return False, ior_
 
     self._rtcout.RTC_ERROR("interface matched with old descriptor: %s", olddesc)
 
-    return True
+    return True, ior_
 
 
   ##

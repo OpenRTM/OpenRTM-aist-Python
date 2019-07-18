@@ -121,7 +121,7 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,OpenRTM_aist.SharedMemory)
 
         
       endian = OpenRTM_aist.split(endian, ",")
-      endian = OpenRTM_aist.normalize(endian)
+      endian = OpenRTM_aist.normalize(endian[0])
       if endian == "little":
         self._endian = True
       elif endian == "big":
@@ -171,12 +171,10 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,OpenRTM_aist.SharedMemory)
       return OpenRTM.UNKNOWN_ERROR
 
     try:
-
-      cdr = [None]
-      ret = self._connector.read(cdr)
+      ret, cdr = self._connector.read()
       
       if ret == OpenRTM_aist.BufferStatus.BUFFER_OK:
-        if cdr[0] is None:
+        if cdr is None:
           self._rtcout.RTC_ERROR("buffer is empty.")
           return OpenRTM.BUFFER_EMPTY
       
@@ -187,10 +185,10 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,OpenRTM_aist.SharedMemory)
 
     self.setEndian(self._endian)
     self.create_memory(self._memory_size, self._shm_address)
-    if cdr[0]:
-      self.write(cdr[0])
+    if cdr:
+      self.write(cdr)
     
-    return self.convertReturn(ret, cdr[0])
+    return self.convertReturn(ret, cdr)
 
     
   def onBufferRead(self, data):

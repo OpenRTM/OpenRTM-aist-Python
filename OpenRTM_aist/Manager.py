@@ -1140,20 +1140,20 @@ class Manager:
     self._rtcout.RTC_TRACE("Manager.createContext()")
     self._rtcout.RTC_TRACE("ExecutionContext type: %s",
                            self._config.getProperty("exec_cxt.periodic.type"))
-    ec_id = [""]
     ec_prop = OpenRTM_aist.Properties()
+    ret, ec_id = self.procContextArgs(ec_args, ec_prop)
 
-    if not self.procContextArgs(ec_args, ec_id, ec_prop):
+    if not ret:
       return None
 
     avail_ec_ = OpenRTM_aist.ExecutionContextFactory.instance().getIdentifiers()
 
-    if not ec_id[0] in avail_ec_:
-      self._rtcout.RTC_ERROR("Factory not found: %s", ec_id[0])
+    if not ec_id in avail_ec_:
+      self._rtcout.RTC_ERROR("Factory not found: %s", ec_id)
       return None
 
     
-    ec = OpenRTM_aist.ExecutionContextFactory.instance().createObject(ec_id[0])
+    ec = OpenRTM_aist.ExecutionContextFactory.instance().createObject(ec_id)
     ec.init(ec_prop)
     self._ecs.append(ec)
     return ec
@@ -1765,14 +1765,12 @@ class Manager:
     opt      = self._config.getProperty("corba.args")
     self._rtcout.RTC_DEBUG("corba.args: %s",opt)
 
-    endpoints = []
-    self.createORBEndpoints(endpoints)
-    opt = [opt]
-    self.createORBEndpointOption(opt,endpoints)
+    endpoints = self.createORBEndpoints()
+    opt = self.createORBEndpointOption(opt,endpoints)
 
-    self._rtcout.RTC_PARANOID("ORB options: %s", opt[0])
+    self._rtcout.RTC_PARANOID("ORB options: %s", opt)
 
-    return opt[0]
+    return opt
 
 
   ##
@@ -1793,8 +1791,8 @@ class Manager:
   # @endif
   #
   # void createORBEndpoints(coil::vstring& endpoints);
-  def createORBEndpoints(self, endpoints):
-
+  def createORBEndpoints(self):
+    endpoints = []
     # corba.endpoint is obsolete
     # corba.endpoints with comma separated values are acceptable
     if self._config.findNode("corba.endpoints"):
@@ -1825,7 +1823,7 @@ class Manager:
 
     endpoints = OpenRTM_aist.unique_sv(endpoints)
     
-    return
+    return endpoints
 
     
   ##
@@ -1856,20 +1854,20 @@ class Manager:
         endpoint += ":"
 
       if corba == "omniORB":
-        endpoint = OpenRTM_aist.normalize([endpoint])
-        if OpenRTM_aist.normalize([endpoint]) == "all:":
-          opt[0] += " -ORBendPointPublish all(addr)"
+        endpoint = OpenRTM_aist.normalize(endpoint)
+        if endpoint == "all:":
+          opt += " -ORBendPointPublish all(addr)"
         else:
-          opt[0] += " -ORBendPoint giop:tcp:" + endpoint
+          opt += " -ORBendPoint giop:tcp:" + endpoint
 
       elif corba == "TAO":
-        opt[0] += "-ORBEndPoint iiop://" + endpoint
+        opt += "-ORBEndPoint iiop://" + endpoint
       elif corba == "MICO":
-        opt[0] += "-ORBIIOPAddr inet:" + endpoint
+        opt += "-ORBIIOPAddr inet:" + endpoint
 
       endpoints[i] = endpoint
 
-    return
+    return opt
 
 
   ##
@@ -2525,18 +2523,18 @@ class Manager:
   # bool procContextArgs(const char* ec_args,
   #                      std::string& ec_id,
   #                      coil::Properties& ec_conf);
-  def procContextArgs(self, ec_args, ec_id, ec_conf):
+  def procContextArgs(self, ec_args, ec_conf):
     id_and_conf = [s.strip() for s in ec_args.split("?")]
 
     if len(id_and_conf) != 1 and len(id_and_conf) != 2:
       self._rtcout.RTC_ERROR("Invalid arguments. Two or more '?'")
-      return False
+      return False, ""
 
     if (id_and_conf[0] == "") or id_and_conf[0] is None:
       self._rtcout.RTC_ERROR("Empty ExecutionContext's name")
-      return False
+      return False, ""
 
-    ec_id[0] = id_and_conf[0]
+    ec_id = id_and_conf[0]
 
     if len(id_and_conf) == 2:
       conf = [s.strip() for s in id_and_conf[1].split("&")]
@@ -2545,7 +2543,7 @@ class Manager:
         ec_conf.setProperty(k[0],k[1])
         self._rtcout.RTC_TRACE("EC property %s: %s",(k[0],k[1]))
         
-    return True
+    return True, ec_id
 
 
   ##
@@ -2589,6 +2587,7 @@ class Manager:
         self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
       else:
         name_prop.load(conff)
+        conff.close()
 
     if self._config.findNode(category + "." + inst_name):
       temp_ = OpenRTM_aist.Properties(prop=self._config.getNode(category+"."+inst_name))
@@ -2613,6 +2612,7 @@ class Manager:
         self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
       else:
         type_prop.load(conff)
+        conff.close()
 
     if self._config.findNode(category + "." + type_name):
       temp_ = OpenRTM_aist.Properties(prop=self._config.getNode(category+"."+type_name))
@@ -3101,8 +3101,10 @@ class Manager:
           ports.append(p)
           continue
         tmp = k.replace("port","")
-        v = [0]
-        if OpenRTM_aist.stringTo(v, tmp) and k.find("port") != -1:
+        v = 0
+        #パラメータ名の末尾が数字の場合(port0, port1...)
+        ret, v = OpenRTM_aist.stringTo(v, tmp)
+        if ret and k.find("port") != -1:
           ports.append(p)
           continue
         configs[k] = p

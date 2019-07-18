@@ -138,8 +138,7 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
 
 
       endian = OpenRTM_aist.split(endian, ",")
-      
-      endian = OpenRTM_aist.normalize(endian)
+      endian = OpenRTM_aist.normalize(endian[0])
       if endian == "little":
         self._endian = True
       elif endian == "big":

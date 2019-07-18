@@ -291,12 +291,10 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
       return (RTC.UNKNOWN_ERROR, "")
 
     try:
-
-      cdr = [None]
-      ret = self._connector.read(cdr)
+      ret, cdr = self._connector.read()
 
       if ret == OpenRTM_aist.BufferStatus.BUFFER_OK:
-        if not cdr[0]:
+        if not cdr:
           self._rtcout.RTC_ERROR("buffer is empty.")
           return (RTC.BUFFER_EMPTY, "")
       
@@ -304,7 +302,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
       self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
       return (RTC.UNKNOWN_ERROR, "")
 
-    return self.convertReturn(ret, cdr[0])
+    return self.convertReturn(ret, cdr)
     
   ##
   # @if jp

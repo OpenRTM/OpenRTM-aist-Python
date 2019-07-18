@@ -158,11 +158,10 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
       return (OpenRTM.UNKNOWN_ERROR, "")
 
     try:
-      cdr = [None]
-      ret = self._connector.read(cdr)
+      ret, cdr = self._connector.read()
       
       if ret == OpenRTM_aist.BufferStatus.BUFFER_OK:
-        if cdr[0] is None:
+        if cdr is None:
           self._rtcout.RTC_ERROR("buffer is empty.")
           return (OpenRTM.BUFFER_EMPTY, "")
       
@@ -170,7 +169,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
       self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
       return (OpenRTM.UNKNOWN_ERROR, "")
     
-    return self.convertReturn(ret, cdr[0])
+    return self.convertReturn(ret, cdr)
 
 
   ##

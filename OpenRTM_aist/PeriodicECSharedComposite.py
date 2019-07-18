@@ -44,10 +44,9 @@ periodicecsharedcomposite_spec = ["implementation_id", "PeriodicECSharedComposit
                                   
 
 def stringToStrVec(v, _is):
-  str = [_is]
-  OpenRTM_aist.eraseBlank(str)
-  v[0] = str[0].split(",")
-  return True
+  _str = OpenRTM_aist.eraseBlank(_is)
+  v = _str.split(",")
+  return True, v
 
 
 class setCallback(OpenRTM_aist.ConfigurationSetListener):
@@ -141,11 +140,11 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     self._rtcout.RTC_DEBUG("add_members()")
     self.updateExportedPortsList()
     for sdo in sdo_list:
-      dfc = [None]
-      if not self.sdoToDFC(sdo, dfc):
+      ret, dfc = self.sdoToDFC(sdo)
+      if not ret:
         sdo_list.remove(sdo)
         continue
-      member = self.Member(dfc[0])
+      member = self.Member(dfc)
       self.stopOwnedEC(member)
       self.addOrganizationToTarget(member)
       self.addParticipantToEC(member)
@@ -188,12 +187,12 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     self.updateExportedPortsList()
 
     for sdo in sdo_list:
-      dfc = [None]
-      if not self.sdoToDFC(sdo, dfc):
+      ret, dfc = self.sdoToDFC(sdo)
+      if not ret:
         sdo_list.remove(sdo)
         continue
       
-      member = self.Member(dfc[0])
+      member = self.Member(dfc)
       self.stopOwnedEC(member)
       self.addOrganizationToTarget(member)
       self.addParticipantToEC(member)
@@ -279,15 +278,15 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
   # @endif
   #
   # bool sdoToDFC(const SDO_ptr sdo, ::OpenRTM::DataFlowComponent_ptr& dfc);
-  def sdoToDFC(self, sdo, dfc):
+  def sdoToDFC(self, sdo):
     if CORBA.is_nil(sdo):
-      return False
+      return False, None
 
-    dfc[0] = sdo._narrow(OpenRTM.DataFlowComponent)
-    if CORBA.is_nil(dfc[0]):
-      return False
+    dfc = sdo._narrow(OpenRTM.DataFlowComponent)
+    if CORBA.is_nil(dfc):
+      return False, dfc
 
-    return True
+    return True, dfc
 
 
   ##
@@ -390,10 +389,10 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     for org in orglist:
       sdos = org.get_members()
       for sdo in sdos:
-        dfc = [None]
-        if not self.sdoToDFC(sdo, dfc):
+        ret, dfc = self.sdoToDFC(sdo)
+        if not ret:
           continue
-        self.addRTCToEC(dfc[0])
+        self.addRTCToEC(dfc)
     
 
 
@@ -421,10 +420,10 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     for org in orglist:
       sdos = org.get_members()
       for sdo in sdos:
-        dfc = [None]
-        if not self.sdoToDFC(sdo, dfc):
+        ret, dfc = self.sdoToDFC(sdo)
+        if not ret:
           continue
-        self._ec.remove_component(dfc[0])
+        self._ec.remove_component(dfc)
     return
 
 

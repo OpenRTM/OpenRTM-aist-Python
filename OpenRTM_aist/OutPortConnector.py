@@ -138,7 +138,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
         return RTC.RTC_ERROR
         
       endian = OpenRTM_aist.split(endian, ",") # Maybe endian is ["little","big"]
-      endian = OpenRTM_aist.normalize(endian) # Maybe self._endian is "little" or "big"
+      endian = OpenRTM_aist.normalize(endian[0]) # Maybe self._endian is "little" or "big"
 
       if endian == "little":
         self._endian = True
@@ -188,7 +188,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   def write(self, data):
     pass
-  def read(self, data):
+  def read(self, data=None):
     pass
 
   #

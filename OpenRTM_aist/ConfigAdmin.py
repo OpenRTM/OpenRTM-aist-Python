@@ -215,10 +215,11 @@ class Config:
       return True
     self.string_value = val
     # value changed
-    if self._trans(self._var, val):
+    ret, self._var[0] = self._trans(self._var[0], val)
+    if ret:
       self.notifyUpdate(self.name, val)
       return True
-    self._trans(self._var, self.default_value)
+    ret, self._var[0] = self._trans(self._var[0], self.default_value)
     self.notifyUpdate(self.name, val)
     return False
 

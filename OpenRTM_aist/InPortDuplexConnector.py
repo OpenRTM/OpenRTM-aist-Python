@@ -125,10 +125,9 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
   #
   def readBuff(self):
     self._rtcout.RTC_TRACE("readBuff()")
-    data = [None]
     if self._consumer:
-      read_ret = self._consumer.get(data)
-      return read_ret, data[0]
+      read_ret, data = self._consumer.get()
+      return read_ret, data
     self._rtcout.RTC_ERROR("cunsumer is not set")
     return self.PORT_ERROR, None
 
@@ -165,20 +164,20 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
   # @endif
   #
   # virtual ReturnCode read(cdrMemoryStream& data);
-  def read(self, data):
+  def read(self, data=None):
     self._rtcout.RTC_TRACE("read()")
     if not self._dataType:
       return self.PRECONDITION_NOT_MET
     ret, cdr = self.readBuff()
     if ret != self.PORT_OK:
-      return ret
+      return ret, data
     else:
       ret, _data = self.deserializeData(cdr)
       if ret == self.PORT_OK:
         if type(data) == list:
-          data[0] = _data
+          data = _data
         self.onBufferRead(cdr)
-      return ret
+      return ret, data
 
 
   #

@@ -289,27 +289,26 @@ class ExecutionContextWorker:
   # @endif
   # RTC::ReturnCode_t activateComponent(RTC::LightweightRTObject_ptr comp,
   #                                     RTObjectStateMachine*& rtobj);
-  def activateComponent(self, comp, rtobj):
+  def activateComponent(self, comp):
     self._rtcout.RTC_TRACE("activateComponent()")
     guard = OpenRTM_aist.ScopedLock(self._mutex)
     obj_ = self.findComponent(comp)
     if not obj_:
       del guard
       self._rtcout.RTC_ERROR("Given RTC is not participant of this EC.")
-      return RTC.BAD_PARAMETER
+      return RTC.BAD_PARAMETER, obj_
 
     self._rtcout.RTC_DEBUG("Component found in the EC.")
     if not obj_.isCurrentState(RTC.INACTIVE_STATE):
       del guard
       self._rtcout.RTC_ERROR("State of the RTC is not INACTIVE_STATE.")
-      return RTC.PRECONDITION_NOT_MET
+      return RTC.PRECONDITION_NOT_MET, obj_
 
     self._rtcout.RTC_DEBUG("Component is in INACTIVE state. Going to ACTIVE state.")
     obj_.goTo(RTC.ACTIVE_STATE)
-    rtobj[0] = obj_
     del guard
     self._rtcout.RTC_DEBUG("activateComponent() done.")
-    return RTC.RTC_OK
+    return RTC.RTC_OK, obj_
 
 
   # RTC::ReturnCode_t waitActivateComplete(RTObjectStateMachine*& rtobj,
@@ -351,24 +350,24 @@ class ExecutionContextWorker:
   # @endif
   # RTC::ReturnCode_t deactivateComponent(RTC::LightweightRTObject_ptr comp,
   #                                       RTObjectStateMachine*& rtobj);
-  def deactivateComponent(self, comp, rtobj):
+  def deactivateComponent(self, comp):
     self._rtcout.RTC_TRACE("deactivateComponent()")
     guard = OpenRTM_aist.ScopedLock(self._mutex)
 
-    rtobj[0] = self.findComponent(comp)
-    if not rtobj[0]: 
+    rtobj = self.findComponent(comp)
+    if not rtobj: 
       del guard
       self._rtcout.RTC_ERROR("Given RTC is not participant of this EC.")
-      return RTC.BAD_PARAMETER
+      return RTC.BAD_PARAMETER, rtobj
 
-    if not rtobj[0].isCurrentState(RTC.ACTIVE_STATE):
+    if not rtobj.isCurrentState(RTC.ACTIVE_STATE):
       del guard
       self._rtcout.RTC_ERROR("State of the RTC is not ACTIVE_STATE.")
-      return RTC.PRECONDITION_NOT_MET
+      return RTC.PRECONDITION_NOT_MET, rtobj
 
-    rtobj[0].goTo(RTC.INACTIVE_STATE)
+    rtobj.goTo(RTC.INACTIVE_STATE)
     del guard
-    return RTC.RTC_OK
+    return RTC.RTC_OK, rtobj
 
 
   # RTC::ReturnCode_t waitDeactivateComplete(RTObjectStateMachine*& rtobj,
@@ -410,24 +409,24 @@ class ExecutionContextWorker:
   # @endif
   # RTC::ReturnCode_t resetComponent(RTC::LightweightRTObject_ptr com,
   #                                  RTObjectStateMachine*& rtobj);
-  def resetComponent(self, comp, rtobj):
+  def resetComponent(self, comp):
     self._rtcout.RTC_TRACE("resetComponent()")
     guard = OpenRTM_aist.ScopedLock(self._mutex)
 
-    rtobj[0] = self.findComponent(comp)
-    if not rtobj[0]:
+    rtobj = self.findComponent(comp)
+    if not rtobj:
       del guard
       self._rtcout.RTC_ERROR("Given RTC is not participant of this EC.")
-      return RTC.BAD_PARAMETER
+      return RTC.BAD_PARAMETER, rtobj
 
-    if not rtobj[0].isCurrentState(RTC.ERROR_STATE):
+    if not rtobj.isCurrentState(RTC.ERROR_STATE):
       del guard
       self._rtcout.RTC_ERROR("State of the RTC is not ERROR_STATE.")
-      return RTC.PRECONDITION_NOT_MET
+      return RTC.PRECONDITION_NOT_MET, rtobj
 
-    rtobj[0].goTo(RTC.INACTIVE_STATE)
+    rtobj.goTo(RTC.INACTIVE_STATE)
     del guard
-    return RTC.RTC_OK
+    return RTC.RTC_OK, rtobj
 
 
   # RTC::ReturnCode_t waitResetComplete(RTObjectStateMachine*& rtobj,

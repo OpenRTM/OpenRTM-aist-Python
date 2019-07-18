@@ -200,26 +200,26 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
       
       if ret == RTC.PORT_OK:
         self._rtcout.RTC_DEBUG("get() successful")
-        data[0] = cdr_data
-        self.onReceived(data[0])
-        self.onBufferWrite(data[0])
+        data = cdr_data
+        self.onReceived(data)
+        self.onBufferWrite(data)
         
         if self._buffer.full():
           self._rtcout.RTC_INFO("InPort buffer is full.")
-          self.onBufferFull(data[0])
-          self.onReceiverFull(data[0])
+          self.onBufferFull(data)
+          self.onReceiverFull(data)
           
-        self._buffer.put(data[0])
+        self._buffer.put(data)
         self._buffer.advanceWptr()
         self._buffer.advanceRptr()
 
-        return self.PORT_OK
-      return self.convertReturn(ret,data[0])
+        return self.PORT_OK, data
+      return self.convertReturn(ret,data)
 
     except:
       self._rtcout.RTC_WARN("Exception caught from OutPort.get().")
       self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
-      return self.CONNECTION_LOST
+      return self.CONNECTION_LOST, None
 
 
 
@@ -336,31 +336,31 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
   def convertReturn(self, status, data):
     if status == RTC.PORT_OK:
       # never comes here
-      return self.PORT_OK
+      return self.PORT_OK, data
 
     elif status == RTC.PORT_ERROR:
       self.onSenderError()
-      return self.PORT_ERROR
+      return self.PORT_ERROR, data
 
     elif status == RTC.BUFFER_FULL:
       # never comes here
-      return self.BUFFER_FULL
+      return self.BUFFER_FULL, data
 
     elif status == RTC.BUFFER_EMPTY:
       self.onSenderEmpty()
-      return self.BUFFER_EMPTY
+      return self.BUFFER_EMPTY, data
 
     elif status == RTC.BUFFER_TIMEOUT:
       self.onSenderTimeout()
-      return self.BUFFER_TIMEOUT
+      return self.BUFFER_TIMEOUT, data
 
     elif status == RTC.UNKNOWN_ERROR:
       self.onSenderError()
-      return self.UNKNOWN_ERROR
+      return self.UNKNOWN_ERROR, data
 
     else:
       self.onSenderError()
-      return self.UNKNOWN_ERROR
+      return self.UNKNOWN_ERROR, data
 
 
 
