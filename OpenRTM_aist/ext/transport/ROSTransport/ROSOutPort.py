@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ROSOutPort.py
@@ -40,8 +40,8 @@ import sys
 ##
 # @if jp
 # @class ROSOutPort
-# @brief ROS Publisher¤ËÂĞ±ş¤¹¤ë¥¯¥é¥¹
-# InPortConsumer¥ª¥Ö¥¸¥§¥¯¥È¤È¤·¤Æ»ÈÍÑ¤¹¤ë
+# @brief ROS Publisherã«å¯¾å¿œã™ã‚‹ã‚¯ãƒ©ã‚¹
+# InPortConsumerã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã—ã¦ä½¿ç”¨ã™ã‚‹
 #
 # @else
 # @class ROSOutPort
@@ -55,9 +55,9 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -77,13 +77,14 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     self._roscorehost = "localhost"
     self._roscoreport = "11311"
     self._tcp_connecters = {}
+    self._subnum = 0
 
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -101,16 +102,16 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
-  # InPortConsumer¤Î³Æ¼ïÀßÄê¤ò¹Ô¤¦
+  # InPortConsumerã®å„ç¨®è¨­å®šã‚’è¡Œã†
   #
   # @param self
-  # @param prop ÀÜÂ³ÀßÄê
-  # marshaling_type ¥·¥ê¥¢¥é¥¤¥¶¤Î¼ïÎà ¥Ç¥Õ¥©¥ë¥È¡§ROSFloat32
-  # topic ¥È¥Ô¥Ã¥¯Ì¾ ¥Ç¥Õ¥©¥ë¥È chatter
-  # roscore_host roscore¤Î¥Û¥¹¥ÈÌ¾ ¥Ç¥Õ¥©¥ë¥È¡§localhost
-  # roscore_port roscore¤Î¥İ¡¼¥ÈÈÖ¹æ ¥Ç¥Õ¥©¥ë¥È¡§11311
+  # @param prop æ¥ç¶šè¨­å®š
+  # marshaling_type ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®ç¨®é¡ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šROSFloat32
+  # topic ãƒˆãƒ”ãƒƒã‚¯å ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ chatter
+  # roscore_host roscoreã®ãƒ›ã‚¹ãƒˆå ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šlocalhost
+  # roscore_port roscoreã®ãƒãƒ¼ãƒˆç•ªå· ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼š11311
   #
   # @else
   # @brief Initializing configuration
@@ -142,17 +143,19 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     self._properties = prop
 
     self._messageType = prop.getProperty("marshaling_type", "ROSFloat32")
-    self._topic = prop.getProperty("topic", "chatter")
+    self._topic = prop.getProperty("ros.topic", "chatter")
     self._topic = "/"+self._topic
-    self._roscorehost = prop.getProperty("roscore_host", "localhost")
-    self._roscoreport = prop.getProperty("roscore_port", "11311")
+    self._roscorehost = prop.getProperty("ros.roscore.host", "localhost")
+    self._roscoreport = prop.getProperty("ros.roscore.port", "11311")
 
     
     self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
     self._rtcout.RTC_VERBOSE("roscore address: %s:%s", (self._roscorehost, self._roscoreport))
 
+    self._callerid = prop.getProperty("ros.node.name")
     if not self._callerid:
       self._callerid = str(OpenRTM_aist.uuid1())
+    self._callerid = "/"+self._callerid
 
     self._rtcout.RTC_VERBOSE("caller id: %s", self._callerid)
 
@@ -166,10 +169,10 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ¥È¥Ô¥Ã¥¯Ì¾¼èÆÀ
+  # @brief ãƒˆãƒ”ãƒƒã‚¯åå–å¾—
   #
   #
-  # @return ¥È¥Ô¥Ã¥¯Ì¾
+  # @return ãƒˆãƒ”ãƒƒã‚¯å
   #
   # @else
   # @brief get topic name
@@ -184,12 +187,12 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief Subscriber¤È¤ÎÀÜÂ³
+  # @brief Subscriberã¨ã®æ¥ç¶š
   #
   #
   # @param self
-  # @param client_sock ¥½¥±¥Ã¥È
-  # @param addr ÀÜÂ³Àè¤ÎURI
+  # @param client_sock ã‚½ã‚±ãƒƒãƒˆ
+  # @param addr æ¥ç¶šå…ˆã®URI
   #
   # @else
   # @brief 
@@ -269,7 +272,8 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
               'tcp_nodelay': '0',
               'md5sum': info_md5sum,
               'type': info_type,
-              'callerid': header['callerid']}
+              'callerid': self._callerid}
+
     try:
       write_ros_handshake_header(client_sock, fields)
     except rosgraph.network.ROSHandshakeException:
@@ -279,26 +283,27 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
       poller.unregister(fileno)
 
 
-    self._tcp_connecters[addr] = client_sock
+    self._tcp_connecters[addr] = {"socket": client_sock, "id": self._subnum, "node": header['callerid']}
+    self._subnum += 1
     
     
 
   ##
   # @if jp
-  # @brief ÀÜÂ³Àè¤Ø¤Î¥Ç¡¼¥¿Á÷¿®
+  # @brief æ¥ç¶šå…ˆã¸ã®ãƒ‡ãƒ¼ã‚¿é€ä¿¡
   #
-  # ÀÜÂ³Àè¤Î¥İ¡¼¥È¤Ø¥Ç¡¼¥¿¤òÁ÷¿®¤¹¤ë¤¿¤á¤Î½ã¿è²¾ÁÛ´Ø¿ô¡£
+  # æ¥ç¶šå…ˆã®ãƒãƒ¼ãƒˆã¸ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹ãŸã‚ã®ç´”ç²‹ä»®æƒ³é–¢æ•°ã€‚
   # 
-  # ¤³¤Î´Ø¿ô¤Ï¡¢°Ê²¼¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É¤òÊÖ¤¹¡£
+  # ã“ã®é–¢æ•°ã¯ã€ä»¥ä¸‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™ã€‚
   #
-  # - PORT_OK:       Àµ¾ï½ªÎ»¡£
-  # - PORT_ERROR:    ¥Ç¡¼¥¿Á÷¿®¤Î²áÄø¤Ç²¿¤é¤«¤Î¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
-  # - SEND_FULL:     ¥Ç¡¼¥¿¤òÁ÷¿®¤·¤¿¤¬¡¢Áê¼êÂ¦¥Ğ¥Ã¥Õ¥¡¤¬¥Õ¥ë¤À¤Ã¤¿¡£
-  # - SEND_TIMEOUT:  ¥Ç¡¼¥¿¤òÁ÷¿®¤·¤¿¤¬¡¢Áê¼êÂ¦¥Ğ¥Ã¥Õ¥¡¤¬¥¿¥¤¥à¥¢¥¦¥È¤·¤¿¡£
-  # - UNKNOWN_ERROR: ¸¶°øÉÔÌÀ¤Î¥¨¥é¡¼
+  # - PORT_OK:       æ­£å¸¸çµ‚äº†ã€‚
+  # - PORT_ERROR:    ãƒ‡ãƒ¼ã‚¿é€ä¿¡ã®éç¨‹ã§ä½•ã‚‰ã‹ã®ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ãŸã€‚
+  # - SEND_FULL:     ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã—ãŸãŒã€ç›¸æ‰‹å´ãƒãƒƒãƒ•ã‚¡ãŒãƒ•ãƒ«ã ã£ãŸã€‚
+  # - SEND_TIMEOUT:  ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã—ãŸãŒã€ç›¸æ‰‹å´ãƒãƒƒãƒ•ã‚¡ãŒã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ãŸã€‚
+  # - UNKNOWN_ERROR: åŸå› ä¸æ˜ã®ã‚¨ãƒ©ãƒ¼
   #
-  # @param data Á÷¿®¤¹¤ë¥Ç¡¼¥¿
-  # @return ¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @param data é€ä¿¡ã™ã‚‹ãƒ‡ãƒ¼ã‚¿
+  # @return ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   # @brief Send data to the destination port
@@ -322,11 +327,11 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     ret = self.PORT_OK
     for k, connector in self._tcp_connecters.items():
       try:
-        connector.sendall(data)
+        connector["socket"].sendall(data)
       except:
         self._rtcout.RTC_ERROR("send error")
         #connector.shutdown(socket.SHUT_RDWR)
-        connector.close()
+        connector["socket"].close()
         ret = self.CONNECTION_LOST
         del self._tcp_connecters[k]
     return ret
@@ -335,14 +340,14 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë
+  # @brief InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
   #
-  # InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë¡£
-  # °ú¿ô¤Ç»ØÄê¤¹¤ë¥×¥í¥Ñ¥Æ¥£¾ğÊóÆâ¤Î NameValue ¥ª¥Ö¥¸¥§¥¯¥È¤Î
-  # dataport.interface_type ÃÍ¤òÄ´¤Ù¡¢Åö³º¥İ¡¼¥È¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ë
-  # ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¿¥¤¥×¤È°ìÃ×¤¹¤ë¾ì¹ç¤Î¤ß¾ğÊó¤ò¼èÆÀ¤¹¤ë¡£
+  # InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹ã€‚
+  # å¼•æ•°ã§æŒ‡å®šã™ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±å†…ã® NameValue ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®
+  # dataport.interface_type å€¤ã‚’èª¿ã¹ã€å½“è©²ãƒãƒ¼ãƒˆã«è¨­å®šã•ã‚Œã¦ã„ã‚‹
+  # ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—ã¨ä¸€è‡´ã™ã‚‹å ´åˆã®ã¿æƒ…å ±ã‚’å–å¾—ã™ã‚‹ã€‚
   #
-  # @param properties InterfaceProfile¾ğÊó¤ò¼õ¤±¼è¤ë¥×¥í¥Ñ¥Æ¥£
+  # @param properties InterfaceProfileæƒ…å ±ã‚’å—ã‘å–ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   #
   # @else
   # @brief Publish InterfaceProfile information
@@ -362,13 +367,13 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤Ø¤ÎÅĞÏ¿
+  # @brief ãƒ‡ãƒ¼ã‚¿é€ä¿¡é€šçŸ¥ã¸ã®ç™»éŒ²
   #
-  # »ØÄê¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¤Ë´ğ¤Å¤¤¤Æ¡¢¥Ç¡¼¥¿Á÷½ĞÄÌÃÎ¤Î¼õ¤±¼è¤ê¤ËÅĞÏ¿¤¹¤ë¡£
+  # æŒ‡å®šã•ã‚ŒãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«åŸºã¥ã„ã¦ã€ãƒ‡ãƒ¼ã‚¿é€å‡ºé€šçŸ¥ã®å—ã‘å–ã‚Šã«ç™»éŒ²ã™ã‚‹ã€‚
   #
-  # @param properties ÅĞÏ¿¾ğÊó
+  # @param properties ç™»éŒ²æƒ…å ±
   #
-  # @return ÅĞÏ¿½èÍı·ë²Ì(ÅĞÏ¿À®¸ù:true¡¢ÅĞÏ¿¼ºÇÔ:false)
+  # @return ç™»éŒ²å‡¦ç†çµæœ(ç™»éŒ²æˆåŠŸ:trueã€ç™»éŒ²å¤±æ•—:false)
   #
   # @else
   # @brief Subscribe to the data sending notification
@@ -388,11 +393,11 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½ü
+  # @brief ãƒ‡ãƒ¼ã‚¿é€ä¿¡é€šçŸ¥ã‹ã‚‰ã®ç™»éŒ²è§£é™¤
   #
-  # ¥Ç¡¼¥¿Á÷½ĞÄÌÃÎ¤Î¼õ¤±¼è¤ê¤«¤éÅĞÏ¿¤ò²ò½ü¤¹¤ë¡£
+  # ãƒ‡ãƒ¼ã‚¿é€å‡ºé€šçŸ¥ã®å—ã‘å–ã‚Šã‹ã‚‰ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹ã€‚
   #
-  # @param properties ÅĞÏ¿²ò½ü¾ğÊó
+  # @param properties ç™»éŒ²è§£é™¤æƒ…å ±
   #
   # @else
   # @brief Unsubscribe the data send notification
@@ -419,17 +424,68 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     for k, connector in self._tcp_connecters.items():
       try:
         self._rtcout.RTC_VERBOSE("connection close")
-        connector.shutdown(socket.SHUT_RDWR)
-        connector.close()
+        connector["socket"].shutdown(socket.SHUT_RDWR)
+        connector["socket"].close()
       except:
         self._rtcout.RTC_ERROR("socket shutdown error")
 
+  ##
+  # @if jp
+  # @brief ãƒãƒ¼ãƒ‰åã®å–å¾—
+  #
+  # @return ãƒãƒ¼ãƒ‰å
+  #
+  # @else
+  # @brief 
+  #
+  # @return
+  #
+  # @endif
+  #
+  def getName(self):
+    self._rtcout.RTC_VERBOSE("getName")
+    return self._callerid
 
+  ##
+  # @if jp
+  # @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‹ã®å–å¾—
+  #
+  # @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‹
+  #
+  # @else
+  # @brief 
+  #
+  # @return
+  #
+  # @endif
+  #
+  def datatype(self):
+    self._rtcout.RTC_VERBOSE("datatype")
+    return self._messageType
 
+  ##
+  # @if jp
+  # @brief ã‚³ãƒã‚¯ã‚¿ã®æƒ…å ±å–å¾—
+  #
+  # @return ã‚³ãƒã‚¯ã‚¿ã®æƒ…å ±ã®ãƒªã‚¹ãƒˆ
+  #
+  # @else
+  # @brief 
+  #
+  # @return
+  #
+  # @endif
+  #
+  def getInfo(self):
+    self._rtcout.RTC_VERBOSE("getInfo")
+    cons = []
+    for k, connector in self._tcp_connecters.items():
+      cons.append([connector["id"], connector["node"], "i", "TCPROS", self._topic, True, ""])
+    return cons
 
 ##
 # @if jp
-# @brief ¥â¥¸¥å¡¼¥ëÅĞÏ¿´Ø¿ô
+# @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ç™»éŒ²é–¢æ•°
 #
 #
 # @else

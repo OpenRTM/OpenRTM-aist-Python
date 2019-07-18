@@ -121,7 +121,7 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
 
     self._dataType = prop.getProperty("data_type", self._dataType)
 
-    self._topic = prop.getProperty("topic", "chatter")
+    self._topic = prop.getProperty("opensplice.topic", "chatter")
 
     topic = self._topicmgr.createTopic(self._dataType, self._topic)
 

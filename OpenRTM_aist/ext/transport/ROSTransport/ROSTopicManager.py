@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ROSTopicManager.py
@@ -16,7 +16,6 @@
 #
 # $Id$
 #
-
 import OpenRTM_aist
 import threading
 import rosgraph.xmlrpc
@@ -36,7 +35,7 @@ mutex = threading.RLock()
 ##
 # @if jp
 # @class ROSTopicManager
-# @brief ROS¥È¥Ô¥Ã¥¯¤ò´ÉÍı¤¹¤ë¥¯¥é¥¹
+# @brief ROSãƒˆãƒ”ãƒƒã‚¯ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
 #
 #
 # @else
@@ -51,9 +50,9 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -77,7 +76,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   #
   # @param self
@@ -92,7 +91,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief ¥È¥Ô¥Ã¥¯¥Ş¥Í¡¼¥¸¥ã³«»Ï
+  # @brief ãƒˆãƒ”ãƒƒã‚¯ãƒãƒãƒ¼ã‚¸ãƒ£é–‹å§‹
   #
   # @param self
   #
@@ -117,10 +116,10 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief ROSOutPortÅĞÏ¿
+  # @brief ROSOutPortç™»éŒ²
   #
   # @param self
-  # @param publisher ÅĞÏ¿ÂĞ¾İ¤ÎROSOutPort
+  # @param publisher ç™»éŒ²å¯¾è±¡ã®ROSOutPort
   #
   # @else
   #
@@ -136,10 +135,10 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief ROSInPortÅĞÏ¿
+  # @brief ROSInPortç™»éŒ²
   #
   # @param self
-  # @param subscriber ÅĞÏ¿ÂĞ¾İ¤ÎROSInPort
+  # @param subscriber ç™»éŒ²å¯¾è±¡ã®ROSInPort
   #
   # @else
   #
@@ -156,11 +155,11 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief ROSOutPortºï½ü
+  # @brief ROSOutPortå‰Šé™¤
   #
   # @param self
-  # @param publisher ºï½üÂĞ¾İ¤ÎROSOutPort
-  # @return True¡§ºï½üÀ®¸ù¡¢False¡§ºï½üÂĞ¾İ¤¬Â¸ºß¤·¤Ê¤¤
+  # @param publisher å‰Šé™¤å¯¾è±¡ã®ROSOutPort
+  # @return Trueï¼šå‰Šé™¤æˆåŠŸã€Falseï¼šå‰Šé™¤å¯¾è±¡ãŒå­˜åœ¨ã—ãªã„
   #
   # @else
   #
@@ -180,11 +179,11 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief ROSInPortºï½ü
+  # @brief ROSInPortå‰Šé™¤
   #
   # @param self
-  # @param subscriber ºï½üÂĞ¾İ¤ÎROSInPort
-  # @return True¡§ºï½üÀ®¸ù¡¢False¡§ºï½üÂĞ¾İ¤¬Â¸ºß¤·¤Ê¤¤
+  # @param subscriber å‰Šé™¤å¯¾è±¡ã®ROSInPort
+  # @return Trueï¼šå‰Šé™¤æˆåŠŸã€Falseï¼šå‰Šé™¤å¯¾è±¡ãŒå­˜åœ¨ã—ãªã„
   #
   # @else
   #
@@ -204,11 +203,11 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief ROSOutPort¤¬ÅĞÏ¿ºÑ¤ß¤«¤Î³ÎÇ§
+  # @brief ROSOutPortãŒç™»éŒ²æ¸ˆã¿ã‹ã®ç¢ºèª
   #
   # @param self
   # @param publisher ROSOutPort
-  # @return True¡§ÅĞÏ¿ºÑ¤ß¡¢False¡§Ì¤ÅĞÏ¿
+  # @return Trueï¼šç™»éŒ²æ¸ˆã¿ã€Falseï¼šæœªç™»éŒ²
   #
   # @else
   #
@@ -227,11 +226,11 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief ROSInPort¤¬ÅĞÏ¿ºÑ¤ß¤«¤Î³ÎÇ§
+  # @brief ROSInPortãŒç™»éŒ²æ¸ˆã¿ã‹ã®ç¢ºèª
   #
   # @param self
   # @param subscriber ROSInPort
-  # @return True¡§ÅĞÏ¿ºÑ¤ß¡¢False¡§Ì¤ÅĞÏ¿
+  # @return Trueï¼šç™»éŒ²æ¸ˆã¿ã€Falseï¼šæœªç™»éŒ²
   #
   # @else
   #
@@ -250,16 +249,16 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief publisherUpdate¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief publisherUpdateã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @param self
-  # @param caller_id ¸Æ¤Ó½Ğ¤·ID
-  # @param topic ¥È¥Ô¥Ã¥¯Ì¾
-  # @param publishers publisher°ìÍ÷
+  # @param caller_id å‘¼ã³å‡ºã—ID
+  # @param topic ãƒˆãƒ”ãƒƒã‚¯å
+  # @param publishers publisherä¸€è¦§
   # @return ret, msg, value
-  # ret¡§¥ê¥¿¡¼¥ó¥³¡¼¥É(1¡§ÌäÂê¤Ê¤·)
-  # msg¡§¥á¥Ã¥»¡¼¥¸
-  # value¡§ÃÍ
+  # retï¼šãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰(1ï¼šå•é¡Œãªã—)
+  # msgï¼šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+  # valueï¼šå€¤
   #
   # @else
   #
@@ -277,8 +276,6 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     for uri in self._old_uris:
       if not (uri in publishers):
         lost_uris.append(uri)
-    
-
 
     for subscriber in self._subscribers:
       subscriber.connect(caller_id, topic, publishers)
@@ -290,7 +287,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief TCP¥½¥±¥Ã¥È¼õ¿®»ş¤Î½èÍı´Ø¿ô
+  # @brief TCPã‚½ã‚±ãƒƒãƒˆå—ä¿¡æ™‚ã®å‡¦ç†é–¢æ•°
   #
   # @param self
   #
@@ -313,7 +310,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     
   ##
   # @if jp
-  # @brief ¥½¥±¥Ã¥È¡¢¥¹¥ì¥Ã¥É½ªÎ»½èÍı
+  # @brief ã‚½ã‚±ãƒƒãƒˆã€ã‚¹ãƒ¬ãƒƒãƒ‰çµ‚äº†å‡¦ç†
   #
   # @param self
   #
@@ -326,7 +323,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
   # @endif
   def shutdown(self):
     self._shutdownflag = True
-    #self._server_sock.shutdown(socket.SHUT_RDWR)
+    self._server_sock.shutdown(socket.SHUT_RDWR)
     self._server_sock.close()
     self._thread.join()
     self._node.shutdown(True)
@@ -334,16 +331,16 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief requestTopic¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief requestTopicã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @param self
-  # @param caller_id ¸Æ¤Ó½Ğ¤·ID
-  # @param topic ¥È¥Ô¥Ã¥¯Ì¾
-  # @param protocols ¥×¥í¥È¥³¥ë°ìÍ÷
+  # @param caller_id å‘¼ã³å‡ºã—ID
+  # @param topic ãƒˆãƒ”ãƒƒã‚¯å
+  # @param protocols ãƒ—ãƒ­ãƒˆã‚³ãƒ«ä¸€è¦§
   # @return ret, msg, value
-  # ret¡§¥ê¥¿¡¼¥ó¥³¡¼¥É(1¡§ÌäÂê¤Ê¤·¡¢-1¡§¥È¥Ô¥Ã¥¯¤ËÂĞ±ş¤·¤¿Publisher¤¬Â¸ºß¤·¤Ê¤¤¡¢0¡§¤½¤ì°Ê³°¤Î¥¨¥é¡¼)
-  # msg¡§¥á¥Ã¥»¡¼¥¸
-  # value¡§¥×¥í¥È¥³¥ë¡¢¥¢¥É¥ì¥¹¡¢¥İ¡¼¥ÈÈÖ¹æ
+  # retï¼šãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰(1ï¼šå•é¡Œãªã—ã€-1ï¼šãƒˆãƒ”ãƒƒã‚¯ã«å¯¾å¿œã—ãŸPublisherãŒå­˜åœ¨ã—ãªã„ã€0ï¼šãã‚Œä»¥å¤–ã®ã‚¨ãƒ©ãƒ¼)
+  # msgï¼šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+  # valueï¼šãƒ—ãƒ­ãƒˆã‚³ãƒ«ã€ã‚¢ãƒ‰ãƒ¬ã‚¹ã€ãƒãƒ¼ãƒˆç•ªå·
   #
   # @else
   #
@@ -369,11 +366,136 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief »ØÄê¥È¥Ô¥Ã¥¯Ì¾¤ÎPublisher¤¬ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¤«¤ò³ÎÇ§
+  # @brief getSubscriptionsã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @param self
-  # @param topic ¥È¥Ô¥Ã¥¯Ì¾
-  # @return True¡§Â¸ºß¤¹¤ë¡¢False¡§Â¸ºß¤·¤Ê¤¤
+  # @param caller_id å‘¼ã³å‡ºã—ID
+  # @return ret, msg, subs
+  # retï¼šãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰(1)
+  # msgï¼šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+  # subsï¼šSubscriberä¸€è¦§
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param caller_id
+  # @return ret, msg, subs
+  #
+  # @endif
+  def getSubscriptions(self, caller_id):
+    subs = []
+    for subscriber in self._subscribers:
+      sub = [subscriber.getName(), subscriber.datatype()]
+      subs.append(sub)
+
+    return 1, "subscriptions", subs
+
+  ##
+  # @if jp
+  # @brief getPublicationsã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+  #
+  # @param self
+  # @param caller_id å‘¼ã³å‡ºã—ID
+  # @return ret, msg, pubs
+  # retï¼šãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰(1)
+  # msgï¼šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+  # pubsï¼šPublisherä¸€è¦§
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param caller_id
+  # @return ret, msg, pubs
+  #
+  # @endif
+  def getPublications(self, caller_id):
+    pubs = []
+    for publisher in self._publishers:
+      pub = [publisher.getName(), publisher.datatype()]
+      pubs.append(pub)
+
+    return 1, "subscriptions", pubs
+
+  ##
+  # @if jp
+  # @brief getBusStatsã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+  #
+  # @param self
+  # @param caller_id å‘¼ã³å‡ºã—ID
+  # @return
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param caller_id
+  # @return
+  #
+  # @endif
+  def getBusStats(self, caller_id):
+    return 1, "" , []
+
+  ##
+  # @if jp
+  # @brief getBusInfoã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+  #
+  # @param self
+  # @param caller_id å‘¼ã³å‡ºã—ID
+  # @return ret, msg, info
+  # retï¼šãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰(1)
+  # msgï¼šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+  # pubsï¼šã‚³ãƒã‚¯ã‚¿ã®æƒ…å ±ä¸€è¦§
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param caller_id
+  # @return ret, msg, info
+  #
+  # @endif
+  def getBusInfo(self, caller_id):
+    info = []
+    for subscriber in self._subscribers:
+      info.extend(subscriber.getInfo())
+    for publisher in self._publishers:
+      info.extend(publisher.getInfo())
+
+    return 1, "bus info", info
+  
+  ##
+  # @if jp
+  # @brief getMasterUriã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+  #
+  # @param self
+  # @param caller_id å‘¼ã³å‡ºã—ID
+  # @return
+  #
+  # @else
+  #
+  # @brief 
+  #
+  # @param self
+  # @param caller_id
+  # @return
+  #
+  # @endif
+  #def getMasterUri(self, caller_id):
+  #  return 0, "master URI not set", ""
+
+  ##
+  # @if jp
+  # @brief æŒ‡å®šãƒˆãƒ”ãƒƒã‚¯åã®PublisherãŒç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ã‚’ç¢ºèª
+  #
+  # @param self
+  # @param topic ãƒˆãƒ”ãƒƒã‚¯å
+  # @return Trueï¼šå­˜åœ¨ã™ã‚‹ã€Falseï¼šå­˜åœ¨ã—ãªã„
   #
   # @else
   #
@@ -392,7 +514,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief TCP¥½¥±¥Ã¥È¤ÎURI¤ò¼èÆÀ
+  # @brief TCPã‚½ã‚±ãƒƒãƒˆã®URIã‚’å–å¾—
   #
   # @param self
   # @return URI
@@ -414,15 +536,15 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief ¥¤¥ó¥¹¥¿¥ó¥¹¼èÆÀ
+  # @brief ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—
   #
-  # @return ¥¤¥ó¥¹¥¿¥ó¥¹
+  # @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
   #
   # @else
   #
   # @brief 
   #
-  # @return ¥¤¥ó¥¹¥¿¥ó¥¹
+  # @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
   #
   # @endif
   def instance():
@@ -441,7 +563,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
   ##
   # @if jp
-  # @brief ROSTopicManager¤ò½é´ü²½¤·¤Æ¤¤¤ë¾ì¹ç¤Ë½ªÎ»½èÍı¤ò¸Æ¤Ó½Ğ¤¹
+  # @brief ROSTopicManagerã‚’åˆæœŸåŒ–ã—ã¦ã„ã‚‹å ´åˆã«çµ‚äº†å‡¦ç†ã‚’å‘¼ã³å‡ºã™
   #
   #
   # @else

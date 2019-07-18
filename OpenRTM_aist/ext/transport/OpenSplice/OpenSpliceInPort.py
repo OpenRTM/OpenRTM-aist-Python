@@ -151,14 +151,14 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
     
     self._properties = prop
 
-    qosxml = prop.getProperty("QOSXML")
-    qosprofile = prop.getProperty("QOSPrfile")
+    qosxml = prop.getProperty("opensplice.QOSXML")
+    qosprofile = prop.getProperty("opensplice.QOSPrfile")
     self._topicmgr = OpenSpliceTopicManager.instance(qosxml, qosprofile)
     
 
     self._dataType = prop.getProperty("data_type", self._dataType)
 
-    self._topic = prop.getProperty("topic", "chatter")
+    self._topic = prop.getProperty("opensplice.topic", "chatter")
 
     topic = self._topicmgr.createTopic(self._dataType, self._topic)
 

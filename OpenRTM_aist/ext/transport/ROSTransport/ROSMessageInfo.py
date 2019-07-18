@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ROSMessageInfo.py
@@ -22,7 +22,7 @@ import OpenRTM_aist
 ##
 # @if jp
 # @class ROSMessageInfoBase
-# @brief ROS¥á¥Ã¥»¡¼¥¸¾ğÊó³ÊÇ¼¥ª¥Ö¥¸¥§¥¯¥È¤Î´ğÄì¥¯¥é¥¹
+# @brief ROSãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æƒ…å ±æ ¼ç´ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åŸºåº•ã‚¯ãƒ©ã‚¹
 #
 # @else
 # @class ROSOutPort
@@ -33,9 +33,9 @@ import OpenRTM_aist
 class ROSMessageInfoBase(object):
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -49,9 +49,9 @@ class ROSMessageInfoBase(object):
     pass
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -69,10 +69,10 @@ class ROSMessageInfoBase(object):
 
   ##
   # @if jp
-  # @brief ¥á¥Ã¥»¡¼¥¸¤Î·¿Ì¾¤ò¼èÆÀ
+  # @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å‹åã‚’å–å¾—
   #
   # @param self
-  # @return ·¿Ì¾
+  # @return å‹å
   #
   # @else
   # @brief 
@@ -88,10 +88,10 @@ class ROSMessageInfoBase(object):
 
   ##
   # @if jp
-  # @brief ¥á¥Ã¥»¡¼¥¸¤ÎMD5¥Á¥§¥Ã¥¯¥µ¥à¤ò¼èÆÀ
+  # @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®MD5ãƒã‚§ãƒƒã‚¯ã‚µãƒ ã‚’å–å¾—
   #
   # @param self
-  # @return MD5¥Á¥§¥Ã¥¯¥µ¥à
+  # @return MD5ãƒã‚§ãƒƒã‚¯ã‚µãƒ 
   #
   # @else
   # @brief 
@@ -107,10 +107,10 @@ class ROSMessageInfoBase(object):
 
   ##
   # @if jp
-  # @brief ¥á¥Ã¥»¡¼¥¸¤Î¾ÜºÙÀâÌÀ¤ò¼èÆÀ
+  # @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è©³ç´°èª¬æ˜ã‚’å–å¾—
   #
   # @param self
-  # @return ¾ÜºÙÀâÌÀ
+  # @return è©³ç´°èª¬æ˜
   #
   # @else
   # @brief 
@@ -127,10 +127,10 @@ class ROSMessageInfoBase(object):
 
 ##
 # @if jp
-# @brief ¥á¥Ã¥»¡¼¥¸¤Î¾ğÊó³ÊÇ¼¥ª¥Ö¥¸¥§¥¯¥ÈÀ¸À®´Ø¿ô
+# @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®æƒ…å ±æ ¼ç´ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆé–¢æ•°
 #
-# @param data_class ROS¥á¥Ã¥»¡¼¥¸·¿
-# @return ¥á¥Ã¥»¡¼¥¸¤Î¾ğÊó³ÊÇ¼¥ª¥Ö¥¸¥§¥¯¥È
+# @param data_class ROSãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‹
+# @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®æƒ…å ±æ ¼ç´ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 #
 # @else
 # @brief 
@@ -144,7 +144,7 @@ def ros_message_info(data_class):
   ##
   # @if jp
   # @class ROSMessageInfo
-  # @brief ¥á¥Ã¥»¡¼¥¸¤Î¾ğÊó³ÊÇ¼¥¯¥é¥¹
+  # @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®æƒ…å ±æ ¼ç´ã‚¯ãƒ©ã‚¹
   #
   #
   # @else
@@ -159,9 +159,9 @@ def ros_message_info(data_class):
 
     ##
     # @if jp
-    # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
-    # ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
     # @param self
     #
@@ -177,7 +177,7 @@ def ros_message_info(data_class):
 
     ##
     # @if jp
-    # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+    # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
     #
     # @param self
@@ -192,10 +192,10 @@ def ros_message_info(data_class):
 
     ##
     # @if jp
-    # @brief ¥á¥Ã¥»¡¼¥¸¤Î·¿Ì¾¤ò¼èÆÀ
+    # @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å‹åã‚’å–å¾—
     #
     # @param self
-    # @return ·¿Ì¾
+    # @return å‹å
     #
     # @else
     # @brief 
@@ -211,10 +211,10 @@ def ros_message_info(data_class):
 
     ##
     # @if jp
-    # @brief ¥á¥Ã¥»¡¼¥¸¤ÎMD5¥Á¥§¥Ã¥¯¥µ¥à¤ò¼èÆÀ
+    # @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®MD5ãƒã‚§ãƒƒã‚¯ã‚µãƒ ã‚’å–å¾—
     #
     # @param self
-    # @return MD5¥Á¥§¥Ã¥¯¥µ¥à
+    # @return MD5ãƒã‚§ãƒƒã‚¯ã‚µãƒ 
     #
     # @else
     # @brief 
@@ -230,10 +230,10 @@ def ros_message_info(data_class):
 
     ##
     # @if jp
-    # @brief ¥á¥Ã¥»¡¼¥¸¤ÎMD5¥Á¥§¥Ã¥¯¥µ¥à¤ò¼èÆÀ
+    # @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®MD5ãƒã‚§ãƒƒã‚¯ã‚µãƒ ã‚’å–å¾—
     #
     # @param self
-    # @return MD5¥Á¥§¥Ã¥¯¥µ¥à
+    # @return MD5ãƒã‚§ãƒƒã‚¯ã‚µãƒ 
     #
     # @else
     # @brief 
@@ -256,7 +256,7 @@ rosmessageinfofactory = None
 ##
 # @if jp
 # @class ROSMessageInfoFactory
-# @brief ROS¥á¥Ã¥»¡¼¥¸¾ğÊó³ÊÇ¼¥ª¥Ö¥¸¥§¥¯¥ÈÀ¸À®¥Õ¥¡¥¯¥È¥ê
+# @brief ROSãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æƒ…å ±æ ¼ç´ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆãƒ•ã‚¡ã‚¯ãƒˆãƒª
 #
 # @else
 # @class ROSMessageInfoFactory
@@ -267,9 +267,9 @@ rosmessageinfofactory = None
 class ROSMessageInfoFactory(OpenRTM_aist.Factory,ROSMessageInfoBase):
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -284,9 +284,9 @@ class ROSMessageInfoFactory(OpenRTM_aist.Factory,ROSMessageInfoBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -304,10 +304,10 @@ class ROSMessageInfoFactory(OpenRTM_aist.Factory,ROSMessageInfoBase):
 
   ##
   # @if jp
-  # @brief ¥¤¥ó¥¹¥¿¥ó¥¹¼èÆÀ
+  # @brief ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—
   #
   #
-  # @return ¥¤¥ó¥¹¥¿¥ó¥¹
+  # @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
   #
   # @else
   # @brief 

@@ -119,7 +119,7 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
     self._topicmgr = ROS2TopicManager.instance(args)
 
     self._messageType = prop.getProperty("marshaling_type", "ROSFloat32")
-    self._topic = prop.getProperty("topic", "chatter")
+    self._topic = prop.getProperty("ros2.topic", "chatter")
 
     self._rtcout.RTC_VERBOSE("message type: %s", self._messageType)
     self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)

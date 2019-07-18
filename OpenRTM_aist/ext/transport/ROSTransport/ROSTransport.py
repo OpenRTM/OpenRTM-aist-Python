@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ROSTransport.py
@@ -28,7 +28,7 @@ from ROSTopicManager import ROSTopicManager
 ##
 # @if jp
 # @class ManagerActionListener
-# @brief ROSTopicManager¤Î½ªÎ»½èÍı¤ò¹Ô¤¦¥Ş¥Í¡¼¥¸¥ã¥¢¥¯¥·¥ç¥ó¥ê¥¹¥Ê
+# @brief ROSTopicManagerã®çµ‚äº†å‡¦ç†ã‚’è¡Œã†ãƒãƒãƒ¼ã‚¸ãƒ£ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãƒªã‚¹ãƒŠ
 #
 #
 # @else
@@ -40,7 +40,7 @@ from ROSTopicManager import ROSTopicManager
 class ManagerActionListener:
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   #
   # @param self
@@ -57,7 +57,7 @@ class ManagerActionListener:
     pass
   ##
   # @if jp
-  # @brief RTM¥Ş¥Í¡¼¥¸¥ã½ªÎ»¸å¤ËROSTopicManager¤Î½ªÎ»½èÍı¤ò¼Â¹Ô
+  # @brief RTMãƒãƒãƒ¼ã‚¸ãƒ£çµ‚äº†å¾Œã«ROSTopicManagerã®çµ‚äº†å‡¦ç†ã‚’å®Ÿè¡Œ
   #
   #
   # @param self
@@ -79,7 +79,7 @@ class ManagerActionListener:
 
 ##
 # @if jp
-# @brief ¥â¥¸¥å¡¼¥ëÅĞÏ¿´Ø¿ô
+# @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ç™»éŒ²é–¢æ•°
 #
 #
 # @else
