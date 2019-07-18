@@ -90,7 +90,7 @@ class ManagerConfig :
   if os.name == 'nt':
 
     config_file_path = ["./rtc.conf",
-                        "${APPDATA}/OpenRTM-aist/rtc.conf"]
+                        "${PROGRAMDATA}/OpenRTM-aist/rtc.conf"]
   else:
     config_file_path = ["./rtc.conf",
                         "/etc/rtc.conf",
