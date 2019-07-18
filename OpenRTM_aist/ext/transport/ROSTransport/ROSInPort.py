@@ -659,9 +659,12 @@ class SubListener:
     while not self._shutdown:
       try:
         self._sock.setblocking(1)
-        data = self._sock.recv(65536)
-        if data:
-          self._sub.put(data)
+        message_size = self._sock.recv(4)
+        if message_size:
+          if len(message_size) == 4:
+            (size,) = struct.unpack('<I', message_size)
+            data = self._sock.recv(size)
+            self._sub.put(message_size+data)
       except:
         self._sub.deleteSocket(self._uri)
         return
