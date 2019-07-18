@@ -232,10 +232,10 @@ baseidl_files = [
   "DataPort_OpenRTM.idl",
   "CSPPort.idl",
   "../ext/fsm4rtc_observer/ComponentObserver.idl",
-  "CameraCommonInterface.idl",
-  "ManipulatorCommonInterface_Common.idl",
-  "ManipulatorCommonInterface_DataTypes.idl",
-  "ManipulatorCommonInterface_Middle.idl"
+  "ext/rtmCamera/CameraCommonInterface.idl",
+  "ext/rtmManipulator/ManipulatorCommonInterface_Common.idl",
+  "ext/rtmManipulator/ManipulatorCommonInterface_DataTypes.idl",
+  "ext/rtmManipulator/ManipulatorCommonInterface_Middle.idl"
   ]
 baseidl_mods  = ["RTM", "RTC", "SDOPackage", "OpenRTM"]
 baseidl_path  = os.path.normpath(current_dir + "/" + baseidl_dir)
