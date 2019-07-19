@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: euc-jp -*-
+# -*- coding: utf-8 -*-
 
 ##
 # @file Factory.py
