@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -22,8 +22,8 @@ import OpenRTM_aist
 ##
 # @if jp
 # @class OpenSpliceMessageInfoBase
-# @brief OpenSplice¥á¥Ã¥»¡¼¥¸¾ğÊó³ÊÇ¼¥ª¥Ö¥¸¥§¥¯¥È¤Î´ğÄì¥¯¥é¥¹
-# OpenSplice¥Ç¡¼¥¿·¿Ì¾¡¢IDL¥Õ¥¡¥¤¥ë¥Ñ¥¹¤òÅĞÏ¿¤¹¤ë
+# @brief OpenSpliceãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æƒ…å ±æ ¼ç´ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åŸºåº•ã‚¯ãƒ©ã‚¹
+# OpenSpliceãƒ‡ãƒ¼ã‚¿å‹åã€IDLãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚’ç™»éŒ²ã™ã‚‹
 #
 # @else
 # @class OpenSpliceOutPort
@@ -34,9 +34,9 @@ import OpenRTM_aist
 class OpenSpliceMessageInfoBase(object):
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -50,9 +50,9 @@ class OpenSpliceMessageInfoBase(object):
     pass
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -70,10 +70,10 @@ class OpenSpliceMessageInfoBase(object):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤Î·¿Ì¾¤ò¼èÆÀ
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®å‹åã‚’å–å¾—
   #
   # @param self
-  # @return ·¿Ì¾
+  # @return å‹å
   #
   # @else
   # @brief 
@@ -89,10 +89,10 @@ class OpenSpliceMessageInfoBase(object):
 
   ##
   # @if jp
-  # @brief IDL¥Õ¥¡¥¤¥ë¤Î¥Ñ¥¹¤ò¼èÆÀ
+  # @brief IDLãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’å–å¾—
   #
   # @param self
-  # @return IDL¥Õ¥¡¥¤¥ë¤Î¥Ñ¥¹
+  # @return IDLãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
   #
   # @else
   # @brief 
@@ -110,10 +110,10 @@ class OpenSpliceMessageInfoBase(object):
 
 ##
 # @if jp
-# @brief ¥á¥Ã¥»¡¼¥¸¤Î¾ğÊó³ÊÇ¼¥ª¥Ö¥¸¥§¥¯¥ÈÀ¸À®´Ø¿ô
+# @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®æƒ…å ±æ ¼ç´ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆé–¢æ•°
 #
-# @param data_class OpenSplice¥Ç¡¼¥¿·¿
-# @return ¥á¥Ã¥»¡¼¥¸¤Î¾ğÊó³ÊÇ¼¥ª¥Ö¥¸¥§¥¯¥È
+# @param data_class OpenSpliceãƒ‡ãƒ¼ã‚¿å‹
+# @return ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®æƒ…å ±æ ¼ç´ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 #
 # @else
 # @brief 
@@ -127,7 +127,7 @@ def opensplice_message_info(datatype, idlfile):
   ##
   # @if jp
   # @class OpenSpliceMessageInfo
-  # @brief ¥á¥Ã¥»¡¼¥¸¤Î¾ğÊó³ÊÇ¼¥¯¥é¥¹
+  # @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®æƒ…å ±æ ¼ç´ã‚¯ãƒ©ã‚¹
   #
   #
   # @else
@@ -142,9 +142,9 @@ def opensplice_message_info(datatype, idlfile):
 
     ##
     # @if jp
-    # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
-    # ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
     # @param self
     #
@@ -160,7 +160,7 @@ def opensplice_message_info(datatype, idlfile):
 
     ##
     # @if jp
-    # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+    # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
     #
     # @param self
@@ -175,10 +175,10 @@ def opensplice_message_info(datatype, idlfile):
 
     ##
     # @if jp
-    # @brief ¥á¥Ã¥»¡¼¥¸¤Î·¿Ì¾¤ò¼èÆÀ
+    # @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å‹åã‚’å–å¾—
     #
     # @param self
-    # @return ·¿Ì¾
+    # @return å‹å
     #
     # @else
     # @brief 
@@ -194,10 +194,10 @@ def opensplice_message_info(datatype, idlfile):
 
     ##
     # @if jp
-    # @brief IDL¥Õ¥¡¥¤¥ë¤Î¥Ñ¥¹¤ò¼èÆÀ
+    # @brief IDLãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’å–å¾—
     #
     # @param self
-    # @return IDL¥Õ¥¡¥¤¥ë¤Î¥Ñ¥¹
+    # @return IDLãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
     #
     # @else
     # @brief 
@@ -221,7 +221,7 @@ opensplicemessageinfofactory = None
 ##
 # @if jp
 # @class OpenSpliceMessageInfoFactory
-# @brief OpenSplice¥á¥Ã¥»¡¼¥¸¾ğÊó³ÊÇ¼¥ª¥Ö¥¸¥§¥¯¥ÈÀ¸À®¥Õ¥¡¥¯¥È¥ê
+# @brief OpenSpliceãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æƒ…å ±æ ¼ç´ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆãƒ•ã‚¡ã‚¯ãƒˆãƒª
 #
 # @else
 # @class OpenSpliceMessageInfoFactory
@@ -232,9 +232,9 @@ opensplicemessageinfofactory = None
 class OpenSpliceMessageInfoFactory(OpenRTM_aist.Factory,OpenSpliceMessageInfoBase):
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -249,9 +249,9 @@ class OpenSpliceMessageInfoFactory(OpenRTM_aist.Factory,OpenSpliceMessageInfoBas
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -269,10 +269,10 @@ class OpenSpliceMessageInfoFactory(OpenRTM_aist.Factory,OpenSpliceMessageInfoBas
 
   ##
   # @if jp
-  # @brief ¥¤¥ó¥¹¥¿¥ó¥¹¼èÆÀ
+  # @brief ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—
   #
   #
-  # @return ¥¤¥ó¥¹¥¿¥ó¥¹
+  # @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
   #
   # @else
   # @brief 

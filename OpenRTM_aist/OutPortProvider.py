@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -25,12 +25,12 @@ import OpenRTM_aist
 # @class OutPortProvider
 # @brief OutPortProvider
 #
-# - Port ���Ф��Ʋ����󶡤��Ƥ��뤫��������롣
-#   PortProfile �� properties �� Provider �˴ؤ��������ɲä��롣
+# - Port に対して何を提供しているかを宣言する。
+#   PortProfile の properties に Provider に関する情報を追加する。
 #
-# (��) OutPort �� Provide ������
+# (例) OutPort を Provide する場合
 #
-# OutPortCorbaProvider ���ʲ������
+# OutPortCorbaProvider が以下を宣言
 #  - dataport.interface_type = CORBA_Any
 #  - dataport.dataflow_type = Push, Pull
 #  - dataport.subscription_type = Once, New, Periodic
@@ -49,7 +49,7 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ���󥿡��ե������ץ��ե������������뤿�Υե��󥯥�
+  # @brief インターフェースプロファイルを公開するたのファンクタ
   # @else
   # @brief Functor to publish interface profile
   # @endif
@@ -64,9 +64,9 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
   #
@@ -84,7 +84,7 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ��λ����
+  # @brief 終了処理
   #
   # @else
   # @brief 
@@ -98,15 +98,15 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief InterfaceProfile������������
+  # @brief InterfaceProfile情報を公開する
   #
-  # InterfaceProfile�����������롣
-  # �����ǻ��ꤹ��ץ��ѥƥ�������� NameValue ���֥������Ȥ�
-  # dataport.interface_type �ͤ�Ĵ�١������ݡ��Ȥ����ꤵ��Ƥ���
-  # ���󥿡��ե����������פȰ��פ�����Τ߾����������롣
+  # InterfaceProfile情報を公開する。
+  # 引数で指定するプロパティ情報内の NameValue オブジェクトの
+  # dataport.interface_type 値を調べ、当該ポートに設定されている
+  # インターフェースタイプと一致する場合のみ情報を取得する。
   #
   # @param self
-  # @param prop InterfaceProfile�����������ץ��ѥƥ�
+  # @param prop InterfaceProfile情報を受け取るプロパティ
   #
   # @else
   #
@@ -118,16 +118,16 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief Interface������������
+  # @brief Interface情報を公開する
   #
-  # Interface�����������롣
-  # �����ǻ��ꤹ��ץ��ѥƥ�������� NameValue ���֥������Ȥ�
-  # dataport.interface_type �ͤ�Ĵ�١������ݡ��Ȥ����ꤵ��Ƥ��ʤ����
-  # NameValue �˾�����ɲä��롣
-  # ���Ǥ�Ʊ�쥤�󥿡��ե���������Ͽ�Ѥߤξ��ϲ���Ԥ�ʤ���
+  # Interface情報を公開する。
+  # 引数で指定するプロパティ情報内の NameValue オブジェクトの
+  # dataport.interface_type 値を調べ、当該ポートに設定されていなければ
+  # NameValue に情報を追加する。
+  # すでに同一インターフェースが登録済みの場合は何も行わない。
   #
   # @param self
-  # @param prop InterfaceProfile�����������ץ��ѥƥ�
+  # @param prop InterfaceProfile情報を受け取るプロパティ
   #
   # @else
   #
@@ -143,12 +143,12 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief �ݡ��ȥ����פ����ꤹ��
+  # @brief ポートタイプを設定する
   #
-  # �����ǻ��ꤷ���ݡ��ȥ����פ����ꤹ�롣
+  # 引数で指定したポートタイプを設定する。
   #
   # @param self
-  # @param port_type �����оݥݡ��ȥ�����
+  # @param port_type 設定対象ポートタイプ
   #
   # @else
   #
@@ -159,12 +159,12 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief �ǡ��������פ����ꤹ��
+  # @brief データタイプを設定する
   #
-  # �����ǻ��ꤷ���ǡ��������פ����ꤹ�롣
+  # 引数で指定したデータタイプを設定する。
   #
   # @param self
-  # @param data_type �����оݥǡ���������
+  # @param data_type 設定対象データタイプ
   #
   # @else
   #
@@ -175,12 +175,12 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ���󥿡��ե����������פ����ꤹ��
+  # @brief インターフェースタイプを設定する
   #
-  # �����ǻ��ꤷ�����󥿡��ե����������פ����ꤹ�롣
+  # 引数で指定したインターフェースタイプを設定する。
   #
   # @param self
-  # @param interface_type �����оݥ��󥿡��ե�����������
+  # @param interface_type 設定対象インターフェースタイプ
   #
   # @else
   #
@@ -191,12 +191,12 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief �ǡ����ե��������פ����ꤹ��
+  # @brief データフロータイプを設定する
   #
-  # �����ǻ��ꤷ���ǡ����ե��������פ����ꤹ�롣
+  # 引数で指定したデータフロータイプを設定する。
   #
   # @param self
-  # @param dataflow_type �����оݥǡ����ե���������
+  # @param dataflow_type 設定対象データフロータイプ
   #
   # @else
   #
@@ -207,12 +207,12 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ���֥�����ץ���󥿥��פ����ꤹ��
+  # @brief サブスクリプションタイプを設定する
   #
-  # �����ǻ��ꤷ�����֥�����ץ���󥿥��פ����ꤹ�롣
+  # 引数で指定したサブスクリプションタイプを設定する。
   #
   # @param self
-  # @param subs_type �����оݥ��֥�����ץ���󥿥���
+  # @param subs_type 設定対象サブスクリプションタイプ
   #
   # @else
   #

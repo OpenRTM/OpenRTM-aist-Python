@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -26,10 +26,10 @@ import OpenRTM
 #
 # @class SharedMemory
 #
-# @brief SharedMemory ¥¯¥é¥¹
+# @brief SharedMemory ã‚¯ãƒ©ã‚¹
 #
-# ¶¦Í­¥á¥â¥êÁàºî¥¯¥é¥¹
-# CORBA¤Ë¤è¤ëÄÌ¿®¤Ë¤è¤ê¡¢mmap¤Î½é´ü²½¡¢½ªÎ»¤Ê¤É¤¬¥ê¥â¡¼¥È¤ËÁàºî¤Ç¤­¤ë
+# å…±æœ‰ãƒ¡ãƒ¢ãƒªæ“ä½œã‚¯ãƒ©ã‚¹
+# CORBAã«ã‚ˆã‚‹é€šä¿¡ã«ã‚ˆã‚Šã€mmapã®åˆæœŸåŒ–ã€çµ‚äº†ãªã©ãŒãƒªãƒ¢ãƒ¼ãƒˆã«æ“ä½œã§ãã‚‹
 #
 #
 # @else
@@ -48,9 +48,9 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -98,9 +98,9 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -119,15 +119,15 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
   
   ##
   # @if jp
-  # @brief Ê¸»úÎó¤Ç»ØÄê¤·¤¿¥Ç¡¼¥¿¥µ¥¤¥º¤ò¿ôÃÍ¤ËÊÑ´¹¤¹¤ë
-  # 1M ¢ª 1048576
-  # 1k ¢ª 1024
-  # 100 ¢ª 100
+  # @brief æ–‡å­—åˆ—ã§æŒ‡å®šã—ãŸãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’æ•°å€¤ã«å¤‰æ›ã™ã‚‹
+  # 1M â†’ 1048576
+  # 1k â†’ 1024
+  # 100 â†’ 100
   #
   #
   # @param self
-  # @param size_str ¥Ç¡¼¥¿¥µ¥¤¥º(Ê¸»úÎó)
-  # @return ¥Ç¡¼¥¿¥µ¥¤¥º(¿ôÃÍ)
+  # @param size_str ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º(æ–‡å­—åˆ—)
+  # @return ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º(æ•°å€¤)
   #
   # @else
   # @brief 
@@ -154,16 +154,16 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
   ##
   # @if jp
-  # @brief ¶¦Í­¥á¥â¥ê¤Î½é´ü²½
-  # windows¤Ç¤Ï¥Ú¡¼¥¸¥ó¥°¥Õ¥¡¥¤¥ë¾å¤ËÎÎ°è¤ò³ÎÊİ¤¹¤ë
-  # Linux¤Ç¤Ï/dev/shm°Ê²¼¤Ë¥Õ¥¡¥¤¥ë¤òºîÀ®¤¹¤ë
-  # ºîÀ®¤·¤¿¥Õ¥¡¥¤¥ë¤ÎÆâÍÆ¤ò²¾ÁÛ¥¢¥É¥ì¥¹¤Ë¥Ş¥Ã¥Ô¥ó¥°¤¹¤ë
+  # @brief å…±æœ‰ãƒ¡ãƒ¢ãƒªã®åˆæœŸåŒ–
+  # windowsã§ã¯ãƒšãƒ¼ã‚¸ãƒ³ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ä¸Šã«é ˜åŸŸã‚’ç¢ºä¿ã™ã‚‹
+  # Linuxã§ã¯/dev/shmä»¥ä¸‹ã«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹
+  # ä½œæˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã‚’ä»®æƒ³ã‚¢ãƒ‰ãƒ¬ã‚¹ã«ãƒãƒƒãƒ”ãƒ³ã‚°ã™ã‚‹
   # 
   #
   #
   # @param self
-  # @param memory_size ¶¦Í­¥á¥â¥ê¤Î¥µ¥¤¥º
-  # @param shm_address ¶õ´ÖÌ¾
+  # @param memory_size å…±æœ‰ãƒ¡ãƒ¢ãƒªã®ã‚µã‚¤ã‚º
+  # @param shm_address ç©ºé–“å
   #
   # @else
   # @brief 
@@ -209,13 +209,13 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
   ##
   # @if jp
-  # @brief ¶¦Í­¥á¥â¥ê¤Î¥Ş¥Ã¥Ô¥ó¥°¤ò¹Ô¤¦
+  # @brief å…±æœ‰ãƒ¡ãƒ¢ãƒªã®ãƒãƒƒãƒ”ãƒ³ã‚°ã‚’è¡Œã†
   # 
   #
   #
   # @param self
-  # @param memory_size ¶¦Í­¥á¥â¥ê¤Î¥µ¥¤¥º
-  # @parama shm_address ¶õ´ÖÌ¾
+  # @param memory_size å…±æœ‰ãƒ¡ãƒ¢ãƒªã®ã‚µã‚¤ã‚º
+  # @parama shm_address ç©ºé–“å
   #
   # @else
   # @brief 
@@ -246,12 +246,12 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
   ##
   # @if jp
-  # @brief ¥Ş¥Ã¥Ô¥ó¥°¤·¤¿¶¦Í­¥á¥â¥ê¤ò¥¢¥ó¥Ş¥Ã¥×¤¹¤ë
+  # @brief ãƒãƒƒãƒ”ãƒ³ã‚°ã—ãŸå…±æœ‰ãƒ¡ãƒ¢ãƒªã‚’ã‚¢ãƒ³ãƒãƒƒãƒ—ã™ã‚‹
   # 
   #
   #
   # @param self
-  # @param unlink Linux¤Ç/dev/shm°Ê²¼¤ËºîÀ®¤·¤¿¥Õ¥¡¥¤¥ë¤òºï½ü¤¹¤ë¾ì¹ç¤ËTrue¤Ë¤¹¤ë
+  # @param unlink Linuxã§/dev/shmä»¥ä¸‹ã«ä½œæˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤ã™ã‚‹å ´åˆã«Trueã«ã™ã‚‹
   #
   # @else
   # @brief 
@@ -285,14 +285,14 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
   
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à
-  # ÀèÆ¬8byte¤Ë¥Ç¡¼¥¿¥µ¥¤¥º¤ò½ñ¤­¹ş¤ß¡¢¤½¤Î¸å¤í¤Ë¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à
-  # ÀßÄê¤·¤¿¥Ç¡¼¥¿¥µ¥¤¥º¤¬¶¦Í­¥á¥â¥ê¤Î¥µ¥¤¥º¤ò¾å²ó¤Ã¤¿¾ì¹ç¡¢¶¦Í­¥á¥â¥ê¤Î½é´ü²½¤ò¹Ô¤¦
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
+  # å…ˆé ­8byteã«ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’æ›¸ãè¾¼ã¿ã€ãã®å¾Œã‚ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
+  # è¨­å®šã—ãŸãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºãŒå…±æœ‰ãƒ¡ãƒ¢ãƒªã®ã‚µã‚¤ã‚ºã‚’ä¸Šå›ã£ãŸå ´åˆã€å…±æœ‰ãƒ¡ãƒ¢ãƒªã®åˆæœŸåŒ–ã‚’è¡Œã†
   # 
   #
   #
   # @param self
-  # @param data ½ñ¤­¹ş¤à¥Ç¡¼¥¿
+  # @param data æ›¸ãè¾¼ã‚€ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   # @brief
@@ -332,12 +332,12 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤òÆÉ¤ß¹ş¤à
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
   # 
   #
   #
   # @param self
-  # @return ¥Ç¡¼¥¿
+  # @return ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   # @brief 
@@ -368,13 +368,13 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
   ##
   # @if jp
-  # @brief ÄÌ¿®Àè¤ÎCORBA¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤òÅĞÏ¿¤¹¤ë
-  # ÅĞÏ¿¤¹¤ë»ö¤Ë¤è¤ê¶¦Í­¥á¥â¥ê¤Î½é´ü²½¤·¤¿¤È¤­¤Ë¡¢ÄÌ¿®Àè¤Ç¤â¥Ş¥Ã¥Ô¥ó¥°¤ò¤ä¤êÄ¾¤¹¤³¤È¤¬¤Ç¤­¤ë
+  # @brief é€šä¿¡å…ˆã®CORBAã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ç™»éŒ²ã™ã‚‹
+  # ç™»éŒ²ã™ã‚‹äº‹ã«ã‚ˆã‚Šå…±æœ‰ãƒ¡ãƒ¢ãƒªã®åˆæœŸåŒ–ã—ãŸã¨ãã«ã€é€šä¿¡å…ˆã§ã‚‚ãƒãƒƒãƒ”ãƒ³ã‚°ã‚’ã‚„ã‚Šç›´ã™ã“ã¨ãŒã§ãã‚‹
   # 
   #
   #
   # @param self
-  # @param sm SharedMemory¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹
+  # @param sm SharedMemoryã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹
   #
   # @else
   # @brief 
@@ -393,12 +393,12 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
   ##
   # @if jp
-  # @brief ¥¨¥ó¥Ç¥£¥¢¥ó¤òÀßÄê¤¹¤ë
+  # @brief ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’è¨­å®šã™ã‚‹
   # 
   #
   #
   # @param self
-  # @param endian ¥¨¥ó¥Ç¥£¥¢¥ó
+  # @param endian ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³
   #
   # @else
   # @brief 
@@ -416,7 +416,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÁ÷¿®¤òÃÎ¤é¤»¤ë
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®é€ä¿¡ã‚’çŸ¥ã‚‰ã›ã‚‹
   # 
   #
   #
@@ -435,7 +435,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÁ÷¿®¤òÍ×µá¤¹¤ë
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®é€ä¿¡ã‚’è¦æ±‚ã™ã‚‹
   # 
   #
   #

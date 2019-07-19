@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -27,7 +27,7 @@ import logging.handlers
 # @if jp
 # @class LogstreamFile
 #
-# @brief LogstreamFile ¥¯¥é¥¹
+# @brief LogstreamFile ã‚¯ãƒ©ã‚¹
 #
 # 
 #
@@ -46,9 +46,9 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
   s_logger = None
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @else
   # @brief Constructor
@@ -63,9 +63,9 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @else
   # @brief Destructor
@@ -81,13 +81,13 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
 
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
-  # Logstream¥¯¥é¥¹¤Î³Æ¼ïÀßÄê¤ò¹Ô¤¦¡£¼ÂÁõ¥¯¥é¥¹¤Ç¤Ï¡¢Í¿¤¨¤é¤ì¤¿
-  # Properties¤«¤éÉ¬Í×¤Ê¾ğÊó¤ò¼èÆÀ¤·¤Æ³Æ¼ïÀßÄê¤ò¹Ô¤¦¡£
+  # Logstreamã‚¯ãƒ©ã‚¹ã®å„ç¨®è¨­å®šã‚’è¡Œã†ã€‚å®Ÿè£…ã‚¯ãƒ©ã‚¹ã§ã¯ã€ä¸ãˆã‚‰ã‚ŒãŸ
+  # Propertiesã‹ã‚‰å¿…è¦ãªæƒ…å ±ã‚’å–å¾—ã—ã¦å„ç¨®è¨­å®šã‚’è¡Œã†ã€‚
   #
   # @param self
-  # @param prop ÀßÄê¾ğÊó
+  # @param prop è¨­å®šæƒ…å ±
   # @return
   #
   # @else
@@ -139,11 +139,11 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
 
   ##
   # @if jp
-  # @brief ¥í¥°½ĞÎÏ¥Ï¥ó¥É¥éÄÉ²Ã
+  # @brief ãƒ­ã‚°å‡ºåŠ›ãƒãƒ³ãƒ‰ãƒ©è¿½åŠ 
   #
   #
   # @param self
-  # @param f ¥í¥°½ĞÎÏ¥Õ¥¡¥¤¥ëÌ¾¡¢¤â¤·¤¯¤Ïstdout
+  # @param f ãƒ­ã‚°å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«åã€ã‚‚ã—ãã¯stdout
   # @return
   #
   # @else
@@ -192,13 +192,13 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
 
   ##
   # @if jp
-  # @brief »ØÄêÊ¸»úÎó¤ò¥í¥°½ĞÎÏ¤¹¤ë
+  # @brief æŒ‡å®šæ–‡å­—åˆ—ã‚’ãƒ­ã‚°å‡ºåŠ›ã™ã‚‹
   #
   #
   # @param self
-  # @param msg¡¡¥í¥°½ĞÎÏ¤¹¤ëÊ¸»úÎó
-  # @param level ¥í¥°¥ì¥Ù¥ë
-  # @param name ¥í¥°¤Î½ĞÎÏÌ¾
+  # @param msgã€€ãƒ­ã‚°å‡ºåŠ›ã™ã‚‹æ–‡å­—åˆ—
+  # @param level ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«
+  # @param name ãƒ­ã‚°ã®å‡ºåŠ›å
   # @return
   #
   # @else
@@ -239,11 +239,11 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
 
   ##
   # @if jp
-  # @brief ¥í¥°¥ì¥Ù¥ëÀßÄê
+  # @brief ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«è¨­å®š
   #
   #
   # @param self
-  # @param level ¥í¥°¥ì¥Ù¥ë
+  # @param level ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«
   # @return
   #
   # @else
@@ -282,7 +282,7 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
 
   ##
   # @if jp
-  # @brief ½ªÎ»½èÍı
+  # @brief çµ‚äº†å‡¦ç†
   #
   #
   # @param self
@@ -308,12 +308,12 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
 
   ##
   # @if jp
-  # @brief ¥í¥¬¡¼¤Î¼èÆÀ
+  # @brief ãƒ­ã‚¬ãƒ¼ã®å–å¾—
   #
   #
   # @param self
-  # @param name ¥í¥°¤Î½ĞÎÏÌ¾
-  # @return¡¡¥í¥¬¡¼
+  # @param name ãƒ­ã‚°ã®å‡ºåŠ›å
+  # @returnã€€ãƒ­ã‚¬ãƒ¼
   #
   # @else
   # @brief 

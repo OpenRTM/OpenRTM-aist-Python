@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -24,16 +24,16 @@ import RTC
 ##
 # @if jp
 # @class OutPortConnector
-# @brief OutPortConnector ´ğÄì¥¯¥é¥¹
+# @brief OutPortConnector åŸºåº•ã‚¯ãƒ©ã‚¹
 #
-# OutPort ¤Î Push/Pull ³Æ¼ï Connector ¤òÇÉÀ¸¤µ¤»¤ë¤¿¤á¤Î
-# ´ğÄì¥¯¥é¥¹¡£
+# OutPort ã® Push/Pull å„ç¨® Connector ã‚’æ´¾ç”Ÿã•ã›ã‚‹ãŸã‚ã®
+# åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @since 1.0.0
 #
 # @else
 # @class OutPortConnector
-# @brief I£îPortConnector base class
+# @brief Iï½PortConnector base class
 #
 # The base class to derive subclasses for OutPort's Push/Pull Connectors
 #
@@ -47,7 +47,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Constructor
   # @endif
@@ -62,7 +62,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -73,9 +73,9 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ConnectorInfo ¼èÆÀ
+  # @brief ConnectorInfo å–å¾—
   #
-  # ConnectorInfo ¤ò¼èÆÀ¤¹¤ë
+  # ConnectorInfo ã‚’å–å¾—ã™ã‚‹
   #
   # @else
   # @brief Getting ConnectorInfo
@@ -91,9 +91,9 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief Connector ID ¼èÆÀ
+  # @brief Connector ID å–å¾—
   #
-  # Connector ID ¤ò¼èÆÀ¤¹¤ë
+  # Connector ID ã‚’å–å¾—ã™ã‚‹
   #
   # @else
   # @brief Getting Connector ID
@@ -110,9 +110,9 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief Connector Ì¾¼èÆÀ
+  # @brief Connector åå–å¾—
   #
-  # Connector Ì¾¤ò¼èÆÀ¤¹¤ë
+  # Connector åã‚’å–å¾—ã™ã‚‹
   #
   # @else
   # @brief Getting Connector name
@@ -154,7 +154,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ¥À¥¤¥ì¥¯¥ÈÀÜÂ³¥â¡¼¥É¤ËÀßÄê
+  # @brief ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆæ¥ç¶šãƒ¢ãƒ¼ãƒ‰ã«è¨­å®š
   #
   #
   # @else
@@ -170,9 +170,9 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ¥À¥¤¥ì¥¯¥ÈÀÜÂ³¥â¡¼¥É¤«¤ÎÈ½Äê
+  # @brief ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆæ¥ç¶šãƒ¢ãƒ¼ãƒ‰ã‹ã®åˆ¤å®š
   #
-  # @return True¡§¥À¥¤¥ì¥¯¥ÈÀÜÂ³¥â¡¼¥É,false¡§¤½¤ì°Ê³°
+  # @return Trueï¼šãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆæ¥ç¶šãƒ¢ãƒ¼ãƒ‰,falseï¼šãã‚Œä»¥å¤–
   #
   # @else
   # @brief 
@@ -193,9 +193,9 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   #
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤á¤ë¾õÂÖ¤«¤òÈ½Äê
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚ã‚‹çŠ¶æ…‹ã‹ã‚’åˆ¤å®š
   # @param self
-  # @return True¡§½ñ¤­¹ş¤ß²ÄÇ½
+  # @return Trueï¼šæ›¸ãè¾¼ã¿å¯èƒ½
   # @else
   # @brief 
   # @param self
@@ -206,9 +206,9 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   #
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤òÆÉ¤ß¹ş¤á¤ë¾õÂÖ¤«¤òÈ½Äê
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚ã‚‹çŠ¶æ…‹ã‹ã‚’åˆ¤å®š
   # @param self
-  # @return True¡§ÆÉ¤ß¹ş¤ß²ÄÇ½
+  # @return Trueï¼šèª­ã¿è¾¼ã¿å¯èƒ½
   # @else
   # @brief 
   # @param self
@@ -220,9 +220,9 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   #
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤á¤ë¾õÂÖ¤«¤òÈ½Äê
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚ã‚‹çŠ¶æ…‹ã‹ã‚’åˆ¤å®š
   # @param self
-  # @return True¡§½ñ¤­¹ş¤ß²ÄÇ½
+  # @return Trueï¼šæ›¸ãè¾¼ã¿å¯èƒ½
   # @else
   # @brief 
   # @param self
@@ -233,9 +233,9 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   #
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤òÆÉ¤ß¹ş¤á¤ë¾õÂÖ¤«¤òÈ½Äê
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚ã‚‹çŠ¶æ…‹ã‹ã‚’åˆ¤å®š
   # @param self
-  # @return True¡§ÆÉ¤ß¹ş¤ß²ÄÇ½
+  # @return Trueï¼šèª­ã¿è¾¼ã¿å¯èƒ½
   # @else
   # @brief 
   # @param self
@@ -247,7 +247,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥·¥å¡¼¥Ş¤ÎÀßÄê
+  # @brief ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®è¨­å®š
   # @else
   # @brief set Consumer
   # @endif
@@ -256,8 +256,8 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥·¥å¡¼¥Ş¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ÎÅĞÏ¿¤ò¼è¤ê¾Ã¤¹
-  # @param prop ¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë¤Î¥×¥í¥Ñ¥Æ¥£
+  # @brief ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã®ç™»éŒ²ã‚’å–ã‚Šæ¶ˆã™
+  # @param prop ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   # @else
   # @brief 
   # @param prop

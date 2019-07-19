@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -19,8 +19,8 @@ import OpenRTM_aist
 # @if jp
 #
 # @class NodeNumberingPolicy
-# @brief ���֥��������������͡��ߥ󥰡��ݥꥷ��(̿̾��§)�����ѥ��饹
-# �ޥ������ޥ͡����㡢���졼�֥ޥ͡����㤫��RTC�򸡺����ƥʥ�Х�󥰤�Ԥ�
+# @brief オブジェクト生成時ネーミング・ポリシー(命名規則)管理用クラス
+# マスターマネージャ、スレーブマネージャからRTCを検索してナンバリングを行う
 #
 # 
 #
@@ -35,9 +35,9 @@ class NodeNumberingPolicy(OpenRTM_aist.NumberingPolicy):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # 
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   # 
   # @param self
   # 
@@ -53,13 +53,13 @@ class NodeNumberingPolicy(OpenRTM_aist.NumberingPolicy):
   ##
   # @if jp
   #
-  # @brief ���֥���������������̾�κ���
+  # @brief オブジェクト生成時の名称作成
   #
   # 
   # @param self
-  # @param obj ̾�������оݥ��֥�������
+  # @param obj 名称生成対象オブジェクト
   #
-  # @return �����������֥�������̾��
+  # @return 生成したオブジェクト名称
   #
   # @else
   #
@@ -80,11 +80,11 @@ class NodeNumberingPolicy(OpenRTM_aist.NumberingPolicy):
   ##
   # @if jp
   #
-  # @brief ���֥������Ⱥ������̾�β���
+  # @brief オブジェクト削除時の名称解放
   #
   # 
   # @param self
-  # @param obj ̾�β����оݥ��֥�������
+  # @param obj 名称解放対象オブジェクト
   #
   # @else
   #
@@ -99,17 +99,17 @@ class NodeNumberingPolicy(OpenRTM_aist.NumberingPolicy):
   ##
   # @if jp
   #
-  # @brief ���֥������Ȥθ���
+  # @brief オブジェクトの検索
   #
-  # �ޥ������ޥ͡����㡢����ӥ��졼�֥ޥ͡��������Ͽ���줿RTC�򸡺�����
-  # ��������̾�������פ���RTC��¸�ߤ������True���֤�
-  # ���Υץ������ǵ�ư�����ޥ͡����㤬�ޥ������ޥ͡�����ǤϤʤ���
-  #   ����˥ޥ������ޥ͡����㤬1�Ĥ���Ͽ����Ƥ��ʤ����Ϥ��Υץ������Υޥ͡����㤫�鸡��
+  # マスターマネージャ、およびスレーブマネージャに登録されたRTCを検索し、
+  # 　　　　名前が一致するRTCが存在する場合はTrueを返す
+  # このプロセスで起動したマネージャがマスターマネージャではなく、
+  #   さらにマスターマネージャが1つも登録されていない場合はこのプロセスのマネージャから検索
   # 
   # @param self
-  # @param name �����оݥ��֥������Ȥ�̾��
+  # @param name 検索対象オブジェクトの名前
   #
-  # @return Ƚ��
+  # @return 判定
   #
   # @else
   #

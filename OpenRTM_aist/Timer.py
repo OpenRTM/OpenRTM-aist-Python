@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -24,9 +24,9 @@ import OpenRTM_aist
 ##
 # @if jp
 # @class Timer
-# @brief Timer���饹
+# @brief Timerクラス
 # 
-# ��Ͽ���줿�ꥹ�ʡ��Υ�����Хå��ؿ������ꤵ�줿���������Ū�˸ƤӽФ���
+# 登録されたリスナーのコールバック関数を、設定された周期で定期的に呼び出す。
 #
 # @since 0.4.0
 #
@@ -47,12 +47,12 @@ class Timer:
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # 
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
-  # @param interval �����޵�ư����
+  # @param interval タイマ起動周期
   #
   # @else
   #
@@ -74,9 +74,9 @@ class Timer:
 
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # 
-  # �ǥ��ȥ饯��
+  # デストラクタ
   #
   # @else
   # @brief Destructor
@@ -103,12 +103,12 @@ class Timer:
 
   ##
   # @if jp
-  # @brief Timer �ѤΥ���åɼ¹Դؿ�
+  # @brief Timer 用のスレッド実行関数
   #
-  # Timer �ѤΥ���åɼ¹Դؿ���
-  # ��Ͽ���줿�ꥹ�ʡ��Υ�����Хå��ؿ���ƤӽФ���
+  # Timer 用のスレッド実行関数。
+  # 登録されたリスナーのコールバック関数を呼び出す。
   #
-  # @return �¹Է��
+  # @return 実行結果
   #
   # @else
   # @brief Thread execution function for Timer
@@ -131,9 +131,9 @@ class Timer:
 
   ##
   # @if jp
-  # @brief Timer ����������
+  # @brief Timer タスク開始
   #
-  # Timer �ѿ�������åɤ��������������򳫻Ϥ��롣
+  # Timer 用新規スレッドを生成し、処理を開始する。
   #
   # @param self
   #
@@ -154,11 +154,11 @@ class Timer:
 
   ##
   # @if jp
-  # @brief Timer ���������
+  # @brief Timer タスク停止
   #
   # @param self
   #
-  # Timer ����������ߤ��롣
+  # Timer タスクを停止する。
   #
   # @else
   #
@@ -177,13 +177,13 @@ class Timer:
 
   ##
   # @if jp
-  # @brief Timer �������¹�
+  # @brief Timer タスク実行
   #
   # @param self
   #
-  # ��Ͽ���줿�ƥꥹ�ʤε�ư�Ԥ����֤��饿���޵�ư�����򸺻����롣
-  # ��ư�Ԥ����֤������Ȥʤä��ꥹ�ʤ�¸�ߤ�����ϡ�
-  # ������Хå��ؿ���ƤӽФ���
+  # 登録された各リスナの起動待ち時間からタイマ起動周期を減算する。
+  # 起動待ち時間がゼロとなったリスナが存在する場合は、
+  # コールバック関数を呼び出す。
   #
   # @else
   #
@@ -207,18 +207,18 @@ class Timer:
 
   ##
   # @if jp
-  # @brief �ꥹ�ʡ���Ͽ
+  # @brief リスナー登録
   #
-  # �� Timer ���鵯ư���륳����Хå��ؿ��ѤΥꥹ�ʡ���ư��������ꤷ��
-  # ��Ͽ���롣
-  # Ʊ��ꥹ�ʡ���������Ͽ�Ѥߤξ��ϡ��ꥹ�ʡ��ε�ư��������ꤷ���ͤ�
-  # �������롣
+  # 本 Timer から起動するコールバック関数用のリスナーを起動周期を指定して
+  # 登録する。
+  # 同一リスナーが既に登録済みの場合は、リスナーの起動周期を指定した値に
+  # 更新する。
   #
   # @param self
-  # @param listener ��Ͽ�оݥꥹ�ʡ�
-  # @param tm �ꥹ�ʡ���ư����
+  # @param listener 登録対象リスナー
+  # @param tm リスナー起動周期
   #
-  # @return ��Ͽ�ꥹ�ʡ�
+  # @return 登録リスナー
   #
   # @else
   #
@@ -250,17 +250,17 @@ class Timer:
 
   ##
   # @if jp
-  # @brief �ꥹ�ʡ���Ͽ
+  # @brief リスナー登録
   #
-  # ������Хå��оݥ��֥������ȡ�������Хå��оݥ᥽�åɤ���ӵ�ư������
-  # ���ꤷ�ƥꥹ�ʡ�����Ͽ���롣
+  # コールバック対象オブジェクト、コールバック対象メソッドおよび起動周期を
+  # 指定してリスナーを登録する。
   #
   # @param self
-  # @param obj ������Хå��оݥ��֥�������
-  # @param cbf ������Хå��оݥ᥽�å�
-  # @param tm �ꥹ�ʡ���ư����
+  # @param obj コールバック対象オブジェクト
+  # @param cbf コールバック対象メソッド
+  # @param tm リスナー起動周期
   #
-  # @return ��Ͽ�ꥹ�ʡ�
+  # @return 登録リスナー
   #
   # @else
   #
@@ -287,15 +287,15 @@ class Timer:
 
   ##
   # @if jp
-  # @brief �ꥹ�ʡ���Ͽ
+  # @brief リスナー登録
   #
-  # ������Хå��оݥ᥽�åɤȵ�ư��������ꤷ�ƥꥹ�ʡ�����Ͽ���롣
+  # コールバック対象メソッドと起動周期を指定してリスナーを登録する。
   #
   # @param self
-  # @param cbf ������Хå��оݥ᥽�å�
-  # @param tm �ꥹ�ʡ���ư����
+  # @param cbf コールバック対象メソッド
+  # @param tm リスナー起動周期
   #
-  # @return ��Ͽ�ꥹ�ʡ�
+  # @return 登録リスナー
   #
   # @else
   #
@@ -317,15 +317,15 @@ class Timer:
 
   ##
   # @if jp
-  # @brief �ꥹ�ʡ���Ͽ���
+  # @brief リスナー登録解除
   #
-  # ���ꤷ��ID�Υꥹ�ʡ�����Ͽ�������롣
-  # ���ꤷ��ID�Υꥹ�ʡ���̤��Ͽ�ξ�硢false ���֤���
+  # 指定したIDのリスナーの登録を解除する。
+  # 指定したIDのリスナーが未登録の場合、false を返す。
   #
   # @param self
-  # @param id ��Ͽ����оݥꥹ�ʡ�ID
+  # @param id 登録解除対象リスナーID
   #
-  # @return ��Ͽ������
+  # @return 登録解除結果
   #
   # @else
   #
@@ -354,7 +354,7 @@ class Timer:
   ##
   # @if jp
   # @class Task
-  # @brief �����������ѥ��饹
+  # @brief タスク管理用クラス
   # @else
   #
   # @endif

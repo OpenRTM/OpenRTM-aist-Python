@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -31,9 +31,9 @@ import copy
 #
 # @class Logg
 #
-# @brief �������ե����ޥåȥ��ߡ����饹
+# @brief ロガーフォーマットダミークラス
 #
-# �����ե����ޥå��ѥ��ߡ����饹��
+# ログフォーマット用ダミークラス。
 #
 # @else
 #
@@ -56,14 +56,14 @@ class Logger:
   ##
   # @if jp
   #
-  # @brief ������٥�����
+  # @brief ログレベル設定
   #
-  # Ϳ����줿ʸ������б�����������٥�����ꤹ�롣
+  # 与えられた文字列に対応したログレベルを設定する。
   #
   # @param self
-  # @param lv ������٥�ʸ����
+  # @param lv ログレベル文字列
   #
-  # @return ���ꤷ��������٥�
+  # @return 設定したログレベル
   #
   # @else
   #
@@ -98,15 +98,15 @@ class Logger:
   ##
   # @if jp
   #
-  # @brief printf �ե����ޥåȽ���
+  # @brief printf フォーマット出力
   #
-  # printf�饤���ʽ񼰤ǥ������Ϥ��롣<br>
-  # ���ܼ����Ǥϰ��� fmt ��Ϳ����줿ʸ���򤽤Τޤ��֤���
+  # printfライクな書式でログ出力する。<br>
+  # ※本実装では引数 fmt で与えられた文字をそのまま返す。
   #
   # @param self
-  # @param fmt ��ʸ����
+  # @param fmt 書式文字列
   #
-  # @return ���դ�ʸ�������
+  # @return 書式付き文字列出力
   #
   # @else
   #
@@ -122,10 +122,10 @@ class Logger:
   ##
   # @if jp
   #
-  # @brief �㳰�������
-  #  �㳰�����ʸ������֤���
+  # @brief 例外情報出力
+  #  例外情報を文字列で返す。
   #
-  # @return �㳰�����ʸ�������
+  # @return 例外情報の文字列出力
   #
   # @else
   #
@@ -150,9 +150,9 @@ class Logger:
 #
 # @class Logg
 #
-# @brief �������ե����ޥåȥ��ߡ����饹
+# @brief ロガーフォーマットダミークラス
 #
-# �����ե����ޥå��ѥ��ߡ����饹��
+# ログフォーマット用ダミークラス。
 #
 # @else
 #
@@ -164,9 +164,9 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
   # @param (mode,file_name,address)
@@ -206,12 +206,12 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief ������٥�����
+  # @brief ログレベル設定
   #
-  # ������٥�����ꤹ�롣
+  # ログレベルを設定する。
   #
   # @param self
-  # @param level ������٥�
+  # @param level ログレベル
   #
   # @else
   #
@@ -227,12 +227,12 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief ���å��⡼������
+  # @brief ロックモード設定
   #
-  # �����Υ��å��⡼�ɤ����ꤹ�롣
+  # ログのロックモードを設定する。
   #
   # @param self
-  # @param lock �������å��ե饰
+  # @param lock ログロックフラグ
   #
   # @else
   #
@@ -247,11 +247,11 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief ���å��⡼��ͭ����
+  # @brief ロックモード有効化
   #
   # @param self
   #
-  # ���å��⡼�ɤ�ͭ���ˤ��롣
+  # ロックモードを有効にする。
   #
   # @else
   #
@@ -263,11 +263,11 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief ���å��⡼�ɲ��
+  # @brief ロックモード解除
   #
   # @param self
   #
-  # ���å��⡼�ɤ�̵���ˤ��롣
+  # ロックモードを無効にする。
   #
   # @else
   #
@@ -279,8 +279,8 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief �������å�����
-  # ���å��⡼�ɤ����ꤵ��Ƥ����硢�����Υ��å���������롣
+  # @brief ログロック取得
+  # ロックモードが設定されている場合、ログのロックを取得する。
   #
   # @param self
   #
@@ -295,8 +295,8 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief �������å�����
-  # ���å��⡼�ɤ����ꤵ��Ƥ�����ˡ������Υ��å���������롣
+  # @brief ログロック解放
+  # ロックモードが設定されている場合に、ログのロックを解放する。
   #
   # @param self
   #
@@ -311,15 +311,15 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief ���ѥ�������
+  # @brief 汎用ログ出力
   #
-  # ������٥뤪��ӽ��ϥե����ޥå�ʸ���������Ȥ��ƤȤꡤ
-  # ���ѥ�������Ϥ��롣
+  # ログレベルおよび出力フォーマット文字列を引数としてとり，
+  # 汎用ログを出力する。
   #
   # @param self
-  # @param LV ������٥�
-  # @param msg ������å�����
-  # @param opt ���ץ����(�ǥե������:None)
+  # @param LV ログレベル
+  # @param msg ログメッセージ
+  # @param opt オプション(デフォルト値:None)
   #
   # @else
   #
@@ -348,15 +348,15 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief FATAL���顼��������
+  # @brief FATALエラーログ出力
   #
-  # FATAL���顼��٥�Υ�������Ϥ��롣<BR>������٥뤬
+  # FATALエラーレベルのログを出力する。<BR>ログレベルが
   # FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
-  # �ξ��˥������Ϥ���롣
+  # の場合にログ出力される。
   #
   # @param self
-  # @param msg ������å�����
-  # @param opt ���ץ����(�ǥե������:None)
+  # @param msg ログメッセージ
+  # @param opt オプション(デフォルト値:None)
   #
   # @else
   #
@@ -385,15 +385,15 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief ���顼��������
+  # @brief エラーログ出力
   #
-  # ���顼��٥�Υ�������Ϥ��롣<BR>������٥뤬
+  # エラーレベルのログを出力する。<BR>ログレベルが
   # ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
-  # �ξ��˥������Ϥ���롣
+  # の場合にログ出力される。
   #
   # @param self
-  # @param msg ������å�����
-  # @param opt ���ץ����(�ǥե������:None)
+  # @param msg ログメッセージ
+  # @param opt オプション(デフォルト値:None)
   #
   # @else
   #
@@ -423,15 +423,15 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief ��˥󥰥�������
+  # @brief ワーニングログ出力
   #
-  # ��˥󥰥�٥�Υ�������Ϥ��롣<BR>������٥뤬
+  # ワーニングレベルのログを出力する。<BR>ログレベルが
   # ( WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID )
-  # �ξ��˥������Ϥ���롣
+  # の場合にログ出力される。
   #
   # @param self
-  # @param msg ������å�����
-  # @param opt ���ץ����(�ǥե������:None)
+  # @param msg ログメッセージ
+  # @param opt オプション(デフォルト値:None)
   #
   # @else
   #
@@ -465,15 +465,15 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief ����ե���������
+  # @brief インフォログ出力
   #
-  # ����ե���٥�Υ�������Ϥ��롣<BR>������٥뤬
+  # インフォレベルのログを出力する。<BR>ログレベルが
   # ( INFO, DEBUG, TRACE, VERBOSE, PARANOID )
-  # �ξ��˥������Ϥ���롣
+  # の場合にログ出力される。
   #
   # @param self
-  # @param msg ������å�����
-  # @param opt ���ץ����(�ǥե������:None)
+  # @param msg ログメッセージ
+  # @param opt オプション(デフォルト値:None)
   #
   # @else
   #
@@ -507,15 +507,15 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief �ǥХå���������
+  # @brief デバッグログ出力
   #
-  # �ǥХå���٥�Υ�������Ϥ��롣<BR>������٥뤬
+  # デバッグレベルのログを出力する。<BR>ログレベルが
   # ( DEBUG, TRACE, VERBOSE, PARANOID )
-  # �ξ��˥������Ϥ���롣
+  # の場合にログ出力される。
   #
   # @param self
-  # @param msg ������å�����
-  # @param opt ���ץ����(�ǥե������:None)
+  # @param msg ログメッセージ
+  # @param opt オプション(デフォルト値:None)
   #
   # @else
   #
@@ -549,15 +549,15 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief �ȥ졼����������
+  # @brief トレースログ出力
   #
-  # �ȥ졼����٥�Υ�������Ϥ��롣<BR>������٥뤬
+  # トレースレベルのログを出力する。<BR>ログレベルが
   # ( TRACE, VERBOSE, PARANOID )
-  # �ξ��˥������Ϥ���롣
+  # の場合にログ出力される。
   #
   # @param self
-  # @param msg ������å�����
-  # @param opt ���ץ����(�ǥե������:None)
+  # @param msg ログメッセージ
+  # @param opt オプション(デフォルト値:None)
   #
   # @else
   #
@@ -592,16 +592,16 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief �٥�ܡ�����������
+  # @brief ベルボーズログ出力
   #
-  # �٥�ܡ�����٥�Υ�������Ϥ��롣<BR>������٥뤬
+  # ベルボーズレベルのログを出力する。<BR>ログレベルが
   # ( VERBOSE, PARANOID )
-  # �ξ��˥������Ϥ���롣<br>
-  # �������Ǥ�̤����
+  # の場合にログ出力される。<br>
+  # ※現状では未実装
   #
   # @param self
-  # @param msg ������å�����
-  # @param opt ���ץ����(�ǥե������:None)
+  # @param msg ログメッセージ
+  # @param opt オプション(デフォルト値:None)
   #
   # @else
   #
@@ -636,16 +636,16 @@ class LogStream:
   ##
   # @if jp
   #
-  # @brief �ѥ�Υ��ɥ�������
+  # @brief パラノイドログ出力
   #
-  # �ѥ�Υ��ɥ�٥�Υ�������Ϥ��롣<BR>������٥뤬
+  # パラノイドレベルのログを出力する。<BR>ログレベルが
   # ( PARANOID )
-  # �ξ��˥������Ϥ���롣<br>
-  # �������Ǥ�̤����
+  # の場合にログ出力される。<br>
+  # ※現状では未実装
   #
   # @param self
-  # @param msg ������å�����
-  # @param opt ���ץ����(�ǥե������:None)
+  # @param msg ログメッセージ
+  # @param opt オプション(デフォルト値:None)
   #
   # @else
   #

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -23,33 +23,33 @@ import SDOPackage__POA
 ##
 # @if jp
 #
-# @brief SdoServiceProvider�����쥯�饹
+# @brief SdoServiceProvider　基底クラス
 #
-# SDO���������Ƥ���SDO�����ӥ��Υץ��Х�����������뤿��δ��쥯��
-# ����SDO�����ӥ��ˤϡ����������󶡥����ӥ���RTC(SDO)¦�����Ѥ���
-# SDO�����ӥ����󥷥塼�ޤȡ�RTC(SDO)���Ȥ�SDO�����ӥ����󶡤���SDO
-# �����ӥ��ץ��Х��������롣���٤Ƥ�SDO�����ӥ��ץ��Х����Ϥ��δ���
-# ���饹��Ѿ����Ƽ�������롣
+# SDOで定義されているSDOサービスのプロバイダを実装するための基底クラ
+# ス。SDOサービスには、外部から提供サービスをRTC(SDO)側で利用する
+# SDOサービスコンシューマと、RTC(SDO)自身がSDOサービスを提供するSDO
+# サービスプロバイダがある。すべてのSDOサービスプロバイダはこの基底
+# クラスを継承して実装される。
 #
-# ���Υ��֥������ȤΥ饤�ե�������ϰʲ����̤ꡣ
+# このオブジェクトのライフサイクルは以下の通り。
 #
-# -# �ޥ͡�������Ф��ƥ����ɤ����ȥ⥸�塼�������ؿ��ˤ�ꥪ��
-#    �������ȥե����ȥ꤬��SdoServiceProviderFactory ���Ф�����Ͽ��
-#    ��롣��Ͽ�Υ����ˤϥ����ӥ����󥿡��ե������� IFR (interface
-#    repository) ID �����Ѥ��졢����ˤ�ꥵ���ӥ������̤���롣
-# -# rtc.conf���Υ���ե�����졼��������ˤ�ꡢͭ�������뤳�Ȥ�
-#    ���ꤵ��Ƥ��륵���ӥ�����ץ��Х����ϡ�RTC�ε�ư��Ʊ���˥���
-#    ���󥹲�����롣
-# -# ���󥹥��󥹲��塢������ؿ� init() ���ƤФ�롣�����ˤ���������
-#    �ӥ��Τ���Υ���ե�����졼����󥪥ץ���� Property��
-#    ����Ϥ���롣
-# -# ���󥹥��󥹲����줿SDO�����ӥ��ץ��Х�����
-#    SDO.get_sdo_service() �ˤ�곰�����饢����������롣���Τ�
-#    ���������ӥ�����ꤹ��ID��IFR ID��Ʊ���Ǥ��롣���ΤȤ��Υ�����
-#    ���������󥹤ϰʲ����̤ꡣ
-# -# RTC��finalize������Τ�����Ʊ����SDO�����ӥ��ץ��Х��������
-#    ����뤬�����κݤˤ�SdoServiceProviderBase.finalize()��������
-#    �����Τǡ������ǥ꥽�����β����ʤɽ�λ������Ԥ���
+# -# マネージャに対してロードされるとモジュール初期化関数によりオブ
+#    ジェクトファクトリが、SdoServiceProviderFactory に対して登録さ
+#    れる。登録のキーにはサービスインターフェースの IFR (interface
+#    repository) ID が利用され、これによりサービスが区別される。
+# -# rtc.conf等のコンフィギュレーション指定により、有効化することが
+#    指定されているサービスインプロバイダは、RTCの起動と同時にインス
+#    タンス化される。
+# -# インスタンス化後、初期化関数 init() が呼ばれる。引数には当該サー
+#    ビスのためのコンフィギュレーションオプションが Propertyに
+#    より渡される。
+# -# インスタンス化されたSDOサービスプロバイダは
+#    SDO.get_sdo_service() により外部からアクセスされる。このと
+#    き、サービスを指定するIDはIFR IDと同じである。このときのアタッ
+#    チシーケンスは以下の通り。
+# -# RTCがfinalizeされ解体されると同時にSDOサービスプロバイダも解体
+#    されるが、その際にはSdoServiceProviderBase.finalize()がコール
+#    されるので、ここでリソースの解放など終了処理を行う。
 #
 # <pre>
 # 
@@ -72,30 +72,30 @@ import SDOPackage__POA
 #
 # </pre>
 #
-# ���Υ��饹�μ����������äƤϡ����ʤ��Ȥ�ʲ��ν�貾�۴ؿ��������
-# ��ɬ�פ����롣
+# このクラスの実装に当たっては、少なくとも以下の純粋仮想関数を実装す
+# る必要がある。
 #
-# - init(): ������ؿ���Ϳ����줿 RTObject ����� ServiceProfile ��
-#   �顢�������֥������Ȥ��������롣
-# - reinit(): �ƽ�����ؿ���ServiceProfile ��������󹹿��Τ���Ʊ��
-#   ID�ǸƤӽФ���뤳�Ȥ�ͭ�뤬�����κݤˤ��δؿ���������
-#   ServiceProfile �ȤȤ�˸ƤӽФ���롣�ؿ���Ǥϡ�������ѹ��ʤ�
-#   �ƽ����������������롣
-# - getProfile(): ���ꤵ�줿�ץ��ե�������֤��ؿ���
-# - finalize(): ��λ���������󥷥塼�ޤ��ǥ��å������ݤ˸ƤӽФ���
-#   ��ؿ����ؿ���ǤϽ�λ������������롣
+# - init(): 初期化関数。与えられた RTObject および ServiceProfile か
+#   ら、当該オブジェクトを初期化する。
+# - reinit(): 再初期化関数。ServiceProfile は設定情報更新のため同一
+#   IDで呼び出されることが有るが、その際にこの関数が新たな
+#   ServiceProfile とともに呼び出される。関数内では、設定の変更など
+#   再初期化処理を実装する。
+# - getProfile(): 設定されたプロファイルを返す関数。
+# - finalize(): 終了処理。コンシューマがデタッチされる際に呼び出され
+#   る関数。関数内では終了処理を実装する。
 #
-# SdoServiceProvider�Υ���ȥ�ݥ���Ȥ��̾�ե�����̾�� basename + "Init" 
-# �ˤ��Ƥ������ʲ��ˡ����饹̾���ե�����
-# ̾������ȥ�ݥ���ȴؿ�̾�ο侩��򼨤���
+# SdoServiceProviderのエントリポイントは通常、ファイル名の basename + "Init" 
+# にしておく。以下に、クラス名、ファイル
+# 名、エントリポイント関数名の推奨例を示す。
 #
-# - �������饹̾: MySdoServiceProvider
-# - �ե�����̾: MySdoServiceProvider.py
-# - ����ȥ�ݥ���ȴؿ�̾: MySdoServiceProviderInit()
+# - 実装クラス名: MySdoServiceProvider
+# - ファイル名: MySdoServiceProvider.py
+# - エントリポイント関数名: MySdoServiceProviderInit()
 #
-# ����ȥ�ݥ���ȴؿ����̾�ʲ��Τ褦�ˡ�SdoServiceProviderFactory
-# ���������󥷥塼�ޤΥե����ȥ� (�Ȳ��Υե��󥯥�) ����Ͽ����ʲ���
-# �褦�ʴؿ��ˤʤ롣
+# エントリポイント関数は通常以下のように、SdoServiceProviderFactory
+# に当該コンシューマのファクトリ (と解体ファンクタ) を登録する以下の
+# ような関数になる。
 #
 # <pre>
 #   def MySdoServiceProviderInit(mgr=None):
@@ -118,7 +118,7 @@ class SdoServiceProviderBase(SDOPackage__POA.SDOService):
     pass
   ##
   # @if jp
-  # @brief ���ۥǥ��ȥ饯��
+  # @brief 仮想デストラクタ
   # @else
   # @brief virtual destructor
   # @endif
@@ -127,22 +127,22 @@ class SdoServiceProviderBase(SDOPackage__POA.SDOService):
 
   ##
   # @if jp
-  # @brief ���󥷥塼�ޥ��饹�ν�����ؿ�
+  # @brief コンシューマクラスの初期化関数
   #
-  # ���Υ��֥������Ȥν������Ԥ�����������SDO�����ӥ���
-  # ServiceProfile �ȤȤ�˥����å������ȡ�SDO���󥷥塼�ޤ�����
-  # ���󥹲����졢����ľ��� SDO �����ӥ��������å����줿 RTC ��Ϳ��
-  # ��줿 ServiceProfile ������Ȥ��Ƥ��δؿ����ƤФ�롣
+  # このオブジェクトの初期化を行う。外部からSDOサービスが
+  # ServiceProfile とともにアタッチされると、SDOコンシューマがインス
+  # タンス化され、その直後に SDO サービスがアタッチされた RTC と与え
+  # られた ServiceProfile を引数としてこの関数が呼ばれる。
   #
-  # �ؿ���Ǥϡ�ServiceProfile ��� SDO �����ӥ���ե���󥹤�
-  # CorbaProvider ���饹�������Ѥ����֥�����������ݻ�����ȤȤ�ˡ�
-  # properties �����������Ƥ��ɤ߹��ߥ����ӥ���ͭ����������Ԥ���Ϳ
-  # ����줿�����ӥ��Υ��֥������ȥ�ե���󥹤����������뤤��
-  # properties �����Ƥ����������ξ�������ͤ� false ���֤���
+  # 関数内では、ServiceProfile 内の SDO サービスリファレンスを
+  # CorbaProvider クラス等を利用しオブジェクト内に保持するとともに、
+  # properties から設定内容を読み込みサービス固有の設定等を行う。与
+  # えられたサービスのオブジェクトリファレンスが不正、あるいは
+  # properties の内容が不正、等の場合は戻り値に false を返す。
   #
-  # @param rtobj ���Υ��֥������Ȥ����󥹥��󥹲����줿 RTC
-  # @param profile ��������Ϳ����줿 SDO ServiceProfile
-  # @return Ϳ����줿 SDO Service �� ServiceProfile �������ξ�� false
+  # @param rtobj このオブジェクトがインスタンス化された RTC
+  # @param profile 外部から与えられた SDO ServiceProfile
+  # @return 与えられた SDO Service や ServiceProfile が不正の場合 false
   #
   # @else
   # @brief Initialization function of the consumer class
@@ -156,19 +156,19 @@ class SdoServiceProviderBase(SDOPackage__POA.SDOService):
 
   ##
   # @if jp
-  # @brief ���󥷥塼�ޥ��饹�κƽ�����ؿ�
+  # @brief コンシューマクラスの再初期化関数
   #
-  # ���Υ��֥������Ȥκƽ������Ԥ���ServiceProfile �ˤ� id �ե���
-  # ��ɤ˥��å�����ͭ�� UUID �����åȤ���Ƥ��뤬��Ʊ��� id �ξ�
-  # �硢properties �����ꤵ�줿���������ѹ��䡢service �ե������
-  # �Υ����ӥ��λ��Ȥ��ѹ����Ԥ��롣���κݤ˸ƤФ��Τ�����
-  # reinit() �ؿ��Ǥ��롣�����Ǥϡ�service �ե�����ɤΥ��֥�������
-  # ��ե���󥹤�Ʊ�������ǧ�����ۤʤäƤ������ݻ����Ƥ����ե�
-  # ��󥹤򹹿�����ɬ�פ����롣�ޤ� properties �ˤϿ��������꤬Ϳ��
-  # ���Ƥ����ǽ��������Τǡ����Ƥ��ɤ߹�������򹹿����롣
+  # このオブジェクトの再初期化を行う。ServiceProfile には id フィー
+  # ルドにセッション固有の UUID がセットされているが、同一の id の場
+  # 合、properties に設定された設定情報の変更や、service フィールド
+  # のサービスの参照の変更が行われる。その際に呼ばれるのがこの
+  # reinit() 関数である。実装では、service フィールドのオブジェクト
+  # リファレンスの同一性を確認し、異なっている場合保持しているリファ
+  # レンスを更新する必要がある。また properties には新たな設定が与え
+  # られている可能性があるので、内容を読み込み設定を更新する。
   #
-  # @param profile ������Ϳ����줿 SDO ServiceProfile
-  # @return ������ ServiceProfile ��Ϳ����줿���� false
+  # @param profile 新たに与えられた SDO ServiceProfile
+  # @return 不正な ServiceProfile が与えられた場合は false
   #
   # @else
   # @brief Reinitialization function of the consumer class
@@ -181,14 +181,14 @@ class SdoServiceProviderBase(SDOPackage__POA.SDOService):
 
   ##
   # @if jp
-  # @brief ServiceProfile ���֤�
+  # @brief ServiceProfile を返す
   #
-  # init()/reinit()��Ϳ����줿 ServiceProfile ���̾索�֥���������
-  # ���ݻ�����롣SDO Service �����ե졼�����ϴ����夳�Υ��֥���
-  # ���Ȥ��б����� ServiceProfile ��ɬ�פȤ���Τǡ����δؿ��Ǥ��ݻ�
-  # ����Ƥ��� ServiceProfile ���֤���
+  # init()/reinit()で与えられた ServiceProfile は通常オブジェクト内
+  # で保持される。SDO Service 管理フレームワークは管理上このオブジェ
+  # クトに対応する ServiceProfile を必要とするので、この関数では保持
+  # されている ServiceProfile を返す。
   # 
-  # @return ���Υ��֥������Ȥ��ݻ����Ƥ��� ServiceProfile
+  # @return このオブジェクトが保持している ServiceProfile
   #
   # @else
   # @brief Getting ServiceProfile
@@ -200,11 +200,11 @@ class SdoServiceProviderBase(SDOPackage__POA.SDOService):
 
   ##
   # @if jp
-  # @brief ��λ����
+  # @brief 終了処理
   #
-  # SDO�����ӥ����ǥ��å������ݤ˸ƤӽФ���뽪λ�����Ѵؿ�������
-  # �ӥ��Τǥ��å��˺ݤ��ơ��������֥������Ȥ��ݻ�����꥽���������
-  # ����ʤɤν�����Ԥ���
+  # SDOサービスがでタッチされる際に呼び出される終了処理用関数。サー
+  # ビスのでタッチに際して、当該オブジェクトが保持するリソースを解放
+  # するなどの処理を行う。
   #
   # @else
   # @brief Finalization
@@ -221,7 +221,7 @@ sdoserviceproviderfactory = None
   
 ##
 # @if jp
-# @brief SdoServiceProviderFactory �� typedef
+# @brief SdoServiceProviderFactory の typedef
 # @else
 # @brief typedef of sdoServiceProviderFactory
 # @endif

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -17,9 +17,9 @@ import OpenRTM_aist
 ##
 # @if jp
 # @class InPortDirectProvider
-# @brief InPortDirectProvider ¥¯¥é¥¹
+# @brief InPortDirectProvider ã‚¯ãƒ©ã‚¹
 #
-# ¥Ç¡¼¥¿¤ò¥À¥¤¥ì¥¯¥È¤Ë½ñ¤­¹ş¤àpush·¿ÄÌ¿®¤ò¼Â¸½¤¹¤ëInPort¥×¥í¥Ğ¥¤¥À¥¯¥é¥¹
+# ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã«æ›¸ãè¾¼ã‚€pushå‹é€šä¿¡ã‚’å®Ÿç¾ã™ã‚‹InPortãƒ—ãƒ­ãƒã‚¤ãƒ€ã‚¯ãƒ©ã‚¹
 #
 # @param self
 #
@@ -39,9 +39,9 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -72,9 +72,9 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -92,7 +92,7 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
     return
   ##
   # @if jp
-  # @brief ½ªÎ»½èÍı
+  # @brief çµ‚äº†å‡¦ç†
   #
   # @else
   # @brief 

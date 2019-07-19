@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -24,14 +24,14 @@ import OpenRTM_aist
 #
 # @class InPortConsumer
 #
-# @brief InPortConsumer ���쥯�饹
+# @brief InPortConsumer 基底クラス
 #
-# ���ϥݡ��ȥ��󥷥塼�ޤΤ������ݥ��󥿡��ե��������饹
-# �ƶ�ݥ��饹�ϡ��ʲ��δؿ��μ������󶡤��ʤ���Фʤ�ʤ���
-# - push(): �ǡ�������
-# - clone(): �ݡ��ȤΥ��ԡ�
-# - subscribeInterface(): �ǡ����������Τؤ���Ͽ
-# - unsubscribeInterface(): �ǡ����������Τ���Ͽ���
+# 入力ポートコンシューマのための抽象インターフェースクラス
+# 各具象クラスは、以下の関数の実装を提供しなければならない。
+# - push(): データ送信
+# - clone(): ポートのコピー
+# - subscribeInterface(): データ送出通知への登録
+# - unsubscribeInterface(): データ送出通知の登録解除
 #
 # @since 0.4.0
 #
@@ -52,7 +52,7 @@ class InPortConsumer(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ���󥿡��ե������ץ��ե������������뤿�Υե��󥯥�
+  # @brief インターフェースプロファイルを公開するたのファンクタ
   # @else
   # @brief Functor to publish interface profile
   # @endif
@@ -67,7 +67,7 @@ class InPortConsumer(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ���󥿡��ե������ץ��ե������������뤿�Υե��󥯥�
+  # @brief インターフェースプロファイルを公開するたのファンクタ
   # @else
   # @brief Functor to publish interface profile
   # @endif

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -20,9 +20,9 @@
 ##
 # @if jp
 # @class ScopedLock
-# @brief ScopedLock ¥¯¥é¥¹
+# @brief ScopedLock ã‚¯ãƒ©ã‚¹
 #
-# ÇÓÂ¾½èÍıÍÑ¥í¥Ã¥¯¥¯¥é¥¹¡£
+# æ’ä»–å‡¦ç†ç”¨ãƒ­ãƒƒã‚¯ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @since 0.4.0
 #
@@ -35,12 +35,12 @@ class ScopedLock:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
-  # @param mutex ¥í¥Ã¥¯ÍÑ¥ß¥å¡¼¥Æ¥Ã¥¯¥¹
+  # @param mutex ãƒ­ãƒƒã‚¯ç”¨ãƒŸãƒ¥ãƒ¼ãƒ†ãƒƒã‚¯ã‚¹
   #
   # @else
   #
@@ -52,9 +52,9 @@ class ScopedLock:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #

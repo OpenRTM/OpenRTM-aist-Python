@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -25,11 +25,11 @@ import RTC
 # @if jp
 # @class OutPortDSConsumer
 #
-# @brief OutPortDSConsumer ¥¯¥é¥¹
+# @brief OutPortDSConsumer ã‚¯ãƒ©ã‚¹
 #
-# ÄÌ¿®¼êÃÊ¤Ë CORBA ¤òÍøÍÑ¤·¤¿½ÐÎÏ¥Ý¡¼¥È¥³¥ó¥·¥å¡¼¥Þ¤Î¼ÂÁõ¥¯¥é¥¹¡£
+# é€šä¿¡æ‰‹æ®µã« CORBA ã‚’åˆ©ç”¨ã—ãŸå‡ºåŠ›ãƒãƒ¼ãƒˆã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒžã®å®Ÿè£…ã‚¯ãƒ©ã‚¹ã€‚
 #
-# @param DataType ËÜ¥Ý¡¼¥È¤Ë¤Æ°·¤¦¥Ç¡¼¥¿·¿
+# @param DataType æœ¬ãƒãƒ¼ãƒˆã«ã¦æ‰±ã†ãƒ‡ãƒ¼ã‚¿åž‹
 #
 # @since 1.2.0
 #
@@ -53,11 +53,11 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # @param buffer ËÜ¥Ý¡¼¥È¤Ë³ä¤êÅö¤Æ¤ë¥Ð¥Ã¥Õ¥¡
+  # @param buffer æœ¬ãƒãƒ¼ãƒˆã«å‰²ã‚Šå½“ã¦ã‚‹ãƒãƒƒãƒ•ã‚¡
   #
   # @else
   # @brief Constructor
@@ -78,9 +78,9 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @else
   # @brief Destructor
@@ -97,15 +97,15 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
 
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
-  # OutPortConsumer¤Î³Æ¼ïÀßÄê¤ò¹Ô¤¦¡£¼ÂÁõ¥¯¥é¥¹¤Ç¤Ï¡¢Í¿¤¨¤é¤ì¤¿
-  # Properties¤«¤éÉ¬Í×¤Ê¾ðÊó¤ò¼èÆÀ¤·¤Æ³Æ¼ïÀßÄê¤ò¹Ô¤¦¡£¤³¤Î init() ´Ø
-  # ¿ô¤Ï¡¢OutPortProviderÀ¸À®Ä¾¸å¤ª¤è¤Ó¡¢ÀÜÂ³»þ¤Ë¤½¤ì¤¾¤ì¸Æ¤Ð¤ì¤ë²Ä
-  # Ç½À­¤¬¤¢¤ë¡£¤·¤¿¤¬¤Ã¤Æ¡¢¤³¤Î´Ø¿ô¤ÏÊ£¿ô²ó¸Æ¤Ð¤ì¤ë¤³¤È¤òÁÛÄê¤·¤Æµ­
-  # ½Ò¤µ¤ì¤ë¤Ù¤­¤Ç¤¢¤ë¡£
+  # OutPortConsumerã®å„ç¨®è¨­å®šã‚’è¡Œã†ã€‚å®Ÿè£…ã‚¯ãƒ©ã‚¹ã§ã¯ã€ä¸Žãˆã‚‰ã‚ŒãŸ
+  # Propertiesã‹ã‚‰å¿…è¦ãªæƒ…å ±ã‚’å–å¾—ã—ã¦å„ç¨®è¨­å®šã‚’è¡Œã†ã€‚ã“ã® init() é–¢
+  # æ•°ã¯ã€OutPortProviderç”Ÿæˆç›´å¾ŒãŠã‚ˆã³ã€æŽ¥ç¶šæ™‚ã«ãã‚Œãžã‚Œå‘¼ã°ã‚Œã‚‹å¯
+  # èƒ½æ€§ãŒã‚ã‚‹ã€‚ã—ãŸãŒã£ã¦ã€ã“ã®é–¢æ•°ã¯è¤‡æ•°å›žå‘¼ã°ã‚Œã‚‹ã“ã¨ã‚’æƒ³å®šã—ã¦è¨˜
+  # è¿°ã•ã‚Œã‚‹ã¹ãã§ã‚ã‚‹ã€‚
   # 
-  # @param prop ÀßÄê¾ðÊó
+  # @param prop è¨­å®šæƒ…å ±
   #
   # @else
   #
@@ -130,15 +130,15 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
 
   ##
   # @if jp
-  # @brief ¥Ð¥Ã¥Õ¥¡¤ò¥»¥Ã¥È¤¹¤ë
+  # @brief ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   #
-  # OutPortConsumer¤¬¥Ç¡¼¥¿¤ò¼è¤ê½Ð¤¹¥Ð¥Ã¥Õ¥¡¤ò¥»¥Ã¥È¤¹¤ë¡£
-  # ¤¹¤Ç¤Ë¥»¥Ã¥È¤µ¤ì¤¿¥Ð¥Ã¥Õ¥¡¤¬¤¢¤ë¾ì¹ç¡¢°ÊÁ°¤Î¥Ð¥Ã¥Õ¥¡¤Ø¤Î
-  # ¥Ý¥¤¥ó¥¿¤ËÂÐ¤·¤Æ¾å½ñ¤­¤µ¤ì¤ë¡£
-  # OutPortProvider¤Ï¥Ð¥Ã¥Õ¥¡¤Î½êÍ­¸¢¤ò²¾Äê¤·¤Æ¤¤¤Ê¤¤¤Î¤Ç¡¢
-  # ¥Ð¥Ã¥Õ¥¡¤Îºï½ü¤Ï¥æ¡¼¥¶¤ÎÀÕÇ¤¤Ç¹Ô¤ï¤Ê¤±¤ì¤Ð¤Ê¤é¤Ê¤¤¡£
+  # OutPortConsumerãŒãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã™ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã€‚
+  # ã™ã§ã«ã‚»ãƒƒãƒˆã•ã‚ŒãŸãƒãƒƒãƒ•ã‚¡ãŒã‚ã‚‹å ´åˆã€ä»¥å‰ã®ãƒãƒƒãƒ•ã‚¡ã¸ã®
+  # ãƒã‚¤ãƒ³ã‚¿ã«å¯¾ã—ã¦ä¸Šæ›¸ãã•ã‚Œã‚‹ã€‚
+  # OutPortProviderã¯ãƒãƒƒãƒ•ã‚¡ã®æ‰€æœ‰æ¨©ã‚’ä»®å®šã—ã¦ã„ãªã„ã®ã§ã€
+  # ãƒãƒƒãƒ•ã‚¡ã®å‰Šé™¤ã¯ãƒ¦ãƒ¼ã‚¶ã®è²¬ä»»ã§è¡Œã‚ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
   #
-  # @param buffer OutPortProvider¤¬¥Ç¡¼¥¿¤ò¼è¤ê½Ð¤¹¥Ð¥Ã¥Õ¥¡¤Ø¤Î¥Ý¥¤¥ó¥¿
+  # @param buffer OutPortProviderãŒãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã™ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒã‚¤ãƒ³ã‚¿
   #
   # @else
   # @brief Setting outside buffer's pointer
@@ -171,13 +171,13 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤òÆÉ¤ß½Ð¤¹
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿å‡ºã™
   #
-  # ÀßÄê¤µ¤ì¤¿¥Ç¡¼¥¿¤òÆÉ¤ß½Ð¤¹¡£
+  # è¨­å®šã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿å‡ºã™ã€‚
   #
-  # @param data ÆÉ¤ß½Ð¤·¤¿¥Ç¡¼¥¿¤ò¼õ¤±¼è¤ë¥ª¥Ö¥¸¥§¥¯¥È
+  # @param data èª­ã¿å‡ºã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’å—ã‘å–ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
-  # @return ¥Ç¡¼¥¿ÆÉ¤ß½Ð¤·½èÍý·ë²Ì(ÆÉ¤ß½Ð¤·À®¸ù:true¡¢ÆÉ¤ß½Ð¤·¼ºÇÔ:false)
+  # @return ãƒ‡ãƒ¼ã‚¿èª­ã¿å‡ºã—å‡¦ç†çµæžœ(èª­ã¿å‡ºã—æˆåŠŸ:trueã€èª­ã¿å‡ºã—å¤±æ•—:false)
   #
   # @else
   # @brief Read data
@@ -226,13 +226,13 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤Ø¤ÎÅÐÏ¿
+  # @brief ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã¸ã®ç™»éŒ²
   #
-  # »ØÄê¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¤Ë´ð¤Å¤¤¤Æ¡¢¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤Î¼õ¤±¼è¤ê¤ËÅÐÏ¿¤¹¤ë¡£
+  # æŒ‡å®šã•ã‚ŒãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«åŸºã¥ã„ã¦ã€ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã®å—ã‘å–ã‚Šã«ç™»éŒ²ã™ã‚‹ã€‚
   #
-  # @param properties ÅÐÏ¿¾ðÊó
+  # @param properties ç™»éŒ²æƒ…å ±
   #
-  # @return ÅÐÏ¿½èÍý·ë²Ì(ÅÐÏ¿À®¸ù:true¡¢ÅÐÏ¿¼ºÇÔ:false)
+  # @return ç™»éŒ²å‡¦ç†çµæžœ(ç™»éŒ²æˆåŠŸ:trueã€ç™»éŒ²å¤±æ•—:false)
   #
   # @else
   # @brief Subscribe the data receive notification
@@ -278,11 +278,11 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤«¤é¤ÎÅÐÏ¿²ò½ü
+  # @brief ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã‹ã‚‰ã®ç™»éŒ²è§£é™¤
   #
-  # ¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤Î¼õ¤±¼è¤ê¤«¤éÅÐÏ¿¤ò²ò½ü¤¹¤ë¡£
+  # ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã®å—ã‘å–ã‚Šã‹ã‚‰ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹ã€‚
   #
-  # @param properties ÅÐÏ¿²ò½ü¾ðÊó
+  # @param properties ç™»éŒ²è§£é™¤æƒ…å ±
   #
   # @else
   # @brief Unsubscribe the data receive notification
@@ -326,7 +326,7 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,OpenRTM_aist.CorbaConsumer)
 
   ##
   # @if jp
-  # @brief ¥ê¥¿¡¼¥ó¥³¡¼¥ÉÊÑ´¹ (DataPortStatus -> BufferStatus)
+  # @brief ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰å¤‰æ› (DataPortStatus -> BufferStatus)
   # @else
   # @brief Return codes conversion
   # @endif

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -24,9 +24,9 @@ import RTC, RTC__POA
 ##
 # @if jp
 # @brief 
-# FiniteStateMachine�Υ١������饹��
-# �桼����������RT����ݡ��ͥ�Ȥ����������ϡ����Υ��饹���ĥ���롣
-# ��RT����ݡ��ͥ�ȤΥ١����Ȥʤ륯�饹��}
+# FiniteStateMachineのベースクラス。
+# ユーザが新たなRTコンポーネントを作成する場合は、このクラスを拡張する。
+# 各RTコンポーネントのベースとなるクラス。}
 #
 #
 # @else
@@ -39,9 +39,9 @@ import RTC, RTC__POA
 class FsmObject_impl(RTC__POA.FsmObject):
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
   #

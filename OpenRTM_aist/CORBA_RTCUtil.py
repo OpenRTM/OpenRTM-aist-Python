@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -17,11 +17,11 @@ import RTC
 ##
 # @if jp
 #
-# @brief ����ݡ��ͥ�ȤΥץ��ѥƥ�����
+# @brief コンポーネントのプロパティ取得
 #
 # 
-# @param rtc RT����ݡ��ͥ��
-# @return ����ݡ��ͥ�ȤΥץ��ѥƥ�
+# @param rtc RTコンポーネント
+# @return コンポーネントのプロパティ
 #
 # @else
 #
@@ -45,16 +45,16 @@ def get_component_profile(rtc):
 ##
 # @if jp
 #
-# @brief ����ݡ��ͥ�ȤΥ��֥������ȥ�ե���󥹤�¸�ߤ��Ƥ��뤫��Ƚ��
+# @brief コンポーネントのオブジェクトリファレンスが存在しているかを判定
 #
 # 
-# @param rtc RT����ݡ��ͥ��
-# @return True:��¸��False:��λ�Ѥ�
+# @param rtc RTコンポーネント
+# @return True:生存、False:終了済み
 #
 # @else
 #
 # @brief 
-# @param rtc RT����ݡ��ͥ��
+# @param rtc RTコンポーネント
 # @return 
 #
 # @endif
@@ -70,10 +70,10 @@ def is_existing(rtc):
 ##
 # @if jp
 #
-# @brief RTC���ǥե���Ȥμ¹ԥ���ƥ����Ȥ�alive���֤���Ƚ�ꤹ��
+# @brief RTCがデフォルトの実行コンテキストでalive状態かを判定する
 #
-# @param rtc RT����ݡ��ͥ��
-# @return True:alive����
+# @param rtc RTコンポーネント
+# @return True:alive状態
 # 
 # @param 
 #
@@ -93,12 +93,12 @@ def is_alive_in_default_ec(rtc):
 ##
 # @if jp
 #
-# @brief RT����ݡ��ͥ�Ȥ˴�Ϣ�դ������¹ԥ���ƥ����Ȥ�����ꤷ��ID�μ¹ԥ���ƥ����Ȥ����
+# @brief RTコンポーネントに関連付けした実行コンテキストから指定したIDの実行コンテキストを取得
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param ec_id �¹ԥ���ƥ����Ȥ�ID
-# @return �¹ԥ���ƥ����ȤΥ��֥������ȥ�ե����
+# @param rtc 対象のRTコンポーネント
+# @param ec_id 実行コンテキストのID
+# @return 実行コンテキストのオブジェクトリファレンス
 #
 # @else
 #
@@ -137,13 +137,13 @@ def get_actual_ec(rtc, ec_id=0):
 ##
 # @if jp
 #
-# @brief �оݤ�RT����ݡ��ͥ�Ȥ�����ꤷ���¹ԥ���ƥ����Ȥ�ID��������� 
+# @brief 対象のRTコンポーネントから指定した実行コンテキストのIDを取得する 
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param ec �¹ԥ���ƥ�����
-# @return �¹ԥ���ƥ����Ȥ�ID
-# ���ꤷ���¹ԥ���ƥ����Ȥ�RT����ݡ��ͥ�Ȥ˴�Ϣ�դ����Ƥ��ʤ��ä�����-1���֤�
+# @param rtc 対象のRTコンポーネント
+# @param ec 実行コンテキスト
+# @return 実行コンテキストのID
+# 指定した実行コンテキストがRTコンポーネントに関連付けられていなかった場合は-1を返す
 #
 # @else
 #
@@ -179,13 +179,13 @@ def get_ec_id(rtc, ec):
 ##
 # @if jp
 #
-# @brief RTC����ꤷ���¹ԥ���ƥ����Ȥǥ����ƥ��١�����󤹤�
+# @brief RTCを指定した実行コンテキストでアクティベーションする
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param ec_id �¹ԥ���ƥ����Ȥ�ID
-# @return RTC��EC�Υ��֥������ȥ�ե���󥹤�nil�ξ���BAD_PARAMETER���֤�
-# nil�ǤϤʤ�����activate_component�ؿ�������ͤ��֤���RTC_OK�ξ��ϥ����ƥ��١����������
+# @param rtc 対象のRTコンポーネント
+# @param ec_id 実行コンテキストのID
+# @return RTC、ECのオブジェクトリファレンスがnilの場合はBAD_PARAMETERを返す
+# nilではない場合はactivate_component関数の戻り値を返す。RTC_OKの場合はアクティベーションが成功
 #
 # @else
 #
@@ -208,13 +208,13 @@ def activate(rtc, ec_id=0):
 ##
 # @if jp
 #
-# @brief RTC����ꤷ���¹ԥ���ƥ����Ȥ��󥢥��ƥ��١�����󤹤�
+# @brief RTCを指定した実行コンテキストで非アクティベーションする
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param ec_id �¹ԥ���ƥ����Ȥ�ID
-# @return RTC��EC�Υ��֥������ȥ�ե���󥹤�nil�ξ���BAD_PARAMETER���֤�
-# nil�ǤϤʤ�����deactivate_component�ؿ�������ͤ��֤���RTC_OK�ξ����󥢥��ƥ��١����������
+# @param rtc 対象のRTコンポーネント
+# @param ec_id 実行コンテキストのID
+# @return RTC、ECのオブジェクトリファレンスがnilの場合はBAD_PARAMETERを返す
+# nilではない場合はdeactivate_component関数の戻り値を返す。RTC_OKの場合は非アクティベーションが成功
 #
 # @else
 #
@@ -236,13 +236,13 @@ def deactivate(rtc, ec_id=0):
 ##
 # @if jp
 #
-# @brief RTC����ꤷ���¹ԥ���ƥ����Ȥǥꥻ�åȤ���
+# @brief RTCを指定した実行コンテキストでリセットする
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param ec_id �¹ԥ���ƥ����Ȥ�ID
-# @return RTC��EC�Υ��֥������ȥ�ե���󥹤�nil�ξ���BAD_PARAMETER���֤�
-# nil�ǤϤʤ�����reset_component�ؿ�������ͤ��֤���RTC_OK�ξ��ϥꥻ�åȤ�����
+# @param rtc 対象のRTコンポーネント
+# @param ec_id 実行コンテキストのID
+# @return RTC、ECのオブジェクトリファレンスがnilの場合はBAD_PARAMETERを返す
+# nilではない場合はreset_component関数の戻り値を返す。RTC_OKの場合はリセットが成功
 #
 # @else
 #
@@ -264,13 +264,13 @@ def reset(rtc, ec_id=0):
 ##
 # @if jp
 #
-# @brief �оݤ�RT����ݡ��ͥ�Ȥλ��ꤷ���¹ԥ���ƥ����ȤǤξ��֤����
+# @brief 対象のRTコンポーネントの指定した実行コンテキストでの状態を取得
 #
 #
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param ec_id �¹ԥ���ƥ����Ȥ�ID
-# @return 1���ܤ�����ͤȤ���rtc��ec��nil�ξ���False���֤�������ʳ��ξ���True���֤���
-# 2���ܤ�����ͤȤ��ƾ��֤��֤���
+# @param rtc 対象のRTコンポーネント
+# @param ec_id 実行コンテキストのID
+# @return 1番目の戻り値としてrtc、ecがnilの場合はFalseを返し、それ以外の場合はTrueを返す。
+# 2番目の戻り値として状態を返す。
 # 
 #
 # @else
@@ -293,13 +293,13 @@ def get_state(rtc, ec_id=0):
 ##
 # @if jp
 #
-# @brief �оݤ�RT����ݡ��ͥ�Ȥλ��ꤷ���¹ԥ���ƥ����Ȥ�INACTIVE���֤��ɤ���Ƚ��
+# @brief 対象のRTコンポーネントの指定した実行コンテキストでINACTIVE状態かどうか判定
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param ec_id �¹ԥ���ƥ����Ȥ�ID
-# @return INACTIVE���֤λ���True������ʳ���False
-# rtc��ec��nil�ξ���False���֤�
+# @param rtc 対象のRTコンポーネント
+# @param ec_id 実行コンテキストのID
+# @return INACTIVE状態の時はTrue、それ以外はFalse
+# rtc、ecがnilの場合もFalseを返す
 #
 # @else
 #
@@ -319,13 +319,13 @@ def is_in_inactive(rtc, ec_id=0):
 ##
 # @if jp
 #
-# @brief �оݤ�RT����ݡ��ͥ�Ȥλ��ꤷ���¹ԥ���ƥ����Ȥ�ACTIVE���֤��ɤ���Ƚ��
+# @brief 対象のRTコンポーネントの指定した実行コンテキストでACTIVE状態かどうか判定
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param ec_id �¹ԥ���ƥ����Ȥ�ID
-# @return ACTIVE���֤λ���True������ʳ���False
-# rtc��ec��nil�ξ���False���֤�
+# @param rtc 対象のRTコンポーネント
+# @param ec_id 実行コンテキストのID
+# @return ACTIVE状態の時はTrue、それ以外はFalse
+# rtc、ecがnilの場合もFalseを返す
 #
 # @else
 #
@@ -345,13 +345,13 @@ def is_in_active(rtc, ec_id=0):
 ##
 # @if jp
 #
-# @brief �оݤ�RT����ݡ��ͥ�Ȥλ��ꤷ���¹ԥ���ƥ����Ȥ�ERROR���֤��ɤ���Ƚ��
+# @brief 対象のRTコンポーネントの指定した実行コンテキストでERROR状態かどうか判定
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param ec_id �¹ԥ���ƥ����Ȥ�ID
-# @return ERROR���֤λ���True������ʳ���False
-# rtc��ec��nil�ξ���False���֤�
+# @param rtc 対象のRTコンポーネント
+# @param ec_id 実行コンテキストのID
+# @return ERROR状態の時はTrue、それ以外はFalse
+# rtc、ecがnilの場合もFalseを返す
 #
 # @else
 #
@@ -373,11 +373,11 @@ def is_in_error(rtc, ec_id=0):
 ##
 # @if jp
 #
-# @brief RTC�Υǥե���Ȥμ¹ԥ���ƥ����Ȥμ¹Լ������������
+# @brief RTCのデフォルトの実行コンテキストの実行周期を取得する
 #
 # 
-# @param rtc RT����ݡ��ͥ��
-# @return �¹Լ���
+# @param rtc RTコンポーネント
+# @return 実行周期
 #
 # @else
 #
@@ -396,13 +396,13 @@ def get_default_rate(rtc):
 ##
 # @if jp
 #
-# @brief RTC�Υǥե���Ȥμ¹ԥ���ƥ����Ȥμ¹Լ��������ꤹ��
+# @brief RTCのデフォルトの実行コンテキストの実行周期を設定する
 #
 # 
-# @param rtc RT����ݡ��ͥ��
-# @param rate �¹Լ���
-# @return set_rate�ؿ�������ͤ��֤���
-# RTC_OK�����꤬����
+# @param rtc RTコンポーネント
+# @param rate 実行周期
+# @return set_rate関数の戻り値を返す。
+# RTC_OKで設定が成功
 #
 # @else
 #
@@ -420,12 +420,12 @@ def set_default_rate(rtc, rate):
 ##
 # @if jp
 #
-# @brief RTC�λ���ID�μ¹ԥ���ƥ����Ȥμ��������
+# @brief RTCの指定IDの実行コンテキストの周期を取得
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param ec_id ����μ¹ԥ���ƥ����Ȥ�ID
-# @return �¹Լ���
+# @param rtc 対象のRTコンポーネント
+# @param ec_id 指定の実行コンテキストのID
+# @return 実行周期
 #
 # @else
 #
@@ -444,14 +444,14 @@ def get_current_rate(rtc, ec_id):
 ##
 # @if jp
 #
-# @brief RTC�λ���ID�μ¹ԥ���ƥ����Ȥμ���������
+# @brief RTCの指定IDの実行コンテキストの周期を設定
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param ec_id ����μ¹ԥ���ƥ����Ȥ�ID
-# @param rate �¹Լ���
-# @return set_rate�ؿ�������ͤ��֤���
-# RTC_OK�����꤬����
+# @param rtc 対象のRTコンポーネント
+# @param ec_id 指定の実行コンテキストのID
+# @param rate 実行周期
+# @return set_rate関数の戻り値を返す。
+# RTC_OKで設定が成功
 #
 # @else
 #
@@ -469,13 +469,13 @@ def set_current_rate(rtc, ec_id, rate):
 ##
 # @if jp
 #
-# @brief �оݤ�RTC�Υǥե���Ȥμ¹ԥ���ƥ����Ȥ˻����RTC���Ϣ�դ���
+# @brief 対象のRTCのデフォルトの実行コンテキストに指定のRTCを関連付ける
 #
 # 
-# @param localcomp �оݤ�RT����ݡ��ͥ��
-# @param othercomp �¹ԥ���ƥ����Ȥ˴�Ϣ�դ���RT����ݡ��ͥ��
-# @return ec�μ����˼��Ԥ�������BAD_PARAMETER���֤�
-# �����Ǥʤ�����addComponent�ؿ�������ͤ��֤���RTC_OK����³������
+# @param localcomp 対象のRTコンポーネント
+# @param othercomp 実行コンテキストに関連付けるRTコンポーネント
+# @return ecの取得に失敗した場合はBAD_PARAMETERを返す
+# そうでない場合はaddComponent関数の戻り値を返す。RTC_OKで接続成功。
 #
 # @else
 #
@@ -495,13 +495,13 @@ def add_rtc_to_default_ec(localcomp, othercomp):
 ##
 # @if jp
 #
-# @brief �оݤ�RTC�Υǥե���Ȥμ¹ԥ���ƥ����Ȥλ����RTC�ؤδ�Ϣ�դ���������
+# @brief 対象のRTCのデフォルトの実行コンテキストの指定のRTCへの関連付けを解除する
 #
 # 
-# @param localcomp �оݤ�RT����ݡ��ͥ��
-# @param othercomp �¹ԥ���ƥ����ȤȤδ�Ϣ�դ���������RT����ݡ��ͥ��
-# @return ec�μ����˼��Ԥ�������BAD_PARAMETER���֤�
-# �����Ǥʤ�����removeComponent�ؿ�������ͤ��֤���RTC_OK�ǲ��������
+# @param localcomp 対象のRTコンポーネント
+# @param othercomp 実行コンテキストとの関連付けを解除するRTコンポーネント
+# @return ecの取得に失敗した場合はBAD_PARAMETERを返す
+# そうでない場合はremoveComponent関数の戻り値を返す。RTC_OKで解除成功。
 #
 # @else
 #
@@ -521,12 +521,12 @@ def remove_rtc_to_default_ec(localcomp, othercomp):
 ##
 # @if jp
 #
-# @brief RTC�Υǥե���Ȥμ¹ԥ���ƥ����Ȥ˻��ä��Ƥ���RTC�Υꥹ�Ȥ��������
-# �¹ԥ���ƥ����Ȥ�nil�ξ��϶��Υꥹ�Ȥ��֤�
+# @brief RTCのデフォルトの実行コンテキストに参加しているRTCのリストを取得する
+# 実行コンテキストがnilの場合は空のリストを返す
 #
 # 
-# @param rtc RT����ݡ��ͥ��
-# @return RTC�Υꥹ��
+# @param rtc RTコンポーネント
+# @return RTCのリスト
 #
 # @else
 #
@@ -546,11 +546,11 @@ def get_participants_rtc(rtc):
 ##
 # @if jp
 #
-# @brief ���ꤷ��RTC���ݻ�����ݡ��Ȥ�̾�������
+# @brief 指定したRTCの保持するポートの名前を取得
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @return �ݡ���̾�Υꥹ��
+# @param rtc 対象のRTコンポーネント
+# @return ポート名のリスト
 #
 # @else
 #
@@ -574,11 +574,11 @@ def get_port_names(rtc):
 ##
 # @if jp
 #
-# @brief ���ꤷ��RTC���ݻ����륤��ݡ��Ȥ�̾�������
+# @brief 指定したRTCの保持するインポートの名前を取得
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @return �ݡ���̾�Υꥹ��
+# @param rtc 対象のRTコンポーネント
+# @return ポート名のリスト
 #
 # @else
 #
@@ -606,11 +606,11 @@ def get_inport_names(rtc):
 ##
 # @if jp
 #
-# @brief ���ꤷ��RTC���ݻ����륢���ȥݡ��Ȥ�̾�������
+# @brief 指定したRTCの保持するアウトポートの名前を取得
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @return �ݡ���̾�Υꥹ��
+# @param rtc 対象のRTコンポーネント
+# @return ポート名のリスト
 #
 # @else
 #
@@ -639,11 +639,11 @@ def get_outport_names(rtc):
 ##
 # @if jp
 #
-# @brief ���ꤷ��RTC���ݻ����륵���ӥ��ݡ��Ȥ�̾�������
+# @brief 指定したRTCの保持するサービスポートの名前を取得
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @return �ݡ���̾�Υꥹ��
+# @param rtc 対象のRTコンポーネント
+# @return ポート名のリスト
 #
 # @else
 #
@@ -671,12 +671,12 @@ def get_svcport_names(rtc):
 ##
 # @if jp
 #
-# @brief �оݤ�RTC������ꤷ��̾���Υݡ��Ȥ����
+# @brief 対象のRTCから指定した名前のポートを取得
 #
 # 
-# @param rtc RT����ݡ��ͥ��
-# @param port_name �ݡ���̾
-# @return �ݡ���
+# @param rtc RTコンポーネント
+# @param port_name ポート名
+# @return ポート
 #
 # @else
 #
@@ -706,11 +706,11 @@ def get_port_by_name(rtc, port_name):
 ##
 # @if jp
 #
-# @brief ���ꤷ���ݡ��Ȥ��ݻ����Ƥ��륳�ͥ�����̾���Υꥹ�Ȥ����
+# @brief 指定したポートの保持しているコネクタの名前のリストを取得
 #
 # 
-# @param port �оݤΥݡ���
-# @return ���ͥ���̾�Υꥹ��
+# @param port 対象のポート
+# @return コネクタ名のリスト
 #
 # @else
 #
@@ -731,11 +731,11 @@ def get_connector_names_by_portref(port):
 ##
 # @if jp
 #
-# @brief �оݤ�RTC�λ��ꤷ���ݡ��ȤΥ��ͥ�����̾���Υꥹ�Ȥ����
+# @brief 対象のRTCの指定したポートのコネクタの名前のリストを取得
 #
-# @param rtc RT����ݡ��ͥ��
-# @param port_name �ݡ���̾
-# @return ���ͥ���̾�Υꥹ��
+# @param rtc RTコンポーネント
+# @param port_name ポート名
+# @return コネクタ名のリスト
 #
 # @else
 #
@@ -762,11 +762,11 @@ def get_connector_names(rtc, port_name):
 ##
 # @if jp
 #
-# @brief ���ꤷ���ݡ��Ȥ��ݻ����Ƥ��륳�ͥ�����ID�Υꥹ�Ȥ����
+# @brief 指定したポートの保持しているコネクタのIDのリストを取得
 #
 # 
-# @param port �оݤΥݡ���
-# @return ���ͥ�����ID�Υꥹ��
+# @param port 対象のポート
+# @return コネクタのIDのリスト
 #
 # @else
 #
@@ -790,12 +790,12 @@ def get_connector_ids_by_portref(port):
 ##
 # @if jp
 #
-# @brief �оݤ�RTC�λ��ꤷ���ݡ��ȤΥ��ͥ�����ID�Υꥹ�Ȥ����
+# @brief 対象のRTCの指定したポートのコネクタのIDのリストを取得
 #
 # 
-# @param rtc RT����ݡ��ͥ��
-# @param port_name �ݡ���̾
-# @return ���ͥ�����ID�Υꥹ��
+# @param rtc RTコンポーネント
+# @param port_name ポート名
+# @return コネクタのIDのリスト
 #
 # @else
 #
@@ -818,14 +818,14 @@ def get_connector_ids(rtc, port_name):
 ##
 # @if jp
 #
-# @brief ���ꤷ���ݡ��Ȥ���³���뤿��Υ��ͥ����ץ��ե���������
+# @brief 指定したポートを接続するためのコネクタプロファイルを取得
 #
 # 
-# @param name ���ͥ���̾
-# @param prop_arg ����
-# @param port0 �оݤΥݡ���1
-# @param port1 �оݤΥݡ���2
-# @return ���ͥ����ץ��ե�����
+# @param name コネクタ名
+# @param prop_arg 設定
+# @param port0 対象のポート1
+# @param port1 対象のポート2
+# @return コネクタプロファイル
 #
 # @else
 #
@@ -868,12 +868,12 @@ def create_connector(name, prop_arg, port0, port1):
 ##
 # @if jp
 #
-# @brief ���ꤷ���ݡ���Ʊ�Τ���³����Ƥ��뤫��Ƚ��
+# @brief 指定したポート同士が接続されているかを判定
 #
 # 
-# @param localport �оݤΥݡ���1
-# @param otherport �оݤΥݡ���2
-# @return True: ��³�Ѥߡ�False: ̤��³
+# @param localport 対象のポート1
+# @param otherport 対象のポート2
+# @return True: 接続済み、False: 未接続
 #
 # @else
 #
@@ -901,15 +901,15 @@ def already_connected(localport, otherport):
 ##
 # @if jp
 #
-# @brief ���ꤷ���ݡ��Ȥ���³����
+# @brief 指定したポートを接続する
 #
 # 
-# @param name ���ͥ���̾
-# @param prop ����
-# @param port0 �оݤΥݡ���1
-# @param port1 �оݤΥݡ���2
-# @return �ݡ��ȤΥ��֥������ȥ�ե���󥹤�nil�ξ���BAD_PARAMETER���֤�
-# nil�ǤϤʤ�����port0.connect�ؿ�������ͤ��֤���RTC_OK�ξ�����³������
+# @param name コネクタ名
+# @param prop 設定
+# @param port0 対象のポート1
+# @param port1 対象のポート2
+# @return ポートのオブジェクトリファレンスがnilの場合はBAD_PARAMETERを返す
+# nilではない場合はport0.connect関数の戻り値を返す。RTC_OKの場合は接続が成功
 #
 # @else
 #
@@ -938,15 +938,15 @@ def connect(name, prop, port0, port1):
 ##
 # @if jp
 #
-# @brief ���ꤷ���ݡ��ȤȻ��ꤷ���ꥹ����Υݡ������Ƥ���³����
+# @brief 指定したポートと指定したリスト内のポート全てと接続する
 #
 # 
-# @param name ���ͥ���̾
-# @param prop ����
-# @param port �оݤΥݡ���
-# @param target_ports �оݤΥݡ��ȤΥꥹ��
-# @return ���Ƥ���³��������������RTC_OK���֤���
-# connect�ؿ���RTC_OK�ʳ����֤�������BAD_PARAMETER���֤���
+# @param name コネクタ名
+# @param prop 設定
+# @param port 対象のポート
+# @param target_ports 対象のポートのリスト
+# @return 全ての接続が成功した場合はRTC_OKを返す。
+# connect関数がRTC_OK以外を返した場合はBAD_PARAMETERを返す。
 #
 #
 # @else
@@ -983,7 +983,7 @@ def connect_multi(name, prop, port, target_ports):
 ##
 # @if jp
 # @class find_port
-# @brief �ݡ��Ȥ�̾�����鸡��
+# @brief ポートを名前から検索
 #
 # @else
 # @class find_port
@@ -995,12 +995,12 @@ class find_port:
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
-  # ��������ݡ���̾����ꤹ��
+  # @brief コンストラクタ
+  # 検索するポート名を指定する
   #
   # 
   # @param self
-  # @param name �ݡ���̾
+  # @param name ポート名
   #
   # @else
   #
@@ -1015,12 +1015,12 @@ class find_port:
   ##
   # @if jp
   #
-  # @brief �оݤΥݡ��Ȥ�̾���Ȼ��ꤷ���ݡ���̾�����פ��뤫Ƚ��
+  # @brief 対象のポートの名前と指定したポート名が一致するか判定
   #
   # 
   # @param self
-  # @param p �оݤΥݡ���
-  # @return True: ̾�������ס�False:��̾�����԰���
+  # @param p 対象のポート
+  # @return True: 名前が一致、False:　名前が不一致
   #
   # @else
   #
@@ -1040,17 +1040,17 @@ class find_port:
 ##
 # @if jp
 #
-# @brief �оݤ�RTC�λ��ꤷ��̾���Υݡ��Ȥ���³����
+# @brief 対象のRTCの指定した名前のポートを接続する
 #
 # 
-# @param name ���ͥ���̾
-# @param prop ����
-# @param rtc0 �оݤ�RTC����ݡ��ͥ��1
-# @param portName0 �оݤΥݡ���̾1
-# @param rtc1 �оݤ�RTC����ݡ��ͥ��2
-# @param portName1 �оݤ�RTC����ݡ��ͥ��2
-# @return RTC���ݡ��Ȥ�nil�ξ���BAD_PARAMETER���֤���
-# nil�ǤϤʤ�����port0.connect�ؿ�������ͤ��֤���RTC_OK�ξ�����³������
+# @param name コネクタ名
+# @param prop 設定
+# @param rtc0 対象のRTCコンポーネント1
+# @param portName0 対象のポート名1
+# @param rtc1 対象のRTCコンポーネント2
+# @param portName1 対象のRTCコンポーネント2
+# @return RTC、ポートがnilの場合はBAD_PARAMETERを返す。
+# nilではない場合はport0.connect関数の戻り値を返す。RTC_OKの場合は接続が成功
 #
 # @else
 #
@@ -1083,12 +1083,12 @@ def connect_by_name(name, prop, rtc0, port_name0, rtc1, port_name1):
 ##
 # @if jp
 #
-# @brief ����Υ��ͥ��������Ǥ���
+# @brief 指定のコネクタを切断する
 #
 # 
-# @param connector_prof ���ͥ����ץ��ե�����
-# @return ���ͥ����ץ��ե�������ݻ����Ƥ���ݡ��ȤΥ��֥������ȥ�ե���󥹤�nil�ξ���BAD_PARAMETER���֤�
-# nil�ǤϤʤ�����ports[0].disconnect�ؿ�������ͤ��֤���RTC_OK�ξ������Ǥ�����
+# @param connector_prof コネクタプロファイル
+# @return コネクタプロファイルで保持しているポートのオブジェクトリファレンスがnilの場合はBAD_PARAMETERを返す
+# nilではない場合はports[0].disconnect関数の戻り値を返す。RTC_OKの場合は切断が成功
 #
 # @else
 #
@@ -1106,13 +1106,13 @@ def disconnect(connector_prof):
 ##
 # @if jp
 #
-# @brief �оݤΥݡ��Ȥǻ��ꤷ��̾���Υ��ͥ���������
+# @brief 対象のポートで指定した名前のコネクタを切断
 #
 # 
-# @param port_ref �оݤΥݡ���
-# @param conn_name ���ͥ���̾
-# @return port��nil�ξ���BAD_PARAMETER���֤�
-# nil�ǤϤʤ�����disconnect�ؿ�������ͤ��֤���RTC_OK�ξ������Ǥ�����
+# @param port_ref 対象のポート
+# @param conn_name コネクタ名
+# @return portがnilの場合はBAD_PARAMETERを返す
+# nilではない場合はdisconnect関数の戻り値を返す。RTC_OKの場合は切断が成功
 #
 # @else
 #
@@ -1136,13 +1136,13 @@ def disconnect_by_portref_connector_name(port_ref, conn_name):
 ##
 # @if jp
 #
-# @brief �оݤ�̾���Υݡ��Ȥǻ��ꤷ��̾���Υ��ͥ���������
+# @brief 対象の名前のポートで指定した名前のコネクタを切断
 #
 # 
-# @param port_name �оݤΥݡ���̾
-# @param conn_name ���ͥ���̾
-# @return port��¸�ߤ��ʤ�����BAD_PARAMETER���֤�
-# nil�ǤϤʤ�����disconnect�ؿ�������ͤ��֤���RTC_OK�ξ������Ǥ�����
+# @param port_name 対象のポート名
+# @param conn_name コネクタ名
+# @return portが存在しない場合はBAD_PARAMETERを返す
+# nilではない場合はdisconnect関数の戻り値を返す。RTC_OKの場合は切断が成功
 #
 # @else
 #
@@ -1166,13 +1166,13 @@ def disconnect_by_portname_connector_name(port_name, conn_name):
 ##
 # @if jp
 #
-# @brief �оݤΥݡ��Ȥǻ��ꤷ��ID�Υ��ͥ���������
+# @brief 対象のポートで指定したIDのコネクタを切断
 #
 # 
-# @param port �оݤΥݡ���
-# @param name ���ͥ���ID
-# @return port��nil�ξ���BAD_PARAMETER���֤�
-# nil�ǤϤʤ�����disconnect�ؿ�������ͤ��֤���RTC_OK�ξ������Ǥ�����
+# @param port 対象のポート
+# @param name コネクタID
+# @return portがnilの場合はBAD_PARAMETERを返す
+# nilではない場合はdisconnect関数の戻り値を返す。RTC_OKの場合は切断が成功
 #
 # @else
 #
@@ -1189,13 +1189,13 @@ def disconnect_by_portref_connector_id(port_ref, conn_id):
 ##
 # @if jp
 #
-# @brief �оݤ�̾���Υݡ��Ȥǻ��ꤷ��ID�Υ��ͥ���������
+# @brief 対象の名前のポートで指定したIDのコネクタを切断
 #
 # 
-# @param port_name �оݤΥݡ���̾
-# @param name ���ͥ���ID
-# @return port��¸�ߤ��ʤ�����BAD_PARAMETER���֤�
-# nil�ǤϤʤ�����disconnect�ؿ�������ͤ��֤���RTC_OK�ξ������Ǥ�����
+# @param port_name 対象のポート名
+# @param name コネクタID
+# @return portが存在しない場合はBAD_PARAMETERを返す
+# nilではない場合はdisconnect関数の戻り値を返す。RTC_OKの場合は切断が成功
 #
 # @else
 #
@@ -1216,12 +1216,12 @@ def disconnect_by_portname_connector_id(port_name, conn_id):
 ##
 # @if jp
 #
-# @brief �оݤΥݡ��ȤΥ��ͥ�������������
+# @brief 対象のポートのコネクタを全て切断
 #
 # 
-# @param port_ref �ݡ��ȤΥ��֥������ȥ�ե����
-# @return port��nil�ξ���BAD_PARAMETER���֤�
-# ���ǤǤ�������RTC_OK���֤�
+# @param port_ref ポートのオブジェクトリファレンス
+# @return portがnilの場合はBAD_PARAMETERを返す
+# 切断できた場合はRTC_OKを返す
 #
 # @else
 #
@@ -1239,12 +1239,12 @@ def disconnect_all_by_ref(port_ref):
 ##
 # @if jp
 #
-# @brief ����ݡ���̾�Υݡ��ȤΥ��ͥ�������������
+# @brief 指定ポート名のポートのコネクタを全て切断
 #
 # 
-# @param port_name �ݡ���̾
-# @return port��¸�ߤ��ʤ�����BAD_PARAMETER���֤�
-# ���ǤǤ�������RTC_OK���֤�
+# @param port_name ポート名
+# @return portが存在しない場合はBAD_PARAMETERを返す
+# 切断できた場合はRTC_OKを返す
 #
 # @else
 #
@@ -1263,12 +1263,12 @@ def disconnect_all_by_name(port_name):
 ##
 # @if jp
 #
-# @brief ���ꤷ��̾���Υݡ��Ȥ����
+# @brief 指定した名前のポートを取得
 #
 # 
-# @param port_name �ݡ���̾
-# @return �ݡ��ȤΥ��֥������ȥ�ե����
-# port��¸�ߤ��ʤ�����nil���֤�
+# @param port_name ポート名
+# @return ポートのオブジェクトリファレンス
+# portが存在しない場合はnilを返す
 #
 # @else
 #
@@ -1295,13 +1295,13 @@ def get_port_by_url(port_name):
 ##
 # @if jp
 #
-# @brief �оݥݡ��Ȥ���³���Ƥ���ݡ��Ȥǻ��ꤷ���ݡ���̾�Ȱ��פ�����������
+# @brief 対象ポートと接続しているポートで指定したポート名と一致した場合に切断
 #
 # 
-# @param localport �оݤΥݡ���
-# @param othername ��³���Ƥ���ݡ���̾
-# @return �ݡ��Ȥ�nil�ξ�硢localport��̾����othername�����פ����硢��³���Ƥ���ݡ��Ȥ�̾����othername�Ȱ��פ����Τ��ʤ�����BAD_PARAMETER���֤�
-# �嵭�ξ������ƤϤޤ�ʤ�����disconnect�ؿ�������ͤ��֤���RTC_OK�ξ������Ǥ�����
+# @param localport 対象のポート
+# @param othername 接続しているポート名
+# @return ポートがnilの場合、localportの名前とothernameが一致する場合、接続しているポートの名前でothernameと一致するものがない場合にBAD_PARAMETERを返す
+# 上記の条件に当てはまらない場合はdisconnect関数の戻り値を返す。RTC_OKの場合は切断が成功
 #
 # @else
 #
@@ -1329,12 +1329,12 @@ def disconnect_by_port_name(localport, othername):
 ##
 # @if jp
 #
-# @brief �оݤ�RT����ݡ��ͥ�Ȥλ��ꤷ��̾���Υ���ե�����졼����󥻥åȤ�key-value�Ǽ���
+# @brief 対象のRTコンポーネントの指定した名前のコンフィギュレーションセットをkey-valueで取得
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param conf_name ����ե�����졼����󥻥å�̾
-# @return ����ե�����졼����󥻥å�
+# @param rtc 対象のRTコンポーネント
+# @param conf_name コンフィギュレーションセット名
+# @return コンフィギュレーションセット
 #
 # @else
 #
@@ -1357,13 +1357,13 @@ def get_configuration(rtc, conf_name):
 ##
 # @if jp
 #
-# @brief ���ꤷ������ե�����졼����󥻥å�̾���ѥ�᡼��̾�Υ���ե�����졼�����ѥ�᡼�������
+# @brief 指定したコンフィギュレーションセット名、パラメータ名のコンフィギュレーションパラメータを取得
 #
 # 
-# @param rtc RT����ݡ��ͥ��
-# @param confset_name ����ե�����졼����󥻥å�̾
-# @param value_name �ѥ�᡼��̾
-# @return �ѥ�᡼��
+# @param rtc RTコンポーネント
+# @param confset_name コンフィギュレーションセット名
+# @param value_name パラメータ名
+# @return パラメータ
 #
 # @else
 #
@@ -1391,11 +1391,11 @@ def get_parameter_by_key(rtc, confset_name, value_name):
 ##
 # @if jp
 #
-# @brief �оݤ�RTC�Υ����ƥ��֤ʥ���ե�����졼����󥻥å�̾���������
+# @brief 対象のRTCのアクティブなコンフィギュレーションセット名を取得する
 #
-# @param rtc RT����ݡ��ͥ��
-# @return ����ե�����졼����󥻥å�̾
-# ����ե�����졼�����μ����˼��Ԥ������϶���ʸ������֤�
+# @param rtc RTコンポーネント
+# @return コンフィギュレーションセット名
+# コンフィギュレーションの取得に失敗した場合は空の文字列を返す
 # 
 # @param 
 #
@@ -1414,11 +1414,11 @@ def get_active_configuration_name(rtc):
 ##
 # @if jp
 #
-# @brief �����ƥ��֤ʥ���ե�����졼����󥻥åȤ�key-value�Ǽ�������
+# @brief アクティブなコンフィギュレーションセットをkey-valueで取得する
 #
 # 
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @return �����ƥ��֤ʥ���ե�����졼����󥻥å�
+# @param rtc 対象のRTコンポーネント
+# @return アクティブなコンフィギュレーションセット
 #
 # @else
 #
@@ -1443,14 +1443,14 @@ def get_active_configuration(rtc):
 ##
 # @if jp
 #
-# @brief ����ե�����졼�����ѥ�᡼��������
+# @brief コンフィギュレーションパラメータを設定
 #
 #
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param confset_name ����ե�����졼����󥻥å�̾
-# @param value_name �ѥ�᡼��̾
-# @param value �ѥ�᡼��
-# @return True:�����������False:����˼���
+# @param rtc 対象のRTコンポーネント
+# @param confset_name コンフィギュレーションセット名
+# @param value_name パラメータ名
+# @param value パラメータ
+# @return True:設定に成功、False:設定に失敗
 #
 # @else
 #
@@ -1476,13 +1476,13 @@ def set_configuration(rtc, confset_name, value_name, value):
 ##
 # @if jp
 #
-# @brief �����ƥ��֤ʥ���ե�����졼����󥻥åȤΥѥ�᡼��������
+# @brief アクティブなコンフィギュレーションセットのパラメータを設定
 #
 #
-# @param rtc �оݤ�RT����ݡ��ͥ��
-# @param value_name �ѥ�᡼��̾
-# @param value �ѥ�᡼��
-# @return True:�����������False:����˼���
+# @param rtc 対象のRTコンポーネント
+# @param value_name パラメータ名
+# @param value パラメータ
+# @return True:設定に成功、False:設定に失敗
 #
 # @else
 #
@@ -1507,14 +1507,14 @@ def set_active_configuration(rtc, value_name, value):
 ##
 # @if jp
 #
-# @brief ����ե�����졼�����ѥ�᡼��������
+# @brief コンフィギュレーションパラメータの設定
 #
 #
-# @param conf ����ե�����졼�����
-# @param confset ����ե�����졼����󥻥å�
-# @param value_name �ѥ�᡼��̾
-# @param value �ѥ�᡼��
-# @return True:�����������False:����˼���
+# @param conf コンフィギュレーション
+# @param confset コンフィギュレーションセット
+# @param value_name パラメータ名
+# @param value パラメータ
+# @return True:設定に成功、False:設定に失敗
 #
 # @else
 #

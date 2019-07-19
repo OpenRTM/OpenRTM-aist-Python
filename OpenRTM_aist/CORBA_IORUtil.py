@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -185,11 +185,11 @@ class IOP:
 ##
 # @if jp
 #
-# @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥×¥í¥Ñ¥Æ¥£¼èÆÀ
+# @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å–å¾—
 #
 # 
-# @param rtc RT¥³¥ó¥İ¡¼¥Í¥ó¥È
-# @return ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥×¥í¥Ñ¥Æ¥£
+# @param rtc RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+# @return ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 #
 # @else
 #
@@ -346,12 +346,12 @@ def extractAddrs(comps):
 ##
 # @if jp
 #
-# @brief IRO¤Î¥¨¥ó¥É¥İ¥¤¥ó¥ÈÃÖ¤­´¹¤¨
+# @brief IROã®ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆç½®ãæ›ãˆ
 #
 # 
-# @param iorstr IORÊ¸»úÎó
-# @param endpoint ¥¨¥ó¥É¥İ¥¤¥ó¥È
-# @return ÃÖ¤­´¹¤¨¸å¤ÎÊ¸»úÎó
+# @param iorstr IORæ–‡å­—åˆ—
+# @param endpoint ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆ
+# @return ç½®ãæ›ãˆå¾Œã®æ–‡å­—åˆ—
 #
 # @else
 #

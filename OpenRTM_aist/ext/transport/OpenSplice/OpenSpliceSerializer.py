@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -31,14 +31,14 @@ import sys
 
 ##
 # @if jp
-# @brief omniORB�Υǡ�������OpenSplice�Υǡ������Ѵ�
-# omniORB�Υǡ������ξ����_NP_RepositoryId�����������
-# ������줿����̾���ͤ��Ǽ���Ƥ���
+# @brief omniORBのデータからOpenSpliceのデータに変換
+# omniORBのデータ型の情報は_NP_RepositoryIdから取得し、
+# 定義された要素名に値を格納していく
 #
 # @param self
-# @param data �Ѵ����Υǡ���(omniORB)
-# @param gen_info OpenSplice�Υǡ�����Info���֥�������
-# @return �Ѵ���Υǡ���(OpenSplice)
+# @param data 変換前のデータ(omniORB)
+# @param gen_info OpenSpliceのデータ型Infoオブジェクト
+# @return 変換後のデータ(OpenSplice)
 # 
 #
 # @else
@@ -75,13 +75,13 @@ if sys.version_info[0] == 3:
 
 ##
 # @if jp
-# @brief OpenSplice�Υǡ�������omniORB�Υǡ������Ѵ�
-# OpenSplice�Υǡ�����xml.etree.ElementTree���������Ƥ��ꡢ
-# ElementTree��������̾����������ͤ��Ǽ����
+# @brief OpenSpliceのデータからomniORBのデータに変換
+# OpenSpliceのデータはxml.etree.ElementTreeで定義されており、
+# ElementTreeから要素名を取得して値を格納する
 #
 # @param self
-# @param ddsdata �Ѵ����Υǡ���(OpenSplice)
-# @param omnidata �ѹ��оݤΥǡ���(omniORB)
+# @param ddsdata 変換前のデータ(OpenSplice)
+# @param omnidata 変更対象のデータ(omniORB)
 # 
 #
 # @else
@@ -111,7 +111,7 @@ def DDSDataToOmniData(ddsdata, omnidata):
 ##
 # @if jp
 # @class OpenSpliceSerializer
-# @brief OpenSplice�ѥ��ꥢ�饤��
+# @brief OpenSplice用シリアライザ
 #
 # @else
 # @class OpenSpliceSerializer
@@ -125,9 +125,9 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
   #
@@ -142,7 +142,7 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
   #
   # @param self
@@ -157,10 +157,10 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ��������
+  # @brief 設定初期化
   #
   # 
-  # @param prop �������
+  # @param prop 設定情報
   #
   # @else
   #
@@ -177,13 +177,13 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief �ǡ������Ѵ�(omniORB->OpenSplice)
+  # @brief データの変換(omniORB->OpenSplice)
   #
   # 
-  # @param data omniORB����Υǡ���
-  # @return ret��value
-  # ret��SERIALIZE_OK��������SERIALIZE_ERROR�����ԡ�SERIALIZE_NOTFOUND������Υ��ꥢ�饤�����ʤ�
-  # value��OpenSplice����Υǡ���
+  # @param data omniORB定義のデータ
+  # @return ret、value
+  # ret：SERIALIZE_OK：成功、SERIALIZE_ERROR：失敗、SERIALIZE_NOTFOUND：指定のシリアライザがない
+  # value：OpenSplice定義のデータ
   #
   # @else
   #
@@ -215,13 +215,13 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief �ǡ������Ѵ�(OpenSplice->omniORB)
+  # @brief データの変換(OpenSplice->omniORB)
   #
-  # @param bdata OpenSplice����Υǡ���
-  # @param data_type omniORB����Υǡ�����
-  # @return ret��value
-  # ret��SERIALIZE_OK��������SERIALIZE_ERROR�����ԡ�SERIALIZE_NOTFOUND������Υ��ꥢ�饤�����ʤ�
-  # value��omniORB����Υǡ���
+  # @param bdata OpenSplice定義のデータ
+  # @param data_type omniORB定義のデータ型
+  # @return ret、value
+  # ret：SERIALIZE_OK：成功、SERIALIZE_ERROR：失敗、SERIALIZE_NOTFOUND：指定のシリアライザがない
+  # value：omniORB定義のデータ
   #
   # @else
   #
@@ -241,13 +241,13 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
 
 ##
 # @if jp
-# @brief OpenSplice�ǻ��Ѥ���ǡ��������ɲä���
-# OpenSplice��omniORB��Ʊ���IDL�ե��������������ǡ���������Ѥ��뤬��
-# omniORB�Υǡ���������ɤ�IDL�ե��������������ǡ������ʤΤ���������뤳�ȤϤǤ��ʤ����ᡢ
-# omniORB�Υǡ�����̾��OpenSplice�Υǡ�����̾��IDL�ե�����̾���Ϣ�դ���������Ͽ����
+# @brief OpenSpliceで使用するデータ型を追加する
+# OpenSpliceとomniORBは同一のIDLファイルで定義したデータ型を使用するが、
+# omniORBのデータ型からどのIDLファイルで定義したデータ型なのかを取得することはできないため、
+# omniORBのデータ型名、OpenSpliceのデータ型名、IDLファイル名を関連付ける情報を登録する
 #
-# @param datatype omniORB����Υǡ�����̾
-# @param idlfile IDL�ե�����Υѥ�
+# @param datatype omniORB定義のデータ型名
+# @param idlfile IDLファイルのパス
 #
 # @else
 #
@@ -270,7 +270,7 @@ def addDataType(datatype, idlfile):
 
 ##
 # @if jp
-# @brief ���ꥢ�饤����������ǡ�����������Ͽ
+# @brief シリアライザ初期化、データ型情報登録
 #
 #
 # @else

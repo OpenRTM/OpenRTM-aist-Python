@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -23,25 +23,25 @@ import OpenRTM_aist
 ##
 # @if jp
 # @class InPortPullConnector
-# @brief InPortPullConnector ���饹
+# @brief InPortPullConnector クラス
 #
-# InPort �� pull ���ǡ����ե����Τ���� Connector ���饹�����Υ���
-# �������Ȥϡ���³���� dataflow_type �� pull �����ꤵ�줿��硢
-# InPort �ˤ�ä���������ͭ���졢OutPortPullConnector ���Фˤʤäơ�
-# �ǡ����ݡ��Ȥ� pull ���Υǡ����ե�����¸����롣��Ĥ���³���Ф��ơ�
-# ��ĤΥǡ������ȥ꡼����󶡤���ͣ��� Connector ���б����롣
-# Connector �� ��³������������� UUID ������ ID �ˤ����̤���롣
+# InPort の pull 型データフローのための Connector クラス。このオブ
+# ジェクトは、接続時に dataflow_type に pull が指定された場合、
+# InPort によって生成・所有され、OutPortPullConnector と対になって、
+# データポートの pull 型のデータフローを実現する。一つの接続に対して、
+# 一つのデータストリームを提供する唯一の Connector が対応する。
+# Connector は 接続時に生成される UUID 形式の ID により区別される。
 #
-# InPortPullConnector �ϰʲ��λ��ĤΥ��֥������Ȥ��ͭ���������롣
+# InPortPullConnector は以下の三つのオブジェクトを所有し管理する。
 #
 # - InPortConsumer
 # - Buffer
 #
-# OutPort �˽񤭹��ޤ줿�ǡ����� OutPortPullConnector::write() ����
-# ���� Buffer �˽񤭹��ޤ�롣InPort::read(),
-# InPortPullConnector::read() �Ϸ�̤Ȥ��ơ�OutPortConsumer::get()
-# ��ƤӽФ���OutPortPullConnector �λ��ĥХåե�����ǡ������ɤ߽�
-# ����InPortPullConnector �Τ�ĥХåե��˥ǡ�����񤭹��ࡣ
+# OutPort に書き込まれたデータは OutPortPullConnector::write() に渡
+# され Buffer に書き込まれる。InPort::read(),
+# InPortPullConnector::read() は結果として、OutPortConsumer::get()
+# を呼び出し、OutPortPullConnector の持つバッファからデータを読み出
+# し、InPortPullConnector のもつバッファにデータを書き込む。
 #
 # @since 1.0.0
 #
@@ -80,21 +80,21 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # InPortPullConnector �Υ��󥹥ȥ饯���ϥ��֥��������������˲���
-  # ������ˤȤ롣ConnectorInfo ����³�����ޤߡ����ξ���˽����Х�
-  # �ե������������롣OutPort ���󥿡��ե������Υץ��Х������֥�����
-  # �ȤؤΥݥ��󥿤��ꡢ��ͭ������ĤΤǡ�InPortPullConnector ��
-  # OutPortConsumer �β�����Ǥ����ġ��Ƽ磻�٥�Ȥ��Ф��륳����Х�
-  # ���������󶡤��� ConnectorListeners �������Ŭ�ڤʥ����ߥ󥰤ǥ���
-  # ��Хå���ƤӽФ����ǡ����Хåե����⤷ InPortBase �����󶡤�
-  # �����Ϥ��Υݥ��󥿤��롣
+  # InPortPullConnector のコンストラクタはオブジェクト生成時に下記
+  # を引数にとる。ConnectorInfo は接続情報を含み、この情報に従いバッ
+  # ファ等を生成する。OutPort インターフェースのプロバイダオブジェク
+  # トへのポインタを取り、所有権を持つので、InPortPullConnector は
+  # OutPortConsumer の解体責任を持つ。各種イベントに対するコールバッ
+  # ク機構を提供する ConnectorListeners を持ち、適切なタイミングでコー
+  # ルバックを呼び出す。データバッファがもし InPortBase から提供さ
+  # れる場合はそのポインタを取る。
   #
   # @param info ConnectorInfo
   # @param consumer OutPortConsumer
-  # @param listeners ConnectorListeners ���Υꥹ�ʥ��֥������ȥꥹ��
-  # @param buffer CdrBufferBase ���ΥХåե�
+  # @param listeners ConnectorListeners 型のリスナオブジェクトリスト
+  # @param buffer CdrBufferBase 型のバッファ
   #
   # @else
   # @brief Constructor
@@ -153,9 +153,9 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
-  # disconnect() ���ƤФ졢consumer, publisher, buffer �����Ρ��������롣
+  # disconnect() が呼ばれ、consumer, publisher, buffer が解体・削除される。
   #
   # @else
   #
@@ -172,18 +172,18 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief read �ؿ�
+  # @brief read 関数
   #
-  # OutPortConsumer ����ǡ�����������롣������ɤ߽Ф�����硢���
-  # �ͤ� PORT_OK �Ȥʤꡢdata ���ɤ߽Ф��줿�ǡ�������Ǽ����롣����
-  # �ʳ��ξ��ˤϡ����顼�ͤȤ��� BUFFER_EMPTY, TIMEOUT,
-  # PRECONDITION_NOT_MET, PORT_ERROR ���֤���롣
+  # OutPortConsumer からデータを取得する。正常に読み出せた場合、戻り
+  # 値は PORT_OK となり、data に読み出されたデータが格納される。それ
+  # 以外の場合には、エラー値として BUFFER_EMPTY, TIMEOUT,
+  # PRECONDITION_NOT_MET, PORT_ERROR が返される。
   #
-  # @return PORT_OK              ���ｪλ
-  #         BUFFER_EMPTY         �Хåե��϶��Ǥ���
-  #         TIMEOUT              �����ॢ���Ȥ���
-  #         PRECONDITION_NOT_MET ���������������ʤ�
-  #         PORT_ERROR           ����¾�Υ��顼
+  # @return PORT_OK              正常終了
+  #         BUFFER_EMPTY         バッファは空である
+  #         TIMEOUT              タイムアウトした
+  #         PRECONDITION_NOT_MET 事前条件を満たさない
+  #         PORT_ERROR           その他のエラー
   #
   # @else
   # @brief Destructor
@@ -260,9 +260,9 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief ��³����ؿ�
+  # @brief 接続解除関数
   #
-  # Connector ���ݻ����Ƥ�����³��������
+  # Connector が保持している接続を解除する
   #
   # @else
   # @brief Disconnect connection
@@ -289,9 +289,9 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
         
   ##
   # @if jp
-  # @brief �����ƥ��ֲ�
+  # @brief アクティブ化
   #
-  # ���Υ��ͥ����򥢥��ƥ��ֲ�����
+  # このコネクタをアクティブ化する
   #
   # @else
   #
@@ -307,9 +307,9 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief �󥢥��ƥ��ֲ�
+  # @brief 非アクティブ化
   #
-  # ���Υ��ͥ������󥢥��ƥ��ֲ�����
+  # このコネクタを非アクティブ化する
   #
   # @else
   #
@@ -325,12 +325,12 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
   
   ##
   # @if jp
-  # @brief Buffer������
+  # @brief Bufferの生成
   #
-  # Ϳ����줿��³����˴�Ť��Хåե����������롣
+  # 与えられた接続情報に基づきバッファを生成する。
   #
-  # @param info ��³����
-  # @return �Хåե��ؤΥݥ���
+  # @param info 接続情報
+  # @return バッファへのポインタ
   #
   # @else
   # @brief create buffer
@@ -349,7 +349,7 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     
   ##
   # @if jp
-  # @brief ��³��Ω���˥�����Хå���Ƥ�
+  # @brief 接続確立時にコールバックを呼ぶ
   # @else
   # @brief Invoke callback when connection is established
   # @endif
@@ -361,7 +361,7 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief ��³���ǻ��˥�����Хå���Ƥ�
+  # @brief 接続切断時にコールバックを呼ぶ
   # @else
   # @brief Invoke callback when connection is destroied
   # @endif
@@ -375,11 +375,11 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief �ǡ���������쥯�Ȥ˽񤭹��ि���OutPort�Υ����Х�Ȥ����ꤹ��
+  # @brief データをダイレクトに書き込むためのOutPortのサーバントを設定する
   #
   # @param self
-  # @param directOutPort OutPort�Υ����Х��
-  # @return True: ��������� False: ��������ѤߤΤ��Ἲ��
+  # @param directOutPort OutPortのサーバント
+  # @return True: 設定に成功 False: 既に設定済みのため失敗
   # @else
   # @brief 
   #
@@ -399,8 +399,8 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief ���󥷥塼�ޤΥ��󥿡��ե���������Ͽ����ä�
-  # @param prop ���ͥ����ץ��ե�����Υץ��ѥƥ�
+  # @brief コンシューマのインターフェースの登録を取り消す
+  # @param prop コネクタプロファイルのプロパティ
   # @else
   # @brief 
   # @param prop

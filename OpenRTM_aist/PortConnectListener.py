@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -21,12 +21,12 @@ class Lock:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
-  # @param mutex ¥í¥Ã¥¯ÍÑ¥ß¥å¡¼¥Æ¥Ã¥¯¥¹
+  # @param mutex ãƒ­ãƒƒã‚¯ç”¨ãƒŸãƒ¥ãƒ¼ãƒ†ãƒƒã‚¯ã‚¹
   #
   # @else
   #
@@ -38,9 +38,9 @@ class Lock:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -54,11 +54,11 @@ class Lock:
 
 ##
 # @if jp
-# @brief PortConnectListener ¤Î¥¿¥¤¥×
+# @brief PortConnectListener ã®ã‚¿ã‚¤ãƒ—
 #
-# - ON_NOTIFY_CONNECT:         notify_connect() ´Ø¿ôÆâ¸Æ¤Ó½Ğ¤·Ä¾¸å
-# - ON_NOTIFY_DISCONNECT:      notify_disconnect() ¸Æ¤Ó½Ğ¤·Ä¾¸å
-# - ON_UNSUBSCRIBE_INTERFACES: notify_disconnect() Æâ¤ÎIF¹ØÆÉ²ò½ü»ş
+# - ON_NOTIFY_CONNECT:         notify_connect() é–¢æ•°å†…å‘¼ã³å‡ºã—ç›´å¾Œ
+# - ON_NOTIFY_DISCONNECT:      notify_disconnect() å‘¼ã³å‡ºã—ç›´å¾Œ
+# - ON_UNSUBSCRIBE_INTERFACES: notify_disconnect() å†…ã®IFè³¼èª­è§£é™¤æ™‚
 #
 # @else
 # @brief The types of ConnectorDataListener
@@ -84,15 +84,15 @@ class PortConnectListenerType:
 
 ##
 # @if jp
-# @class PortConnectListener ¥¯¥é¥¹
-# @brief PortConnectListener ¥¯¥é¥¹
+# @class PortConnectListener ã‚¯ãƒ©ã‚¹
+# @brief PortConnectListener ã‚¯ãƒ©ã‚¹
 #
-# ³Æ¥¢¥¯¥·¥ç¥ó¤ËÂĞ±ş¤¹¤ë¥æ¡¼¥¶¡¼¥³¡¼¥É¤¬¸Æ¤Ğ¤ì¤ëÄ¾Á°¤Î¥¿¥¤¥ß¥ó¥°
-# ¤Ç¥³¡¼¥ë¤µ¤ì¤ë¥ê¥¹¥Ê¥¯¥é¥¹¤Î´ğÄì¥¯¥é¥¹¡£
+# å„ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã«å¯¾å¿œã™ã‚‹ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚³ãƒ¼ãƒ‰ãŒå‘¼ã°ã‚Œã‚‹ç›´å‰ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°
+# ã§ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ãƒªã‚¹ãƒŠã‚¯ãƒ©ã‚¹ã®åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
 #
-# - ON_NOTIFY_CONNECT:         notify_connect() ´Ø¿ôÆâ¸Æ¤Ó½Ğ¤·Ä¾¸å
-# - ON_NOTIFY_DISCONNECT:      notify_disconnect() ¸Æ¤Ó½Ğ¤·Ä¾¸å
-# - ON_UNSUBSCRIBE_INTERFACES: notify_disconnect() Æâ¤ÎIF¹ØÆÉ²ò½ü»ş
+# - ON_NOTIFY_CONNECT:         notify_connect() é–¢æ•°å†…å‘¼ã³å‡ºã—ç›´å¾Œ
+# - ON_NOTIFY_DISCONNECT:      notify_disconnect() å‘¼ã³å‡ºã—ç›´å¾Œ
+# - ON_UNSUBSCRIBE_INTERFACES: notify_disconnect() å†…ã®IFè³¼èª­è§£é™¤æ™‚
 #
 # @else
 # @class PortConnectListener class
@@ -116,13 +116,13 @@ class PortConnectListener:
   ##
   # @if jp
   #
-  # @brief PortConnectListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+  # @brief PortConnectListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
   #
-  # PortConnectListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
+  # PortConnectListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
   #
-  # @param type ÊÑ´¹ÂĞ¾İ PortConnectListenerType
+  # @param type å¤‰æ›å¯¾è±¡ PortConnectListenerType
   #
-  # @return Ê¸»úÎóÊÑ´¹·ë²Ì
+  # @return æ–‡å­—åˆ—å¤‰æ›çµæœ
   #
   # @else
   #
@@ -153,7 +153,7 @@ class PortConnectListener:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -164,9 +164,9 @@ class PortConnectListener:
   ##
   # @if jp
   #
-  # @brief ²¾ÁÛ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief ä»®æƒ³ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
-  # PortConnectListener ¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # PortConnectListener ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @else
   #
@@ -185,13 +185,13 @@ class PortConnectListener:
 #============================================================
 ##
 # @if jp
-# @brief PortConnectRetListenerType ¤Î¥¿¥¤¥×
+# @brief PortConnectRetListenerType ã®ã‚¿ã‚¤ãƒ—
 #
-# - ON_CONNECT_NEXTPORT:     notify_connect() Ãæ¤Î¥«¥¹¥±¡¼¥É¸Æ¤Ó½Ğ¤·Ä¾¸å
-# - ON_SUBSCRIBE_INTERFACES: notify_connect() Ãæ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¹ØÆÉÄ¾¸å
-# - ON_CONNECTED:            nofity_connect() ÀÜÂ³½èÍı´°Î»»ş¤Ë¸Æ¤Ó½Ğ¤µ¤ì¤ë
-# - ON_DISCONNECT_NEXT:      notify_disconnect() Ãæ¤Ë¥«¥¹¥±¡¼¥É¸Æ¤Ó½Ğ¤·Ä¾¸å
-# - ON_DISCONNECTED:         notify_disconnect() ¥ê¥¿¡¼¥ó»ş
+# - ON_CONNECT_NEXTPORT:     notify_connect() ä¸­ã®ã‚«ã‚¹ã‚±ãƒ¼ãƒ‰å‘¼ã³å‡ºã—ç›´å¾Œ
+# - ON_SUBSCRIBE_INTERFACES: notify_connect() ä¸­ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹è³¼èª­ç›´å¾Œ
+# - ON_CONNECTED:            nofity_connect() æ¥ç¶šå‡¦ç†å®Œäº†æ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹
+# - ON_DISCONNECT_NEXT:      notify_disconnect() ä¸­ã«ã‚«ã‚¹ã‚±ãƒ¼ãƒ‰å‘¼ã³å‡ºã—ç›´å¾Œ
+# - ON_DISCONNECTED:         notify_disconnect() ãƒªã‚¿ãƒ¼ãƒ³æ™‚
 #
 # @else
 # @brief The types of PortConnectRetListenerType
@@ -222,18 +222,18 @@ class PortConnectRetListenerType:
 
 ##
 # @if jp
-# @class PortConnectRetListener ¥¯¥é¥¹
-# @brief PortConnectRetListener ¥¯¥é¥¹
+# @class PortConnectRetListener ã‚¯ãƒ©ã‚¹
+# @brief PortConnectRetListener ã‚¯ãƒ©ã‚¹
 #
-# ³Æ¥¢¥¯¥·¥ç¥ó¤ËÂĞ±ş¤¹¤ë¥æ¡¼¥¶¡¼¥³¡¼¥É¤¬¸Æ¤Ğ¤ì¤ëÄ¾Á°¤Î¥¿¥¤¥ß¥ó¥°
-# ¤Ç¥³¡¼¥ë¤µ¤ì¤ë¥ê¥¹¤Ê¥¯¥é¥¹¤Î´ğÄì¥¯¥é¥¹¡£
+# å„ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã«å¯¾å¿œã™ã‚‹ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚³ãƒ¼ãƒ‰ãŒå‘¼ã°ã‚Œã‚‹ç›´å‰ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°
+# ã§ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ãƒªã‚¹ãªã‚¯ãƒ©ã‚¹ã®åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
 #
-# - ON_PUBLISH_INTERFACES:   notify_connect() Ãæ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¸ø³«Ä¾¸å
-# - ON_CONNECT_NEXTPORT:     notify_connect() Ãæ¤Î¥«¥¹¥±¡¼¥É¸Æ¤Ó½Ğ¤·Ä¾¸å
-# - ON_SUBSCRIBE_INTERFACES: notify_connect() Ãæ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¹ØÆÉÄ¾¸å
-# - ON_CONNECTED:            nofity_connect() ÀÜÂ³½èÍı´°Î»»ş¤Ë¸Æ¤Ó½Ğ¤µ¤ì¤ë
-# - ON_DISCONNECT_NEXT:      notify_disconnect() Ãæ¤Ë¥«¥¹¥±¡¼¥É¸Æ¤Ó½Ğ¤·Ä¾¸å
-# - ON_DISCONNECTED:         notify_disconnect() ¥ê¥¿¡¼¥ó»ş
+# - ON_PUBLISH_INTERFACES:   notify_connect() ä¸­ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å…¬é–‹ç›´å¾Œ
+# - ON_CONNECT_NEXTPORT:     notify_connect() ä¸­ã®ã‚«ã‚¹ã‚±ãƒ¼ãƒ‰å‘¼ã³å‡ºã—ç›´å¾Œ
+# - ON_SUBSCRIBE_INTERFACES: notify_connect() ä¸­ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹è³¼èª­ç›´å¾Œ
+# - ON_CONNECTED:            nofity_connect() æ¥ç¶šå‡¦ç†å®Œäº†æ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹
+# - ON_DISCONNECT_NEXT:      notify_disconnect() ä¸­ã«ã‚«ã‚¹ã‚±ãƒ¼ãƒ‰å‘¼ã³å‡ºã—ç›´å¾Œ
+# - ON_DISCONNECTED:         notify_disconnect() ãƒªã‚¿ãƒ¼ãƒ³æ™‚
 #
 # @else
 # @class PortConnectRetListener class
@@ -260,13 +260,13 @@ class PortConnectRetListener:
   ##
   # @if jp
   #
-  # @brief PortConnectRetListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+  # @brief PortConnectRetListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
   #
-  # PortConnectRetListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
+  # PortConnectRetListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
   #
-  # @param type ÊÑ´¹ÂĞ¾İ PortConnectRetListenerType
+  # @param type å¤‰æ›å¯¾è±¡ PortConnectRetListenerType
   #
-  # @return Ê¸»úÎóÊÑ´¹·ë²Ì
+  # @return æ–‡å­—åˆ—å¤‰æ›çµæœ
   #
   # @else
   #
@@ -298,7 +298,7 @@ class PortConnectRetListener:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -309,9 +309,9 @@ class PortConnectRetListener:
   ##
   # @if jp
   #
-  # @brief ²¾ÁÛ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief ä»®æƒ³ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
-  # PortConnectRetListener ¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # PortConnectRetListener ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @else
   #
@@ -332,9 +332,9 @@ class PortConnectRetListener:
 ##
 # @if jp
 # @class PortConnectListenerHolder 
-# @brief PortConnectListener ¥Û¥ë¥À¥¯¥é¥¹
+# @brief PortConnectListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
 #
-# Ê£¿ô¤Î PortConnectListener ¤òÊİ»ı¤·´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
+# è¤‡æ•°ã® PortConnectListener ã‚’ä¿æŒã—ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @else
 # @class PortConnectListenerHolder
@@ -350,7 +350,7 @@ class PortConnectListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Constructor
   # @endif
@@ -362,7 +362,7 @@ class PortConnectListenerHolder:
     
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -373,11 +373,11 @@ class PortConnectListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ÎÄÉ²Ã
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®è¿½åŠ 
   #
-  # ¥ê¥¹¥Ê¡¼¤òÄÉ²Ã¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ ã™ã‚‹ã€‚
   #
-  # @param listener ÄÉ²Ã¤¹¤ë¥ê¥¹¥Ê
+  # @param listener è¿½åŠ ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Add the listener.
@@ -397,11 +397,11 @@ class PortConnectListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤Îºï½ü
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®å‰Šé™¤
   #
-  # ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ã€‚
   #
-  # @param listener ºï½ü¤¹¤ë¥ê¥¹¥Ê
+  # @param listener å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Remove the listener. 
@@ -426,9 +426,9 @@ class PortConnectListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤ë
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã¸é€šçŸ¥ã™ã‚‹
   #
-  # ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ê¥¹¥Ê¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+  # ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒªã‚¹ãƒŠã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã€‚
   #
   # @param info ConnectorInfo
   # @else
@@ -451,9 +451,9 @@ class PortConnectListenerHolder:
 ##
 # @if jp
 # @class PortConnectRetListenerHolder
-# @brief PortConnectRetListener ¥Û¥ë¥À¥¯¥é¥¹
+# @brief PortConnectRetListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
 #
-# Ê£¿ô¤Î PortConnectRetListener ¤òÊİ»ı¤·´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
+# è¤‡æ•°ã® PortConnectRetListener ã‚’ä¿æŒã—ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @else
 # @class PortConnectRetListenerHolder
@@ -469,7 +469,7 @@ class PortConnectRetListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Constructor
   # @endif
@@ -482,7 +482,7 @@ class PortConnectRetListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -494,11 +494,11 @@ class PortConnectRetListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ÎÄÉ²Ã
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®è¿½åŠ 
   #
-  # ¥ê¥¹¥Ê¡¼¤òÄÉ²Ã¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ ã™ã‚‹ã€‚
   #
-  # @param listener ÄÉ²Ã¤¹¤ë¥ê¥¹¥Ê
+  # @param listener è¿½åŠ ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Add the listener.
@@ -518,11 +518,11 @@ class PortConnectRetListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤Îºï½ü
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®å‰Šé™¤
   #
-  # ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ã€‚
   #
-  # @param listener ºï½ü¤¹¤ë¥ê¥¹¥Ê
+  # @param listener å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Remove the listener. 
@@ -547,12 +547,12 @@ class PortConnectRetListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤ë
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã¸é€šçŸ¥ã™ã‚‹
   #
-  # ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ê¥¹¥Ê¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+  # ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒªã‚¹ãƒŠã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã€‚
   #
   # @param info ConnectorInfo
-  # @param cdrdata ¥Ç¡¼¥¿
+  # @param cdrdata ãƒ‡ãƒ¼ã‚¿
   # @else
   #
   # @brief Notify listeners. 
@@ -576,7 +576,7 @@ class PortConnectRetListenerHolder:
 ##
 # @if jp
 # @class PortConnectListeners
-# @brief PortConnectListeners ¥¯¥é¥¹
+# @brief PortConnectListeners ã‚¯ãƒ©ã‚¹
 #
 #
 # @else
@@ -592,8 +592,8 @@ class PortConnectListeners:
   def __init__(self):
     ##
     # @if jp
-    # @brief PortConnectListenerType ¥ê¥¹¥ÊÇÛÎó
-    # PortConnectListenerType ¥ê¥¹¥Ê¤ò³ÊÇ¼
+    # @brief PortConnectListenerType ãƒªã‚¹ãƒŠé…åˆ—
+    # PortConnectListenerType ãƒªã‚¹ãƒŠã‚’æ ¼ç´
     # @else
     # @brief PortConnectListenerType listener array
     # The PortConnectListenerType listener is stored. 
@@ -603,8 +603,8 @@ class PortConnectListeners:
     
     ##
     # @if jp
-    # @brief PortConnectRetType¥ê¥¹¥ÊÇÛÎó
-    # PortConnectRetType¥ê¥¹¥Ê¤ò³ÊÇ¼
+    # @brief PortConnectRetTypeãƒªã‚¹ãƒŠé…åˆ—
+    # PortConnectRetTypeãƒªã‚¹ãƒŠã‚’æ ¼ç´
     # @else
     # @brief PortConnectRetType listener array
     # The PortConnectRetType listener is stored.

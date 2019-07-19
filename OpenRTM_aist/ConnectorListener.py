@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -24,16 +24,16 @@ import threading
 ##
 # @if jp
 # @class ConnectorListenerStatus mixin class
-# @brief ConnectorListenerStatus mixin ���饹
+# @brief ConnectorListenerStatus mixin クラス
 #
-# ���Υ��饹�ϡ�enum������줿�꥿���󥳡��ɤ�ConnectorListener��
-# Ϣ�Υ��֥��饹�Ƕ������Ѥ��뤿��� mixin ���饹�Ǥ��롣���Υ꥿��
-# �󥳡��ɤ���Ѥ��륯�饹�Ǥϡ�ConnectorListenerStatus ���饹��
-# public �Ѿ���������define ���Ƥ��� CONNLISTENER_STATUS_ENUM �򥯥�
-# ����˵��Ҥ��뤳�Ȥ����Ѳ�ǽ�Ȥʤ롣����ˤ�ꡢenum ��
-# ReturnCode ���Ȥ��� typedef �����ʸ� ReturnCode �����ѤǤ���褦��
-# ����ȤȤ�ˡ�̾�����֤� enum ������줿�Ƽ��̻Ҥ��������饹̾����
-# �����Ƴ�����롣
+# このクラスは、enum定義されたリターンコードを、ConnectorListener関
+# 連のサブクラスで共通利用するための mixin クラスである。このリター
+# ンコードを使用するクラスでは、ConnectorListenerStatus クラスを
+# public 継承し、下にdefine してある CONNLISTENER_STATUS_ENUM をクラ
+# ス内に記述することで利用可能となる。これにより、enum を
+# ReturnCode 型として typedef し、以後 ReturnCode を利用できるように
+# するとともに、名前空間に enum 定義された各識別子を当該クラス名前空
+# 間内に導入する。
 #
 # @else
 # @class DataPortStatus mixin class
@@ -62,18 +62,18 @@ class PortType:
 
 ##
 # @if jp
-# @brief ConnectorDataListener �Υ�����
+# @brief ConnectorDataListener のタイプ
 #
-# - ON_BUFFER_WRITE:          �Хåե��񤭹��߻�
-# - ON_BUFFER_FULL:           �Хåե��ե��
-# - ON_BUFFER_WRITE_TIMEOUT:  �Хåե��񤭹��ߥ����ॢ���Ȼ�
-# - ON_BUFFER_OVERWRITE:      �Хåե���񤭻�
-# - ON_BUFFER_READ:           �Хåե��ɤ߽Ф���
-# - ON_SEND:                  InProt�ؤ�������
-# - ON_RECEIVED:              InProt�ؤ�������λ��
-# - ON_RECEIVER_FULL:         InProt¦�Хåե��ե��
-# - ON_RECEIVER_TIMEOUT:      InProt¦�Хåե������ॢ���Ȼ�
-# - ON_RECEIVER_ERROR:        InProt¦���顼��
+# - ON_BUFFER_WRITE:          バッファ書き込み時
+# - ON_BUFFER_FULL:           バッファフル時
+# - ON_BUFFER_WRITE_TIMEOUT:  バッファ書き込みタイムアウト時
+# - ON_BUFFER_OVERWRITE:      バッファ上書き時
+# - ON_BUFFER_READ:           バッファ読み出し時
+# - ON_SEND:                  InProtへの送信時
+# - ON_RECEIVED:              InProtへの送信完了時
+# - ON_RECEIVER_FULL:         InProt側バッファフル時
+# - ON_RECEIVER_TIMEOUT:      InProt側バッファタイムアウト時
+# - ON_RECEIVER_ERROR:        InProt側エラー時
 #
 # @else
 # @brief The types of ConnectorDataListener
@@ -111,31 +111,31 @@ class ConnectorDataListenerType:
 
 ##
 # @if jp
-# @class ConnectorDataListener ���饹
+# @class ConnectorDataListener クラス
 #
-# �ǡ����ݡ��Ȥ� Connector �ˤ�����ȯ������Ƽ磻�٥�Ȥ��Ф��륳��
-# ��Хå���¸�����ꥹ�ʥ��饹�δ��쥯�饹��
+# データポートの Connector において発生する各種イベントに対するコー
+# ルバックを実現するリスナクラスの基底クラス。
 #
-# ���������å���OutPort���Ф��ƥǡ����񤭹��ߡ�InPort¦�ǥǡ�������
-# �������ޤǤδ֤�ȯ������Ƽ磻�٥�Ȥ�եå����륳����Хå�����
-# �ꤹ�뤳�Ȥ��Ǥ��롣�ʤ����ꥹ�ʡ����饹��2����¸�ߤ����Хåե���
-# ����������Υ�����Хå��ǡ����λ�����ͭ���ʥǡ�����ե��󥯥��ΰ�
-# ���Ȥ��Ƽ������ ConnectorDataListener �Ǥ��ꡢ�⤦�����ϥǡ�����
-# ��ץƥ���Хåե��ɤ߹��߻��Υ����ॢ���Ȥʤɥǡ����������Ǥ��ʤ�
-# ���ʤɤ˥����뤵���ե��󥯥��ΰ����˲���Ȥ�ʤ餤
-# ConnecotorListener �����롣
+# コアロジックがOutPortに対してデータ書き込み、InPort側でデータが取
+# 得されるまでの間で発生する各種イベントをフックするコールバックを設
+# 定することができる。なお、リスナークラスは2種類存在し、バッファフ
+# ルや送信時のコールバックで、その時点で有効なデータをファンクタの引
+# 数として受け取る ConnectorDataListener であり、もう一方はデータエ
+# ンプティやバッファ読み込み時のタイムアウトなどデータが取得できない
+# 場合などにコールされるファンクタの引数に何もとらならい
+# ConnecotorListener がある。
 # 
-# �ǡ����ݡ��Ȥˤϡ���³���˥ǡ�������������ˡ�ˤĤ��ƥǡ����ե�������
-# ���֥�����ץ�����������ꤹ�뤳�Ȥ��Ǥ��롣
-# ConnectorDaataListener/ConnectorListener �ϤȤ�ˡ��͡��ʥ��٥��
-# ���Ф��륳����Хå������ꤹ�뤳�Ȥ��Ǥ��뤬�������ǡ����ե�����
-# ����ӥ��֥�����ץ���󷿤�����˱����ơ����Ѳ�ǽ�ʤ�������Բ�ǽ
-# �ʤ�Τ䡢�ƤӽФ���륿���ߥ󥰤��ۤʤ롣
-# �ʲ��ˡ����󥿡��ե�������CORBA CDR���ξ��Υ�����Хå������򼨤���
+# データポートには、接続時にデータの送受信方法についてデータフロー型、
+# サブスクリプション型等を設定することができる。
+# ConnectorDaataListener/ConnectorListener はともに、様々なイベント
+# に対するコールバックを設定することができるが、これらデータフロー型
+# およびサブスクリプション型の設定に応じて、利用可能なもの利用不可能
+# なものや、呼び出されるタイミングが異なる。
+# 以下に、インターフェースがCORBA CDR型の場合のコールバック一覧を示す。
 # 
 # OutPort:
-#  -  Push��: Subscription Type�ˤ�ꤵ��˥��٥�Ȥμ��बʬ����롣
-#    - Flush: Flush���ˤϥХåե����ʤ����� ON_BUFFER �ϤΥ��٥�Ȥ�ȯ�����ʤ�
+#  -  Push型: Subscription Typeによりさらにイベントの種類が分かれる。
+#    - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
 #      - ON_SEND
 #      - ON_RECEIVED
 #      - ON_RECEIVER_FULL
@@ -144,7 +144,7 @@ class ConnectorDataListenerType:
 #      - ON_CONNECT
 #      - ON_DISCONNECT
 #      .
-#    - New��
+#    - New型
 #      - ON_BUFFER_WRITE
 #      - ON_BUFFER_FULL
 #      - ON_BUFFER_WRITE_TIMEOUT
@@ -159,7 +159,7 @@ class ConnectorDataListenerType:
 #      - ON_CONNECT
 #      - ON_DISCONNECT
 #      .
-#    - Periodic��
+#    - Periodic型
 #      - ON_BUFFER_WRITE
 #      - ON_BUFFER_FULL
 #      - ON_BUFFER_WRITE_TIMEOUT
@@ -176,7 +176,7 @@ class ConnectorDataListenerType:
 #      - ON_DISCONNECT
 #      .
 #    .
-#  - Pull��
+#  - Pull型
 #    - ON_BUFFER_READ
 #    - ON_SEND
 #    - ON_BUFFER_EMPTY
@@ -188,7 +188,7 @@ class ConnectorDataListenerType:
 #    - ON_DISCONNECT
 # 
 #  InPort:
-#  - Push��:
+#  - Push型:
 #      - ON_BUFFER_WRITE
 #      - ON_BUFFER_FULL
 #      - ON_BUFFER_WRITE_TIMEOUT
@@ -200,7 +200,7 @@ class ConnectorDataListenerType:
 #      - ON_CONNECT
 #      - ON_DISCONNECT
 #      .
-#  - Pull��
+#  - Pull型
 #      - ON_CONNECT
 #      - ON_DISCONNECT
 # @else
@@ -227,13 +227,13 @@ class ConnectorDataListener:
   ##
   # @if jp
   #
-  # @brief ConnectorDataListenerType ��ʸ������Ѵ�
+  # @brief ConnectorDataListenerType を文字列に変換
   #
-  # ConnectorDataListenerType ��ʸ������Ѵ�����
+  # ConnectorDataListenerType を文字列に変換する
   #
-  # @param type �Ѵ��о� ConnectorDataListenerType
+  # @param type 変換対象 ConnectorDataListenerType
   #
-  # @return ʸ�����Ѵ����
+  # @return 文字列変換結果
   #
   # @else
   #
@@ -270,14 +270,14 @@ class ConnectorDataListener:
 
 ##
 # @if jp
-# @class ConnectorDataListenerT ���饹
+# @class ConnectorDataListenerT クラス
 #
-# �ǡ����ݡ��Ȥ� Connector �ˤ�����ȯ������Ƽ磻�٥�Ȥ��Ф��륳��
-# ��Хå���¸�����ꥹ�ʥ��饹�δ��쥯�饹��
+# データポートの Connector において発生する各種イベントに対するコー
+# ルバックを実現するリスナクラスの基底クラス。
 # 
-# ���Υ��饹�ϡ�operator()() ����2������ cdrMemoryStream ���ǤϤʤ���
-# �ºݤ˥ǡ����ݡ��Ȥǻ��Ѥ�����ѿ�����ƥ�ץ졼�Ȱ����Ȥ���
-# �Ϥ����Ȥ��Ǥ��롣
+# このクラスは、operator()() の第2引数に cdrMemoryStream 型ではなく、
+# 実際にデータポートで使用される変数型をテンプレート引数として
+# 渡すことができる。
 #
 # @else
 # @class ConnectorDataListenerT class
@@ -303,15 +303,15 @@ class ConnectorDataListenerT(ConnectorDataListener):
   ##
   # @if jp
   #
-  # @brief ������Хå��᥽�å�
+  # @brief コールバックメソッド
   #
-  # �ǡ�����ǡ����ݡ��Ȥǻ��Ѥ�����ѿ������Ѵ����� ConnectorDataListenerT
-  # �Υ�����Хå��᥽�åɤ�ƤӽФ���
+  # データをデータポートで使用される変数型に変換して ConnectorDataListenerT
+  # のコールバックメソッドを呼び出す。
   #
   # @param info ConnectorInfo 
-  # @param cdrdata cdrMemoryStream���Υǡ���
-  # @param data ���Υǡ�����
-  # @param porttype �ݡ��Ȥμ���
+  # @param cdrdata cdrMemoryStream型のデータ
+  # @param data 元のデータ型
+  # @param porttype ポートの種類
   #
   # @else
   #
@@ -363,15 +363,15 @@ class ConnectorDataListenerT(ConnectorDataListener):
 
 ##
 # @if jp
-# @brief ConnectorListener �Υ�����
+# @brief ConnectorListener のタイプ
 #  
-# - ON_BUFFER_EMPTY:       �Хåե������ξ��
-# - ON_BUFFER_READTIMEOUT: �Хåե������ǥ����ॢ���Ȥ������
-# - ON_SENDER_EMPTY:       OutPort¦�Хåե�����
-# - ON_SENDER_TIMEOUT:     OutPort¦�����ॢ���Ȼ�
-# - ON_SENDER_ERROR:       OutPort¦���顼��
-# - ON_CONNECT:            ��³��Ω��
-# - ON_DISCONNECT:         ��³���ǻ�
+# - ON_BUFFER_EMPTY:       バッファが空の場合
+# - ON_BUFFER_READTIMEOUT: バッファが空でタイムアウトした場合
+# - ON_SENDER_EMPTY:       OutPort側バッファが空
+# - ON_SENDER_TIMEOUT:     OutPort側タイムアウト時
+# - ON_SENDER_ERROR:       OutPort側エラー時
+# - ON_CONNECT:            接続確立時
+# - ON_DISCONNECT:         接続切断時
 #
 # @else
 # @brief The types of ConnectorListener
@@ -405,25 +405,25 @@ class ConnectorListenerType:
 
 ##
 # @if jp
-# @class ConnectorListener ���饹
-# @brief ConnectorListener ���饹
+# @class ConnectorListener クラス
+# @brief ConnectorListener クラス
 #
-# �ǡ����ݡ��Ȥ� Connector �ˤ�����ȯ������Ƽ磻�٥�Ȥ��Ф��륳��
-# ��Хå���¸�����ꥹ�ʥ��饹�δ��쥯�饹��
+# データポートの Connector において発生する各種イベントに対するコー
+# ルバックを実現するリスナクラスの基底クラス。
 #
-# ���������å���OutPort���Ф��ƥǡ����񤭹��ߡ�InPort¦�ǥǡ�������
-# �������ޤǤδ֤�ȯ������Ƽ磻�٥�Ȥ�եå����륳����Хå�����
-# �ꤹ�뤳�Ȥ��Ǥ��롣�ʤ����ꥹ�ʡ����饹��2����¸�ߤ����Хåե���
-# ����������Υ�����Хå��ǡ����λ�����ͭ���ʥǡ�����ե��󥯥��ΰ�
-# ���Ȥ��Ƽ������ ConnectorDataListener �Ǥ��ꡢ�⤦�����ϥǡ�����
-# ��ץƥ���Хåե��ɤ߹��߻��Υ����ॢ���Ȥʤɥǡ����������Ǥ��ʤ�
-# ���ʤɤ˥����뤵���ե��󥯥��ΰ����˲���Ȥ�ʤ餤
-# ConnecotorListener �����롣
+# コアロジックがOutPortに対してデータ書き込み、InPort側でデータが取
+# 得されるまでの間で発生する各種イベントをフックするコールバックを設
+# 定することができる。なお、リスナークラスは2種類存在し、バッファフ
+# ルや送信時のコールバックで、その時点で有効なデータをファンクタの引
+# 数として受け取る ConnectorDataListener であり、もう一方はデータエ
+# ンプティやバッファ読み込み時のタイムアウトなどデータが取得できない
+# 場合などにコールされるファンクタの引数に何もとらならい
+# ConnecotorListener がある。
 #
-# ConnectorListener ���饹�ˤ�äƴ�Ϣ����ư���եå���������硢��
-# ������Τ褦�ˡ����Υ��饹��Ѿ��������ͥ����ξ��������˼��ʲ�
-# �Τ褦�ʥ�����Хå����֥������Ȥ���������ǡ����ݡ��Ȥ�Ŭ�ڤʥ���
-# ��Хå�����ؿ����饳����Хå����֥������Ȥ򥻥åȤ���ɬ�פ����롣
+# ConnectorListener クラスによって関連する動作をフックしたい場合、以
+# 下の例のように、このクラスを継承し、コネクタの情報を引数に取る以下
+# のようなコールバックオブジェクトを定義し、データポートの適切なコー
+# ルバック設定関数からコールバックオブジェクトをセットする必要がある。
 #
 # <pre>
 # class MyListener
@@ -444,8 +444,8 @@ class ConnectorListenerType:
 # };
 # </pre>
 #
-# ���Τ褦�ˤ���������줿�ꥹ�ʥ��饹�ϡ��ʲ��Τ褦�˥ǡ����ݡ��Ȥ�
-# �Ф��ơ��ʲ��Τ褦�˥��åȤ���롣
+# このようにして定義されたリスナクラスは、以下のようにデータポートに
+# 対して、以下のようにセットされる。
 #
 # <pre>
 # RTC::ReturnCode_t ConsoleIn::onInitialize()
@@ -456,24 +456,24 @@ class ConnectorListenerType:
 #    :
 # </pre>
 #
-# ��1������ "ON_BUFFER_EMPTY" �ϡ�������Хå���եå�����ݥ���Ȥ�
-# ���ꡢ�ʲ�����󤹤��ͤ��뤳�Ȥ���ǽ�Ǥ��롣�ǡ����ݡ��Ȥˤϡ���
-# ³���˥ǡ�������������ˡ�ˤĤ��ơ����󥿡��ե����������ǡ����ե���
-# �������֥�����ץ�����������ꤹ�뤳�Ȥ��Ǥ��뤬�������������
-# ���եå������ݥ���Ȥϰۤʤ롣�ʲ��ˡ����󥿡��ե�������CORBA
-# CDR���ξ��Υ�����Хå������򼨤���
+# 第1引数の "ON_BUFFER_EMPTY" は、コールバックをフックするポイントで
+# あり、以下に列挙する値を取ることが可能である。データポートには、接
+# 続時にデータの送受信方法について、インターフェース型、データフロー
+# 型、サブスクリプション型等を設定することができるが、これらの設定に
+# よりフックされるポイントは異なる。以下に、インターフェースがCORBA
+# CDR型の場合のコールバック一覧を示す。
 #
 # OutPort:
-# -  Push��: Subscription Type�ˤ�ꤵ��˥��٥�Ȥμ��बʬ����롣
-#   - Flush: Flush���ˤϥХåե����ʤ����� ON_BUFFER �ϤΥ��٥�Ȥ�ȯ�����ʤ�
+# -  Push型: Subscription Typeによりさらにイベントの種類が分かれる。
+#   - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
 #     - ON_CONNECT
 #     - ON_DISCONNECT
 #     .
-#   - New��
+#   - New型
 #     - ON_CONNECT
 #     - ON_DISCONNECT
 #     .
-#   - Periodic��
+#   - Periodic型
 #     - ON_BUFFER_EMPTY
 #     - ON_BUFFER_READ_TIMEOUT
 #     - ON_SENDER_EMPTY
@@ -482,7 +482,7 @@ class ConnectorListenerType:
 #     - ON_DISCONNECT
 #     .
 #   .
-# - Pull��
+# - Pull型
 #   - ON_BUFFER_EMPTY
 #   - ON_BUFFER_READ_TIMEOUT
 #   - ON_SENDER_EMPTY
@@ -492,13 +492,13 @@ class ConnectorListenerType:
 #   - ON_DISCONNECT
 #   .
 # InPort:
-# - Push��:
+# - Push型:
 #     - ON_BUFFER_EMPTY
 #     - ON_BUFFER_READ_TIMEOUT
 #     - ON_CONNECT
 #     - ON_DISCONNECT
 #     .
-# - Pull��
+# - Pull型
 #     - ON_CONNECT
 #     - ON_DISCONNECT
 #
@@ -618,13 +618,13 @@ class ConnectorListener:
   ##
   # @if jp
   #
-  # @brief ConnectorListenerType ��ʸ������Ѵ�
+  # @brief ConnectorListenerType を文字列に変換
   #
-  # ConnectorListenerType ��ʸ������Ѵ�����
+  # ConnectorListenerType を文字列に変換する
   #
-  # @param type �Ѵ��о� ConnectorListenerType
+  # @param type 変換対象 ConnectorListenerType
   #
-  # @return ʸ�����Ѵ����
+  # @return 文字列変換結果
   #
   # @else
   #
@@ -658,9 +658,9 @@ class ConnectorListener:
 
 ##
 # @if jp
-# @class ConnectorDataListener �ۥ�����饹
+# @class ConnectorDataListener ホルダクラス
 #
-# ʣ���� ConnectorDataListener ���ݻ����������륯�饹��
+# 複数の ConnectorDataListener を保持し管理するクラス。
 #
 # @else
 # @class ConnectorDataListener holder class
@@ -675,7 +675,7 @@ class ConnectorDataListenerHolder:
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # @else
   # @brief Constructor
   # @endif
@@ -688,7 +688,7 @@ class ConnectorDataListenerHolder:
 
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # @else
   # @brief Destructor
   # @endif
@@ -700,12 +700,12 @@ class ConnectorDataListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ����ɲ�
+  # @brief リスナーの追加
   #
-  # �ꥹ�ʡ����ɲä��롣
+  # リスナーを追加する。
   #
   # @param self
-  # @param listener �ɲä���ꥹ��
+  # @param listener 追加するリスナ
   # @else
   #
   # @brief Add the listener.
@@ -726,12 +726,12 @@ class ConnectorDataListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ��κ��
+  # @brief リスナーの削除
   #
-  # �ꥹ�ʤ������롣
+  # リスナを削除する。
   #
   # @param self
-  # @param listener �������ꥹ��
+  # @param listener 削除するリスナ
   # @else
   #
   # @brief Remove the listener. 
@@ -753,13 +753,13 @@ class ConnectorDataListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ������Τ���
+  # @brief リスナーへ通知する
   #
-  # ��Ͽ����Ƥ���ꥹ�ʤΥ�����Хå��᥽�åɤ�ƤӽФ���
+  # 登録されているリスナのコールバックメソッドを呼び出す。
   #
   # @param self
   # @param info ConnectorInfo
-  # @param cdrdata �ǡ���
+  # @param cdrdata データ
   # @else
   #
   # @brief Notify listeners. 
@@ -783,9 +783,9 @@ class ConnectorDataListenerHolder:
 
 ##
 # @if jp
-# @class ConnectorListener �ۥ�����饹
+# @class ConnectorListener ホルダクラス
 #
-# ʣ���� ConnectorListener ���ݻ����������륯�饹��
+# 複数の ConnectorListener を保持し管理するクラス。
 #
 # @else
 # @class ConnectorListener holder class
@@ -800,7 +800,7 @@ class ConnectorListenerHolder:
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # @else
   # @brief Constructor
   # @endif
@@ -813,7 +813,7 @@ class ConnectorListenerHolder:
     
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # @else
   # @brief Destructor
   # @endif
@@ -825,12 +825,12 @@ class ConnectorListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ����ɲ�
+  # @brief リスナーの追加
   #
-  # �ꥹ�ʡ����ɲä��롣
+  # リスナーを追加する。
   #
   # @param self
-  # @param listener �ɲä���ꥹ��
+  # @param listener 追加するリスナ
   # @else
   #
   # @brief Add the listener.
@@ -851,12 +851,12 @@ class ConnectorListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ��κ��
+  # @brief リスナーの削除
   #
-  # �ꥹ�ʤ������롣
+  # リスナを削除する。
   #
   # @param self
-  # @param listener �������ꥹ��
+  # @param listener 削除するリスナ
   # @else
   #
   # @brief Remove the listener. 
@@ -878,9 +878,9 @@ class ConnectorListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ������Τ���
+  # @brief リスナーへ通知する
   #
-  # ��Ͽ����Ƥ���ꥹ�ʤΥ�����Хå��᥽�åɤ�ƤӽФ���
+  # 登録されているリスナのコールバックメソッドを呼び出す。
   #
   # @param self
   # @param info ConnectorInfo

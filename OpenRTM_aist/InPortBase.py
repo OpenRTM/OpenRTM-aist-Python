@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -25,7 +25,7 @@ import RTC
 # @if jp
 # @namespace RTC
 #
-# @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È
+# @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 #
 # @else
 #
@@ -39,9 +39,9 @@ import RTC
 ##
 # @if jp
 # @class InPortBase
-# @brief InPort ÍÑ Port
+# @brief InPort ç”¨ Port
 #
-# ¥Ç¡¼¥¿ÆşÎÏ¥İ¡¼¥È¤Î¼ÂÁõ¥¯¥é¥¹¡£
+# ãƒ‡ãƒ¼ã‚¿å…¥åŠ›ãƒãƒ¼ãƒˆã®å®Ÿè£…ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @since 0.4.0
 #
@@ -61,14 +61,14 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # @param name ¥İ¡¼¥ÈÌ¾¾Î
-  # @param inport Åö³º¥Ç¡¼¥¿ÆşÎÏ¥İ¡¼¥È¤Ë´ØÏ¢ÉÕ¤±¤ëInPort¥ª¥Ö¥¸¥§¥¯¥È
-  #               InPort¥ª¥Ö¥¸¥§¥¯¥È¤Ç°·¤¦¥Ç¡¼¥¿·¿¡¢¥Ğ¥Ã¥Õ¥¡¥¿¥¤¥×¤â»ØÄê¤¹¤ë
-  # @param prop ¥İ¡¼¥ÈÀßÄêÍÑ¥×¥í¥Ñ¥Æ¥£
+  # @param name ãƒãƒ¼ãƒˆåç§°
+  # @param inport å½“è©²ãƒ‡ãƒ¼ã‚¿å…¥åŠ›ãƒãƒ¼ãƒˆã«é–¢é€£ä»˜ã‘ã‚‹InPortã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+  #               InPortã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§æ‰±ã†ãƒ‡ãƒ¼ã‚¿å‹ã€ãƒãƒƒãƒ•ã‚¡ã‚¿ã‚¤ãƒ—ã‚‚æŒ‡å®šã™ã‚‹
+  # @param prop ãƒãƒ¼ãƒˆè¨­å®šç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   #
   # @else
   # @brief Constructor
@@ -95,7 +95,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     self._connectors    = []
     self._connector_mutex = threading.RLock()
 
-    # PortProfile::properties ¤òÀßÄê
+    # PortProfile::properties ã‚’è¨­å®š
     self._rtcout.RTC_DEBUG("setting port.port_type: DataInPort")
     self.addProperty("port.port_type", "DataInPort")
 
@@ -130,9 +130,9 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @else
   # @brief Destructor
@@ -167,11 +167,11 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ¥×¥í¥Ñ¥Æ¥£¤Î½é´ü²½
+  # @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®åˆæœŸåŒ–
   #
-  # »ØÄê¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¤Ç½é´ü²½¤¹¤ë¡£
+  # æŒ‡å®šã•ã‚ŒãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã§åˆæœŸåŒ–ã™ã‚‹ã€‚
   #
-  # @param prop ÀßÄê¤¹¤ë¥×¥í¥Ñ¥Æ¥£
+  # @param prop è¨­å®šã™ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   # @else
   # @brief Initializing properties
   #
@@ -214,11 +214,11 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief RTObject_impl::readAll()¤«¤é¸Æ¤Ğ¤ì¤ë²¾ÁÛ´Ø¿ô
+  # @brief RTObject_impl::readAll()ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ä»®æƒ³é–¢æ•°
   #
-  # DataPort ¤«¤é¥Ç¡¼¥¿¤òÆÉ¤ß½Ğ¤¹
+  # DataPort ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿å‡ºã™
   #
-  # @return true:À®¸ù,false:¼ºÇÔ
+  # @return true:æˆåŠŸ,false:å¤±æ•—
   # @else
   # @brief It is a virtual method that is called from RTObject_impl::readAll().
   # This method reads out data from DataPort. 
@@ -232,11 +232,11 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ¥×¥í¥Ñ¥Æ¥£¤ò¼èÆÀ¤¹¤ë
+  # @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å–å¾—ã™ã‚‹
   #
-  # InPort¤Î¥×¥í¥Ñ¥Æ¥£¤ò¼èÆÀ¤¹¤ë¡£
+  # InPortã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å–å¾—ã™ã‚‹ã€‚
   #
-  # @return ¥×¥í¥Ñ¥Æ¥£
+  # @return ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   #
   # @else
   #
@@ -255,11 +255,11 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief Connector ¤ò¼èÆÀ
+  # @brief Connector ã‚’å–å¾—
   #
-  # ¸½ºß½êÍ­¤·¤Æ¤¤¤ë¥³¥Í¥¯¥¿¤ò¼èÆÀ¤¹¤ë¡£
+  # ç¾åœ¨æ‰€æœ‰ã—ã¦ã„ã‚‹ã‚³ãƒã‚¯ã‚¿ã‚’å–å¾—ã™ã‚‹ã€‚
   #
-  # @return connector ¤Î¥ê¥¹¥È
+  # @return connector ã®ãƒªã‚¹ãƒˆ
   #
   # @else
   #
@@ -280,11 +280,11 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ConnectorProfile ¤ò¼èÆÀ
+  # @brief ConnectorProfile ã‚’å–å¾—
   #
-  # ¸½ºß½êÍ­¤·¤Æ¤¤¤ë¥³¥Í¥¯¥¿¤ÎProfile¤ò¼èÆÀ¤¹¤ë¡£
+  # ç¾åœ¨æ‰€æœ‰ã—ã¦ã„ã‚‹ã‚³ãƒã‚¯ã‚¿ã®Profileã‚’å–å¾—ã™ã‚‹ã€‚
   #
-  # @return ConnectorProfile ¤Î¥ê¥¹¥È
+  # @return ConnectorProfile ã®ãƒªã‚¹ãƒˆ
   #
   # @else
   #
@@ -308,11 +308,11 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
         
   ##
   # @if jp
-  # @brief ConnectorId ¤ò¼èÆÀ
+  # @brief ConnectorId ã‚’å–å¾—
   #
-  # ¸½ºß½êÍ­¤·¤Æ¤¤¤ë¥³¥Í¥¯¥¿¤ÎID¤ò¼èÆÀ¤¹¤ë¡£
+  # ç¾åœ¨æ‰€æœ‰ã—ã¦ã„ã‚‹ã‚³ãƒã‚¯ã‚¿ã®IDã‚’å–å¾—ã™ã‚‹ã€‚
   #
-  # @return ConnectorId ¤Î¥ê¥¹¥È
+  # @return ConnectorId ã®ãƒªã‚¹ãƒˆ
   #
   # @else
   #
@@ -337,11 +337,11 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief Connector¤ÎÌ¾Á°¤ò¼èÆÀ
+  # @brief Connectorã®åå‰ã‚’å–å¾—
   #
-  # ¸½ºß½êÍ­¤·¤Æ¤¤¤ë¥³¥Í¥¯¥¿¤ÎÌ¾Á°¤ò¼èÆÀ¤¹¤ë¡£
+  # ç¾åœ¨æ‰€æœ‰ã—ã¦ã„ã‚‹ã‚³ãƒã‚¯ã‚¿ã®åå‰ã‚’å–å¾—ã™ã‚‹ã€‚
   #
-  # @return ConnectorÌ¾¤Î¥ê¥¹¥È
+  # @return Connectoråã®ãƒªã‚¹ãƒˆ
   #
   # @else
   #
@@ -365,12 +365,12 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ConnectorProfile¤òID¤Ç¼èÆÀ
+  # @brief ConnectorProfileã‚’IDã§å–å¾—
   #
-  # ¸½ºß½êÍ­¤·¤Æ¤¤¤ë¥³¥Í¥¯¥¿¤òID¤Ç¼èÆÀ¤¹¤ë¡£
+  # ç¾åœ¨æ‰€æœ‰ã—ã¦ã„ã‚‹ã‚³ãƒã‚¯ã‚¿ã‚’IDã§å–å¾—ã™ã‚‹ã€‚
   #
   # @param id Connector ID
-  # @return ¥³¥Í¥¯¥¿¤Ø¤Î¥İ¥¤¥ó¥¿
+  # @return ã‚³ãƒã‚¯ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿
   #
   # @else
   #
@@ -396,12 +396,12 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ConnectorProfile¤òÌ¾Á°¤Ç¼èÆÀ
+  # @brief ConnectorProfileã‚’åå‰ã§å–å¾—
   #
-  # ¸½ºß½êÍ­¤·¤Æ¤¤¤ë¥³¥Í¥¯¥¿¤òÌ¾Á°¤Ç¼èÆÀ¤¹¤ë¡£
+  # ç¾åœ¨æ‰€æœ‰ã—ã¦ã„ã‚‹ã‚³ãƒã‚¯ã‚¿ã‚’åå‰ã§å–å¾—ã™ã‚‹ã€‚
   #
   # @param name Connector name
-  # @return ¥³¥Í¥¯¥¿¤Ø¤Î¥İ¥¤¥ó¥¿
+  # @return ã‚³ãƒã‚¯ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿
   #
   # @else
   #
@@ -427,13 +427,13 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ConnectorProfile¤òID¤Ç¼èÆÀ
+  # @brief ConnectorProfileã‚’IDã§å–å¾—
   #
-  # ¸½ºß½êÍ­¤·¤Æ¤¤¤ë¥³¥Í¥¯¥¿¤òID¤Ç¼èÆÀ¤¹¤ë¡£
+  # ç¾åœ¨æ‰€æœ‰ã—ã¦ã„ã‚‹ã‚³ãƒã‚¯ã‚¿ã‚’IDã§å–å¾—ã™ã‚‹ã€‚
   #
   # @param id Connector ID
   # @param prof ConnectorProfile
-  # @return false »ØÄê¤·¤¿ID¤¬¤Ê¤¤
+  # @return false æŒ‡å®šã—ãŸIDãŒãªã„
   #
   # @else
   #
@@ -462,13 +462,13 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ConnectorProfile¤òÌ¾Á°¤Ç¼èÆÀ
+  # @brief ConnectorProfileã‚’åå‰ã§å–å¾—
   #
-  # ¸½ºß½êÍ­¤·¤Æ¤¤¤ë¥³¥Í¥¯¥¿¤òÌ¾Á°¤Ç¼èÆÀ¤¹¤ë¡£
+  # ç¾åœ¨æ‰€æœ‰ã—ã¦ã„ã‚‹ã‚³ãƒã‚¯ã‚¿ã‚’åå‰ã§å–å¾—ã™ã‚‹ã€‚
   #
   # @param name Connector name
   # @param prof ConnectorProfile
-  # @return false »ØÄê¤·¤¿Ì¾Á°¤¬¤Ê¤¤
+  # @return false æŒ‡å®šã—ãŸåå‰ãŒãªã„
   #
   # @else
   #
@@ -498,14 +498,14 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
   ##
   # @if jp
   #
-  # @brief [CORBA interface] Port ¤ÎÀÜÂ³¤ò¹Ô¤¦
+  # @brief [CORBA interface] Port ã®æ¥ç¶šã‚’è¡Œã†
   #
-  # Í¿¤¨¤é¤ì¤¿ ConnectoionProfile ¤Î¾ğÊó¤Ë´ğ¤Å¤­¡¢Port´Ö¤ÎÀÜÂ³¤ò³ÎÎ©
-  # ¤¹¤ë¡£¤³¤Î´Ø¿ô¤Ï¼ç¤Ë¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¥×¥í¥°¥é¥à¤ä¥Ä¡¼¥ë¤«¤é¸Æ¤Ó½Ğ
-  # ¤¹¤³¤È¤òÁ°Äó¤È¤·¤Æ¤¤¤ë¡£
+  # ä¸ãˆã‚‰ã‚ŒãŸ ConnectoionProfile ã®æƒ…å ±ã«åŸºã¥ãã€Porté–“ã®æ¥ç¶šã‚’ç¢ºç«‹
+  # ã™ã‚‹ã€‚ã“ã®é–¢æ•°ã¯ä¸»ã«ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚„ãƒ„ãƒ¼ãƒ«ã‹ã‚‰å‘¼ã³å‡º
+  # ã™ã“ã¨ã‚’å‰æã¨ã—ã¦ã„ã‚‹ã€‚
   # 
   # @param connector_profile ConnectorProfile
-  # @return ReturnCode_t ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @return ReturnCode_t å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   #
@@ -588,9 +588,9 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
   ##
   # @if jp
   #
-  # @brief InPort¤ò activates ¤¹¤ë
+  # @brief InPortã‚’ activates ã™ã‚‹
   #
-  # InPort¤ò activate ¤¹¤ë¡£
+  # InPortã‚’ activate ã™ã‚‹ã€‚
   #
   # @else
   #
@@ -617,9 +617,9 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
   ##
   # @if jp
   #
-  # @brief Á´¤Æ¤Î Port ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò deactivates ¤¹¤ë
+  # @brief å…¨ã¦ã® Port ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ deactivates ã™ã‚‹
   #
-  # Port ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëÁ´¤Æ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò deactivate ¤¹¤ë¡£
+  # Port ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å…¨ã¦ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ deactivate ã™ã‚‹ã€‚
   #
   # @else
   #
@@ -644,39 +644,39 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ConnectorDataListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+  # @brief ConnectorDataListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
   #
-  # ¥Ğ¥Ã¥Õ¥¡½ñ¤­¹ş¤ß¤Ş¤¿¤ÏÆÉ¤ß½Ğ¤·¥¤¥Ù¥ó¥È¤Ë´ØÏ¢¤¹¤ë³Æ¼ï¥ê¥¹¥Ê¤òÀßÄê¤¹¤ë¡£
+  # ãƒãƒƒãƒ•ã‚¡æ›¸ãè¾¼ã¿ã¾ãŸã¯èª­ã¿å‡ºã—ã‚¤ãƒ™ãƒ³ãƒˆã«é–¢é€£ã™ã‚‹å„ç¨®ãƒªã‚¹ãƒŠã‚’è¨­å®šã™ã‚‹ã€‚
   #
-  # ÀßÄê¤Ç¤­¤ë¥ê¥¹¥Ê¤Î¥¿¥¤¥×¤È¥³¡¼¥ë¥Ğ¥Ã¥¯¥¤¥Ù¥ó¥È¤Ï°Ê²¼¤ÎÄÌ¤ê
+  # è¨­å®šã§ãã‚‹ãƒªã‚¹ãƒŠã®ã‚¿ã‚¤ãƒ—ã¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚¤ãƒ™ãƒ³ãƒˆã¯ä»¥ä¸‹ã®é€šã‚Š
   #
-  # - ON_BUFFER_WRITE:          ¥Ğ¥Ã¥Õ¥¡½ñ¤­¹ş¤ß»ş
-  # - ON_BUFFER_FULL:           ¥Ğ¥Ã¥Õ¥¡¥Õ¥ë»ş
-  # - ON_BUFFER_WRITE_TIMEOUT:  ¥Ğ¥Ã¥Õ¥¡½ñ¤­¹ş¤ß¥¿¥¤¥à¥¢¥¦¥È»ş
-  # - ON_BUFFER_OVERWRITE:      ¥Ğ¥Ã¥Õ¥¡¾å½ñ¤­»ş
-  # - ON_BUFFER_READ:           ¥Ğ¥Ã¥Õ¥¡ÆÉ¤ß½Ğ¤·»ş
-  # - ON_SEND:                  InProt¤Ø¤ÎÁ÷¿®»ş
-  # - ON_RECEIVED:              InProt¤Ø¤ÎÁ÷¿®´°Î»»ş
-  # - ON_SEND_ERTIMEOUT:        OutPortÂ¦¥¿¥¤¥à¥¢¥¦¥È»ş
-  # - ON_SEND_ERERROR:          OutPortÂ¦¥¨¥é¡¼»ş
-  # - ON_RECEIVER_FULL:         InProtÂ¦¥Ğ¥Ã¥Õ¥¡¥Õ¥ë»ş
-  # - ON_RECEIVER_TIMEOUT:      InProtÂ¦¥Ğ¥Ã¥Õ¥¡¥¿¥¤¥à¥¢¥¦¥È»ş
-  # - ON_RECEIVER_ERROR:        InProtÂ¦¥¨¥é¡¼»ş
+  # - ON_BUFFER_WRITE:          ãƒãƒƒãƒ•ã‚¡æ›¸ãè¾¼ã¿æ™‚
+  # - ON_BUFFER_FULL:           ãƒãƒƒãƒ•ã‚¡ãƒ•ãƒ«æ™‚
+  # - ON_BUFFER_WRITE_TIMEOUT:  ãƒãƒƒãƒ•ã‚¡æ›¸ãè¾¼ã¿ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆæ™‚
+  # - ON_BUFFER_OVERWRITE:      ãƒãƒƒãƒ•ã‚¡ä¸Šæ›¸ãæ™‚
+  # - ON_BUFFER_READ:           ãƒãƒƒãƒ•ã‚¡èª­ã¿å‡ºã—æ™‚
+  # - ON_SEND:                  InProtã¸ã®é€ä¿¡æ™‚
+  # - ON_RECEIVED:              InProtã¸ã®é€ä¿¡å®Œäº†æ™‚
+  # - ON_SEND_ERTIMEOUT:        OutPortå´ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆæ™‚
+  # - ON_SEND_ERERROR:          OutPortå´ã‚¨ãƒ©ãƒ¼æ™‚
+  # - ON_RECEIVER_FULL:         InProtå´ãƒãƒƒãƒ•ã‚¡ãƒ•ãƒ«æ™‚
+  # - ON_RECEIVER_TIMEOUT:      InProtå´ãƒãƒƒãƒ•ã‚¡ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆæ™‚
+  # - ON_RECEIVER_ERROR:        InProtå´ã‚¨ãƒ©ãƒ¼æ™‚
   #
-  # ¥ê¥¹¥Ê¤Ï ConnectorDataListener ¤ò·Ñ¾µ¤·¡¢°Ê²¼¤Î¥·¥°¥Ë¥Á¥ã¤ò»ı¤Ä
-  # operator() ¤ò¼ÂÁõ¤·¤Æ¤¤¤ëÉ¬Í×¤¬¤¢¤ë¡£
+  # ãƒªã‚¹ãƒŠã¯ ConnectorDataListener ã‚’ç¶™æ‰¿ã—ã€ä»¥ä¸‹ã®ã‚·ã‚°ãƒ‹ãƒãƒ£ã‚’æŒã¤
+  # operator() ã‚’å®Ÿè£…ã—ã¦ã„ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
   #
   # ConnectorDataListener::
   #         operator()(const ConnectorProfile&, const cdrStream&)
   #
-  # ¥Ç¥Õ¥©¥ë¥È¤Ç¤Ï¡¢¤³¤Î´Ø¿ô¤ËÍ¿¤¨¤¿¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È¤Î½êÍ­¸¢¤Ï
-  # OutPort¤Ë°Ü¤ê¡¢OutPort²òÂÎ»ş¤â¤·¤¯¤Ï¡¢
-  # removeConnectorDataListener() ¤Ë¤è¤êºï½ü»ş¤Ë¼«Æ°Åª¤Ë²òÂÎ¤µ¤ì¤ë¡£
-  # ¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È¤Î½êÍ­¸¢¤ò¸Æ¤Ó½Ğ¤·Â¦¤Ç°İ»ı¤·¤¿¤¤¾ì¹ç¤Ï¡¢Âè3°ú
-  # ¿ô¤Ë false ¤ò»ØÄê¤·¡¢¼«Æ°Åª¤Ê²òÂÎ¤òÍŞÀ©¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+  # ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ã¯ã€ã“ã®é–¢æ•°ã«ä¸ãˆãŸãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ‰€æœ‰æ¨©ã¯
+  # OutPortã«ç§»ã‚Šã€OutPortè§£ä½“æ™‚ã‚‚ã—ãã¯ã€
+  # removeConnectorDataListener() ã«ã‚ˆã‚Šå‰Šé™¤æ™‚ã«è‡ªå‹•çš„ã«è§£ä½“ã•ã‚Œã‚‹ã€‚
+  # ãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ‰€æœ‰æ¨©ã‚’å‘¼ã³å‡ºã—å´ã§ç¶­æŒã—ãŸã„å ´åˆã¯ã€ç¬¬3å¼•
+  # æ•°ã« false ã‚’æŒ‡å®šã—ã€è‡ªå‹•çš„ãªè§£ä½“ã‚’æŠ‘åˆ¶ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
   #
-  # @param listener_type ¥ê¥¹¥Ê¥¿¥¤¥×
-  # @param listener ¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È¤Ø¤Î¥İ¥¤¥ó¥¿
+  # @param listener_type ãƒªã‚¹ãƒŠã‚¿ã‚¤ãƒ—
+  # @param listener ãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿
   #
   # @else
   # @brief Adding BufferDataListener type listener
@@ -731,12 +731,12 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ConnectorDataListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+  # @brief ConnectorDataListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
   #
-  # ÀßÄê¤·¤¿³Æ¼ï¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
+  # è¨­å®šã—ãŸå„ç¨®ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ã€‚
   # 
-  # @param listener_type ¥ê¥¹¥Ê¥¿¥¤¥×
-  # @param listener ¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È¤Ø¤Î¥İ¥¤¥ó¥¿
+  # @param listener_type ãƒªã‚¹ãƒŠã‚¿ã‚¤ãƒ—
+  # @param listener ãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿
   #
   # @else
   # @brief Removing BufferDataListener type listener
@@ -763,27 +763,27 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
   
   ##
   # @if jp
-  # @brief ConnectorListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+  # @brief ConnectorListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
   #
-  # ¥Ğ¥Ã¥Õ¥¡½ñ¤­¹ş¤ß¤Ş¤¿¤ÏÆÉ¤ß½Ğ¤·¥¤¥Ù¥ó¥È¤Ë´ØÏ¢¤¹¤ë³Æ¼ï¥ê¥¹¥Ê¤òÀßÄê¤¹¤ë¡£
+  # ãƒãƒƒãƒ•ã‚¡æ›¸ãè¾¼ã¿ã¾ãŸã¯èª­ã¿å‡ºã—ã‚¤ãƒ™ãƒ³ãƒˆã«é–¢é€£ã™ã‚‹å„ç¨®ãƒªã‚¹ãƒŠã‚’è¨­å®šã™ã‚‹ã€‚
   #
-  # ÀßÄê¤Ç¤­¤ë¥ê¥¹¥Ê¤Î¥¿¥¤¥×¤Ï
+  # è¨­å®šã§ãã‚‹ãƒªã‚¹ãƒŠã®ã‚¿ã‚¤ãƒ—ã¯
   #
-  # - ON_BUFFER_EMPTY:       ¥Ğ¥Ã¥Õ¥¡¤¬¶õ¤Î¾ì¹ç
-  # - ON_BUFFER_READTIMEOUT: ¥Ğ¥Ã¥Õ¥¡¤¬¶õ¤Ç¥¿¥¤¥à¥¢¥¦¥È¤·¤¿¾ì¹ç
+  # - ON_BUFFER_EMPTY:       ãƒãƒƒãƒ•ã‚¡ãŒç©ºã®å ´åˆ
+  # - ON_BUFFER_READTIMEOUT: ãƒãƒƒãƒ•ã‚¡ãŒç©ºã§ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ãŸå ´åˆ
   #
-  # ¥ê¥¹¥Ê¤Ï°Ê²¼¤Î¥·¥°¥Ë¥Á¥ã¤ò»ı¤Ä operator() ¤ò¼ÂÁõ¤·¤Æ¤¤¤ëÉ¬Í×¤¬¤¢¤ë¡£
+  # ãƒªã‚¹ãƒŠã¯ä»¥ä¸‹ã®ã‚·ã‚°ãƒ‹ãƒãƒ£ã‚’æŒã¤ operator() ã‚’å®Ÿè£…ã—ã¦ã„ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
   #
   # ConnectorListener::operator()(const ConnectorProfile&)
   #
-  # ¥Ç¥Õ¥©¥ë¥È¤Ç¤Ï¡¢¤³¤Î´Ø¿ô¤ËÍ¿¤¨¤¿¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È¤Î½êÍ­¸¢¤Ï
-  # OutPort¤Ë°Ü¤ê¡¢OutPort²òÂÎ»ş¤â¤·¤¯¤Ï¡¢
-  # removeConnectorListener() ¤Ë¤è¤êºï½ü»ş¤Ë¼«Æ°Åª¤Ë²òÂÎ¤µ¤ì¤ë¡£
-  # ¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È¤Î½êÍ­¸¢¤ò¸Æ¤Ó½Ğ¤·Â¦¤Ç°İ»ı¤·¤¿¤¤¾ì¹ç¤Ï¡¢Âè3°ú
-  # ¿ô¤Ë false ¤ò»ØÄê¤·¡¢¼«Æ°Åª¤Ê²òÂÎ¤òÍŞÀ©¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+  # ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ã¯ã€ã“ã®é–¢æ•°ã«ä¸ãˆãŸãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ‰€æœ‰æ¨©ã¯
+  # OutPortã«ç§»ã‚Šã€OutPortè§£ä½“æ™‚ã‚‚ã—ãã¯ã€
+  # removeConnectorListener() ã«ã‚ˆã‚Šå‰Šé™¤æ™‚ã«è‡ªå‹•çš„ã«è§£ä½“ã•ã‚Œã‚‹ã€‚
+  # ãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ‰€æœ‰æ¨©ã‚’å‘¼ã³å‡ºã—å´ã§ç¶­æŒã—ãŸã„å ´åˆã¯ã€ç¬¬3å¼•
+  # æ•°ã« false ã‚’æŒ‡å®šã—ã€è‡ªå‹•çš„ãªè§£ä½“ã‚’æŠ‘åˆ¶ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
   #
-  # @param listener_type ¥ê¥¹¥Ê¥¿¥¤¥×
-  # @param listener ¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È¤Ø¤Î¥İ¥¤¥ó¥¿
+  # @param listener_type ãƒªã‚¹ãƒŠã‚¿ã‚¤ãƒ—
+  # @param listener ãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿
   #
   # @else
   # @brief Adding ConnectorListener type listener
@@ -826,12 +826,12 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ConnectorDataListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+  # @brief ConnectorDataListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
   #
-  # ÀßÄê¤·¤¿³Æ¼ï¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
+  # è¨­å®šã—ãŸå„ç¨®ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ã€‚
   # 
-  # @param listener_type ¥ê¥¹¥Ê¥¿¥¤¥×
-  # @param listener ¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È¤Ø¤Î¥İ¥¤¥ó¥¿
+  # @param listener_type ãƒªã‚¹ãƒŠã‚¿ã‚¤ãƒ—
+  # @param listener ãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿
   #
   # @else
   # @brief Removing BufferDataListener type listener
@@ -858,18 +858,18 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief Interface¾ğÊó¤ò¸ø³«¤¹¤ë
+  # @brief Interfaceæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
   #
-  # Interface¾ğÊó¤ò¸ø³«¤¹¤ë¡£
-  # °ú¿ô¤Î ConnectorProfile ¤Ë³ÊÇ¼¤µ¤ì¤Æ¤¤¤ë dataflow_type ¤¬ push ·¿
-  # ¤Î¾ì¹ç¤Ï¡¢»ØÄê¤µ¤ì¤¿ interface_type ¤Î InPortProvider ¤Ë´Ø¤¹¤ë¾ğÊó
-  # ¤ò ConnectorProfile::properties ¤Ë½ñ¹ş¤ß¸Æ¤Ó½Ğ¤·Â¦¤ËÌá¤¹¡£
+  # Interfaceæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹ã€‚
+  # å¼•æ•°ã® ConnectorProfile ã«æ ¼ç´ã•ã‚Œã¦ã„ã‚‹ dataflow_type ãŒ push å‹
+  # ã®å ´åˆã¯ã€æŒ‡å®šã•ã‚ŒãŸ interface_type ã® InPortProvider ã«é–¢ã™ã‚‹æƒ…å ±
+  # ã‚’ ConnectorProfile::properties ã«æ›¸è¾¼ã¿å‘¼ã³å‡ºã—å´ã«æˆ»ã™ã€‚
   #
   #  dataport.dataflow_type
   #
-  # @param connector_profile ¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë
+  # @param connector_profile ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
   #
-  # @return ReturnCode_t ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @return ReturnCode_t å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   # @brief Publish interface information
@@ -903,10 +903,10 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     prop.mergeProperties(conn_prop.getNode("dataport.inport"))
 
     #
-    # ¤³¤³¤Ç, ConnectorProfile ¤«¤é¤Î properties ¤¬¥Ş¡¼¥¸¤µ¤ì¤¿¤¿¤á¡¢
-    # prop["dataflow_type"]: ¥Ç¡¼¥¿¥Õ¥í¡¼¥¿¥¤¥×
-    # prop["interface_type"]: ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¿¥¤¥×
-    # ¤Ê¤É¤¬¥¢¥¯¥»¥¹²ÄÇ½¤Ë¤Ê¤ë¡£
+    # ã“ã“ã§, ConnectorProfile ã‹ã‚‰ã® properties ãŒãƒãƒ¼ã‚¸ã•ã‚ŒãŸãŸã‚ã€
+    # prop["dataflow_type"]: ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚¿ã‚¤ãƒ—
+    # prop["interface_type"]: ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—
+    # ãªã©ãŒã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ã«ãªã‚‹ã€‚
     #
     dflow_type = prop.getProperty("dataflow_type")
     dflow_type = OpenRTM_aist.normalize(dflow_type)
@@ -965,16 +965,16 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     
   ##
   # @if jp
-  # @brief Interface¤ËÀÜÂ³¤¹¤ë
+  # @brief Interfaceã«æ¥ç¶šã™ã‚‹
   #
-  # Interface¤ËÀÜÂ³¤¹¤ë¡£
-  # Port¤¬½êÍ­¤¹¤ëConsumer¤ËÅ¬¹ç¤¹¤ëProvider¤Ë´Ø¤¹¤ë¾ğÊó¤ò 
-  # ConnectorProfile#properties ¤«¤éÃê½Ğ¤·¡¢
-  # Consumer¤ËCORBA¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÀßÄê¤¹¤ë¡£
+  # Interfaceã«æ¥ç¶šã™ã‚‹ã€‚
+  # PortãŒæ‰€æœ‰ã™ã‚‹Consumerã«é©åˆã™ã‚‹Providerã«é–¢ã™ã‚‹æƒ…å ±ã‚’ 
+  # ConnectorProfile#properties ã‹ã‚‰æŠ½å‡ºã—ã€
+  # Consumerã«CORBAã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’è¨­å®šã™ã‚‹ã€‚
   #
-  # @param connector_profile ¥³¥Í¥¯¥¿¡¦¥×¥í¥Õ¥¡¥¤¥ë
+  # @param connector_profile ã‚³ãƒã‚¯ã‚¿ãƒ»ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
   #
-  # @return ReturnCode_t ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @return ReturnCode_t å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   # @brief Subscribe to the interface
@@ -1002,10 +1002,10 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     prop.mergeProperties(conn_prop.getNode("dataport.inport")) # marge ConnectorProfile for buffer property.
     
     #
-    # ¤³¤³¤Ç, ConnectorProfile ¤«¤é¤Î properties ¤¬¥Ş¡¼¥¸¤µ¤ì¤¿¤¿¤á¡¢
-    # prop["dataflow_type"]: ¥Ç¡¼¥¿¥Õ¥í¡¼¥¿¥¤¥×
-    # prop["interface_type"]: ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¿¥¤¥×
-    # ¤Ê¤É¤¬¥¢¥¯¥»¥¹²ÄÇ½¤Ë¤Ê¤ë¡£
+    # ã“ã“ã§, ConnectorProfile ã‹ã‚‰ã® properties ãŒãƒãƒ¼ã‚¸ã•ã‚ŒãŸãŸã‚ã€
+    # prop["dataflow_type"]: ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚¿ã‚¤ãƒ—
+    # prop["interface_type"]: ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—
+    # ãªã©ãŒã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ã«ãªã‚‹ã€‚
     #
     dflow_type = prop.getProperty("dataflow_type")
     dflow_type = OpenRTM_aist.normalize(dflow_type)
@@ -1075,13 +1075,13 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     
   ##
   # @if jp
-  # @brief Interface¤Ø¤ÎÀÜÂ³¤ò²ò½ü¤¹¤ë
+  # @brief Interfaceã¸ã®æ¥ç¶šã‚’è§£é™¤ã™ã‚‹
   #
-  # Interface¤Ø¤ÎÀÜÂ³¤ò²ò½ü¤¹¤ë¡£
-  # Í¿¤¨¤é¤ì¤¿ConnectorProfile¤Ë´ØÏ¢¤¹¤ëConsumer¤ËÀßÄê¤µ¤ì¤¿Á´¤Æ¤ÎObject¤ò
-  # ²òÊü¤·ÀÜÂ³¤ò²ò½ü¤¹¤ë¡£
+  # Interfaceã¸ã®æ¥ç¶šã‚’è§£é™¤ã™ã‚‹ã€‚
+  # ä¸ãˆã‚‰ã‚ŒãŸConnectorProfileã«é–¢é€£ã™ã‚‹Consumerã«è¨­å®šã•ã‚ŒãŸå…¨ã¦ã®Objectã‚’
+  # è§£æ”¾ã—æ¥ç¶šã‚’è§£é™¤ã™ã‚‹ã€‚
   #
-  # @param connector_profile ¥³¥Í¥¯¥¿¡¦¥×¥í¥Õ¥¡¥¤¥ë
+  # @param connector_profile ã‚³ãƒã‚¯ã‚¿ãƒ»ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
   #
   # @else
   # @brief Disconnect the interface connection
@@ -1120,7 +1120,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief InPort provider ¤Î½é´ü²½
+  # @brief InPort provider ã®åˆæœŸåŒ–
   # @else
   # @brief InPort provider initialization
   # @endif
@@ -1165,7 +1165,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief OutPort consumer ¤Î½é´ü²½
+  # @brief OutPort consumer ã®åˆæœŸåŒ–
   # @else
   # @brief OutPort consumer initialization
   # @endif
@@ -1209,10 +1209,10 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief InPort provider ¤ÎÀ¸À®
+  # @brief InPort provider ã®ç”Ÿæˆ
   #
-  # InPortProvider ¤òÀ¸À®¤·¡¢¾ğÊó¤ò ConnectorProfile ¤Ë¸ø³«¤¹¤ë¡£
-  # À¸À®¤Ë¼ºÇÔ¤·¤¿¾ì¹ç 0 ¤òÊÖ¤¹¡£
+  # InPortProvider ã‚’ç”Ÿæˆã—ã€æƒ…å ±ã‚’ ConnectorProfile ã«å…¬é–‹ã™ã‚‹ã€‚
+  # ç”Ÿæˆã«å¤±æ•—ã—ãŸå ´åˆ 0 ã‚’è¿”ã™ã€‚
   #
   # @else
   # @brief InPort provider creation
@@ -1250,10 +1250,10 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief OutPort consumer ¤ÎÀ¸À®
+  # @brief OutPort consumer ã®ç”Ÿæˆ
   #
-  # OutPortConsumer ¤òÀ¸À®¤¹¤ë¡£
-  # À¸À®¤Ë¼ºÇÔ¤·¤¿¾ì¹ç 0 ¤òÊÖ¤¹¡£
+  # OutPortConsumer ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+  # ç”Ÿæˆã«å¤±æ•—ã—ãŸå ´åˆ 0 ã‚’è¿”ã™ã€‚
   #
   # @else
   # @brief InPort provider creation
@@ -1289,10 +1289,10 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief InPortPushConnector ¤ÎÀ¸À®
+  # @brief InPortPushConnector ã®ç”Ÿæˆ
   #
-  # Connector ¤òÀ¸À®¤·¡¢À¸À®¤¬À®¸ù¤¹¤ì¤Ğ m_connectors ¤ËÊİÂ¸¤¹¤ë¡£
-  # À¸À®¤Ë¼ºÇÔ¤·¤¿¾ì¹ç None ¤òÊÖ¤¹¡£
+  # Connector ã‚’ç”Ÿæˆã—ã€ç”ŸæˆãŒæˆåŠŸã™ã‚Œã° m_connectors ã«ä¿å­˜ã™ã‚‹ã€‚
+  # ç”Ÿæˆã«å¤±æ•—ã—ãŸå ´åˆ None ã‚’è¿”ã™ã€‚
   #
   # @else
   # @brief InPortPushConnector creation
@@ -1365,15 +1365,15 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief InPortDuplexConnector ¤ÎÀ¸À®
+  # @brief InPortDuplexConnector ã®ç”Ÿæˆ
   #
-  # ÁĞÊı¸şÄÌ¿®ÍÑ¥³¥Í¥¯¥¿¤òÀ¸À®¤·¡¢À¸À®¤¬À®¸ù¤¹¤ì¤Ğ m_connectors ¤ËÊİÂ¸¤¹¤ë¡£
+  # åŒæ–¹å‘é€šä¿¡ç”¨ã‚³ãƒã‚¯ã‚¿ã‚’ç”Ÿæˆã—ã€ç”ŸæˆãŒæˆåŠŸã™ã‚Œã° m_connectors ã«ä¿å­˜ã™ã‚‹ã€‚
   # 
   #
-  # @param cprof ¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë
-  # @param prop ¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë¤ò¥×¥í¥Ñ¥Æ¥£¤ËÊÑ´¹
-  # @param provider_ ¥×¥í¥Ğ¥¤¥À
-  # @return À¸À®¤·¤¿¥³¥Í¥¯¥¿¡£À¸À®¤Ë¼ºÇÔ¤·¤¿¾ì¹ç None ¤òÊÖ¤¹¡£
+  # @param cprof ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+  # @param prop ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«å¤‰æ›
+  # @param provider_ ãƒ—ãƒ­ãƒã‚¤ãƒ€
+  # @return ç”Ÿæˆã—ãŸã‚³ãƒã‚¯ã‚¿ã€‚ç”Ÿæˆã«å¤±æ•—ã—ãŸå ´åˆ None ã‚’è¿”ã™ã€‚
   #
   # @else
   # @brief InPortDuplexConnector creation
@@ -1415,10 +1415,10 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ¥í¡¼¥«¥ë¤Î¥Ô¥¢OutPort¤ò¼èÆÀ
+  # @brief ãƒ­ãƒ¼ã‚«ãƒ«ã®ãƒ”ã‚¢OutPortã‚’å–å¾—
   # @param self
-  # @param profile ¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë
-  # @return OutPort¤Î¥µ¡¼¥Ğ¥ó¥È(¼èÆÀ¤Ë¼ºÇÔ¤·¤¿¾ì¹ç¤ÏNone)
+  # @param profile ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+  # @return OutPortã®ã‚µãƒ¼ãƒãƒ³ãƒˆ(å–å¾—ã«å¤±æ•—ã—ãŸå ´åˆã¯None)
   # @else
   # @brief Getting local peer OutPort if available
   # @param self

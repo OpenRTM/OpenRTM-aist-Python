@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -20,13 +20,13 @@ import OpenRTM_aist
 ##
 # @if jp
 #
-# @brief brief RT����ݡ��ͥ���˴��Ѵؿ�
+# @brief brief RTコンポーネント破棄用関数
 #
-# RT����ݡ��ͥ�ȤΥ��󥹥��󥹤��˴����뤿��δؿ���
-# �����ˤƻ��ꤷ��RT����ݡ��ͥ�ȤΥ��󥹥��󥹤򡢽�λ������ƤӽФ���
-# �˴����롣
+# RTコンポーネントのインスタンスを破棄するための関数。
+# 引数にて指定したRTコンポーネントのインスタンスを、終了処理を呼び出して
+# 破棄する。
 #
-# @param rtc �˴��о�RT����ݡ��ͥ�ȤΥ��󥹥���
+# @param rtc 破棄対象RTコンポーネントのインスタンス
 #
 # @else
 #
@@ -40,11 +40,11 @@ def Delete(rtc):
 # @if jp
 #
 # @class FactoryBase
-# @brief FactoryBase ���쥯�饹
+# @brief FactoryBase 基底クラス
 # 
-# RT����ݡ��ͥ�������ѥե����ȥ�δ��쥯�饹��
-# �ºݤγƼ�ե����ȥꥯ�饹�����������ϡ��ܥ��饹��Ѿ�������Ǽ������롣
-# �ºݤ���������������϶�ݥ��֥��饹�ˤƼ�������ɬ�פ����롣
+# RTコンポーネント生成用ファクトリの基底クラス。
+# 実際の各種ファクトリクラスを実装する場合は、本クラスを継承する形で実装する。
+# 実際の生成、削除処理は具象サブクラスにて実装する必要がある。
 #
 # @since 0.2.0
 #
@@ -65,12 +65,12 @@ class FactoryBase:
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯����
+  # コンストラクタ。
   #
   # @param self
-  # @param profile ����ݡ��ͥ�ȤΥץ��ե�����
+  # @param profile コンポーネントのプロファイル
   #
   # @else
   #
@@ -93,15 +93,15 @@ class FactoryBase:
   ##
   # @if jp
   #
-  # @brief ����ݡ��ͥ�Ȥ�����(���֥��饹������)
+  # @brief コンポーネントの生成(サブクラス実装用)
   #
-  # RTComponent �Υ��󥹥��󥹤��������뤿��δؿ���<BR>
-  # �ºݤν���������ϡ��ƶ�ݥ��饹��ˤƵ��Ҥ��롣
+  # RTComponent のインスタンスを生成するための関数。<BR>
+  # 実際の初期化処理は、各具象クラス内にて記述する。
   #
   # @param self
-  # @param mgr �ޥ͡����㥪�֥�������
+  # @param mgr マネージャオブジェクト
   #
-  # @return ������������ݡ��ͥ��
+  # @return 生成したコンポーネント
   #
   # @else
   #
@@ -117,13 +117,13 @@ class FactoryBase:
   ##
   # @if jp
   #
-  # @brief ����ݡ��ͥ�Ȥ��˴�(���֥��饹������)
+  # @brief コンポーネントの破棄(サブクラス実装用)
   #
-  # RTComponent �Υ��󥹥��󥹤��˴����뤿��δؿ���<BR>
-  # �ºݤν���������ϡ��ƶ�ݥ��饹��ˤƵ��Ҥ��롣
+  # RTComponent のインスタンスを破棄するための関数。<BR>
+  # 実際の初期化処理は、各具象クラス内にて記述する。
   #
   # @param self
-  # @param comp �˴��о� RT����ݡ��ͥ��
+  # @param comp 破棄対象 RTコンポーネント
   #
   # @else
   #
@@ -139,13 +139,13 @@ class FactoryBase:
   ##
   # @if jp
   #
-  # @brief ����ݡ��ͥ�ȥץ��ե�����μ���
+  # @brief コンポーネントプロファイルの取得
   #
-  # ����ݡ��ͥ�ȤΥץ��ե�������������
+  # コンポーネントのプロファイルを取得する
   #
   # @param self
   #
-  # @return ����ݡ��ͥ�ȤΥץ��ե�����
+  # @return コンポーネントのプロファイル
   #
   # @else
   #
@@ -161,13 +161,13 @@ class FactoryBase:
   ##
   # @if jp
   #
-  # @brief ���ߤΥ��󥹥��󥹿��μ���
+  # @brief 現在のインスタンス数の取得
   #
-  # ����ݡ��ͥ�Ȥθ��ߤΥ��󥹥��󥹿���������롣
+  # コンポーネントの現在のインスタンス数を取得する。
   #
   # @param self
   #
-  # @return ����ݡ��ͥ�ȤΥ��󥹥��󥹿�
+  # @return コンポーネントのインスタンス数
   #
   # @else
   #
@@ -185,9 +185,9 @@ class FactoryBase:
 ##
 # @if jp
 # @class FactoryPython
-# @brief FactoryPython ���饹
+# @brief FactoryPython クラス
 # 
-# Python�ѥ���ݡ��ͥ�ȥե����ȥꥯ�饹��
+# Python用コンポーネントファクトリクラス。
 #
 # @since 0.4.1
 #
@@ -207,18 +207,18 @@ class FactoryPython(FactoryBase):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯����
-  # �����оݥ���ݡ��ͥ�ȤΥץ��ե����롢����ݡ��ͥ�������Ѵؿ���
-  # ����ݡ��ͥ���˴��Ѵؿ�������ݡ��ͥ����������̿̾�ݥꥷ��������˼�ꡢ
-  # Python �Ǽ������줿����ݡ��ͥ�ȤΥե����ȥꥯ�饹���������롣
+  # コンストラクタ。
+  # 生成対象コンポーネントのプロファイル、コンポーネント生成用関数、
+  # コンポーネント破棄用関数、コンポーネント生成時の命名ポリシーを引数に取り、
+  # Python で実装されたコンポーネントのファクトリクラスを生成する。
   #
   # @param self
-  # @param profile ����ݡ��ͥ�ȤΥץ��ե�����
-  # @param new_func ����ݡ��ͥ�������Ѵؿ�
-  # @param delete_func ����ݡ��ͥ���˴��Ѵؿ�
-  # @param policy ����ݡ��ͥ����������̿̾�ݥꥷ��(�ǥե������:None)
+  # @param profile コンポーネントのプロファイル
+  # @param new_func コンポーネント生成用関数
+  # @param delete_func コンポーネント破棄用関数
+  # @param policy コンポーネント生成時の命名ポリシー(デフォルト値:None)
   #
   # @else
   #
@@ -251,14 +251,14 @@ class FactoryPython(FactoryBase):
   ##
   # @if jp
   #
-  # @brief ����ݡ��ͥ�Ȥ�����
+  # @brief コンポーネントの生成
   #
-  # RTComponent �Υ��󥹥��󥹤��������롣
+  # RTComponent のインスタンスを生成する。
   #
   # @param self
-  # @param mgr �ޥ͡����㥪�֥�������
+  # @param mgr マネージャオブジェクト
   #
-  # @return ������������ݡ��ͥ��
+  # @return 生成したコンポーネント
   #
   # @else
   #
@@ -292,12 +292,12 @@ class FactoryPython(FactoryBase):
   ##
   # @if jp
   #
-  # @brief ����ݡ��ͥ�Ȥ��˴�
+  # @brief コンポーネントの破棄
   #
-  # RTComponent �Υ��󥹥��󥹤��˴����롣
+  # RTComponent のインスタンスを破棄する。
   #
   # @param self
-  # @param comp �˴��о� RTComponent
+  # @param comp 破棄対象 RTComponent
   #
   # @else
   #

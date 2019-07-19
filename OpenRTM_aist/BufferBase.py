@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -20,21 +20,21 @@ import OpenRTM_aist
 ##
 # @if jp
 # @class BufferBase
-# @brief BufferBase ��ݥ��饹
+# @brief BufferBase 抽象クラス
 # 
-# ��ΥХåե��Τ������ݥ��󥿡��ե��������饹��
-# ��ݥХåե����饹�ϡ��ʲ��δؿ��μ������󶡤��ʤ���Фʤ�ʤ���
+# 種々のバッファのための抽象インターフェースクラス。
+# 具象バッファクラスは、以下の関数の実装を提供しなければならない。
 # 
-# public���󥿡��ե������Ȥ��ưʲ��Τ�Τ��󶡤��롣
-#  - write(): �Хåե��˽񤭹���
-#  - read(): �Хåե������ɤ߽Ф�
-#  - length(): �Хåե�Ĺ���֤�
-#  - isFull(): �Хåե������դǤ���
-#  - isEmpty(): �Хåե������Ǥ���
+# publicインターフェースとして以下のものを提供する。
+#  - write(): バッファに書き込む
+#  - read(): バッファから読み出す
+#  - length(): バッファ長を返す
+#  - isFull(): バッファが満杯である
+#  - isEmpty(): バッファが空である
 # 
-# protected���󥿡��ե������Ȥ��ưʲ��Τ�Τ��󶡤��롣
-#  - put(): �Хåե��˥ǡ�����񤭹���
-#  - get(): �Хåե�����ǡ������ɤ߽Ф�
+# protectedインターフェースとして以下のものを提供する。
+#  - put(): バッファにデータを書き込む
+#  - get(): バッファからデータを読み出す
 # 
 # @since 0.4.0
 # 
@@ -55,38 +55,38 @@ class BufferBase(OpenRTM_aist.BufferStatus):
 
   ##
   # @if jp
-  # @brief �Хåե�������
+  # @brief バッファの設定
   #
-  # Properties ��Ϳ������ץ��ѥƥ��ˤ�ꡢ
-  # �Хåե���������������롣
-  # ���ѤǤ��륪�ץ����Ȱ�̣�ϰʲ����̤�
+  # Properties で与えられるプロパティにより、
+  # バッファの設定を初期化する。
+  # 使用できるオプションと意味は以下の通り
   #
   # - buffer.length:
-  #     �Хåե���Ĺ�����������ʳ��ο��ͤ����ꤵ��Ƥ�̵�뤵��롣��
-  #     �Ǥ˥Хåե������Ѿ��֤Ǥ⡢Ĺ���������ꤵ�줿�Τ������٤Ƥ�
-  #     �ݥ��󥿤����������롣
+  #     バッファの長さ。自然数以外の数値が指定されても無視される。す
+  #     でにバッファが使用状態でも、長さが再設定されたのち、すべての
+  #     ポインタが初期化される。
   #
   # - buffer.write.full_policy:
-  #     ��񤭤��뤫�ɤ����Υݥꥷ����
-  #     overwrite (���), do_nothing (���⤷�ʤ�), block (�֥��å�����)
-  #     block ����ꤷ����硢���� timeout �ͤ���ꤹ��С�������ָ�
-  #     �񤭹����Բ�ǽ�Ǥ���Х����ॢ���Ȥ��롣
-  #     �ǥե���Ȥ�  overwrite (���)��
+  #     上書きするかどうかのポリシー。
+  #     overwrite (上書き), do_nothing (何もしない), block (ブロックする)
+  #     block を指定した場合、次の timeout 値を指定すれば、指定時間後
+  #     書き込み不可能であればタイムアウトする。
+  #     デフォルトは  overwrite (上書き)。
   #
   # - buffer.write.timeout:
-  #     �����ॢ���Ȼ��֤� [sec] �ǻ��ꤹ�롣�ǥե���Ȥ� 1.0 [sec]��
-  #     1 sec -> 1.0, 1 ms -> 0.001, �����ॢ���Ȥ��ʤ� -> 0.0
+  #     タイムアウト時間を [sec] で指定する。デフォルトは 1.0 [sec]。
+  #     1 sec -> 1.0, 1 ms -> 0.001, タイムアウトしない -> 0.0
   #
   # - buffer.read.empty_policy:
-  #     �Хåե������ΤȤ����ɤ߽Ф��ݥꥷ����
-  #     readback (�Ǹ������), do_nothing (���⤷�ʤ�), block (�֥��å�����)
-  #     block ����ꤷ����硢���� timeout �ͤ���ꤹ��С�������ָ�
-  #     �ɤ߽Ф��Բ�ǽ�Ǥ���Х����ॢ���Ȥ��롣
-  #     �ǥե���Ȥ� readback (�Ǹ������)��
+  #     バッファが空のときの読み出しポリシー。
+  #     readback (最後の要素), do_nothing (何もしない), block (ブロックする)
+  #     block を指定した場合、次の timeout 値を指定すれば、指定時間後
+  #     読み出し不可能であればタイムアウトする。
+  #     デフォルトは readback (最後の要素)。
   #
   # - buffer.read.timeout:
-  #     �����ॢ���Ȼ��� [sec] �ǻ��ꤹ�롣�ǥե���Ȥ� 1.0 [sec]��
-  #     1sec -> 1.0, 1ms -> 0.001, �����ॢ���Ȥ��ʤ� -> 0.0
+  #     タイムアウト時間 [sec] で指定する。デフォルトは 1.0 [sec]。
+  #     1sec -> 1.0, 1ms -> 0.001, タイムアウトしない -> 0.0
   #
   # @else
   #
@@ -98,14 +98,14 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   # 
-  # @brief �Хåե���Ĺ�����������(���֥��饹������)
+  # @brief バッファの長さを取得する(サブクラス実装用)
   # 
-  # �Хåե�Ĺ���������<BR>
-  # �����֥��饹�Ǥμ���������
+  # バッファ長を取得する<BR>
+  # ※サブクラスでの実装参照用
   # 
   # @param self 
   # 
-  # @return �Хåե�Ĺ
+  # @return バッファ長
   # 
   # @else
   # 
@@ -121,13 +121,13 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   #
-  # @brief �Хåե��ξ��֤�ꥻ�åȤ���
+  # @brief バッファの状態をリセットする
   # 
-  # �Хåե����ɤ߽Ф��ݥ��󥿤Ƚ񤭹��ߥݥ��󥿤ΰ��֤�ꥻ�åȤ��롣
+  # バッファの読み出しポインタと書き込みポインタの位置をリセットする。
   # 
-  # @return BUFFER_OK: ���ｪλ
-  #         NOT_SUPPORTED: �Хåե�Ĺ�ѹ��Բ�
-  #         BUFFER_ERROR: �۾ｪλ
+  # @return BUFFER_OK: 正常終了
+  #         NOT_SUPPORTED: バッファ長変更不可
+  #         BUFFER_ERROR: 異常終了
   # 
   # @else
   #
@@ -146,12 +146,12 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   #
-  # @brief �Хåե��θ��ߤν�������ǤΥݥ���
+  # @brief バッファの現在の書込み要素のポインタ
   # 
-  # �Хåե��θ��ߤν�������ǤΥݥ��󥿤ޤ��ϡ�n����Υݥ��󥿤��֤�
+  # バッファの現在の書込み要素のポインタまたは、n個先のポインタを返す
   # 
-  # @param  n ����ߥݥ��� + n �ΰ��֤Υݥ��� 
-  # @return ����߰��֤Υݥ���
+  # @param  n 書込みポインタ + n の位置のポインタ 
+  # @return 書込み位置のポインタ
   # 
   # @else
   #
@@ -169,14 +169,14 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   #
-  # @brief ����ߥݥ��󥿤�ʤ��
+  # @brief 書込みポインタを進める
   # 
-  # ���ߤν񤭹��߰��֤Υݥ��󥿤� n �Ŀʤ�롣
+  # 現在の書き込み位置のポインタを n 個進める。
   # 
-  # @param  n ����ߥݥ��� + n �ΰ��֤Υݥ���
-  # @param unlock_enable True�ξ��˥Хåե�����ץƥ��Υ֥��å���������
-  # @return BUFFER_OK: ���ｪλ
-  #         BUFFER_ERROR: �۾ｪλ
+  # @param  n 書込みポインタ + n の位置のポインタ
+  # @param unlock_enable Trueの場合にバッファエンプティのブロックを解除する
+  # @return BUFFER_OK: 正常終了
+  #         BUFFER_ERROR: 異常終了
   # 
   # @else
   #
@@ -194,13 +194,13 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   # 
-  # @brief �Хåե��˥ǡ������Ǽ����(���֥��饹������)
+  # @brief バッファにデータを格納する(サブクラス実装用)
   # 
-  # �Хåե��ؤΥǡ�����Ǽ�Ѵؿ�<BR>
-  # �����֥��饹�Ǥμ���������
+  # バッファへのデータ格納用関数<BR>
+  # ※サブクラスでの実装参照用
   # 
   # @param self 
-  # @param data �оݥǡ���
+  # @param data 対象データ
   # 
   # @else
   # 
@@ -214,15 +214,15 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   # 
-  # @brief �Хåե��˥ǡ�����񤭹���(���֥��饹������)
+  # @brief バッファにデータを書き込む(サブクラス実装用)
   # 
-  # �Хåե��˥ǡ�����񤭹���<BR>
-  # �����֥��饹�Ǥμ���������
+  # バッファにデータを書き込む<BR>
+  # ※サブクラスでの実装参照用
   # 
   # @param self 
-  # @param value �񤭹����оݥǡ���
+  # @param value 書き込み対象データ
   # 
-  # @return �ǡ����񤭹��߷��(true:�񤭹���������false:�񤭹��߼���)
+  # @return データ書き込み結果(true:書き込み成功，false:書き込み失敗)
   # 
   # @else
   # 
@@ -236,14 +236,14 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   #
-  # @brief �Хåե��˽���߲�ǽ�����ǿ�
+  # @brief バッファに書込み可能な要素数
   # 
-  # �Хåե��˽���߲�ǽ�����ǿ����֤���
+  # バッファに書込み可能な要素数を返す。
   # 
-  # @return �񤭹��߲�ǽ�����ǿ�
+  # @return 書き込み可能な要素数
   #
-  # @return BUFFER_OK: ���ｪλ
-  #         BUFFER_ERROR: �۾ｪλ
+  # @return BUFFER_OK: 正常終了
+  #         BUFFER_ERROR: 異常終了
   # 
   # @else
   #
@@ -263,11 +263,11 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   #
-  # @brief �Хåե�full�����å�
+  # @brief バッファfullチェック
   # 
-  # �Хåե�full�����å��ѽ�貾�۴ؿ�
+  # バッファfullチェック用純粋仮想関数
   #
-  # @return full�����å����(true:�Хåե�full��false:�Хåե���������)
+  # @return fullチェック結果(true:バッファfull，false:バッファ空きあり)
   # 
   # @else
   #
@@ -285,12 +285,12 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   #
-  # @brief �Хåե��θ��ߤ��ɤ߽Ф����ǤΥݥ���
+  # @brief バッファの現在の読み出し要素のポインタ
   # 
-  # �Хåե��θ��ߤ��ɤ߽Ф����ǤΥݥ��󥿤ޤ��ϡ�n����Υݥ��󥿤��֤�
+  # バッファの現在の読み出し要素のポインタまたは、n個先のポインタを返す
   # 
-  # @param  n �ɤ߽Ф��ݥ��� + n �ΰ��֤Υݥ��� 
-  # @return �ɤ߽Ф����֤Υݥ���
+  # @param  n 読み出しポインタ + n の位置のポインタ 
+  # @return 読み出し位置のポインタ
   # 
   # @else
   #
@@ -307,14 +307,14 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   #
-  # @brief �ɤ߽Ф��ݥ��󥿤�ʤ��
+  # @brief 読み出しポインタを進める
   # 
-  # ���ߤ��ɤ߽Ф����֤Υݥ��󥿤� n �Ŀʤ�롣
+  # 現在の読み出し位置のポインタを n 個進める。
   # 
-  # @param  n �ɤ߽Ф��ݥ��� + n �ΰ��֤Υݥ���
-  # @param unlock_enable True�ξ��˥Хåե��ե�Υ֥��å���������
-  # @return BUFFER_OK: ���ｪλ
-  #         BUFFER_ERROR: �۾ｪλ
+  # @param  n 読み出しポインタ + n の位置のポインタ
+  # @param unlock_enable Trueの場合にバッファフルのブロックを解除する
+  # @return BUFFER_OK: 正常終了
+  #         BUFFER_ERROR: 異常終了
   # 
   # @else
   #
@@ -332,14 +332,14 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   # 
-  # @brief �Хåե�����ǡ������������(���֥��饹������)
+  # @brief バッファからデータを取得する(サブクラス実装用)
   # 
-  # �Хåե��˳�Ǽ���줿�ǡ��������Ѵؿ�<BR>
-  # �����֥��饹�Ǥμ���������
+  # バッファに格納されたデータ取得用関数<BR>
+  # ※サブクラスでの実装参照用
   # 
   # @param self 
   # 
-  # @return �����ǡ���
+  # @return 取得データ
   # 
   # @else
   # 
@@ -353,16 +353,16 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   # 
-  # @brief �Хåե�����ǡ������ɤ߽Ф�(���֥��饹������)
+  # @brief バッファからデータを読み出す(サブクラス実装用)
   # 
-  # �Хåե�����ǡ������ɤ߽Ф�<BR>
-  # �����֥��饹�Ǥμ���������
+  # バッファからデータを読み出す<BR>
+  # ※サブクラスでの実装参照用
   # 
   # @param self 
   # 
   # @return ret, data
-  # ret :   �ǡ����ɤ߽Ф����(true:�ɤ߽Ф�������false:�ɤ߽Ф�����)
-  # value : �ɤ߽Ф��ǡ���
+  # ret :   データ読み出し結果(true:読み出し成功，false:読み出し失敗)
+  # value : 読み出しデータ
   # 
   # @else
   # 
@@ -376,14 +376,14 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   #
-  # @brief �Хåե������ɤ߽Ф���ǽ�����ǿ�
+  # @brief バッファから読み出し可能な要素数
   # 
-  # �Хåե������ɤ߽Ф���ǽ�����ǿ����֤���
+  # バッファから読み出し可能な要素数を返す。
   # 
-  # @return �ɤ߽Ф���ǽ�����ǿ�
+  # @return 読み出し可能な要素数
   #
-  # @return BUFFER_OK: ���ｪλ
-  #         BUFFER_ERROR: �۾ｪλ
+  # @return BUFFER_OK: 正常終了
+  #         BUFFER_ERROR: 異常終了
   # 
   # @else
   #
@@ -403,11 +403,11 @@ class BufferBase(OpenRTM_aist.BufferStatus):
   ##
   # @if jp
   #
-  # @brief �Хåե�empty�����å�
+  # @brief バッファemptyチェック
   # 
-  # �Хåե�empty�����å��ѽ�貾�۴ؿ�
+  # バッファemptyチェック用純粋仮想関数
   #
-  # @return empty�����å����(true:�Хåե�empty��false:�Хåե��ǡ�������)
+  # @return emptyチェック結果(true:バッファempty，false:バッファデータあり)
   # 
   # @else
   #
@@ -426,11 +426,11 @@ class BufferBase(OpenRTM_aist.BufferStatus):
 ##
 # @if jp
 # @class NullBuffer
-# @brief ���ߡ��Хåե��������饹
+# @brief ダミーバッファ実装クラス
 # 
-# �Хåե�Ĺ��������Υ��ߡ��Хåե��������饹��
+# バッファ長が１固定のダミーバッファ実装クラス。
 # 
-# @param DataType �Хåե��˳�Ǽ����ǡ�����
+# @param DataType バッファに格納するデータ型
 # 
 # @since 0.4.0
 # 
@@ -446,13 +446,13 @@ class NullBuffer(BufferBase):
   ##
   # @if jp
   # 
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # 
-  # ���󥹥ȥ饯��
-  # �Хåե�Ĺ��(����)�ǽ�������롣
+  # コンストラクタ
+  # バッファ長を１(固定)で初期化する。
   # 
   # @param self 
-  # @param size �Хåե�Ĺ(�ǥե������:None��������̵��)
+  # @param size バッファ長(デフォルト値:None，ただし無効)
   # 
   # @else
   # 
@@ -467,13 +467,13 @@ class NullBuffer(BufferBase):
   ##
   # @if jp
   # 
-  # @brief �Хåե�Ĺ(������)���������
+  # @brief バッファ長(１固定)を取得する
   # 
-  # �Хåե�Ĺ��������롣(��ˣ����֤���)
+  # バッファ長を取得する。(常に１を返す。)
   # 
   # @param self 
   # 
-  # @return �Хåե�Ĺ(������)
+  # @return バッファ長(１固定)
   # 
   # @else
   # 
@@ -489,14 +489,14 @@ class NullBuffer(BufferBase):
   ##
   # @if jp
   # 
-  # @brief �Хåե��˥ǡ�����񤭹���
+  # @brief バッファにデータを書き込む
   # 
-  # ������Ϳ����줿�ǡ�����Хåե��˽񤭹��ࡣ
+  # 引数で与えられたデータをバッファに書き込む。
   # 
   # @param self 
-  # @param value �񤭹����оݥǡ���
+  # @param value 書き込み対象データ
   # 
-  # @return �ǡ����񤭹��߷��(true:�񤭹���������false:�񤭹��߼���)
+  # @return データ書き込み結果(true:書き込み成功，false:書き込み失敗)
   # 
   # @else
   # 
@@ -511,15 +511,15 @@ class NullBuffer(BufferBase):
   ##
   # @if jp
   # 
-  # @brief �Хåե�����ǡ������ɤ߽Ф�
+  # @brief バッファからデータを読み出す
   # 
-  # �Хåե��˳�Ǽ���줿�ǡ������ɤ߽Ф���
+  # バッファに格納されたデータを読み出す。
   # 
   # @param self 
   # 
   # @return ret, data
-  # ret : �ǡ����ɤ߽Ф����(true:�ɤ߽Ф�������false:�ɤ߽Ф�����)
-  # data �ɤ߽Ф����ǡ���
+  # ret : データ読み出し結果(true:読み出し成功，false:読み出し失敗)
+  # data 読み出したデータ
   # 
   # @else
   # 
@@ -536,13 +536,13 @@ class NullBuffer(BufferBase):
   ##
   # @if jp
   # 
-  # @brief �Хåե�full�����å�
+  # @brief バッファfullチェック
   # 
-  # �Хåե�full������å����롣(���false���֤���)
+  # バッファfullをチェックする。(常にfalseを返す。)
   # 
   # @param self 
   # 
-  # @return full�����å����(���false)
+  # @return fullチェック結果(常にfalse)
   # 
   # @else
   # 
@@ -556,14 +556,14 @@ class NullBuffer(BufferBase):
   ##
   # @if jp
   # 
-  # @brief �Хåե�empty�����å�
+  # @brief バッファemptyチェック
   # 
-  # �Хåե�empty������å����롣(���false���֤���)
-  # ���׳�ǧ
+  # バッファemptyをチェックする。(常にfalseを返す。)
+  # ※要確認
   # 
   # @param self 
   # 
-  # @return empty�����å����(���false)
+  # @return emptyチェック結果(常にfalse)
   # 
   # @else
   # 
@@ -577,15 +577,15 @@ class NullBuffer(BufferBase):
   ##
   # @if jp
   # 
-  # @brief �ǿ��ǡ�������ǧ����
+  # @brief 最新データか確認する
   # 
-  # ���ߤΥХåե����֤˳�Ǽ����Ƥ���ǡ������ǿ��ǡ�������ǧ���롣
+  # 現在のバッファ位置に格納されているデータが最新データか確認する。
   # 
   # @param self 
   # 
-  # @return �ǿ��ǡ�����ǧ���
-  #            ( true:�ǿ��ǡ������ǡ����Ϥޤ��ɤ߽Ф���Ƥ��ʤ�
-  #             false:���Υǡ������ǡ����ϴ����ɤ߽Ф���Ƥ���)
+  # @return 最新データ確認結果
+  #            ( true:最新データ．データはまだ読み出されていない
+  #             false:過去のデータ．データは既に読み出されている)
   # 
   # @else
   # 
@@ -597,12 +597,12 @@ class NullBuffer(BufferBase):
   ##
   # @if jp
   # 
-  # @brief �Хåե��˥ǡ������Ǽ
+  # @brief バッファにデータを格納
   # 
-  # ������Ϳ����줿�ǡ�����Хåե��˳�Ǽ���롣
+  # 引数で与えられたデータをバッファに格納する。
   # 
   # @param self 
-  # @param data �оݥǡ���
+  # @param data 対象データ
   # 
   # @else
   # 
@@ -618,16 +618,16 @@ class NullBuffer(BufferBase):
   ##
   # @if jp
   # 
-  # @brief �Хåե�����ǡ������������
+  # @brief バッファからデータを取得する
   # 
-  # �Хåե��˳�Ǽ���줿�ǡ�����������롣
+  # バッファに格納されたデータを取得する。
   # 
   # @param self 
   # 
   # @return ret, value
-  #   ret : BUFFER_OK: ���ｪλ
-  #         BUFFER_ERROR: �۾ｪλ
-  # value : �ɤ߽Ф��ǡ���
+  #   ret : BUFFER_OK: 正常終了
+  #         BUFFER_ERROR: 異常終了
+  # value : 読み出しデータ
   # 
   # @else
   # 
@@ -642,15 +642,15 @@ class NullBuffer(BufferBase):
   ##
   # @if jp
   # 
-  # @brief ���˽񤭹���Хåե��ؤλ��Ȥ��������
+  # @brief 次に書き込むバッファへの参照を取得する
   # 
-  # �񤭹��ߥХåե��ؤλ��Ȥ�������롣
-  # �ܥХåե������ǤϥХåե�Ĺ�ϸ���ǣ��Ǥ��뤿�ᡤ
-  # ���Ʊ�����֤ؤλ��Ȥ��֤���
+  # 書き込みバッファへの参照を取得する。
+  # 本バッファ実装ではバッファ長は固定で１であるため，
+  # 常に同じ位置への参照を返す。
   # 
   # @param self 
   # 
-  # @return ���ν񤭹����оݥХåե��ؤλ���(����)
+  # @return 次の書き込み対象バッファへの参照(固定)
   # 
   # @else
   # 

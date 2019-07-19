@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -17,7 +17,7 @@
 
 ##
 # @if jp
-# @brief ConfigurationParamListener ¤Î¥¿¥¤¥×
+# @brief ConfigurationParamListener ã®ã‚¿ã‚¤ãƒ—
 #
 # - ON_UPDATE_CONFIG_PARAM,
 #
@@ -42,13 +42,13 @@ class ConfigurationParamListenerType:
 
 ##
 # @if jp
-# @class ConfigurationParamListener ¥¯¥é¥¹
-# @brief ConfigurationParamListener ¥¯¥é¥¹
+# @class ConfigurationParamListener ã‚¯ãƒ©ã‚¹
+# @brief ConfigurationParamListener ã‚¯ãƒ©ã‚¹
 #
-# Configuration ¥Ñ¥é¥á¡¼¥¿¤ÎÊÑ¹¹¤Ë´Ø¤¹¤ë¥ê¥¹¥Ê¥¯¥é¥¹¡£
-# °Ê²¼¤Î¥¤¥Ù¥ó¥È¤ËÂĞ¤·¤Æ¥³¡¼¥ë¥Ğ¥Ã¥¯¤µ¤ì¤ë¡£
+# Configuration ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å¤‰æ›´ã«é–¢ã™ã‚‹ãƒªã‚¹ãƒŠã‚¯ãƒ©ã‚¹ã€‚
+# ä»¥ä¸‹ã®ã‚¤ãƒ™ãƒ³ãƒˆã«å¯¾ã—ã¦ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã•ã‚Œã‚‹ã€‚
 #
-# - ON_UPDATE_CONFIG_PARAM: ¥Ñ¥é¥á¡¼¥¿¤¬ÊÑ¹¹¤µ¤ì¤¿
+# - ON_UPDATE_CONFIG_PARAM: ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒå¤‰æ›´ã•ã‚ŒãŸ
 #
 # @else
 # @class ConfigurationParamListener class
@@ -71,13 +71,13 @@ class ConfigurationParamListener:
   ##
   # @if jp
   #
-  # @brief ConfigurationParamListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+  # @brief ConfigurationParamListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
   #
-  # ConfigurationParamListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
+  # ConfigurationParamListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
   #
-  # @param type ÊÑ´¹ÂĞ¾İ ConfigurationParamListenerType
+  # @param type å¤‰æ›å¯¾è±¡ ConfigurationParamListenerType
   #
-  # @return Ê¸»úÎóÊÑ´¹·ë²Ì
+  # @return æ–‡å­—åˆ—å¤‰æ›çµæœ
   #
   # @else
   #
@@ -105,7 +105,7 @@ class ConfigurationParamListener:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -116,9 +116,9 @@ class ConfigurationParamListener:
   ##
   # @if jp
   #
-  # @brief ²¾ÁÛ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief ä»®æƒ³ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
-  # ConfigurationParamListener ¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # ConfigurationParamListener ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @else
   #
@@ -137,10 +137,10 @@ class ConfigurationParamListener:
 #============================================================
 ##
 # @if jp
-# @brief ConfigurationSetListener ¤Î¥¿¥¤¥×
+# @brief ConfigurationSetListener ã®ã‚¿ã‚¤ãƒ—
 #
-# - ON_SET_CONFIG_SET: ConfigurationSet Ã±°Ì¤ÇÃÍ¤¬¥»¥Ã¥È¤µ¤ì¤¿
-# - ON_ADD_CONFIG_SET: ConfigurationSet ¤¬ÄÉ²Ã¤µ¤ì¤¿
+# - ON_SET_CONFIG_SET: ConfigurationSet å˜ä½ã§å€¤ãŒã‚»ãƒƒãƒˆã•ã‚ŒãŸ
+# - ON_ADD_CONFIG_SET: ConfigurationSet ãŒè¿½åŠ ã•ã‚ŒãŸ
 #
 # @else
 # @brief The types of ConfigurationSetListener
@@ -164,14 +164,14 @@ class ConfigurationSetListenerType:
 
 ##
 # @if jp
-# @class ConfigurationSetListener ¥¯¥é¥¹
-# @brief ConfigurationSetListener ¥¯¥é¥¹
+# @class ConfigurationSetListener ã‚¯ãƒ©ã‚¹
+# @brief ConfigurationSetListener ã‚¯ãƒ©ã‚¹
 #
-# Configuration¥»¥Ã¥È¤¬ÊÑ¹¹¤µ¤ì¤¿¤êÄÉ²Ã¤µ¤ì¤¿¾ì¹ç¤Ë¸Æ¤Ó½Ğ¤µ¤ì¤ë¥ê¥¹¥Ê¥¯¥é¥¹¡£
-# °Ê²¼¤ÎConfiguration¥»¥Ã¥È¤Ë´ØÏ¢¤¹¤ë¥¤¥Ù¥ó¥È¤ËÂĞ¤¹¤ë¥ê¥¹¥Ê¡£
+# Configurationã‚»ãƒƒãƒˆãŒå¤‰æ›´ã•ã‚ŒãŸã‚Šè¿½åŠ ã•ã‚ŒãŸå ´åˆã«å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒªã‚¹ãƒŠã‚¯ãƒ©ã‚¹ã€‚
+# ä»¥ä¸‹ã®Configurationã‚»ãƒƒãƒˆã«é–¢é€£ã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆã«å¯¾ã™ã‚‹ãƒªã‚¹ãƒŠã€‚
 #
-# - ON_SET_CONFIG_SET: ConfigurationSet Ã±°Ì¤ÇÃÍ¤¬¥»¥Ã¥È¤µ¤ì¤¿
-# - ON_ADD_CONFIG_SET: ConfigurationSet ¤¬ÄÉ²Ã¤µ¤ì¤¿
+# - ON_SET_CONFIG_SET: ConfigurationSet å˜ä½ã§å€¤ãŒã‚»ãƒƒãƒˆã•ã‚ŒãŸ
+# - ON_ADD_CONFIG_SET: ConfigurationSet ãŒè¿½åŠ ã•ã‚ŒãŸ
 #
 # @else
 # @class ConfigurationSetListener class
@@ -195,13 +195,13 @@ class ConfigurationSetListener:
   ##
   # @if jp
   #
-  # @brief ConfigurationSetListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+  # @brief ConfigurationSetListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
   #
-  # ConfigurationSetListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
+  # ConfigurationSetListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
   #
-  # @param type ÊÑ´¹ÂĞ¾İ ConfigurationSetListenerType
+  # @param type å¤‰æ›å¯¾è±¡ ConfigurationSetListenerType
   #
-  # @return Ê¸»úÎóÊÑ´¹·ë²Ì
+  # @return æ–‡å­—åˆ—å¤‰æ›çµæœ
   #
   # @else
   #
@@ -230,7 +230,7 @@ class ConfigurationSetListener:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -241,9 +241,9 @@ class ConfigurationSetListener:
   ##
   # @if jp
   #
-  # @brief ²¾ÁÛ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief ä»®æƒ³ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
-  # ConfigurationSetListener ¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # ConfigurationSetListener ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @else
   #
@@ -283,10 +283,10 @@ class ConfigurationSetNameListenerType:
 
 ##
 # @if jp
-# @class ConfigurationSetNameListener ¥¯¥é¥¹
-# @brief ConfigurationSetNameListener ¥¯¥é¥¹
+# @class ConfigurationSetNameListener ã‚¯ãƒ©ã‚¹
+# @brief ConfigurationSetNameListener ã‚¯ãƒ©ã‚¹
 #
-# ConfigurationSet¤Ë´Ø¤¹¤ë¥¤¥Ù¥ó¥È¤Ë´Ø¤¹¤ë¥ê¥¹¥Ê¡¼¥¯¥é¥¹¡£
+# ConfigurationSetã«é–¢ã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆã«é–¢ã™ã‚‹ãƒªã‚¹ãƒŠãƒ¼ã‚¯ãƒ©ã‚¹ã€‚
 #
 # - ON_UPDATE_CONFIG_SET:
 # - ON_REMOVE_CONFIG_SET:
@@ -315,13 +315,13 @@ class ConfigurationSetNameListener:
   ##
   # @if jp
   #
-  # @brief ConfigurationSetNameListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+  # @brief ConfigurationSetNameListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
   #
-  # ConfigurationSetNameListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
+  # ConfigurationSetNameListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
   #
-  # @param type ÊÑ´¹ÂĞ¾İ ConfigurationSetNameListenerType
+  # @param type å¤‰æ›å¯¾è±¡ ConfigurationSetNameListenerType
   #
-  # @return Ê¸»úÎóÊÑ´¹·ë²Ì
+  # @return æ–‡å­—åˆ—å¤‰æ›çµæœ
   #
   # @else
   #
@@ -351,7 +351,7 @@ class ConfigurationSetNameListener:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -362,9 +362,9 @@ class ConfigurationSetNameListener:
   ##
   # @if jp
   #
-  # @brief ²¾ÁÛ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief ä»®æƒ³ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
-  # ConfigurationSetNameListener ¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # ConfigurationSetNameListener ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @else
   #
@@ -382,9 +382,9 @@ class ConfigurationSetNameListener:
 ##
 # @if jp
 # @class ConfigurationParamListenerHolder
-# @brief ConfigurationParamListener ¥Û¥ë¥À¥¯¥é¥¹
+# @brief ConfigurationParamListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
 #
-# Ê£¿ô¤Î ConfigurationParamListener ¤òÊİ»ı¤·´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
+# è¤‡æ•°ã® ConfigurationParamListener ã‚’ä¿æŒã—ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @else
 # @class ConfigurationParamListenerHolder
@@ -400,7 +400,7 @@ class ConfigurationParamListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Constructor
   # @endif
@@ -412,7 +412,7 @@ class ConfigurationParamListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -425,11 +425,11 @@ class ConfigurationParamListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ÎÄÉ²Ã
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®è¿½åŠ 
   #
-  # ¥ê¥¹¥Ê¡¼¤òÄÉ²Ã¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ ã™ã‚‹ã€‚
   #
-  # @param listener ÄÉ²Ã¤¹¤ë¥ê¥¹¥Ê
+  # @param listener è¿½åŠ ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Add the listener.
@@ -447,11 +447,11 @@ class ConfigurationParamListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤Îºï½ü
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®å‰Šé™¤
   #
-  # ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ã€‚
   #
-  # @param listener ºï½ü¤¹¤ë¥ê¥¹¥Ê
+  # @param listener å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Remove the listener. 
@@ -474,12 +474,12 @@ class ConfigurationParamListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤ë
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã¸é€šçŸ¥ã™ã‚‹
   #
-  # ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ê¥¹¥Ê¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+  # ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒªã‚¹ãƒŠã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã€‚
   #
   # @param info ConnectorInfo
-  # @param cdrdata ¥Ç¡¼¥¿
+  # @param cdrdata ãƒ‡ãƒ¼ã‚¿
   # @else
   #
   # @brief Notify listeners. 
@@ -501,9 +501,9 @@ class ConfigurationParamListenerHolder:
 ##
 # @if jp
 # @class ConfigurationSetListenerHolder
-# @brief ConfigurationSetListener ¥Û¥ë¥À¥¯¥é¥¹
+# @brief ConfigurationSetListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
 #
-# Ê£¿ô¤Î ConfigurationSetListener ¤òÊİ»ı¤·´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
+# è¤‡æ•°ã® ConfigurationSetListener ã‚’ä¿æŒã—ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @else
 # @class ConfigurationSetListenerHolder
@@ -519,7 +519,7 @@ class ConfigurationSetListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Constructor
   # @endif
@@ -531,7 +531,7 @@ class ConfigurationSetListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -542,11 +542,11 @@ class ConfigurationSetListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ÎÄÉ²Ã
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®è¿½åŠ 
   #
-  # ¥ê¥¹¥Ê¡¼¤òÄÉ²Ã¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ ã™ã‚‹ã€‚
   #
-  # @param listener ÄÉ²Ã¤¹¤ë¥ê¥¹¥Ê
+  # @param listener è¿½åŠ ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Add the listener.
@@ -564,11 +564,11 @@ class ConfigurationSetListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤Îºï½ü
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®å‰Šé™¤
   #
-  # ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ã€‚
   #
-  # @param listener ºï½ü¤¹¤ë¥ê¥¹¥Ê
+  # @param listener å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Remove the listener. 
@@ -591,12 +591,12 @@ class ConfigurationSetListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤ë
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã¸é€šçŸ¥ã™ã‚‹
   #
-  # ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ê¥¹¥Ê¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+  # ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒªã‚¹ãƒŠã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã€‚
   #
   # @param info ConnectorInfo
-  # @param cdrdata ¥Ç¡¼¥¿
+  # @param cdrdata ãƒ‡ãƒ¼ã‚¿
   # @else
   #
   # @brief Notify listeners. 
@@ -618,9 +618,9 @@ class ConfigurationSetListenerHolder:
 ##
 # @if jp
 # @class ConfigurationSetNameListenerHolder 
-# @brief ConfigurationSetNameListener ¥Û¥ë¥À¥¯¥é¥¹
+# @brief ConfigurationSetNameListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
 #
-# Ê£¿ô¤Î ConfigurationSetNameListener ¤òÊİ»ı¤·´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
+# è¤‡æ•°ã® ConfigurationSetNameListener ã‚’ä¿æŒã—ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @else
 # @class ConfigurationSetNameListenerHolder
@@ -636,7 +636,7 @@ class ConfigurationSetNameListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Constructor
   # @endif
@@ -648,7 +648,7 @@ class ConfigurationSetNameListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -659,11 +659,11 @@ class ConfigurationSetNameListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ÎÄÉ²Ã
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®è¿½åŠ 
   #
-  # ¥ê¥¹¥Ê¡¼¤òÄÉ²Ã¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ ã™ã‚‹ã€‚
   #
-  # @param listener ÄÉ²Ã¤¹¤ë¥ê¥¹¥Ê
+  # @param listener è¿½åŠ ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Add the listener.
@@ -681,11 +681,11 @@ class ConfigurationSetNameListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤Îºï½ü
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®å‰Šé™¤
   #
-  # ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ã€‚
   #
-  # @param listener ºï½ü¤¹¤ë¥ê¥¹¥Ê
+  # @param listener å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Remove the listener. 
@@ -708,9 +708,9 @@ class ConfigurationSetNameListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤ë
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã¸é€šçŸ¥ã™ã‚‹
   #
-  # ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ê¥¹¥Ê¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+  # ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒªã‚¹ãƒŠã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã€‚
   #
   # @param info ConnectorInfo
   # @else
@@ -733,7 +733,7 @@ class ConfigurationSetNameListenerHolder:
 ##
 # @if jp
 # @class ConfigurationActionListeners
-# @brief ConfigurationActionListeners ¥¯¥é¥¹
+# @brief ConfigurationActionListeners ã‚¯ãƒ©ã‚¹
 #
 #
 # @else
@@ -749,8 +749,8 @@ class ConfigurationListeners:
   def __init__(self):
     ##
     # @if jp
-    # @brief ConfigurationParamListenerType¥ê¥¹¥ÊÇÛÎó
-    # ConfigurationParamType¥ê¥¹¥Ê¤ò³ÊÇ¼
+    # @brief ConfigurationParamListenerTypeãƒªã‚¹ãƒŠé…åˆ—
+    # ConfigurationParamTypeãƒªã‚¹ãƒŠã‚’æ ¼ç´
     # @else
     # @brief ConfigurationParamListenerType listener array
     # The ConfigurationParamListenerType listener is stored.
@@ -761,8 +761,8 @@ class ConfigurationListeners:
 
     ##
     # @if jp
-    # @brief ConfigurationSetListenerType¥ê¥¹¥ÊÇÛÎó
-    # ConfigurationSetListenerType¥ê¥¹¥Ê¤ò³ÊÇ¼
+    # @brief ConfigurationSetListenerTypeãƒªã‚¹ãƒŠé…åˆ—
+    # ConfigurationSetListenerTypeãƒªã‚¹ãƒŠã‚’æ ¼ç´
     # @else
     # @brief ConfigurationSetListenerType listener array
     # The ConfigurationSetListenerType listener is stored.
@@ -773,8 +773,8 @@ class ConfigurationListeners:
 
     ##
     # @if jp
-    # @brief ConfigurationSetNameListenerType¥ê¥¹¥ÊÇÛÎó
-    # ConfigurationSetNameListenerType¥ê¥¹¥Ê¤ò³ÊÇ¼
+    # @brief ConfigurationSetNameListenerTypeãƒªã‚¹ãƒŠé…åˆ—
+    # ConfigurationSetNameListenerTypeãƒªã‚¹ãƒŠã‚’æ ¼ç´
     # @else
     # @brief ConfigurationSetNameListenerType listener array
     # The ConfigurationSetNameListenerType listener is stored. 

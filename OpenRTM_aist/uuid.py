@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -31,9 +31,9 @@ if sys.version_info[0] == 3:
 ##
 # @if jp
 # @class UUID
-# @brief UUID�ݻ����饹
+# @brief UUID保持クラス
 # 
-# �������� UUID �ξ�����ݻ����뤿��Υ��饹��
+# 生成した UUID の情報を保持するためのクラス。
 #
 # @since 0.4.0
 #

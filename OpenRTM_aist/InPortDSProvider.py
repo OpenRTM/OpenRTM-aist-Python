@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -23,11 +23,11 @@ import RTC__POA,RTC
 ##
 # @if jp
 # @class InPortDSProvider
-# @brief InPortDSProvider ���饹
+# @brief InPortDSProvider クラス
 #
-# �̿����ʤ� CORBA �����Ѥ������ϥݡ��ȥץ��Х������μ������饹��
+# 通信手段に CORBA を利用した入力ポートプロバイダーの実装クラス。
 #
-# @param DataType �����ץ��Х����˳�����Ƥ��Хåե����ݻ�����ǡ�����
+# @param DataType 当該プロバイダに割り当てたバッファが保持するデータ型
 #
 # @since 1.2.0
 #
@@ -53,15 +53,15 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
-  # �ݡ��ȥץ��ѥƥ��˰ʲ��ι��ܤ����ꤹ�롣
-  #  - ���󥿡��ե����������� : CORBA_Any
-  #  - �ǡ����ե��������� : Push, Pull
-  #  - ���֥�����ץ���󥿥��� : Any
+  # コンストラクタ
+  # ポートプロパティに以下の項目を設定する。
+  #  - インターフェースタイプ : CORBA_Any
+  #  - データフロータイプ : Push, Pull
+  #  - サブスクリプションタイプ : Any
   #
-  # @param buffer �����ץ��Х����˳�����Ƥ�Хåե����֥�������
+  # @param buffer 当該プロバイダに割り当てるバッファオブジェクト
   #
   # @else
   # @brief Constructor
@@ -102,9 +102,9 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
 
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
-  # �ǥ��ȥ饯��
+  # デストラクタ
   #
   # @else
   # @brief Destructor
@@ -118,7 +118,7 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
 
   ##
   # @if jp
-  # @brief ��λ����
+  # @brief 終了処理
   #
   # @else
   # @brief 
@@ -152,11 +152,11 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
     return RTC.UNKNOWN_ERROR
   ##
   # @if jp
-  # @brief [CORBA interface] �Хåե��˥ǡ�����񤭹���
+  # @brief [CORBA interface] バッファにデータを書き込む
   #
-  # ���ꤵ�줿�Хåե��˥ǡ�����񤭹��ࡣ
+  # 設定されたバッファにデータを書き込む。
   #
-  # @param data ����оݥǡ���
+  # @param data 書込対象データ
   #
   # @else
   # @brief [CORBA interface] Write data into the buffer

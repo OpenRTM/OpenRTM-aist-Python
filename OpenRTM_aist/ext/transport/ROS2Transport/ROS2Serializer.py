@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -56,9 +56,9 @@ from sensor_msgs.msg import Image
 
 ##
 # @if jp
-# @brief Ã±°ì¥Ç¡¼¥¿¡¢ÇÛÎó¤Ê¤É¤Î´ğËÜ¥á¥Ã¥»¡¼¥¸·¿¤ÎROS2¥·¥ê¥¢¥é¥¤¥¶¤ÎÀ¸À®´Ø¿ô
+# @brief å˜ä¸€ãƒ‡ãƒ¼ã‚¿ã€é…åˆ—ãªã©ã®åŸºæœ¬ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‹ã®ROS2ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®ç”Ÿæˆé–¢æ•°
 #
-# @param message_type ROS2¥á¥Ã¥»¡¼¥¸·¿
+# @param message_type ROS2ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‹
 #
 # @else
 # @brief 
@@ -71,7 +71,7 @@ def ros2_basic_data(message_type):
   ##
   # @if jp
   # @class ROS2BasicData
-  # @brief Ã±°ì¥Ç¡¼¥¿¡¢ÇÛÎó¤Ê¤É¤Î´ğËÜ¥á¥Ã¥»¡¼¥¸·¿
+  # @brief å˜ä¸€ãƒ‡ãƒ¼ã‚¿ã€é…åˆ—ãªã©ã®åŸºæœ¬ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‹
   #
   # @else
   # @class ROS2BasicData
@@ -85,9 +85,9 @@ def ros2_basic_data(message_type):
 
     ##
     # @if jp
-    # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
-    # ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
     # @param self
     #
@@ -102,7 +102,7 @@ def ros2_basic_data(message_type):
 
     ##
     # @if jp
-    # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+    # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
     #
     # @param self
@@ -117,10 +117,10 @@ def ros2_basic_data(message_type):
 
     ##
     # @if jp
-    # @brief ÀßÄê½é´ü²½
+    # @brief è¨­å®šåˆæœŸåŒ–
     #
     # 
-    # @param prop ÀßÄê¾ğÊó
+    # @param prop è¨­å®šæƒ…å ±
     #
     # @else
     #
@@ -137,13 +137,13 @@ def ros2_basic_data(message_type):
 
     ##
     # @if jp
-    # @brief ¥Ç¡¼¥¿¤ÎÊÑ´¹(omniORB->ROS2)
+    # @brief ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›(omniORB->ROS2)
     #
     # 
-    # @param data omniORB¤Î¥Ç¡¼¥¿
-    # @return ret¡¢value
-    # ret¡§SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
-    # value¡§ROS2¤Î¥Ç¡¼¥¿
+    # @param data omniORBã®ãƒ‡ãƒ¼ã‚¿
+    # @return retã€value
+    # retï¼šSERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
+    # valueï¼šROS2ã®ãƒ‡ãƒ¼ã‚¿
     #
     # @else
     #
@@ -176,14 +176,14 @@ def ros2_basic_data(message_type):
 
     ##
     # @if jp
-    # @brief ¥Ç¡¼¥¿¤ÎÊÑ´¹(ROS2->omniORB)
+    # @brief ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›(ROS2->omniORB)
     #
     # @param self 
-    # @param bdata ROS2¤Î¥Ç¡¼¥¿
-    # @param data_type omniORB¤Î¥Ç¡¼¥¿
-    # @return ret¡¢value
-    # ret¡§SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
-    # value¡§ÊÑ´¹¸å¤Î¥Ç¡¼¥¿
+    # @param bdata ROS2ã®ãƒ‡ãƒ¼ã‚¿
+    # @param data_type omniORBã®ãƒ‡ãƒ¼ã‚¿
+    # @return retã€value
+    # retï¼šSERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
+    # valueï¼šå¤‰æ›å¾Œã®ãƒ‡ãƒ¼ã‚¿
     #
     # @else
     #
@@ -213,10 +213,10 @@ def ros2_basic_data(message_type):
 
 ##
 # @if jp
-# @brief Ã±°ì¥Ç¡¼¥¿¡¢ÇÛÎó¤Ê¤É¤Î´ğËÜ¥á¥Ã¥»¡¼¥¸·¿¤Î¥·¥ê¥¢¥é¥¤¥¶¤Î½é´ü²½
+# @brief å˜ä¸€ãƒ‡ãƒ¼ã‚¿ã€é…åˆ—ãªã©ã®åŸºæœ¬ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‹ã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®åˆæœŸåŒ–
 #
-# @param message_type ROS¥á¥Ã¥»¡¼¥¸·¿
-# @param name ¥·¥ê¥¢¥é¥¤¥¶¤ÎÌ¾Á°
+# @param message_type ROSãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‹
+# @param name ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®åå‰
 #
 # @else
 # @brief 
@@ -240,7 +240,7 @@ def ROS2BasicDataInit(message_type, name):
 ##
 # @if jp
 # @class ROS2Point3DData
-# @brief PointStamped·¿¤Î¥·¥ê¥¢¥é¥¤¥¶½é´ü²½
+# @brief PointStampedå‹ã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶åˆæœŸåŒ–
 #
 # @else
 # @class ROS2Point3DData
@@ -254,9 +254,9 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -271,7 +271,7 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   #
   # @param self
@@ -286,10 +286,10 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
   # 
-  # @param prop ÀßÄê¾ğÊó
+  # @param prop è¨­å®šæƒ…å ±
   #
   # @else
   #
@@ -306,13 +306,13 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÊÑ´¹(omniORB->ROS2)
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›(omniORB->ROS2)
   #
   # 
-  # @param data omniORB¤Î¥Ç¡¼¥¿
-  # @return ret¡¢value
-  # ret¡§SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
-  # value¡§ROS2¤Î¥Ç¡¼¥¿
+  # @param data omniORBã®ãƒ‡ãƒ¼ã‚¿
+  # @return retã€value
+  # retï¼šSERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
+  # valueï¼šROS2ã®ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   #
@@ -335,14 +335,14 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÊÑ´¹(ROS2->omniORB)
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›(ROS2->omniORB)
   #
   # @param self 
-  # @param bdata ROS2¤Î¥Ç¡¼¥¿
-  # @param data_type omniORB¤Î¥Ç¡¼¥¿
-  # @return ret¡¢value
-  # ret¡§SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
-  # value¡§ÊÑ´¹¸å¤Î¥Ç¡¼¥¿
+  # @param bdata ROS2ã®ãƒ‡ãƒ¼ã‚¿
+  # @param data_type omniORBã®ãƒ‡ãƒ¼ã‚¿
+  # @return retã€value
+  # retï¼šSERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
+  # valueï¼šå¤‰æ›å¾Œã®ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   #
@@ -367,7 +367,7 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
 
 ##
 # @if jp
-# @brief PointStamped·¿¤Î¥·¥ê¥¢¥é¥¤¥¶¤Î½é´ü²½
+# @brief PointStampedå‹ã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®åˆæœŸåŒ–
 #
 #
 # @else
@@ -388,7 +388,7 @@ def ROS2Point3DInit():
 ##
 # @if jp
 # @class ROS2QuaternionData
-# @brief QuaternionStamped·¿¤Î¥·¥ê¥¢¥é¥¤¥¶
+# @brief QuaternionStampedå‹ã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶
 #
 # @else
 # @class ROS2QuaternionData
@@ -402,9 +402,9 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -419,7 +419,7 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   #
   # @param self
@@ -434,10 +434,10 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
   # 
-  # @param prop ÀßÄê¾ğÊó
+  # @param prop è¨­å®šæƒ…å ±
   #
   # @else
   #
@@ -454,13 +454,13 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÊÑ´¹(omniORB->ROS2)
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›(omniORB->ROS2)
   #
   # 
-  # @param data omniORB¤Î¥Ç¡¼¥¿
-  # @return ret¡¢value
-  # ret¡§SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
-  # value¡§ROS2¤Î¥Ç¡¼¥¿
+  # @param data omniORBã®ãƒ‡ãƒ¼ã‚¿
+  # @return retã€value
+  # retï¼šSERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
+  # valueï¼šROS2ã®ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   #
@@ -484,14 +484,14 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÊÑ´¹(ROS2->omniORB)
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›(ROS2->omniORB)
   #
   # @param self 
-  # @param bdata ROS2¤Î¥Ç¡¼¥¿
-  # @param data_type omniORB¤Î¥Ç¡¼¥¿
-  # @return ret¡¢value
-  # ret¡§SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
-  # value¡§ÊÑ´¹¸å¤Î¥Ç¡¼¥¿
+  # @param bdata ROS2ã®ãƒ‡ãƒ¼ã‚¿
+  # @param data_type omniORBã®ãƒ‡ãƒ¼ã‚¿
+  # @return retã€value
+  # retï¼šSERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
+  # valueï¼šå¤‰æ›å¾Œã®ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   #
@@ -517,7 +517,7 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
 
 ##
 # @if jp
-# @brief QuaternionStamped·¿¤Î¥·¥ê¥¢¥é¥¤¥¶¤Î½é´ü²½
+# @brief QuaternionStampedå‹ã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®åˆæœŸåŒ–
 #
 #
 # @else
@@ -539,7 +539,7 @@ def ROS2QuaternionInit():
 ##
 # @if jp
 # @class ROS2Vector3DData
-# @brief Vector3Stamped·¿¤Î¥·¥ê¥¢¥é¥¤¥¶
+# @brief Vector3Stampedå‹ã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶
 #
 # @else
 # @class ROS2Vector3DData
@@ -553,9 +553,9 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -570,7 +570,7 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   #
   # @param self
@@ -585,10 +585,10 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
   # 
-  # @param prop ÀßÄê¾ğÊó
+  # @param prop è¨­å®šæƒ…å ±
   #
   # @else
   #
@@ -605,13 +605,13 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÊÑ´¹(omniORB->ROS2)
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›(omniORB->ROS2)
   #
   # 
-  # @param data omniORB¤Î¥Ç¡¼¥¿
-  # @return ret¡¢value
-  # ret¡§SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
-  # value¡§ROS2¤Î¥Ç¡¼¥¿
+  # @param data omniORBã®ãƒ‡ãƒ¼ã‚¿
+  # @return retã€value
+  # retï¼šSERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
+  # valueï¼šROS2ã®ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   #
@@ -634,14 +634,14 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÊÑ´¹(ROS2->omniORB)
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›(ROS2->omniORB)
   #
   # @param self 
-  # @param bdata ROS2¤Î¥Ç¡¼¥¿
-  # @param data_type omniORB¤Î¥Ç¡¼¥¿
-  # @return ret¡¢value
-  # ret¡§SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
-  # value¡§ÊÑ´¹¸å¤Î¥Ç¡¼¥¿
+  # @param bdata ROS2ã®ãƒ‡ãƒ¼ã‚¿
+  # @param data_type omniORBã®ãƒ‡ãƒ¼ã‚¿
+  # @return retã€value
+  # retï¼šSERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
+  # valueï¼šå¤‰æ›å¾Œã®ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   #
@@ -666,7 +666,7 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
 
 ##
 # @if jp
-# @brief Vector3Stamped·¿¤Î¥·¥ê¥¢¥é¥¤¥¶¤Î½é´ü²½
+# @brief Vector3Stampedå‹ã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®åˆæœŸåŒ–
 #
 #
 # @else
@@ -687,7 +687,7 @@ def ROS2Vector3DInit():
 ##
 # @if jp
 # @class ROS2CameraImageData
-# @brief Image·¿¤Î¥·¥ê¥¢¥é¥¤¥¶
+# @brief Imageå‹ã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶
 #
 # @else
 # @class ROS2CameraImageData
@@ -701,9 +701,9 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -718,7 +718,7 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   #
   # @param self
@@ -733,10 +733,10 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
   # 
-  # @param prop ÀßÄê¾ğÊó
+  # @param prop è¨­å®šæƒ…å ±
   #
   # @else
   #
@@ -753,13 +753,13 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÊÑ´¹(omniORB->ROS2)
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›(omniORB->ROS2)
   #
   # 
-  # @param data omniORB¤Î¥Ç¡¼¥¿
-  # @return ret¡¢value
-  # ret¡§SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
-  # value¡§ROS2¤Î¥Ç¡¼¥¿
+  # @param data omniORBã®ãƒ‡ãƒ¼ã‚¿
+  # @return retã€value
+  # retï¼šSERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
+  # valueï¼šROS2ã®ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   #
@@ -787,14 +787,14 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÊÑ´¹(ROS2->omniORB)
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›(ROS2->omniORB)
   #
   # @param self 
-  # @param bdata ROS2¤Î¥Ç¡¼¥¿
-  # @param data_type omniORB¤Î¥Ç¡¼¥¿
-  # @return ret¡¢value
-  # ret¡§SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
-  # value¡§ÊÑ´¹¸å¤Î¥Ç¡¼¥¿
+  # @param bdata ROS2ã®ãƒ‡ãƒ¼ã‚¿
+  # @param data_type omniORBã®ãƒ‡ãƒ¼ã‚¿
+  # @return retã€value
+  # retï¼šSERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
+  # valueï¼šå¤‰æ›å¾Œã®ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   #
@@ -820,7 +820,7 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
 
 ##
 # @if jp
-# @brief Image·¿¤Î¥·¥ê¥¢¥é¥¤¥¶¤Î½é´ü²½
+# @brief Imageå‹ã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®åˆæœŸåŒ–
 #
 #
 # @else
@@ -840,7 +840,7 @@ def ROS2CameraImageInit():
 
 ##
 # @if jp
-# @brief ³Æ¼ï¥·¥ê¥¢¥é¥¤¥¶¤Î½é´ü²½´Ø¿ô
+# @brief å„ç¨®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®åˆæœŸåŒ–é–¢æ•°
 #
 #
 # @else

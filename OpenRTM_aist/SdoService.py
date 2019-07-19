@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -21,9 +21,9 @@
 # @if jp
 #
 # @class SDOServiceProfile
-# @brief SDO Service Profile¥¯¥é¥¹
+# @brief SDO Service Profileã‚¯ãƒ©ã‚¹
 #
-# SDO Service Profile ¤Ï SDO Service ¤Î¾ğÊó¤òÊİ»ı¤¹¤ë¤¿¤á¤Î¥¯¥é¥¹¤Ç¤¢¤ë¡£
+# SDO Service Profile ã¯ SDO Service ã®æƒ…å ±ã‚’ä¿æŒã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹ã€‚
 #
 # @since 0.4.0
 #
@@ -42,13 +42,13 @@ class SDOServiceProfile:
   ##
   # @if jp
   #
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # 
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
-  # @param id_ Service ¤ÎID(¥Ç¥Õ¥©¥ë¥ÈÃÍ:None)
-  # @param type_ Service ¤Î·¿(¥Ç¥Õ¥©¥ë¥ÈÃÍ:None)
+  # @param id_ Service ã®ID(ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤:None)
+  # @param type_ Service ã®å‹(ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤:None)
   #
   # @else
   #
@@ -73,9 +73,9 @@ class SDOServiceProfile:
   ##
   # @if jp
   #
-  # @brief Service Profile¤ò¼èÆÀ¤¹¤ë
+  # @brief Service Profileã‚’å–å¾—ã™ã‚‹
   # 
-  # Service Profile¤ò¼èÆÀ¤¹¤ë
+  # Service Profileã‚’å–å¾—ã™ã‚‹
   #
   # @param self
   # 
@@ -90,12 +90,12 @@ class SDOServiceProfile:
 
   ##
   # @if jp
-  # @brief ServiceProfile.id ¤ò¥»¥Ã¥È¤¹¤ë
+  # @brief ServiceProfile.id ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   # 
-  # SDO Service ¤ÎID¤ò¥»¥Ã¥È¤¹¤ë
+  # SDO Service ã®IDã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   # 
   # @param self
-  # @param id_ Service ¤ÎID
+  # @param id_ Service ã®ID
   # 
   # @else
   # @brief Setting ServiceProfile.id
@@ -106,13 +106,13 @@ class SDOServiceProfile:
 
   ##
   # @if jp
-  # @brief ServiceProfile.id ¤ò¼èÆÀ
+  # @brief ServiceProfile.id ã‚’å–å¾—
   # 
-  # SDO Service ¤ÎID¤ò¼èÆÀ¤¹¤ë
+  # SDO Service ã®IDã‚’å–å¾—ã™ã‚‹
   # 
   # @param self
   # 
-  # @return Service ¤ÎID
+  # @return Service ã®ID
   # 
   # @else
   # @brief Getting ServiceProfile.id
@@ -123,12 +123,12 @@ class SDOServiceProfile:
 
   ##
   # @if jp
-  # @brief SDO ServiceProfile.interfaceType ¤ò¥»¥Ã¥È¤¹¤ë
+  # @brief SDO ServiceProfile.interfaceType ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   # 
-  # SDO Service ¤ÎinterfaceType¤ò¥»¥Ã¥È¤¹¤ë
+  # SDO Service ã®interfaceTypeã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   # 
   # @param self
-  # @param interfaceType Service ¤ÎinterfaceType
+  # @param interfaceType Service ã®interfaceType
   # 
   # @else
   # @brief Setting SDOServiceProfile.interfaceType
@@ -139,13 +139,13 @@ class SDOServiceProfile:
 
 
   # @if jp
-  # @brief SDO ServiceProfile.interfaceType ¤ò¼èÆÀ¤¹¤ë
+  # @brief SDO ServiceProfile.interfaceType ã‚’å–å¾—ã™ã‚‹
   # 
-  # SDO Service ¤ÎinterfaceType¤ò¼èÆÀ¤¹¤ë
+  # SDO Service ã®interfaceTypeã‚’å–å¾—ã™ã‚‹
   # 
   # @param self
   # 
-  # @return Service ¤ÎinterfaceType
+  # @return Service ã®interfaceType
   # 
   # @else
   # @brief Getting SDOServiceProfile.interfaceType
@@ -156,12 +156,12 @@ class SDOServiceProfile:
 
   ##
   # @if jp
-  # @brief SDO ServiceProfile.idlDefinition ¤ò¥»¥Ã¥È¤¹¤ë
+  # @brief SDO ServiceProfile.idlDefinition ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   # 
-  # SDO Service ¤ÎidlDefinition¤ò¥»¥Ã¥È¤¹¤ë
+  # SDO Service ã®idlDefinitionã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   # 
   # @param self
-  # @param idlDefinition Service ¤ÎidlDefinition
+  # @param idlDefinition Service ã®idlDefinition
   # 
   # @else
   # @brief Setting SDOServiceProfile.idlDefnition
@@ -172,13 +172,13 @@ class SDOServiceProfile:
 
   ##
   # @if jp
-  # @brief SDO ServiceProfile.idlDefinition ¤ò¼èÆÀ¤¹¤ë
+  # @brief SDO ServiceProfile.idlDefinition ã‚’å–å¾—ã™ã‚‹
   # 
-  # SDO Service ¤ÎidlDefinition¤ò¼èÆÀ¤¹¤ë
+  # SDO Service ã®idlDefinitionã‚’å–å¾—ã™ã‚‹
   # 
   # @param self
   # 
-  # @return Service ¤ÎidlDefinition
+  # @return Service ã®idlDefinition
   # 
   # @else
   # @brief Getting SDO ServiceProfile.idlDefnition
@@ -189,12 +189,12 @@ class SDOServiceProfile:
 
   ##
   # @if jp
-  # @brief SDO ServiceProfile.properties ¤ò¥»¥Ã¥È¤¹¤ë
+  # @brief SDO ServiceProfile.properties ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   # 
-  # SDO Service ¤Îproperties¤ò¥»¥Ã¥È¤¹¤ë
+  # SDO Service ã®propertiesã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   # 
   # @param self
-  # @param properties Service ¤Îproperties
+  # @param properties Service ã®properties
   # 
   # @else
   # @brief Setting SDO ServiceProfile.properties
@@ -205,13 +205,13 @@ class SDOServiceProfile:
 
   ##
   # @if jp
-  # @brief SDO ServiceProfile.properties ¤ò¼èÆÀ¤¹¤ë
+  # @brief SDO ServiceProfile.properties ã‚’å–å¾—ã™ã‚‹
   # 
-  # SDO Service ¤Îproperties¤ò¼èÆÀ¤¹¤ë
+  # SDO Service ã®propertiesã‚’å–å¾—ã™ã‚‹
   # 
   # @param self
   # 
-  # @return Service ¤Îproperties
+  # @return Service ã®properties
   # 
   # @else
   # @brief Getting SDO ServiceProfile.properties
@@ -225,12 +225,12 @@ class SDOServiceProfile:
 
   ##
   # @if jp
-  # @brief SDO ServiceProfile.serviceRef ¤ò¥»¥Ã¥È¤¹¤ë
+  # @brief SDO ServiceProfile.serviceRef ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   # 
-  # SDO Service ¤ÎserviceRef¤ò¥»¥Ã¥È¤¹¤ë
+  # SDO Service ã®serviceRefã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   # 
   # @param self
-  # @param serviceRef Service¤Ø¤Î»²¾È
+  # @param serviceRef Serviceã¸ã®å‚ç…§
   # 
   # @else
   # @brief Setting SDO ServiceProfile.serviceRef
@@ -241,13 +241,13 @@ class SDOServiceProfile:
 
   ##
   # @if jp
-  # @brief SDO ServiceProfile.serviceRef ¤ò¼èÆÀ¤¹¤ë
+  # @brief SDO ServiceProfile.serviceRef ã‚’å–å¾—ã™ã‚‹
   # 
-  # SDO Service ¤Ø¤Î»²¾È¤ò¼èÆÀ¤¹¤ë
+  # SDO Service ã¸ã®å‚ç…§ã‚’å–å¾—ã™ã‚‹
   # 
   # @param self
   # 
-  # @return Service¤Ø¤Î»²¾È
+  # @return Serviceã¸ã®å‚ç…§
   # 
   # @else
   # @brief Getting SDO ServiceProfile.serviceRef

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -19,9 +19,9 @@ import OpenRTM_aist
 #
 # @class InPortDirectConsumer
 #
-# @brief InPortDirectConsumer ¥¯¥é¥¹
+# @brief InPortDirectConsumer ã‚¯ãƒ©ã‚¹
 #
-# ¥Ç¡¼¥¿¤ò¥À¥¤¥ì¥¯¥È¤Ë½ñ¤­¹ş¤àpull·¿ÄÌ¿®¤ò¼Â¸½¤¹¤ëOutPort¥³¥ó¥·¥å¥Ş¡¼¥¯¥é¥¹
+# ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã«æ›¸ãè¾¼ã‚€pullå‹é€šä¿¡ã‚’å®Ÿç¾ã™ã‚‹OutPortã‚³ãƒ³ã‚·ãƒ¥ãƒãƒ¼ã‚¯ãƒ©ã‚¹
 #
 # @else
 # @class InPortDirectConsumer
@@ -38,9 +38,9 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -63,9 +63,9 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -86,9 +86,9 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
 
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
-  # InPortConsumer¤Î³Æ¼ïÀßÄê¤ò¹Ô¤¦
+  # InPortConsumerã®å„ç¨®è¨­å®šã‚’è¡Œã†
   #
   # @self
   # 
@@ -148,11 +148,11 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
 
   ##
   # @if jp
-  # @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë
+  # @brief InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
   #
   #
   # @param self
-  # @param properties InterfaceProfile¾ğÊó¤ò¼õ¤±¼è¤ë¥×¥í¥Ñ¥Æ¥£
+  # @param properties InterfaceProfileæƒ…å ±ã‚’å—ã‘å–ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   #
   # @else
   # @brief Publish InterfaceProfile information
@@ -173,12 +173,12 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤Ø¤ÎÅĞÏ¿
+  # @brief ãƒ‡ãƒ¼ã‚¿é€ä¿¡é€šçŸ¥ã¸ã®ç™»éŒ²
   #
   # @param self
-  # @param properties ÅĞÏ¿¾ğÊó
+  # @param properties ç™»éŒ²æƒ…å ±
   #
-  # @return ÅĞÏ¿½èÍı·ë²Ì(ÅĞÏ¿À®¸ù:true¡¢ÅĞÏ¿¼ºÇÔ:false)
+  # @return ç™»éŒ²å‡¦ç†çµæœ(ç™»éŒ²æˆåŠŸ:trueã€ç™»éŒ²å¤±æ•—:false)
   #
   # @else
   # @brief Subscribe to the data sending notification

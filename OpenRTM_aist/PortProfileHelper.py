@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -27,10 +27,10 @@ import RTC
 # @if jp
 #
 # @class PortProfileHelper
-# @brief PortProfile ¥Ø¥ë¥Ñ¡¼¥¯¥é¥¹
+# @brief PortProfile ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹
 #
-# RTC::Port ¤Î¼ï¡¹¤Î¥×¥í¥Õ¥¡¥¤¥ë¤òÊİ»ı¤¹¤ë PortProfile ¤ò´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
-# ¼ç¤È¤·¤Æ PortBase ¤ÎÆâÉô¤Ç»ÈÍÑ¤µ¤ì¤ë¡£
+# RTC::Port ã®ç¨®ã€…ã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿æŒã™ã‚‹ PortProfile ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
+# ä¸»ã¨ã—ã¦ PortBase ã®å†…éƒ¨ã§ä½¿ç”¨ã•ã‚Œã‚‹ã€‚
 #
 # @else
 #
@@ -59,12 +59,12 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortProfile ¤òÀßÄê¤¹¤ë
+  # @brief PortProfile ã‚’è¨­å®šã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ö¥¸¥§¥¯¥È¤¬Êİ»ı¤¹¤ë PortProfile ¤ò°ú¿ô¤ÇÍ¿¤¨¤é¤ì¤¿ PortProfile
-  # ¤ò¥³¥Ô¡¼¤·¾å½ñ¤­¤·¤ÆÊİÂ¸¤¹¤ë¡£
+  # ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒä¿æŒã™ã‚‹ PortProfile ã‚’å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸ PortProfile
+  # ã‚’ã‚³ãƒ”ãƒ¼ã—ä¸Šæ›¸ãã—ã¦ä¿å­˜ã™ã‚‹ã€‚
   #
-  # @param PortProfile ¾å½ñ¤­¤¹¤ë PortProfile
+  # @param PortProfile ä¸Šæ›¸ãã™ã‚‹ PortProfile
   #
   # @else
   #
@@ -91,11 +91,11 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortProfile ¤ò¼èÆÀ¤¹¤ë
+  # @brief PortProfile ã‚’å–å¾—ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ö¥¸¥§¥¯¥È¤¬Êİ»ı¤¹¤ë PortProfile ¤òÊÖ¤¹¡£
+  # ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒä¿æŒã™ã‚‹ PortProfile ã‚’è¿”ã™ã€‚
   #
-  # @return ¤³¤Î¥ª¥Ö¥¸¥§¥¯¥È¤¬Êİ»ı¤¹¤ë PortProfile
+  # @return ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒä¿æŒã™ã‚‹ PortProfile
   #
   # @else
   #
@@ -122,12 +122,12 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortProfile.name ¤òÀßÄê¤¹¤ë
+  # @brief PortProfile.name ã‚’è¨­å®šã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°ú¿ô¤ÇÍ¿¤¨¤é¤ì¤¿Ê¸»úÎó¤ò¥³¥İ¡¼¤·¡¢
-  # PortProfile.name ¤È¤·¤ÆÊİ»ı¤¹¤ë¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ã‚’ã‚³ãƒãƒ¼ã—ã€
+  # PortProfile.name ã¨ã—ã¦ä¿æŒã™ã‚‹ã€‚
   #
-  # @param name PortProfile.name ¤Ë³ÊÇ¼¤¹¤ë Port ¤ÎÌ¾Á°
+  # @param name PortProfile.name ã«æ ¼ç´ã™ã‚‹ Port ã®åå‰
   #
   # @else
   #
@@ -148,11 +148,11 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortProfile.name ¤ò¼èÆÀ¤¹¤ë
+  # @brief PortProfile.name ã‚’å–å¾—ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile.name ¤ò¼èÆÀ¤¹¤ë¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile.name ã‚’å–å¾—ã™ã‚‹ã€‚
   #
-  # @return PortProfile.name ¤Ø¤Î¥İ¥¤¥ó¥¿
+  # @return PortProfile.name ã¸ã®ãƒã‚¤ãƒ³ã‚¿
   #
   # @else
   #
@@ -173,11 +173,11 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortInterfaceProfile ¤òÄÉ²Ã¤¹¤ë
+  # @brief PortInterfaceProfile ã‚’è¿½åŠ ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile ¤Ë PortInterfaceProfile ¤òÄÉ²Ã¤¹¤ë¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile ã« PortInterfaceProfile ã‚’è¿½åŠ ã™ã‚‹ã€‚
   #
-  # @param if_profile PortProfile ¤ËÄÉ²Ã¤¹¤ë PortInterfaceProfile
+  # @param if_profile PortProfile ã«è¿½åŠ ã™ã‚‹ PortInterfaceProfile
   #
   # @else
   #
@@ -198,9 +198,9 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortInterfaceProfileList ¤ò¼èÆÀ¤¹¤ë
+  # @brief PortInterfaceProfileList ã‚’å–å¾—ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortInterfaceProfileList ¤òÊÖ¤¹¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortInterfaceProfileList ã‚’è¿”ã™ã€‚
   #
   # @return PortInterfaceProfileList
   #
@@ -223,12 +223,12 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortInterfaceProfile ¤ò¼èÆÀ¤¹¤ë
+  # @brief PortInterfaceProfile ã‚’å–å¾—ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï instance_name ¤Ç»ØÄê¤µ¤ì¤¿ PortInterfaceProfile
-  # ¤òÊÖ¤¹¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ instance_name ã§æŒ‡å®šã•ã‚ŒãŸ PortInterfaceProfile
+  # ã‚’è¿”ã™ã€‚
   #
-  # @param instance_name PortInterfaceProfile ¤Î instance_name
+  # @param instance_name PortInterfaceProfile ã® instance_name
   # @return PortInterfaceProfile
   #
   # @else
@@ -257,13 +257,13 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortInterfaceProfile ¤òºï½ü¤¹¤ë
+  # @brief PortInterfaceProfile ã‚’å‰Šé™¤ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï instance_name ¤Ç»ØÄê¤µ¤ì¤¿¡¡PortInterfaceProfile
-  # ¤òºï½ü¤¹¤ë¡£»ØÄê¤·¤¿Ì¾Á°¤Î PortInterfaceProfile ¤¬Â¸ºß¤·¤Ê¤¤¾ì¹ç¤Ë¤Ï¡¢
-  # NotFound exception ¤òÊÖ¤¹¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ instance_name ã§æŒ‡å®šã•ã‚ŒãŸã€€PortInterfaceProfile
+  # ã‚’å‰Šé™¤ã™ã‚‹ã€‚æŒ‡å®šã—ãŸåå‰ã® PortInterfaceProfile ãŒå­˜åœ¨ã—ãªã„å ´åˆã«ã¯ã€
+  # NotFound exception ã‚’è¿”ã™ã€‚
   #
-  # @param instance_name ºï½ü¤¹¤ë PortInterfaceProfile ¤ÎÌ¾Á°
+  # @param instance_name å‰Šé™¤ã™ã‚‹ PortInterfaceProfile ã®åå‰
   #
   # @else
   #
@@ -290,12 +290,12 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¥»¥Ã¥È¤¹¤ë
+  # @brief Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile ¤Ë¡¢´ØÏ¢¤¹¤ë Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È
-  # ¤òÀßÄê¤¹¤ë¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile ã«ã€é–¢é€£ã™ã‚‹ Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§
+  # ã‚’è¨­å®šã™ã‚‹ã€‚
   #
-  # @param port ÀßÄê¤¹¤ë Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹
+  # @param port è¨­å®šã™ã‚‹ Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹
   #
   # @else
   #
@@ -317,12 +317,12 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤ë
+  # @brief Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’å–å¾—ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile ¤Ë´ØÏ¢ÉÕ¤±¤é¤ì¤¿ Port ¤Î
-  # ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÊÖ¤¹¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile ã«é–¢é€£ä»˜ã‘ã‚‰ã‚ŒãŸ Port ã®
+  # ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’è¿”ã™ã€‚
   #
-  # @return ´ØÏ¢ÉÕ¤±¤é¤ì¤¿ Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È
+  # @return é–¢é€£ä»˜ã‘ã‚‰ã‚ŒãŸ Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§
   #
   # @else
   #
@@ -343,9 +343,9 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief ConnectorProfile ¤òÄÉ²Ã¤¹¤ë
+  # @brief ConnectorProfile ã‚’è¿½åŠ ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile ¤Ë ConnectorProfile ¤òÄÉ²Ã¤¹¤ë¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile ã« ConnectorProfile ã‚’è¿½åŠ ã™ã‚‹ã€‚
   #
   # @param conn_profile ConnectorProfile 
   #
@@ -368,12 +368,12 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief ConnectorProfileList ¤ò¼èÆÀ¤¹¤ë
+  # @brief ConnectorProfileList ã‚’å–å¾—ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile ¤Ë´ØÏ¢ÉÕ¤±¤é¤ì¤¿ ConnectorProfile ¤Î
-  # ¥ê¥¹¥È ConnectorProfileList ¤òÊÖ¤¹¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile ã«é–¢é€£ä»˜ã‘ã‚‰ã‚ŒãŸ ConnectorProfile ã®
+  # ãƒªã‚¹ãƒˆ ConnectorProfileList ã‚’è¿”ã™ã€‚
   #
-  # @return ´ØÏ¢ÉÕ¤±¤é¤ì¤¿ ConnectorProfileList
+  # @return é–¢é€£ä»˜ã‘ã‚‰ã‚ŒãŸ ConnectorProfileList
   #
   # @else
   #
@@ -394,11 +394,11 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief ConnectorProfile ¤ò¼èÆÀ¤¹¤ë
+  # @brief ConnectorProfile ã‚’å–å¾—ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°ú¿ô¤Ç»ØÄê¤µ¤ì¤¿Ì¾Á°¤ò»ı¤Ä ConnectorProfile ¤òÊÖ¤¹¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸåå‰ã‚’æŒã¤ ConnectorProfile ã‚’è¿”ã™ã€‚
   #
-  # @param name ConnectorProfile ¤ÎÌ¾Á°
+  # @param name ConnectorProfile ã®åå‰
   # @return ConnectorProfile
   #
   # @else
@@ -428,11 +428,11 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief ConnectorProfile ¤ò¼èÆÀ¤¹¤ë
+  # @brief ConnectorProfile ã‚’å–å¾—ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°ú¿ô¤Ç»ØÄê¤µ¤ì¤¿ID¤ò»ı¤Ä ConnectorProfile ¤òÊÖ¤¹¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸIDã‚’æŒã¤ ConnectorProfile ã‚’è¿”ã™ã€‚
   #
-  # @param id ConnectorProfile ¤ÎID
+  # @param id ConnectorProfile ã®ID
   # @return ConnectorProfile
   #
   # @else
@@ -461,12 +461,12 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief ConnectorProfile ¤òºï½ü¤¹¤ë
+  # @brief ConnectorProfile ã‚’å‰Šé™¤ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile ¤Î ConnectorProfile ¤ò
-  # Ì¾Á°¤Ç»ØÄê¤·¤Æºï½ü¤¹¤ë¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile ã® ConnectorProfile ã‚’
+  # åå‰ã§æŒ‡å®šã—ã¦å‰Šé™¤ã™ã‚‹ã€‚
   #
-  # @param naem ConnectorProfile ¤ÎÌ¾Á°
+  # @param naem ConnectorProfile ã®åå‰
   #
   # @else
   #
@@ -494,12 +494,12 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief ConnectorProfile ¤òºï½ü¤¹¤ë
+  # @brief ConnectorProfile ã‚’å‰Šé™¤ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile ¤Î ConnectorProfile ¤ò
-  # ID ¤Ç»ØÄê¤·¤Æºï½ü¤¹¤ë¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile ã® ConnectorProfile ã‚’
+  # ID ã§æŒ‡å®šã—ã¦å‰Šé™¤ã™ã‚‹ã€‚
   #
-  # @param id ConnectorProfile ¤ÎID
+  # @param id ConnectorProfile ã®ID
   #
   # @else
   #
@@ -526,11 +526,11 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortProfile ¤Î owner ¤òÀßÄê¤¹¤ë
+  # @brief PortProfile ã® owner ã‚’è¨­å®šã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile ¤Î owner ¤òÀßÄê¤¹¤ë¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile ã® owner ã‚’è¨­å®šã™ã‚‹ã€‚
   #
-  # @param owner PortProfile ¤Î owner ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È
+  # @param owner PortProfile ã® owner ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§
   #
   # @else
   #
@@ -551,11 +551,11 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortProfile ¤Î owner ¤ò¼èÆÀ¤¹¤ë
+  # @brief PortProfile ã® owner ã‚’å–å¾—ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile ¤Î owner ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÊÖ¤¹¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile ã® owner ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’è¿”ã™ã€‚
   #
-  # @return PortProfile ¤Î owner ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È
+  # @return PortProfile ã® owner ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§
   #
   # @else
   #
@@ -576,11 +576,11 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortProfile ¤Î properties ¤òÀßÄê¤¹¤ë
+  # @brief PortProfile ã® properties ã‚’è¨­å®šã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile ¤Ë properties ¤òÀßÄê¤¹¤ë¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile ã« properties ã‚’è¨­å®šã™ã‚‹ã€‚
   #
-  # @param prop PortProfile ¤Î properties ¤Î NVList
+  # @param prop PortProfile ã® properties ã® NVList
   #
   # @else
   #
@@ -601,11 +601,11 @@ class PortProfileHelper:
   ##
   # @if jp
   #
-  # @brief PortProfile ¤Î properties ¤ò¼èÆÀ¤¹¤ë
+  # @brief PortProfile ã® properties ã‚’å–å¾—ã™ã‚‹
   #
-  # ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï PortProfile ¤Î properties¤òÊÖ¤¹¡£
+  # ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ PortProfile ã® propertiesã‚’è¿”ã™ã€‚
   #
-  # @return PortProfile ¤Î properties ¤Î NVList
+  # @return PortProfile ã® properties ã® NVList
   #
   # @else
   #
@@ -626,7 +626,7 @@ class PortProfileHelper:
   ##
   # @if jp
   # @class if_name
-  # @brief instance_name ¤ò»ı¤Ä PortInterfaceProfile ¤òÃµ¤¹ Functor
+  # @brief instance_name ã‚’æŒã¤ PortInterfaceProfile ã‚’æ¢ã™ Functor
   # @else
   # @brief A functor to find a PortInterfaceProfile named instance_name
   # @endif

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -21,8 +21,8 @@ import OpenRTM_aist
 # @if jp
 #
 # @class NamingServiceNumberingPolicy
-# @brief ¥ª¥Ö¥¸¥§¥¯¥ÈÀ¸À®»ş¥Í¡¼¥ß¥ó¥°¡¦¥İ¥ê¥·¡¼(Ì¿Ì¾µ¬Â§)´ÉÍıÍÑ¥¯¥é¥¹
-#¡¡¥Í¡¼¥ß¥ó¥°¥µ¡¼¥Ó¥¹¤«¤éRTC¤ò¸¡º÷¤·¤Æ¥Ê¥ó¥Ğ¥ê¥ó¥°¤ò¹Ô¤¦
+# @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆæ™‚ãƒãƒ¼ãƒŸãƒ³ã‚°ãƒ»ãƒãƒªã‚·ãƒ¼(å‘½åè¦å‰‡)ç®¡ç†ç”¨ã‚¯ãƒ©ã‚¹
+#ã€€ãƒãƒ¼ãƒŸãƒ³ã‚°ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰RTCã‚’æ¤œç´¢ã—ã¦ãƒŠãƒ³ãƒãƒªãƒ³ã‚°ã‚’è¡Œã†
 #
 #
 # @else
@@ -35,9 +35,9 @@ class NamingServiceNumberingPolicy(OpenRTM_aist.NumberingPolicy):
   ##
   # @if jp
   #
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # 
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # 
   # @param self
   # 
@@ -55,14 +55,14 @@ class NamingServiceNumberingPolicy(OpenRTM_aist.NumberingPolicy):
   ##
   # @if jp
   #
-  # @brief ¥ª¥Ö¥¸¥§¥¯¥ÈÀ¸À®»ş¤ÎÌ¾¾ÎºîÀ®
+  # @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆæ™‚ã®åç§°ä½œæˆ
   #
   # 
   # 
   # @param self
-  # @param obj Ì¾¾ÎÀ¸À®ÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param obj åç§°ç”Ÿæˆå¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
-  # @return À¸À®¤·¤¿¥ª¥Ö¥¸¥§¥¯¥ÈÌ¾¾Î
+  # @return ç”Ÿæˆã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåç§°
   #
   # @else
   #
@@ -82,12 +82,12 @@ class NamingServiceNumberingPolicy(OpenRTM_aist.NumberingPolicy):
   ##
   # @if jp
   #
-  # @brief ¥ª¥Ö¥¸¥§¥¯¥Èºï½ü»ş¤ÎÌ¾¾Î²òÊü
+  # @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‰Šé™¤æ™‚ã®åç§°è§£æ”¾
   #
   # 
   # 
   # @param self
-  # @param obj Ì¾¾Î²òÊüÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param obj åç§°è§£æ”¾å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -102,15 +102,15 @@ class NamingServiceNumberingPolicy(OpenRTM_aist.NumberingPolicy):
   ##
   # @if jp
   #
-  # @brief ¥ª¥Ö¥¸¥§¥¯¥È¤Î¸¡º÷
+  # @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¤œç´¢
   #
-  # »ØÄêÌ¾¤Î¥¤¥ó¥¹¥¿¥ó¥¹Ì¾¤ÎRTC¤ò¸¡º÷¤·¡¢
-  # °ìÃ×¤¹¤ëRTC¤¬Â¸ºß¤¹¤ë¾ì¹ç¤ÏTrue¤òÊÖ¤¹
+  # æŒ‡å®šåã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åã®RTCã‚’æ¤œç´¢ã—ã€
+  # ä¸€è‡´ã™ã‚‹RTCãŒå­˜åœ¨ã™ã‚‹å ´åˆã¯Trueã‚’è¿”ã™
   # 
   # @param self
-  # @param name RTC¤Î¥¤¥ó¥¹¥¿¥ó¥¹Ì¾
+  # @param name RTCã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å
   #
-  # @return È½Äê
+  # @return åˆ¤å®š
   #
   # @else
   #

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -23,13 +23,13 @@ DEFAULT_EXECUTION_RATE = 1000
 ##
 # @if jp
 # @class ExecutionContextBase
-# @brief ExecutionContext�Ѵ��쥯�饹
+# @brief ExecutionContext用基底クラス
 #
-# EC�μ������饹�Ǥϡ����δ��쥯�饹��Ѿ���������EC��CORBA���ڥ졼
-# ������������ʤ���Фʤ�ʤ�������ˡ��ºݤ˥����å����ư���뤿
-# �ᡢ���Ĥ�����«��§��ExecutionContextBase�δؿ���ƤӽФ�ɬ�פ���
-# �롣EC��CORBA���ڥ졼�����ϰʲ��Τ�Τ����ꡢ���줾��
-# ExecutionContextBase�Υ��дؿ����б����Ƥ��롣
+# ECの実装クラスでは、この基底クラスを継承し、かつECのCORBAオペレー
+# ションを実装しなければならない。さらに、実際にロジックを駆動するた
+# め、幾つかの約束に則りExecutionContextBaseの関数を呼び出す必要があ
+# る。ECのCORBAオペレーションは以下のものがあり、それぞれ
+# ExecutionContextBaseのメンバ関数に対応している。
 #
 # - is_running(): ExecutionContextBase.isRunning()
 # - start(): ExecutionContextBase.start()
@@ -49,23 +49,23 @@ DEFAULT_EXECUTION_RATE = 1000
 # - get_kind(): ExecutionContextBase.getKind()
 # - get_profile(): ExecutionContextBase.getProfile()
 #
-# @par �¹Ծ��֤˴ط�����ؿ��ȼ�����ˡ
+# @par 実行状態に関係する関数と実装方法
 # - is_running(): ExecutionContextBase.isRunning()
 # - start(): ExecutionContextBase.start()
 # - stop(): ExecutionContextBase.stop()
 #
-# �¹Ծ��֤˴ط�����ؿ��ϡ�is_running(), start(), stop() ��3�Ĥ���
-# �롣ExecutionContextBase�Ǥ�ñ��� running/stopped �Υե饰�����
-# �Ƥ��ꡢstart/stop�ǥե饰��ON/OFF�ڤ��ؤ���is_running()�Ǿ����ɤ�
-# �Ф���ԤäƤ��롣�̾EC�μ������饹�Ǥϡ�protected �ʲ��ۥ��
-# �дؿ� onStarting(), onStarted(), onStopping(), onStopped() �ؿ���
-# �������������ǡ�CORBA���ڥ졼������ʲ��Τ褦�˼�������ɬ�פ����롣
+# 実行状態に関係する関数は、is_running(), start(), stop() の3つがあ
+# る。ExecutionContextBaseでは単純に running/stopped のフラグを持っ
+# ており、start/stopでフラグのON/OFF切り替え、is_running()で状態読み
+# 出しを行っている。通常、ECの実装クラスでは、protected な仮想メン
+# バ関数 onStarting(), onStarted(), onStopping(), onStopped() 関数を
+# 実装したうえで、CORBAオペレーションを以下のように実装する必要がある。
 #
-# is_running() ��CORBA���ڥ졼�����Ǥϡ�ñ���
-# ExecutionContextBase �� isRunning() ��ƤӽФ������Ǥ��롣���δؿ�
-# �˴�Ϣ���� protected ���۴ؿ���onIsRunning() ���Ѱդ���Ƥ��뤬��
-# �̾��ä˼�������ɬ�פϤʤ��������ơ����ߤ� running/stopped ���֤�
-# �񤭴����������ˤ��δؿ������Ѥ��뤳�Ȥ��Ǥ��뤬�侩�Ϥ���ʤ���
+# is_running() のCORBAオペレーションでは、単純に
+# ExecutionContextBase の isRunning() を呼び出すだけである。この関数
+# に関連する protected 仮想関数はonIsRunning() が用意されているが、
+# 通常特に実装する必要はない。あえて、現在の running/stopped 状態を
+# 書き換えたい場合にこの関数を利用することができるが推奨はされない。
 #
 # <pre>
 # public:
@@ -80,12 +80,12 @@ DEFAULT_EXECUTION_RATE = 1000
 #  }
 # </pre>
 #
-# start(), stop() CORBA���ڥ졼�����Ǥϡ��̾�
-# ExecutionContextBase �� start(), stop() �ؿ���ƤӽФ��褦�������롣
-# ���δؿ��˴�Ϣ���� protected ���۴ؿ��ϡ�start() ����� stop() ��
-# �Ĥ��Ƥ��줾��2�ĤŤĤ� onStarting(), onStarted(), �����
-# onStopping(), onStopped() �ؿ������롣EC�μ������饹�ˤ����Ƥϡ���
-# �줾��ʲ��Τ褦�˼������롣
+# start(), stop() CORBAオペレーションでは、通常
+# ExecutionContextBase の start(), stop() 関数を呼び出すよう実装する。
+# この関数に関連する protected 仮想関数は、start() および stop() に
+# ついてそれぞれ2つづつの onStarting(), onStarted(), および
+# onStopping(), onStopped() 関数がある。ECの実装クラスにおいては、そ
+# れぞれ以下のように実装する。
 #
 # <pre>
 #  RTC::ReturnCode_t start()
@@ -99,42 +99,42 @@ DEFAULT_EXECUTION_RATE = 1000
 # protected:
 #  RTC::ReturnCode_t onStarting()
 #  {
-#    RTC::ReturnCode_t ret = // ����åɤ򳫻Ϥ�������ʤ�
+#    RTC::ReturnCode_t ret = // スレッドを開始する処理など
 #    return ret;
 #  }
 #  RTC::ReturnCode_t onStarted()
 #  {
-#    RTC::ReturnCode_t ret = // ����åɤ򳫻Ϥ�������ʤ�
+#    RTC::ReturnCode_t ret = // スレッドを開始する処理など
 #    return ret;
 #  }
 #  RTC::ReturnCode_t onStopping()
 #  {
-#    // ����åɤ���ߤ�������ʤ�
+#    // スレッドを停止する処理など
 #    return retcode;
 #  }
 #  RTC::ReturnCode_t onStopped()
 #  {
-#    // ����åɤ���ߤ�������ʤ�
+#    // スレッドを停止する処理など
 #    return retcode;
 #  }
 # </pre>
 #
-# @par �¹Լ����˴ؤ���ؿ��ȼ�����ˡ
+# @par 実行周期に関する関数と実装方法
 # - get_rate(): ExecutionContextBase.gatRate()
 # - set_rate(): ExecutioinContextBase.setRate()
 #
-# �¹Լ����˴ؤ���ؿ��� set_rate(), get_rate() ��2���ब���롣����
-# ����¹ԥ���ƥ����Ȥ��⤷ set_rate() �ˤ����ꤵ�����������Ѥ���
-# ��硢�ƥ�ץ졼�ȴؿ� onSetRate() �򥪡��С��饤�ɤ��������롣
-# onSetRate() �ϰ����� double ���μ������ꡢ�����ͤ��������ͤǤ���
-# ���Ȥ��ݾڤ���Ƥ��롣onSetRate() ��RTC::RTC_OK �ʳ����ͤ��֤�����
-# �硢EC��Profile�μ��������ꤵ���������ͤ��ݻ����뤳�Ȥ��ݾڤ���
-# �롣
+# 実行周期に関する関数は set_rate(), get_rate() の2種類がある。実装
+# する実行コンテキストがもし set_rate() により指定される周期を利用する
+# 場合、テンプレート関数 onSetRate() をオーバーライドし実装する。
+# onSetRate() は引数に double 型の周期を取り、この値は正当な値である
+# ことが保証されている。onSetRate() がRTC::RTC_OK 以外の値を返した場
+# 合、ECのProfileの周期は設定される以前の値を保持することが保証され
+# る。
 #
-# set_rate() Ʊ�� get_rate() �ƤӽФ�����onGetRate() ���ƤӽФ����
-# ����������̾索���С��饤�ɤ���ɬ�פϤʤ�����������get_rate() ��
-# �֤��ͤ��ѹ���������硢onGetRate() �򥪡��С��饤�ɤ��뤳�ȤǤ���
-# �ͤ�񤭴����뤳�Ȥ��Ǥ��롣������������Ͽ侩����ʤ���
+# set_rate() 同様 get_rate() 呼び出し時にonGetRate() が呼び出される
+# が、これは通常オーバーライドする必要はない。ただし、get_rate() が
+# 返す値を変更したい場合、onGetRate() をオーバーライドすることでその
+# 値を書き換えることができる。ただし、これは推奨されない。
 #
 # <pre>
 # public:
@@ -149,7 +149,7 @@ DEFAULT_EXECUTION_RATE = 1000
 # protected:
 #  virtual RTC::ReturnCode_t onSetRate(double rate)
 #  {
-#    RTC::ReturnCode_t ret = // ���������ꤹ�벿�餫�ν���
+#    RTC::ReturnCode_t ret = // 周期を設定する何らかの処理
 #    if (ret != RTC::RTC_OK)
 #      {
 #        RTC_ERROR(("Error message"));
@@ -158,24 +158,24 @@ DEFAULT_EXECUTION_RATE = 1000
 #  }
 #  virtual double onGetRate(rate)
 #  {
-#    // get_rate() ���֤��ͤ�ù����������
-#    // �̾�Ϥ��δؿ����������ɬ�פϤʤ���
+#    // get_rate() が返す値を加工したい場合
+#    // 通常はこの関数を実装する必要はない。
 #    return rate;
 #  }
 # </pre>
 #
-# @par ����ݡ��ͥ�Ȥ��ɲäȺ���˴ؤ���ؿ�
+# @par コンポーネントの追加と削除に関する関数
 # - add_component(): ExecutionContextBase.addComponent()
 # - remove_component(): ExecutionContextBase.removeComponent()
 #
-# ����ݡ��ͥ�Ȥ��ɲäȺ���˴ؤ���ؿ��ϡ�add_component(),
-# remove_component() ������ब���롣�¹ԥ���ƥ����Ȥμ������饹��
-# �����Ƥϡ�ExecutionContextBase �Τ��줾�� addComponent(),
-# removeComponent() ��ƤӽФ����Ǽ�����Ԥ��������δؿ��˴�Ϣ����
-# protected ���۴ؿ��� onAddingComponent(), onAddedComponent(),
-# onRemovingComponent(), onRemovedComponent() ��4���ढ�롣��������
-# �����β��۴ؿ����̾索���С��饤�ɤ���ɬ�פϤʤ������ѤϿ侩����
-# �ʤ���
+# コンポーネントの追加と削除に関する関数は、add_component(),
+# remove_component() の二種類がある。実行コンテキストの実装クラスに
+# おいては、ExecutionContextBase のそれぞれ addComponent(),
+# removeComponent() を呼び出す形で実装を行う。これらの関数に関連する
+# protected 仮想関数は onAddingComponent(), onAddedComponent(),
+# onRemovingComponent(), onRemovedComponent() の4種類ある。ただし、
+# これらの仮想関数は通常オーバーライドする必要はなく、使用は推奨され
+# ない。
 #
 # <pre>
 # public:
@@ -191,51 +191,51 @@ DEFAULT_EXECUTION_RATE = 1000
 #  virtual RTC::ReturnCode_t
 #  onAddingComponent(RTC::LightweightRTObject rtobj)
 #  {
-#     // ����ݡ��ͥ���ɲû��˼¹Ԥ����������򵭽�
-#     // RTC::RTC_OK �ʳ����֤�����硢����ݡ��ͥ�Ȥ��ɲäϹԤ��ʤ���
+#     // コンポーネント追加時に実行したい処理を記述
+#     // RTC::RTC_OK 以外を返した場合、コンポーネントの追加は行われない。
 #     return RTC::RTC_OK;
 #  }
 #  virtual RTC::ReturnCode_t
 #  onAddedComponent(RTC::LightweightRTObject rtobj)
 #  {
-#     // ����ݡ��ͥ���ɲû��˼¹Ԥ����������򵭽�
-#     // RTC::RTC_OK �ʳ����֤�����硢removeComponent() ���ƤӽФ��졢
-#     // �ɲä��줿����ݡ��ͥ�Ȥ��������롣
+#     // コンポーネント追加時に実行したい処理を記述
+#     // RTC::RTC_OK 以外を返した場合、removeComponent() が呼び出され、
+#     // 追加されたコンポーネントが削除される。
 #     return RTC::RTC_OK;
 #  }
 #  virtual RTC::ReturnCode_t
 #  onRemovingComponent(RTC::LightweightRTObject rtobj)
 #  {
-#     // ����ݡ��ͥ�Ⱥ�����˼¹Ԥ����������򵭽�
-#     // RTC::RTC_OK �ʳ����֤�����硢����ݡ��ͥ�Ȥκ���ϹԤ��ʤ���
+#     // コンポーネント削除時に実行したい処理を記述
+#     // RTC::RTC_OK 以外を返した場合、コンポーネントの削除は行われない。
 #     return RTC::RTC_OK;
 #  }
 #  virtual RTC::ReturnCode_t
 #  onRemovedComponent(RTC::LightweightRTObject rtobj)
 #  {
-#     // ����ݡ��ͥ���ɲû��˼¹Ԥ����������򵭽�
-#     // RTC::RTC_OK �ʳ����֤�����硢addComponent() ���ƤӽФ��졢
-#     // ������줿����ݡ��ͥ�Ȥ��Ƥ��ɲä���롣
+#     // コンポーネント追加時に実行したい処理を記述
+#     // RTC::RTC_OK 以外を返した場合、addComponent() が呼び出され、
+#     // 削除されたコンポーネントが再び追加される。
 #     return RTC::RTC_OK;
 #  }
 # </pre>
 #
-# @par ����ݡ��ͥ�ȤΥ����ƥ��ֲ����˴ؤ���ؿ�
+# @par コンポーネントのアクティブ化等に関する関数
 # - activate_component(): ExecutionContextBase.activateComponent()
 # - deactivate_component(): ExecutionContextBase.deactivateComponent()
 # - reset_component(): ExecutionContextBase.resetComponent()
 #
-# ����ݡ��ͥ�ȤΥ����ƥ��ֲ����˴ؤ���ؿ��ϡ�
-# activate_component(), deactivate_component(), reset_component() ��
-# �����ब���롣�¹ԥ���ƥ����Ȥμ������饹�ˤ����Ƥϡ�
-# ExecutionContextBase �Τ��줾�� activateComponent(),
-# deactivateComponent(), resetComponent() ��ƤӽФ����Ǽ�����Ԥ���
-# �����δؿ��˴�Ϣ���� protected ���۴ؿ���
+# コンポーネントのアクティブ化等に関する関数は、
+# activate_component(), deactivate_component(), reset_component() の
+# 三種類がある。実行コンテキストの実装クラスにおいては、
+# ExecutionContextBase のそれぞれ activateComponent(),
+# deactivateComponent(), resetComponent() を呼び出す形で実装を行う。
+# これらの関数に関連する protected 仮想関数は
 # onActivatingComponent(), onAtivatingComponent(),
 # onActivatedComponent(), onDeactivatingComponent(),
 # onDeactivatedComponent(), onResettingComponent(),
-# onResetComponent() ��6���ढ�롣�������������β��۴ؿ����̾索��
-# �С��饤�ɤ���ɬ�פϤʤ������ѤϿ侩����ʤ���
+# onResetComponent() の6種類ある。ただし、これらの仮想関数は通常オー
+# バーライドする必要はなく、使用は推奨されない。
 #
 # <pre>
 # public:
@@ -251,49 +251,49 @@ DEFAULT_EXECUTION_RATE = 1000
 #  virtual RTC::ReturnCode_t
 #  onAddingComponent(RTC::LightweightRTObject rtobj)
 #  {
-#    // ����ݡ��ͥ���ɲû��˼¹Ԥ����������򵭽�
-#    // RTC::RTC_OK �ʳ����֤�����硢����ݡ��ͥ�Ȥ��ɲäϹԤ��ʤ���
+#    // コンポーネント追加時に実行したい処理を記述
+#    // RTC::RTC_OK 以外を返した場合、コンポーネントの追加は行われない。
 #    return RTC::RTC_OK;
 #  }
 #  virtual RTC::ReturnCode_t
 #  onAddedComponent(RTC::LightweightRTObject rtobj)
 #  {
-#    // ����ݡ��ͥ���ɲû��˼¹Ԥ����������򵭽�
-#    // RTC::RTC_OK �ʳ����֤�����硢removeComponent() ���ƤӽФ��졢
-#    // �ɲä��줿����ݡ��ͥ�Ȥ��������롣
+#    // コンポーネント追加時に実行したい処理を記述
+#    // RTC::RTC_OK 以外を返した場合、removeComponent() が呼び出され、
+#    // 追加されたコンポーネントが削除される。
 #    return RTC::RTC_OK;
 #  }
 #  virtual RTC::ReturnCode_t
 #  onRemovingComponent(RTC::LightweightRTObject rtobj)
 #  {
-#    // ����ݡ��ͥ�Ⱥ�����˼¹Ԥ����������򵭽�
-#    // RTC::RTC_OK �ʳ����֤�����硢����ݡ��ͥ�Ȥκ���ϹԤ��ʤ���
+#    // コンポーネント削除時に実行したい処理を記述
+#    // RTC::RTC_OK 以外を返した場合、コンポーネントの削除は行われない。
 #    return RTC::RTC_OK;
 #  }
 #  virtual RTC::ReturnCode_t
 #  onRemovedComponent(RTC::LightweightRTObject rtobj)
 #  {
-#    // ����ݡ��ͥ���ɲû��˼¹Ԥ����������򵭽�
-#    // RTC::RTC_OK �ʳ����֤�����硢addComponent() ���ƤӽФ��졢
-#    // ������줿����ݡ��ͥ�Ȥ��Ƥ��ɲä���롣
+#    // コンポーネント追加時に実行したい処理を記述
+#    // RTC::RTC_OK 以外を返した場合、addComponent() が呼び出され、
+#    // 削除されたコンポーネントが再び追加される。
 #    return RTC::RTC_OK;
 #  }
 # </pre>
 #
-# @par �¹ԥ���ƥ����Ȥξ�������˴ؤ���ؿ�
+# @par 実行コンテキストの情報取得に関する関数
 # - get_component_state(): ExecutionContextBase.getComponentState()
 # - get_kind(): ExecutionContextBase.getKind()
 # - get_profile(): ExecutionContextBase.getProfile()
 #
-# �¹ԥ���ƥ����Ȥξ�������˴ؤ���ؿ��ϡ�get_component_state(),
-# get_kind(), get_profile() ��3���ब���롣�¹ԥ���ƥ����Ȥμ�����
-# �饹�ˤ����Ƥϡ�ExecutionContextBase �Τ��줾��
-# getComponentState(), getKind(), getProfile() ��ƤӽФ����Ǽ�����
-# �Ԥ��������δؿ��˴�Ϣ���� protected ���۴ؿ���
-# onGetComponentState(), onGetKind(), onGetProfile() ��3���ढ�롣��
-# ���β��۴ؿ����̾索���С��饤�ɤ���ɬ�פϤʤ������ѤϿ侩�����
-# �������������֤�������ѹ����������ϡ������δؿ���Ŭ�ڤ˼�����
-# �뤳�Ȥǡ��ƤӽФ�¦���֤��ͤ��񤭤��뤳�Ȥ��Ǥ��롣
+# 実行コンテキストの情報取得に関する関数は、get_component_state(),
+# get_kind(), get_profile() の3種類がある。実行コンテキストの実装ク
+# ラスにおいては、ExecutionContextBase のそれぞれ
+# getComponentState(), getKind(), getProfile() を呼び出す形で実装を
+# 行う。これらの関数に関連する protected 仮想関数は
+# onGetComponentState(), onGetKind(), onGetProfile() の3種類ある。こ
+# れらの仮想関数は通常オーバーライドする必要はなく、使用は推奨されな
+# い。ただし、返す情報を変更したい場合は、これらの関数を適切に実装す
+# ることで、呼び出し側に返す値を上書きすることができる。
 #
 # <pre>
 # public:
@@ -312,21 +312,21 @@ DEFAULT_EXECUTION_RATE = 1000
 #
 # protected:
 #  virtual LifeCycleState onGetComponentState(LifeCycleState state)
-#  { // �֤�state��񤭴����������Ϥ��δؿ����������
+#  { // 返すstateを書き換えたい場合はこの関数を実装する
 #    return state;
 #  }
 #  virtual ExecutionKind onGetKind(ExecutionKind kind)
-#  { // �֤�kind��񤭴����������Ϥ��δؿ����������
+#  { // 返すkindを書き換えたい場合はこの関数を実装する
 #    return kind;
 #  }
 #  virtual ExecutionContextProfile*
 #  onGetProfile(ExecutionContextProfile*& profile)
-#  { // �֤�profile��񤭴����������Ϥ��δؿ����������
+#  { // 返すprofileを書き換えたい場合はこの関数を実装する
 #    return profile;
 #  }
 # </pre>
 #
-# ExecutionContext�δ��쥯�饹��
+# ExecutionContextの基底クラス。
 #
 # @since 0.4.0
 #
@@ -358,7 +358,7 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief ExecutionContext�ν��������
+  # @brief ExecutionContextの初期化処理
   #
   # @else
   # @brief Initialization function of the ExecutionContext
@@ -425,7 +425,7 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief ExecutionContext�ν�λ����
+  # @brief ExecutionContextの終了処理
   #
   # @else
   # @brief 
@@ -439,10 +439,10 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief ExecutionContext�ν�����ʤ��(���֥��饹������)
+  # @brief ExecutionContextの処理を進める(サブクラス実装用)
   #
-  # ExecutionContext�ν����򣱼���ʬ�ʤ�롣<BR>
-  # �����֥��饹�Ǥμ���������
+  # ExecutionContextの処理を１周期分進める。<BR>
+  # ※サブクラスでの実装参照用
   #
   # @param self
   #
@@ -455,9 +455,9 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief ����ݡ��ͥ�Ȥ�Х���ɤ��롣
+  # @brief コンポーネントをバインドする。
   #
-  # ����ݡ��ͥ�Ȥ�Х���ɤ��롣
+  # コンポーネントをバインドする。
   #
   # @else
   # @brief Bind the component.
@@ -475,7 +475,7 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief ExecutionContext �¹Ծ��ֳ�ǧ�ؿ�
+  # @brief ExecutionContext 実行状態確認関数
   # @else
   # @brief Check for ExecutionContext running state
   # @endif
@@ -487,7 +487,7 @@ class ExecutionContextBase:
   
   ##
   # @if jp
-  # @brief ExecutionContext �μ¹Ԥ򳫻�
+  # @brief ExecutionContext の実行を開始
   # @else
   # @brief Start the ExecutionContext
   # @endif
@@ -516,7 +516,7 @@ class ExecutionContextBase:
   
   ##
   # @if jp
-  # @brief ExecutionContext �μ¹Ԥ����
+  # @brief ExecutionContext の実行を停止
   # @else
   # @brief Stopping the ExecutionContext
   # @endif
@@ -543,12 +543,12 @@ class ExecutionContextBase:
   
   ##
   # @if jp
-  # @brief ExecutionContext �μ¹Լ���(Hz)���������
+  # @brief ExecutionContext の実行周期(Hz)を取得する
   #
-  # Active ���֤ˤ�RT����ݡ��ͥ�Ȥ��¹Ԥ�������(ñ��:Hz)�������
-  # �롣
+  # Active 状態にてRTコンポーネントが実行される周期(単位:Hz)を取得す
+  # る。
   #
-  # @return ��������(ñ��:Hz)
+  # @return 処理周期(単位:Hz)
   #
   # @else
   #
@@ -573,24 +573,24 @@ class ExecutionContextBase:
   
   ##
   # @if jp
-  # @brief ExecutionContext �μ¹Լ���(Hz)�����ꤹ��
+  # @brief ExecutionContext の実行周期(Hz)を設定する
   #
-  # Active ���֤ˤ�RT����ݡ��ͥ�Ȥ��¹Ԥ�������(ñ��:Hz)�����ꤹ
-  # �롣�¹Լ������ѹ��ϡ�DataFlowComponentAction ��
-  # on_rate_changed �ˤ�äƳ�RT����ݡ��ͥ�Ȥ���ã����롣
+  # Active 状態にてRTコンポーネントが実行される周期(単位:Hz)を設定す
+  # る。実行周期の変更は、DataFlowComponentAction の
+  # on_rate_changed によって各RTコンポーネントに伝達される。
   #
-  # @param rate ��������(ñ��:Hz)
+  # @param rate 処理周期(単位:Hz)
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
-  #         RTC_OK: ���ｪλ
-  #         BAD_PARAMETER: �����ͤ������
+  # @return ReturnCode_t 型のリターンコード
+  #         RTC_OK: 正常終了
+  #         BAD_PARAMETER: 設定値が負の値
   #
   # @else
   #
   # @brief Set execution rate(Hz) of ExecutionContext
   #
   # This operation shall set the rate (in hertz) at which this
-  # context��s Active participating RTCs are being called.  If the
+  # context’s Active participating RTCs are being called.  If the
   # execution kind of the context is PERIODIC, a rate change shall
   # result in the invocation of on_rate_changed on any RTCs
   # realizing DataFlowComponentAction that are registered with any
@@ -630,7 +630,7 @@ class ExecutionContextBase:
   
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ��ɲä���
+  # @brief RTコンポーネントを追加する
   # @else
   # @brief Add an RT-component
   # @endif
@@ -668,7 +668,7 @@ class ExecutionContextBase:
   
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ򻲲üԥꥹ�Ȥ���������
+  # @brief RTコンポーネントを参加者リストから削除する
   # @else
   # @brief Remove the RT-Component from participant list
   # @endif
@@ -706,7 +706,7 @@ class ExecutionContextBase:
   
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ򥢥��ƥ��ֲ�����
+  # @brief RTコンポーネントをアクティブ化する
   # @else
   # @brief Activate an RT-component
   # @endif
@@ -785,7 +785,7 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ��󥢥��ƥ��ֲ�����
+  # @brief RTコンポーネントを非アクティブ化する
   # @else
   # @brief Deactivate an RT-component
   # @endif
@@ -862,7 +862,7 @@ class ExecutionContextBase:
   
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ�ꥻ�åȤ���
+  # @brief RTコンポーネントをリセットする
   # @else
   # @brief Reset the RT-component
   # @endif
@@ -936,15 +936,15 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥξ��֤��������
+  # @brief RTコンポーネントの状態を取得する
   #
-  # ���ꤷ��RT����ݡ��ͥ�Ȥξ���(LifeCycleState)��������롣���ꤷ
-  # ��RT����ݡ��ͥ�Ȥ����üԥꥹ�Ȥ˴ޤޤ�ʤ����ϡ�
-  # UNKNOWN_STATE ���֤���롣
+  # 指定したRTコンポーネントの状態(LifeCycleState)を取得する。指定し
+  # たRTコンポーネントが参加者リストに含まれない場合は、
+  # UNKNOWN_STATE が返される。
   #
-  # @param comp ���ּ����о�RT����ݡ��ͥ��
+  # @param comp 状態取得対象RTコンポーネント
   #
-  # @return ���ߤξ���(LifeCycleState)
+  # @return 現在の状態(LifeCycleState)
   #
   # @else
   #
@@ -978,9 +978,9 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief ExecutionKind ���������
+  # @brief ExecutionKind を取得する
   #
-  # �� ExecutionContext �� ExecutionKind ���������
+  # 本 ExecutionContext の ExecutionKind を取得する
   #
   # @return ExecutionKind
   #
@@ -1005,11 +1005,11 @@ class ExecutionContextBase:
   
   ##
   # @if jp
-  # @brief Profile���������
+  # @brief Profileを取得する
   #
-  # RTC::ExecutionContextProfile ��������롣��������
-  # ExecutionContextProfile �ν�ͭ���ϸƤӽФ�¦�ˤ��롣�������줿��
-  # �֥������Ȥ����פˤʤä���硢�ƤӽФ�¦������������Ǥ���餦��
+  # RTC::ExecutionContextProfile を取得する。取得した
+  # ExecutionContextProfile の所有権は呼び出し側にある。取得されたオ
+  # ブジェクトが不要になった場合、呼び出し側が開放する責任を負う。
   #
   # @return RTC::ExecutionContextProfile
   #
@@ -1043,12 +1043,12 @@ class ExecutionContextBase:
   #============================================================
   ##
   # @if jp
-  # @brief CORBA ���֥������Ȼ��Ȥμ���
+  # @brief CORBA オブジェクト参照の取得
   #
-  # �ܥ��֥������Ȥ� ExecutioncontextService �Ȥ��Ƥ� CORBA ���֥���
-  # ���Ȼ��Ȥ�������롣
+  # 本オブジェクトの ExecutioncontextService としての CORBA オブジェ
+  # クト参照を取得する。
   #
-  # @return CORBA ���֥������Ȼ���
+  # @return CORBA オブジェクト参照
   #
   # @else
   # @brief Get the reference to the CORBA object
@@ -1068,12 +1068,12 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief CORBA ���֥������Ȼ��Ȥμ���
+  # @brief CORBA オブジェクト参照の取得
   #
-  # �ܥ��֥������Ȥ� ExecutioncontextService �Ȥ��Ƥ� CORBA ���֥���
-  # ���Ȼ��Ȥ�������롣
+  # 本オブジェクトの ExecutioncontextService としての CORBA オブジェ
+  # クト参照を取得する。
   #
-  # @return CORBA ���֥������Ȼ���
+  # @return CORBA オブジェクト参照
   #
   # @else
   # @brief Get the reference to the CORBA object
@@ -1090,13 +1090,13 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief ExecutionKind ��ʸ���󲽤���
+  # @brief ExecutionKind を文字列化する
   #
-  # RTC::ExecutionKind ���������Ƥ��� PERIODIC, EVENT_DRIVEN,
-  # OTHER ��ʸ���󲽤��롣
+  # RTC::ExecutionKind で定義されている PERIODIC, EVENT_DRIVEN,
+  # OTHER を文字列化する。
   #
   # @param kind ExecutionKind
-  # @return ʸ���󲽤��줿ExecutionKind
+  # @return 文字列化されたExecutionKind
   #
   # @else
   #
@@ -1116,9 +1116,9 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief ExecutionKind �����ꤹ��
+  # @brief ExecutionKind を設定する
   #
-  # ���� ExecutionContext �� ExecutionKind �����ꤹ��
+  # この ExecutionContext の ExecutionKind を設定する
   #
   # @param kind ExecutionKind
   #
@@ -1138,12 +1138,12 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief Owner����ݡ��ͥ�Ȥ򥻥åȤ��롣
+  # @brief Ownerコンポーネントをセットする。
   #
-  # ����EC��Owner�Ȥʤ�RTC�򥻥åȤ��롣
+  # このECのOwnerとなるRTCをセットする。
   #
-  # @param comp Owner�Ȥʤ�RT����ݡ��ͥ��
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @param comp OwnerとなるRTコンポーネント
+  # @return ReturnCode_t 型のリターンコード
   # @else
   # @brief Setting owner component of the execution context
   #
@@ -1159,11 +1159,11 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief Owner����ݡ��ͥ�Ȥλ��Ȥ��������
+  # @brief Ownerコンポーネントの参照を取得する
   #
-  # ����EC��Owner�Ǥ���RTC�λ��Ȥ�������롣
+  # このECのOwnerであるRTCの参照を取得する。
   #
-  # @return OwnerRT����ݡ��ͥ�Ȥλ���
+  # @return OwnerRTコンポーネントの参照
   # @else
   # @brief Getting a reference of the owner component
   #
@@ -1179,11 +1179,11 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥλ��üԥꥹ�Ȥ��������
+  # @brief RTコンポーネントの参加者リストを取得する
   #
-  # ������Ͽ����Ƥ��뻲�ü�RTC�Υꥹ�Ȥ�������롣
+  # 現在登録されている参加者RTCのリストを取得する。
   #
-  # @return ���ü�RTC�Υꥹ��
+  # @return 参加者RTCのリスト
   #
   # @else
   #
@@ -1201,12 +1201,12 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief Properties�򥻥åȤ���
+  # @brief Propertiesをセットする
   #
-  # ExecutionContextProfile::properties �򥻥åȤ��롣
+  # ExecutionContextProfile::properties をセットする。
   #
-  # @param props ExecutionContextProfile::properties �˥��åȤ����
-  #              ���ѥƥ���
+  # @param props ExecutionContextProfile::properties にセットするプ
+  #              ロパティー
   #
   # @else
   # @brief Setting Properties
@@ -1226,11 +1226,11 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief Properties���������
+  # @brief Propertiesを取得する
   #
-  # ExecutionContextProfile::properties ��������롣
+  # ExecutionContextProfile::properties を取得する。
   #
-  # @return coil::Properties���Ѵ����줿
+  # @return coil::Propertiesに変換された
   #              ExecutionContextProfile::properties
   #
   # @else
@@ -1249,11 +1249,11 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief Profile���������
+  # @brief Profileを取得する
   #
-  # RTC::ExecutionContextProfile ��������롣��������
-  # ExecutionContextProfile �ν�ͭ���ϸƤӽФ�¦�ˤ��롣�������줿��
-  # �֥������Ȥ����פˤʤä���硢�ƤӽФ�¦������������Ǥ���餦��
+  # RTC::ExecutionContextProfile を取得する。取得した
+  # ExecutionContextProfile の所有権は呼び出し側にある。取得されたオ
+  # ブジェクトが不要になった場合、呼び出し側が開放する責任を負う。
   #
   # @return RTC::ExecutionContextProfile
   #
@@ -1437,7 +1437,7 @@ class ExecutionContextBase:
 
   ##
   # @if jp
-  # @brief Properties����¹ԥ���ƥ����Ȥ򥻥åȤ���
+  # @brief Propertiesから実行コンテキストをセットする
   # @else
   # @brief Setting execution rate from given properties.
   # @endif
@@ -1454,7 +1454,7 @@ class ExecutionContextBase:
   
   ##
   # @if jp
-  # @brief Properties����������ܥ⡼�ɤ򥻥åȤ���
+  # @brief Propertiesから状態遷移モードをセットする
   # @else
   # @brief Setting state transition mode from given properties.
   # @endif
@@ -1475,7 +1475,7 @@ class ExecutionContextBase:
   
   ##
   # @if jp
-  # @brief Properties�����������Timeout�򥻥åȤ���
+  # @brief Propertiesから状態遷移Timeoutをセットする
   # @else
   # @brief Setting state transition timeout from given properties.
   # @endif

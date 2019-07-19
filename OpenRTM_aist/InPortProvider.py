@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -23,9 +23,9 @@ import OpenRTM_aist
 ##
 # @if jp
 # @class InPortProvider
-# @brief InPortProvider ¥¯¥é¥¹
+# @brief InPortProvider ã‚¯ãƒ©ã‚¹
 #
-# InPort¤Î¾ğÊó¤òÊİ»ı¤¹¤ë¤¿¤á¤Î¥¯¥é¥¹¡£
+# InPortã®æƒ…å ±ã‚’ä¿æŒã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @since 0.4.0
 #
@@ -41,9 +41,9 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -60,7 +60,7 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ½ªÎ»½èÍı
+  # @brief çµ‚äº†å‡¦ç†
   #
   # @else
   # @brief 
@@ -74,12 +74,12 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
   
   ##
   # @if jp
-  # @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë
+  # @brief InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
   #
-  # InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë¡£
+  # InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹ã€‚
   #
   # @param self
-  # @param prop InterfaceProfile¾ğÊó¤ò¼õ¤±¼è¤ë¥×¥í¥Ñ¥Æ¥£
+  # @param prop InterfaceProfileæƒ…å ±ã‚’å—ã‘å–ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   #
   # @else
   #
@@ -92,12 +92,12 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief Interface¾ğÊó¤ò¸ø³«¤¹¤ë
+  # @brief Interfaceæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
   #
-  # Interface¾ğÊó¤ò¸ø³«¤¹¤ë¡£
+  # Interfaceæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹ã€‚
   #
   # @param self
-  # @param prop Interface¾ğÊó¤ò¼õ¤±¼è¤ë¥×¥í¥Ñ¥Æ¥£
+  # @param prop Interfaceæƒ…å ±ã‚’å—ã‘å–ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   #
   # @else
   #
@@ -115,12 +115,12 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ¥¤¥ó¥¿¥Õ¥§¡¼¥¹¥¿¥¤¥×¤òÀßÄê¤¹¤ë
+  # @brief ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹
   #
-  # ¥¤¥ó¥¿¥Õ¥§¡¼¥¹¥¿¥¤¥×¤òÀßÄê¤¹¤ë¡£
+  # ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹ã€‚
   #
   # @param self
-  # @param interface_type ÀßÄêÂĞ¾İ¥¤¥ó¥¿¥Õ¥§¡¼¥¹¥¿¥¤¥×
+  # @param interface_type è¨­å®šå¯¾è±¡ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—
   #
   # @else
   #
@@ -132,12 +132,12 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¥Õ¥í¡¼¥¿¥¤¥×¤òÀßÄê¤¹¤ë
+  # @brief ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹
   #
-  # ¥Ç¡¼¥¿¥Õ¥í¡¼¥¿¥¤¥×¤òÀßÄê¤¹¤ë¡£
+  # ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹ã€‚
   #
   # @param self
-  # @param dataflow_type ÀßÄêÂĞ¾İ¥Ç¡¼¥¿¥Õ¥í¡¼¥¿¥¤¥×
+  # @param dataflow_type è¨­å®šå¯¾è±¡ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚¿ã‚¤ãƒ—
   #
   # @else
   #
@@ -149,12 +149,12 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ¥µ¥Ö¥¹¥¯¥ê¥×¥·¥ç¥ó¥¿¥¤¥×¤òÀßÄê¤¹¤ë
+  # @brief ã‚µãƒ–ã‚¹ã‚¯ãƒªãƒ—ã‚·ãƒ§ãƒ³ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹
   #
-  # ¥µ¥Ö¥¹¥¯¥ê¥×¥·¥ç¥ó¥¿¥¤¥×¤òÀßÄê¤¹¤ë¡£
+  # ã‚µãƒ–ã‚¹ã‚¯ãƒªãƒ—ã‚·ãƒ§ãƒ³ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹ã€‚
   #
   # @param self
-  # @param subs_type ÀßÄêÂĞ¾İ¥µ¥Ö¥¹¥¯¥ê¥×¥·¥ç¥ó¥¿¥¤¥×
+  # @param subs_type è¨­å®šå¯¾è±¡ã‚µãƒ–ã‚¹ã‚¯ãƒªãƒ—ã‚·ãƒ§ãƒ³ã‚¿ã‚¤ãƒ—
   #
   # @else
   #

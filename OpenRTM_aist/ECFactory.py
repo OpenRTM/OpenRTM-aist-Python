@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -21,11 +21,11 @@
 ##
 # @if jp
 #
-# @brief ExecutionContext�˴��Ѵؿ�
+# @brief ExecutionContext破棄用関数
 # 
-# ExecutionContext�Υ��󥹥��󥹤��˴����뤿��δؿ���
+# ExecutionContextのインスタンスを破棄するための関数。
 #
-# \param ec �˴��о�ExecutionContext�Υ��󥹥���
+# \param ec 破棄対象ExecutionContextのインスタンス
 #
 # @else
 #
@@ -37,16 +37,16 @@ def ECDelete(ec):
 ##
 # @if jp
 # @class ECFactoryBase
-# @brief ECFactoryBase ��ݥ��饹
+# @brief ECFactoryBase 抽象クラス
 # 
-# ExecutionContext������Factory����ݥ��饹��
-# ��ExecutionContext���������뤿��ζ��Factory���饹�ϡ�
-# �ʲ��δؿ��μ������󶡤��ʤ���Фʤ�ʤ���
+# ExecutionContext生成用Factoryの抽象クラス。
+# 各ExecutionContextを生成するための具象Factoryクラスは、
+# 以下の関数の実装を提供しなければならない。
 #
-# public���󥿡��ե������Ȥ��ưʲ��Τ�Τ��󶡤��롣
-# - name()   : �����о�ExecutionContext̾�Τμ���
-# - create() : ExecutionContext���󥹥��󥹤�����
-# - destroy(): ExecutionContext���󥹥��󥹤��˴�
+# publicインターフェースとして以下のものを提供する。
+# - name()   : 生成対象ExecutionContext名称の取得
+# - create() : ExecutionContextインスタンスの生成
+# - destroy(): ExecutionContextインスタンスの破棄
 #
 # @since 0.4.0
 #
@@ -60,14 +60,14 @@ class ECFactoryBase :
   ##
   # @if jp
   #
-  # @brief �����о�ExecutionContext̾�μ����Ѵؿ�(���֥��饹������)
+  # @brief 生成対象ExecutionContext名称取得用関数(サブクラス実装用)
   # 
-  # �����о�ExecutionContext��̾�Τ�������뤿��δؿ���<BR>
-  # ���δؿ��϶�ݥ��֥��饹�Ǽ�������ɬ�פ����롣
+  # 生成対象ExecutionContextの名称を取得するための関数。<BR>
+  # この関数は具象サブクラスで実装する必要がある。
   #
   # @param self
   #
-  # @return �����о�ExecutionContext̾��
+  # @return 生成対象ExecutionContext名称
   # 
   # @else
   # 
@@ -81,14 +81,14 @@ class ECFactoryBase :
   ##
   # @if jp
   #
-  # @brief ExecutionContext�����Ѵؿ�(���֥��饹������)
+  # @brief ExecutionContext生成用関数(サブクラス実装用)
   # 
-  # ExecutionContext�Υ��󥹥��󥹤��������뤿��δؿ���<BR>
-  # ���δؿ��϶�ݥ��֥��饹�Ǽ�������ɬ�פ����롣
+  # ExecutionContextのインスタンスを生成するための関数。<BR>
+  # この関数は具象サブクラスで実装する必要がある。
   #
   # @param self
   #
-  # @return ��������ExecutionContext���󥹥���
+  # @return 生成したExecutionContextインスタンス
   # 
   # @else
   #
@@ -99,13 +99,13 @@ class ECFactoryBase :
   ##
   # @if jp
   #
-  # @brief ExecutionContext�˴��Ѵؿ�(���֥��饹������)
+  # @brief ExecutionContext破棄用関数(サブクラス実装用)
   # 
-  # ExecutionContext�Υ��󥹥��󥹤��˴����뤿��δؿ���<BR>
-  # ���δؿ��϶�ݥ��֥��饹�Ǽ�������ɬ�פ����롣
+  # ExecutionContextのインスタンスを破棄するための関数。<BR>
+  # この関数は具象サブクラスで実装する必要がある。
   #
   # @param self
-  # @param comp �˴��оݤ�ExecutionContext���󥹥���
+  # @param comp 破棄対象のExecutionContextインスタンス
   # 
   # @else
   #
@@ -118,9 +118,9 @@ class ECFactoryBase :
 ##
 # @if jp
 # @class ECFactoryPython
-# @brief ECFactoryPython ���饹
+# @brief ECFactoryPython クラス
 # 
-# Python������ExecutionContext���󥹥��󥹤���������Factory���饹��
+# Python言語用ExecutionContextインスタンスを生成するFactoryクラス。
 #
 # @since 0.4.1
 #
@@ -134,14 +134,14 @@ class ECFactoryPython(ECFactoryBase):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # 
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
-  # @param name �����о�ExecutionContext̾��
-  # @param new_func ExecutionContext�����Ѵؿ�
-  # @param delete_func ExecutionContext�˴��Ѵؿ�
+  # @param name 生成対象ExecutionContext名称
+  # @param new_func ExecutionContext生成用関数
+  # @param delete_func ExecutionContext破棄用関数
   # 
   # @else
   #
@@ -157,13 +157,13 @@ class ECFactoryPython(ECFactoryBase):
   ##
   # @if jp
   #
-  # @brief �����о�ExecutionContext̾�Τ����
+  # @brief 生成対象ExecutionContext名称を取得
   # 
-  # �����оݤ�ExecutionContext̾�Τ�������롣
+  # 生成対象のExecutionContext名称を取得する。
   #
   # @param self
   #
-  # @return �����о�ExecutionContext̾��
+  # @return 生成対象ExecutionContext名称
   # 
   # @else
   #
@@ -174,13 +174,13 @@ class ECFactoryPython(ECFactoryBase):
   ##
   # @if jp
   #
-  # @brief �����о�ExecutionContext���󥹥��󥹤�����
+  # @brief 生成対象ExecutionContextインスタンスを生成
   # 
-  # �����оݤ�ExecutionContext���饹�Υ��󥹥��󥹤��������롣
+  # 生成対象のExecutionContextクラスのインスタンスを生成する。
   #
   # @param self
   #
-  # @return ��������ExecutionContext���󥹥���
+  # @return 生成したExecutionContextインスタンス
   # 
   # @else
   #
@@ -191,12 +191,12 @@ class ECFactoryPython(ECFactoryBase):
   ##
   # @if jp
   #
-  # @brief �о�ExecutionContext���󥹥��󥹤��˴�
+  # @brief 対象ExecutionContextインスタンスを破棄
   # 
-  # �о�ExecutionContext���饹�Υ��󥹥��󥹤��˴����롣
+  # 対象ExecutionContextクラスのインスタンスを破棄する。
   #
   # @param self
-  # @param ec �˴��о�ExecutionContext���󥹥���
+  # @param ec 破棄対象ExecutionContextインスタンス
   # 
   # @else
   #

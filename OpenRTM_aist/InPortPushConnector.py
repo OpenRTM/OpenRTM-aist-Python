@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -26,23 +26,23 @@ import threading
 ##
 # @if jp
 # @class InPortPushConnector
-# @brief InPortPushConnector ���饹
+# @brief InPortPushConnector クラス
 #
-# InPort �� push ���ǡ����ե����Τ���� Connector ���饹�����Υ���
-# �������Ȥϡ���³���� dataflow_type �� push �����ꤵ�줿��硢
-# InPort �ˤ�ä���������ͭ���졢OutPortPushConnector ���Фˤʤäơ�
-# �ǡ����ݡ��Ȥ� push ���Υǡ����ե�����¸����롣��Ĥ���³���Ф��ơ�
-# ��ĤΥǡ������ȥ꡼����󶡤���ͣ��� Connector ���б����롣
-# Connector �� ��³������������� UUID ������ ID �ˤ����̤���롣
+# InPort の push 型データフローのための Connector クラス。このオブ
+# ジェクトは、接続時に dataflow_type に push が指定された場合、
+# InPort によって生成・所有され、OutPortPushConnector と対になって、
+# データポートの push 型のデータフローを実現する。一つの接続に対して、
+# 一つのデータストリームを提供する唯一の Connector が対応する。
+# Connector は 接続時に生成される UUID 形式の ID により区別される。
 #
-# InPortPushConnector �ϰʲ��λ��ĤΥ��֥������Ȥ��ͭ���������롣
+# InPortPushConnector は以下の三つのオブジェクトを所有し管理する。
 #
 # - InPortProvider
 # - Buffer
 #
-# OutPort �˽񤭹��ޤ줿�ǡ����ϡ�OutPortConnector �ˤ�ä�
-# InPortProvider::put() �˥ǡ������Ϥ���롣�񤭹��ޤ줿�ǡ�����
-# Connector ��� Buffer �˥ǡ������񤭹��ޤ�롣
+# OutPort に書き込まれたデータは、OutPortConnector によって
+# InPortProvider::put() にデータが渡される。書き込まれたデータは
+# Connector 内で Buffer にデータが書き込まれる。
 #
 # @since 1.0.0
 #
@@ -78,21 +78,21 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # InPortPushConnector �Υ��󥹥ȥ饯���ϥ��֥��������������˲�����
-  # �����ˤȤ롣ConnectorInfo ����³�����ޤߡ����ξ���˽����Хåե�
-  # �����������롣InPort ���󥿡��ե������Υץ��Х������֥������Ȥ�
-  # �Υݥ��󥿤��ꡢ��ͭ������ĤΤǡ�InPortPushConnector ��
-  # InPortProvider �β�����Ǥ����ġ��Ƽ磻�٥�Ȥ��Ф��륳����Х�
-  # ���������󶡤��� ConnectorListeners �������Ŭ�ڤʥ����ߥ󥰤ǥ���
-  # ��Хå���ƤӽФ����ǡ����Хåե����⤷ InPortBase �����󶡤���
-  # ����Ϥ��Υݥ��󥿤��롣
+  # InPortPushConnector のコンストラクタはオブジェクト生成時に下記を
+  # 引数にとる。ConnectorInfo は接続情報を含み、この情報に従いバッファ
+  # 等を生成する。InPort インターフェースのプロバイダオブジェクトへ
+  # のポインタを取り、所有権を持つので、InPortPushConnector は
+  # InPortProvider の解体責任を持つ。各種イベントに対するコールバッ
+  # ク機構を提供する ConnectorListeners を持ち、適切なタイミングでコー
+  # ルバックを呼び出す。データバッファがもし InPortBase から提供され
+  # る場合はそのポインタを取る。
   #
   # @param info ConnectorInfo
   # @param provider InPortProvider
-  # @param listeners ConnectorListeners ���Υꥹ�ʥ��֥������ȥꥹ��
-  # @param buffer CdrBufferBase ���ΥХåե�
+  # @param listeners ConnectorListeners 型のリスナオブジェクトリスト
+  # @param buffer CdrBufferBase 型のバッファ
   #
   # @elsek
   # @brief Constructor
@@ -168,9 +168,9 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
-  # disconnect() ���ƤФ졢consumer, publisher, buffer �����Ρ��������롣
+  # disconnect() が呼ばれ、consumer, publisher, buffer が解体・削除される。
   #
   # @else
   #
@@ -186,11 +186,11 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief �Хåե�����ǡ������ɤ߽Ф���
-  # read�ؿ��Ȱ㤤������ޡ������󥰤�¹Ԥ��ʤ�
+  # @brief バッファからデータを読み出す。
+  # read関数と違い、アンマーシャリングを実行しない
   #
   # @param self
-  # @return �꥿���󥳡���
+  # @return リターンコード
   #
   # @brief 
   #  
@@ -252,18 +252,18 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief �ǡ������ɤ߽Ф�
+  # @brief データの読み出し
   #
-  # �Хåե�����ǡ������ɤ߽Ф���������ɤ߽Ф�����硢����ͤ�
-  # PORT_OK �Ȥʤꡢdata ���ɤ߽Ф��줿�ǡ�������Ǽ����롣����ʳ�
-  # �ξ��ˤϡ����顼�ͤȤ��� BUFFER_EMPTY, TIMEOUT,
-  # PRECONDITION_NOT_MET, PORT_ERROR ���֤���롣
+  # バッファからデータを読み出す。正常に読み出せた場合、戻り値は
+  # PORT_OK となり、data に読み出されたデータが格納される。それ以外
+  # の場合には、エラー値として BUFFER_EMPTY, TIMEOUT,
+  # PRECONDITION_NOT_MET, PORT_ERROR が返される。
   #
-  # @return PORT_OK              ���ｪλ
-  #         BUFFER_EMPTY         �Хåե��϶��Ǥ���
-  #         TIMEOUT              �����ॢ���Ȥ���
-  #         PRECONDITION_NOT_MET ���������������ʤ�
-  #         PORT_ERROR           ����¾�Υ��顼
+  # @return PORT_OK              正常終了
+  #         BUFFER_EMPTY         バッファは空である
+  #         TIMEOUT              タイムアウトした
+  #         PRECONDITION_NOT_MET 事前条件を満たさない
+  #         PORT_ERROR           その他のエラー
   #
   # @else
   #
@@ -316,9 +316,9 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief ��³���
+  # @brief 接続解除
   #
-  # consumer, publisher, buffer �����Ρ��������롣
+  # consumer, publisher, buffer が解体・削除される。
   #
   # @return PORT_OK
   #
@@ -361,9 +361,9 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief �����ƥ��ֲ�
+  # @brief アクティブ化
   #
-  # ���Υ��ͥ����򥢥��ƥ��ֲ�����
+  # このコネクタをアクティブ化する
   #
   # @else
   #
@@ -379,9 +379,9 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief �󥢥��ƥ��ֲ�
+  # @brief 非アクティブ化
   #
-  # ���Υ��ͥ������󥢥��ƥ��ֲ�����
+  # このコネクタを非アクティブ化する
   #
   # @else
   #
@@ -398,12 +398,12 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief Buffer������
+  # @brief Bufferの生成
   #
-  # Ϳ����줿��³����˴�Ť��Хåե����������롣
+  # 与えられた接続情報に基づきバッファを生成する。
   #
-  # @param info ��³����
-  # @return �Хåե��ؤΥݥ���
+  # @param info 接続情報
+  # @return バッファへのポインタ
   #
   # @else
   # @brief create buffer
@@ -423,17 +423,17 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief �ǡ����ν񤭽Ф�
+  # @brief データの書き出し
   #
-  # �Хåե��˥ǡ�����񤭽Ф�������˽񤭽Ф�����硢����ͤ�
-  # BUFFER_OK �Ȥʤ롣����ʳ��ξ��ˤϡ����顼�ͤȤ��� BUFFER_FULL,TIMEOUT
-  # PRECONDITION_NOT_MET, BUFFER_ERROR ���֤���롣
+  # バッファにデータを書き出す。正常に書き出せた場合、戻り値は
+  # BUFFER_OK となる。それ以外の場合には、エラー値として BUFFER_FULL,TIMEOUT
+  # PRECONDITION_NOT_MET, BUFFER_ERROR が返される。
   #
-  # @return BUFFER_OK              ���ｪλ
-  #         BUFFER_FULL         �Хåե��Ϥ��äѤ��Ǥ���
-  #         TIMEOUT              �����ॢ���Ȥ���
-  #         PRECONDITION_NOT_MET ���������������ʤ�
-  #         BUFFER_ERROR           ����¾�Υ��顼
+  # @return BUFFER_OK              正常終了
+  #         BUFFER_FULL         バッファはいっぱいである
+  #         TIMEOUT              タイムアウトした
+  #         PRECONDITION_NOT_MET 事前条件を満たさない
+  #         BUFFER_ERROR           その他のエラー
   #
   # @else
   #
@@ -480,7 +480,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     
   ##
   # @if jp
-  # @brief ��³��Ω���˥�����Хå���Ƥ�
+  # @brief 接続確立時にコールバックを呼ぶ
   # @else
   # @brief Invoke callback when connection is established
   # @endif
@@ -492,7 +492,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
   ##
   # @if jp
-  # @brief ��³���ǻ��˥�����Хå���Ƥ�
+  # @brief 接続切断時にコールバックを呼ぶ
   # @else
   # @brief Invoke callback when connection is destroied
   # @endif

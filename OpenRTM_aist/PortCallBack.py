@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -24,10 +24,10 @@
 ##
 # @if jp
 # @class ConnectCallback
-# @brief connect/notify_connect() ���Υ�����Хå���ݥ��饹
+# @brief connect/notify_connect() 時のコールバック抽象クラス
 #
-# Port���Ф���connect/notify_connect() �����ƤӽФ������˸ƤӽФ����
-# ������Хå��ե��󥯥��������� RTC::ConnectorProfile ���롣
+# Portに対してconnect/notify_connect() 等が呼び出される時に呼び出される
+# コールバックファンクタ。引数に RTC::ConnectorProfile を取る。
 #
 # @param profile ConnectorProfile
 #
@@ -54,10 +54,10 @@ class ConnectionCallback:
   ##
   # @if jp
   #
-  # @brief ������Хå��ؿ�
+  # @brief コールバック関数
   #
-  # connect/notify_connect() �����ƤӽФ������˸ƤӽФ����
-  # ������Хå��ؿ�
+  # connect/notify_connect() 等が呼び出される時に呼び出される
+  # コールバック関数
   #
   # @param self
   # @param profile ConnectorProfile
@@ -82,10 +82,10 @@ class ConnectionCallback:
 ##
 # @if jp
 # @class DisconnectCallback
-# @brief disconnect/notify_disconnect() ���Υ�����Хå���ݥ��饹
+# @brief disconnect/notify_disconnect() 時のコールバック抽象クラス
 #
-# Port���Ф���disconnect/notify_disconnect() �����ƤӽФ������˸ƤӽФ����
-# ������Хå��ե��󥯥�����������³ID���롣
+# Portに対してdisconnect/notify_disconnect() 等が呼び出される時に呼び出される
+# コールバックファンクタ。引数に接続IDを取る。
 #
 # @since 1.0.0
 #
@@ -108,10 +108,10 @@ class DisconnectCallback:
   ##
   # @if jp
   #
-  # @brief ������Хå��ؿ�
+  # @brief コールバック関数
   #
-  # disconnect/notify_disconnect() �����ƤӽФ������˸ƤӽФ����
-  # ������Хå��ؿ�
+  # disconnect/notify_disconnect() 等が呼び出される時に呼び出される
+  # コールバック関数
   #
   # @param self
   # @param connector_id Connector ID
@@ -136,10 +136,10 @@ class DisconnectCallback:
 ##
 # @if jp
 # @class OnWrite
-# @brief write() ���Υ�����Хå����饹(���֥��饹������)
+# @brief write() 時のコールバッククラス(サブクラス実装用)
 #
-# DataPort�ΥХåե��˥ǡ�����write()�����ľ���˸ƤӽФ���륳����Хå���<BR>
-# �����֥��饹�Ǥμ���������
+# DataPortのバッファにデータがwrite()される直前に呼び出されるコールバック用<BR>
+# ※サブクラスでの実装参照用
 #
 # @since 0.4.0
 #
@@ -155,12 +155,12 @@ class OnWrite:
   ##
   # @if jp
   #
-  # @brief ������Хå��ؿ�
+  # @brief コールバック関数
   #
-  # �Хåե��˥ǡ������񤭹��ޤ��ľ���˸ƤӽФ���륳����Хå��ؿ�
+  # バッファにデータが書き込まれる直前に呼び出されるコールバック関数
   #
   # @param self
-  # @param value �Хåե��˽񤭹��ޤ��ǡ���
+  # @param value バッファに書き込まれるデータ
   #
   # @else
   #
@@ -182,12 +182,12 @@ class OnWrite:
 ##
 # @if jp
 # @class OnWriteConvert
-# @brief write() ���Υǡ����Ѵ�������Хå����饹(���֥��饹������)
+# @brief write() 時のデータ変換コールバッククラス(サブクラス実装用)
 #
-# InPort/OutPort�ΥХåե��˥ǡ����� write()�������˸ƤӽФ����<BR>
-# �����֥��饹�Ǥμ���������
-# ������Хå��ѥ��󥿡��ե�������
-# ���Υ�����Хå�������ͤ��Хåե��˳�Ǽ����롣
+# InPort/OutPortのバッファにデータが write()される時に呼び出される<BR>
+# ※サブクラスでの実装参照用
+# コールバック用インターフェース。
+# このコールバックの戻り値がバッファに格納される。
 #
 # @since 0.4.0
 #
@@ -203,13 +203,13 @@ class OnWriteConvert:
   ##
   # @if jp
   #
-  # @brief ������Хå��ؿ�
+  # @brief コールバック関数
   #
-  # �Хåե��˥ǡ������񤭹��ޤ��ݤ˸ƤӽФ���륳����Хå��ؿ���
+  # バッファにデータが書き込まれる際に呼び出されるコールバック関数。
   #
   # @param self
-  # @param value �Ѵ����ǡ���
-  # @return �Ѵ���ǡ���
+  # @param value 変換前データ
+  # @return 変換後データ
   #
   # @else
   #
@@ -232,11 +232,11 @@ class OnWriteConvert:
 ##
 # @if jp
 # @class OnRead
-# @brief read() ���Υ�����Хå����饹(���֥��饹������)
+# @brief read() 時のコールバッククラス(サブクラス実装用)
 #
-# InPort/OutPort�ΥХåե�����ǡ����� read()�����ľ���˸ƤӽФ����
-# ������Хå��ѥ��󥿡��ե�������<BR>
-# �����֥��饹�Ǥμ���������
+# InPort/OutPortのバッファからデータが read()される直線に呼び出される
+# コールバック用インターフェース。<BR>
+# ※サブクラスでの実装参照用
 #
 # @since 0.4.0
 #
@@ -252,9 +252,9 @@ class OnRead:
   ##
   # @if jp
   #
-  # @brief ������Хå��᥽�å�
+  # @brief コールバックメソッド
   #
-  # �Хåե�����ǡ������ɤ߽Ф����ľ���˸ƤӽФ���륳����Хå��ؿ���
+  # バッファからデータが読み出される直前に呼び出されるコールバック関数。
   #
   # @else
   #
@@ -272,12 +272,12 @@ class OnRead:
 ##
 # @if jp
 # @class OnReadConvert
-# @brief read() ���Υǡ����Ѵ�������Хå����饹(���֥��饹������)
+# @brief read() 時のデータ変換コールバッククラス(サブクラス実装用)
 #
-# InPort/OutPort�ΥХåե�����ǡ����� read()�����ݤ˸ƤӽФ����
-# ������Хå��ѥ��󥿡��ե�������
-# ���Υ�����Хå�������ͤ�read()������ͤȤʤ롣<BR>
-# �����֥��饹�Ǥμ���������
+# InPort/OutPortのバッファからデータが read()される際に呼び出される
+# コールバック用インターフェース。
+# このコールバックの戻り値がread()の戻り値となる。<BR>
+# ※サブクラスでの実装参照用
 #
 # @since 0.4.0
 #
@@ -293,15 +293,15 @@ class OnReadConvert:
   ##
   # @if jp
   #
-  # @brief ������Хå��᥽�å�
+  # @brief コールバックメソッド
   #
-  # �Хåե�����ǡ������ɤ߽Ф����ݤ˸ƤӽФ���륳����Хå��ؿ�
-  # �Ǥ��ꡢoperator()() ������ͤ� InPort �� read() ������ͤȤʤ롢
-  # �ޤ��ϥǡ����ѿ��˳�Ǽ����롣
+  # バッファからデータが読み出される際に呼び出されるコールバック関数
+  # であり、operator()() の戻り値は InPort の read() の戻り値となる、
+  # またはデータ変数に格納される。
   #
   # @param self
-  # @param value �Хåե������ɤߤ����줿�ǡ���
-  # @return �Ѵ���Υǡ������ǡ����ݡ����ѿ��ˤϤ����ͤ���Ǽ����롣
+  # @param value バッファから読みだされたデータ
+  # @return 変換後のデータ。データポート変数にはこの値が格納される。
   #
   # @else
   #

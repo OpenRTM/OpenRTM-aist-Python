@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 #
 # @brief YAT: YAml Template text processor
 # @date $Date: 2008-02-09 20:04:27 $

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
   
 
@@ -30,26 +30,26 @@ import OpenRTM_aist
 # @if jp
 #
 # @class Properties
-# @brief �ץ��ѥƥ����åȤ�ɽ�����륯�饹
+# @brief プロパティセットを表現するクラス
 #
-# Properties ���饹�ϡ����ѤΥץ��ѥƥ����åȤ�ɽ���� Properties �򥹥ȥ꡼��
-# ���ݴɤ����ꡢ���ȥ꡼�फ������ɤ����ꤹ�뤳�Ȥ��Ǥ��롣
-# �ץ��ѥƥ��ꥹ�Ȥγƥ���������Ӥ�����б������ͤ�ʸ����ȤʤäƤ��롣
+# Properties クラスは、不変のプロパティセットを表す。 Properties をストリーム
+# に保管したり、ストリームからロードしたりすることができる。
+# プロパティリストの各キー、およびそれに対応する値は文字列となっている。
 #
-# �ץ��ѥƥ��ꥹ�Ȥˤϡ����Ρ֥ǥե�����͡פȤ����̤Υץ��ѥƥ��ꥹ�Ȥ����
-# ���Ȥ��Ǥ��롣���Υץ��ѥƥ��ꥹ�Ȥǥץ��ѥƥ����������Ĥ���ʤ��ȡ�����
-# 2���ܤΥץ��ѥƥ��ꥹ�Ȥ���������롣 
+# プロパティリストには、その「デフォルト値」として別のプロパティリストを持つ
+# ことができる。元のプロパティリストでプロパティキーが見つからないと、この
+# 2番目のプロパティリストが検索される。 
 #
-# �ץ��ѥƥ��μ����ˤ� getProperty() ���ץ��ѥƥ��Υ��åȤˤ� setProperty() ��
-# ���ä��᥽�åɤ���Ѥ��뤳�Ȥ��侩����롣
+# プロパティの取得には getProperty() 、プロパティのセットには setProperty() と
+# いったメソッドを使用することが推奨される。
 #
-# �ץ��ѥƥ��򥹥ȥ꡼�����¸����Ȥ����ޤ��ϥ��ȥ꡼�फ������ɤ���Ȥ�
-# �ˡ�ISO 8859-1 ʸ�����󥳡��ǥ��󥰤����Ѥ���롣���Υ��󥳡��ǥ��󥰤�
-# ľ��ɽ���Ǥ��ʤ�ʸ���ϡ��������Ȥ��Ǥ��ʤ���
+# プロパティをストリームに保存するとき、またはストリームからロードするとき
+# に、ISO 8859-1 文字エンコーディングが使用される。このエンコーディングに
+# 直接表示できない文字は、扱うことができない。
 #
-# ���Υ��饹�ϡ�Java �� Properties ���饹 (java.util.Properties) �Ȥۤ�Ʊ�ͤ�
-# �᥽�åɤ���ġ��ޤ��������Ϥ����ե������ Java �� Properties ���饹��
-# ���Ϥ����Τȸߴ��������뤬��Unicode ��ޤ��Τϰ������Ȥ��Ǥ��ʤ���
+# このクラスは、Java の Properties クラス (java.util.Properties) とほぼ同様の
+# メソッドを持つ。また、入出力されるファイルは Java の Properties クラスが
+# 出力するものと互換性があるが、Unicode を含むものは扱うことができない。
 #
 # @since 0.4.0
 #
@@ -91,29 +91,29 @@ class Properties:
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # �ʲ��ν�˰���������å��������󥹥��󥹤�������Ԥ���
+  # 以下の順に引数をチェックし、インスタンスの生成を行う。
   #
-  # ���� prop ���ͤ����ꤵ��Ƥ����硢
-  # ������Ϳ����줿 Properties �Υ������ͤ���ӥǥե�����ͤ�
-  # ���Ƥ��Τޤޥ��ԡ�����롣
+  # 引数 prop に値が設定されている場合、
+  # 引数に与えられた Properties のキー、値およびデフォルト値が
+  # 全てそのままコピーされる。
   #
-  # ���� key ���ͤ����ꤵ��Ƥ����硢
-  # key �� value �Τߤ�Ϳ���� Property �Υ롼�ȥΡ��ɤ�������롣
-  # �ͤ����ƥǥե�����ͤȤ������ꤵ��롣
+  # 引数 key に値が設定されている場合、
+  # key と value のみを与えて Property のルートノードを作成する。
+  # 値は全てデフォルト値として設定される。
   #
-  # ���� defaults_map ���ͤ����ꤵ��Ƥ����硢
-  # defaults_map �����ꤵ�줿���Ƥ�ǥե�����ͤˤ�� Properties ��������롣
-  # �ͤ����ƥǥե�����ͤȤ������ꤵ��롣
+  # 引数 defaults_map に値が設定されている場合、
+  # defaults_map に設定された内容をデフォルト値にもつ Properties を作成する。
+  # 値は全てデフォルト値として設定される。
   # 
-  # ���� defaults_str ���ͤ����ꤵ��Ƥ����硢
-  # ���ꤵ�줿�ǥե�����ͤ���Ķ��Υץ��ѥƥ��ꥹ�Ȥ�������롣
-  # �ͤ����ƥǥե�����ͤȤ������ꤵ��롣
-  # �ǥե�����ͤ� char* ������ˤ��Ϳ����졢key �� value ���Фˤʤä�
-  # ���ꡢ�ꥹ�Ȥν�ü������ο���ɽ������ num ������ʸ���� key ��Ϳ������
-  # �ʤ���Фʤ�ʤ���
-  # �ʲ�����򼨤���
+  # 引数 defaults_str に値が設定されている場合、
+  # 指定されたデフォルト値を持つ空のプロパティリストを作成する。
+  # 値は全てデフォルト値として設定される。
+  # デフォルト値は char* の配列により与えられ、key と value の対になって
+  # おり、リストの終端は配列の数を表す引数 num か、空文字の key で与えらられ
+  # なければならない。
+  # 以下に例を示す。
   #
   # <pre>
   # const char* defaults = {
@@ -124,17 +124,17 @@ class Properties:
   #     "key5", "value5",
   #     "" };
   # Properties p(defaults);
-  # // �⤷����
+  # // もしくは
   # Properties p(defaults, 10);
   # </pre>
   # 
   # @param self
-  # @param key �ץ��ѥƥ��Υ���(�ǥե������:None)
-  # @param value �ץ��ѥƥ�����(�ǥե������:None)
-  # @param defaults_map �ǥե�����ͤȤ��ƻ��ꤵ���map(�ǥե������:None)
-  # @param defaults_str �ǥե�����ͤ���ꤹ������(�ǥե������:None)
-  # @param num �ǥե�����ͤ����ꤹ�����ǿ�(�ǥե������:None)
-  # @param prop �ǥե�����ͤȤ��ƻ��ꤵ���property(�ǥե������:None)
+  # @param key プロパティのキー(デフォルト値:None)
+  # @param value プロパティの値(デフォルト値:None)
+  # @param defaults_map デフォルト値として指定されるmap(デフォルト値:None)
+  # @param defaults_str デフォルト値を指定する配列(デフォルト値:None)
+  # @param num デフォルト値を設定する要素数(デフォルト値:None)
+  # @param prop デフォルト値として指定されるproperty(デフォルト値:None)
   # 
   # @else
   #
@@ -214,11 +214,11 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �����黻��
+  # @brief 代入演算子
   # 
-  # �����ͤ� Properties �Υ������ͤ���ӥǥե�����ͤ����ƺ�����졢
-  # �����ͤ� Properties �Υ������ͤ���ӥǥե�����ͤ����Ƥ��Τޤ�
-  # ���ԡ�����롣
+  # 左辺値の Properties のキー、値およびデフォルト値は全て削除され、
+  # 右辺値の Properties のキー、値およびデフォルト値が全てそのまま
+  # コピーされる。
   # 
   # @param self
   # @param prop OpenRTM_aist.Properties
@@ -248,7 +248,7 @@ class Properties:
   ##
   # @if jp
   #
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
   # @param self
   #
@@ -270,13 +270,13 @@ class Properties:
 
   ##
   # @if jp
-  # @brief Name �μ���
+  # @brief Name の取得
   #
-  # �ץ��ѥƥ���̾�Τ�������롣
+  # プロパティの名称を取得する。
   #
   # @param self
   #
-  # @return �ץ��ѥƥ�̾
+  # @return プロパティ名
   #
   # @else
   #
@@ -287,13 +287,13 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �ͤμ���
+  # @brief 値の取得
   #
-  # �ץ��ѥƥ����ͤ�������롣
+  # プロパティの値を取得する。
   #
   # @param self
   #
-  # @return �ץ��ѥƥ���
+  # @return プロパティ値
   #
   # @else
   #
@@ -304,13 +304,13 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �ǥե�����ͤμ���
+  # @brief デフォルト値の取得
   #
-  # �ץ��ѥƥ��Υǥե�����ͤ�������롣
+  # プロパティのデフォルト値を取得する。
   #
   # @param self
   #
-  # @return �ץ��ѥƥ��ǥե������
+  # @return プロパティデフォルト値
   #
   # @else
   #
@@ -321,13 +321,13 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �����Ǥμ���
+  # @brief 子要素の取得
   #
-  # �ץ��ѥƥ��λ����Ǥ�������롣
+  # プロパティの子要素を取得する。
   #
   # @param self
   #
-  # @return ������
+  # @return 子要素
   #
   # @else
   #
@@ -338,13 +338,13 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �롼�����Ǥμ���
+  # @brief ルート要素の取得
   #
-  # �ץ��ѥƥ��Υ롼�����Ǥ�������롣
+  # プロパティのルート要素を取得する。
   #
   # @param self
   #
-  # @return �롼������
+  # @return ルート要素
   #
   # @else
   #
@@ -356,16 +356,16 @@ class Properties:
   ##
   # @if jp
   #
-  # @brief ���ꤵ�줿��������ĥץ��ѥƥ��򡢥ץ��ѥƥ��ꥹ�Ȥ���õ��
+  # @brief 指定されたキーを持つプロパティを、プロパティリストから探す
   #
-  # ���ꤵ�줿��������ĥץ��ѥƥ��򡢥ץ��ѥƥ��ꥹ�Ȥ���õ����
-  # ���Υ������ץ��ѥƥ��ꥹ�Ȥˤʤ����ϡ��ǥե�����ͤΰ������֤���롣 
+  # 指定されたキーを持つプロパティを、プロパティリストから探す。
+  # そのキーがプロパティリストにない場合は、デフォルト値の引数が返される。 
   #
   # @param self
-  # @param key �ץ��ѥƥ�����
-  # @param default �ǥե������(�ǥե������:None)
+  # @param key プロパティキー
+  # @param default デフォルト値(デフォルト値:None)
   #
-  # @return ���ꤵ�줿�����ͤ���Ĥ��Υץ��ѥƥ��ꥹ�Ȥ���
+  # @return 指定されたキー値を持つこのプロパティリストの値
   #
   # @else
   #
@@ -405,15 +405,15 @@ class Properties:
 
   ##
   # @if jp
-  # @brief ���ꤵ�줿�������Ф��ƥǥե�����ͤ��������
+  # @brief 指定されたキーに対してデフォルト値を取得する
   #
-  # ���ꤵ�줿��������ĥץ��ѥƥ��Υǥե�����ͤ��֤���
-  # ���ꤵ�줿��������ĥץ��ѥƥ���¸�ߤ��ʤ����ˤ϶�ʸ�����֤���
+  # 指定されたキーを持つプロパティのデフォルト値を返す。
+  # 指定されたキーを持つプロパティが存在しない場合には空文字を返す。
   #
   # @param self
-  # @param key �ץ��ѥƥ�����
+  # @param key プロパティキー
   #
-  # @return ���ꤵ�줿�����ͤ���ĥץ��ѥƥ��Υǥե������
+  # @return 指定されたキー値を持つプロパティのデフォルト値
   #
   # @else
   # @brief Set value as the default value to specified key's property
@@ -433,16 +433,16 @@ class Properties:
   ##
   # @if jp
   #
-  # @brief Properties �� value �� key �ˤĤ�����Ͽ����
+  # @brief Properties に value を key について登録する
   #
-  # Properties �� value �� key �ˤĤ�����Ͽ���롣
-  # ���Ǥ� key ���Ф����ͤ���äƤ����硢����ͤ˸Ť��ͤ��֤���
+  # Properties に value を key について登録する。
+  # すでに key に対する値を持っている場合、戻り値に古い値を返す。
   #
   # @param self
-  # @param key �ץ��ѥƥ��ꥹ�Ȥ����֤���륭��
-  # @param value key ���б�������(�ǥե������:None)
+  # @param key プロパティリストに配置されるキー
+  # @param value key に対応する値(デフォルト値:None)
   #
-  # @return �ץ��ѥƥ��ꥹ�Ȥλ��ꤵ�줿�����������͡����줬�ʤ����� null
+  # @return プロパティリストの指定されたキーの前の値。それがない場合は null
   #
   # @else
   #
@@ -483,15 +483,15 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �ǥե�����ͤ���Ͽ����
+  # @brief デフォルト値を登録する
   #
-  # key �ǻ��ꤵ������Ǥ˥ǥե�����ͤ���Ͽ���롣
+  # key で指定される要素にデフォルト値を登録する。
   #
   # @param self
-  # @param key �ǥե�����ͤ���Ͽ����ץ��ѥƥ��Υ���
-  # @param value ��Ͽ�����ǥե������
+  # @param key デフォルト値を登録するプロパティのキー
+  # @param value 登録されるデフォルト値
   #
-  # @return ���ꤵ�줿�ǥե������
+  # @return 指定されたデフォルト値
   #
   # @else
   # @brief Sets a default value associated with key in the property list
@@ -517,16 +517,16 @@ class Properties:
 
   ##
   # @if jp
-  # @brief Properties �˥ǥե�����ͤ�ޤȤ����Ͽ����
+  # @brief Properties にデフォルト値をまとめて登録する
   #
-  # ����ǻ��ꤵ�줿���Ǥ˥ǥե�����ͤ�ޤȤ����Ͽ���롣
-  # �ǥե�����ͤ� char* ������ˤ��Ϳ����졢key �� value ���Фˤʤä�
-  # ���ꡢ�ꥹ�Ȥν�ü������ο���ɽ������ num ������ʸ���� key ��Ϳ������
-  # �ʤ���Фʤ�ʤ���
+  # 配列で指定された要素にデフォルト値をまとめて登録する。
+  # デフォルト値は char* の配列により与えられ、key と value の対になって
+  # おり、リストの終端は配列の数を表す引数 num か、空文字の key で与えらられ
+  # なければならない。
   # 
   # @param self
-  # @param defaults �ǥե�����ͤ���ꤹ������
-  # @param num �ǥե�����ͤ����ꤹ�����ǿ�(�ǥե������:None)
+  # @param defaults デフォルト値を指定する配列
+  # @param num デフォルト値を設定する要素数(デフォルト値:None)
   # 
   # @else
   # @brief Sets a default value associated with key in the property list
@@ -563,13 +563,13 @@ class Properties:
   ##
   # @if jp
   #
-  # @brief ���ꤵ�줿���ϥ��ȥ꡼��ˡ��ץ��ѥƥ��ꥹ�Ȥ���Ϥ���
+  # @brief 指定された出力ストリームに、プロパティリストを出力する
   #
-  # ���ꤵ�줿���ϥ��ȥ꡼��ˡ��ץ��ѥƥ��ꥹ�Ȥ���Ϥ��롣
-  # ���Υ᥽�åɤϼ�˥ǥХå����Ѥ����롣
+  # 指定された出力ストリームに、プロパティリストを出力する。
+  # このメソッドは主にデバッグに用いられる。
   #
   # @param self
-  # @param out ���ϥ��ȥ꡼��
+  # @param out 出力ストリーム
   #
   # @else
   #
@@ -589,59 +589,59 @@ class Properties:
   ##
   # @if jp
   #
-  # @brief ���ϥ��ȥ꡼�फ�饭�������Ǥ��Фˤʤä��ץ��ѥƥ��ꥹ�Ȥ��ɤ߹���
+  # @brief 入力ストリームからキーと要素が対になったプロパティリストを読み込む
   #
-  # ���ϥ��ȥ꡼�फ�饭�������Ǥ��Фˤʤä��ץ��ѥƥ��ꥹ�Ȥ��ɤ߹��ࡣ
-  # ���ȥ꡼��ϡ�ISO 8859-1 ʸ�����󥳡��ǥ��󥰤���Ѥ��Ƥ���Ȥߤʤ���롣
-  # �ƥץ��ѥƥ��ϡ����ϥ��ȥ꡼��˹�ñ�̤���Ͽ����Ƥ����ΤȤߤʤ��졢
-  # �ƹԤϹԶ��ڤ�ʸ�� (\\n��\\r���ޤ��� \\r\\n) �ǽ���롣
-  # ���ϥ��ȥ꡼�फ���ɤ߹�����Ԥϡ����ϥ��ȥ꡼��ǥե�����ν�����
-  # ã����ޤǽ�������롣
+  # 入力ストリームからキーと要素が対になったプロパティリストを読み込む。
+  # ストリームは、ISO 8859-1 文字エンコーディングを使用しているとみなされる。
+  # 各プロパティは、入力ストリームに行単位で登録されているものとみなされ、
+  # 各行は行区切り文字 (\\n、\\r、または \\r\\n) で終わる。
+  # 入力ストリームから読み込んだ行は、入力ストリームでファイルの終わりに
+  # 達するまで処理される。
   #
-  # ����ʸ�������ιԡ��ޤ��Ϻǽ�������ʸ���� ASCII ʸ�� # �ޤ��� ! �Ǥ���
-  # �Ԥ�̵�뤵��롣�Ĥޤꡢ# �ޤ��� ! �ϥ����ȹԤ򼨤���
+  # 空白文字だけの行、または最初の非空白文字が ASCII 文字 # または ! である
+  # 行は無視される。つまり、# または ! はコメント行を示す。
   #
-  # ����Ԥޤ��ϥ����ȹ԰ʳ��Τ��٤ƤιԤϡ��ơ��֥���ɲä����ץ��ѥƥ�
-  # �򵭽Ҥ��롣���������Ԥν���꤬ \ �ξ��ϡ����ιԤ�����з�³�ԤȤ���
-  # ������ (�����򻲾�)�� �����ϡ��ǽ�������ʸ�����顢�ǽ�� ASCII ʸ��
-  # =��:���ޤ��϶���ʸ����ľ���ޤǤΡ�����Τ��٤Ƥ�ʸ�����鹽������롣
+  # 空白行またはコメント行以外のすべての行は、テーブルに追加されるプロパティ
+  # を記述する。ただし、行の終わりが \ の場合は、次の行があれば継続行として
+  # 扱われる (下記を参照)。 キーは、最初の非空白文字から、最初の ASCII 文字
+  # =、:、または空白文字の直前までの、行内のすべての文字から構成される。
   #
-  # �����ν����򼨤�ʸ���ϡ����� \ ���դ��뤳�Ȥˤ�ꥭ���˴ޤ�뤳�Ȥ�
-  # �Ǥ��롣�����θ���ζ���Ϥ��٤ƥ����åפ���롣
-  # �����θ���κǽ�������ʸ���� = �ޤ��� : �Ǥ�����ϡ������Υ�����
-  # ̵�뤵�졢���Τ��Ȥζ���ʸ���⤹�٤ƥ����åפ���롣
-  # ����Τ���ʳ���ʸ���Ϥ��٤ơ���Ϣ��������ʸ����ΰ����Ȥʤ롣
-  # ����ʸ������Ǥϡ�ASCII ���������ץ������� \\t��\\n��\\r��\\\\��\\"��
-  # \\'��\\ (�ߵ���ȥ��ڡ���)������� \\uxxxx ��ǧ�����졢ñ�Ȥ�ʸ�����Ѵ�
-  # ����롣
-  # �ޤ����ԤκǸ��ʸ���� \ �Ǥ�����ϡ����ιԤϸ��ߤιԤη�³�Ȥ���
-  # �����롣���ξ�硢\ �ȹԶ��ڤ�ʸ�����˴����졢��³�Ԥ���Ƭ�˶���
-  # ����Ф���⤹�٤��˴����졢����ʸ����ΰ����ˤϤʤ�ʤ��� 
+  # キーの終わりを示す文字は、前に \ を付けることによりキーに含めることも
+  # できる。キーの後ろの空白はすべてスキップされる。
+  # キーの後ろの最初の非空白文字が = または : である場合は、これらのキーは
+  # 無視され、そのあとの空白文字もすべてスキップされる。
+  # 行内のそれ以外の文字はすべて、関連した要素文字列の一部となる。
+  # 要素文字列内では、ASCII エスケープシーケンス \\t、\\n、\\r、\\\\、\\"、
+  # \\'、\\ (円記号とスペース)、および \\uxxxx は認識され、単独の文字に変換
+  # される。
+  # また、行の最後の文字が \ である場合は、次の行は現在の行の継続として
+  # 扱われる。その場合、\ と行区切り文字が破棄され、継続行の先頭に空白が
+  # あればそれもすべて破棄され、要素文字列の一部にはならない。 
   #
-  # ���Ȥ��С����� 4 �ԤϤ��줾�쥭�� Truth �ȴ�Ϣ���������� Beauty ��ɽ����
+  # たとえば、次の 4 行はそれぞれキー Truth と関連した要素値 Beauty を表す。
   # 
   # Truth = Beauty <BR>
   # Truth:Beauty <BR>
   # Truth\\t\\t\\t:Beauty <BR>
   #
-  # �ޤ������� 3 �Ԥ� 1 �ĤΥץ��ѥƥ���ɽ���� 
+  # また、次の 3 行は 1 つのプロパティを表す。 
   #
   # fruits\\t\\t\\t\\tapple, banana, pear, \ <BR>
   #                                  cantaloupe, watermelon, \ <BR>
   #                                  kiwi, mango <BR>
-  # ������ fruits �ǡ��������Ǥ˴�Ϣ�դ�����롣 
+  # キーは fruits で、次の要素に関連付けれられる。 
   # "apple, banana, pear, cantaloupe, watermelon, kiwi, mango"
-  # �ǽ�Ū�ʷ�̤ǥ���ޤΤ��Ȥ�ɬ�����ڡ�����ɽ�������褦�ˡ�
-  # �� \ �����˥��ڡ��������롣�Ԥν����򼨤� \ �ȡ���³�Ԥ���Ƭ�ˤ���
-  # ������˴����졢¾��ʸ�����ִ�����ʤ��� 
-  # �ޤ������� 3 ���ܤ���Ǥϡ������� cheeses �ǡ���Ϣ�������Ǥ�����ʸ����
-  # �Ǥ��뤳�Ȥ�ɽ���� 
+  # 最終的な結果でコンマのあとに必ずスペースが表示されるように、
+  # 各 \ の前にスペースがある。行の終わりを示す \ と、継続行の先頭にある
+  # 空白は破棄され、他の文字に置換されない。 
+  # また、次の 3 番目の例では、キーが cheeses で、関連した要素が空の文字列
+  # であることを表す。 
   #
   # cheeses <BR>
-  # �����ϡ�cheeses �ǡ���Ϣ���Ǥ϶���ʸ����Ǥ��뤳�Ȥ���ꤷ�Ƥ��롣 
+  # キーは、cheeses で、関連要素は空の文字列であることを指定している。 
   #
   # @param self
-  # @param inStream ���ϥ��ȥ꡼�� 
+  # @param inStream 入力ストリーム 
   #
   # @else
   #
@@ -788,15 +788,15 @@ class Properties:
   ##
   # @if jp
   #
-  # @brief �ץ��ѥƥ��ꥹ�Ȥ���ꤵ�줿���ȥ꡼�����¸����
+  # @brief プロパティリストを指定されたストリームに保存する
   #
-  # �ץ��ѥƥ��ꥹ�Ȥ���ꤵ�줿���ȥ꡼�����¸���롣
-  # ���Υ᥽�åɤ� Java Properties �Ȥθߴ����Τ�����������Ƥ��롣
-  # (����Ū�ˤ� store �᥽�åɤ����Ѥ��Ƥ��롣)
+  # プロパティリストを指定されたストリームに保存する。
+  # このメソッドは Java Properties との互換性のために定義されている。
+  # (内部的には store メソッドを利用している。)
   #
   # @param self
-  # @param out ���ϥ��ȥ꡼��
-  # @param header �ץ��ѥƥ��ꥹ�Ȥε��� 
+  # @param out 出力ストリーム
+  # @param header プロパティリストの記述 
   #
   # @else
   #
@@ -816,43 +816,43 @@ class Properties:
   ##
   # @if jp
   #
-  # @brief �ץ��ѥƥ��ꥹ�Ȥ���ϥ��ȥ꡼�����¸����
+  # @brief プロパティリストを出力ストリームへ保存する
   #
-  # Properties �ơ��֥���Υץ��ѥƥ��ꥹ�� (���������ǤΥڥ�) ��load
-  # �᥽�åɤ�Ȥä� Properties �ơ��֥�˥����ɤ���Τ�Ŭ�ڤʥե����ޥåȤ�
-  # ���ϥ��ȥ꡼��˽񤭹��ࡣ 
+  # Properties テーブル内のプロパティリスト (キーと要素のペア) を、load
+  # メソッドを使って Properties テーブルにロードするのに適切なフォーマットで
+  # 出力ストリームに書き込む。 
   #
-  # Properties �ơ��֥���Υץ��ѥƥ��ꥹ�� (���������ǤΥڥ�) ��load
-  # �᥽�åɤ�Ȥä� Properties �ơ��֥�˥����ɤ���Τ�Ŭ�ڤʥե����ޥåȤ�
-  # ���ϥ��ȥ꡼��˽񤭹��ࡣ���ȥ꡼��ϡ�ISO 8859-1 ʸ��
-  # ���󥳡��ǥ��󥰤���Ѥ��ƽ񤭹��ޤ�롣 
-  # Properties �ơ��֥� (¸�ߤ�����) �Υǥե���ȥơ��֥뤫���
-  # �ץ��ѥƥ��ϡ����Υ᥽�åɤˤ�äƤϽ񤭹��ޤ�ʤ��� 
+  # Properties テーブル内のプロパティリスト (キーと要素のペア) を、load
+  # メソッドを使って Properties テーブルにロードするのに適切なフォーマットで
+  # 出力ストリームに書き込む。ストリームは、ISO 8859-1 文字
+  # エンコーディングを使用して書き込まれる。 
+  # Properties テーブル (存在する場合) のデフォルトテーブルからの
+  # プロパティは、このメソッドによっては書き込まれない。 
   #
-  # header ������ null �Ǥʤ����ϡ�ASCII ʸ���� #��header ��ʸ����
-  # ����ӹԶ��ڤ�ʸ�����ǽ�˽��ϥ��ȥ꡼��˽񤭹��ޤ�ޤ������Τ��ᡢ
-  # header �ϼ��̥����ȤȤ��ƻȤ����Ȥ��Ǥ��롣 
+  # header 引数が null でない場合は、ASCII 文字の #、header の文字列、
+  # および行区切り文字が最初に出力ストリームに書き込まれます。このため、
+  # header は識別コメントとして使うことができる。 
   #
-  # ���ˡ�ASCII ʸ���� #�����ߤ����� (Date �� toString �᥽�åɤˤ�ä�
-  # ���߻��郎���������Τ�Ʊ��)������� Writer �ˤ�ä����������Զ��ڤ�
-  # ����ʤ륳���ȹԤ��񤭹��ޤ�롣 
+  # 次に、ASCII 文字の #、現在の日時 (Date の toString メソッドによって
+  # 現在時刻が生成されるのと同様)、および Writer によって生成される行区切り
+  # からなるコメント行が書き込まれる。 
   #
-  # ³���ơ� Properties �ơ��֥���Τ��٤ƤΥ���ȥ꤬ 1 �Ԥ��Ľ񤭽Ф���롣
-  # �ƥ���ȥ�Υ���ʸ����ASCII ʸ����=����Ϣ��������ʸ���󤬽񤭹��ޤ�롣
-  # ����ʸ����γ�ʸ���ϡ����������ץ������󥹤Ȥ������褹��ɬ�פ����뤫
-  # �ɤ�����ǧ����롣ASCII ʸ���� \�����֡����ԡ�����������Ϥ��줾�� \\\\��
-  # \\t��\\n������� \\r �Ȥ��ƽ񤭹��ޤ�롣\\u0020 ��꾮����ʸ�������
-  # \\u007E ����礭��ʸ���ϡ��б����� 16 ���� xxxx ��Ȥä� \\uxxxx �Ȥ���
-  # �񤭹��ޤ�롣�����߶���ʸ���Ǥ��񤭶���ʸ���Ǥ�ʤ���Զ���ʸ���ϡ�
-  # ���� \ ���դ��ƽ񤭹��ޤ�롣�������ͤ�ʸ�� #��!��=������� : �ϡ�
-  # ɬ�������������ɤ����褦�ˡ����˥���å�����դ��ƽ񤭹��ޤ�롣 
+  # 続いて、 Properties テーブル内のすべてのエントリが 1 行ずつ書き出される。
+  # 各エントリのキー文字列、ASCII 文字の=、関連した要素文字列が書き込まれる。
+  # 要素文字列の各文字は、エスケープシーケンスとして描画する必要があるか
+  # どうか確認される。ASCII 文字の \、タブ、改行、および復帰はそれぞれ \\\\、
+  # \\t、\\n、および \\r として書き込まれる。\\u0020 より小さい文字および
+  # \\u007E より大きい文字は、対応する 16 進値 xxxx を使って \\uxxxx として
+  # 書き込まれる。埋め込み空白文字でも後書き空白文字でもない先行空白文字は、
+  # 前に \ を付けて書き込まれる。キーと値の文字 #、!、=、および : は、
+  # 必ず正しくロードされるように、前にスラッシュを付けて書き込まれる。 
   #
-  # ����ȥ꤬�񤭹��ޤ줿���Ȥǡ����ϥ��ȥ꡼�ब�ե�å��夵��롣
-  # ���ϥ��ȥ꡼��Ϥ��Υ᥽�åɤ��������������ȤⳫ�����ޤޤȤʤ롣 
+  # エントリが書き込まれたあとで、出力ストリームがフラッシュされる。
+  # 出力ストリームはこのメソッドから復帰したあとも開いたままとなる。 
   #
   # @param self
-  # @param out ���ϥ��ȥ꡼��
-  # @param header �ץ��ѥƥ��ꥹ�Ȥε��� 
+  # @param out 出力ストリーム
+  # @param header プロパティリストの記述 
   #
   # @else
   #
@@ -908,16 +908,16 @@ class Properties:
   ##
   # @if jp
   #
-  # @brief �ץ��ѥƥ��Υ����Υꥹ�Ȥ� vector ���֤�
+  # @brief プロパティのキーのリストを vector で返す
   #
-  # �ᥤ��ץ��ѥƥ��ꥹ�Ȥ�Ʊ��̾���Υ��������Ĥ���ʤ����ϡ��ǥե���Ȥ�
-  # �ץ��ѥƥ��ꥹ�Ȥˤ�����̤Υ�����ޤࡢ���Υץ��ѥƥ��ꥹ�Ȥˤ��뤹�٤�
-  # �Υ����Υꥹ�Ȥ��֤��� 
+  # メインプロパティリストに同じ名前のキーが見つからない場合は、デフォルトの
+  # プロパティリストにある個別のキーを含む、このプロパティリストにあるすべて
+  # のキーのリストを返す。 
   #
   # @param self
   #
-  # @return �ץ��ѥƥ��ꥹ�Ȥˤ��뤹�٤ƤΥ����Υꥹ�ȡ�
-  #         �ǥե���ȤΥץ��ѥƥ��ꥹ�Ȥˤ��륭����ޤ�
+  # @return プロパティリストにあるすべてのキーのリスト。
+  #         デフォルトのプロパティリストにあるキーを含む
   #
   # @else
   #
@@ -940,13 +940,13 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �ץ��ѥƥ��ο����������
+  # @brief プロパティの数を取得する
   #
-  # ����ѤߤΥץ��ѥƥ�����������롣
+  # 設定済みのプロパティ数を取得する。
   #
   # @param self
   #
-  # @return �ץ��ѥƥ���
+  # @return プロパティ数
   #
   # @else
   # @brief Get number of Properties
@@ -957,7 +957,7 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �Ρ��ɤ򸡺�����
+  # @brief ノードを検索する
   # @else
   # @brief Find node of properties
   # @endif
@@ -973,14 +973,14 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �Ρ��ɤ��������
+  # @brief ノードを取得する
   #
-  # ���ꤷ����������ĥΡ��ɤ�������롣
+  # 指定したキーを持つノードを取得する。
   #
   # @param self
-  # @param key �����оݥΡ��ɤΥ���
+  # @param key 取得対象ノードのキー
   #
-  # @return �оݥΡ���
+  # @return 対象ノード
   #
   # @else
   # @brief Get node of Properties
@@ -999,16 +999,16 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �����Ρ��ɤ���������
+  # @brief 新規ノードを生成する
   #
-  # ���ꤷ����������Ŀ����Ρ��ɤ��������롣
-  # ����Ʊ�쥭������ĥΡ��ɤ���Ͽ�Ѥߤξ��ˤϥ��顼���֤���
+  # 指定したキーを持つ新規ノードを生成する。
+  # 既に同一キーを持つノードが登録済みの場合にはエラーを返す。
   #
   # @param self
-  # @param key �����Ρ��ɤΥ���
+  # @param key 新規ノードのキー
   #
-  # @return �����Ρ����������
-  #         ���ꤷ����������ĥΡ��ɤ�����¸�ߤ�����ˤ�false
+  # @return 新規ノード生成結果
+  #         指定したキーを持つノードが既に存在する場合にはfalse
   #
   # @else
   #
@@ -1026,15 +1026,15 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �Ρ��ɤ�������
+  # @brief ノードを削除する
   #
-  # ���ꤷ��̾�Τ���ĥץ��ѥƥ��������롣
-  # ��������ץ��ѥƥ����֤���
+  # 指定した名称を持つプロパティを削除する。
+  # 削除したプロパティを返す。
   #
   # @param self
-  # @param leaf_name ����оݥץ��ѥƥ�̾��
+  # @param leaf_name 削除対象プロパティ名称
   #
-  # @return ��������ץ��ѥƥ�
+  # @return 削除したプロパティ
   #
   # @else
   # @brief Get node of Properties
@@ -1052,15 +1052,15 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �ҥΡ��ɤ�key�����뤫�ɤ���
+  # @brief 子ノードにkeyがあるかどうか
   #
-  # ���ꤷ����������ĻҥΡ��ɤ�¸�ߤ��뤫�ɤ�����ǧ���롣
-  # ¸�ߤ����硢�ҥΡ��ɤ��֤���
+  # 指定したキーを持つ子ノードが存在するかどうか確認する。
+  # 存在する場合、子ノードを返す。
   #
   # @param self
-  # @param key ��ǧ�оݤΥ���
+  # @param key 確認対象のキー
   #
-  # @return �ҥΡ���
+  # @return 子ノード
   #
   # @else
   # @brief If key exists in the children
@@ -1075,7 +1075,7 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �ҥΡ��ɤ����ƺ������
+  # @brief 子ノードを全て削除する
   #
   # @param self
   #
@@ -1093,14 +1093,14 @@ class Properties:
 
   ##
   # @if jp
-  # @brief Property��ޡ�������
+  # @brief Propertyをマージする
   #
-  # ���ߤΥץ��ѥƥ������ꤷ���ץ��ѥƥ���ޡ������롣
+  # 現在のプロパティに設定したプロパティをマージする。
   #
   # @param self
-  # @param prop �ޡ�������ץ��ѥƥ�
+  # @param prop マージするプロパティ
   #
-  # @return �ץ��ѥƥ��ޡ������
+  # @return プロパティマージ結果
   #
   # @else
   # @brief Merge properties
@@ -1116,21 +1116,21 @@ class Properties:
 
   ##
   # @if jp
-  # @brief ʸ����򥭡����ͤΥڥ���ʬ�䤹��
+  # @brief 文字列をキーと値のペアに分割する
   #
-  # Ϳ����줿ʸ��������ꤵ�줿�ǥ�ߥ��ǥ������ͤΥڥ���ʬ�䤹�롣
-  # �ޤ��ǽ��Ϳ����줿ʸ�����':'�⤷����'='���ޤޤ�뤫�򸡺�����
-  # �ɤ��餫��ʸ�����ޤޤ�Ƥ�����ˤϤ����ǥ�ߥ��Ȥ��ƻ��Ѥ��롣
-  # ξ���Ȥ�ޤޤ�Ƥ��ʤ����ˤϡ�' '(���ڡ���)���Ѥ���ʬ����ߤ롣
-  # ���ƤΥǥ�ߥ����䤬�ޤޤ�Ƥ��ʤ����ˤϡ�Ϳ����줿ʸ����򥭡��Ȥ���
-  # ���ꤷ���ͤ˶���ʸ��������ꤹ�롣
-  # �ɤΥǥ�ߥ�����ˤĤ��Ƥ⥨�������פ���Ƥ���(ľ����'\'�����ꤵ��Ƥ���)
-  # ���ˤϡ��ǥ�ߥ��Ȥ��ƻ��Ѥ��ʤ���
+  # 与えられた文字列を、設定されたデリミタでキーと値のペアに分割する。
+  # まず最初に与えられた文字列に':'もしくは'='が含まれるかを検索し、
+  # どちらかの文字が含まれている場合にはそれをデリミタとして使用する。
+  # 両方とも含まれていない場合には、' '(スペース)を用いて分割を試みる。
+  # 全てのデリミタ候補が含まれていない場合には、与えられた文字列をキーとして
+  # 設定し、値に空の文字列を設定する。
+  # どのデリミタ候補についてもエスケープされている(直前に'\'が設定されている)
+  # 場合には、デリミタとして使用しない。
   #
   # @param self
-  # @param _str ʬ���о�ʸ����
-  # @param key ʬ���̥���
-  # @param value ʬ������
+  # @param _str 分割対象文字列
+  # @param key 分割結果キー
+  # @param value 分割結果値
   #
   # @else
   #
@@ -1162,19 +1162,19 @@ class Properties:
 
   ##
   # @if jp
-  # @brief ʸ�����ʬ�䤹��
+  # @brief 文字列を分割する
   #
-  # Ϳ����줿ʸ�����Ϳ����줿�ǥ�ߥ���ʬ�䤹�롣
-  # Ϳ����줿ʸ���󤬶��ξ��ϡ����顼���֤���
-  # Ϳ����줿�ǥ�ߥ������������פ���Ƥ���(ľ����'\'�����ꤵ��Ƥ���)���
-  # �ˤϡ��ǥ�ߥ��Ȥ��ƻ��Ѥ��ʤ���
+  # 与えられた文字列を、与えられたデリミタで分割する。
+  # 与えられた文字列が空の場合は、エラーを返す。
+  # 与えられたデリミタがエスケープされている(直前に'\'が設定されている)場合
+  # には、デリミタとして使用しない。
   #
   # @param self
-  # @param _str ʬ���о�ʸ����
-  # @param delim �ǥ�ߥ�
-  # @param value ʬ�����ͥꥹ��
+  # @param _str 分割対象文字列
+  # @param delim デリミタ
+  # @param value 分割結果値リスト
   #
-  # @return ʬ��������
+  # @return 分割処理結果
   #
   # @else
   #
@@ -1199,19 +1199,19 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �ץ��ѥƥ����������
+  # @brief プロパティを取得する
   #
-  # �����ꥹ�Ȥǻ��ꤵ�줿�ץ��ѥƥ���������롣
-  # �����ꥹ�ȤǤϡ����ꤹ�륭���Υץ��ѥƥ��Ǥγ��شط���ꥹ�ȷ�����ɽ��
-  # ���롣
-  # ���ꤷ�������ꥹ�Ȥ˳�������ץ��ѥƥ���¸�ߤ��ʤ�����None���֤���
+  # キーリストで指定されたプロパティを取得する。
+  # キーリストでは、指定するキーのプロパティでの階層関係をリスト形式で表現
+  # する。
+  # 指定したキーリストに該当するプロパティが存在しない場合はNoneを返す。
   #
   # @param self
-  # @param keys �����оݥץ��ѥƥ��Υ����Υꥹ��ɽ��
-  # @param index �����ꥹ�Ȥγ��ؿ�
-  # @param curr �����оݥץ��ѥƥ�
+  # @param keys 取得対象プロパティのキーのリスト表現
+  # @param index キーリストの階層数
+  # @param curr 検索対象プロパティ
   #
-  # @return �����оݥץ��ѥƥ�
+  # @return 検索対象プロパティ
   #
   # @else
   #
@@ -1232,14 +1232,14 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �ץ��ѥƥ���̾�Υꥹ�Ȥ��������
+  # @brief プロパティの名称リストを取得する
   #
-  # �ץ��ѥƥ���̾�Τ�'.'���ڤ��ɽ�������ꥹ�Ȥ�������롣
+  # プロパティの名称を'.'区切りで表現したリストを取得する。
   #
   # @param self
-  # @param names �ץ��ѥƥ���̾�Υꥹ��
-  # @param curr_name ���ߤΥץ��ѥƥ�̾
-  # @param curr �оݥץ��ѥƥ�
+  # @param names プロパティの名称リスト
+  # @param curr_name 現在のプロパティ名
+  # @param curr 対象プロパティ
   #
   # @else
   #
@@ -1257,14 +1257,14 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �ץ��ѥƥ���̾�Υꥹ�Ȥ���¸����
+  # @brief プロパティの名称リストを保存する
   #
-  # �ץ��ѥƥ���̾�Τ�'.'���ڤ��ɽ�������ꥹ�Ȥ���¸���롣
+  # プロパティの名称を'.'区切りで表現したリストを保存する。
   #
   # @param self
-  # @param out �ץ��ѥƥ���̾�Υꥹ����¸��ν��ϥ��ȥ꡼��
-  # @param curr_name ���ߤΥץ��ѥƥ�̾
-  # @param curr �оݥץ��ѥƥ�
+  # @param out プロパティの名称リスト保存先の出力ストリーム
+  # @param curr_name 現在のプロパティ名
+  # @param curr 対象プロパティ
   #
   # @else
   #
@@ -1289,15 +1289,15 @@ class Properties:
 
   ##
   # @if jp
-  # @brief ����ǥ�Ȥ���������
+  # @brief インデントを生成する
   #
-  # ���ꤵ�줿�����˽��ä�������������ǥ�Ȥ��֤���
-  # �֤���륤��ǥ�Ȥϡ����������2�Ĥζ���
+  # 指定された数字に従って生成したインデントを返す。
+  # 返されるインデントは、指定数字×2つの空白。
   #
   # @param self
-  # @param index ����ǥ�ȿ��λ���
+  # @param index インデント数の指定
   #
-  # @return �������줿����ǥ��
+  # @return 生成されたインデント
   #
   # @else
   #
@@ -1313,16 +1313,16 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �ץ��ѥƥ������Ƥ���¸����
+  # @brief プロパティの内容を保存する
   #
-  # �ץ��ѥƥ������ꤵ�줿���Ƥ���¸���롣
-  # ��¸���ˤϥץ��ѥƥ����ؤο�����ɽ���������ղä���롣
-  # �ͤ����ꤵ��Ƥ��ʤ��ץ��ѥƥ��ˤĤ��Ƥϡ��ǥե�����ͤ����Ϥ���롣
+  # プロパティに設定された内容を保存する。
+  # 保存時にはプロパティ階層の深さを表す数字が付加される。
+  # 値が設定されていないプロパティについては、デフォルト値が出力される。
   #
   # @param self
-  # @param out �ץ��ѥƥ�������¸��ν��ϥ��ȥ꡼��
-  # @param curr �оݥץ��ѥƥ�
-  # @param index ���ߤΥץ��ѥƥ�����
+  # @param out プロパティ内容保存先の出力ストリーム
+  # @param curr 対象プロパティ
+  # @param index 現在のプロパティ階層
   #
   # @else
   #
@@ -1353,15 +1353,15 @@ class Properties:
 
   ##
   # @if jp
-  # @brief �ץ��ѥƥ������Ƥ���Ϥ���
+  # @brief プロパティの内容を出力する
   #
-  # �ץ��ѥƥ������ꤵ�줿���Ƥ���Ϥ��롣<br>
+  # プロパティに設定された内容を出力する。<br>
   # friend std::ostream& operator<<(std::ostream& lhs, const Properties& rhs);
-  # ������ˡ�print obj�ˤƸƤӽФ���ǽ�Ȥ��뤿��Υ᥽�åɡ�
+  # の代わりに、print objにて呼び出し可能とするためのメソッド。
   #
   # @param self
   #
-  # @return ����ץ��ѥƥ�ʸ����ɽ��
+  # @return 設定プロパティ文字列表示
   #
   # @else
   #

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -18,11 +18,11 @@ import OpenRTM
 ##
 # @if jp
 # @class OutPortSHMProvider
-# @brief OutPortSHMProvider ¥¯¥é¥¹
+# @brief OutPortSHMProvider ã‚¯ãƒ©ã‚¹
 #
 # OutPortProvider 
 #
-# ÄÌ¿®¼êÃÊ¤Ë ¶¦Í­¥á¥â¥ê ¤òÍøÍÑ¤·¤¿½ĞÎÏ¥İ¡¼¥È¥×¥í¥Ğ¥¤¥À¤Î¼ÂÁõ¥¯¥é¥¹¡£
+# é€šä¿¡æ‰‹æ®µã« å…±æœ‰ãƒ¡ãƒ¢ãƒª ã‚’åˆ©ç”¨ã—ãŸå‡ºåŠ›ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒã‚¤ãƒ€ã®å®Ÿè£…ã‚¯ãƒ©ã‚¹ã€‚
 #
 #
 # @else
@@ -36,10 +36,10 @@ import OpenRTM
 class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,OpenRTM_aist.SharedMemory):
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
-  # ¶¦Í­¥á¥â¥ê¤Î¶õ´ÖÌ¾¤ÏUUID¤ÇºîÀ®¤·¡¢¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë¤Îdataport.shared_memory.address¤ËÊİÂ¸¤¹¤ë
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # å…±æœ‰ãƒ¡ãƒ¢ãƒªã®ç©ºé–“åã¯UUIDã§ä½œæˆã—ã€ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã®dataport.shared_memory.addressã«ä¿å­˜ã™ã‚‹
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @else
   # @brief Constructor
@@ -80,9 +80,9 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,OpenRTM_aist.SharedMemory)
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @else
   # @brief Destructor
@@ -96,7 +96,7 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,OpenRTM_aist.SharedMemory)
 
   ##
   # @if jp
-  # @brief ½ªÎ»½èÍı
+  # @brief çµ‚äº†å‡¦ç†
   #
   # @else
   # @brief 
@@ -150,9 +150,9 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,OpenRTM_aist.SharedMemory)
   
   ##
   # @if jp
-  # @brief ¥Ğ¥Ã¥Õ¥¡¤«¤é¥Ç¡¼¥¿¤ò¼èÆÀ¤¹¤ë
+  # @brief ãƒãƒƒãƒ•ã‚¡ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã™ã‚‹
   #
-  # @return (¥ê¥¿¡¼¥ó¥³¡¼¥É¡¢¼èÆÀ¥Ç¡¼¥¿)
+  # @return (ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰ã€å–å¾—ãƒ‡ãƒ¼ã‚¿)
   #
   # @else
   # @brief Get data from the buffer

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ï»¿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -24,12 +24,12 @@ import OpenRTM__POA,OpenRTM
 ##
 # @if jp
 # @class OutPortCorbaCdrProvider
-# @brief OutPortCorbaCdrProvider ¥¯¥é¥¹
+# @brief OutPortCorbaCdrProvider ã‚¯ãƒ©ã‚¹
 #
 # OutPortProvider 
 #
-# ¥Ç¡¼¥¿Å¾Á÷¤Ë CORBA ¤Î OpenRTM::OutPortCdr ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤òÍøÍÑ¤·
-# ¤¿¡¢pull ·¿¥Ç¡¼¥¿¥Õ¥í¡¼·¿¤ò¼Â¸½¤¹¤ë OutPort ¥×¥í¥Ğ¥¤¥À¥¯¥é¥¹¡£
+# ãƒ‡ãƒ¼ã‚¿è»¢é€ã« CORBA ã® OpenRTM::OutPortCdr ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’åˆ©ç”¨ã—
+# ãŸã€pull å‹ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼å‹ã‚’å®Ÿç¾ã™ã‚‹ OutPort ãƒ—ãƒ­ãƒã‚¤ãƒ€ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @since 0.4.0
 #
@@ -49,11 +49,11 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
                               OpenRTM__POA.OutPortCdr):
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # @param buffer Åö³º¥×¥í¥Ğ¥¤¥À¤Ë³ä¤êÅö¤Æ¤ë¥Ğ¥Ã¥Õ¥¡¥ª¥Ö¥¸¥§¥¯¥È
+  # @param buffer å½“è©²ãƒ—ãƒ­ãƒã‚¤ãƒ€ã«å‰²ã‚Šå½“ã¦ã‚‹ãƒãƒƒãƒ•ã‚¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   # @brief Constructor
@@ -89,9 +89,9 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @else
   # @brief Destructor
@@ -105,7 +105,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ½ªÎ»½èÍı
+  # @brief çµ‚äº†å‡¦ç†
   #
   # @else
   # @brief 
@@ -120,15 +120,15 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
-  # InPortConsumer¤Î³Æ¼ïÀßÄê¤ò¹Ô¤¦¡£¼ÂÁõ¥¯¥é¥¹¤Ç¤Ï¡¢Í¿¤¨¤é¤ì¤¿
-  # Properties¤«¤éÉ¬Í×¤Ê¾ğÊó¤ò¼èÆÀ¤·¤Æ³Æ¼ïÀßÄê¤ò¹Ô¤¦¡£¤³¤Î init() ´Ø
-  # ¿ô¤Ï¡¢OutPortProviderÀ¸À®Ä¾¸å¤ª¤è¤Ó¡¢ÀÜÂ³»ş¤Ë¤½¤ì¤¾¤ì¸Æ¤Ğ¤ì¤ë²Ä
-  # Ç½À­¤¬¤¢¤ë¡£¤·¤¿¤¬¤Ã¤Æ¡¢¤³¤Î´Ø¿ô¤ÏÊ£¿ô²ó¸Æ¤Ğ¤ì¤ë¤³¤È¤òÁÛÄê¤·¤Æµ­
-  # ½Ò¤µ¤ì¤ë¤Ù¤­¤Ç¤¢¤ë¡£
+  # InPortConsumerã®å„ç¨®è¨­å®šã‚’è¡Œã†ã€‚å®Ÿè£…ã‚¯ãƒ©ã‚¹ã§ã¯ã€ä¸ãˆã‚‰ã‚ŒãŸ
+  # Propertiesã‹ã‚‰å¿…è¦ãªæƒ…å ±ã‚’å–å¾—ã—ã¦å„ç¨®è¨­å®šã‚’è¡Œã†ã€‚ã“ã® init() é–¢
+  # æ•°ã¯ã€OutPortProviderç”Ÿæˆç›´å¾ŒãŠã‚ˆã³ã€æ¥ç¶šæ™‚ã«ãã‚Œãã‚Œå‘¼ã°ã‚Œã‚‹å¯
+  # èƒ½æ€§ãŒã‚ã‚‹ã€‚ã—ãŸãŒã£ã¦ã€ã“ã®é–¢æ•°ã¯è¤‡æ•°å›å‘¼ã°ã‚Œã‚‹ã“ã¨ã‚’æƒ³å®šã—ã¦è¨˜
+  # è¿°ã•ã‚Œã‚‹ã¹ãã§ã‚ã‚‹ã€‚
   # 
-  # @param prop ÀßÄê¾ğÊó
+  # @param prop è¨­å®šæƒ…å ±
   #
   # @else
   #
@@ -152,15 +152,15 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ¥Ğ¥Ã¥Õ¥¡¤ò¥»¥Ã¥È¤¹¤ë
+  # @brief ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
   #
-  # OutPortProvider¤¬¥Ç¡¼¥¿¤ò¼è¤ê½Ğ¤¹¥Ğ¥Ã¥Õ¥¡¤ò¥»¥Ã¥È¤¹¤ë¡£
-  # ¤¹¤Ç¤Ë¥»¥Ã¥È¤µ¤ì¤¿¥Ğ¥Ã¥Õ¥¡¤¬¤¢¤ë¾ì¹ç¡¢°ÊÁ°¤Î¥Ğ¥Ã¥Õ¥¡¤Ø¤Î
-  # ¥İ¥¤¥ó¥¿¤ËÂĞ¤·¤Æ¾å½ñ¤­¤µ¤ì¤ë¡£
-  # OutPortProvider¤Ï¥Ğ¥Ã¥Õ¥¡¤Î½êÍ­¸¢¤ò²¾Äê¤·¤Æ¤¤¤Ê¤¤¤Î¤Ç¡¢
-  # ¥Ğ¥Ã¥Õ¥¡¤Îºï½ü¤Ï¥æ¡¼¥¶¤ÎÀÕÇ¤¤Ç¹Ô¤ï¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
+  # OutPortProviderãŒãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã™ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã€‚
+  # ã™ã§ã«ã‚»ãƒƒãƒˆã•ã‚ŒãŸãƒãƒƒãƒ•ã‚¡ãŒã‚ã‚‹å ´åˆã€ä»¥å‰ã®ãƒãƒƒãƒ•ã‚¡ã¸ã®
+  # ãƒã‚¤ãƒ³ã‚¿ã«å¯¾ã—ã¦ä¸Šæ›¸ãã•ã‚Œã‚‹ã€‚
+  # OutPortProviderã¯ãƒãƒƒãƒ•ã‚¡ã®æ‰€æœ‰æ¨©ã‚’ä»®å®šã—ã¦ã„ãªã„ã®ã§ã€
+  # ãƒãƒƒãƒ•ã‚¡ã®å‰Šé™¤ã¯ãƒ¦ãƒ¼ã‚¶ã®è²¬ä»»ã§è¡Œã‚ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
   #
-  # @param buffer OutPortProvider¤¬¥Ç¡¼¥¿¤ò¼è¤ê½Ğ¤¹¥Ğ¥Ã¥Õ¥¡¤Ø¤Î¥İ¥¤¥ó¥¿
+  # @param buffer OutPortProviderãŒãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã™ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒã‚¤ãƒ³ã‚¿
   #
   # @else
   # @brief Setting outside buffer's pointer
@@ -183,13 +183,13 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ¥ê¥¹¥Ê¤òÀßÄê¤¹¤ë¡£
+  # @brief ãƒªã‚¹ãƒŠã‚’è¨­å®šã™ã‚‹ã€‚
   #
-  # OutPort ¤Ï¥Ç¡¼¥¿Á÷¿®½èÍı¤Ë¤ª¤±¤ë³Æ¼ï¥¤¥Ù¥ó¥È¤ËÂĞ¤·¤ÆÆÃÄê¤Î¥ê¥¹¥Ê
-  # ¥ª¥Ö¥¸¥§¥¯¥È¤ò¥³¡¼¥ë¤¹¤ë¥³¡¼¥ë¥Ğ¥Ã¥¯µ¡¹½¤òÄó¶¡¤¹¤ë¡£¾ÜºÙ¤Ï
-  # ConnectorListener.h ¤Î ConnectorDataListener, ConnectorListener
-  # Åù¤ò»²¾È¤Î¤³¤È¡£OutPortCorbaCdrProvider ¤Ç¤Ï¡¢°Ê²¼¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯
-  # ¤¬Äó¶¡¤µ¤ì¤ë¡£
+  # OutPort ã¯ãƒ‡ãƒ¼ã‚¿é€ä¿¡å‡¦ç†ã«ãŠã‘ã‚‹å„ç¨®ã‚¤ãƒ™ãƒ³ãƒˆã«å¯¾ã—ã¦ç‰¹å®šã®ãƒªã‚¹ãƒŠ
+  # ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚³ãƒ¼ãƒ«ã™ã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯æ©Ÿæ§‹ã‚’æä¾›ã™ã‚‹ã€‚è©³ç´°ã¯
+  # ConnectorListener.h ã® ConnectorDataListener, ConnectorListener
+  # ç­‰ã‚’å‚ç…§ã®ã“ã¨ã€‚OutPortCorbaCdrProvider ã§ã¯ã€ä»¥ä¸‹ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+  # ãŒæä¾›ã•ã‚Œã‚‹ã€‚
   # 
   # - ON_BUFFER_READ
   # - ON_SEND
@@ -199,8 +199,8 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
   # - ON_SENDER_TIMEOUT
   # - ON_SENDER_ERROR
   #
-  # @param info ÀÜÂ³¾ğÊó
-  # @param listeners ¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È
+  # @param info æ¥ç¶šæƒ…å ±
+  # @param listeners ãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   # @brief Set the listener. 
@@ -235,12 +235,12 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief Connector¤òÀßÄê¤¹¤ë¡£
+  # @brief Connectorã‚’è¨­å®šã™ã‚‹ã€‚
   #
-  # OutPort ¤ÏÀÜÂ³³ÎÎ©»ş¤Ë OutPortConnector ¥ª¥Ö¥¸¥§¥¯¥È¤òÀ¸À®¤·¡¢À¸
-  # À®¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤Î¥İ¥¤¥ó¥¿¤È¶¦¤Ë¤³¤Î´Ø¿ô¤ò¸Æ¤Ó½Ğ¤¹¡£½êÍ­¸¢¤Ï
-  # OutPort ¤¬Êİ»ı¤¹¤ë¤Î¤Ç OutPortProvider ¤Ï OutPortConnector ¤òºï
-  # ½ü¤·¤Æ¤Ï¤¤¤±¤Ê¤¤¡£
+  # OutPort ã¯æ¥ç¶šç¢ºç«‹æ™‚ã« OutPortConnector ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ã€ç”Ÿ
+  # æˆã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒã‚¤ãƒ³ã‚¿ã¨å…±ã«ã“ã®é–¢æ•°ã‚’å‘¼ã³å‡ºã™ã€‚æ‰€æœ‰æ¨©ã¯
+  # OutPort ãŒä¿æŒã™ã‚‹ã®ã§ OutPortProvider ã¯ OutPortConnector ã‚’å‰Š
+  # é™¤ã—ã¦ã¯ã„ã‘ãªã„ã€‚
   #
   # @param connector OutPortConnector
   #
@@ -265,11 +265,11 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief [CORBA interface] ¥Ğ¥Ã¥Õ¥¡¤«¤é¥Ç¡¼¥¿¤ò¼èÆÀ¤¹¤ë
+  # @brief [CORBA interface] ãƒãƒƒãƒ•ã‚¡ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã™ã‚‹
   #
-  # ÀßÄê¤µ¤ì¤¿ÆâÉô¥Ğ¥Ã¥Õ¥¡¤«¤é¥Ç¡¼¥¿¤ò¼èÆÀ¤¹¤ë¡£
+  # è¨­å®šã•ã‚ŒãŸå†…éƒ¨ãƒãƒƒãƒ•ã‚¡ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã™ã‚‹ã€‚
   #
-  # @return ¼èÆÀ¥Ç¡¼¥¿
+  # @return å–å¾—ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   # @brief [CORBA interface] Get data from the buffer
@@ -303,7 +303,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     
   ##
   # @if jp
-  # @brief ON_BUFFER_READ ¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_BUFFER_READ ã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_BUFFER_READ event to listeners
@@ -318,7 +318,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ON_SEND ¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_SEND ã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_SEND event to listeners
@@ -333,7 +333,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ON_BUFFER_EMPTY¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_BUFFER_EMPTYã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @else
   # @brief Notify an ON_BUFFER_EMPTY event to listeners
   # @endif
@@ -346,7 +346,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ON_BUFFER_READ_TIMEOUT ¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_BUFFER_READ_TIMEOUT ã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @else
   # @brief Notify an ON_BUFFER_READ_TIMEOUT event to listeners
   # @endif
@@ -359,7 +359,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ON_SENDER_EMPTY¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_SENDER_EMPTYã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @else
   # @brief Notify an ON_SENDER_EMPTY event to listeners
   # @endif
@@ -372,7 +372,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ON_SENDER_TIMEOUT ¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_SENDER_TIMEOUT ã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @else
   # @brief Notify an ON_SENDER_TIMEOUT event to listeners
   # @endif
@@ -385,7 +385,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ON_SENDER_ERROR¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_SENDER_ERRORã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @else
   # @brief Notify an ON_SENDER_ERROR event to listeners
   # @endif
@@ -399,7 +399,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
   ##
   # @if jp
-  # @brief ¥ê¥¿¡¼¥ó¥³¡¼¥ÉÊÑ´¹
+  # @brief ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰å¤‰æ›
   # @else
   # @brief Return codes conversion
   # @endif

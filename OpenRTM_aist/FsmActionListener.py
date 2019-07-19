@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -25,18 +25,18 @@ import OpenRTM_aist.Guard
 # @if jp
 # @brief
 #
-# FSM����ݡ��ͥ�Ȥ˴ؤ����ο����񤤤�եå����뤿��Υꥹ����
-# �����ꥹ�ʤˤ��礭��ʬ����ȡ�
+# FSMコンポーネントに関する種々の振る舞いをフックするためのリスナ定
+# 義。リスナには大きく分けると、
 #
-# - FSM���Τ�Τ�ư���եå����뤿��Υꥹ��
-# - FSM�˴ؤ���᥿�ǡ����ѹ�����ư���եå����뤿��Υꥹ��
+# - FSMそのものの動作をフックするためのリスナ
+# - FSMに関するメタデータ変更等の動作をフックするためのリスナ
 #
-# ��2�����ʬ�����롣��������Ԥϡ�FSM�ξ����������Υ�����������
-# �夽�줾���եå����뤿��� PreFsmActionListener ��
-# PostFsmActionListener ����Ĥ����ꡢ��Ԥϡ�FSM��Profile���ѹ���ե�
-# ������ FsmProfileListener �� FSM�ι�¤ (Structure) ���ѹ���եå�
-# ���� FsmStructureListener ����Ĥ�ʬ�����롣�ʾ塢�ʲ���FSM�˴�
-# ����ʲ���4����Υꥹ�ʡ����饹�����󶡤���Ƥ��롣
+# の2種類に分けられる。さらに前者は、FSMの状態遷移等のアクションの前
+# 後それぞれをフックするための PreFsmActionListener と
+# PostFsmActionListener の二つがあり、後者は、FSMのProfileの変更をフッ
+# クする FsmProfileListener と FSMの構造 (Structure) の変更をフック
+# する FsmStructureListener の二つに分けられる。以上、以下のFSMに関
+# する以下の4種類のリスナークラス群が提供されている。
 #
 # - PreFsmActionListener
 # - PostFsmActionListener
@@ -52,16 +52,16 @@ import OpenRTM_aist.Guard
 
 ##
 # @if jp
-# @brief PreFsmActionListener �Υ�����
+# @brief PreFsmActionListener のタイプ
 #
-# PreFsmActionListener �ˤϰʲ��Υեå��ݥ���Ȥ��������Ƥ��롣��
-# ��餬�ƤӽФ���뤫�ɤ����ϡ�FSM�μ����˰�¸���롣
+# PreFsmActionListener には以下のフックポイントが定義されている。こ
+# れらが呼び出されるかどうかは、FSMの実装に依存する。
 #
-# - PRE_ON_INIT:          init ľ��
-# - PRE_ON_ENTRY:         entry ľ��
-# - PRE_ON_DO:            do ľ��
-# - PRE_ON_EXIT:          exit ľ��
-# - PRE_ON_STATE_CHANGE:  ��������ľ��
+# - PRE_ON_INIT:          init 直前
+# - PRE_ON_ENTRY:         entry 直前
+# - PRE_ON_DO:            do 直前
+# - PRE_ON_EXIT:          exit 直前
+# - PRE_ON_STATE_CHANGE:  状態遷移直前
 #
 # @else
 # @brief The types of ConnectorDataListener
@@ -94,14 +94,14 @@ class PreFsmActionListenerType:
 
 ##
 # @if jp
-# @class PreFsmActionListener ���饹
-# @brief PreFsmActionListener ���饹
+# @class PreFsmActionListener クラス
+# @brief PreFsmActionListener クラス
 #
-# PreFsmActionListener ���饹�ϡ�Fsm�Υ��������˴ؤ��륳����Хå�
-# ��¸�����ꥹ�ʡ����֥������Ȥδ��쥯�饹�Ǥ��롣FSM�Υ��������
-# ��ľ����ư���եå���������硢�ʲ�����Τ褦�ˡ����Υ��饹��Ѿ�
-# ����������Хå����֥������Ȥ��������Ŭ�ڤʥ�����Хå�����ؿ���
-# ��RTObject���Ф��ƥ�����Хå����֥������Ȥ򥻥åȤ���ɬ�פ����롣
+# PreFsmActionListener クラスは、Fsmのアクションに関するコールバック
+# を実現するリスナーオブジェクトの基底クラスである。FSMのアクション
+# の直前の動作をフックしたい場合、以下の例のように、このクラスを継承
+# したコールバックオブジェクトを定義し、適切なコールバック設定関数か
+# らRTObjectに対してコールバックオブジェクトをセットする必要がある。
 #
 # <pre>
 # class MyListener
@@ -120,8 +120,8 @@ class PreFsmActionListenerType:
 # };
 # </pre>
 #
-# ���Τ褦�ˤ���������줿�ꥹ�ʥ��饹�ϡ��ʲ��Τ褦��RTObject���Ф�
-# �ơ����åȤ���롣
+# このようにして定義されたリスナクラスは、以下のようにRTObjectに対し
+# て、セットされる。
 #
 # <pre>
 # RTC::ReturnCode_t ConsoleIn::onInitialize()
@@ -132,28 +132,28 @@ class PreFsmActionListenerType:
 #    :
 # </pre>
 #
-# ��1������ "PRE_ON_STATE_CHANGE" �ϡ�������Хå���եå�����ݥ���
-# �ȤǤ��ꡢ�ʲ����ͤ��뤳�Ȥ���ǽ�Ǥ��롣�ʤ������٤ƤΥ�����Х�
-# ���ݥ���Ȥ���������Ƥ���Ȥϸ¤餺������餬�ƤӽФ���뤫�ɤ���
-# �ϡ�FSM�μ����˰�¸���롣
+# 第1引数の "PRE_ON_STATE_CHANGE" は、コールバックをフックするポイン
+# トであり、以下の値を取ることが可能である。なお、すべてのコールバッ
+# クポイントが実装されているとは限らず、これらが呼び出されるかどうか
+# は、FSMの実装に依存する。
 #
-# - PRE_ON_INIT:          init ľ��
-# - PRE_ON_ENTRY:         entry ľ��
-# - PRE_ON_DO:            do ľ��
-# - PRE_ON_EXIT:          exit ľ��
-# - PRE_ON_STATE_CHANGE:  ��������ľ��
+# - PRE_ON_INIT:          init 直前
+# - PRE_ON_ENTRY:         entry 直前
+# - PRE_ON_DO:            do 直前
+# - PRE_ON_EXIT:          exit 直前
+# - PRE_ON_STATE_CHANGE:  状態遷移直前
 #
-# ��2�����ϥꥹ�ʥ��֥������ȤΥݥ��󥿤Ǥ��롣��3�����ϥ��֥�������
-# ��ư����ե饰�Ǥ��ꡢtrue �ξ��ϡ�RTObject������˼�ưŪ�˥ꥹ
-# �ʥ��֥������Ȥ��������롣false�ξ��ϡ����֥������Ȥν�ͭ����
-# �ƤӽФ�¦�˻Ĥꡢ����ϸƤӽФ�¦����Ǥ�ǹԤ�ʤ���Фʤ�ʤ���
-# RTObject �Υ饤�ե���������˥�����Хå���ɬ�פʤ�о嵭�Τ褦��
-# �ƤӽФ�������3������ true �Ȥ��Ƥ����Ȥ褤���դˡ�������Хå���
-# �������˱����ƥ��åȤ����ꥢ�󥻥åȤ����ꤹ��ɬ�פ��������
-# false�Ȥ����֤����ꥹ�ʥ��֥������ȤΥݥ��󥿤�����ѿ��ʤɤ���
-# �����Ƥ�����
+# 第2引数はリスナオブジェクトのポインタである。第3引数はオブジェクト
+# 自動削除フラグであり、true の場合は、RTObject削除時に自動的にリス
+# ナオブジェクトが削除される。falseの場合は、オブジェクトの所有権は
+# 呼び出し側に残り、削除は呼び出し側の責任で行わなければならない。
+# RTObject のライフサイクル中にコールバックが必要ならば上記のような
+# 呼び出し方で第3引数を true としておくとよい。逆に、コールバックを
+# 状況等に応じてセットしたりアンセットしたりする必要がある場合は
+# falseとして置き、リスナオブジェクトのポインタをメンバ変数などに保
+# 持しておき、
 # RTObject_impl::addPreFsmActionListener()/removePreFsmActionListener()
-# �ˤ�ꡢ���åȤȥ��󥻥åȤ��������Ȥ��ä��Ȥ������ǽ�Ǥ��롣
+# により、セットとアンセットを管理するといった使い方も可能である。
 #
 # @else
 # @class PreFsmActionListener class
@@ -227,7 +227,7 @@ class PreFsmActionListenerType:
 class PreFsmActionListener:
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # @else
   # @brief Constructor
   # @endif
@@ -238,7 +238,7 @@ class PreFsmActionListener:
 
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # @else
   # @brief Destructor
   # @endif
@@ -250,9 +250,9 @@ class PreFsmActionListener:
   ##
   # @if jp
   #
-  # @brief ���ۥ�����Хå��ؿ�
+  # @brief 仮想コールバック関数
   #
-  # PreFsmActionListener �Υ�����Хå��ؿ�
+  # PreFsmActionListener のコールバック関数
   #
   # @else
   #
@@ -268,13 +268,13 @@ class PreFsmActionListener:
   ##
   # @if jp
   #
-  # @brief PreFsmActionListenerType ��ʸ������Ѵ�
+  # @brief PreFsmActionListenerType を文字列に変換
   #
-  # PreFsmActionListenerType ��ʸ������Ѵ�����
+  # PreFsmActionListenerType を文字列に変換する
   #
-  # @param type �Ѵ��о� PreFsmActionListenerType
+  # @param type 変換対象 PreFsmActionListenerType
   #
-  # @return ʸ�����Ѵ����
+  # @return 文字列変換結果
   #
   # @else
   #
@@ -305,16 +305,16 @@ class PreFsmActionListener:
 
 ##
 # @if jp
-# @brief PreFsmActionListener �Υ�����
+# @brief PreFsmActionListener のタイプ
 #
-# PreFsmActionListener �ˤϰʲ��Υեå��ݥ���Ȥ��������Ƥ��롣��
-# ��餬�ƤӽФ���뤫�ɤ����ϡ�FSM�μ����˰�¸���롣
+# PreFsmActionListener には以下のフックポイントが定義されている。こ
+# れらが呼び出されるかどうかは、FSMの実装に依存する。
 #
-# - POST_ON_INIT:          init ľ��
-# - POST_ON_ENTRY:         entry ľ��
-# - POST_ON_DO:            do ľ��
-# - POST_ON_EXIT:          exit ľ��
-# - POST_ON_STATE_CHANGE:  ��������ľ��
+# - POST_ON_INIT:          init 直後
+# - POST_ON_ENTRY:         entry 直後
+# - POST_ON_DO:            do 直後
+# - POST_ON_EXIT:          exit 直後
+# - POST_ON_STATE_CHANGE:  状態遷移直後
 #
 # @else
 # @brief The types of ConnectorDataListener
@@ -349,14 +349,14 @@ class PostFsmActionListenerType:
 
 ##
 # @if jp
-# @class PostFsmActionListener ���饹
-# @brief PostFsmActionListener ���饹
+# @class PostFsmActionListener クラス
+# @brief PostFsmActionListener クラス
 #
-# PostFsmActionListener ���饹�ϡ�Fsm�Υ��������˴ؤ��륳����Хå�
-# ��¸�����ꥹ�ʡ����֥������Ȥδ��쥯�饹�Ǥ��롣FSM�Υ��������
-# ��ľ���ư���եå���������硢�ʲ�����Τ褦�ˡ����Υ��饹��Ѿ�
-# ����������Хå����֥������Ȥ��������Ŭ�ڤʥ�����Хå�����ؿ���
-# ��RTObject���Ф��ƥ�����Хå����֥������Ȥ򥻥åȤ���ɬ�פ����롣
+# PostFsmActionListener クラスは、Fsmのアクションに関するコールバック
+# を実現するリスナーオブジェクトの基底クラスである。FSMのアクション
+# の直後の動作をフックしたい場合、以下の例のように、このクラスを継承
+# したコールバックオブジェクトを定義し、適切なコールバック設定関数か
+# らRTObjectに対してコールバックオブジェクトをセットする必要がある。
 #
 # <pre>
 # class MyListener
@@ -375,8 +375,8 @@ class PostFsmActionListenerType:
 # };
 # </pre>
 #
-# ���Τ褦�ˤ���������줿�ꥹ�ʥ��饹�ϡ��ʲ��Τ褦��RTObject���Ф�
-# �ơ����åȤ���롣
+# このようにして定義されたリスナクラスは、以下のようにRTObjectに対し
+# て、セットされる。
 #
 # <pre>
 # RTC::ReturnCode_t ConsoleIn::onInitialize()
@@ -387,28 +387,28 @@ class PostFsmActionListenerType:
 #    :
 # </pre>
 #
-# ��1������ "POST_ON_STATE_CHANGE" �ϡ�������Хå���եå�����ݥ���
-# �ȤǤ��ꡢ�ʲ����ͤ��뤳�Ȥ���ǽ�Ǥ��롣�ʤ������٤ƤΥ�����Х�
-# ���ݥ���Ȥ���������Ƥ���Ȥϸ¤餺������餬�ƤӽФ���뤫�ɤ���
-# �ϡ�FSM�μ����˰�¸���롣
+# 第1引数の "POST_ON_STATE_CHANGE" は、コールバックをフックするポイン
+# トであり、以下の値を取ることが可能である。なお、すべてのコールバッ
+# クポイントが実装されているとは限らず、これらが呼び出されるかどうか
+# は、FSMの実装に依存する。
 #
-# - POST_ON_INIT:          init ľ��
-# - POST_ON_ENTRY:         entry ľ��
-# - POST_ON_DO:            do ľ��
-# - POST_ON_EXIT:          exit ľ��
-# - POST_ON_STATE_CHANGE:  ��������ľ��
+# - POST_ON_INIT:          init 直後
+# - POST_ON_ENTRY:         entry 直後
+# - POST_ON_DO:            do 直後
+# - POST_ON_EXIT:          exit 直後
+# - POST_ON_STATE_CHANGE:  状態遷移直後
 #
-# ��2�����ϥꥹ�ʥ��֥������ȤΥݥ��󥿤Ǥ��롣��3�����ϥ��֥�������
-# ��ư����ե饰�Ǥ��ꡢtrue �ξ��ϡ�RTObject������˼�ưŪ�˥ꥹ
-# �ʥ��֥������Ȥ��������롣false�ξ��ϡ����֥������Ȥν�ͭ����
-# �ƤӽФ�¦�˻Ĥꡢ����ϸƤӽФ�¦����Ǥ�ǹԤ�ʤ���Фʤ�ʤ���
-# RTObject �Υ饤�ե���������˥�����Хå���ɬ�פʤ�о嵭�Τ褦��
-# �ƤӽФ�������3������ true �Ȥ��Ƥ����Ȥ褤���դˡ�������Хå���
-# �������˱����ƥ��åȤ����ꥢ�󥻥åȤ����ꤹ��ɬ�פ��������
-# false�Ȥ����֤����ꥹ�ʥ��֥������ȤΥݥ��󥿤�����ѿ��ʤɤ���
-# �����Ƥ�����
+# 第2引数はリスナオブジェクトのポインタである。第3引数はオブジェクト
+# 自動削除フラグであり、true の場合は、RTObject削除時に自動的にリス
+# ナオブジェクトが削除される。falseの場合は、オブジェクトの所有権は
+# 呼び出し側に残り、削除は呼び出し側の責任で行わなければならない。
+# RTObject のライフサイクル中にコールバックが必要ならば上記のような
+# 呼び出し方で第3引数を true としておくとよい。逆に、コールバックを
+# 状況等に応じてセットしたりアンセットしたりする必要がある場合は
+# falseとして置き、リスナオブジェクトのポインタをメンバ変数などに保
+# 持しておき、
 # RTObject_impl::addPostFsmActionListener()/removePostFsmActionListener()
-# �ˤ�ꡢ���åȤȥ��󥻥åȤ��������Ȥ��ä��Ȥ������ǽ�Ǥ��롣
+# により、セットとアンセットを管理するといった使い方も可能である。
 #
 # @else
 # @class PostFsmActionListener class
@@ -482,7 +482,7 @@ class PostFsmActionListenerType:
 class PostFsmActionListener:
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # @else
   # @brief Constructor
   # @endif
@@ -493,7 +493,7 @@ class PostFsmActionListener:
 
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # @else
   # @brief Destructor
   # @endif
@@ -505,9 +505,9 @@ class PostFsmActionListener:
   ##
   # @if jp
   #
-  # @brief ���ۥ�����Хå��ؿ�
+  # @brief 仮想コールバック関数
   #
-  # PostFsmActionListener �Υ�����Хå��ؿ�
+  # PostFsmActionListener のコールバック関数
   #
   # @else
   #
@@ -523,13 +523,13 @@ class PostFsmActionListener:
   ##
   # @if jp
   #
-  # @brief PostFsmActionListenerType ��ʸ������Ѵ�
+  # @brief PostFsmActionListenerType を文字列に変換
   #
-  # PostFsmActionListenerType ��ʸ������Ѵ�����
+  # PostFsmActionListenerType を文字列に変換する
   #
-  # @param type �Ѵ��о� PostFsmActionListenerType
+  # @param type 変換対象 PostFsmActionListenerType
   #
-  # @return ʸ�����Ѵ����
+  # @return 文字列変換結果
   #
   # @else
   #
@@ -560,16 +560,16 @@ class PostFsmActionListener:
 
 ##
 # @if jp
-# @brief FsmProfileListener �Υ�����
+# @brief FsmProfileListener のタイプ
 #
-# - SET_FSM_PROFILE       : FSM Profile�����
-# - GET_FSM_PROFILE       : FSM Profile������
-# - ADD_FSM_STATE         : FSM��State���ɲä��줿
-# - REMOVE_FSM_STATE      : FSM����State��������줿
-# - ADD_FSM_TRANSITION    : FSM�����ܤ��ɲä��줿
-# - REMOVE_FSM_TRANSITION : FSM�������ܤ�������줿
-# - BIND_FSM_EVENT        : FSM�˥��٥�Ȥ��Х���ɤ��줿
-# - UNBIND_FSM_EVENT      : FSM�˥��٥�Ȥ�����Х���ɤ��줿
+# - SET_FSM_PROFILE       : FSM Profile設定時
+# - GET_FSM_PROFILE       : FSM Profile取得時
+# - ADD_FSM_STATE         : FSMにStateが追加された
+# - REMOVE_FSM_STATE      : FSMからStateが削除された
+# - ADD_FSM_TRANSITION    : FSMに遷移が追加された
+# - REMOVE_FSM_TRANSITION : FSMから遷移が削除された
+# - BIND_FSM_EVENT        : FSMにイベントがバインドされた
+# - UNBIND_FSM_EVENT      : FSMにイベントがアンバインドされた
 #
 # @else
 # @brief The types of FsmProfileListener
@@ -605,15 +605,15 @@ class FsmProfileListenerType:
 
 ##
 # @if jp
-# @class FsmProfileListener ���饹
-# @brief FsmProfileListener ���饹
+# @class FsmProfileListener クラス
+# @brief FsmProfileListener クラス
 #
-# FsmProfileListener ���饹�ϡ�FSM��Profile�˴�Ϣ�������������Υ���
-# ��Хå���¸�����ꥹ�ʡ����֥������Ȥδ��쥯�饹�Ǥ��롣FSM
-# Profile�Υ���������ư���եå���������硢�ʲ�����Τ褦�ˡ���
-# �Υ��饹��Ѿ�����������Хå����֥������Ȥ��������Ŭ�ڤʥ�����Х�
-# ������ؿ�����RTObject���Ф��ƥ�����Хå����֥������Ȥ򥻥åȤ���
-# ɬ�פ����롣
+# FsmProfileListener クラスは、FSMのProfileに関連したアクションのコー
+# ルバックを実現するリスナーオブジェクトの基底クラスである。FSM
+# Profileのアクションの動作をフックしたい場合、以下の例のように、こ
+# のクラスを継承したコールバックオブジェクトを定義し、適切なコールバッ
+# ク設定関数からRTObjectに対してコールバックオブジェクトをセットする
+# 必要がある。
 #
 # <pre>
 # class MyListener
@@ -631,8 +631,8 @@ class FsmProfileListenerType:
 # };
 # </pre>
 #
-# ���Τ褦�ˤ���������줿�ꥹ�ʥ��饹�ϡ��ʲ��Τ褦��RTObject���Ф�
-# �ơ����åȤ���롣
+# このようにして定義されたリスナクラスは、以下のようにRTObjectに対し
+# て、セットされる。
 #
 # <pre>
 # RTC::ReturnCode_t ConsoleIn::onInitialize()
@@ -643,30 +643,30 @@ class FsmProfileListenerType:
 #    :
 # </pre>
 #
-# ��1������ "SET_FSM_PROFILE" �ϡ�������Хå���եå�����ݥ���
-# �ȤǤ��ꡢ�ʲ����ͤ��뤳�Ȥ���ǽ�Ǥ��롣�ʤ������٤ƤΥ�����Х�
-# ���ݥ���Ȥ���������Ƥ���Ȥϸ¤餺������餬�ƤӽФ���뤫�ɤ���
-# �ϡ�FSM�����ӥ��μ����˰�¸���롣
+# 第1引数の "SET_FSM_PROFILE" は、コールバックをフックするポイン
+# トであり、以下の値を取ることが可能である。なお、すべてのコールバッ
+# クポイントが実装されているとは限らず、これらが呼び出されるかどうか
+# は、FSMサービスの実装に依存する。
 #
-# - SET_FSM_PROFILE       : FSM Profile�����
-# - GET_FSM_PROFILE       : FSM Profile������
-# - ADD_FSM_STATE         : FSM��State���ɲä��줿
-# - REMOVE_FSM_STATE      : FSM����State��������줿
-# - ADD_FSM_TRANSITION    : FSM�����ܤ��ɲä��줿
-# - REMOVE_FSM_TRANSITION : FSM�������ܤ�������줿
-# - BIND_FSM_EVENT        : FSM�˥��٥�Ȥ��Х���ɤ��줿
-# - UNBIND_FSM_EVENT      : FSM�˥��٥�Ȥ�����Х���ɤ��줿
+# - SET_FSM_PROFILE       : FSM Profile設定時
+# - GET_FSM_PROFILE       : FSM Profile取得時
+# - ADD_FSM_STATE         : FSMにStateが追加された
+# - REMOVE_FSM_STATE      : FSMからStateが削除された
+# - ADD_FSM_TRANSITION    : FSMに遷移が追加された
+# - REMOVE_FSM_TRANSITION : FSMから遷移が削除された
+# - BIND_FSM_EVENT        : FSMにイベントがバインドされた
+# - UNBIND_FSM_EVENT      : FSMにイベントがアンバインドされた
 #
-# ��2�����ϥꥹ�ʥ��֥������ȤΥݥ��󥿤Ǥ��롣��3�����ϥ��֥�������
-# ��ư����ե饰�Ǥ��ꡢtrue �ξ��ϡ�RTObject������˼�ưŪ�˥ꥹ
-# �ʥ��֥������Ȥ��������롣false�ξ��ϡ����֥������Ȥν�ͭ����
-# �ƤӽФ�¦�˻Ĥꡢ����ϸƤӽФ�¦����Ǥ�ǹԤ�ʤ���Фʤ�ʤ���
-# RTObject �Υ饤�ե���������˥�����Хå���ɬ�פʤ�о嵭�Τ褦��
-# �ƤӽФ�������3������ true �Ȥ��Ƥ����Ȥ褤���դˡ�������Хå���
-# �������˱����ƥ��åȤ����ꥢ�󥻥åȤ����ꤹ��ɬ�פ��������
-# false�Ȥ����֤����ꥹ�ʥ��֥������ȤΥݥ��󥿤�����ѿ��ʤɤ���
-# �����Ƥ�����addFsmProfileListener()/removeFsmProfileListener() ��
-# ��ꡢ���åȤȥ��󥻥åȤ��������Ȥ��ä��Ȥ������ǽ�Ǥ��롣
+# 第2引数はリスナオブジェクトのポインタである。第3引数はオブジェクト
+# 自動削除フラグであり、true の場合は、RTObject削除時に自動的にリス
+# ナオブジェクトが削除される。falseの場合は、オブジェクトの所有権は
+# 呼び出し側に残り、削除は呼び出し側の責任で行わなければならない。
+# RTObject のライフサイクル中にコールバックが必要ならば上記のような
+# 呼び出し方で第3引数を true としておくとよい。逆に、コールバックを
+# 状況等に応じてセットしたりアンセットしたりする必要がある場合は
+# falseとして置き、リスナオブジェクトのポインタをメンバ変数などに保
+# 持しておき、addFsmProfileListener()/removeFsmProfileListener() に
+# より、セットとアンセットを管理するといった使い方も可能である。
 #
 # @else
 # @class FsmProfileListener class
@@ -741,7 +741,7 @@ class FsmProfileListenerType:
 class FsmProfileListener:
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # @else
   # @brief Constructor
   # @endif
@@ -751,7 +751,7 @@ class FsmProfileListener:
 
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # @else
   # @brief Destructor
   # @endif
@@ -763,9 +763,9 @@ class FsmProfileListener:
   ##
   # @if jp
   #
-  # @brief ���ۥ�����Хå��ؿ�
+  # @brief 仮想コールバック関数
   #
-  # FsmProfileListener �Υ�����Хå��ؿ�
+  # FsmProfileListener のコールバック関数
   #
   # @else
   #
@@ -781,13 +781,13 @@ class FsmProfileListener:
   ##
   # @if jp
   #
-  # @brief FsmProfileListenerType ��ʸ������Ѵ�
+  # @brief FsmProfileListenerType を文字列に変換
   #
-  # FsmProfileListenerType ��ʸ������Ѵ�����
+  # FsmProfileListenerType を文字列に変換する
   #
-  # @param type �Ѵ��о� FsmProfileListenerType
+  # @param type 変換対象 FsmProfileListenerType
   #
-  # @return ʸ�����Ѵ����
+  # @return 文字列変換結果
   #
   # @else
   #
@@ -821,10 +821,10 @@ class FsmProfileListener:
 
 ##
 # @if jp
-# @brief FsmStructureListener �Υ�����
+# @brief FsmStructureListener のタイプ
 #
-# - SET_FSM_STRUCTURE: FSM��¤������
-# - GET_FSM_STRUCTURE: FSM��¤�μ���
+# - SET_FSM_STRUCTURE: FSM構造の設定
+# - GET_FSM_STRUCTURE: FSM構造の取得
 #
 # @else
 # @brief The types of FsmStructureListener
@@ -847,15 +847,15 @@ class FsmStructureListenerType:
 
 ##
 # @if jp
-# @class FsmStructureListener ���饹
-# @brief FsmStructureListener ���饹
+# @class FsmStructureListener クラス
+# @brief FsmStructureListener クラス
 #
-# FsmStructureListener ���饹�ϡ�FSM Structure�Υ��������˴ؤ��륳��
-# ��Хå���¸�����ꥹ�ʡ����֥������Ȥδ��쥯�饹�Ǥ��롣FSM
-# Structure �Υ���������ľ���ư���եå���������硢�ʲ�����Τ�
-# ���ˡ����Υ��饹��Ѿ�����������Хå����֥������Ȥ��������Ŭ�ڤ�
-# ������Хå�����ؿ�����RTObject���Ф��ƥ�����Хå����֥������Ȥ�
-# ���åȤ���ɬ�פ����롣
+# FsmStructureListener クラスは、FSM Structureのアクションに関するコー
+# ルバックを実現するリスナーオブジェクトの基底クラスである。FSM
+# Structure のアクションの直後の動作をフックしたい場合、以下の例のよ
+# うに、このクラスを継承したコールバックオブジェクトを定義し、適切な
+# コールバック設定関数からRTObjectに対してコールバックオブジェクトを
+# セットする必要がある。
 #
 # <pre>
 # class MyListener
@@ -872,8 +872,8 @@ class FsmStructureListenerType:
 # };
 # </pre>
 #
-# ���Τ褦�ˤ���������줿�ꥹ�ʥ��饹�ϡ��ʲ��Τ褦��RTObject���Ф�
-# �ơ����åȤ���롣
+# このようにして定義されたリスナクラスは、以下のようにRTObjectに対し
+# て、セットされる。
 #
 # <pre>
 # RTC::ReturnCode_t ConsoleIn::onInitialize()
@@ -884,25 +884,25 @@ class FsmStructureListenerType:
 #    :
 # </pre>
 #
-# ��1������ "SET_FSM_STRUCTURE" �ϡ�������Хå���եå�����ݥ���
-# �ȤǤ��ꡢ�ʲ����ͤ��뤳�Ȥ���ǽ�Ǥ��롣�ʤ������٤ƤΥ�����Х�
-# ���ݥ���Ȥ���������Ƥ���Ȥϸ¤餺������餬�ƤӽФ���뤫�ɤ���
-# �ϡ�FSM�μ����˰�¸���롣
+# 第1引数の "SET_FSM_STRUCTURE" は、コールバックをフックするポイン
+# トであり、以下の値を取ることが可能である。なお、すべてのコールバッ
+# クポイントが実装されているとは限らず、これらが呼び出されるかどうか
+# は、FSMの実装に依存する。
 #
-# - SET_FSM_STRUCTURE: FSM��¤������
-# - GET_FSM_STRUCTURE: FSM��¤�μ���
+# - SET_FSM_STRUCTURE: FSM構造の設定
+# - GET_FSM_STRUCTURE: FSM構造の取得
 #
-# ��2�����ϥꥹ�ʥ��֥������ȤΥݥ��󥿤Ǥ��롣��3�����ϥ��֥�������
-# ��ư����ե饰�Ǥ��ꡢtrue �ξ��ϡ�RTObject������˼�ưŪ�˥ꥹ
-# �ʥ��֥������Ȥ��������롣false�ξ��ϡ����֥������Ȥν�ͭ����
-# �ƤӽФ�¦�˻Ĥꡢ����ϸƤӽФ�¦����Ǥ�ǹԤ�ʤ���Фʤ�ʤ���
-# RTObject �Υ饤�ե���������˥�����Хå���ɬ�פʤ�о嵭�Τ褦��
-# �ƤӽФ�������3������ true �Ȥ��Ƥ����Ȥ褤���դˡ�������Хå���
-# �������˱����ƥ��åȤ����ꥢ�󥻥åȤ����ꤹ��ɬ�פ��������
-# false�Ȥ����֤����ꥹ�ʥ��֥������ȤΥݥ��󥿤�����ѿ��ʤɤ���
-# �����Ƥ�����
+# 第2引数はリスナオブジェクトのポインタである。第3引数はオブジェクト
+# 自動削除フラグであり、true の場合は、RTObject削除時に自動的にリス
+# ナオブジェクトが削除される。falseの場合は、オブジェクトの所有権は
+# 呼び出し側に残り、削除は呼び出し側の責任で行わなければならない。
+# RTObject のライフサイクル中にコールバックが必要ならば上記のような
+# 呼び出し方で第3引数を true としておくとよい。逆に、コールバックを
+# 状況等に応じてセットしたりアンセットしたりする必要がある場合は
+# falseとして置き、リスナオブジェクトのポインタをメンバ変数などに保
+# 持しておき、
 # RTObject_impl::addPostFsmActionListener()/removePostFsmActionListener()
-# �ˤ�ꡢ���åȤȥ��󥻥åȤ��������Ȥ��ä��Ȥ������ǽ�Ǥ��롣
+# により、セットとアンセットを管理するといった使い方も可能である。
 #
 # @else
 # @class FsmStructureListener class
@@ -971,7 +971,7 @@ class FsmStructureListenerType:
 class FsmStructureListener:
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # @else
   # @brief Constructor
   # @endif
@@ -982,7 +982,7 @@ class FsmStructureListener:
 
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # @else
   # @brief Destructor
   # @endif
@@ -994,9 +994,9 @@ class FsmStructureListener:
   ##
   # @if jp
   #
-  # @brief ���ۥ�����Хå��ؿ�
+  # @brief 仮想コールバック関数
   #
-  # FsmStructureListener �Υ�����Хå��ؿ�
+  # FsmStructureListener のコールバック関数
   #
   # @else
   #
@@ -1012,13 +1012,13 @@ class FsmStructureListener:
   ##
   # @if jp
   #
-  # @brief FsmStructureListenerType ��ʸ������Ѵ�
+  # @brief FsmStructureListenerType を文字列に変換
   #
-  # FsmStructureListenerType ��ʸ������Ѵ�����
+  # FsmStructureListenerType を文字列に変換する
   #
-  # @param type �Ѵ��о� FsmStructureListenerType
+  # @param type 変換対象 FsmStructureListenerType
   #
-  # @return ʸ�����Ѵ����
+  # @return 文字列変換結果
   #
   # @else
   #
@@ -1046,9 +1046,9 @@ class FsmStructureListener:
 ##
 # @if jp
 # @class PreFsmActionListenerHolder
-# @brief PreFsmActionListener �ۥ�����饹
+# @brief PreFsmActionListener ホルダクラス
 #
-# ʣ���� PreFsmActionListener ���ݻ����������륯�饹��
+# 複数の PreFsmActionListener を保持し管理するクラス。
 #
 # @else
 # @class PreFsmActionListenerHolder
@@ -1062,7 +1062,7 @@ class FsmStructureListener:
 class PreFsmActionListenerHolder:
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # @else
   # @brief Constructor
   # @endif
@@ -1073,7 +1073,7 @@ class PreFsmActionListenerHolder:
   
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # @else
   # @brief Destructor
   # @endif
@@ -1086,11 +1086,11 @@ class PreFsmActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ����ɲ�
+  # @brief リスナーの追加
   #
-  # �ꥹ�ʡ����ɲä��롣
+  # リスナーを追加する。
   #
-  # @param listener �ɲä���ꥹ��
+  # @param listener 追加するリスナ
   # @else
   #
   # @brief Add the listener.
@@ -1107,11 +1107,11 @@ class PreFsmActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ��κ��
+  # @brief リスナーの削除
   #
-  # �ꥹ�ʤ������롣
+  # リスナを削除する。
   #
-  # @param listener �������ꥹ��
+  # @param listener 削除するリスナ
   # @else
   #
   # @brief Remove the listener. 
@@ -1133,9 +1133,9 @@ class PreFsmActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ������Τ���
+  # @brief リスナーへ通知する
   #
-  # ��Ͽ����Ƥ���ꥹ�ʤΥ�����Хå��᥽�åɤ�ƤӽФ���
+  # 登録されているリスナのコールバックメソッドを呼び出す。
   #
   # @param info ConnectorInfo
   # @else
@@ -1160,9 +1160,9 @@ class PreFsmActionListenerHolder:
 ##
 # @if jp
 # @class PostFsmActionListenerHolder
-# @brief PostFsmActionListener �ۥ�����饹
+# @brief PostFsmActionListener ホルダクラス
 #
-# ʣ���� PostFsmActionListener ���ݻ����������륯�饹��
+# 複数の PostFsmActionListener を保持し管理するクラス。
 #
 # @else
 # @class PostFsmActionListenerHolder
@@ -1176,7 +1176,7 @@ class PreFsmActionListenerHolder:
 class PostFsmActionListenerHolder:
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # @else
   # @brief Constructor
   # @endif
@@ -1187,7 +1187,7 @@ class PostFsmActionListenerHolder:
   
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # @else
   # @brief Destructor
   # @endif
@@ -1198,11 +1198,11 @@ class PostFsmActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ����ɲ�
+  # @brief リスナーの追加
   #
-  # �ꥹ�ʡ����ɲä��롣
+  # リスナーを追加する。
   #
-  # @param listener �ɲä���ꥹ��
+  # @param listener 追加するリスナ
   # @else
   #
   # @brief Add the listener.
@@ -1219,11 +1219,11 @@ class PostFsmActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ��κ��
+  # @brief リスナーの削除
   #
-  # �ꥹ�ʤ������롣
+  # リスナを削除する。
   #
-  # @param listener �������ꥹ��
+  # @param listener 削除するリスナ
   # @else
   #
   # @brief Remove the listener. 
@@ -1245,9 +1245,9 @@ class PostFsmActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ������Τ���
+  # @brief リスナーへ通知する
   #
-  # ��Ͽ����Ƥ���ꥹ�ʤΥ�����Хå��᥽�åɤ�ƤӽФ���
+  # 登録されているリスナのコールバックメソッドを呼び出す。
   #
   # @param info ConnectorInfo
   # @else
@@ -1269,9 +1269,9 @@ class PostFsmActionListenerHolder:
 ##
 # @if jp
 # @class FsmProfileListenerHolder
-# @brief FsmProfileListener �ۥ�����饹
+# @brief FsmProfileListener ホルダクラス
 #
-# ʣ���� FsmProfileListener ���ݻ����������륯�饹��
+# 複数の FsmProfileListener を保持し管理するクラス。
 #
 # @else
 # @class FsmProfileListenerHolder
@@ -1285,7 +1285,7 @@ class PostFsmActionListenerHolder:
 class FsmProfileListenerHolder:
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # @else
   # @brief Constructor
   # @endif
@@ -1296,7 +1296,7 @@ class FsmProfileListenerHolder:
   
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # @else
   # @brief Destructor
   # @endif
@@ -1309,11 +1309,11 @@ class FsmProfileListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ����ɲ�
+  # @brief リスナーの追加
   #
-  # �ꥹ�ʡ����ɲä��롣
+  # リスナーを追加する。
   #
-  # @param listener �ɲä���ꥹ��
+  # @param listener 追加するリスナ
   # @else
   #
   # @brief Add the listener.
@@ -1330,11 +1330,11 @@ class FsmProfileListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ��κ��
+  # @brief リスナーの削除
   #
-  # �ꥹ�ʤ������롣
+  # リスナを削除する。
   #
-  # @param listener �������ꥹ��
+  # @param listener 削除するリスナ
   # @else
   #
   # @brief Remove the listener. 
@@ -1356,9 +1356,9 @@ class FsmProfileListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ������Τ���
+  # @brief リスナーへ通知する
   #
-  # ��Ͽ����Ƥ���ꥹ�ʤΥ�����Хå��᥽�åɤ�ƤӽФ���
+  # 登録されているリスナのコールバックメソッドを呼び出す。
   #
   # @param info ConnectorInfo
   # @else
@@ -1379,9 +1379,9 @@ class FsmProfileListenerHolder:
 ##
 # @if jp
 # @class FsmStructureListenerHolder
-# @brief FsmStructureListener �ۥ�����饹
+# @brief FsmStructureListener ホルダクラス
 #
-# ʣ���� FsmStructureListener ���ݻ����������륯�饹��
+# 複数の FsmStructureListener を保持し管理するクラス。
 #
 # @else
 # @class FsmStructureListenerHolder
@@ -1395,7 +1395,7 @@ class FsmProfileListenerHolder:
 class FsmStructureListenerHolder:
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   # @else
   # @brief Constructor
   # @endif
@@ -1406,7 +1406,7 @@ class FsmStructureListenerHolder:
   
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # @else
   # @brief Destructor
   # @endif
@@ -1418,11 +1418,11 @@ class FsmStructureListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ����ɲ�
+  # @brief リスナーの追加
   #
-  # �ꥹ�ʡ����ɲä��롣
+  # リスナーを追加する。
   #
-  # @param listener �ɲä���ꥹ��
+  # @param listener 追加するリスナ
   # @else
   #
   # @brief Add the listener.
@@ -1439,11 +1439,11 @@ class FsmStructureListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ��κ��
+  # @brief リスナーの削除
   #
-  # �ꥹ�ʤ������롣
+  # リスナを削除する。
   #
-  # @param listener �������ꥹ��
+  # @param listener 削除するリスナ
   # @else
   #
   # @brief Remove the listener. 
@@ -1465,9 +1465,9 @@ class FsmStructureListenerHolder:
   ##
   # @if jp
   #
-  # @brief �ꥹ�ʡ������Τ���
+  # @brief リスナーへ通知する
   #
-  # ��Ͽ����Ƥ���ꥹ�ʤΥ�����Хå��᥽�åɤ�ƤӽФ���
+  # 登録されているリスナのコールバックメソッドを呼び出す。
   #
   # @param info ConnectorInfo
   # @else
@@ -1491,7 +1491,7 @@ class FsmStructureListenerHolder:
 ##
 # @if jp
 # @class FsmActionListeners
-# @brief FsmActionListeners ���饹
+# @brief FsmActionListeners クラス
 #
 #
 # @else
@@ -1506,7 +1506,7 @@ class FsmActionListeners:
     ##
     # @if jp
     # @brief PreFsmActionListenerType
-    # PreFsmActionListenerType�ꥹ�ʤ��Ǽ
+    # PreFsmActionListenerTypeリスナを格納
     # @else
     # @brief PreFsmActionListenerType listener array
     # The PreFsmActionListenerType listener is stored. 
@@ -1517,8 +1517,8 @@ class FsmActionListeners:
 
     ##
     # @if jp
-    # @brief PostFsmActionType�ꥹ������
-    # PostFsmActionType�ꥹ�ʤ��Ǽ
+    # @brief PostFsmActionTypeリスナ配列
+    # PostFsmActionTypeリスナを格納
     # @else
     # @brief PostFsmActionType listener array
     # The PostFsmActionType listener is stored.
@@ -1530,7 +1530,7 @@ class FsmActionListeners:
     ##
     # @if jp
     # @brief FsmProfileType
-    # FsmProfileType�ꥹ�ʤ��Ǽ
+    # FsmProfileTypeリスナを格納
     # @else
     # @brief FsmProfileType listener array
     # The FsmProfileType listener is stored.
@@ -1541,8 +1541,8 @@ class FsmActionListeners:
   
     ##
     # @if jp
-    # @brief FsmStructureType�ꥹ������
-    # FsmStructureType�ꥹ�ʤ��Ǽ
+    # @brief FsmStructureTypeリスナ配列
+    # FsmStructureTypeリスナを格納
     # @else
     # @brief FsmStructureTypelistener array
     # The FsmStructureType listener is stored.
