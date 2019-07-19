@@ -90,8 +90,7 @@ class ManagerConfig :
   if os.name == 'nt':
 
     config_file_path = ["./rtc.conf",
-                        "${RTM_ROOT}bin/${RTM_VC_VERSION}/rtc.conf",
-                        "C:/Python"+str(sys.version_info[0])+str(sys.version_info[1])+"/rtc.conf",
+                        "${PROGRAMDATA}/OpenRTM-aist/rtc.conf",
                         None]
   else:
     config_file_path = ["./rtc.conf",
