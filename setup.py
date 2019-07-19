@@ -216,7 +216,11 @@ baseidl_files = [
   "SDOPackage.idl",
   "SharedMemory.idl",
   "IORProfile.idl",
-  "../ext/sdo/observer/ComponentObserver.idl"
+  "../ext/sdo/observer/ComponentObserver.idl",
+  "ext/rtmCamera/CameraCommonInterface.idl",
+  "ext/rtmManipulator/ManipulatorCommonInterface_Common.idl",
+  "ext/rtmManipulator/ManipulatorCommonInterface_DataTypes.idl",
+  "ext/rtmManipulator/ManipulatorCommonInterface_Middle.idl"
   ]
 baseidl_mods  = ["RTM", "RTC", "SDOPackage", "OpenRTM"]
 baseidl_path  = os.path.normpath(current_dir + "/" + baseidl_dir)
