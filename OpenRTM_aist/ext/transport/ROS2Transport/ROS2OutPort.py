@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ROS2OutPort.py
@@ -27,8 +27,8 @@ import RTC
 ##
 # @if jp
 # @class ROS2OutPort
-# @brief ROS2 Publisher���б����륯�饹
-# InPortConsumer���֥������ȤȤ��ƻ��Ѥ���
+# @brief ROS2 Publisherに対応するクラス
+# InPortConsumerオブジェクトとして使用する
 #
 # @else
 # @class ROS2OutPort
@@ -42,9 +42,9 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
   #
@@ -65,9 +65,9 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
-  # �ǥ��ȥ饯��
+  # デストラクタ
   #
   # @param self
   #
@@ -85,14 +85,14 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
     
   ##
   # @if jp
-  # @brief ��������
+  # @brief 設定初期化
   #
-  # InPortConsumer�γƼ������Ԥ�
+  # InPortConsumerの各種設定を行う
   #
   # @param self
-  # @param prop ��³����
-  # marshaling_type ���ꥢ�饤���μ��� �ǥե���ȡ�ROS2
-  # topic �ȥԥå�̾ �ǥե���� chatter
+  # @param prop 接続設定
+  # marshaling_type シリアライザの種類 デフォルト：ROS2
+  # topic トピック名 デフォルト chatter
   #
   # @else
   # @brief Initializing configuration
@@ -138,20 +138,20 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ��³��ؤΥǡ�������
+  # @brief 接続先へのデータ送信
   #
-  # ��³��Υݡ��Ȥإǡ������������뤿��ν�貾�۴ؿ���
+  # 接続先のポートへデータを送信するための純粋仮想関数。
   # 
-  # ���δؿ��ϡ��ʲ��Υ꥿���󥳡��ɤ��֤���
+  # この関数は、以下のリターンコードを返す。
   #
-  # - PORT_OK:       ���ｪλ��
-  # - PORT_ERROR:    �ǡ��������β����ǲ��餫�Υ��顼��ȯ��������
-  # - SEND_FULL:     �ǡ��������������������¦�Хåե����ե���ä���
-  # - SEND_TIMEOUT:  �ǡ��������������������¦�Хåե��������ॢ���Ȥ�����
-  # - UNKNOWN_ERROR: ���������Υ��顼
+  # - PORT_OK:       正常終了。
+  # - PORT_ERROR:    データ送信の過程で何らかのエラーが発生した。
+  # - SEND_FULL:     データを送信したが、相手側バッファがフルだった。
+  # - SEND_TIMEOUT:  データを送信したが、相手側バッファがタイムアウトした。
+  # - UNKNOWN_ERROR: 原因不明のエラー
   #
-  # @param data ��������ǡ���
-  # @return �꥿���󥳡���
+  # @param data 送信するデータ
+  # @return リターンコード
   #
   # @else
   # @brief Send data to the destination port
@@ -186,14 +186,14 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief InterfaceProfile������������
+  # @brief InterfaceProfile情報を公開する
   #
-  # InterfaceProfile�����������롣
-  # �����ǻ��ꤹ��ץ��ѥƥ�������� NameValue ���֥������Ȥ�
-  # dataport.interface_type �ͤ�Ĵ�١������ݡ��Ȥ����ꤵ��Ƥ���
-  # ���󥿡��ե����������פȰ��פ�����Τ߾����������롣
+  # InterfaceProfile情報を公開する。
+  # 引数で指定するプロパティ情報内の NameValue オブジェクトの
+  # dataport.interface_type 値を調べ、当該ポートに設定されている
+  # インターフェースタイプと一致する場合のみ情報を取得する。
   #
-  # @param properties InterfaceProfile�����������ץ��ѥƥ�
+  # @param properties InterfaceProfile情報を受け取るプロパティ
   #
   # @else
   # @brief Publish InterfaceProfile information
@@ -213,13 +213,13 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief �ǡ����������Τؤ���Ͽ
+  # @brief データ送信通知への登録
   #
-  # ���ꤵ�줿�ץ��ѥƥ��˴�Ť��ơ��ǡ����������Τμ���������Ͽ���롣
+  # 指定されたプロパティに基づいて、データ送出通知の受け取りに登録する。
   #
-  # @param properties ��Ͽ����
+  # @param properties 登録情報
   #
-  # @return ��Ͽ�������(��Ͽ����:true����Ͽ����:false)
+  # @return 登録処理結果(登録成功:true、登録失敗:false)
   #
   # @else
   # @brief Subscribe to the data sending notification
@@ -239,11 +239,11 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
     
   ##
   # @if jp
-  # @brief �ǡ����������Τ������Ͽ���
+  # @brief データ送信通知からの登録解除
   #
-  # �ǡ����������Τμ�����꤫����Ͽ�������롣
+  # データ送出通知の受け取りから登録を解除する。
   #
-  # @param properties ��Ͽ�������
+  # @param properties 登録解除情報
   #
   # @else
   # @brief Unsubscribe the data send notification
@@ -263,7 +263,7 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 
 ##
 # @if jp
-# @brief �⥸�塼����Ͽ�ؿ�
+# @brief モジュール登録関数
 #
 #
 # @else

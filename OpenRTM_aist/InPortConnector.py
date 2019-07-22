@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file InPortConnector.py
@@ -23,16 +23,16 @@ import RTC
 ##
 # @if jp
 # @class InPortConnector
-# @brief InPortConnector ´ğÄì¥¯¥é¥¹
+# @brief InPortConnector åŸºåº•ã‚¯ãƒ©ã‚¹
 #
-# InPort ¤Î Push/Pull ³Æ¼ï Connector ¤òÇÉÀ¸¤µ¤»¤ë¤¿¤á¤Î
-# ´ğÄì¥¯¥é¥¹¡£
+# InPort ã® Push/Pull å„ç¨® Connector ã‚’æ´¾ç”Ÿã•ã›ã‚‹ãŸã‚ã®
+# åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @since 1.0.0
 #
 # @else
 # @class InPortConnector
-# @brief I£îPortConnector base class
+# @brief Iï½PortConnector base class
 #
 # The base class to derive subclasses for InPort's Push/Pull Connectors
 #
@@ -46,7 +46,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Constructor
   # @endif
@@ -63,7 +63,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -74,9 +74,9 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ConnectorInfo ¼èÆÀ
+  # @brief ConnectorInfo å–å¾—
   #
-  # Connector ConnectorInfo ¤ò¼èÆÀ¤¹¤ë
+  # Connector ConnectorInfo ã‚’å–å¾—ã™ã‚‹
   #
   # @else
   # @brief Getting ConnectorInfo
@@ -93,9 +93,9 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief Connector ID ¼èÆÀ
+  # @brief Connector ID å–å¾—
   #
-  # Connector ID ¤ò¼èÆÀ¤¹¤ë
+  # Connector ID ã‚’å–å¾—ã™ã‚‹
   #
   # @else
   # @brief Getting Connector ID
@@ -112,9 +112,9 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief Connector Ì¾¼èÆÀ
+  # @brief Connector åå–å¾—
   #
-  # Connector Ì¾¤ò¼èÆÀ¤¹¤ë
+  # Connector åã‚’å–å¾—ã™ã‚‹
   #
   # @else
   # @brief Getting Connector name
@@ -131,9 +131,9 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ÀÜÂ³²ò½ü´Ø¿ô
+  # @brief æ¥ç¶šè§£é™¤é–¢æ•°
   #
-  # Connector ¤¬Êİ»ı¤·¤Æ¤¤¤ëÀÜÂ³¤ò²ò½ü¤¹¤ë
+  # Connector ãŒä¿æŒã—ã¦ã„ã‚‹æ¥ç¶šã‚’è§£é™¤ã™ã‚‹
   #
   # @else
   # @brief Disconnect connection
@@ -148,9 +148,9 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief Buffer ¤ò½êÆÀ¤¹¤ë
+  # @brief Buffer ã‚’æ‰€å¾—ã™ã‚‹
   #
-  # Connector ¤¬Êİ»ı¤·¤Æ¤¤¤ë Buffer ¤òÊÖ¤¹
+  # Connector ãŒä¿æŒã—ã¦ã„ã‚‹ Buffer ã‚’è¿”ã™
   #
   # @else
   # @brief Getting Buffer
@@ -165,9 +165,9 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief read ´Ø¿ô
+  # @brief read é–¢æ•°
   #
-  # Buffer ¤«¤é¥Ç¡¼¥¿¤ò InPort ¤Ø read ¤¹¤ë´Ø¿ô
+  # Buffer ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’ InPort ã¸ read ã™ã‚‹é–¢æ•°
   #
   # @else
   # @brief 
@@ -218,9 +218,9 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   #
   # @if jp
-  # @brief ¥Ç¡¼¥¿½ñ¤­¹ş¤ß»ş¤Î¥ê¥¹¥ÊÀßÄê
+  # @brief ãƒ‡ãƒ¼ã‚¿æ›¸ãè¾¼ã¿æ™‚ã®ãƒªã‚¹ãƒŠè¨­å®š
   # @param self
-  # @param listener ¥ê¥¹¥Ê
+  # @param listener ãƒªã‚¹ãƒŠ
   # @else
   # @brief 
   # @param self
@@ -231,9 +231,9 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   #
   # @if jp
-  # @brief ¥Ç¡¼¥¿½ñ¤­¹ş¤ßÈ½Äê»ş¤Î¥ê¥¹¥ÊÀßÄê
+  # @brief ãƒ‡ãƒ¼ã‚¿æ›¸ãè¾¼ã¿åˆ¤å®šæ™‚ã®ãƒªã‚¹ãƒŠè¨­å®š
   # @param self
-  # @param listener ¥ê¥¹¥Ê
+  # @param listener ãƒªã‚¹ãƒŠ
   # @else
   # @brief 
   # @param self
@@ -244,9 +244,9 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   #
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤á¤ë¾õÂÖ¤«¤òÈ½Äê
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚ã‚‹çŠ¶æ…‹ã‹ã‚’åˆ¤å®š
   # @param self
-  # @return True¡§½ñ¤­¹ş¤ß²ÄÇ½
+  # @return Trueï¼šæ›¸ãè¾¼ã¿å¯èƒ½
   # @else
   # @brief 
   # @param self
@@ -258,9 +258,9 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   #
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤òÆÉ¤ß¹ş¤á¤ë¾õÂÖ¤«¤òÈ½Äê
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚ã‚‹çŠ¶æ…‹ã‹ã‚’åˆ¤å®š
   # @param self
-  # @return True¡§ÆÉ¤ß¹ş¤ß²ÄÇ½
+  # @return Trueï¼šèª­ã¿è¾¼ã¿å¯èƒ½
   # @else
   # @brief 
   # @param self
@@ -272,7 +272,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥·¥å¡¼¥Ş¤ÎÀßÄê
+  # @brief ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®è¨­å®š
   # @else
   # @brief set Consumer
   # @endif
@@ -281,8 +281,8 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥·¥å¡¼¥Ş¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ÎÅĞÏ¿¤ò¼è¤ê¾Ã¤¹
-  # @param prop ¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë¤Î¥×¥í¥Ñ¥Æ¥£
+  # @brief ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã®ç™»éŒ²ã‚’å–ã‚Šæ¶ˆã™
+  # @param prop ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   # @else
   # @brief 
   # @param prop

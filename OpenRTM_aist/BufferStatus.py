@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 #

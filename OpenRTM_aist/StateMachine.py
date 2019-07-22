@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file StateMachine.py
@@ -24,12 +24,12 @@ import RTC
 ##
 # @if jp
 # @class StateHolder
-# @brief �����ݻ��ѥ��饹
+# @brief 状態保持用クラス
 # 
-# ���֤��ݻ����뤿��Υۥ�������饹��
-# ���ߤξ��֤ȡ��������ξ��֡�����ͽ��ξ��֤��ݻ����롣
+# 状態を保持するためのホルダークラス。
+# 現在の状態と、１つ前の状態、遷移予定の状態を保持する。
 #
-# @param State �ݻ�������֤η�
+# @param State 保持する状態の型
 #
 # @since 0.4.0
 #
@@ -48,13 +48,13 @@ class StateHolder:
 #
 # @class StateMachine
 #
-# @brief ���֥ޥ��󥯥饹
+# @brief 状態マシンクラス
 #
-# StateMachine ���饹�Ͼ��֥ޥ����¸����륯�饹�Ǥ��롣
+# StateMachine クラスは状態マシンを実現するクラスである。
 #
-# ��: ActiveObject�Ͼ��֥ޥ������ĥ����ƥ��֥��֥������ȤǤ���Ȥ��롣
-# ���֤�3���� INACTIVE, ACTIVE, ERROR �����ꡢ�ƾ��֤Ǥ�Entry��Exitư���
-# ����������Ȥ���ȡ��ʲ��Τ褦�˼¸�����롣
+# 例: ActiveObjectは状態マシンを持つアクティブオブジェクトであるとする。
+# 状態は3状態 INACTIVE, ACTIVE, ERROR があり、各状態でのEntryやExit動作を
+# 定義したいとすると、以下のように実現される。
 # <pre>
 # class ActiveObject:
 #   class MyState:
@@ -80,24 +80,24 @@ class StateHolder:
 #   def transition(myStates:
 #     pass
 # </pre>
-# ���֤�������������饹�ϰʲ��ξ����������褦�˼������ʤ���Фʤ�ʤ���
+# 状態を持たせたいクラスは以下の条件を満たすように実装しなければならない。
 # <ol>
-# <li> �������饹�Ǿ��֤����
-# <li> StateMachine �Υ��󥹥ȥ饯�������Ͼ��֤ο�
-# <li> �ʲ��Υ��������ؿ���(Return _function_name_(States)) �δؿ��Ȥ�������
+# <li> 内部クラスで状態を定義
+# <li> StateMachine のコンストラクタ引数は状態の数
+# <li> 以下のアクション関数を(Return _function_name_(States)) の関数として設定
 # <ol>
-#  <li> ���⤷�ʤ��ؿ���ɬ���������setNOP ��Ϳ���ʤ���Фʤ�ʤ�
-#  <li> �ƾ������, set(Entry|PreDo|Do|PostDo|Exit)Action �ǥ�������������
-#  <li> �������ܻ��Υ��������� setTransitionAction() �����ꡣ
+#  <li> 何もしない関数を必ず定義し、setNOP で与えなければならない
+#  <li> 各状態毎に, set(Entry|PreDo|Do|PostDo|Exit)Action でアクションを設定
+#  <li> 状態遷移時のアクションを setTransitionAction() で設定。
 # </ol>
-# <li> ���ܻ��Υ��������ϡ�Ϳ����줿���߾��֡������֡������֤򸵤ˡ�
-#   �桼�����������ʤ���Фʤ�ʤ���
-# <li> ���֤��ѹ��� goTo() �ǡ����֤Υ����å��� isIn(state) �ǹԤ���
-# <li> goTo()�ϼ����֤���Ū�˥��åȤ���ؿ��Ǥ��ꡢ���ܤβ��ݤϡ�
-#   �桼�������߾��֤������Ƚ�Ǥ�������å���������ʤ���Фʤ�ʤ���
+# <li> 遷移時のアクションは、与えられた現在状態、次状態、前状態を元に、
+#   ユーザが実装しなければならない。
+# <li> 状態の変更は goTo() で、状態のチェックは isIn(state) で行う。
+# <li> goTo()は次状態を強制的にセットする関数であり、遷移の可否は、
+#   ユーザが現在状態を取得し判断するロジックを実装しなければならない。
 # </ol>
 #
-# ���Υ��饹�ϡ���Ĥξ��֤��Ф��ơ�
+# このクラスは、一つの状態に対して、
 # <ul>
 # <li> Entry action
 # <li> PreDo action
@@ -105,23 +105,23 @@ class StateHolder:
 # <li> PostDo action
 # <li> Exit action
 # </ul>
-# 5�ĤΥ��������������뤳�Ȥ��Ǥ��롣
-# Transition action �Ϥ�������ִ����ܤǸƤӽФ���륢�������ǡ�
-# ���ο����񤤤ϥ桼����������ʤ���Фʤ�ʤ���
+# 5つのアクションが定義することができる。
+# Transition action はあらゆる状態間遷移で呼び出されるアクションで、
+# その振る舞いはユーザが定義しなければならない。
 # 
-# ���Υ��饹�ϰʲ��Τ褦�ʥ����ߥ󥰤ǳƥ�������󤬼¹Ԥ���롣
+# このクラスは以下のようなタイミングで各アクションが実行される。
 #
 # <ul>
-# <li> ���֤��ѹ�����(A->B)���֤����ܤ����� <br>
-# (A:Exit)->|(���ֹ���:A->B)->(B:Entry)->(B:PreDo)->(B:Do)->(B:PostDo)
+# <li> 状態が変更され(A->B)状態が遷移する場合 <br>
+# (A:Exit)->|(状態更新:A->B)->(B:Entry)->(B:PreDo)->(B:Do)->(B:PostDo)
 #
-# <li> ���֤��ѹ����줺��B���֤�ݻ������� (|�ϥ��ƥåפζ��ڤ��ɽ��)<br>
+# <li> 状態が変更されず、B状態を維持する場合 (|はステップの区切りを表す)<br>
 # (B(n-1):PostDo)->|(B(n):PreDo)->(B(n):Do)->(B(n):PostDo)->|(B(n+1):PreDo)<br>
-# PreDo, Do, PostDo �������֤��¹Ԥ���롣
+# PreDo, Do, PostDo が繰り返し実行される。
 #
-# <li> �������ܤ����� <br>
+# <li> 自己遷移する場合 <br>
 # (B(n-1):PostDo)->(B(n-1):Exit)->|(B(n):Entry)->(B(n):PreDo) <br>
-# ��ö Exit ���ƤФ줿�塢Entry ���¹Ԥ��졢�ʹߤ������Ʊ��ư��򤹤롣
+# 一旦 Exit が呼ばれた後、Entry が実行され、以降は前項と同じ動作をする。
 # </ul>
 #
 # @since 0.4.0
@@ -142,12 +142,12 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
-  # @param num_of_state ���ơ��ȥޥ�����ξ��ֿ�
+  # @param num_of_state ステートマシン中の状態数
   #
   # @else
   # @brief Constructor
@@ -173,12 +173,12 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief NOP�ؿ�����Ͽ����
+  # @brief NOP関数を登録する
   #
-  # NOP�ؿ�(���⤷�ʤ��ؿ�)����Ͽ���롣
+  # NOP関数(何もしない関数)を登録する。
   #
   # @param self
-  # @param call_back ������Хå��ؿ�
+  # @param call_back コールバック関数
   #
   # @else
   # @brief Set NOP function
@@ -194,12 +194,12 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief Listener ���֥������Ȥ���Ͽ����
+  # @brief Listener オブジェクトを登録する
   #
-  # �Ƽ異�������¹Ի��˸ƤӽФ���� Listener ���֥������Ȥ���Ͽ���롣
+  # 各種アクション実行時に呼び出される Listener オブジェクトを登録する。
   #
   # @param self
-  # @param listener Listener ���֥�������
+  # @param listener Listener オブジェクト
   #
   # @else
   # @brief Set Listener Object
@@ -212,15 +212,15 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief Entry action �ؿ�����Ͽ����
+  # @brief Entry action 関数を登録する
   #
-  # �ƾ��֤����ä��ݤ˼¹Ԥ���� Entry action �ѥ�����Хå��ؿ�����Ͽ���롣
+  # 各状態に入った際に実行される Entry action 用コールバック関数を登録する。
   #
   # @param self
-  # @param state ��Ͽ�оݾ���
-  # @param call_back Entry action �ѥ�����Хå��ؿ�
+  # @param state 登録対象状態
+  # @param call_back Entry action 用コールバック関数
   #
-  # @return ���������¹Է��
+  # @return アクション実行結果
   #
   # @else
   # @brief Set Entry action function
@@ -235,15 +235,15 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief PreDo action �ؿ�����Ͽ����
+  # @brief PreDo action 関数を登録する
   #
-  # �ƾ�����Ǽ¹Ԥ���� PreDo action �ѥ�����Хå��ؿ�����Ͽ���롣
+  # 各状態内で実行される PreDo action 用コールバック関数を登録する。
   #
   # @param self
-  # @param state ��Ͽ�оݾ���
-  # @param call_back PreDo action �ѥ�����Хå��ؿ�
+  # @param state 登録対象状態
+  # @param call_back PreDo action 用コールバック関数
   #
-  # @return ���������¹Է��
+  # @return アクション実行結果
   #
   # @else
   # @brief Set PreDo action function
@@ -258,15 +258,15 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief Do action �ؿ�����Ͽ����
+  # @brief Do action 関数を登録する
   #
-  # �ƾ�����Ǽ¹Ԥ���� Do action �ѥ�����Хå��ؿ�����Ͽ���롣
+  # 各状態内で実行される Do action 用コールバック関数を登録する。
   #
   # @param self
-  # @param state ��Ͽ�оݾ���
-  # @param call_back Do action �ѥ�����Хå��ؿ�
+  # @param state 登録対象状態
+  # @param call_back Do action 用コールバック関数
   #
-  # @return ���������¹Է��
+  # @return アクション実行結果
   #
   # @else
   # @brief Set Do action function
@@ -281,15 +281,15 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief PostDo action �ؿ�����Ͽ����
+  # @brief PostDo action 関数を登録する
   #
-  # �ƾ�����Ǽ¹Ԥ���� PostDo action �ѥ�����Хå��ؿ�����Ͽ���롣
+  # 各状態内で実行される PostDo action 用コールバック関数を登録する。
   #
   # @param self
-  # @param state ��Ͽ�оݾ���
-  # @param call_back PostDo action �ѥ�����Хå��ؿ�
+  # @param state 登録対象状態
+  # @param call_back PostDo action 用コールバック関数
   #
-  # @return ���������¹Է��
+  # @return アクション実行結果
   #
   # @else
   # @brief Set PostDo action function
@@ -304,15 +304,15 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief Exit action �ؿ�����Ͽ����
+  # @brief Exit action 関数を登録する
   #
-  # �ƾ�����Ǽ¹Ԥ���� Exit action �ѥ�����Хå��ؿ�����Ͽ���롣
+  # 各状態内で実行される Exit action 用コールバック関数を登録する。
   #
   # @param self
-  # @param state ��Ͽ�оݾ���
-  # @param call_back Exit action �ѥ�����Хå��ؿ�
+  # @param state 登録対象状態
+  # @param call_back Exit action 用コールバック関数
   #
-  # @return ���������¹Է��
+  # @return アクション実行結果
   #
   # @else
   # @brief Set Exit action function
@@ -327,15 +327,15 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief State transition action �ؿ�����Ͽ����
+  # @brief State transition action 関数を登録する
   #
-  # �������ܻ��˼¹Ԥ���� State transition action �ѥ�����Хå��ؿ���
-  # ��Ͽ���롣
+  # 状態遷移時に実行される State transition action 用コールバック関数を
+  # 登録する。
   #
   # @param self
-  # @param call_back State transition �ѥ�����Хå��ؿ�
+  # @param call_back State transition 用コールバック関数
   #
-  # @return ���������¹Է��
+  # @return アクション実行結果
   #
   # @else
   # @brief Set state transition action function
@@ -347,12 +347,12 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief ������֤򥻥åȤ���
+  # @brief 初期状態をセットする
   #
-  # ���ơ��ȥޥ���ν�����֤����ꤹ�롣
+  # ステートマシンの初期状態を設定する。
   #
   # @param self
-  # @param states �������
+  # @param states 初期状態
   #
   # @else
   # @brief Set Exit action function
@@ -366,14 +366,14 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief ���֤��������
+  # @brief 状態を取得する
   #
-  # ���־����������롣
-  # ���ߤξ��֡��������ξ��֡�����ͽ��ξ��֤�������뤳�Ȥ��Ǥ��롣
+  # 状態情報を取得する。
+  # 現在の状態、１つ前の状態、遷移予定の状態を取得することができる。
   #
   # @param self
   #
-  # @return ���־���
+  # @return 状態情報
   #
   # @else
   # @brief Get state machine's status
@@ -385,13 +385,13 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief ���ߤξ��֤��������
+  # @brief 現在の状態を取得する
   #
-  # ���ߤξ��֤�������롣
+  # 現在の状態を取得する。
   #
   # @param self
   #
-  # @return ���ߤξ���
+  # @return 現在の状態
   #
   # @else
   # @brief Get current state
@@ -403,14 +403,14 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief ���߾��֤��ǧ
+  # @brief 現在状態を確認
   #
-  # ���ߤξ��֤��������ǻ��ꤷ�����֤Ȱ��פ��뤫��ǧ���롣
+  # 現在の状態が、引数で指定した状態と一致するか確認する。
   #
   # @param self
-  # @param state ��ǧ�оݾ���
+  # @param state 確認対象状態
   #
-  # @return ���ֳ�ǧ���
+  # @return 状態確認結果
   #
   # @else
   # @brief Evaluate current status
@@ -425,16 +425,16 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief ���֤�����
+  # @brief 状態を遷移
   #
-  # ���ꤷ�����֤˾��֤����ܤ��롣
-  # �ܴؿ��ϼ����֤���Ū�˥��åȤ���ؿ��Ǥ��롣
-  # ���Τ��ᡢ���ܤβ��ݤϡ��桼�������߾��֤������Ƚ�Ǥ�������å���
-  # �������ʤ���Фʤ�ʤ���
-  # �����褬���ߤξ��֤�Ʊ�����ˤϡ��������ܥե饰�򥻥åȤ��롣
+  # 指定した状態に状態を遷移する。
+  # 本関数は次状態を強制的にセットする関数である。
+  # このため、遷移の可否は、ユーザが現在状態を取得し判断するロジックを
+  # 実装しなければならない。
+  # 遷移先が現在の状態と同じ場合には、自己遷移フラグをセットする。
   #
   # @param self
-  # @param state ���������
+  # @param state 遷移先状態
   #
   # @else
   # @brief Change status
@@ -449,10 +449,10 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief ��ư�ؿ�
+  # @brief 駆動関数
   #
-  # ���ơ��ȥޥ���ζ�ư�ؿ���
-  # �ºݤξ������ܤ���Ӿ�������ȯ�����γƥ��������θƤӤ�����¹Ԥ��롣
+  # ステートマシンの駆動関数。
+  # 実際の状態遷移および状態遷移発生時の各アクションの呼びだしを実行する。
   #
   # @param self
   #
@@ -545,13 +545,13 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief NOP�ؿ�������
+  # @brief NOP関数を設定
   #
-  # NOP�ؿ�(���⤷�ʤ��ؿ�)����Ͽ���롣
+  # NOP関数(何もしない関数)を登録する。
   #
   # @param self
-  # @param s ������Хå��ؿ�������
-  # @param nullfunc ������Хå��ؿ�(NOP�ؿ�)
+  # @param s コールバック関数設定先
+  # @param nullfunc コールバック関数(NOP関数)
   #
   # @else
   # @brief Worker function
@@ -567,7 +567,7 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief ���֤�Ʊ������
+  # @brief 状態の同期処理
   #
   # @param self
   # @param states OpenRTM_aist.StateHolder<RTC.LifeCycleState>
@@ -584,11 +584,11 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief ���ܤ�ɬ���������å�
+  # @brief 遷移の必要性チェック
   #
   # @param self
   #
-  # @return ����ɬ������ǧ���
+  # @return 遷移必要性確認結果
   #
   # @else
   # @endif
@@ -599,7 +599,7 @@ class StateMachine:
 
   ##
   # @if jp
-  # @brief ���߾��֤ι���
+  # @brief 現在状態の更新
   #
   # @param self
   # @param curr RTC.LifeCycleState

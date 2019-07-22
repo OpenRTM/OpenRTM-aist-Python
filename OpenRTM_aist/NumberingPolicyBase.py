@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file NumberingPolicyBase.py
@@ -17,7 +17,7 @@ import OpenRTM_aist
 # @if jp
 #
 # @class NumberingPolicyBase
-# @brief ¥ª¥Ö¥¸¥§¥¯¥ÈÀ¸À®»ş¥Í¡¼¥ß¥ó¥°¡¦¥İ¥ê¥·¡¼(Ì¿Ì¾µ¬Â§)´ÉÍıÍÑ´ğÄì¥¯¥é¥¹
+# @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆæ™‚ãƒãƒ¼ãƒŸãƒ³ã‚°ãƒ»ãƒãƒªã‚·ãƒ¼(å‘½åè¦å‰‡)ç®¡ç†ç”¨åŸºåº•ã‚¯ãƒ©ã‚¹
 #
 #
 #

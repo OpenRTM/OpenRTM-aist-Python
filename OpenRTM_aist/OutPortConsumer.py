@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file  OutPortConsumer.py
@@ -22,13 +22,13 @@ import OpenRTM_aist
 #
 # @class OutPortConsumer
 #
-# @brief OutPortConsumer ¥¯¥é¥¹
+# @brief OutPortConsumer ã‚¯ãƒ©ã‚¹
 #
-# ½ĞÎÏ¥İ¡¼¥È¥³¥ó¥·¥å¡¼¥Ş¤Î¤¿¤á¤Î¥¯¥é¥¹
-# ³Æ¶ñ¾İ¥¯¥é¥¹¤Ï¡¢°Ê²¼¤Î´Ø¿ô¤Î¼ÂÁõ¤òÄó¶¡¤·¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
-# - pull(): ¥Ç¡¼¥¿¼õ¿®
-# - subscribeInterface(): ¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤Ø¤ÎÅĞÏ¿
-# - unsubscribeInterface(): ¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤ÎÅĞÏ¿²ò½ü
+# å‡ºåŠ›ãƒãƒ¼ãƒˆã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®ãŸã‚ã®ã‚¯ãƒ©ã‚¹
+# å„å…·è±¡ã‚¯ãƒ©ã‚¹ã¯ã€ä»¥ä¸‹ã®é–¢æ•°ã®å®Ÿè£…ã‚’æä¾›ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
+# - pull(): ãƒ‡ãƒ¼ã‚¿å—ä¿¡
+# - subscribeInterface(): ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã¸ã®ç™»éŒ²
+# - unsubscribeInterface(): ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã®ç™»éŒ²è§£é™¤
 #
 # @since 0.4.0
 #
@@ -47,7 +47,7 @@ class OutPortConsumer(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief InterfaceÀÜÂ³ÍÑFunctor
+  # @brief Interfaceæ¥ç¶šç”¨Functor
   # @else
   # @brief Functor to subscribe the interface
   # @endif
@@ -65,7 +65,7 @@ class OutPortConsumer(OpenRTM_aist.DataPortStatus):
     
   ##
   # @if jp
-  # @brief InterfaceÀÜÂ³²ò½üÍÑFunctor
+  # @brief Interfaceæ¥ç¶šè§£é™¤ç”¨Functor
   # @else
   # @brief Functor to unsubscribe the interface
   # @endif

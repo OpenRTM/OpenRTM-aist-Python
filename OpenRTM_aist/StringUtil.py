@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file StringUtil.py
@@ -24,14 +24,14 @@ if sys.version_info[0] == 3:
 
 ##
 # @if jp
-# @brief ʸ���󤬥��������פ���Ƥ��뤫Ƚ�Ǥ���
+# @brief 文字列がエスケープされているか判断する
 #
-# ���ꤵ�줿ʸ�������������פ���Ƥ��뤫�ɤ�����Ƚ�Ǥ��롣
+# 指定された文字がエスケープされているかどうかを判断する。
 #
-# @param _str ���������פ���Ƥ��뤫�ɤ���Ƚ�Ǥ���ʸ����ޤ�ʸ����
-# @param pos ���������פ���Ƥ��뤫�ɤ���Ƚ�Ǥ���ʸ���ΰ���
+# @param _str エスケープされているかどうか判断する文字を含む文字列
+# @param pos エスケープされているかどうか判断する文字の位置
 #
-# @return ���ꤷ��ʸ�������������פ���Ƥ���� true, ����ʳ��� false
+# @return 指定した文字がエスケープされていれば true, それ以外は false
 #
 # @else
 # @brief Whether the character is escaped or not
@@ -59,7 +59,7 @@ def isEscaped(_str, pos):
 ##
 # @if jp
 # @class escape_functor
-# @brief  ʸ���󥨥������׽�����functor
+# @brief  文字列エスケープ処理用functor
 # @else
 #
 # @endif
@@ -85,7 +85,7 @@ class escape_functor:
 ##
 # @if jp
 # @class unescape_functor
-# @brief  ʸ���󥢥󥨥������׽�����functor
+# @brief  文字列アンエスケープ処理用functor
 # @else
 #
 # @endif
@@ -124,7 +124,7 @@ class unescape_functor:
 ##
 # @if jp
 # @class unique_strvec
-# @brief  ��ʣʸ�����������functor
+# @brief  重複文字削除処理用functor
 # @else
 #
 # @endif
@@ -139,7 +139,7 @@ class unique_strvec:
 
 ##
 # @if jp
-# @brief  ���󥹥���������functor
+# @brief  インスタンス生成用functor
 # @else
 #
 # @endif
@@ -152,14 +152,14 @@ def for_each(_str, instance):
 
 ##
 # @if jp
-# @brief ʸ����򥨥������פ���
+# @brief 文字列をエスケープする
 # 
-# ����ʸ���򥨥������ץ������󥹤��Ѵ����롣<br>
+# 次の文字をエスケープシーケンスに変換する。<br>
 # HT -> "\t" <br>
 # LF -> "\n" <br>
 # CR -> "\r" <br>
 # FF -> "\f" <br>
-# ���󥰥륯�����ȡ����֥륯�����ȤˤĤ��ƤϤȤ��˽����Ϥ��ʤ���
+# シングルクオート、ダブルクオートについてはとくに処理はしない。
 # 
 # @else
 # 
@@ -179,9 +179,9 @@ def escape(_str):
 
 ##
 # @if jp
-# @brief ʸ����Υ��������פ��᤹
+# @brief 文字列のエスケープを戻す
 # 
-# ���Υ��������ץ������󥹤�ʸ�����Ѵ����롣<br>
+# 次のエスケープシーケンスを文字に変換する。<br>
 # "\t" -> HT <br>
 # "\n" -> LF <br>
 # "\r" -> CR <br>
@@ -207,12 +207,12 @@ def unescape(_str):
 
 ##
 # @if jp
-# @brief ʸ����ζ���ʸ����������
+# @brief 文字列の空白文字を削除する
 #
-# Ϳ����줿ʸ����ζ���ʸ���������롣
-# ����ʸ���Ȥ��ư����Τ�' '(���ڡ���)��'\\t'(����)��
+# 与えられた文字列の空白文字を削除する。
+# 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
 #
-# @param str(list) ����ʸ���������ʸ����Υꥹ��
+# @param str(list) 空白文字削除処理文字列のリスト
 #
 # @else
 # @brief Erase blank characters of string
@@ -245,12 +245,12 @@ def eraseBlank(_str):
 
 ##
 # @if jp
-# @brief ʸ�������Ƭ�ζ���ʸ����������
+# @brief 文字列の先頭の空白文字を削除する
 #
-# Ϳ����줿ʸ�������Ƭ��¸�ߤ������ʸ���������롣
-# ����ʸ���Ȥ��ư����Τ�' '(���ڡ���)��'\\t'(����)��
+# 与えられた文字列の先頭に存在する空白文字を削除する。
+# 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
 #
-# @param _str ��Ƭ����ʸ���������ʸ����
+# @param _str 先頭空白文字削除処理文字列
 #
 # @else
 # @brief Erase the head blank characters of string
@@ -261,12 +261,12 @@ def eraseHeadBlank(_str):
 
 ##
 # @if jp
-# @brief ʸ����������ζ���ʸ����������
+# @brief 文字列の末尾の空白文字を削除する
 #
-# Ϳ����줿ʸ�����������¸�ߤ������ʸ���������롣
-# ����ʸ���Ȥ��ư����Τ�' '(���ڡ���)��'\\t'(����)��
+# 与えられた文字列の末尾に存在する空白文字を削除する。
+# 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
 #
-# @param _str ��������ʸ���������ʸ����
+# @param _str 末尾空白文字削除処理文字列
 #
 # @else
 # @brief Erase the tail blank characters of string
@@ -282,7 +282,7 @@ def eraseTailBlank(_str):
 
 #
 # @if jp
-# @brief ʸ���������������
+# @brief 文字列を正規化する
 # @else
 # @brief Erase the head/tail blank and replace upper case to lower case
 # @endif
@@ -294,14 +294,14 @@ def normalize(_str):
 
 ##
 # @if jp
-# @brief ʸ������֤�������
+# @brief 文字列を置き換える
 #
-# Ϳ����줿ʸ������Ф��ơ����ꤷ��ʸ�����֤�������Ԥ���
+# 与えられた文字列に対して、指定した文字の置き換えを行う。
 #
-# @param str �֤����������о�ʸ����
-# @param _from �ִ���ʸ��
-# @param _to �ִ���ʸ��
-# @return �֤��������ʸ����
+# @param str 置き換え処理対象文字列
+# @param _from 置換元文字
+# @param _to 置換先文字
+# @return 置き換え結果文字列
 #
 # @else
 # @brief Replace string
@@ -312,14 +312,14 @@ def replaceString(_str, _from, _to):
 
 ##
 # @if jp
-# @brief ʸ�����ʬ��ʸ����ʬ�䤹��
+# @brief 文字列を分割文字で分割する
 # 
-# ���ꤵ�줿ʸ�����Ϳ����줿�ǥ�ߥ���ʬ�䤹�롣
+# 設定された文字列を与えられたデリミタで分割する。
 #
-# @param input ʬ���о�ʸ����
-# @param delimiter ʬ��ʸ����(�ǥ�ߥ�)
+# @param input 分割対象文字列
+# @param delimiter 分割文字列(デリミタ)
 #
-# @return ʸ����ʬ���̥ꥹ��
+# @return 文字列分割結果リスト
 #
 # @else
 # @brief Split string by delimiter
@@ -347,17 +347,17 @@ def split(input, delimiter):
 
 ##
 # @if jp
-# @brief Ϳ����줿ʸ�����bool�ͤ��Ѵ�����
+# @brief 与えられた文字列をbool値に変換する
 # 
-# ���ꤵ�줿ʸ�����trueɽ��ʸ����falseɽ��ʸ�������Ӥ������η�̤�
-# bool�ͤȤ����֤���
-# ��Ӥη�̡�trueɽ��ʸ����falseɽ��ʸ����Τɤ���Ȥ���פ��ʤ����ϡ�
-# Ϳ����줿�ǥե�����ͤ��֤���
+# 指定された文字列を、true表現文字列、false表現文字列と比較し、その結果を
+# bool値として返す。
+# 比較の結果、true表現文字列、false表現文字列のどちらとも一致しない場合は、
+# 与えられたデフォルト値を返す。
 #
-# @param _str Ƚ���о�ʸ����
-# @param yes trueɽ��ʸ����
-# @param no falseɽ��ʸ����
-# @param default_value �ǥե������(�ǥե������:None)
+# @param _str 判断対象文字列
+# @param yes true表現文字列
+# @param no false表現文字列
+# @param default_value デフォルト値(デフォルト値:None)
 # @else
 # @brief Convert given string to bool value
 # @endif
@@ -378,14 +378,14 @@ def toBool(_str, yes, no, default_value=None):
 
 ##
 # @if jp
-# @brief ʸ����ꥹ����ˤ���ʸ���󤬴ޤޤ�뤫�ɤ���
+# @brief 文字列リスト中にある文字列が含まれるかどうか
 # 
-# ��1�����˥���޶��ڤ�Υꥹ�Ȥ���2������õ���о�ʸ�������ꤷ��
-# ����ʸ������1��������˴ޤޤ�뤫��Ƚ�Ǥ��롣
+# 第1引数にカンマ区切りのリストを、第2引数に探索対象文字列を指定し、
+# その文字列が第1引数の中に含まれるかを判断する。
 #
-# @param list �оݥꥹ��
-# @param value õ��ʸ����
-# @return true: �ޤޤ�롢false: �ޤޤ�ʤ�
+# @param list 対象リスト
+# @param value 探索文字列
+# @return true: 含まれる、false: 含まれない
 #
 # @else
 # @brief Include if a string is included in string list
@@ -422,17 +422,17 @@ def includes(_list, value, ignore_case = True):
 
 ##
 # @if jp
-# @brief Ϳ����줿ʸ�������Хѥ����ɤ�����Ƚ�Ǥ���
+# @brief 与えられた文字列が絶対パスかどうかを判断する
 #
-# Ϳ����줿ʸ�������Хѥ�ɽ���Ǥ��뤫�ɤ�����Ƚ�Ǥ��롣
-# ʸ���󤬰ʲ��ξ��ˤ����Хѥ��Ȥ���Ƚ�Ǥ��롣
-#  - ��Ƭʸ����'/' (UNIX�ξ��)
-#  - ��Ƭ��ʸ��������ե��٥åȡ�'/'��'\\' (Windows�ξ��)
-#  - ��Ƭ��ʸ����'\\\\' (Windows�ͥåȥ���ѥ��ξ��)
+# 与えられた文字列が絶対パス表現であるかどうかを判断する。
+# 文字列が以下の場合には絶対パスとして判断する。
+#  - 先頭文字が'/' (UNIXの場合)
+#  - 先頭３文字がアルファベット＋'/'＋'\\' (Windowsの場合)
+#  - 先頭２文字が'\\\\' (Windowsネットワークパスの場合)
 #
-# @param str Ƚ���о�ʸ����
+# @param str 判定対象文字列
 #
-# @return ���Хѥ�Ƚ����
+# @return 絶対パス判定結果
 #
 # @else
 # @brief Investigate whether the given string is absolute path or not
@@ -450,15 +450,15 @@ def isAbsolutePath(str):
 
 ##
 # @if jp
-# @brief Ϳ����줿ʸ����URL���ɤ�����Ƚ�Ǥ���
+# @brief 与えられた文字列がURLかどうかを判断する
 #
-# Ϳ����줿ʸ����URLɽ�����ɤ�����Ƚ�Ǥ��롣
-# Ϳ����줿ʸ������ˡ�'://'�Ȥ���ʸ���󤬴ޤޤ�Ƥ�����ˤ�
-# URLɽ���Ȥ���Ƚ�Ǥ��롣
+# 与えられた文字列がURL表現かどうかを判断する。
+# 与えられた文字列中に、'://'という文字列が含まれている場合には
+# URL表現として判断する。
 #
-# @param str Ƚ���о�ʸ����
+# @param str 判定対象文字列
 #
-# @return URLȽ����
+# @return URL判定結果
 #
 # @else
 # @brief Investigate whether the given string is URL or not
@@ -477,13 +477,13 @@ def isURL(str):
 
 ##
 # @if jp
-# @brief Ϳ����줿���֥������Ȥ�ʸ������Ѵ�
+# @brief 与えられたオブジェクトを文字列に変換
 #
-# �����ǻ��ꤵ�줿���֥������Ȥ�ʸ������Ѵ����롣
+# 引数で指定されたオブジェクトを文字列に変換する。
 #
-# @param n �Ѵ��оݥ��֥�������
+# @param n 変換対象オブジェクト
 #
-# @return ʸ�����Ѵ����
+# @return 文字列変換結果
 #
 # @else
 # @brief Convert the given object to st::string.
@@ -496,13 +496,13 @@ def otos(n):
 
 ##
 # @if jp
-# @brief Ϳ����줿ʸ�����ꥹ�Ȥ��Ѵ�
+# @brief 与えられた文字列をリストに変換
 #
-# �����ǻ��ꤵ�줿ʸ�����,����ʬ�䤷���ꥹ�Ȥ��Ѵ����롣
+# 引数で指定された文字列を｢,｣で分割し、リストに変換する。
 #
-# @param _str �Ѵ���ʸ����
+# @param _str 変換元文字列
 #
-# @return �ꥹ���Ѵ��������
+# @return リスト変換処理結果
 #
 # @else
 # 
@@ -543,13 +543,13 @@ def _stringToList(_type, _str):
 
 ##
 # @if jp
-# @brief Ϳ����줿ʸ����򥪥֥������Ȥ��Ѵ�
+# @brief 与えられた文字列をオブジェクトに変換
 #
-# ������Ϳ����줿ʸ�������ꤵ�줿���֥������Ȥ��Ѵ����롣
+# 引数で与えられた文字列を指定されたオブジェクトに変換する。
 #
-# @param _str �Ѵ���ʸ����
+# @param _str 変換元文字列
 #
-# @return �Ѵ������¹Է��
+# @return 変換処理実行結果
 #
 # @else
 # @brief Convert the given object to st::string.
@@ -584,13 +584,13 @@ def stringTo(_type, _str):
 
 ##
 # @if jp
-# @brief Ϳ����줿ʸ����ꥹ�Ȥ����ʣ����
+# @brief 与えられた文字列リストから重複を削除
 #
-# ������Ϳ����줿ʸ����ꥹ�Ȥ����ʣ���������ꥹ�Ȥ�������롣
+# 引数で与えられた文字列リストから重複を削除したリストを作成する。
 #
-# @param sv ��ǧ��ʸ����ꥹ��
+# @param sv 確認元文字列リスト
 #
-# @return ��ʣ���������̥ꥹ��
+# @return 重複削除処理結果リスト
 #
 # @else
 #
@@ -601,15 +601,15 @@ def unique_sv(sv):
 
 ##
 # @if jp
-# @brief Ϳ����줿ʸ����ꥹ�Ȥ���CSV������
+# @brief 与えられた文字列リストからCSVを生成
 #
-# ������Ϳ����줿ʸ����ꥹ�Ȥγ����Ǥ��¤٤�CSV���������롣
-# ʸ����ꥹ�Ȥ����ξ��ˤ϶���ʸ�����֤���
+# 引数で与えられた文字列リストの各要素を並べたCSVを生成する。
+# 文字列リストが空の場合には空白文字を返す。
 #
-# @param sv CSV�Ѵ��о�ʸ����ꥹ��
-# @param delimiter ��³�����ʸ����δ֤�ʸ�� (�ǥե����: ", ")
+# @param sv CSV変換対象文字列リスト
+# @param delimiter 接続される文字列の間の文字 (デフォルト: ", ")
 #
-# @return CSV�Ѵ����ʸ����
+# @return CSV変換結果文字列
 #
 # @else
 # @brief Create CSV file from the given string list
@@ -635,15 +635,15 @@ def flatten(sv, delimiter=", "):
 
 ##
 # @if jp
-# @brief Ϳ����줿ʸ����ꥹ�Ȥ�����ꥹ�Ȥ��Ѵ�
+# @brief 与えられた文字列リストを引数リストに変換
 #
-# ������Ϳ����줿ʸ����ꥹ�Ȥγ�����������'\\0'��ä���
-# �����ꥹ�Ȥ��Ѵ����롣<br>
-# ���ܥ⥸�塼��Ǥϰ����򤽤Τޤ��֤�
+# 引数で与えられた文字列リストの各要素末尾に'\\0'を加え、
+# 引数リストに変換する。<br>
+# ※本モジュールでは引数をそのまま返す
 #
-# @param args �Ѵ��о�ʸ����ꥹ��
+# @param args 変換対象文字列リスト
 #
-# @return �����Ѵ����ʸ����
+# @return 引数変換結果文字列
 #
 # @else
 #
@@ -656,16 +656,16 @@ def toArgv(args):
 
 ##
 # @if jp
-# @brief URL�ѥ�᡼����mapstring��ʬ�򤷤��֤�
+# @brief URLパラメータをmapstringに分解して返す
 #
-# URL�ѥ�᡼��ɽ�� something?key0=value0&key1=value1.... �Τ���
-# '?' �ʹߤ���ʬ��ʬ�򤷤ơ�std::map<std::string, std::string> ����
-# ���Ѵ����롣Ϳ����줿ʸ����򺸤��饵��������'?' ��걦¦����ʬ��
-# �Ĥ��Ʋ��Ϥ�Ԥ���'&'��ʬ�䤷�������� '=' �򸡺������ǽ�� '=' ��
-# ���դȺ��դ򤽤줾�졢key �� value �Ȥ��� map �˳�Ǽ���롣
+# URLパラメータ表現 something?key0=value0&key1=value1.... のうち
+# '?' 以降の部分を分解して、std::map<std::string, std::string> 形式
+# に変換する。与えられた文字列を左からサーチし、'?' より右側の部分に
+# ついて解析を行う。'&'で分割し、左から '=' を検索し、最初の '=' の
+# 右辺と左辺をそれぞれ、key と value として map に格納する。
 #
-# @param str ʬ���о�ʸ����
-# @return mapstring ���� key/value�ǡ���
+# @param str 分解対象文字列
+# @return mapstring 型の key/valueデータ
 #
 #
 # @else
@@ -702,13 +702,13 @@ def urlparam2map(_str):
 
 ##
 # @if jp
-# @brief ʸ������δĶ��ѿ����֤�������
+# @brief 文字列中の環境変数を置き換える
 #
-# ʸ�������${}�ǰϤޤ줿ʸ���󤬤�����ˡ��Ķ��ѿ����֤�������
-# �㡧${RTM_ROOT}\bin -> C:\Program Files (x86)\OpenRTM-aist\1.1.2\
+# 文字列中に${}で囲まれた文字列がある場合に、環境変数と置き換える
+# 例：${RTM_ROOT}\bin -> C:\Program Files (x86)\OpenRTM-aist\1.1.2\
 #
-# @param _str �֤���������ʸ����
-# @return �֤��������ʸ����
+# @param _str 置き換え前の文字列
+# @return 置き換え後の文字列
 #
 #
 # @else
@@ -742,11 +742,11 @@ def replaceEnv(_str):
 
 ##
 # @if jp
-# @brief ����ե�����̾�����ǥ��쥯�ȥ꤫��õ������
+# @brief 指定ファイル名を指定ディレクトリから探査する
 #
-# @param dir �ǥ��쥯�ȥ�ѥ�
-# @param filename �ե�����̾
-# @param filelist �ե��������
+# @param dir ディレクトリパス
+# @param filename ファイル名
+# @param filelist ファイル一覧
 #
 #
 #
@@ -772,11 +772,11 @@ def findFile(dir, filename, filelist):
 
 ##
 # @if jp
-# @brief �ե�������������ǥ��쥯�ȥ꤫��õ������
+# @brief ファイル一覧を指定ディレクトリから探査する
 #
-# @param dir �ǥ��쥯�ȥ�ѥ�
-# @param ext ��ĥ��
-# @param filelist �ե��������
+# @param dir ディレクトリパス
+# @param ext 拡張子
+# @param filelist ファイル一覧
 #
 #
 #

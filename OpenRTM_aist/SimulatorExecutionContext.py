@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file SimulatorExecutionContext.py
@@ -26,9 +26,9 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -47,9 +47,9 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -67,14 +67,14 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
 
   ##
   # @if jp
-  # @brief ÂĞ¾İ¤ÎRTC¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
-  # ÆâÉô¤ÇinvokeWorkerPreDo´Ø¿ô¤ò¸Æ¤Ö¤¿¤á¡¢Â¨ºÂ¤Ë
-  # ¾õÂÖ¤òÁ«°Ü¤µ¤»¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-  # ¸½ºßtick¼Â¹ÔÃæ¤Î¾ì¹ç¤Ï¼Â¹Ô½ªÎ»¤Ş¤ÇÂÔ¤Ä
+  # @brief å¯¾è±¡ã®RTCã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
+  # å†…éƒ¨ã§invokeWorkerPreDoé–¢æ•°ã‚’å‘¼ã¶ãŸã‚ã€å³åº§ã«
+  # çŠ¶æ…‹ã‚’é·ç§»ã•ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
+  # ç¾åœ¨tickå®Ÿè¡Œä¸­ã®å ´åˆã¯å®Ÿè¡Œçµ‚äº†ã¾ã§å¾…ã¤
   #
   # @param self
-  # @param comp ¥¢¥¯¥Æ¥£¥Ö²½ÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥È
-  # @return ReturnCode_t ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @param comp ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–å¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+  # @return ReturnCode_t å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   # @brief Activate an RT-component
@@ -107,14 +107,14 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
 
   ##
   # @if jp
-  # @brief ÂĞ¾İ¤ÎRTC¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
-  # ÆâÉô¤ÇinvokeWorkerPreDo´Ø¿ô¤ò¸Æ¤Ö¤¿¤á¡¢Â¨ºÂ¤Ë
-  # ¾õÂÖ¤òÁ«°Ü¤µ¤»¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-  # ¸½ºßtick¼Â¹ÔÃæ¤Î¾ì¹ç¤Ï¼Â¹Ô½ªÎ»¤Ş¤ÇÂÔ¤Ä
+  # @brief å¯¾è±¡ã®RTCã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
+  # å†…éƒ¨ã§invokeWorkerPreDoé–¢æ•°ã‚’å‘¼ã¶ãŸã‚ã€å³åº§ã«
+  # çŠ¶æ…‹ã‚’é·ç§»ã•ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
+  # ç¾åœ¨tickå®Ÿè¡Œä¸­ã®å ´åˆã¯å®Ÿè¡Œçµ‚äº†ã¾ã§å¾…ã¤
   #
   # @param self
-  # @param comp Èó¥¢¥¯¥Æ¥£¥Ö²½ÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥È
-  # @return ReturnCode_t ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @param comp éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–å¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+  # @return ReturnCode_t å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   # @brief Deactivate an RT-component
@@ -148,14 +148,14 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
 
   ##
   # @if jp
-  # @brief ÂĞ¾İ¤ÎRTC¤ò¥ê¥»¥Ã¥È²½¤¹¤ë
-  # ÆâÉô¤ÇinvokeWorkerPreDo´Ø¿ô¤ò¸Æ¤Ö¤¿¤á¡¢Â¨ºÂ¤Ë
-  # ¾õÂÖ¤òÁ«°Ü¤µ¤»¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-  # ¸½ºßtick¼Â¹ÔÃæ¤Î¾ì¹ç¤Ï¼Â¹Ô½ªÎ»¤Ş¤ÇÂÔ¤Ä
+  # @brief å¯¾è±¡ã®RTCã‚’ãƒªã‚»ãƒƒãƒˆåŒ–ã™ã‚‹
+  # å†…éƒ¨ã§invokeWorkerPreDoé–¢æ•°ã‚’å‘¼ã¶ãŸã‚ã€å³åº§ã«
+  # çŠ¶æ…‹ã‚’é·ç§»ã•ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
+  # ç¾åœ¨tickå®Ÿè¡Œä¸­ã®å ´åˆã¯å®Ÿè¡Œçµ‚äº†ã¾ã§å¾…ã¤
   #
   # @param self
-  # @param comp ¥ê¥»¥Ã¥ÈÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥È
-  # @return ReturnCode_t ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @param comp ãƒªã‚»ãƒƒãƒˆå¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+  # @return ReturnCode_t å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   # @brief Reset an RT-component
@@ -190,7 +190,7 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
 
 ##
 # @if jp
-# @brief ECFactory¤Ø¤ÎÅĞÏ¿¤Î¤¿¤á¤Î½é´ü²½´Ø¿ô
+# @brief ECFactoryã¸ã®ç™»éŒ²ã®ãŸã‚ã®åˆæœŸåŒ–é–¢æ•°
 # @else
 # @brief Initialization function to register to ECFactory
 # @endif

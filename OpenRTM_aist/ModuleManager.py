@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ModuleManager.py
@@ -41,10 +41,10 @@ MOD_PRELOAD   = "manager.modules.preload"
 ##
 # @if jp
 #
-# @brief �⥸�塼��ޥ͡����㥯�饹
+# @brief モジュールマネージャクラス
 # @class ModuleManager
 #
-# �⥸�塼��Υ����ɡ���������ɤʤɤ�������륯�饹
+# モジュールのロード、アンロードなどを管理するクラス
 #
 # @since 0.4.0
 #
@@ -62,13 +62,13 @@ class ModuleManager:
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯����
-  # ���ꤵ�줿 Property ���֥���������ξ�����˽������¹Ԥ��롣
+  # コンストラクタ。
+  # 設定された Property オブジェクト内の情報を基に初期化を実行する。
   #
   # @param self
-  # @param prop ������ѥץ��ѥƥ�
+  # @param prop 初期化用プロパティ
   #
   # @else
   #
@@ -104,7 +104,7 @@ class ModuleManager:
   ##
   # @if jp
   #
-  # @brief �ǥ��ȥ饯��(̤����)
+  # @brief デストラクタ(未実装)
   #
   # @param self
   #
@@ -120,7 +120,7 @@ class ModuleManager:
   ##
   # @if jp
   # @class Error
-  # @brief �ե����롦�����ץ����㳰�������������饹
+  # @brief ファイル・オープン失敗例外処理用内部クラス
   # @else
   #
   # @endif
@@ -133,7 +133,7 @@ class ModuleManager:
   ##
   # @if jp
   # @class NotFound
-  # @brief ̤������������⥸�塼�������㳰�������������饹
+  # @brief 未実装部，指定モジュール不明例外処理用内部クラス
   # @else
   #
   # @endif
@@ -146,7 +146,7 @@ class ModuleManager:
   ##
   # @if jp
   # @class FileNotFound
-  # @brief ����ե����������㳰�������������饹
+  # @brief 指定ファイル不明例外処理用内部クラス
   # @else
   #
   # @endif
@@ -159,7 +159,7 @@ class ModuleManager:
   ##
   # @if jp
   # @class ModuleNotFound
-  # @brief ����⥸�塼�������㳰�������������饹
+  # @brief 指定モジュール不明例外処理用内部クラス
   # @else
   #
   # @endif
@@ -172,7 +172,7 @@ class ModuleManager:
   ##
   # @if jp
   # @class SymbolNotFound
-  # @brief ���ꥷ��ܥ������㳰�������������饹
+  # @brief 指定シンボル不明例外処理用内部クラス
   # @else
   #
   # @endif
@@ -185,7 +185,7 @@ class ModuleManager:
   ##
   # @if jp
   # @class NotAllowedOperation
-  # @brief �������ػ߻��㳰�������������饹
+  # @brief 指定操作禁止時例外処理用内部クラス
   # @else
   #
   # @endif
@@ -198,7 +198,7 @@ class ModuleManager:
   ##
   # @if jp
   # @class InvalidArguments
-  # @brief ��������������㳰�������������饹
+  # @brief 指定引数不正時例外処理用内部クラス
   # @else
   #
   # @endif
@@ -211,7 +211,7 @@ class ModuleManager:
   ##
   # @if jp
   # @class InvalidOperation
-  # @brief ��������������㳰�������������饹
+  # @brief 指定操作不正時例外処理用内部クラス
   # @else
   #
   # @endif
@@ -224,16 +224,16 @@ class ModuleManager:
   ##
   # @if jp
   #
-  # @brief �⥸�塼��Υ����ɡ������
+  # @brief モジュールのロード、初期化
   #
-  # ���ꤷ���ե������ͭ�饤�֥��Ȥ��ƥ����ɤ���ȤȤ�ˡ�
-  # ���ꤷ��������ѥ��ڥ졼������¹Ԥ��롣
+  # 指定したファイルを共有ライブラリとしてロードするとともに、
+  # 指定した初期化用オペレーションを実行する。
   # 
   # @param self
-  # @param file_name �������оݥ⥸�塼��̾ (.py��������ե�����̾)
-  # @param init_func ����������ѥ��ڥ졼�����(�ǥե������:None)
+  # @param file_name ロード対象モジュール名 (.pyを除いたファイル名)
+  # @param init_func 初期化処理用オペレーション(デフォルト値:None)
   #
-  # @return ���ꤷ���������оݥ⥸�塼��̾
+  # @return 指定したロード対象モジュール名
   #
   # @else
   #
@@ -324,12 +324,12 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �⥸�塼��Υ��������
+  # @brief モジュールのアンロード
   #
-  # ���ꤷ�������ɺѤߥ⥸�塼��򥯥�����������������ɤ��롣
+  # 指定したロード済みモジュールをクローズし、アンロードする。
   #
   # @param self
-  # @param file_name ����������оݥ⥸�塼��̾
+  # @param file_name アンロード対象モジュール名
   #
   # @else
   # @brief Unload module
@@ -347,9 +347,9 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief ���⥸�塼��Υ��������
+  # @brief 全モジュールのアンロード
   #
-  # ���ƤΥ����ɺѤߥ⥸�塼��򥢥�����ɤ��롣
+  # 全てのロード済みモジュールをアンロードする。
   #
   # @param self
   #
@@ -367,13 +367,13 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �⥸�塼��Υ���ܥ�λ���
+  # @brief モジュールのシンボルの参照
   #
-  # �⥸�塼��Υ���ܥ���������
+  # モジュールのシンボルを取得する
   #
   # @param self
-  # @param file_name �����оݥե�����̾
-  # @param func_name �����оݴؿ�̾
+  # @param file_name 取得対象ファイル名
+  # @param func_name 取得対象関数名
   #
   # @else
   # @brief Look up a named symbol in the module
@@ -393,12 +393,12 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �⥸�塼������ɥѥ�����ꤹ��
+  # @brief モジュールロードパスを指定する
   # 
-  # �⥸�塼������ɻ����оݥ⥸�塼��򸡺�����ѥ�����ꤹ�롣
+  # モジュールロード時に対象モジュールを検索するパスを指定する。
   #
   # @param self
-  # @param load_path_list �⥸�塼�븡���оݥѥ��ꥹ��
+  # @param load_path_list モジュール検索対象パスリスト
   #
   # @else
   # @brief Set default module load path
@@ -410,13 +410,13 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �⥸�塼������ɥѥ����������
+  # @brief モジュールロードパスを取得する
   # 
-  # ���ꤵ��Ƥ���⥸�塼��򸡺��оݥѥ��ꥹ�Ȥ�������롣
+  # 設定されているモジュールを検索対象パスリストを取得する。
   #
   # @param self
   # 
-  # @return load_path �⥸�塼�븡���оݥѥ��ꥹ��
+  # @return load_path モジュール検索対象パスリスト
   #
   # @else
   # @brief Get default module load path
@@ -427,12 +427,12 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �⥸�塼������ɥѥ����ɲä���
+  # @brief モジュールロードパスを追加する
   # 
-  # ���ꤵ�줿�ѥ��ꥹ�Ȥ򸡺��оݥѥ��ꥹ�Ȥ��ɲä��롣
+  # 指定されたパスリストを検索対象パスリストに追加する。
   #
   # @param self
-  # @param load_path �ɲå⥸�塼�븡���оݥѥ��ꥹ��
+  # @param load_path 追加モジュール検索対象パスリスト
   #
   # @else
   # @brief Add module load path
@@ -445,13 +445,13 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �����ɺѤߤΥ⥸�塼��ꥹ�Ȥ��������
+  # @brief ロード済みのモジュールリストを取得する
   #
-  # ���˥����ɺѤߤΥ⥸�塼��ꥹ�Ȥ�������롣
+  # 既にロード済みのモジュールリストを取得する。
   #
   # @param self
   #
-  # @return �����ɺѤߥ⥸�塼��ꥹ��
+  # @return ロード済みモジュールリスト
   #
   # @else
   # @brief Get loaded module names
@@ -525,7 +525,7 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �������ˤ���������ɥѥ���Υ������֥�ʥե�����ꥹ�Ȥ��֤�
+  # @brief 指定言語におけるロードパス上のローダブルなファイルリストを返す
   #
   #
   # @param self
@@ -585,7 +585,7 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief ����å����̵���ѥ�����modules���ɲä���
+  # @brief キャッシュに無いパスだけmodulesに追加する
   #
   #
   # @param self
@@ -614,7 +614,7 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief ������졢�ե�����ꥹ�Ȥ���⥸�塼��Υץ��ѥƥ����֤�
+  # @brief 指定言語、ファイルリストからモジュールのプロパティを返す
   #
   #
   # @param self
@@ -678,7 +678,7 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief ̵���ʥ⥸�塼��ץ��ե������������
+  # @brief 無効なモジュールプロファイルを削除する
   #
   #
   # @param self
@@ -696,7 +696,7 @@ class ModuleManager:
       
   ##
   # @if jp
-  # @brief Ʊ���ѥ�����
+  # @brief 同じパスを削除
   #
   #
   # @param self
@@ -722,13 +722,13 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �����ɲ�ǽ�⥸�塼��ꥹ�Ȥ��������(̤����)
+  # @brief ロード可能モジュールリストを取得する(未実装)
   #
-  # �����ɲ�ǽ�ʥ⥸�塼��Υꥹ�Ȥ�������롣
+  # ロード可能なモジュールのリストを取得する。
   #
   # @param self
   #
-  # @return �����ɲ�ǽ�⥸�塼��ꥹ��
+  # @return ロード可能モジュールリスト
   #
   # @else
   # @brief Get loadable module names
@@ -765,9 +765,9 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �⥸�塼������Хѥ��������
+  # @brief モジュールの絶対パス指定許可
   #
-  # �������оݥ⥸�塼������Хѥ��������Ĥ���褦�����ꤹ�롣
+  # ロード対象モジュールの絶対パス指定を許可するように設定する。
   #
   # @param self
   #
@@ -780,9 +780,9 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �⥸�塼������Хѥ�����ػ�
+  # @brief モジュールの絶対パス指定禁止
   #
-  # �������оݥ⥸�塼������Хѥ������ػߤ���褦�����ꤹ�롣
+  # ロード対象モジュールの絶対パス指定を禁止するように設定する。
   #
   # @param self
   #
@@ -795,11 +795,11 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �⥸�塼���URL�������
+  # @brief モジュールのURL指定許可
   #
-  # �������оݥ⥸�塼���URL�������Ĥ��롣
-  # �����꤬���Ĥ���Ƥ����硢�⥸�塼������������ɤ��ƥ����ɤ��뤳�Ȥ�
-  # ���Ĥ���롣
+  # ロード対象モジュールのURL指定を許可する。
+  # 本設定が許可されている場合、モジュールをダウンロードしてロードすることが
+  # 許可される。
   #
   # @param self
   #
@@ -812,9 +812,9 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �⥸�塼���URL����ػ�
+  # @brief モジュールのURL指定禁止
   #
-  # �������оݥ⥸�塼���URL�����ػߤ��롣
+  # ロード対象モジュールのURL指定を禁止する。
   #
   # @param self
   #
@@ -827,15 +827,15 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief LoadPath ����Υե�����θ���
+  # @brief LoadPath からのファイルの検索
   # 
-  # ���ꤵ�줿�ѥ���ˡ����ꤵ�줿�ե����뤬¸�ߤ��뤫��ǧ���롣
+  # 指定されたパス内に、指定されたファイルが存在するか確認する。
   #
   # @param self
-  # @param fname �����оݥե�����̾
-  # @param load_path ������ѥ��ꥹ��
+  # @param fname 検索対象ファイル名
+  # @param load_path 検索先パスリスト
   #
-  # @return �������줿�ե�����̾
+  # @return 検索されたファイル名
   #
   # @else
   # @brief Search file from load path
@@ -862,14 +862,14 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief �ե����뤬¸�ߤ��뤫�ɤ����Υ����å�
+  # @brief ファイルが存在するかどうかのチェック
   #
-  # ���ꤵ�줿�ե����뤬¸�ߤ��뤫��ǧ���롣
+  # 指定されたファイルが存在するか確認する。
   #
   # @param self
-  # @param filename ¸�߳�ǧ�оݥե�����̾
+  # @param filename 存在確認対象ファイル名
   #
-  # @return �ե�����¸�߳�ǧ���(�ե����뤢��:true���ʤ�:false)
+  # @return ファイル存在確認結果(ファイルあり:true，なし:false)
   #
   # @else
   # @brief Check file existance
@@ -889,14 +889,14 @@ class ModuleManager:
 
   ##
   # @if jp
-  # @brief ������ؿ�����ܥ����������
+  # @brief 初期化関数シンボルを生成する
   #
-  # ������ؿ���̾�Τ��Ȥ�Ω�Ƥ롣
+  # 初期化関数の名称を組み立てる。
   #
   # @param self
-  # @param file_path ������оݥ⥸�塼��̾��
+  # @param file_path 初期化対象モジュール名称
   #
-  # @return ������ؿ�̾���Ȥ�Ω�Ʒ��
+  # @return 初期化関数名称組み立て結果
   #
   # @else
   # @brief Create initialize function symbol
@@ -910,7 +910,7 @@ class ModuleManager:
   ##
   # @if jp
   # @class DLL
-  # @brief �⥸�塼���ݻ����������饹
+  # @brief モジュール保持用内部クラス
   # @else
   #
   # @endif

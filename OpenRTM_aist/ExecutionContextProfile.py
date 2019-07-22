@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ExecutionContextProfile.py
@@ -28,7 +28,7 @@ DEFAULT_PERIOD = 0.000001
 ##
 # @if jp
 # @class ExecutionContextProfile
-# @brief ExecutionContextProfile ���饹
+# @brief ExecutionContextProfile クラス
 #
 # @since 1.2.0
 #
@@ -45,10 +45,10 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief �ǥե���ȥ��󥹥ȥ饯��
+  # @brief デフォルトコンストラクタ
   #
-  # �ǥե���ȥ��󥹥ȥ饯��
-  # �ץ��ե�����˰ʲ��ι��ܤ����ꤹ�롣
+  # デフォルトコンストラクタ
+  # プロファイルに以下の項目を設定する。
   #  - kind : PERIODIC
   #  - rate : 0.0
   #
@@ -79,7 +79,7 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief ExecitionContextProfile��λ����
+  # @brief ExecitionContextProfile終了処理
   #
   # 
   #
@@ -102,12 +102,12 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief CORBA ���֥������Ȼ��Ȥ򥻥å�
+  # @brief CORBA オブジェクト参照をセット
   #
-  # ExecutioncontextService �Ȥ��Ƥ� CORBA ���֥���
-  # ���Ȼ��Ȥ򥻥åȤ��롣
+  # ExecutioncontextService としての CORBA オブジェ
+  # クト参照をセットする。
   #
-  # @param ec_ptr CORBA ���֥������Ȼ���
+  # @param ec_ptr CORBA オブジェクト参照
   #
   # @else
   # @brief Set the reference to the CORBA object
@@ -130,12 +130,12 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief CORBA ���֥������Ȼ��Ȥμ���
+  # @brief CORBA オブジェクト参照の取得
   #
-  # �ܥ��֥������Ȥ� ExecutioncontextService �Ȥ��Ƥ� CORBA ���֥���
-  # ���Ȼ��Ȥ�������롣
+  # 本オブジェクトの ExecutioncontextService としての CORBA オブジェ
+  # クト参照を取得する。
   #
-  # @return CORBA ���֥������Ȼ���
+  # @return CORBA オブジェクト参照
   #
   # @else
   # @brief Get the reference to the CORBA object
@@ -155,24 +155,24 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief ExecutionContext �μ¹Լ���(Hz)�����ꤹ��
+  # @brief ExecutionContext の実行周期(Hz)を設定する
   #
-  # Active ���֤ˤ�RT����ݡ��ͥ�Ȥ��¹Ԥ�������(ñ��:Hz)�����ꤹ
-  # �롣�¹Լ������ѹ��ϡ�DataFlowComponentAction ��
-  # on_rate_changed �ˤ�äƳ�RT����ݡ��ͥ�Ȥ���ã����롣
+  # Active 状態にてRTコンポーネントが実行される周期(単位:Hz)を設定す
+  # る。実行周期の変更は、DataFlowComponentAction の
+  # on_rate_changed によって各RTコンポーネントに伝達される。
   #
-  # @param rate ��������(ñ��:Hz)
+  # @param rate 処理周期(単位:Hz)
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
-  #         RTC_OK: ���ｪλ
-  #         BAD_PARAMETER: �����ͤ������
+  # @return ReturnCode_t 型のリターンコード
+  #         RTC_OK: 正常終了
+  #         BAD_PARAMETER: 設定値が負の値
   #
   # @else
   #
   # @brief Set execution rate(Hz) of ExecutionContext
   #
   # This operation shall set the rate (in hertz) at which this
-  # context��s Active participating RTCs are being called.  If the
+  # context’s Active participating RTCs are being called.  If the
   # execution kind of the context is PERIODIC, a rate change shall
   # result in the invocation of on_rate_changed on any RTCs
   # realizing DataFlowComponentAction that are registered with any
@@ -224,12 +224,12 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief ExecutionContext �μ¹Լ���(Hz)���������
+  # @brief ExecutionContext の実行周期(Hz)を取得する
   #
-  # Active ���֤ˤ�RT����ݡ��ͥ�Ȥ��¹Ԥ�������(ñ��:Hz)�������
-  # �롣
+  # Active 状態にてRTコンポーネントが実行される周期(単位:Hz)を取得す
+  # る。
   #
-  # @return ��������(ñ��:Hz)
+  # @return 処理周期(単位:Hz)
   #
   # @else
   #
@@ -255,13 +255,13 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief ExecutionKind ��ʸ���󲽤���
+  # @brief ExecutionKind を文字列化する
   #
-  # RTC::ExecutionKind ���������Ƥ��� PERIODIC, EVENT_DRIVEN,
-  # OTHER ��ʸ���󲽤��롣
+  # RTC::ExecutionKind で定義されている PERIODIC, EVENT_DRIVEN,
+  # OTHER を文字列化する。
   #
   # @param kind ExecutionKind
-  # @return ʸ���󲽤��줿ExecutionKind
+  # @return 文字列化されたExecutionKind
   #
   # @else
   #
@@ -290,9 +290,9 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief ExecutionKind �����ꤹ��
+  # @brief ExecutionKind を設定する
   #
-  # ���� ExecutionContext �� ExecutionKind �����ꤹ��
+  # この ExecutionContext の ExecutionKind を設定する
   #
   # @param kind ExecutionKind
   #
@@ -320,9 +320,9 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief ExecutionKind ���������
+  # @brief ExecutionKind を取得する
   #
-  # �� ExecutionContext �� ExecutionKind ���������
+  # 本 ExecutionContext の ExecutionKind を取得する
   #
   # @return ExecutionKind
   #
@@ -345,12 +345,12 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief Owner����ݡ��ͥ�Ȥ򥻥åȤ��롣
+  # @brief Ownerコンポーネントをセットする。
   #
-  # ����EC��Owner�Ȥʤ�RTC�򥻥åȤ��롣
+  # このECのOwnerとなるRTCをセットする。
   #
-  # @param comp Owner�Ȥʤ�RT����ݡ��ͥ��
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @param comp OwnerとなるRTコンポーネント
+  # @return ReturnCode_t 型のリターンコード
   # @else
   # @brief Setting owner component of the execution context
   #
@@ -377,11 +377,11 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief Owner����ݡ��ͥ�Ȥλ��Ȥ��������
+  # @brief Ownerコンポーネントの参照を取得する
   #
-  # ����EC��Owner�Ǥ���RTC�λ��Ȥ�������롣
+  # このECのOwnerであるRTCの参照を取得する。
   #
-  # @return OwnerRT����ݡ��ͥ�Ȥλ���
+  # @return OwnerRTコンポーネントの参照
   # @else
   # @brief Getting a reference of the owner component
   #
@@ -399,17 +399,17 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ��ɲä���
+  # @brief RTコンポーネントを追加する
   #
-  # ���ꤷ��RT����ݡ��ͥ�Ȥ򻲲üԥꥹ�Ȥ��ɲä��롣�ɲä��줿RT��
-  # ��ݡ��ͥ�Ȥ� attach_context ���ƤФ졢Inactive ���֤����ܤ��롣
-  # ���ꤵ�줿RT����ݡ��ͥ�Ȥ�null�ξ��ϡ�BAD_PARAMETER ���֤���
-  # �롣���ꤵ�줿RT����ݡ��ͥ�Ȥ� DataFlowComponent �ʳ��ξ��ϡ�
-  # BAD_PARAMETER ���֤���롣
+  # 指定したRTコンポーネントを参加者リストに追加する。追加されたRTコ
+  # ンポーネントは attach_context が呼ばれ、Inactive 状態に遷移する。
+  # 指定されたRTコンポーネントがnullの場合は、BAD_PARAMETER が返され
+  # る。指定されたRTコンポーネントが DataFlowComponent 以外の場合は、
+  # BAD_PARAMETER が返される。
   #
-  # @param comp �ɲ��о�RT����ݡ��ͥ��
+  # @param comp 追加対象RTコンポーネント
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -448,16 +448,16 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ򻲲üԥꥹ�Ȥ���������
+  # @brief RTコンポーネントを参加者リストから削除する
   #
-  # ���ꤷ��RT����ݡ��ͥ�Ȥ򻲲üԥꥹ�Ȥ��������롣������줿
-  # RT����ݡ��ͥ�Ȥ� detach_context ���ƤФ�롣���ꤵ�줿RT����ݡ�
-  # �ͥ�Ȥ����üԥꥹ�Ȥ���Ͽ����Ƥ��ʤ����ϡ�BAD_PARAMETER ����
-  # ����롣
+  # 指定したRTコンポーネントを参加者リストから削除する。削除された
+  # RTコンポーネントは detach_context が呼ばれる。指定されたRTコンポー
+  # ネントが参加者リストに登録されていない場合は、BAD_PARAMETER が返
+  # される。
   #
-  # @param comp ����о�RT����ݡ��ͥ��
+  # @param comp 削除対象RTコンポーネント
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -500,11 +500,11 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥλ��üԥꥹ�Ȥ��������
+  # @brief RTコンポーネントの参加者リストを取得する
   #
-  # ������Ͽ����Ƥ��뻲�ü�RTC�Υꥹ�Ȥ�������롣
+  # 現在登録されている参加者RTCのリストを取得する。
   #
-  # @return ���ü�RTC�Υꥹ��
+  # @return 参加者RTCのリスト
   #
   # @else
   #
@@ -523,12 +523,12 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief Properties�򥻥åȤ���
+  # @brief Propertiesをセットする
   #
-  # ExecutionContextProfile::properties �򥻥åȤ��롣
+  # ExecutionContextProfile::properties をセットする。
   #
-  # @param props ExecutionContextProfile::properties �˥��åȤ����
-  #              ���ѥƥ���
+  # @param props ExecutionContextProfile::properties にセットするプ
+  #              ロパティー
   #
   # @else
   # @brief Setting Properties
@@ -552,11 +552,11 @@ class ExecutionContextProfile:
   
   ##
   # @if jp
-  # @brief Properties���������
+  # @brief Propertiesを取得する
   #
-  # ExecutionContextProfile::properties ��������롣
+  # ExecutionContextProfile::properties を取得する。
   #
-  # @return coil::Properties���Ѵ����줿
+  # @return coil::Propertiesに変換された
   #              ExecutionContextProfile::properties
   #
   # @else
@@ -581,11 +581,11 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief Profile���������
+  # @brief Profileを取得する
   #
-  # RTC::ExecutionContextProfile ��������롣��������
-  # ExecutionContextProfile �ν�ͭ���ϸƤӽФ�¦�ˤ��롣�������줿��
-  # �֥������Ȥ����פˤʤä���硢�ƤӽФ�¦������������Ǥ���餦��
+  # RTC::ExecutionContextProfile を取得する。取得した
+  # ExecutionContextProfile の所有権は呼び出し側にある。取得されたオ
+  # ブジェクトが不要になった場合、呼び出し側が開放する責任を負う。
   #
   # @return RTC::ExecutionContextProfile
   #
@@ -609,10 +609,10 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief ExecutionContextProfile����å�����
+  # @brief ExecutionContextProfileをロックする
   #
-  # ���Υ��֥������Ȥ��������� RTC::ExecutionContextProfile ����å����롣
-  # ���å������פˤʤä��ݤˤ�unlock()�ǥ��å��������ʤ���Фʤ�ʤ���
+  # このオブジェクトが管理する RTC::ExecutionContextProfile をロックする。
+  # ロックが不要になった際にはunlock()でロックを解除しなければならない。
   #
   # @else
   # @brief Getting a lock of RTC::ExecutionContextProfile
@@ -629,10 +629,10 @@ class ExecutionContextProfile:
 
   ##
   # @if jp
-  # @brief ExecutionContextProfile�򥢥���å�����
+  # @brief ExecutionContextProfileをアンロックする
   #
-  # ���Υ��֥������Ȥ��������� RTC::ExecutionContextProfile �򥢥����
-  # �����롣
+  # このオブジェクトが管理する RTC::ExecutionContextProfile をアンロッ
+  # クする。
   #
   # @else
   # @brief Release a lock of the RTC::ExecutionContextProfile

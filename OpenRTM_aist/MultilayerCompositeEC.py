@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file MultilayerCompositeEC.py
@@ -31,9 +31,9 @@ DEFAULT_PERIOD = 0.000001
 ##
 # @if jp
 # @class MultilayerCompositeEC
-# @brief MultilayerCompositeEC ¥¯¥é¥¹
+# @brief MultilayerCompositeEC ã‚¯ãƒ©ã‚¹
 #
-# Periodic Sampled Data Processing(¼ş´ü¼Â¹ÔÍÑ)ExecutionContext¥¯¥é¥¹¡£
+# Periodic Sampled Data Processing(å‘¨æœŸå®Ÿè¡Œç”¨)ExecutionContextã‚¯ãƒ©ã‚¹ã€‚
 #
 # @since 0.4.0
 #
@@ -47,10 +47,10 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
-  # ÀßÄê¤µ¤ì¤¿ÃÍ¤ò¥×¥í¥Õ¥¡¥¤¥ë¤ËÀßÄê¤¹¤ë¡£
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # è¨­å®šã•ã‚ŒãŸå€¤ã‚’ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã«è¨­å®šã™ã‚‹ã€‚
   #
   # @else
   # @brief Constructor
@@ -68,15 +68,15 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
   ##
   # @if jp
-  # @brief ½ªÎ»´Ø¿ô
+  # @brief çµ‚äº†é–¢æ•°
   #
-  # @param self¡¡
-  # @param Task¡¡
+  # @param selfã€€
+  # @param Taskã€€
   #
   # @else
   # @brief 
-  # @param self¡¡
-  # @param Task¡¡
+  # @param selfã€€
+  # @param Taskã€€
   # @endif
   def exit(self, Task=OpenRTM_aist.Task):
     OpenRTM_aist.PeriodicExecutionContext.exit(self)
@@ -86,14 +86,14 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
   ##
   # @if jp
-  # @brief ½é´ü²½´Ø¿ô
+  # @brief åˆæœŸåŒ–é–¢æ•°
   #
-  # @param self¡¡
-  # @param props ¥×¥í¥Ñ¥Æ¥£
+  # @param selfã€€
+  # @param props ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   #
   # @else
   # @brief 
-  # @param self¡¡
+  # @param selfã€€
   # @param props 
   # @endif
   def init(self, props):
@@ -104,7 +104,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥Ğ¥¤¥ó¥É¤¹¤ë¡£
+  # @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã€‚
   #
   # @param self
   # @param rtc RTC
@@ -151,7 +151,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
   ##
   # @if jp
   # @class 
-  # @brief worker ÍÑ¾õÂÖÊÑ¿ô¥¯¥é¥¹
+  # @brief worker ç”¨çŠ¶æ…‹å¤‰æ•°ã‚¯ãƒ©ã‚¹
   # @else
   # @brief
   #
@@ -159,9 +159,9 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
   class WorkerThreadCtrl:
     ##
     # @if jp
-    # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
-    # ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
     # @param self
     #
@@ -176,7 +176,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
   ##
   # @if jp
   # @class 
-  # @brief RTC¼ş´ü¼Â¹Ô¥¹¥ì¥Ã¥É
+  # @brief RTCå‘¨æœŸå®Ÿè¡Œã‚¹ãƒ¬ãƒƒãƒ‰
   # @else
   # @brief
   #
@@ -184,11 +184,11 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
   class ChildTask:
     ##
     # @if jp
-    # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
     # @param self
-    # @param task ¼ş´ü¼Â¹Ô¥¹¥ì¥Ã¥É
-    # @param ec ¼Â¹Ô¥³¥ó¥Æ¥­¥¹¥È
+    # @param task å‘¨æœŸå®Ÿè¡Œã‚¹ãƒ¬ãƒƒãƒ‰
+    # @param ec å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
     #
     # @else
     #
@@ -209,7 +209,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
     ##
     # @if jp
-    # @brief ¼Â¹Ô¤¹¤ëRTC¤òÄÉ²Ã
+    # @brief å®Ÿè¡Œã™ã‚‹RTCã‚’è¿½åŠ 
     #
     # @param self
     # @param rtc RTC
@@ -227,7 +227,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
     ##
     # @if jp
-    # @brief ¥¹¥Æ¡¼¥È¥Ş¥·¥ó¤Î¥ê¥¹¥È¤ò¹¹¿·
+    # @brief ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®ãƒªã‚¹ãƒˆã‚’æ›´æ–°
     #
     # @param self
     # @param return
@@ -249,7 +249,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
     ##
     # @if jp
-    # @brief ¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô
+    # @brief ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œé–¢æ•°
     #
     # @param self
     # @param return
@@ -296,7 +296,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
     ##
     # @if jp
-    # @brief 1²ó¤Î½èÍı¤ò¼Â¹Ô
+    # @brief 1å›ã®å‡¦ç†ã‚’å®Ÿè¡Œ
     #
     # @param self
     #
@@ -322,7 +322,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
       
     ##
     # @if jp
-    # @brief 1²ó¤Î½èÍı½ªÎ»¤Ş¤ÇÂÔµ¡
+    # @brief 1å›ã®å‡¦ç†çµ‚äº†ã¾ã§å¾…æ©Ÿ
     #
     # @param self
     #
@@ -349,10 +349,10 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
     ##
     # @if jp
-    # @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬·ë²Ì¤ò¼èÆÀ
+    # @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬çµæœã‚’å–å¾—
     #
     # @param self
-    # @return ·×Â¬·ë²Ì
+    # @return è¨ˆæ¸¬çµæœ
     #
     # @else
     #
@@ -368,10 +368,10 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
     ##
     # @if jp
-    # @brief ¥¿¥¹¥¯´Ø¿ô¼Â¹Ô»ş´Ö·×Â¬·ë²Ì¤ò¼èÆÀ
+    # @brief ã‚¿ã‚¹ã‚¯é–¢æ•°å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬çµæœã‚’å–å¾—
     #
     # @param self
-    # @return ·×Â¬·ë²Ì
+    # @return è¨ˆæ¸¬çµæœ
     #
     # @else
     #
@@ -386,7 +386,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
     ##
     # @if jp
-    # @brief RTC¼Â¹Ô¥¹¥ì¥Ã¥É½ªÎ»´Ø¿ô
+    # @brief RTCå®Ÿè¡Œã‚¹ãƒ¬ãƒƒãƒ‰çµ‚äº†é–¢æ•°
     #
     # @param self
     #
@@ -405,11 +405,11 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
       
   ##
   # @if jp
-  # @brief RTC¼Â¹Ô¥¹¥ì¥Ã¥ÉºîÀ®
+  # @brief RTCå®Ÿè¡Œã‚¹ãƒ¬ãƒƒãƒ‰ä½œæˆ
   #
   # @param self
-  # @param rtcs ¥¹¥ì¥Ã¥É¤Ë´ØÏ¢ÉÕ¤±¤ëRTC°ìÍ÷
-  # @return ¥¹¥Æ¡¼¥È¥Ş¥·¥ó
+  # @param rtcs ã‚¹ãƒ¬ãƒƒãƒ‰ã«é–¢é€£ä»˜ã‘ã‚‹RTCä¸€è¦§
+  # @return ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³
   #
   # @else
   #
@@ -460,11 +460,11 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥İ¡¼¥Í¥ó¥ÈÃµº÷´Ø¿ô
+  # @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆæ¢ç´¢é–¢æ•°
   #
   # @param self
   # @param rtobj RTC
-  # @return ¥¹¥Æ¡¼¥È¥Ş¥·¥ó
+  # @return ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³
   #
   # @else
   #
@@ -480,11 +480,11 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
   ##
   # @if jp
-  # @brief RTC¼Â¹Ô¥¹¥ì¥Ã¥É¤ËRTC¤òÄÉ²Ã
-  # Ê£¹ç¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¾ì¹ç¤Ï»Ò¥³¥ó¥İ¡¼¥Í¥ó¥È¤âÄÉ²Ã
+  # @brief RTCå®Ÿè¡Œã‚¹ãƒ¬ãƒƒãƒ‰ã«RTCã‚’è¿½åŠ 
+  # è¤‡åˆã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å ´åˆã¯å­ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚‚è¿½åŠ 
   #
   # @param self
-  # @param task RTC¼Â¹Ô¥¹¥ì¥Ã¥É
+  # @param task RTCå®Ÿè¡Œã‚¹ãƒ¬ãƒƒãƒ‰
   # @param rtobj RTC
   #
   # @else
@@ -512,10 +512,10 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¢¥¯¥Æ¥£¥Ó¥Æ¥£¥¹¥ì¥Ã¥É´Ø¿ô
+  # @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°
   #
-  # ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÆâÉô¥¢¥¯¥Æ¥£¥Ó¥Æ¥£¥¹¥ì¥Ã¥É¤Î¼Â¹Ô´Ø¿ô¡£
-  # ACE_Task ¥µ¡¼¥Ó¥¹¥¯¥é¥¹¥á¥½¥Ã¥É¤Î¥ª¡¼¥Ğ¡¼¥é¥¤¥É¡£
+  # ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å†…éƒ¨ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã‚¹ãƒ¬ãƒƒãƒ‰ã®å®Ÿè¡Œé–¢æ•°ã€‚
+  # ACE_Task ã‚µãƒ¼ãƒ“ã‚¹ã‚¯ãƒ©ã‚¹ãƒ¡ã‚½ãƒƒãƒ‰ã®ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã€‚
   #
   # @else
   #
@@ -622,11 +622,11 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 
 ##
 # @if jp
-# @brief ExecutionContext ¤ò½é´ü²½¤¹¤ë
+# @brief ExecutionContext ã‚’åˆæœŸåŒ–ã™ã‚‹
 #
-# ExecutionContext µ¯Æ°ÍÑ¥Õ¥¡¥¯¥È¥ê¤òÅĞÏ¿¤¹¤ë¡£
+# ExecutionContext èµ·å‹•ç”¨ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚’ç™»éŒ²ã™ã‚‹ã€‚
 #
-# @param manager ¥Ş¥Í¡¼¥¸¥ã¥ª¥Ö¥¸¥§¥¯¥È
+# @param manager ãƒãƒãƒ¼ã‚¸ãƒ£ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 #
 # @else
 #

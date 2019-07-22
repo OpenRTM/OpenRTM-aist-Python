@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 
 ##
@@ -24,14 +24,14 @@ import OpenRTM_aist
 #
 # @class InPortConsumer
 #
-# @brief InPortConsumer ´ğÄì¥¯¥é¥¹
+# @brief InPortConsumer åŸºåº•ã‚¯ãƒ©ã‚¹
 #
-# ÆşÎÏ¥İ¡¼¥È¥³¥ó¥·¥å¡¼¥Ş¤Î¤¿¤á¤ÎÃê¾İ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¯¥é¥¹
-# ³Æ¶ñ¾İ¥¯¥é¥¹¤Ï¡¢°Ê²¼¤Î´Ø¿ô¤Î¼ÂÁõ¤òÄó¶¡¤·¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
-# - push(): ¥Ç¡¼¥¿Á÷¿®
-# - clone(): ¥İ¡¼¥È¤Î¥³¥Ô¡¼
-# - subscribeInterface(): ¥Ç¡¼¥¿Á÷½ĞÄÌÃÎ¤Ø¤ÎÅĞÏ¿
-# - unsubscribeInterface(): ¥Ç¡¼¥¿Á÷½ĞÄÌÃÎ¤ÎÅĞÏ¿²ò½ü
+# å…¥åŠ›ãƒãƒ¼ãƒˆã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®ãŸã‚ã®æŠ½è±¡ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
+# å„å…·è±¡ã‚¯ãƒ©ã‚¹ã¯ã€ä»¥ä¸‹ã®é–¢æ•°ã®å®Ÿè£…ã‚’æä¾›ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
+# - push(): ãƒ‡ãƒ¼ã‚¿é€ä¿¡
+# - clone(): ãƒãƒ¼ãƒˆã®ã‚³ãƒ”ãƒ¼
+# - subscribeInterface(): ãƒ‡ãƒ¼ã‚¿é€å‡ºé€šçŸ¥ã¸ã®ç™»éŒ²
+# - unsubscribeInterface(): ãƒ‡ãƒ¼ã‚¿é€å‡ºé€šçŸ¥ã®ç™»éŒ²è§£é™¤
 #
 # @since 0.4.0
 #
@@ -52,7 +52,7 @@ class InPortConsumer(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥×¥í¥Õ¥¡¥¤¥ë¤ò¸ø³«¤¹¤ë¤¿¤Î¥Õ¥¡¥ó¥¯¥¿
+  # @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å…¬é–‹ã™ã‚‹ãŸã®ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
   # @else
   # @brief Functor to publish interface profile
   # @endif
@@ -67,7 +67,7 @@ class InPortConsumer(OpenRTM_aist.DataPortStatus):
 
   ##
   # @if jp
-  # @brief ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥×¥í¥Õ¥¡¥¤¥ë¤ò¸ø³«¤¹¤ë¤¿¤Î¥Õ¥¡¥ó¥¯¥¿
+  # @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å…¬é–‹ã™ã‚‹ãŸã®ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
   # @else
   # @brief Functor to publish interface profile
   # @endif

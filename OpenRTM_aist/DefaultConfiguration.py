@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # \file DefaultConfiguration.py
@@ -29,9 +29,9 @@ else:
 
 ##
 # @if jp
-# @brief Manager ÍÑ ¥Ç¥Õ¥©¥ë¥È¡¦¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó
+# @brief Manager ç”¨ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ»ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
 #
-# Manager¥¯¥é¥¹ÍÑ¥Ç¥Õ¥©¥ë¥È¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¡£
+# Managerã‚¯ãƒ©ã‚¹ç”¨ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã€‚
 #
 # @since 0.4.0
 #

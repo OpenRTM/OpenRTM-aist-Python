@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file TimeMeasure.py
@@ -33,7 +33,7 @@ if sys.version_info[0] == 3:
 
 ##
 # @if jp
-# @brief »þ´ÖÃ±°ÌÊÑ´¹ÍÑÄê¿ô
+# @brief æ™‚é–“å˜ä½å¤‰æ›ç”¨å®šæ•°
 # @else
 # @endif
 usec_per_sec = 1000000
@@ -41,9 +41,9 @@ usec_per_sec = 1000000
 ##
 # @if jp
 # @class Time
-# @brief »þ´Ö´ÉÍýÍÑ¥¯¥é¥¹
+# @brief æ™‚é–“ç®¡ç†ç”¨ã‚¯ãƒ©ã‚¹
 # 
-# »ØÄê¤·¤¿»þ´ÖÃÍ¤òÊÝ»ý¤¹¤ë¤¿¤á¤Î¥¯¥é¥¹¡£
+# æŒ‡å®šã—ãŸæ™‚é–“å€¤ã‚’ä¿æŒã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ã€‚
 # 
 # @since 0.4.1
 # 
@@ -56,9 +56,9 @@ class Time:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿¡£
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
   #
   # @param self
   #
@@ -73,8 +73,8 @@ class Time:
   def __init__(self):
     global usec_per_sec
     tm = time.time()
-    tm_f       = float(tm - long(tm))     # ¾®¿ôÉô¤Î¼è¤ê½Ð¤·
-    self.sec   = long(tm - tm_f)   # À°¿ôÉô¤Î¼è¤ê½Ð¤·
+    tm_f       = float(tm - long(tm))     # å°æ•°éƒ¨ã®å–ã‚Šå‡ºã—
+    self.sec   = long(tm - tm_f)   # æ•´æ•°éƒ¨ã®å–ã‚Šå‡ºã—
     self.usec  = long(float(tm_f) * float(usec_per_sec)) # sec -> usec (micro second)
     self._timevalue = OpenRTM_aist.TimeValue(self.sec,self.usec)
     return
@@ -82,14 +82,14 @@ class Time:
   ##
   # @if jp
   #
-  # @brief »þ´Ö¸º»»
+  # @brief æ™‚é–“æ¸›ç®—
   # 
-  # ÀßÄê¤µ¤ì¤¿»þ´Ö¤«¤é°ú¿ô¤ÇÍ¿¤¨¤é¤ì¤¿»þ´Ö¤ò¸º»»¤¹¤ë¡£
+  # è¨­å®šã•ã‚ŒãŸæ™‚é–“ã‹ã‚‰å¼•æ•°ã§ä¸Žãˆã‚‰ã‚ŒãŸæ™‚é–“ã‚’æ¸›ç®—ã™ã‚‹ã€‚
   #
   # @param self
-  # @param tm ¸º»»»þ´Ö
+  # @param tm æ¸›ç®—æ™‚é–“
   # 
-  # @return ¸º»»·ë²Ì
+  # @return æ¸›ç®—çµæžœ
   # 
   # @else
   #
@@ -121,8 +121,8 @@ class Time:
 
       
     tm = time.time()
-    tm_f       = float(tm - long(tm))     # ¾®¿ôÉô¤Î¼è¤ê½Ð¤·
-    self.sec   = long(float(tm) - float(tm_f))   # À°¿ôÉô¤Î¼è¤ê½Ð¤·
+    tm_f       = float(tm - long(tm))     # å°æ•°éƒ¨ã®å–ã‚Šå‡ºã—
+    self.sec   = long(float(tm) - float(tm_f))   # æ•´æ•°éƒ¨ã®å–ã‚Šå‡ºã—
     self.usec  = long(float(tm_f) * float(usec_per_sec)) # sec -> usec (micro second)
     return OpenRTM_aist.TimeValue(self.sec, self.usec)
 

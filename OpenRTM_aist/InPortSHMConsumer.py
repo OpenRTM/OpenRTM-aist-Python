@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file  InPortSHMConsumer.py
@@ -20,9 +20,9 @@ import threading
 #
 # @class InPortSHMConsumer
 #
-# @brief InPortSHMConsumer ¥¯¥é¥¹
+# @brief InPortSHMConsumer ã‚¯ãƒ©ã‚¹
 #
-# ÄÌ¿®¼êÃÊ¤Ë ¶¦Í­¥á¥â¥ê ¤òÍøÍÑ¤·¤¿ÆşÎÏ¥İ¡¼¥È¥³¥ó¥·¥å¡¼¥Ş¤Î¼ÂÁõ¥¯¥é¥¹¡£
+# é€šä¿¡æ‰‹æ®µã« å…±æœ‰ãƒ¡ãƒ¢ãƒª ã‚’åˆ©ç”¨ã—ãŸå…¥åŠ›ãƒãƒ¼ãƒˆã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®å®Ÿè£…ã‚¯ãƒ©ã‚¹ã€‚
 #
 #
 # @else
@@ -40,9 +40,9 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -71,9 +71,9 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   # @param CorbaConsumer
@@ -101,13 +101,13 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
 
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
-  # InPortConsumer¤Î³Æ¼ïÀßÄê¤ò¹Ô¤¦
-  # ¥×¥í¥Ğ¥¤¥À¤Ç¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë¤Ë¶¦Í­¥á¥â¥ê¤Î¶õ´ÖÌ¾¤òÊİÂ¸¤¹¤ë¤¿¤á¡¢init´Ø¿ô¤Ç¶¦Í­¥á¥â¥ê¤Î½é´ü²½¤ò¹Ô¤¦
+  # InPortConsumerã®å„ç¨®è¨­å®šã‚’è¡Œã†
+  # ãƒ—ãƒ­ãƒã‚¤ãƒ€ã§ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã«å…±æœ‰ãƒ¡ãƒ¢ãƒªã®ç©ºé–“åã‚’ä¿å­˜ã™ã‚‹ãŸã‚ã€inité–¢æ•°ã§å…±æœ‰ãƒ¡ãƒ¢ãƒªã®åˆæœŸåŒ–ã‚’è¡Œã†
   #
   # @param self
-  # @param prop ¥³¥Í¥¯¥¿¥×¥í¥Ñ¥Æ¥£
+  # @param prop ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   #
   # @else
   # @brief Initializing configuration
@@ -160,16 +160,16 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
       
   ##
   # @if jp
-  # @brief ÀÜÂ³Àè¤Ø¤Î¥Ç¡¼¥¿Á÷¿®
+  # @brief æ¥ç¶šå…ˆã¸ã®ãƒ‡ãƒ¼ã‚¿é€ä¿¡
   #
-  # ÀÜÂ³Àè¤Î¥İ¡¼¥È¤Ø¥Ç¡¼¥¿¤òÁ÷¿®¤¹¤ë
+  # æ¥ç¶šå…ˆã®ãƒãƒ¼ãƒˆã¸ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹
   # 
-  # ¥Ç¡¼¥¿¤Î¥µ¥¤¥º¤Ï¶¦Í­¥á¥â¥ê¤âÀèÆ¬8byte¤«¤é¼èÆÀ¤¹¤ë
-  # ¥Ç¡¼¥¿¤Ï¶¦Í­¥á¥â¥ê¤Ë½ñ¤­¹ş¤à
+  # ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚ºã¯å…±æœ‰ãƒ¡ãƒ¢ãƒªã‚‚å…ˆé ­8byteã‹ã‚‰å–å¾—ã™ã‚‹
+  # ãƒ‡ãƒ¼ã‚¿ã¯å…±æœ‰ãƒ¡ãƒ¢ãƒªã«æ›¸ãè¾¼ã‚€
   #
   # @param self
-  # @param data Á÷¿®¤¹¤ë¥Ç¡¼¥¿
-  # @return ¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @param data é€ä¿¡ã™ã‚‹ãƒ‡ãƒ¼ã‚¿
+  # @return ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   # @brief Send data to the destination port

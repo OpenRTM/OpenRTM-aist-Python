@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file FiniteStateMachineComponentBase.py
@@ -27,9 +27,9 @@ import OpenRTM, OpenRTM__POA
 ##
 # @if jp
 # @brief 
-# FiniteStateMachine¤Î¥Ù¡¼¥¹¥¯¥é¥¹¡£
-# ¥æ¡¼¥¶¤¬¿·¤¿¤ÊRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òºîÀ®¤¹¤ë¾ì¹ç¤Ï¡¢¤³¤Î¥¯¥é¥¹¤ò³ÈÄ¥¤¹¤ë¡£
-# ³ÆRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥Ù¡¼¥¹¤È¤Ê¤ë¥¯¥é¥¹¡£}
+# FiniteStateMachineã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã€‚
+# ãƒ¦ãƒ¼ã‚¶ãŒæ–°ãŸãªRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ä½œæˆã™ã‚‹å ´åˆã¯ã€ã“ã®ã‚¯ãƒ©ã‚¹ã‚’æ‹¡å¼µã™ã‚‹ã€‚
+# å„RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒ™ãƒ¼ã‚¹ã¨ãªã‚‹ã‚¯ãƒ©ã‚¹ã€‚}
 #
 #
 # @else
@@ -42,9 +42,9 @@ import OpenRTM, OpenRTM__POA
 class FiniteStateMachineComponent_impl(OpenRTM_aist.RTObject_impl, OpenRTM__POA.FiniteStateMachineComponent):
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -64,7 +64,7 @@ class FiniteStateMachineComponent_impl(OpenRTM_aist.RTObject_impl, OpenRTM__POA.
   #
   # @brief 
   #
-  # @return ReturnCode_t ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @return ReturnCode_t å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   #

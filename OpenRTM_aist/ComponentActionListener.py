@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ComponentActionListener.py
@@ -18,20 +18,20 @@
 
 ##
 # @if jp
-# @brief PreComponentActionListener ¤Î¥¿¥¤¥×
+# @brief PreComponentActionListener ã®ã‚¿ã‚¤ãƒ—
 #
-# - PRE_ON_INITIALIZE:    onInitialize Ä¾Á°
-# - PRE_ON_FINALIZE:      onFinalize Ä¾Á°
-# - PRE_ON_STARTUP:       onStartup Ä¾Á°
-# - PRE_ON_SHUTDOWN:      onShutdown Ä¾Á°
-# - PRE_ON_ACTIVATED:     onActivated Ä¾Á°
-# - PRE_ON_DEACTIVATED:   onDeactivated Ä¾Á°
-# - PRE_ON_ABORTING:      onAborted Ä¾Á°
-# - PRE_ON_ERROR:         onError Ä¾Á°
-# - PRE_ON_RESET:         onReset Ä¾Á°
-# - PRE_ON_EXECUTE:       onExecute Ä¾Á°
-# - PRE_ON_STATE_UPDATE:  onStateUpdate Ä¾Á°
-# - PRE_ON_RATE_CHANGED:  onRateChanged Ä¾Á°
+# - PRE_ON_INITIALIZE:    onInitialize ç›´å‰
+# - PRE_ON_FINALIZE:      onFinalize ç›´å‰
+# - PRE_ON_STARTUP:       onStartup ç›´å‰
+# - PRE_ON_SHUTDOWN:      onShutdown ç›´å‰
+# - PRE_ON_ACTIVATED:     onActivated ç›´å‰
+# - PRE_ON_DEACTIVATED:   onDeactivated ç›´å‰
+# - PRE_ON_ABORTING:      onAborted ç›´å‰
+# - PRE_ON_ERROR:         onError ç›´å‰
+# - PRE_ON_RESET:         onReset ç›´å‰
+# - PRE_ON_EXECUTE:       onExecute ç›´å‰
+# - PRE_ON_STATE_UPDATE:  onStateUpdate ç›´å‰
+# - PRE_ON_RATE_CHANGED:  onRateChanged ç›´å‰
 #
 # @else
 # @brief The types of ConnectorDataListener
@@ -61,11 +61,11 @@ class PreComponentActionListenerType:
 
 ##
 # @if jp
-# @class PreComponentActionListener ¥¯¥é¥¹
-# @brief PreComponentActionListener ¥¯¥é¥¹
+# @class PreComponentActionListener ã‚¯ãƒ©ã‚¹
+# @brief PreComponentActionListener ã‚¯ãƒ©ã‚¹
 #
-# OMG RTC»ÅÍÍ¤ÇÄêµÁ¤µ¤ì¤Æ¤¤¤ë°Ê²¼¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¥¢¥¯¥·¥ç¥ó¥È¤Ë¤Ä¤¤
-# ¤Æ¡¢
+# OMG RTCä»•æ§˜ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ä»¥ä¸‹ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãƒˆã«ã¤ã„
+# ã¦ã€
 #
 # - on_initialize()
 # - on_finalize()
@@ -80,8 +80,8 @@ class PreComponentActionListenerType:
 # - on_state_update()
 # - on_rate_changed()
 #
-# ³Æ¥¢¥¯¥·¥ç¥ó¤ËÂĞ±ş¤¹¤ë¥æ¡¼¥¶¡¼¥³¡¼¥É¤¬¸Æ¤Ğ¤ì¤ëÄ¾Á°¤Î¥¿¥¤¥ß¥ó¥°
-# ¤Ç¥³¡¼¥ë¤µ¤ì¤ë¥ê¥¹¥Ê¥¯¥é¥¹¤Î´ğÄì¥¯¥é¥¹¡£
+# å„ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã«å¯¾å¿œã™ã‚‹ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚³ãƒ¼ãƒ‰ãŒå‘¼ã°ã‚Œã‚‹ç›´å‰ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°
+# ã§ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ãƒªã‚¹ãƒŠã‚¯ãƒ©ã‚¹ã®åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
 #
 # - PRE_ON_INITIALIZE:
 # - PRE_ON_FINALIZE:
@@ -114,13 +114,13 @@ class PreComponentActionListener:
   ##
   # @if jp
   #
-  # @brief PreComponentActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+  # @brief PreComponentActionListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
   #
-  # PreComponentActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
+  # PreComponentActionListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
   #
-  # @param type ÊÑ´¹ÂĞ¾İ PreComponentActionListenerType
+  # @param type å¤‰æ›å¯¾è±¡ PreComponentActionListenerType
   #
-  # @return Ê¸»úÎóÊÑ´¹·ë²Ì
+  # @return æ–‡å­—åˆ—å¤‰æ›çµæœ
   #
   # @else
   #
@@ -156,7 +156,7 @@ class PreComponentActionListener:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -166,9 +166,9 @@ class PreComponentActionListener:
   ##
   # @if jp
   #
-  # @brief ²¾ÁÛ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief ä»®æƒ³ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
-  # PreComponentActionListener ¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # PreComponentActionListener ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @else
   #
@@ -186,7 +186,7 @@ class PreComponentActionListener:
 
 ##
 # @if jp
-# @brief PostCompoenntActionListener ¤Î¥¿¥¤¥×
+# @brief PostCompoenntActionListener ã®ã‚¿ã‚¤ãƒ—
 #
 # - POST_ON_INITIALIZE:
 # - POST_ON_FINALIZE:
@@ -229,11 +229,11 @@ class PostComponentActionListenerType:
 
 ##
 # @if jp
-# @class PostComponentActionListener ¥¯¥é¥¹
-# @brief PostComponentActionListener ¥¯¥é¥¹
+# @class PostComponentActionListener ã‚¯ãƒ©ã‚¹
+# @brief PostComponentActionListener ã‚¯ãƒ©ã‚¹
 #
-# OMG RTC»ÅÍÍ¤ÇÄêµÁ¤µ¤ì¤Æ¤¤¤ë°Ê²¼¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¥¢¥¯¥·¥ç¥ó¥È¤Ë¤Ä¤¤
-# ¤Æ¡¢
+# OMG RTCä»•æ§˜ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ä»¥ä¸‹ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãƒˆã«ã¤ã„
+# ã¦ã€
 #
 # - on_initialize()
 # - on_finalize()
@@ -248,8 +248,8 @@ class PostComponentActionListenerType:
 # - on_state_update()
 # - on_rate_changed()
 #
-# ³Æ¥¢¥¯¥·¥ç¥ó¤ËÂĞ±ş¤¹¤ë¥æ¡¼¥¶¡¼¥³¡¼¥É¤¬¸Æ¤Ğ¤ì¤ëÄ¾Á°¤Î¥¿¥¤¥ß¥ó¥°
-# ¤Ç¥³¡¼¥ë¤µ¤ì¤ë¥ê¥¹¤Ê¥¯¥é¥¹¤Î´ğÄì¥¯¥é¥¹¡£
+# å„ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã«å¯¾å¿œã™ã‚‹ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚³ãƒ¼ãƒ‰ãŒå‘¼ã°ã‚Œã‚‹ç›´å‰ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°
+# ã§ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ãƒªã‚¹ãªã‚¯ãƒ©ã‚¹ã®åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
 #
 # - POST_ON_INITIALIZE:
 # - POST_ON_FINALIZE:
@@ -282,13 +282,13 @@ class PostComponentActionListener:
   ##
   # @if jp
   #
-  # @brief PostComponentActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+  # @brief PostComponentActionListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
   #
-  # PostComponentActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
+  # PostComponentActionListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
   #
-  # @param type ÊÑ´¹ÂĞ¾İ PostComponentActionListenerType
+  # @param type å¤‰æ›å¯¾è±¡ PostComponentActionListenerType
   #
-  # @return Ê¸»úÎóÊÑ´¹·ë²Ì
+  # @return æ–‡å­—åˆ—å¤‰æ›çµæœ
   #
   # @else
   #
@@ -324,7 +324,7 @@ class PostComponentActionListener:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -334,9 +334,9 @@ class PostComponentActionListener:
   ##
   # @if jp
   #
-  # @brief ²¾ÁÛ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief ä»®æƒ³ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
-  # PostComponentActionListener ¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # PostComponentActionListener ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @else
   #
@@ -355,10 +355,10 @@ class PostComponentActionListener:
 #============================================================
 ##
 # @if jp
-# @brief PortActionListener ¤Î¥¿¥¤¥×
+# @brief PortActionListener ã®ã‚¿ã‚¤ãƒ—
 #
-# - ADD_PORT:             Port ÄÉ²Ã»ş
-# - REMOVE_PORT:          Port ºï½ü»ş
+# - ADD_PORT:             Port è¿½åŠ æ™‚
+# - REMOVE_PORT:          Port å‰Šé™¤æ™‚
 #
 # @else
 # @brief The types of PortActionListener
@@ -379,11 +379,11 @@ class PortActionListenerType:
 
 ##
 # @if jp
-# @class PortActionListener ¥¯¥é¥¹
-# @brief PortActionListener ¥¯¥é¥¹
+# @class PortActionListener ã‚¯ãƒ©ã‚¹
+# @brief PortActionListener ã‚¯ãƒ©ã‚¹
 #
-# ³Æ¥¢¥¯¥·¥ç¥ó¤ËÂĞ±ş¤¹¤ë¥æ¡¼¥¶¡¼¥³¡¼¥É¤¬¸Æ¤Ğ¤ì¤ëÄ¾Á°¤Î¥¿¥¤¥ß¥ó¥°
-# ¤Ç¥³¡¼¥ë¤µ¤ì¤ë¥ê¥¹¤Ê¥¯¥é¥¹¤Î´ğÄì¥¯¥é¥¹¡£
+# å„ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã«å¯¾å¿œã™ã‚‹ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚³ãƒ¼ãƒ‰ãŒå‘¼ã°ã‚Œã‚‹ç›´å‰ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°
+# ã§ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ãƒªã‚¹ãªã‚¯ãƒ©ã‚¹ã®åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
 #
 # - ADD_PORT:
 # - REMOVE_PORT:
@@ -406,13 +406,13 @@ class PortActionListener:
   ##
   # @if jp
   #
-  # @brief PortActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+  # @brief PortActionListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
   #
-  # PortActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
+  # PortActionListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
   #
-  # @param type ÊÑ´¹ÂĞ¾İ PortActionListenerType
+  # @param type å¤‰æ›å¯¾è±¡ PortActionListenerType
   #
-  # @return Ê¸»úÎóÊÑ´¹·ë²Ì
+  # @return æ–‡å­—åˆ—å¤‰æ›çµæœ
   #
   # @else
   #
@@ -438,7 +438,7 @@ class PortActionListener:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -449,9 +449,9 @@ class PortActionListener:
   ##
   # @if jp
   #
-  # @brief ²¾ÁÛ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief ä»®æƒ³ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
-  # PortActionListener ¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # PortActionListener ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @else
   #
@@ -468,10 +468,10 @@ class PortActionListener:
 #============================================================
 ##
 # @if jp
-# @brief ExecutionContextActionListener ¤Î¥¿¥¤¥×
+# @brief ExecutionContextActionListener ã®ã‚¿ã‚¤ãƒ—
 #
-# - EC_ATTACHED:          ExecutionContext ÄÉ²Ã»ş
-# - EC_DETACHED:          ExecutionContext ºï½ü»ş
+# - EC_ATTACHED:          ExecutionContext è¿½åŠ æ™‚
+# - EC_DETACHED:          ExecutionContext å‰Šé™¤æ™‚
 #
 # @else
 # @brief The types of ExecutionContextActionListener
@@ -489,11 +489,11 @@ class ExecutionContextActionListenerType:
 
 ##
 # @if jp
-# @class ExecutionContextActionListener ¥¯¥é¥¹
-# @brief ExecutionContextActionListener ¥¯¥é¥¹
+# @class ExecutionContextActionListener ã‚¯ãƒ©ã‚¹
+# @brief ExecutionContextActionListener ã‚¯ãƒ©ã‚¹
 #
-# ³Æ¥¢¥¯¥·¥ç¥ó¤ËÂĞ±ş¤¹¤ë¥æ¡¼¥¶¡¼¥³¡¼¥É¤¬¸Æ¤Ğ¤ì¤ëÄ¾Á°¤Î¥¿¥¤¥ß¥ó¥°
-# ¤Ç¥³¡¼¥ë¤µ¤ì¤ë¥ê¥¹¤Ê¥¯¥é¥¹¤Î´ğÄì¥¯¥é¥¹¡£
+# å„ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã«å¯¾å¿œã™ã‚‹ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚³ãƒ¼ãƒ‰ãŒå‘¼ã°ã‚Œã‚‹ç›´å‰ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°
+# ã§ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ãƒªã‚¹ãªã‚¯ãƒ©ã‚¹ã®åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
 #
 # - ADD_PORT:
 # - REMOVE_PORT:
@@ -517,13 +517,13 @@ class ExecutionContextActionListener:
   ##
   # @if jp
   #
-  # @brief ExecutionContextActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+  # @brief ExecutionContextActionListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
   #
-  # ExecutionContextActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
+  # ExecutionContextActionListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
   #
-  # @param type ÊÑ´¹ÂĞ¾İ ExecutionContextActionListenerType
+  # @param type å¤‰æ›å¯¾è±¡ ExecutionContextActionListenerType
   #
-  # @return Ê¸»úÎóÊÑ´¹·ë²Ì
+  # @return æ–‡å­—åˆ—å¤‰æ›çµæœ
   #
   # @else
   #
@@ -550,7 +550,7 @@ class ExecutionContextActionListener:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -560,9 +560,9 @@ class ExecutionContextActionListener:
   ##
   # @if jp
   #
-  # @brief ²¾ÁÛ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief ä»®æƒ³ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
-  # ExecutionContextActionListener ¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # ExecutionContextActionListener ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @else
   #
@@ -581,9 +581,9 @@ class ExecutionContextActionListener:
 ##
 # @if jp
 # @class PreComponentActionListenerHolder 
-# @brief PreComponentActionListener ¥Û¥ë¥À¥¯¥é¥¹
+# @brief PreComponentActionListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
 #
-# Ê£¿ô¤Î PreComponentActionListener ¤òÊİ»ı¤·´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
+# è¤‡æ•°ã® PreComponentActionListener ã‚’ä¿æŒã—ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @else
 # @class PreComponentActionListenerHolder
@@ -599,7 +599,7 @@ class PreComponentActionListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Constructor
   # @endif
@@ -610,7 +610,7 @@ class PreComponentActionListenerHolder:
     
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -620,11 +620,11 @@ class PreComponentActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ÎÄÉ²Ã
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®è¿½åŠ 
   #
-  # ¥ê¥¹¥Ê¡¼¤òÄÉ²Ã¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ ã™ã‚‹ã€‚
   #
-  # @param listener ÄÉ²Ã¤¹¤ë¥ê¥¹¥Ê
+  # @param listener è¿½åŠ ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Add the listener.
@@ -641,11 +641,11 @@ class PreComponentActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤Îºï½ü
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®å‰Šé™¤
   #
-  # ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ã€‚
   #
-  # @param listener ºï½ü¤¹¤ë¥ê¥¹¥Ê
+  # @param listener å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Remove the listener. 
@@ -667,9 +667,9 @@ class PreComponentActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤ë
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã¸é€šçŸ¥ã™ã‚‹
   #
-  # ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ê¥¹¥Ê¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+  # ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒªã‚¹ãƒŠã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã€‚
   #
   # @param info ConnectorInfo
   # @else
@@ -691,9 +691,9 @@ class PreComponentActionListenerHolder:
 ##
 # @if jp
 # @class PostComponentActionListenerHolder
-# @brief PostComponentActionListener ¥Û¥ë¥À¥¯¥é¥¹
+# @brief PostComponentActionListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
 #
-# Ê£¿ô¤Î PostComponentActionListener ¤òÊİ»ı¤·´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
+# è¤‡æ•°ã® PostComponentActionListener ã‚’ä¿æŒã—ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @else
 # @class PostComponentActionListenerHolder
@@ -709,7 +709,7 @@ class PostComponentActionListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Constructor
   # @endif
@@ -720,7 +720,7 @@ class PostComponentActionListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -730,11 +730,11 @@ class PostComponentActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ÎÄÉ²Ã
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®è¿½åŠ 
   #
-  # ¥ê¥¹¥Ê¡¼¤òÄÉ²Ã¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ ã™ã‚‹ã€‚
   #
-  # @param listener ÄÉ²Ã¤¹¤ë¥ê¥¹¥Ê
+  # @param listener è¿½åŠ ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Add the listener.
@@ -751,11 +751,11 @@ class PostComponentActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤Îºï½ü
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®å‰Šé™¤
   #
-  # ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ã€‚
   #
-  # @param listener ºï½ü¤¹¤ë¥ê¥¹¥Ê
+  # @param listener å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Remove the listener. 
@@ -778,12 +778,12 @@ class PostComponentActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤ë
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã¸é€šçŸ¥ã™ã‚‹
   #
-  # ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ê¥¹¥Ê¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+  # ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒªã‚¹ãƒŠã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã€‚
   #
   # @param info ConnectorInfo
-  # @param cdrdata ¥Ç¡¼¥¿
+  # @param cdrdata ãƒ‡ãƒ¼ã‚¿
   # @else
   #
   # @brief Notify listeners. 
@@ -805,9 +805,9 @@ class PostComponentActionListenerHolder:
 ##
 # @if jp
 # @class PortActionListenerHolder
-# @brief PortActionListener ¥Û¥ë¥À¥¯¥é¥¹
+# @brief PortActionListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
 #
-# Ê£¿ô¤Î PortActionListener ¤òÊİ»ı¤·´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
+# è¤‡æ•°ã® PortActionListener ã‚’ä¿æŒã—ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @else
 # @class PortActionListenerHolder
@@ -823,7 +823,7 @@ class PortActionListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Constructor
   # @endif
@@ -834,7 +834,7 @@ class PortActionListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -844,11 +844,11 @@ class PortActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ÎÄÉ²Ã
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®è¿½åŠ 
   #
-  # ¥ê¥¹¥Ê¡¼¤òÄÉ²Ã¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ ã™ã‚‹ã€‚
   #
-  # @param listener ÄÉ²Ã¤¹¤ë¥ê¥¹¥Ê
+  # @param listener è¿½åŠ ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Add the listener.
@@ -866,11 +866,11 @@ class PortActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤Îºï½ü
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®å‰Šé™¤
   #
-  # ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ã€‚
   #
-  # @param listener ºï½ü¤¹¤ë¥ê¥¹¥Ê
+  # @param listener å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Remove the listener. 
@@ -892,12 +892,12 @@ class PortActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤ë
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã¸é€šçŸ¥ã™ã‚‹
   #
-  # ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ê¥¹¥Ê¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+  # ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒªã‚¹ãƒŠã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã€‚
   #
   # @param info ConnectorInfo
-  # @param cdrdata ¥Ç¡¼¥¿
+  # @param cdrdata ãƒ‡ãƒ¼ã‚¿
   # @else
   #
   # @brief Notify listeners. 
@@ -918,9 +918,9 @@ class PortActionListenerHolder:
 ##
 # @if jp
 # @class ExecutionContextActionListenerHolder
-# @brief ExecutionContextActionListener ¥Û¥ë¥À¥¯¥é¥¹
+# @brief ExecutionContextActionListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
 #
-# Ê£¿ô¤Î ExecutionContextActionListener ¤òÊİ»ı¤·´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
+# è¤‡æ•°ã® ExecutionContextActionListener ã‚’ä¿æŒã—ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @else
 # @class ExecutionContextActionListenerHolder
@@ -936,7 +936,7 @@ class ExecutionContextActionListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Constructor
   # @endif
@@ -947,7 +947,7 @@ class ExecutionContextActionListenerHolder:
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # @else
   # @brief Destructor
   # @endif
@@ -958,11 +958,11 @@ class ExecutionContextActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ÎÄÉ²Ã
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®è¿½åŠ 
   #
-  # ¥ê¥¹¥Ê¡¼¤òÄÉ²Ã¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ ã™ã‚‹ã€‚
   #
-  # @param listener ÄÉ²Ã¤¹¤ë¥ê¥¹¥Ê
+  # @param listener è¿½åŠ ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Add the listener.
@@ -980,11 +980,11 @@ class ExecutionContextActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤Îºï½ü
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã®å‰Šé™¤
   #
-  # ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
+  # ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹ã€‚
   #
-  # @param listener ºï½ü¤¹¤ë¥ê¥¹¥Ê
+  # @param listener å‰Šé™¤ã™ã‚‹ãƒªã‚¹ãƒŠ
   # @else
   #
   # @brief Remove the listener. 
@@ -1007,12 +1007,12 @@ class ExecutionContextActionListenerHolder:
   ##
   # @if jp
   #
-  # @brief ¥ê¥¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤ë
+  # @brief ãƒªã‚¹ãƒŠãƒ¼ã¸é€šçŸ¥ã™ã‚‹
   #
-  # ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ê¥¹¥Ê¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+  # ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒªã‚¹ãƒŠã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã€‚
   #
   # @param info ConnectorInfo
-  # @param cdrdata ¥Ç¡¼¥¿
+  # @param cdrdata ãƒ‡ãƒ¼ã‚¿
   # @else
   #
   # @brief Notify listeners. 
@@ -1033,7 +1033,7 @@ class ExecutionContextActionListenerHolder:
 ##
 # @if jp
 # @class ComponentActionListeners
-# @brief ComponentActionListeners ¥¯¥é¥¹
+# @brief ComponentActionListeners ã‚¯ãƒ©ã‚¹
 #
 #
 # @else
@@ -1050,8 +1050,8 @@ class ComponentActionListeners:
 
     ##
     # @if jp
-    # @brief PreComponentActionListenerType¥ê¥¹¥ÊÇÛÎó
-    # PreComponentActionListenerType¥ê¥¹¥Ê¤ò³ÊÇ¼
+    # @brief PreComponentActionListenerTypeãƒªã‚¹ãƒŠé…åˆ—
+    # PreComponentActionListenerTypeãƒªã‚¹ãƒŠã‚’æ ¼ç´
     # @else
     # @brief PreComponentActionListenerType listener array
     # The PreComponentActionListenerType listener is stored. 
@@ -1062,8 +1062,8 @@ class ComponentActionListeners:
 
     ##
     # @if jp
-    # @brief PostComponentActionListenerType¥ê¥¹¥ÊÇÛÎó
-    # PostComponentActionListenerType¥ê¥¹¥Ê¤ò³ÊÇ¼
+    # @brief PostComponentActionListenerTypeãƒªã‚¹ãƒŠé…åˆ—
+    # PostComponentActionListenerTypeãƒªã‚¹ãƒŠã‚’æ ¼ç´
     # @else
     # @brief PostComponentActionListenerType listener array
     # The PostComponentActionListenerType listener is stored.
@@ -1074,8 +1074,8 @@ class ComponentActionListeners:
 
     ##
     # @if jp
-    # @brief PortActionListenerType¥ê¥¹¥ÊÇÛÎó
-    # PortActionListenerType¥ê¥¹¥Ê¤ò³ÊÇ¼
+    # @brief PortActionListenerTypeãƒªã‚¹ãƒŠé…åˆ—
+    # PortActionListenerTypeãƒªã‚¹ãƒŠã‚’æ ¼ç´
     # @else
     # @brief PortActionListenerType listener array
     # The PortActionListenerType listener is stored.
@@ -1086,8 +1086,8 @@ class ComponentActionListeners:
   
     ##
     # @if jp
-    # @brief ExecutionContextActionListenerType¥ê¥¹¥ÊÇÛÎó
-    # ExecutionContextActionListenerType¥ê¥¹¥Ê¤ò³ÊÇ¼
+    # @brief ExecutionContextActionListenerTypeãƒªã‚¹ãƒŠé…åˆ—
+    # ExecutionContextActionListenerTypeãƒªã‚¹ãƒŠã‚’æ ¼ç´
     # @else
     # @brief ExecutionContextActionListenerType listener array
     # The ExecutionContextActionListenerType listener is stored.

@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file PortAdmin.py
@@ -24,11 +24,11 @@ import OpenRTM_aist
 ##
 # @if jp
 # @class PortAdmin
-# @brief PortAdmin ¥¯¥é¥¹
+# @brief PortAdmin ã‚¯ãƒ©ã‚¹
 #
-# ³Æ¼ï Port ¤Î´ÉÍı¤ò¹Ô¤¦¥¯¥é¥¹¡£
-# Port ¤ÎÅĞÏ¿/ÅĞÏ¿²ò½ü¤Ê¤É³Æ¼ï´ÉÍıÁàºî¤ò¼Â¹Ô¤¹¤ë¤È¤È¤â¤Ë¡¢ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë
-# Port ¤Î´ÉÍı¤ò¹Ô¤¦¥¯¥é¥¹¡£
+# å„ç¨® Port ã®ç®¡ç†ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ã€‚
+# Port ã®ç™»éŒ²/ç™»éŒ²è§£é™¤ãªã©å„ç¨®ç®¡ç†æ“ä½œã‚’å®Ÿè¡Œã™ã‚‹ã¨ã¨ã‚‚ã«ã€ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹
+# Port ã®ç®¡ç†ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @since 0.4.0
 #
@@ -45,7 +45,7 @@ class PortAdmin:
   ##
   # @if jp
   # @class comp_op
-  # @brief Port ´ÉÍıÍÑÆâÉô¥¯¥é¥¹
+  # @brief Port ç®¡ç†ç”¨å†…éƒ¨ã‚¯ãƒ©ã‚¹
   # @else
   #
   # @endif
@@ -64,7 +64,7 @@ class PortAdmin:
   ##
   # @if jp
   # @class find_port_name
-  # @brief Port ¸¡º÷ÍÑ¥Õ¥¡¥ó¥¯¥¿
+  # @brief Port æ¤œç´¢ç”¨ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
   # @else
   # @endif
   class find_port_name:
@@ -79,7 +79,7 @@ class PortAdmin:
 
   ##
   # @if jp
-  # @brief Portºï½üÍÑ¥Õ¥¡¥ó¥¯¥¿
+  # @brief Portå‰Šé™¤ç”¨ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
   # @else
   # @brief Functor to delete the Port
   # @endif
@@ -104,9 +104,9 @@ class PortAdmin:
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   # @param orb ORB
@@ -116,16 +116,16 @@ class PortAdmin:
   # @brief Constructor
   # @endif
   def __init__(self, orb, poa):
-    # ORB ¥ª¥Ö¥¸¥§¥¯¥È
+    # ORB ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     self._orb = orb
 
-    # POA ¥ª¥Ö¥¸¥§¥¯¥È
+    # POA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     self._poa = poa
 
-    # Port¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤Î¥ê¥¹¥È. PortServiceList
+    # Portã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã®ãƒªã‚¹ãƒˆ. PortServiceList
     self._portRefs = []
 
-    # ¥µ¡¼¥Ğ¥ó¥È¤òÄ¾ÀÜ³ÊÇ¼¤¹¤ë¥ª¥Ö¥¸¥§¥¯¥È¥Ş¥Í¡¼¥¸¥ã
+    # ã‚µãƒ¼ãƒãƒ³ãƒˆã‚’ç›´æ¥æ ¼ç´ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£
     self._portServants = OpenRTM_aist.ObjectManager(self.comp_op)
 
     self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("PortAdmin")
@@ -133,13 +133,13 @@ class PortAdmin:
   ##
   # @if jp
   #
-  # @brief Port ¥ê¥¹¥È¤Î¼èÆÀ
+  # @brief Port ãƒªã‚¹ãƒˆã®å–å¾—
   #
-  # registerPort() ¤Ë¤è¤êÅĞÏ¿¤µ¤ì¤¿ Port ¤Î ¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë¡£
+  # registerPort() ã«ã‚ˆã‚Šç™»éŒ²ã•ã‚ŒãŸ Port ã® ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹ã€‚
   #
   # @param self
   #
-  # @return Port ¥ê¥¹¥È
+  # @return Port ãƒªã‚¹ãƒˆ
   #
   # @else
   #
@@ -158,11 +158,11 @@ class PortAdmin:
   ##
   # @if jp
   #
-  # @brief PorProfile ¥ê¥¹¥È¤Î¼èÆÀ
+  # @brief PorProfile ãƒªã‚¹ãƒˆã®å–å¾—
   #
-  # addPort() ¤Ë¤è¤êÅĞÏ¿¤µ¤ì¤¿ Port ¤Î Profile ¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë¡£
+  # addPort() ã«ã‚ˆã‚Šç™»éŒ²ã•ã‚ŒãŸ Port ã® Profile ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹ã€‚
   #
-  # @return PortProfile ¥ê¥¹¥È
+  # @return PortProfile ãƒªã‚¹ãƒˆ
   #
   # @else
   #
@@ -186,16 +186,16 @@ class PortAdmin:
   ##
   # @if jp
   #
-  # @brief Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤Î¼èÆÀ
+  # @brief Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã®å–å¾—
   #
-  # port_name ¤Ç»ØÄê¤·¤¿ Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÊÖ¤¹¡£
-  # port_name ¤Ç»ØÄê¤¹¤ë Port ¤Ï¤¢¤é¤«¤¸¤á registerPort() ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤
-  # ¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
+  # port_name ã§æŒ‡å®šã—ãŸ Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’è¿”ã™ã€‚
+  # port_name ã§æŒ‡å®šã™ã‚‹ Port ã¯ã‚ã‚‰ã‹ã˜ã‚ registerPort() ã§ç™»éŒ²ã•ã‚Œã¦ã„
+  # ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
   #
   # @param self
-  # @param port_name »²¾È¤òÊÖ¤¹Port¤ÎÌ¾Á°
+  # @param port_name å‚ç…§ã‚’è¿”ã™Portã®åå‰
   #
-  # @return Port_ptr Port¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È
+  # @return Port_ptr Portã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§
   #
   # @else
   #
@@ -219,16 +219,16 @@ class PortAdmin:
   ##
   # @if jp
   #
-  # @brief Port ¤Î¥µ¡¼¥Ğ¥ó¥È¤Î¥İ¥¤¥ó¥¿¤Î¼èÆÀ
+  # @brief Port ã®ã‚µãƒ¼ãƒãƒ³ãƒˆã®ãƒã‚¤ãƒ³ã‚¿ã®å–å¾—
   #
-  # port_name ¤Ç»ØÄê¤·¤¿ Port ¤Î¥µ¡¼¥Ğ¥ó¥È¤Î¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£
-  # port_name ¤Ç»ØÄê¤¹¤ë Port ¤Ï¤¢¤é¤«¤¸¤á registerPort() ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤
-  # ¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
+  # port_name ã§æŒ‡å®šã—ãŸ Port ã®ã‚µãƒ¼ãƒãƒ³ãƒˆã®ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚
+  # port_name ã§æŒ‡å®šã™ã‚‹ Port ã¯ã‚ã‚‰ã‹ã˜ã‚ registerPort() ã§ç™»éŒ²ã•ã‚Œã¦ã„
+  # ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
   #
   # @param self
-  # @param port_name »²¾È¤òÊÖ¤¹Port¤ÎÌ¾Á°
+  # @param port_name å‚ç…§ã‚’è¿”ã™Portã®åå‰
   #
-  # @return PortBase* Port¥µ¡¼¥Ğ¥ó¥È´ğÄì¥¯¥é¥¹¤Î¥İ¥¤¥ó¥¿
+  # @return PortBase* Portã‚µãƒ¼ãƒãƒ³ãƒˆåŸºåº•ã‚¯ãƒ©ã‚¹ã®ãƒã‚¤ãƒ³ã‚¿
   #
   # @else
   #
@@ -249,14 +249,14 @@ class PortAdmin:
   ##
   # @if jp
   #
-  # @brief Port ¤òÅĞÏ¿¤¹¤ë
+  # @brief Port ã‚’ç™»éŒ²ã™ã‚‹
   #
-  # °ú¿ô port ¤Ç»ØÄê¤µ¤ì¤¿ Port ¤Î¥µ¡¼¥Ğ¥ó¥È¤òÅĞÏ¿¤¹¤ë¡£
-  # ÅĞÏ¿¤µ¤ì¤¿ Port ¤Î¥µ¡¼¥Ğ¥ó¥È¤Ï¥³¥ó¥¹¥È¥é¥¯¥¿¤ÇÍ¿¤¨¤é¤ì¤¿POA ¾å¤Ç
-  # activate ¤µ¤ì¡¢¤½¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ÏPort¤ÎProfile¤Ë¥»¥Ã¥È¤µ¤ì¤ë¡£
+  # å¼•æ•° port ã§æŒ‡å®šã•ã‚ŒãŸ Port ã®ã‚µãƒ¼ãƒãƒ³ãƒˆã‚’ç™»éŒ²ã™ã‚‹ã€‚
+  # ç™»éŒ²ã•ã‚ŒãŸ Port ã®ã‚µãƒ¼ãƒãƒ³ãƒˆã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§ä¸ãˆã‚‰ã‚ŒãŸPOA ä¸Šã§
+  # activate ã•ã‚Œã€ãã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã¯Portã®Profileã«ã‚»ãƒƒãƒˆã•ã‚Œã‚‹ã€‚
   #
   # @param self
-  # @param port Port ¥µ¡¼¥Ğ¥ó¥È
+  # @param port Port ã‚µãƒ¼ãƒãƒ³ãƒˆ
   #
   # @else
   #
@@ -309,14 +309,14 @@ class PortAdmin:
   ##
   # @if jp
   #
-  # @brief Port ¤ÎÅĞÏ¿¤ò²ò½ü¤¹¤ë
+  # @brief Port ã®ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹
   #
-  # °ú¿ô port ¤Ç»ØÄê¤µ¤ì¤¿ Port ¤ÎÅĞÏ¿¤ò²ò½ü¤¹¤ë¡£
-  # ºï½ü»ş¤Ë Port ¤Ï deactivate ¤µ¤ì¡¢Port¤ÎProfile¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤Ë¤Ï¡¢
-  # nilÃÍ¤¬ÂåÆş¤µ¤ì¤ë¡£
+  # å¼•æ•° port ã§æŒ‡å®šã•ã‚ŒãŸ Port ã®ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹ã€‚
+  # å‰Šé™¤æ™‚ã« Port ã¯ deactivate ã•ã‚Œã€Portã®Profileã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã«ã¯ã€
+  # nilå€¤ãŒä»£å…¥ã•ã‚Œã‚‹ã€‚
   #
   # @param self
-  # @param port Port ¥µ¡¼¥Ğ¥ó¥È
+  # @param port Port ã‚µãƒ¼ãƒãƒ³ãƒˆ
   #
   # @else
   #
@@ -359,14 +359,14 @@ class PortAdmin:
   ##
   # @if jp
   #
-  # @brief Ì¾¾Î»ØÄê¤Ë¤è¤êPort ¤ÎÅĞÏ¿¤ò²ò½ü¤¹¤ë
+  # @brief åç§°æŒ‡å®šã«ã‚ˆã‚ŠPort ã®ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹
   #
-  # °ú¿ô¤Ç»ØÄê¤µ¤ì¤¿Ì¾Á°¤ò»ı¤Ä Port ¤ÎÅĞÏ¿¤òºï½ü¤¹¤ë¡£
-  # ºï½ü»ş¤Ë Port ¤Ï deactivate ¤µ¤ì¡¢Port¤ÎProfile¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤Ë¤Ï¡¢
-  # nilÃÍ¤¬ÂåÆş¤µ¤ì¤ë¡£
+  # å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸåå‰ã‚’æŒã¤ Port ã®ç™»éŒ²ã‚’å‰Šé™¤ã™ã‚‹ã€‚
+  # å‰Šé™¤æ™‚ã« Port ã¯ deactivate ã•ã‚Œã€Portã®Profileã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã«ã¯ã€
+  # nilå€¤ãŒä»£å…¥ã•ã‚Œã‚‹ã€‚
   #
   # @param self
-  # @param port_name Port ¤ÎÌ¾Á°
+  # @param port_name Port ã®åå‰
   #
   # @else
   #
@@ -390,7 +390,7 @@ class PortAdmin:
 
   ##
   # @if jp
-  # @brief Á´¤Æ¤Î Port ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò activates ¤¹¤ë
+  # @brief å…¨ã¦ã® Port ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ activates ã™ã‚‹
   # @else
   # @brief Activate all Port interfaces
   # @endif
@@ -405,7 +405,7 @@ class PortAdmin:
 
   ##
   # @if jp
-  # @brief Á´¤Æ¤Î Port ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò deactivates ¤¹¤ë
+  # @brief å…¨ã¦ã® Port ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ deactivates ã™ã‚‹
   # @else
   # @brief Deactivate all Port interfaces
   # @endif
@@ -421,10 +421,10 @@ class PortAdmin:
   ##
   # @if jp
   #
-  # @brief Á´¤Æ¤Î Port ¤òdeactivate¤·ÅĞÏ¿¤òºï½ü¤¹¤ë
+  # @brief å…¨ã¦ã® Port ã‚’deactivateã—ç™»éŒ²ã‚’å‰Šé™¤ã™ã‚‹
   #
-  # ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëÁ´¤Æ¤ÎPort¤ËÂĞ¤·¤Æ¡¢¥µ¡¼¥Ğ¥ó¥È¤Îdeactivate¤ò¹Ô¤¤¡¢
-  # ÅĞÏ¿¥ê¥¹¥È¤«¤éºï½ü¤¹¤ë¡£
+  # ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å…¨ã¦ã®Portã«å¯¾ã—ã¦ã€ã‚µãƒ¼ãƒãƒ³ãƒˆã®deactivateã‚’è¡Œã„ã€
+  # ç™»éŒ²ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã™ã‚‹ã€‚
   #
   # @param self
   #

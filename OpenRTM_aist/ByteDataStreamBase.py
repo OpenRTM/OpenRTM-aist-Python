@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ByteDataStreamBase.py
@@ -41,10 +41,10 @@ class ByteDataStreamBase:
 
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
   # 
-  # @param prop ÀßÄê¾ğÊó
+  # @param prop è¨­å®šæƒ…å ±
   #
   # @else
   #
@@ -62,10 +62,10 @@ class ByteDataStreamBase:
 
   ##
   # @if jp
-  # @brief ¥¨¥ó¥Ç¥£¥¢¥ó¤ÎÀßÄê
+  # @brief ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã®è¨­å®š
   #
   # 
-  # @param little_endian ¥ê¥È¥ë¥¨¥ó¥Ç¥£¥¢¥ó(True)¡¢¥Ó¥Ã¥°¥¨¥ó¥Ç¥£¥¢¥ó(False)
+  # @param little_endian ãƒªãƒˆãƒ«ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³(True)ã€ãƒ“ãƒƒã‚°ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³(False)
   #
   # @else
   #
@@ -82,11 +82,11 @@ class ByteDataStreamBase:
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÉä¹æ²½
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®ç¬¦å·åŒ–
   #
   # 
-  # @param data Éä¹æ²½Á°¤Î¥Ç¡¼¥¿
-  # @return SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
+  # @param data ç¬¦å·åŒ–å‰ã®ãƒ‡ãƒ¼ã‚¿
+  # @return SERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
   #
   # @else
   #
@@ -104,13 +104,13 @@ class ByteDataStreamBase:
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ÎÉü¹æ²½
+  # @brief ãƒ‡ãƒ¼ã‚¿ã®å¾©å·åŒ–
   #
-  # @param cdr ¥Ğ¥¤¥ÈÎó
-  # @param data_type ¥Ç¡¼¥¿·¿
-  # @return ret¡¢value
-  # ret¡§SERIALIZE_OK¡§À®¸ù¡¢SERIALIZE_ERROR¡§¼ºÇÔ¡¢SERIALIZE_NOTFOUND¡§»ØÄê¤Î¥·¥ê¥¢¥é¥¤¥¶¤¬¤Ê¤¤
-  # value¡§Éü¹æ²½¸å¤Î¥Ç¡¼¥¿
+  # @param cdr ãƒã‚¤ãƒˆåˆ—
+  # @param data_type ãƒ‡ãƒ¼ã‚¿å‹
+  # @return retã€value
+  # retï¼šSERIALIZE_OKï¼šæˆåŠŸã€SERIALIZE_ERRORï¼šå¤±æ•—ã€SERIALIZE_NOTFOUNDï¼šæŒ‡å®šã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ãŒãªã„
+  # valueï¼šå¾©å·åŒ–å¾Œã®ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   #

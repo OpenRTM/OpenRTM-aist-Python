@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file  InPortSHMProvider.py
@@ -18,9 +18,9 @@ import OpenRTM
 ##
 # @if jp
 # @class InPortSHMProvider
-# @brief InPortSHMProvider ¥¯¥é¥¹
+# @brief InPortSHMProvider ã‚¯ãƒ©ã‚¹
 #
-# ÄÌ¿®¼êÃÊ¤Ë ¶¦Í­¥á¥â¥ê ¤òÍøÍÑ¤·¤¿ÆşÎÏ¥İ¡¼¥È¥×¥í¥Ğ¥¤¥À¡¼¤Î¼ÂÁõ¥¯¥é¥¹¡£
+# é€šä¿¡æ‰‹æ®µã« å…±æœ‰ãƒ¡ãƒ¢ãƒª ã‚’åˆ©ç”¨ã—ãŸå…¥åŠ›ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒã‚¤ãƒ€ãƒ¼ã®å®Ÿè£…ã‚¯ãƒ©ã‚¹ã€‚
 #
 #
 # @else
@@ -38,11 +38,11 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
-  # Interface Type¤Ë¤Ïshared_memory¤ò»ØÄê¤¹¤ë
-  # ¶¦Í­¥á¥â¥ê¤Î¶õ´ÖÌ¾¤ÏUUID¤ÇºîÀ®¤·¡¢¥³¥Í¥¯¥¿¥×¥í¥Õ¥¡¥¤¥ë¤Îdataport.shared_memory.address¤ËÊİÂ¸¤¹¤ë
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # Interface Typeã«ã¯shared_memoryã‚’æŒ‡å®šã™ã‚‹
+  # å…±æœ‰ãƒ¡ãƒ¢ãƒªã®ç©ºé–“åã¯UUIDã§ä½œæˆã—ã€ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã®dataport.shared_memory.addressã«ä¿å­˜ã™ã‚‹
   #
   # self
   #
@@ -84,9 +84,9 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -104,7 +104,7 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
 
   ##
   # @if jp
-  # @brief ½ªÎ»½èÍı
+  # @brief çµ‚äº†å‡¦ç†
   #
   # @else
   # @brief 
@@ -135,12 +135,12 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider, OpenRTM_aist.SharedMemory):
 
   ##
   # @if jp
-  # @brief ¥Ğ¥Ã¥Õ¥¡¤Ë¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à
+  # @brief ãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
   #
-  # ¥Ç¡¼¥¿¤Î¥µ¥¤¥º¤Ï¶¦Í­¥á¥â¥ê¤âÀèÆ¬8byte¤«¤é¼èÆÀ¤¹¤ë
-  # ¶¦Í­¥á¥â¥ê¤«¤é¥Ç¡¼¥¿¤ò¼è¤ê½Ğ¤·¥Ğ¥Ã¥Õ¥¡¤Ë½ñ¤­¹ş¤à
+  # ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚ºã¯å…±æœ‰ãƒ¡ãƒ¢ãƒªã‚‚å…ˆé ­8byteã‹ã‚‰å–å¾—ã™ã‚‹
+  # å…±æœ‰ãƒ¡ãƒ¢ãƒªã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã—ãƒãƒƒãƒ•ã‚¡ã«æ›¸ãè¾¼ã‚€
   #
-  # @param data ½ñ¹şÂĞ¾İ¥Ç¡¼¥¿
+  # @param data æ›¸è¾¼å¯¾è±¡ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   # @brief 

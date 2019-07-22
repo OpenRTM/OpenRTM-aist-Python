@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 
 ##
@@ -22,7 +22,7 @@ import shlex
 
 ##
 # @if jp
-# @brief ¥×¥í¥»¥¹¤òµ¯Æ°¤¹¤ë
+# @brief ãƒ—ãƒ­ã‚»ã‚¹ã‚’èµ·å‹•ã™ã‚‹
 # @else
 # @brief Launching a process
 # @endif
@@ -64,7 +64,7 @@ def launch_shell(command):
 
 ##
 # @if jp
-# @brief ¥×¥í¥»¥¹¤òÊ£À½¤¹¤ë
+# @brief ãƒ—ãƒ­ã‚»ã‚¹ã‚’è¤‡è£½ã™ã‚‹
 # @else
 # @brief fork process
 # @endif
@@ -79,7 +79,7 @@ def fork():
 
 ##
 # @if jp
-# @brief ¥×¥í¥»¥¹¤òµ¯Æ°¤·½ĞÎÏ¤ò¼èÆÀ¤¹¤ë
+# @brief ãƒ—ãƒ­ã‚»ã‚¹ã‚’èµ·å‹•ã—å‡ºåŠ›ã‚’å–å¾—ã™ã‚‹
 # @else
 # @brief fork process
 # @endif

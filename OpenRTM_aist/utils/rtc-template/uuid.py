@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file uuid.py
@@ -29,9 +29,9 @@ if sys.version_info[0] == 3:
 ##
 # @if jp
 # @class UUID
-# @brief UUIDÊİ»ı¥¯¥é¥¹
+# @brief UUIDä¿æŒã‚¯ãƒ©ã‚¹
 # 
-# À¸À®¤·¤¿ UUID ¤Î¾ğÊó¤òÊİ»ı¤¹¤ë¤¿¤á¤Î¥¯¥é¥¹¡£
+# ç”Ÿæˆã—ãŸ UUID ã®æƒ…å ±ã‚’ä¿æŒã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ã€‚
 #
 # @since 0.4.0
 #

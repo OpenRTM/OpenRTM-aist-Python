@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file RTObject.py
@@ -48,17 +48,17 @@ default_conf = [
 
 ##
 # @if jp
-# @brief RT����ݡ��ͥ�ȥ��饹
+# @brief RTコンポーネントクラス
 #
-# ��RT����ݡ��ͥ�ȤΥ١����Ȥʤ륯�饹��
-# Robotic Technology Component ������� lightweightRTComponent�μ������饹��
-# ����ݡ��ͥ�Ȥε�ǽ���󶡤��� ComponentAction ���󥿡��ե�������
-# ����ݡ��ͥ�ȤΥ饤�ե������������Ԥ������ LightweightRTObject �μ�����
-# �󶡤��롣
-# �ºݤ˥桼��������ݡ��ͥ�Ȥ����������ˤϡ�Execution Semantics ���б�
-# �����ƥ��֥��饹�����Ѥ��롣<BR>
-# (�����μ����Ǥ� Periodic Sampled Data Processing �Τߥ��ݡ��Ȥ��Ƥ��뤿�ᡢ
-#  dataFlowComponent ��ľ�ܷѾ����Ƥ���)
+# 各RTコンポーネントのベースとなるクラス。
+# Robotic Technology Component 仕様中の lightweightRTComponentの実装クラス。
+# コンポーネントの機能を提供する ComponentAction インターフェースと
+# コンポーネントのライフサイクル管理を行うための LightweightRTObject の実装を
+# 提供する。
+# 実際にユーザがコンポーネントを作成する場合には、Execution Semantics に対応
+# した各サブクラスを利用する。<BR>
+# (現状の実装では Periodic Sampled Data Processing のみサポートしているため、
+#  dataFlowComponent を直接継承している)
 #
 # @since 0.2.0
 #
@@ -71,14 +71,14 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
-  # @param manager �ޥ͡����㥪�֥�������(�ǥե������:None)
-  # @param orb ORB(�ǥե������:None)
-  # @param poa POA(�ǥե������:None)
+  # @param manager マネージャオブジェクト(デフォルト値:None)
+  # @param orb ORB(デフォルト値:None)
+  # @param poa POA(デフォルト値:None)
   #
   # @else
   #
@@ -141,7 +141,7 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
   # @param self
   # 
@@ -161,17 +161,17 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ����������ѥ�����Хå��ؿ�
+  # @brief 初期化処理用コールバック関数
   # 
-  # ComponentAction::on_initialize ���ƤФ줿�ݤ˼¹Ԥ���륳����Хå�
-  # �ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�Ȥμºݤν���������ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣
+  # ComponentAction::on_initialize が呼ばれた際に実行されるコールバック
+  # 関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際の初期化処理は、本関数をオーバーライドして実装する
+  # 必要がある。
   #
   # @param self
   # 
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -184,17 +184,17 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ��λ�����ѥ�����Хå��ؿ�
+  # @brief 終了処理用コールバック関数
   # 
-  # ComponentAction::on_finalize ���ƤФ줿�ݤ˼¹Ԥ���륳����Хå�
-  # �ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�Ȥμºݤν�λ�����ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣
+  # ComponentAction::on_finalize が呼ばれた際に実行されるコールバック
+  # 関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際の終了処理は、本関数をオーバーライドして実装する
+  # 必要がある。
   #
   # @param self
   # 
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -207,18 +207,18 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ���Ͻ����ѥ�����Хå��ؿ�
+  # @brief 開始処理用コールバック関数
   # 
-  # ComponentAction::on_startup ���ƤФ줿�ݤ˼¹Ԥ���륳����Хå�
-  # �ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�Ȥμºݤγ��Ͻ����ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣
+  # ComponentAction::on_startup が呼ばれた際に実行されるコールバック
+  # 関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際の開始処理は、本関数をオーバーライドして実装する
+  # 必要がある。
   # 
   # @param self
-  # @param ec_id ���ä��Ƥ��� ExecutionContext �� ID
+  # @param ec_id 参加している ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -231,18 +231,18 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ��߽����ѥ�����Хå��ؿ�
+  # @brief 停止処理用コールバック関数
   # 
-  # ComponentAction::on_shutdown ���ƤФ줿�ݤ˼¹Ԥ���륳����Хå�
-  # �ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�Ȥμºݤ���߽����ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣
+  # ComponentAction::on_shutdown が呼ばれた際に実行されるコールバック
+  # 関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際の停止処理は、本関数をオーバーライドして実装する
+  # 必要がある。
   # 
   # @param self
-  # @param ec_id ���ä��Ƥ��� ExecutionContext �� ID
+  # @param ec_id 参加している ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -255,18 +255,18 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief �����������ѥ�����Хå��ؿ�
+  # @brief 活性化処理用コールバック関数
   # 
-  # ComponentAction::on_activated ���ƤФ줿�ݤ˼¹Ԥ���륳����Хå�
-  # �ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�Ȥμºݤγ����������ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣
+  # ComponentAction::on_activated が呼ばれた際に実行されるコールバック
+  # 関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際の活性化処理は、本関数をオーバーライドして実装する
+  # 必要がある。
   # 
   # @param self
-  # @param ec_id ���ä��Ƥ��� ExecutionContext �� ID
+  # @param ec_id 参加している ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -279,18 +279,18 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ������������ѥ�����Хå��ؿ�
+  # @brief 非活性化処理用コールバック関数
   # 
-  # ComponentAction::on_deactivated ���ƤФ줿�ݤ˼¹Ԥ���륳����Хå�
-  # �ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�Ȥμºݤ�������������ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣
+  # ComponentAction::on_deactivated が呼ばれた際に実行されるコールバック
+  # 関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際の非活性化処理は、本関数をオーバーライドして実装する
+  # 必要がある。
   # 
   # @param self
-  # @param ec_id ���ä��Ƥ��� ExecutionContext �� ID
+  # @param ec_id 参加している ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -303,20 +303,20 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ���������ѥ�����Хå��ؿ�
+  # @brief 周期処理用コールバック関数
   # 
-  # DataFlowComponentAction::on_execute ���ƤФ줿�ݤ˼¹Ԥ����
-  # ������Хå��ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�Ȥμºݤμ��������ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣<BR>
-  # �ܴؿ��� Periodic Sampled Data Processing �ˤ����� Two-Pass Execution��
-  # �����ܤμ¹ԥѥ��Ȥ������Ū�˸ƤӽФ���롣
+  # DataFlowComponentAction::on_execute が呼ばれた際に実行される
+  # コールバック関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際の周期処理は、本関数をオーバーライドして実装する
+  # 必要がある。<BR>
+  # 本関数は Periodic Sampled Data Processing における Two-Pass Executionの
+  # １回目の実行パスとして定期的に呼び出される。
   # 
   # @param self
-  # @param ec_id ���ä��Ƥ��� ExecutionContext �� ID
+  # @param ec_id 参加している ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -329,18 +329,18 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ���ǽ����ѥ�����Хå��ؿ�
+  # @brief 中断処理用コールバック関数
   # 
-  # ComponentAction::on_aborting ���ƤФ줿�ݤ˼¹Ԥ���륳����Хå�
-  # �ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�Ȥμºݤ����ǽ����ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣
+  # ComponentAction::on_aborting が呼ばれた際に実行されるコールバック
+  # 関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際の中断処理は、本関数をオーバーライドして実装する
+  # 必要がある。
   # 
   # @param self
-  # @param ec_id ���ä��Ƥ��� ExecutionContext �� ID
+  # @param ec_id 参加している ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -353,17 +353,17 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ���顼�����ѥ�����Хå��ؿ�
+  # @brief エラー処理用コールバック関数
   # 
-  # ComponentAction::on_error ���ƤФ줿�ݤ˼¹Ԥ���륳����Хå��ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�ȤμºݤΥ��顼�����ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣
+  # ComponentAction::on_error が呼ばれた際に実行されるコールバック関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際のエラー処理は、本関数をオーバーライドして実装する
+  # 必要がある。
   # 
   # @param self
-  # @param ec_id ���ä��Ƥ��� ExecutionContext �� ID
+  # @param ec_id 参加している ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -376,17 +376,17 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief �ꥻ�åȽ����ѥ�����Хå��ؿ�
+  # @brief リセット処理用コールバック関数
   # 
-  # ComponentAction::on_reset ���ƤФ줿�ݤ˼¹Ԥ���륳����Хå��ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�ȤμºݤΥꥻ�åȽ����ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣
+  # ComponentAction::on_reset が呼ばれた際に実行されるコールバック関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際のリセット処理は、本関数をオーバーライドして実装する
+  # 必要がある。
   # 
   # @param self
-  # @param ec_id ���ä��Ƥ��� ExecutionContext �� ID
+  # @param ec_id 参加している ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -399,20 +399,20 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief �����ѹ������ѥ�����Хå��ؿ�
+  # @brief 状態変更処理用コールバック関数
   # 
-  # DataFlowComponentAction::on_state_update ���ƤФ줿�ݤ˼¹Ԥ����
-  # ������Хå��ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�Ȥμºݤξ����ѹ������ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣<BR>
-  # �ܴؿ��� Periodic Sampled Data Processing �ˤ����� Two-Pass Execution��
-  # �����ܤμ¹ԥѥ��Ȥ������Ū�˸ƤӽФ���롣
+  # DataFlowComponentAction::on_state_update が呼ばれた際に実行される
+  # コールバック関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際の状態変更処理は、本関数をオーバーライドして実装する
+  # 必要がある。<BR>
+  # 本関数は Periodic Sampled Data Processing における Two-Pass Executionの
+  # ２回目の実行パスとして定期的に呼び出される。
   #
   # @param self
-  # @param ec_id ���ä��Ƥ��� ExecutionContext �� ID
+  # @param ec_id 参加している ExecutionContext の ID
   # 
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -425,20 +425,20 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ư������ѹ������ѥ�����Хå��ؿ�
+  # @brief 動作周期変更通知用コールバック関数
   # 
-  # DataFlowComponentAction::on_rate_changed ���ƤФ줿�ݤ˼¹Ԥ����
-  # ������Хå��ؿ���<BR>
-  # �ܴؿ���̵���� RTC::RTC_OK ���֤��褦�˥��ߡ���������Ƥ���Τǡ�
-  # �ƥ���ݡ��ͥ�Ȥμºݤξ����ѹ������ϡ��ܴؿ��򥪡��С��饤�ɤ��Ƽ�������
-  # ɬ�פ����롣<BR>
-  # �ܴؿ��� Periodic Sampled Data Processing �ˤ����� ExecutionContext ��
-  # �¹Ԥ��������줿�ݤ˸ƤӽФ���롣
+  # DataFlowComponentAction::on_rate_changed が呼ばれた際に実行される
+  # コールバック関数。<BR>
+  # 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+  # 各コンポーネントの実際の状態変更処理は、本関数をオーバーライドして実装する
+  # 必要がある。<BR>
+  # 本関数は Periodic Sampled Data Processing において ExecutionContext の
+  # 実行が更新された際に呼び出される。
   #
   # @param self
-  # @param ec_id ���ä��Ƥ��� ExecutionContext �� ID
+  # @param ec_id 参加している ExecutionContext の ID
   # 
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -453,9 +453,9 @@ class RTObject_impl:
   # @brief 
   #
   # @param self
-  # @param ec_id ���ä��Ƥ��� ExecutionContext �� ID
+  # @param ec_id 参加している ExecutionContext の ID
   # 
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   # 
@@ -472,21 +472,21 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [CORBA interface] RTC����������
+  # @brief [CORBA interface] RTCを初期化する
   #
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��ơ�ComponentAction::on_initialize
-  # ������Хå��ؿ����ƤФ�롣
+  # このオペレーション呼び出しの結果として、ComponentAction::on_initialize
+  # コールバック関数が呼ばれる。
   # 
-  # ����
-  # - RTC �� Created���֤ξ��߽�������Ԥ��롣¾�ξ��֤ˤ�����ˤ�
-  #   ReturnCode_t::PRECONDITION_NOT_MET ���֤���ƤӽФ��ϼ��Ԥ��롣
-  # - ���Υ��ڥ졼������ RTC �Υߥɥ륦��������ƤФ�뤳�Ȥ����ꤷ�Ƥ��ꡢ
-  #   ���ץꥱ�������ȯ�Ԥ�ľ�ܤ��Υ��ڥ졼������Ƥ֤��Ȥ�����
-  #   ����Ƥ��ʤ���
+  # 制約
+  # - RTC は Created状態の場合み初期化が行われる。他の状態にいる場合には
+  #   ReturnCode_t::PRECONDITION_NOT_MET が返され呼び出しは失敗する。
+  # - このオペレーションは RTC のミドルウエアから呼ばれることを想定しており、
+  #   アプリケーション開発者は直接このオペレーションを呼ぶことは想定
+  #   されていない。
   #
   # @param self
   # 
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   #
@@ -545,26 +545,26 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [CORBA interface] RTC ��λ����
+  # @brief [CORBA interface] RTC を終了する
   #
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� ComponentAction::on_finalize()
-  # ��ƤӽФ���
+  # このオペレーション呼び出しの結果として ComponentAction::on_finalize()
+  # を呼び出す。
   #
-  # ����
-  # - RTC �� ExecutionContext �˽�°���Ƥ���֤Ͻ�λ����ʤ������ξ��ϡ�
-  #   �ޤ��ǽ�� ExecutionContextOperations::remove_component �ˤ�äƻ��ä�
-  #   ������ʤ���Фʤ�ʤ�������ʳ��ξ��ϡ����Υ��ڥ졼�����ƤӽФ���
-  #   �����ʤ���� ReturnCode_t::PRECONDITION_NOT_ME �Ǽ��Ԥ��롣
-  # - RTC �� Created ���֤Ǥ����硢��λ�����ϹԤ��ʤ���
-  #   ���ξ�硢���Υ��ڥ졼�����ƤӽФ��Ϥ����ʤ����
-  #   ReturnCode_t::PRECONDITION_NOT_MET �Ǽ��Ԥ��롣
-  # - ���Υ��ڥ졼������RTC�Υߥɥ륦��������ƤФ�뤳�Ȥ����ꤷ�Ƥ��ꡢ
-  #   ���ץꥱ�������ȯ�Ԥ�ľ�ܤ��Υ��ڥ졼������Ƥ֤��Ȥ�����
-  #   ����Ƥ��ʤ���
+  # 制約
+  # - RTC が ExecutionContext に所属している間は終了されない。この場合は、
+  #   まず最初に ExecutionContextOperations::remove_component によって参加を
+  #   解除しなければならない。これ以外の場合は、このオペレーション呼び出しは
+  #   いかなる場合も ReturnCode_t::PRECONDITION_NOT_ME で失敗する。
+  # - RTC が Created 状態である場合、終了処理は行われない。
+  #   この場合、このオペレーション呼び出しはいかなる場合も
+  #   ReturnCode_t::PRECONDITION_NOT_MET で失敗する。
+  # - このオペレーションはRTCのミドルウエアから呼ばれることを想定しており、
+  #   アプリケーション開発者は直接このオペレーションを呼ぶことは想定
+  #   されていない。
   #
   # @param self
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   #
@@ -606,25 +606,25 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [CORBA interface] RTC �������ʡ��Ǥ��� ExecutionContext ��
-  #        ��ߤ��������Υ���ƥ�Ĥȶ��˽�λ������
+  # @brief [CORBA interface] RTC がオーナーである ExecutionContext を
+  #        停止させ、そのコンテンツと共に終了させる
   #
-  # ���� RTC �������ʡ��Ǥ��뤹�٤Ƥμ¹ԥ���ƥ����Ȥ���ߤ��롣
-  # ���� RTC ��¾�μ¹ԥ���ƥ����Ȥ��ͭ���� RTC ��°����¹ԥ���ƥ�����
-  # (i.e. �¹ԥ���ƥ����Ȥ��ͭ���� RTC �Ϥ��ʤ�����μ¹ԥ���ƥ����Ȥ�
-  # �����ʡ��Ǥ��롣)�˻��ä��Ƥ����硢���� RTC �Ϥ����Υ���ƥ����Ⱦ�
-  # �������������ʤ���Фʤ�ʤ���
-  # RTC ���¹���Τɤ� ExecutionContext �Ǥ� Active ���֤ǤϤʤ��ʤä��塢
-  # ���� RTC �Ȥ���˴ޤޤ�� RTC ����λ���롣
+  # この RTC がオーナーであるすべての実行コンテキストを停止する。
+  # この RTC が他の実行コンテキストを所有する RTC に属する実行コンテキスト
+  # (i.e. 実行コンテキストを所有する RTC はすなわちその実行コンテキストの
+  # オーナーである。)に参加している場合、当該 RTC はそれらのコンテキスト上
+  # で非活性化されなければならない。
+  # RTC が実行中のどの ExecutionContext でも Active 状態ではなくなった後、
+  # この RTC とこれに含まれる RTC が終了する。
   # 
-  # ����
-  # - RTC �����������Ƥ��ʤ���С���λ�����뤳�ȤϤǤ��ʤ���
-  #   Created ���֤ˤ��� RTC �� exit() ��ƤӽФ�����硢
-  #   ReturnCode_t::PRECONDITION_NOT_MET �Ǽ��Ԥ��롣
+  # 制約
+  # - RTC が初期化されていなければ、終了させることはできない。
+  #   Created 状態にある RTC に exit() を呼び出した場合、
+  #   ReturnCode_t::PRECONDITION_NOT_MET で失敗する。
   #
   # @param self
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   #
@@ -693,21 +693,21 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [CORBA interface] RTC �� Alive ���֤Ǥ��뤫�ɤ�����ǧ���롣
+  # @brief [CORBA interface] RTC が Alive 状態であるかどうか確認する。
   #
-  # RTC �����ꤷ�� ExecutionContext ���Ф��� Alive���֤Ǥ��뤫�ɤ�����ǧ���롣
-  # RTC �ξ��֤� Active �Ǥ��뤫��Inactive �Ǥ��뤫��Error �Ǥ��뤫�ϼ¹����
-  # ExecutionContext �˰�¸���롣���ʤ�������� ExecutionContext ���Ф��Ƥ�
-  # Active  ���֤Ǥ��äƤ⡢¾�� ExecutionContext ���Ф��Ƥ� Inactive ���֤�
-  # �ʤ���⤢�ꤨ�롣���äơ����Υ��ڥ졼�����ϻ��ꤵ�줿
-  # ExecutionContext ���䤤��碌�ơ����� RTC �ξ��֤� Active��Inactive��
-  # Error �ξ��ˤ� Alive ���֤Ȥ����֤���
+  # RTC が指定した ExecutionContext に対して Alive状態であるかどうか確認する。
+  # RTC の状態が Active であるか、Inactive であるか、Error であるかは実行中の
+  # ExecutionContext に依存する。すなわち、ある ExecutionContext に対しては
+  # Active  状態であっても、他の ExecutionContext に対しては Inactive 状態と
+  # なる場合もありえる。従って、このオペレーションは指定された
+  # ExecutionContext に問い合わせて、この RTC の状態が Active、Inactive、
+  # Error の場合には Alive 状態として返す。
   #
   # @param self
   #
-  # @param exec_context �����о� ExecutionContext �ϥ�ɥ�
+  # @param exec_context 取得対象 ExecutionContext ハンドル
   #
-  # @return Alive ���ֳ�ǧ���
+  # @return Alive 状態確認結果
   #
   # @else
   #
@@ -742,13 +742,13 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief [CORBA interface] ExecutionContextList���������
+  # @brief [CORBA interface] ExecutionContextListを取得する
   #
-  # ���� RTC ����ͭ���� ExecutionContext �Υꥹ�Ȥ�������롣
+  # この RTC が所有する ExecutionContext のリストを取得する。
   #
   # @param self
   #
-  # @return ExecutionContext �ꥹ��
+  # @return ExecutionContext リスト
   #
   # @else
   # @brief [CORBA interface] Get ExecutionContextList.
@@ -766,14 +766,14 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief [CORBA interface] ExecutionContext���������
+  # @brief [CORBA interface] ExecutionContextを取得する
   #
-  # ���ꤷ���ϥ�ɥ�� ExecutionContext ��������롣
-  # �ϥ�ɥ뤫�� ExecutionContext �ؤΥޥåԥ󥰤ϡ������ RTC ���󥹥��󥹤�
-  # ��ͭ�Ǥ��롣�ϥ�ɥ�Ϥ��� RTC �� attach_context �����ݤ˼����Ǥ��롣
+  # 指定したハンドルの ExecutionContext を取得する。
+  # ハンドルから ExecutionContext へのマッピングは、特定の RTC インスタンスに
+  # 固有である。ハンドルはこの RTC を attach_context した際に取得できる。
   #
   # @param self
-  # @param ec_id �����о� ExecutionContext �ϥ�ɥ�
+  # @param ec_id 取得対象 ExecutionContext ハンドル
   #
   # @return ExecutionContext
   #
@@ -815,11 +815,11 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief [CORBA interface] ��ͭ���� ExecutionContextList�� ��������
+  # @brief [CORBA interface] 所有する ExecutionContextListを 取得する
   #
-  # ���� RTC ����ͭ���� ExecutionContext �Υꥹ�Ȥ�������롣
+  # この RTC が所有する ExecutionContext のリストを取得する。
   #
-  # @return ExecutionContext �ꥹ��
+  # @return ExecutionContext リスト
   #
   # @else
   # @brief [CORBA interface] Get ExecutionContextList.
@@ -839,11 +839,11 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief [CORBA interface] ���ä��Ƥ��� ExecutionContextList ���������
+  # @brief [CORBA interface] 参加している ExecutionContextList を取得する
   #
-  # ���� RTC �����ä��Ƥ��� ExecutionContext �Υꥹ�Ȥ�������롣
+  # この RTC が参加している ExecutionContext のリストを取得する。
   #
-  # @return ExecutionContext �ꥹ��
+  # @return ExecutionContext リスト
   #
   # @else
   # @brief [CORBA interface] Get participating ExecutionContextList.
@@ -864,13 +864,13 @@ class RTObject_impl:
 
   #
   # @if jp
-  # @brief [CORBA interface] ExecutionContext �Υϥ�ɥ���֤�
+  # @brief [CORBA interface] ExecutionContext のハンドルを返す
   #
-  # @param ExecutionContext �¹ԥ���ƥ�����
+  # @param ExecutionContext 実行コンテキスト
   #
   # @return ExecutionContextHandle
   #
-  # Ϳ����줿�¹ԥ���ƥ����Ȥ˴�Ϣ�դ���줿�ϥ�ɥ���֤���
+  # 与えられた実行コンテキストに関連付けられたハンドルを返す。
   #
   # @else
   # @brief [CORBA interface] Return a handle of a ExecutionContext
@@ -907,13 +907,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [RTObject CORBA interface] ����ݡ��ͥ�ȥץ��ե�������������
+  # @brief [RTObject CORBA interface] コンポーネントプロファイルを取得する
   #
-  # ��������ݡ��ͥ�ȤΥץ��ե����������֤��� 
+  # 当該コンポーネントのプロファイル情報を返す。 
   #
   # @param self
   #
-  # @return ����ݡ��ͥ�ȥץ��ե�����
+  # @return コンポーネントプロファイル
   #
   # @else
   #
@@ -958,13 +958,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [RTObject CORBA interface] �ݡ��Ȥ��������
+  # @brief [RTObject CORBA interface] ポートを取得する
   #
-  # ��������ݡ��ͥ�Ȥ���ͭ����ݡ��Ȥλ��Ȥ��֤���
+  # 当該コンポーネントが保有するポートの参照を返す。
   #
   # @param self
   #
-  # @return �ݡ��ȥꥹ��
+  # @return ポートリスト
   #
   # @else
   #
@@ -989,18 +989,18 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief [CORBA interface] ExecutionContext��attach����
+  # @brief [CORBA interface] ExecutionContextをattachする
   #
-  # ���ꤷ�� ExecutionContext �ˤ��� RTC ���°�����롣���� RTC �ȴ�Ϣ���� 
-  # ExecutionContext �Υϥ�ɥ���֤���
-  # ���Υ��ڥ졼�����ϡ�ExecutionContextOperations::add_component ���ƤФ줿
-  # �ݤ˸ƤӽФ���롣�֤��줿�ϥ�ɥ��¾�Υ��饤����Ȥǻ��Ѥ��뤳�Ȥ�����
-  # ���Ƥ��ʤ���
+  # 指定した ExecutionContext にこの RTC を所属させる。この RTC と関連する 
+  # ExecutionContext のハンドルを返す。
+  # このオペレーションは、ExecutionContextOperations::add_component が呼ばれた
+  # 際に呼び出される。返されたハンドルは他のクライアントで使用することを想定
+  # していない。
   #
   # @param self
-  # @param exec_context ��°�� ExecutionContext
+  # @param exec_context 所属先 ExecutionContext
   #
-  # @return ExecutionContext �ϥ�ɥ�
+  # @return ExecutionContext ハンドル
   #
   # @else
   # @brief [CORBA interface] Attach ExecutionContext.
@@ -1074,23 +1074,23 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief [CORBA interface] ExecutionContext��detach����
+  # @brief [CORBA interface] ExecutionContextをdetachする
   #
-  # ���ꤷ�� ExecutionContext ���餳�� RTC �ν�°�������롣
-  # ���Υ��ڥ졼�����ϡ�ExecutionContextOperations::remove_component ���Ƥ�
-  # �줿�ݤ˸ƤӽФ���롣�֤��줿�ϥ�ɥ��¾�Υ��饤����Ȥǻ��Ѥ��뤳�Ȥ�
-  # ���ꤷ�Ƥ��ʤ���
+  # 指定した ExecutionContext からこの RTC の所属を解除する。
+  # このオペレーションは、ExecutionContextOperations::remove_component が呼ば
+  # れた際に呼び出される。返されたハンドルは他のクライアントで使用することを
+  # 想定していない。
   # 
-  # ����
-  # - ���ꤵ�줿 ExecutionContext �� RTC �����Ǥ˽�°���Ƥ��ʤ����ˤϡ�
-  #   ReturnCode_t::PRECONDITION_NOT_MET ���֤���롣
-  # - ���ꤵ�줿 ExecutionContext �ˤ��������Ф��� RTC ��Active ���֤Ǥ����
-  #   ��ˤϡ� ReturnCode_t::PRECONDITION_NOT_MET ���֤���롣
+  # 制約
+  # - 指定された ExecutionContext に RTC がすでに所属していない場合には、
+  #   ReturnCode_t::PRECONDITION_NOT_MET が返される。
+  # - 指定された ExecutionContext にたしいて対して RTC がActive 状態である場
+  #   合には、 ReturnCode_t::PRECONDITION_NOT_MET が返される。
   #
   # @param self
-  # @param ec_id ����о� ExecutionContext�ϥ�ɥ�
+  # @param ec_id 解除対象 ExecutionContextハンドル
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   # @brief [CORBA interface] Attach ExecutionContext.
@@ -1141,16 +1141,16 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �ν����
+  # @brief [ComponentAction CORBA interface] RTC の初期化
   #
-  # RTC ����������졢Alive ���֤����ܤ��롣
-  # RTC ��ͭ�ν���������Ϥ����Ǽ¹Ԥ��롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onInitialize() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # RTC が初期化され、Alive 状態に遷移する。
+  # RTC 固有の初期化処理はここで実行する。
+  # このオペレーション呼び出しの結果として onInitialize() コールバック関数が
+  # 呼び出される。
   #
   # @param self
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -1199,16 +1199,16 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �ν�λ
+  # @brief [ComponentAction CORBA interface] RTC の終了
   #
-  # RTC ���˴�����롣
-  # RTC ��ͭ�ν�λ�����Ϥ����Ǽ¹Ԥ��롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onFinalize() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # RTC が破棄される。
+  # RTC 固有の終了処理はここで実行する。
+  # このオペレーション呼び出しの結果として onFinalize() コールバック関数が
+  # 呼び出される。
   #
   # @param self
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -1236,17 +1236,17 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �γ���
+  # @brief [ComponentAction CORBA interface] RTC の開始
   #
-  # RTC ����°���� ExecutionContext �� Stopped ���֤��� Running ���֤�����
-  # �������˸ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onStartup() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # RTC が所属する ExecutionContext が Stopped 状態から Running 状態へ遷移
+  # した場合に呼び出される。
+  # このオペレーション呼び出しの結果として onStartup() コールバック関数が
+  # 呼び出される。
   #
   # @param self
-  # @param ec_id �������ܤ��� ExecutionContext �� ID
+  # @param ec_id 状態遷移した ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -1276,17 +1276,17 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �����
+  # @brief [ComponentAction CORBA interface] RTC の停止
   #
-  # RTC ����°���� ExecutionContext �� Running ���֤��� Stopped ���֤�����
-  # �������˸ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onShutdown() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # RTC が所属する ExecutionContext が Running 状態から Stopped 状態へ遷移
+  # した場合に呼び出される。
+  # このオペレーション呼び出しの結果として onShutdown() コールバック関数が
+  # 呼び出される。
   #
   # @param self
-  # @param ec_id �������ܤ��� ExecutionContext �� ID
+  # @param ec_id 状態遷移した ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -1316,16 +1316,16 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �γ�����
+  # @brief [ComponentAction CORBA interface] RTC の活性化
   #
-  # ��°���� ExecutionContext ���� RTC �����������줿�ݤ˸ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onActivated() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # 所属する ExecutionContext から RTC が活性化された際に呼び出される。
+  # このオペレーション呼び出しの結果として onActivated() コールバック関数が
+  # 呼び出される。
   #
   # @param self
-  # @param ec_id ������ ExecutionContext �� ID
+  # @param ec_id 活性化 ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -1356,16 +1356,16 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC ���������
+  # @brief [ComponentAction CORBA interface] RTC の非活性化
   #
-  # ��°���� ExecutionContext ���� RTC ������������줿�ݤ˸ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onDeactivated() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # 所属する ExecutionContext から RTC が非活性化された際に呼び出される。
+  # このオペレーション呼び出しの結果として onDeactivated() コールバック関数が
+  # 呼び出される。
   #
   # @param self
-  # @param ec_id ������� ExecutionContext �� ID
+  # @param ec_id 非活性化 ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -1395,18 +1395,18 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �Υ��顼���֤ؤ�����
+  # @brief [ComponentAction CORBA interface] RTC のエラー状態への遷移
   #
-  # RTC ����°���� ExecutionContext �� Active ���֤��� Error ���֤����ܤ���
-  # ���˸ƤӽФ���롣
-  # ���Υ��ڥ졼������ RTC �� Error ���֤����ܤ����ݤ˰��٤����ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onAborting() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # RTC が所属する ExecutionContext が Active 状態から Error 状態へ遷移した
+  # 場合に呼び出される。
+  # このオペレーションは RTC が Error 状態に遷移した際に一度だけ呼び出される。
+  # このオペレーション呼び出しの結果として onAborting() コールバック関数が
+  # 呼び出される。
   #
   # @param self
-  # @param ec_id �������ܤ��� ExecutionContext �� ID
+  # @param ec_id 状態遷移した ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -1439,23 +1439,23 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �Υ��顼����
+  # @brief [ComponentAction CORBA interface] RTC のエラー処理
   #
-  # RTC �����顼���֤ˤ���ݤ˸ƤӽФ���롣
-  # RTC �����顼���֤ξ��ˡ��оݤȤʤ� ExecutionContext ��ExecutionKind ��
-  # �����������ߥ󥰤ǸƤӽФ���롣�㤨�С�
-  # - ExecutionKind �� PERIODIC �ξ�硢�ܥ��ڥ졼������
-  #   DataFlowComponentAction::on_execute �� on_state_update ���ؤ��ˡ�
-  #   ���ꤵ�줿���֡����ꤵ�줿�����ǸƤӽФ���롣
-  # - ExecutionKind �� EVENT_DRIVEN �ξ�硢�ܥ��ڥ졼������
-  #   FsmParticipantAction::on_action ���ƤФ줿�ݤˡ��ؤ��˸ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onError() ������Хå��ؿ����Ƥӽ�
-  # ����롣
+  # RTC がエラー状態にいる際に呼び出される。
+  # RTC がエラー状態の場合に、対象となる ExecutionContext のExecutionKind に
+  # 応じたタイミングで呼び出される。例えば、
+  # - ExecutionKind が PERIODIC の場合、本オペレーションは
+  #   DataFlowComponentAction::on_execute と on_state_update の替わりに、
+  #   設定された順番、設定された周期で呼び出される。
+  # - ExecutionKind が EVENT_DRIVEN の場合、本オペレーションは
+  #   FsmParticipantAction::on_action が呼ばれた際に、替わりに呼び出される。
+  # このオペレーション呼び出しの結果として onError() コールバック関数が呼び出
+  # される。
   #
   # @param self
-  # @param ec_id �о� ExecutionContext �� ID
+  # @param ec_id 対象 ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -1464,7 +1464,7 @@ class RTObject_impl:
   # The RTC remains in the Error state.
   # If the RTC is in the Error state relative to some execution context when
   # it would otherwise be invoked from that context (according to the 
-  # context��s ExecutionKind), this callback shall be invoked instead. 
+  # context’s ExecutionKind), this callback shall be invoked instead. 
   # For example,
   # - If the ExecutionKind is PERIODIC, this operation shall be invoked in 
   #   sorted order at the rate of the context instead of 
@@ -1495,19 +1495,19 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �Υꥻ�å�
+  # @brief [ComponentAction CORBA interface] RTC のリセット
   #
-  # Error ���֤ˤ��� RTC �Υꥫ�Х������¹Ԥ���Inactive ���֤�����������
-  # ���˸ƤӽФ���롣
-  # RTC �Υꥫ�Х������������������ Inactive ���֤��������뤬������ʳ���
-  # ���ˤ� Error ���֤�α�ޤ롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onReset() ������Хå��ؿ����Ƥ�
-  # �Ф���롣
+  # Error 状態にある RTC のリカバリ処理を実行し、Inactive 状態に復帰させる
+  # 場合に呼び出される。
+  # RTC のリカバリ処理が成功した場合は Inactive 状態に復帰するが、それ以外の
+  # 場合には Error 状態に留まる。
+  # このオペレーション呼び出しの結果として onReset() コールバック関数が呼び
+  # 出される。
   #
   # @param self
-  # @param ec_id �ꥻ�å��о� ExecutionContext �� ID
+  # @param ec_id リセット対象 ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -1547,21 +1547,21 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] Organization �ꥹ�Ȥμ��� 
+  # @brief [SDO interface] Organization リストの取得 
   #
-  # SDOSystemElement ��0�Ĥ⤷���Ϥ���ʾ�� Organization ���ͭ���뤳�Ȥ�
-  # ����롣 SDOSystemElement ��1�İʾ�� Organization ���ͭ���Ƥ�����
-  # �ˤϡ����Υ��ڥ졼�����Ͻ�ͭ���� Organization �Υꥹ�Ȥ��֤���
-  # �⤷Organization���Ĥ��ͭ���Ƥ��ʤ�����ж��Υꥹ�Ȥ��֤���
+  # SDOSystemElement は0個もしくはそれ以上の Organization を所有することが
+  # 出来る。 SDOSystemElement が1つ以上の Organization を所有している場合
+  # には、このオペレーションは所有する Organization のリストを返す。
+  # もしOrganizationを一つも所有していないければ空のリストを返す。
   #
   # @param self
   #
-  # @return ��ͭ���Ƥ��� Organization �ꥹ��
+  # @return 所有している Organization リスト
   #
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InternalError 内部的エラーが発生した。
   #
   # @else
   #
@@ -1598,19 +1598,19 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] SDO ID �μ���
+  # @brief [SDO interface] SDO ID の取得
   #
-  # SDO ID ���֤����ڥ졼�����
-  # ���Υ��ڥ졼�����ϰʲ��η����㳰��ȯ�������롣
+  # SDO ID を返すオペレーション。
+  # このオペレーションは以下の型の例外を発生させる。
   #
   # @param self
   # 
-  # @return    �꥽�����ǡ�����ǥ���������Ƥ��� SDO �� ID
+  # @return    リソースデータモデルで定義されている SDO の ID
   # 
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InternalError 内部的エラーが発生した。
   #
   # @else
   #
@@ -1641,19 +1641,19 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] SDO �����פμ���
+  # @brief [SDO interface] SDO タイプの取得
   # 
-  # SDO Type ���֤����ڥ졼�����
-  # ���Υ��ڥ졼�����ϰʲ��η����㳰��ȯ�������롣
+  # SDO Type を返すオペレーション。
+  # このオペレーションは以下の型の例外を発生させる。
   #
   # @param self
   #
-  # @return    �꥽�����ǡ�����ǥ���������Ƥ��� SDO �� Type
+  # @return    リソースデータモデルで定義されている SDO の Type
   #
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InternalError 内部的エラーが発生した。
   #
   # @else
   #
@@ -1684,20 +1684,20 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] SDO DeviceProfile �ꥹ�Ȥμ��� 
+  # @brief [SDO interface] SDO DeviceProfile リストの取得 
   #
-  # SDO �� DeviceProfile ���֤����ڥ졼����� SDO ���ϡ��ɥ������ǥХ���
-  # �˴�Ϣ�դ����Ƥ��ʤ����ˤϡ����� DeviceProfile ���֤���롣
-  # ���Υ��ڥ졼�����ϰʲ��η����㳰��ȯ�������롣
+  # SDO の DeviceProfile を返すオペレーション。 SDO がハードウエアデバイス
+  # に関連付けられていない場合には、空の DeviceProfile が返される。
+  # このオペレーションは以下の型の例外を発生させる。
   #
   # @param self
   #
   # @return    SDO DeviceProfile
   #
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InternalError 内部的エラーが発生した。
   #
   # @else
   #
@@ -1730,20 +1730,20 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] SDO ServiceProfile �μ��� 
+  # @brief [SDO interface] SDO ServiceProfile の取得 
   #
-  # SDO ����ͭ���Ƥ��� Service �� ServiceProfile ���֤����ڥ졼�����
-  # SDO �������ӥ����Ĥ��ͭ���Ƥ��ʤ����ˤϡ����Υꥹ�Ȥ��֤���
-  # ���Υ��ڥ졼�����ϰʲ��η����㳰��ȯ�������롣
+  # SDO が所有している Service の ServiceProfile を返すオペレーション。
+  # SDO がサービスを一つも所有していない場合には、空のリストを返す。
+  # このオペレーションは以下の型の例外を発生させる。
   #
   # @param self
   # 
-  # @return    SDO ���󶡤������Ƥ� Service �� ServiceProfile��
+  # @return    SDO が提供する全ての Service の ServiceProfile。
   # 
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InternalError 内部的エラーが発生した。
   #
   # @else
   #
@@ -1778,21 +1778,21 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] �����ServiceProfile�μ��� 
+  # @brief [SDO interface] 特定のServiceProfileの取得 
   #
-  # ���� "id" �ǻ��ꤵ�줿̾���Υ����ӥ��� ServiceProfile ���֤���
+  # 引数 "id" で指定された名前のサービスの ServiceProfile を返す。
   # 
   # @param     self
-  # @param     _id SDO Service �� ServiceProfile �˴�Ϣ�դ���줿���̻ҡ�
+  # @param     _id SDO Service の ServiceProfile に関連付けられた識別子。
   # 
-  # @return    ���ꤵ�줿 SDO Service �� ServiceProfile��
+  # @return    指定された SDO Service の ServiceProfile。
   # 
-  # @exception InvalidParameter "id" �ǻ��ꤷ�� ServiceProfile ��¸�ߤ��ʤ���
-  #                             "id" �� null��
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception InvalidParameter "id" で指定した ServiceProfile が存在しない。
+  #                             "id" が null。
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InternalError 内部的エラーが発生した。
   #
   # @else
   #
@@ -1841,24 +1841,24 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] ���ꤵ�줿 SDO Service �μ���
+  # @brief [SDO interface] 指定された SDO Service の取得
   #
-  # ���Υ��ڥ졼�����ϰ��� "id" �ǻ��ꤵ�줿̾���ˤ�äƶ��̤����
-  # SDO �� Service �ؤΥ��֥������Ȼ��Ȥ��֤��� SDO �ˤ���󶡤����
-  # Service �Ϥ��줾���դμ��̻Ҥˤ����̤���롣
+  # このオペレーションは引数 "id" で指定された名前によって区別される
+  # SDO の Service へのオブジェクト参照を返す。 SDO により提供される
+  # Service はそれぞれ一意の識別子により区別される。
   #
   # @param self
-  # @param _id SDO Service �˴�Ϣ�դ���줿���̻ҡ�
+  # @param _id SDO Service に関連付けられた識別子。
   #
-  # @return �׵ᤵ�줿 SDO Service �ؤλ��ȡ�
+  # @return 要求された SDO Service への参照。
   #
   # 
-  # @exception InvalidParameter "id" �ǻ��ꤷ�� ServiceProfile ��¸�ߤ��ʤ���
-  #                             "id" �� null��
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception InvalidParameter "id" で指定した ServiceProfile が存在しない。
+  #                             "id" が null。
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InternalError 内部的エラーが発生した。
   #
   # @else
   #
@@ -1872,9 +1872,9 @@ class RTObject_impl:
   #
   # @param _id The identifier referring to one of the SDO Service
   # @return The object implementing the requested service.
-  # @exception InvalidParameter if argument ��id�� is null, or if the 
+  # @exception InvalidParameter if argument “id” is null, or if the 
   #                             ServiceProfile that is specified by argument
-  #                            ��id�� does not exist.
+  #                            “id” does not exist.
   # @exception SDONotExists if the target SDO does not exist.(This exception 
   #                         is mapped to CORBA standard system exception
   #                         OBJECT_NOT_EXIST.)
@@ -1906,25 +1906,25 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] Configuration ���֥������Ȥμ��� 
+  # @brief [SDO interface] Configuration オブジェクトの取得 
   #
-  # ���Υ��ڥ졼������ Configuration interface �ؤλ��Ȥ��֤���
-  # Configuration interface �ϳ� SDO ��������뤿��Υ��󥿡��ե�������
-  # �ҤȤĤǤ��롣���Υ��󥿡��ե������� DeviceProfile, ServiceProfile,
-  # Organization ��������줿 SDO ��°���ͤ����ꤹ�뤿��˻��Ѥ���롣
-  # Configuration ���󥿡��ե������ξܺ٤ˤĤ��Ƥϡ�OMG SDO specification
-  # �� 2.3.5��, p.2-24 �򻲾ȤΤ��ȡ�
+  # このオペレーションは Configuration interface への参照を返す。
+  # Configuration interface は各 SDO を管理するためのインターフェースの
+  # ひとつである。このインターフェースは DeviceProfile, ServiceProfile,
+  # Organization で定義された SDO の属性値を設定するために使用される。
+  # Configuration インターフェースの詳細については、OMG SDO specification
+  # の 2.3.5節, p.2-24 を参照のこと。
   #
   # @param self
   #
-  # @return SDO �� Configuration ���󥿡��ե������ؤλ���
+  # @return SDO の Configuration インターフェースへの参照
   #
-  # @exception InterfaceNotImplemented SDO��Configuration���󥿡��ե�������
-  #                                    �����ʤ���
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception InterfaceNotImplemented SDOはConfigurationインターフェースを
+  #                                    持たない。
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InternalError 内部的エラーが発生した。
   #
   # @else
   #
@@ -1962,25 +1962,25 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] Monitoring ���֥������Ȥμ��� 
+  # @brief [SDO interface] Monitoring オブジェクトの取得 
   #
-  # ���Υ��ڥ졼������ Monitoring interface �ؤλ��Ȥ��֤���
-  # Monitoring interface �� SDO ���������륤�󥿡��ե������ΰ�ĤǤ��롣
-  # ���Υ��󥿡��ե������� SDO �Υץ��ѥƥ����˥���󥰤��뤿���
-  # ���Ѥ���롣
-  # Monitoring interface �ξܺ٤ˤĤ��Ƥ� OMG SDO specification ��
-  # 2.3.7�� "Monitoring Interface" p.2-35 �򻲾ȤΤ��ȡ�
+  # このオペレーションは Monitoring interface への参照を返す。
+  # Monitoring interface は SDO が管理するインターフェースの一つである。
+  # このインターフェースは SDO のプロパティをモニタリングするために
+  # 使用される。
+  # Monitoring interface の詳細については OMG SDO specification の
+  # 2.3.7節 "Monitoring Interface" p.2-35 を参照のこと。
   #
   # @param self
   #
-  # @return SDO �� Monitoring interface �ؤλ���
+  # @return SDO の Monitoring interface への参照
   #
-  # @exception InterfaceNotImplemented SDO��Configuration���󥿡��ե�������
-  #                                    �����ʤ���
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception InterfaceNotImplemented SDOはConfigurationインターフェースを
+  #                                    持たない。
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InternalError 内部的エラーが発生した。
   #
   # @else
   #
@@ -2013,21 +2013,21 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] Organization �ꥹ�Ȥμ��� 
+  # @brief [SDO interface] Organization リストの取得 
   #
-  # SDO ��0�İʾ�� Organization (�ȿ�)�˽�°���뤳�Ȥ��Ǥ��롣 �⤷ SDO ��
-  # 1�İʾ�� Organization �˽�°���Ƥ����硢���Υ��ڥ졼�����Ͻ�°����
-  # Organization �Υꥹ�Ȥ��֤���SDO �� �ɤ� Organization �ˤ��°���Ƥ��ʤ�
-  # ���ˤϡ����Υꥹ�Ȥ��֤���롣
+  # SDO は0個以上の Organization (組織)に所属することができる。 もし SDO が
+  # 1個以上の Organization に所属している場合、このオペレーションは所属する
+  # Organization のリストを返す。SDO が どの Organization にも所属していない
+  # 場合には、空のリストが返される。
   #
   # @param self
   #
-  # @return SDO ����°���� Organization �Υꥹ�ȡ�
+  # @return SDO が所属する Organization のリスト。
   #
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InternalError 内部的エラーが発生した。
   # @else
   #
   # @brief [SDO interface] Getting Organizations
@@ -2059,18 +2059,18 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] SDO Status �ꥹ�Ȥμ��� 
+  # @brief [SDO interface] SDO Status リストの取得 
   #
-  # ���Υ��ڥ졼������ SDO �Υ��ơ�������ɽ�� NVList ���֤���
+  # このオペレーションは SDO のステータスを表す NVList を返す。
   #
   # @param self
   #
-  # @return SDO �Υ��ơ�������
+  # @return SDO のステータス。
   #
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InternalError 内部的エラーが発生した。
   #
   # @else
   #
@@ -2100,20 +2100,20 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [SDO interface] SDO Status �μ��� 
+  # @brief [SDO interface] SDO Status の取得 
   #
   # This operation returns the value of the specified status parameter.
   #
   # @param self
-  # @param name SDO �Υ��ơ��������������ѥ�᡼����
+  # @param name SDO のステータスを定義するパラメータ。
   # 
-  # @return ���ꤵ�줿�ѥ�᡼���Υ��ơ������͡�
+  # @return 指定されたパラメータのステータス値。
   # 
-  # @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-  #                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-  # @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-  # @exception InvalidParameter ���� "name" �� null ���뤤��¸�ߤ��ʤ���
-  # @exception InternalError ����Ū���顼��ȯ��������
+  # @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+  #                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+  # @exception NotAvailable SDOは存在するが応答がない。
+  # @exception InvalidParameter 引数 "name" が null あるいは存在しない。
+  # @exception InternalError 内部的エラーが発生した。
   # @else
   #
   # @brief [SDO interface] Get SDO Status
@@ -2155,13 +2155,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [local interface] ���󥹥���̾�μ���
+  # @brief [local interface] インスタンス名の取得
   # 
-  # ComponentProfile �����ꤵ�줿���󥹥���̾���֤���
+  # ComponentProfile に設定されたインスタンス名を返す。
   #
   # @param self
   # 
-  # @return ���󥹥���̾
+  # @return インスタンス名
   # 
   # @else
   # 
@@ -2175,13 +2175,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [local interface] ���󥹥���̾������
+  # @brief [local interface] インスタンス名の設定
   # 
-  # ComponentProfile �˻��ꤵ�줿���󥹥���̾�����ꤹ�롣
+  # ComponentProfile に指定されたインスタンス名を設定する。
   #
   # @param self
   # 
-  # @param instance_name ���󥹥���̾
+  # @param instance_name インスタンス名
   # 
   # @else
   # 
@@ -2196,13 +2196,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [local interface] ��̾�μ���
+  # @brief [local interface] 型名の取得
   # 
-  # ComponentProfile �����ꤵ�줿��̾���֤���
+  # ComponentProfile に設定された型名を返す。
   #
   # @param self
   # 
-  # @return ��̾
+  # @return 型名
   # 
   # @else
   # 
@@ -2216,9 +2216,9 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [local interface] Description �μ���
+  # @brief [local interface] Description の取得
   # 
-  # ComponentProfile �����ꤵ�줿 Description ���֤���
+  # ComponentProfile に設定された Description を返す。
   #
   # @param self
   # 
@@ -2236,13 +2236,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [local interface] �С���������μ���
+  # @brief [local interface] バージョン情報の取得
   # 
-  # ComponentProfile �����ꤵ�줿�С�����������֤���
+  # ComponentProfile に設定されたバージョン情報を返す。
   #
   # @param self
   # 
-  # @return �С���������
+  # @return バージョン情報
   # 
   # @else
   # 
@@ -2256,13 +2256,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [local interface] �٥��������μ���
+  # @brief [local interface] ベンダー情報の取得
   # 
-  # ComponentProfile �����ꤵ�줿�٥����������֤���
+  # ComponentProfile に設定されたベンダー情報を返す。
   #
   # @param self
   # 
-  # @return �٥��������
+  # @return ベンダー情報
   # 
   # @else
   # 
@@ -2276,13 +2276,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [local interface] ���ƥ������μ���
+  # @brief [local interface] カテゴリ情報の取得
   # 
-  # ComponentProfile �����ꤵ�줿���ƥ��������֤���
+  # ComponentProfile に設定されたカテゴリ情報を返す。
   #
   # @param self
   # 
-  # @return ���ƥ������
+  # @return カテゴリ情報
   # 
   # @else
   # 
@@ -2296,13 +2296,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [local interface] Naming Server ����μ���
+  # @brief [local interface] Naming Server 情報の取得
   # 
-  # ���ꤵ�줿 Naming Server ������֤���
+  # 設定された Naming Server 情報を返す。
   #
   # @param self
   # 
-  # @return Naming Server �ꥹ��
+  # @return Naming Server リスト
   # 
   # @else
   # 
@@ -2316,12 +2316,12 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [local interface] ���֥������ȥ�ե���󥹤�����
+  # @brief [local interface] オブジェクトリファレンスの設定
   # 
-  # RTC �� CORBA ���֥������ȥ�ե���󥹤����ꤹ�롣
+  # RTC の CORBA オブジェクトリファレンスを設定する。
   # 
   # @param self
-  # @param rtobj ���֥������ȥ�ե����
+  # @param rtobj オブジェクトリファレンス
   # 
   # @else
   # 
@@ -2336,13 +2336,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [local interface] ���֥������ȥ�ե���󥹤μ���
+  # @brief [local interface] オブジェクトリファレンスの取得
   # 
-  # ���ꤵ�줿 CORBA ���֥������ȥ�ե���󥹤�������롣
+  # 設定された CORBA オブジェクトリファレンスを取得する。
   # 
   # @param self
   # 
-  # @return ���֥������ȥ�ե����
+  # @return オブジェクトリファレンス
   # 
   # @else
   # 
@@ -2356,15 +2356,15 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] RTC �Υץ��ѥƥ������ꤹ��
+  # @brief [local interface] RTC のプロパティを設定する
   #
-  # RTC ���ݻ����٤��ץ��ѥƥ������ꤹ�롣Ϳ������ץ��ѥƥ��ϡ�
-  # ComponentProfile �������ꤵ���٤����������ʤ���Фʤ�ʤ���
-  # ���Υ��ڥ졼�������̾� RTC ������������ݤ� Manager ����
-  # �ƤФ�뤳�Ȥ�տޤ��Ƥ��롣
+  # RTC が保持すべきプロパティを設定する。与えられるプロパティは、
+  # ComponentProfile 等に設定されるべき情報を持たなければならない。
+  # このオペレーションは通常 RTC が初期化される際に Manager から
+  # 呼ばれることを意図している。
   # 
   # @param self
-  # @param prop RTC �Υץ��ѥƥ�
+  # @param prop RTC のプロパティ
   #
   # @else
   #
@@ -2393,14 +2393,14 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] RTC �Υץ��ѥƥ����������
+  # @brief [local interface] RTC のプロパティを取得する
   #
-  # RTC ���ݻ����Ƥ���ץ��ѥƥ����֤���
-  # RTC���ץ��ѥƥ�������ʤ����϶��Υץ��ѥƥ����֤���롣
+  # RTC が保持しているプロパティを返す。
+  # RTCがプロパティを持たない場合は空のプロパティが返される。
   # 
   # @param self
   # 
-  # @return RTC �Υץ��ѥƥ�
+  # @return RTC のプロパティ
   #
   # @else
   #
@@ -2421,18 +2421,18 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ����ե�����졼�����ѥ�᡼��������
+  # @brief コンフィギュレーションパラメータの設定
   # 
-  # ����ե�����졼�����ѥ�᡼�����ѿ���Х���ɤ���
-  # \<VarType\>�Ȥ��ƥ���ե�����졼�����ѥ�᡼���Υǡ���������ꤹ�롣
+  # コンフィギュレーションパラメータと変数をバインドする
+  # \<VarType\>としてコンフィギュレーションパラメータのデータ型を指定する。
   #
   # @param self
-  # @param param_name ����ե�����졼�����ѥ�᡼��̾
-  # @param var ����ե�����졼�����ѥ�᡼����Ǽ���ѿ�
-  # @param def_val ����ե�����졼�����ѥ�᡼���ǥե������
-  # @param trans ʸ�����Ѵ��Ѵؿ�(�ǥե������:None)
+  # @param param_name コンフィギュレーションパラメータ名
+  # @param var コンフィギュレーションパラメータ格納用変数
+  # @param def_val コンフィギュレーションパラメータデフォルト値
+  # @param trans 文字列変換用関数(デフォルト値:None)
   #
-  # @return ������(��������:true�����꼺��:false)
+  # @return 設定結果(設定成功:true，設定失敗:false)
   # 
   # @else
   #
@@ -2455,33 +2455,33 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ����ե�����졼����󥵡��ӥ����������
+  # @brief コンフィギュレーションサービスを取得する
   # 
-  # ����ե�����졼����󥵡��ӥ����֥������Ȥ�������롣���Υ�����
-  # �����֥������Ȥ����Ѥ��ơ�����ե�����졼�����ѥ�᡼�������
-  # ��Ԥ����Ȥ��Ǥ��롣������Ȥ��Ƥϡ�
+  # コンフィギュレーションサービスオブジェクトを取得する。このサービ
+  # スオブジェクトを利用して、コンフィギュレーションパラメータの操作
+  # を行うことができる。主な操作としては、
   #
-  # - unbindParameter(): �ѥ�᡼���Υ���Х����
-  # - update(): �ѥ�᡼���ι���
-  # - update(set_name): ����Υ��åȤι���
-  # - update(set_name, param_name): ����Υ��åȤΥѥ�᡼���ι���
-  # - isExist(): �ѥ�᡼����¸�߳�ǧ
-  # - isChanged(): �ѥ�᡼�����ѹ����줿���γ�ǧ
-  # - changedParameters(): �ѹ����줿�ѥ�᡼���Υꥹ��
-  # - getActiveId(): �����ƥ��֥��å�̾�μ���
-  # - haveConfig(config_id): ����ե������åȤ���äƤ��뤫�ɤ���
-  # - getConfigurationSets(): ������ե�����졼����󥻥åȤμ���
-  # - getConfigurationSet(set_id): ���ꥻ�åȤ����
+  # - unbindParameter(): パラメータのアンバインド
+  # - update(): パラメータの更新
+  # - update(set_name): 特定のセットの更新
+  # - update(set_name, param_name): 特定のセットのパラメータの更新
+  # - isExist(): パラメータの存在確認
+  # - isChanged(): パラメータが変更されたかの確認
+  # - changedParameters(): 変更されたパラメータのリスト
+  # - getActiveId(): アクティブセット名の取得
+  # - haveConfig(config_id): コンフィグセットを持っているかどうか
+  # - getConfigurationSets(): 全コンフィギュレーションセットの取得
+  # - getConfigurationSet(set_id): 特定セットを取得
   #
-  # ������Хå���Ϣ 
-  # - addConfigurationParamListener(): �ꥹ�ʤ��ɲ�
-  # - removeConfigurationParamListener(): �ꥹ�ʤκ��
-  # - addConfigurationSetListener(): �ꥹ�ʤ��ɲ�
-  # - removeConfigurationSetListener(): �ꥹ�ʤκ��
-  # - addConfigurationSetNameListener(): �ꥹ�ʤ��ɲ�
-  # - removeConfigurationSetNameListener(): �ꥹ�ʤκ��
+  # コールバック関連 
+  # - addConfigurationParamListener(): リスナの追加
+  # - removeConfigurationParamListener(): リスナの削除
+  # - addConfigurationSetListener(): リスナの追加
+  # - removeConfigurationSetListener(): リスナの削除
+  # - addConfigurationSetNameListener(): リスナの追加
+  # - removeConfigurationSetNameListener(): リスナの削除
   #
-  # �ܺ٤�ConfigAdmin���饹��ե���󥹤򻲾ȤΤ��ȡ�
+  # 詳細はConfigAdminクラスリファレンスを参照のこと。
   #
   # @return ConfigAdmin object
   # 
@@ -2526,13 +2526,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ����ե�����졼�����ѥ�᡼���ι���(ID����)
+  # @brief コンフィギュレーションパラメータの更新(ID指定)
   # 
-  # ���ꤷ��ID�Υ���ե�����졼����󥻥åȤ����ꤷ���ͤǡ�
-  # ����ե�����졼�����ѥ�᡼�����ͤ򹹿�����
+  # 指定したIDのコンフィギュレーションセットに設定した値で、
+  # コンフィギュレーションパラメータの値を更新する
   #
   # @param self
-  # @param config_set �����оݤΥ���ե�����졼����󥻥å�ID
+  # @param config_set 設定対象のコンフィギュレーションセットID
   # 
   # @else
   #
@@ -2547,18 +2547,18 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] Port ����Ͽ����
+  # @brief [local interface] Port を登録する
   #
-  # RTC ���ݻ�����Port����Ͽ���롣
-  # Port �������饢��������ǽ�ˤ��뤿��ˤϡ����Υ��ڥ졼�����ˤ��
-  # ��Ͽ����Ƥ��ʤ���Фʤ�ʤ�����Ͽ����� Port �Ϥ��� RTC �����ˤ�����
-  # PortProfile.name �ˤ����̤���롣�������äơ�Port �� RTC ��ˤ����ơ�
-  # ��ˡ����� PortProfile.name ������ʤ���Фʤ�ʤ���
-  # ��Ͽ���줿 Port ��������Ŭ�ڤ˥����ƥ��ֲ����줿�塢���λ��Ȥ�
-  # ���֥������Ȼ��Ȥ��ꥹ�������¸����롣
+  # RTC が保持するPortを登録する。
+  # Port を外部からアクセス可能にするためには、このオペレーションにより
+  # 登録されていなければならない。登録される Port はこの RTC 内部において
+  # PortProfile.name により区別される。したがって、Port は RTC 内において、
+  # ユニークな PortProfile.name を持たなければならない。
+  # 登録された Port は内部で適切にアクティブ化された後、その参照と
+  # オブジェクト参照がリスト内に保存される。
   # 
   # @param self
-  # @param port RTC ����Ͽ���� Port
+  # @param port RTC に登録する Port
   # @param port_type if port is PortBase, port_type is None,
   #                  if port is PortService, port_type is True
   #
@@ -2627,16 +2627,16 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] DataInPort ����Ͽ����
+  # @brief [local interface] DataInPort を登録する
   #
-  # RTC ���ݻ����� DataInPort ����Ͽ���롣
-  # Port �Υץ��ѥƥ��˥ǡ����ݡ��ȤǤ��뤳��("port.dataport")��
-  # TCP����Ѥ��뤳��("tcp_any")�����ꤹ��ȤȤ�ˡ� DataInPort ��
-  # ���󥹥��󥹤�����������Ͽ���롣
+  # RTC が保持する DataInPort を登録する。
+  # Port のプロパティにデータポートであること("port.dataport")、
+  # TCPを使用すること("tcp_any")を設定するとともに、 DataInPort の
+  # インスタンスを生成し、登録する。
   # 
   # @param self
-  # @param name port ̾��
-  # @param inport ��Ͽ�о� DataInPort
+  # @param name port 名称
+  # @param inport 登録対象 DataInPort
   #
   # @else
   #
@@ -2669,16 +2669,16 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] DataOutPort ����Ͽ����
+  # @brief [local interface] DataOutPort を登録する
   #
-  # RTC ���ݻ����� DataOutPor t����Ͽ���롣
-  # Port �Υץ��ѥƥ��˥ǡ����ݡ��ȤǤ��뤳��("port.dataport")��
-  # TCP����Ѥ��뤳��("tcp_any")�����ꤹ��ȤȤ�ˡ� DataOutPort ��
-  # ���󥹥��󥹤�����������Ͽ���롣
+  # RTC が保持する DataOutPor tを登録する。
+  # Port のプロパティにデータポートであること("port.dataport")、
+  # TCPを使用すること("tcp_any")を設定するとともに、 DataOutPort の
+  # インスタンスを生成し、登録する。
   # 
   # @param self
-  # @param name port ̾��
-  # @param outport ��Ͽ�о� DataInPort
+  # @param name port 名称
+  # @param outport 登録対象 DataInPort
   #
   # @else
   #
@@ -2713,12 +2713,12 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] InPort ����Ͽ��������
+  # @brief [local interface] InPort の登録を削除する
   #
-  # RTC ���ݻ�����InPort����Ͽ�������롣
+  # RTC が保持するInPortの登録を削除する。
   # 
-  # @param port ����о� Port
-  # @return ������(�������:true���������:false)
+  # @param port 削除対象 Port
+  # @return 削除結果(削除成功:true，削除失敗:false)
   #
   # @else
   #
@@ -2750,12 +2750,12 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] OutPort ����Ͽ��������
+  # @brief [local interface] OutPort の登録を削除する
   #
-  # RTC ���ݻ�����OutPort����Ͽ�������롣
+  # RTC が保持するOutPortの登録を削除する。
   # 
-  # @param port ����о� Port
-  # @return ������(�������:true���������:false)
+  # @param port 削除対象 Port
+  # @return 削除結果(削除成功:true，削除失敗:false)
   #
   # @else
   #
@@ -2787,12 +2787,12 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] Port ����Ͽ��������
+  # @brief [local interface] Port の登録を削除する
   #
-  # RTC ���ݻ�����Port����Ͽ�������롣
+  # RTC が保持するPortの登録を削除する。
   # 
   # @param self
-  # @param port ����о� Port
+  # @param port 削除対象 Port
   #
   # @else
   #
@@ -2821,12 +2821,12 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] ̾������ˤ�� Port ����Ͽ��������
+  # @brief [local interface] 名前指定により Port の登録を削除する
   #
-  # ̾�Τ���ꤷ�� RTC ���ݻ�����Port����Ͽ�������롣
+  # 名称を指定して RTC が保持するPortの登録を削除する。
   # 
   # @param self
-  # @param port_name ����о� Port ̾
+  # @param port_name 削除対象 Port 名
   #
   # @else
   #
@@ -2840,10 +2840,10 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief [local interface] �¹ԥ���ƥ����Ȥ��������
+  # @brief [local interface] 実行コンテキストを取得する
   #
-  # get_context() ��Ʊ����ǽ�Υ��������ǡ��㤤�Ϥʤ���
-  # ���δؿ��ϰʲ��δؿ���ǸƤФ�뤳�Ȥ�����Ȥ��Ƥ��롣
+  # get_context() と同じ機能のローカル版。違いはない。
+  # この関数は以下の関数内で呼ばれることを前提としている。
   #
   # - onStartup()
   # - onShutdown()
@@ -2856,10 +2856,10 @@ class RTObject_impl:
   # - onStateUpdate()
   # - onRateChanged()
   # 
-  # ���δؿ��ΰ����Ϥ����δؿ��ΰ��� UniquieID exec_handle �Ǥʤ�
-  # ��Фʤ�ʤ���
+  # この関数の引数はこれらの関数の引数 UniquieID exec_handle でなけ
+  # ればならない。
   # 
-  # @param ec_id �嵭�ؿ�����1���� exec_handle ���Ϥ�ɬ�פ����롣
+  # @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
   # 
   # @else
   # 
@@ -2894,11 +2894,11 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] �¹ԥ���ƥ����Ȥμ¹ԥ졼�Ȥ��������
+  # @brief [local interface] 実行コンテキストの実行レートを取得する
   #
-  # ���߼¹���μ¹ԥ���ƥ����Ȥμ¹ԥ졼�Ȥ�������롣�¹ԥ���ƥ�
-  # ���Ȥ�Kind��PERIODIC�ʳ��ξ���ư���̤����Ǥ��롣���δؿ��ϰ�
-  # ���δؿ���ǸƤФ�뤳�Ȥ�����Ȥ��Ƥ��롣
+  # 現在実行中の実行コンテキストの実行レートを取得する。実行コンテキ
+  # ストのKindがPERIODIC以外の場合の動作は未定義である。この関数は以
+  # 下の関数内で呼ばれることを前提としている。
   #
   # - onStartup()
   # - onShutdown()
@@ -2911,10 +2911,10 @@ class RTObject_impl:
   # - onStateUpdate()
   # - onRateChanged()
   #
-  # ���δؿ��ΰ����Ϥ����δؿ��ΰ��� UniquieID exec_handle �Ǥʤ�
-  # ��Фʤ�ʤ���
+  # この関数の引数はこれらの関数の引数 UniquieID exec_handle でなけ
+  # ればならない。
   #
-  # @param ec_id �嵭�ؿ�����1���� exec_handle ���Ϥ�ɬ�פ����롣
+  # @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
   #
   # @else
   # 
@@ -2955,11 +2955,11 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] �¹ԥ���ƥ����Ȥμ¹ԥ졼�Ȥ����ꤹ��
+  # @brief [local interface] 実行コンテキストの実行レートを設定する
   #
-  # ���߼¹���μ¹ԥ���ƥ����Ȥμ¹ԥ졼�Ȥ����ꤹ�롣�¹ԥ���ƥ�
-  # ���Ȥ�Kind��PERIODIC�ʳ��ξ���ư���̤����Ǥ��롣���δؿ��ϰ�
-  # ���δؿ���ǸƤФ�뤳�Ȥ�����Ȥ��Ƥ��롣
+  # 現在実行中の実行コンテキストの実行レートを設定する。実行コンテキ
+  # ストのKindがPERIODIC以外の場合の動作は未定義である。この関数は以
+  # 下の関数内で呼ばれることを前提としている。
   #
   # - onStartup()
   # - onShutdown()
@@ -2972,11 +2972,11 @@ class RTObject_impl:
   # - onStateUpdate()
   # - onRateChanged()
   #
-  # ���δؿ��ΰ����Ϥ����δؿ��ΰ��� UniquieID exec_handle �Ǥʤ�
-  # ��Фʤ�ʤ���
+  # この関数の引数はこれらの関数の引数 UniquieID exec_handle でなけ
+  # ればならない。
   #
-  # @param ec_id �嵭�ؿ�����1���� exec_handle ���Ϥ�ɬ�פ����롣
-  # @param rate �¹ԥ졼�Ȥ� [Hz] ��Ϳ����
+  # @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+  # @param rate 実行レートを [Hz] で与える
   #
   # @else
   # 
@@ -3017,10 +3017,10 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] �¹ԥ���ƥ����Ȥν�ͭ����Ĵ�٤�
+  # @brief [local interface] 実行コンテキストの所有権を調べる
   #
-  # ���߼¹���μ¹ԥ���ƥ����Ȥν�ͭ����Ĵ�٤롣���δؿ��ϰʲ��δ�
-  # ����ǸƤФ�뤳�Ȥ�����Ȥ��Ƥ��롣
+  # 現在実行中の実行コンテキストの所有権を調べる。この関数は以下の関
+  # 数内で呼ばれることを前提としている。
   #
   # - onStartup()
   # - onShutdown()
@@ -3033,11 +3033,11 @@ class RTObject_impl:
   # - onStateUpdate()
   # - onRateChanged()
   #
-  # ���δؿ��ΰ����Ϥ����δؿ��ΰ��� UniquieID exec_handle �Ǥʤ�
-  # ��Фʤ�ʤ���
+  # この関数の引数はこれらの関数の引数 UniquieID exec_handle でなけ
+  # ればならない。
   #
-  # @param ec_id �嵭�ؿ�����1���� exec_handle ���Ϥ�ɬ�פ����롣
-  # @return true: ���Ȥμ¹ԥ���ƥ����ȡ�false: ¾�μ¹ԥ���ƥ�����
+  # @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+  # @return true: 自身の実行コンテキスト、false: 他の実行コンテキスト
   #
   # @else
   # 
@@ -3077,20 +3077,20 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] ���֤� Inactive �����ܤ�����
+  # @brief [local interface] 状態を Inactive に遷移させる
   #
-  # ���֤� Active ���� Inactive �����ܤ����롣���δؿ��ϰʲ��δ�
-  # ����ǸƤФ�뤳�Ȥ�����Ȥ��Ƥ��롣
+  # 状態を Active から Inactive に遷移させる。この関数は以下の関
+  # 数内で呼ばれることを前提としている。
   #
   # - onActivated()
   # - onExecute()
   # - onStateUpdate()
   #
-  # ���δؿ��ΰ����Ͼ嵭�δؿ��ΰ��� UniquieID exec_handle �Ǥʤ�
-  # ��Фʤ�ʤ���
+  # この関数の引数は上記の関数の引数 UniquieID exec_handle でなけ
+  # ればならない。
   #
-  # @param ec_id �嵭�ؿ�����1���� exec_handle ���Ϥ�ɬ�פ����롣
-  # @return �꥿���󥳡���
+  # @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+  # @return リターンコード
   #
   # @else
   # 
@@ -3123,19 +3123,19 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] ���֤� Active �����ܤ�����
+  # @brief [local interface] 状態を Active に遷移させる
   #
-  # ���֤� Inactive ���� Active �����ܤ����롣���δؿ��ϰʲ��δ�
-  # ����ǸƤФ�뤳�Ȥ�����Ȥ��Ƥ��롣
+  # 状態を Inactive から Active に遷移させる。この関数は以下の関
+  # 数内で呼ばれることを前提としている。
   #
   # - onStartup()
   # - onDeactivated()
   #
-  # ���δؿ��ΰ����Ͼ嵭�δؿ��ΰ��� UniquieID exec_handle �Ǥʤ�
-  # ��Фʤ�ʤ���
+  # この関数の引数は上記の関数の引数 UniquieID exec_handle でなけ
+  # ればならない。
   #
-  # @param ec_id �嵭�ؿ�����1���� exec_handle ���Ϥ�ɬ�פ����롣
-  # @return �꥿���󥳡���
+  # @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+  # @return リターンコード
   #
   # @else
   # 
@@ -3167,18 +3167,18 @@ class RTObject_impl:
   ##
   # @if jp
   # 
-  # @brief [local interface] ���֤�ꥻ�åȤ� Inactive �����ܤ�����
+  # @brief [local interface] 状態をリセットし Inactive に遷移させる
   #
-  # ���֤� Error ���� Inactive �����ܤ����롣���δؿ��ϰʲ��δ�
-  # ����ǸƤФ�뤳�Ȥ�����Ȥ��Ƥ��롣
+  # 状態を Error から Inactive に遷移させる。この関数は以下の関
+  # 数内で呼ばれることを前提としている。
   #
   # - onError()
   #
-  # ���δؿ��ΰ����Ͼ嵭�δؿ��ΰ��� UniquieID exec_handle �Ǥʤ�
-  # ��Фʤ�ʤ���
+  # この関数の引数は上記の関数の引数 UniquieID exec_handle でなけ
+  # ればならない。
   #
-  # @param ec_id �嵭�ؿ�����1���� exec_handle ���Ϥ�ɬ�פ����롣
-  # @return �꥿���󥳡���
+  # @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+  # @return リターンコード
   #
   # @else
   # 
@@ -3208,7 +3208,7 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief [local interface] SDO service provider �򥻥åȤ���
+  # @brief [local interface] SDO service provider をセットする
   # @else
   # @brief [local interface] Set a SDO service provider
   # @endif
@@ -3221,7 +3221,7 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief [local interface] SDO service provider ��������
+  # @brief [local interface] SDO service provider を削除する
   # @else
   # @brief [local interface] Remove a SDO service provider
   # @endif
@@ -3233,7 +3233,7 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief [local interface] SDO service consumer �򥻥åȤ���
+  # @brief [local interface] SDO service consumer をセットする
   # @else
   # @brief [local interface] Set a SDO service consumer
   # @endif
@@ -3245,7 +3245,7 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief [local interface] SDO service consumer ��������
+  # @brief [local interface] SDO service consumer を削除する
   # @else
   # @brief [local interface] Remove a SDO service consumer
   # @endif
@@ -3257,7 +3257,7 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief [local interface] SDO service consumer ���̥���åɤǺ������
+  # @brief [local interface] SDO service consumer を別スレッドで削除する
   # @else
   # @brief [local interface] Remove a SDO service consumer
   # @endif
@@ -3279,11 +3279,11 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief �� InPort �Υǡ������ɤ߹��ࡣ
+  # @brief 全 InPort のデータを読み込む。
   #
-  # RTC ���ݻ��������Ƥ� InPort �Υǡ������ɤ߹��ࡣ
+  # RTC が保持する全ての InPort のデータを読み込む。
   #
-  # @return �ɤ߹��߷��(���ݡ��Ȥ��ɤ߹�������:true������:false)
+  # @return 読み込み結果(全ポートの読み込み成功:true，失敗:false)
   #
   # @else
   #
@@ -3313,11 +3313,11 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief �� OutPort ��write()�᥽�åɤ򥳡��뤹�롣
+  # @brief 全 OutPort のwrite()メソッドをコールする。
   #
-  # RTC ���ݻ��������Ƥ� OutPort ��write()�᥽�åɤ򥳡��뤹�롣
+  # RTC が保持する全ての OutPort のwrite()メソッドをコールする。
   #
-  # @return �ɤ߹��߷��(���ݡ��Ȥؤν񤭹�������:true������:false)
+  # @return 読み込み結果(全ポートへの書き込み成功:true，失敗:false)
   #
   # @else
   #
@@ -3347,18 +3347,18 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief onExecute()�¹����Ǥ�readAll()�᥽�åɤθƽФ�ͭ���ޤ���̵���ˤ��롣
+  # @brief onExecute()実行前でのreadAll()メソッドの呼出を有効または無効にする。
   #
-  # ���Υ᥽�åɤ�ѥ�᡼����true�Ȥ��ƸƤֻ��ˤ�ꡢonExecute()�¹�����
-  # readAll()���ƽФ����褦�ˤʤ롣
-  # �ѥ�᡼����false�ξ��ϡ�readAll()�ƽФ�̵���ˤ��롣
+  # このメソッドをパラメータをtrueとして呼ぶ事により、onExecute()実行前に
+  # readAll()が呼出されるようになる。
+  # パラメータがfalseの場合は、readAll()呼出を無効にする。
   #
   # @param read(default:true) 
-  #        (readAll()�᥽�åɸƽФ���:true, readAll()�᥽�åɸƽФʤ�:false)
+  #        (readAll()メソッド呼出あり:true, readAll()メソッド呼出なし:false)
   #
   # @param completion(default:false) 
-  #    readAll()�ˤơ��ɤ줫�ΰ�Ĥ�InPort��read()�����Ԥ��Ƥ����Ƥ�InPort��read()��ƤӽФ�:true,
-  #    readAll()�ˤơ��ɤ줫�ΰ�Ĥ�InPort��read()�����Ԥ�����硢������false��ȴ����:false
+  #    readAll()にて、どれかの一つのInPortのread()が失敗しても全てのInPortのread()を呼び出す:true,
+  #    readAll()にて、どれかの一つのInPortのread()が失敗した場合、すぐにfalseで抜ける:false
   #
   # @else
   #
@@ -3386,18 +3386,18 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief onExecute()�¹Ը��writeAll()�᥽�åɤθƽФ�ͭ���ޤ���̵���ˤ��롣
+  # @brief onExecute()実行後にwriteAll()メソッドの呼出を有効または無効にする。
   #
-  # ���Υ᥽�åɤ�ѥ�᡼����true�Ȥ��ƸƤֻ��ˤ�ꡢonExecute()�¹Ը��
-  # writeAll()���ƽФ����褦�ˤʤ롣
-  # �ѥ�᡼����false�ξ��ϡ�writeAll()�ƽФ�̵���ˤ��롣
+  # このメソッドをパラメータをtrueとして呼ぶ事により、onExecute()実行後に
+  # writeAll()が呼出されるようになる。
+  # パラメータがfalseの場合は、writeAll()呼出を無効にする。
   #
   # @param write(default:true) 
-  #        (writeAll()�᥽�åɸƽФ���:true, writeAll()�᥽�åɸƽФʤ�:false)
+  #        (writeAll()メソッド呼出あり:true, writeAll()メソッド呼出なし:false)
   #
   # @param completion(default:false) 
-  #    writeAll()�ˤơ��ɤ줫�ΰ�Ĥ�OutPort��write()�����Ԥ��Ƥ����Ƥ�OutPort��write()��ƤӽФ���Ԥ�:true,
-  #    writeAll()�ˤơ��ɤ줫�ΰ�Ĥ�OutPort��write()�����Ԥ�����硢������false��ȴ����:false
+  #    writeAll()にて、どれかの一つのOutPortのwrite()が失敗しても全てのOutPortのwrite()を呼び出しを行う:true,
+  #    writeAll()にて、どれかの一つのOutPortのwrite()が失敗した場合、すぐにfalseで抜ける:false
   #
   # @else
   #
@@ -3423,9 +3423,9 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief �� Port ����Ͽ��������
+  # @brief 全 Port の登録を削除する
   #
-  # RTC ���ݻ��������Ƥ� Port �������롣
+  # RTC が保持する全ての Port を削除する。
   # 
   # @param self
   #
@@ -3469,38 +3469,38 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PreComponentActionListener �ꥹ�ʤ��ɲä���
+  # @brief PreComponentActionListener リスナを追加する
   #
-  # ComponentAction �����ؿ��θƤӽФ�ľ���Υ��٥�Ȥ˴�Ϣ����Ƽ��
-  # ���ʤ����ꤹ�롣
+  # ComponentAction 実装関数の呼び出し直前のイベントに関連する各種リ
+  # スナを設定する。
   #
-  # ����Ǥ���ꥹ�ʤΥ����פȥ�����Хå����٥�Ȥϰʲ����̤�
+  # 設定できるリスナのタイプとコールバックイベントは以下の通り
   #
-  # - PRE_ON_INITIALIZE:    onInitialize ľ��
-  # - PRE_ON_FINALIZE:      onFinalize ľ��
-  # - PRE_ON_STARTUP:       onStartup ľ��
-  # - PRE_ON_SHUTDOWN:      onShutdown ľ��
-  # - PRE_ON_ACTIVATED:     onActivated ľ��
-  # - PRE_ON_DEACTIVATED:   onDeactivated ľ��
-  # - PRE_ON_ABORTING:       onAborted ľ��
-  # - PRE_ON_ERROR:         onError ľ��
-  # - PRE_ON_RESET:         onReset ľ��
-  # - PRE_ON_EXECUTE:       onExecute ľ��
-  # - PRE_ON_STATE_UPDATE:  onStateUpdate ľ��
+  # - PRE_ON_INITIALIZE:    onInitialize 直前
+  # - PRE_ON_FINALIZE:      onFinalize 直前
+  # - PRE_ON_STARTUP:       onStartup 直前
+  # - PRE_ON_SHUTDOWN:      onShutdown 直前
+  # - PRE_ON_ACTIVATED:     onActivated 直前
+  # - PRE_ON_DEACTIVATED:   onDeactivated 直前
+  # - PRE_ON_ABORTING:       onAborted 直前
+  # - PRE_ON_ERROR:         onError 直前
+  # - PRE_ON_RESET:         onReset 直前
+  # - PRE_ON_EXECUTE:       onExecute 直前
+  # - PRE_ON_STATE_UPDATE:  onStateUpdate 直前
   #
-  # �ꥹ�ʤ� PreComponentActionListener ��Ѿ������ʲ��Υ����˥�������
-  # operator() ��������Ƥ���ɬ�פ����롣
+  # リスナは PreComponentActionListener を継承し、以下のシグニチャを持つ
+  # operator() を実装している必要がある。
   #
   # PreComponentActionListener::operator()(UniqueId ec_id)
   #
-  # �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-  # RTObject�˰ܤꡢRTObject���λ��⤷���ϡ�
-  # removePreComponentActionListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-  # �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-  # ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+  # デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+  # RTObjectに移り、RTObject解体時もしくは、
+  # removePreComponentActionListener() により削除時に自動的に解体される。
+  # リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+  # 数に false を指定し、自動的な解体を抑制することができる。
   #
-  # @param listener_type �ꥹ�ʥ�����
-  # @param memfunc �ؿ����֥�������
+  # @param listener_type リスナタイプ
+  # @param memfunc 関数オブジェクト
   #
   # @else
   # @brief Adding PreComponentAction type listener
@@ -3558,12 +3558,12 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PreComponentActionListener �ꥹ�ʤ�������
+  # @brief PreComponentActionListener リスナを削除する
   #
-  # ���ꤷ���Ƽ�ꥹ�ʤ������롣
+  # 設定した各種リスナを削除する。
   # 
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Removing PreComponentAction type listener
@@ -3585,38 +3585,38 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PostComponentActionListener �ꥹ�ʤ��ɲä���
+  # @brief PostComponentActionListener リスナを追加する
   #
-  # ComponentAction �����ؿ��θƤӽФ�ľ��Υ��٥�Ȥ˴�Ϣ����Ƽ��
-  # ���ʤ����ꤹ�롣
+  # ComponentAction 実装関数の呼び出し直後のイベントに関連する各種リ
+  # スナを設定する。
   #
-  # ����Ǥ���ꥹ�ʤΥ����פȥ�����Хå����٥�Ȥϰʲ����̤�
+  # 設定できるリスナのタイプとコールバックイベントは以下の通り
   #
-  # - POST_ON_INITIALIZE:    onInitialize ľ��
-  # - POST_ON_FINALIZE:      onFinalize ľ��
-  # - POST_ON_STARTUP:       onStartup ľ��
-  # - POST_ON_SHUTDOWN:      onShutdown ľ��
-  # - POST_ON_ACTIVATED:     onActivated ľ��
-  # - POST_ON_DEACTIVATED:   onDeactivated ľ��
-  # - POST_ON_ABORTING:       onAborted ľ��
-  # - POST_ON_ERROR:         onError ľ��
-  # - POST_ON_RESET:         onReset ľ��
-  # - POST_ON_EXECUTE:       onExecute ľ��
-  # - POST_ON_STATE_UPDATE:  onStateUpdate ľ��
+  # - POST_ON_INITIALIZE:    onInitialize 直後
+  # - POST_ON_FINALIZE:      onFinalize 直後
+  # - POST_ON_STARTUP:       onStartup 直後
+  # - POST_ON_SHUTDOWN:      onShutdown 直後
+  # - POST_ON_ACTIVATED:     onActivated 直後
+  # - POST_ON_DEACTIVATED:   onDeactivated 直後
+  # - POST_ON_ABORTING:       onAborted 直後
+  # - POST_ON_ERROR:         onError 直後
+  # - POST_ON_RESET:         onReset 直後
+  # - POST_ON_EXECUTE:       onExecute 直後
+  # - POST_ON_STATE_UPDATE:  onStateUpdate 直後
   #
-  # �ꥹ�ʤ� PostComponentActionListener ��Ѿ������ʲ��Υ����˥�������
-  # operator() ��������Ƥ���ɬ�פ����롣
+  # リスナは PostComponentActionListener を継承し、以下のシグニチャを持つ
+  # operator() を実装している必要がある。
   #
   # PostComponentActionListener::operator()(UniqueId ec_id, ReturnCode_t ret)
   #
-  # �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-  # RTObject�˰ܤꡢRTObject���λ��⤷���ϡ�
-  # removePostComponentActionListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-  # �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-  # ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+  # デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+  # RTObjectに移り、RTObject解体時もしくは、
+  # removePostComponentActionListener() により削除時に自動的に解体される。
+  # リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+  # 数に false を指定し、自動的な解体を抑制することができる。
   #
-  # @param listener_type �ꥹ�ʥ�����
-  # @param memfunc �ؿ����֥�������
+  # @param listener_type リスナタイプ
+  # @param memfunc 関数オブジェクト
   #
   # @else
   # @brief Adding PostComponentAction type listener
@@ -3675,12 +3675,12 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PostComponentActionListener �ꥹ�ʤ�������
+  # @brief PostComponentActionListener リスナを削除する
   #
-  # ���ꤷ���Ƽ�ꥹ�ʤ������롣
+  # 設定した各種リスナを削除する。
   # 
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Removing PostComponentAction type listener
@@ -3702,28 +3702,28 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PortActionListener �ꥹ�ʤ��ɲä���
+  # @brief PortActionListener リスナを追加する
   #
-  # Port���ɲá�������˥�����Хå������Ƽ�ꥹ�ʤ����ꤹ�롣
+  # Portの追加、削除時にコールバックされる各種リスナを設定する。
   #
-  # ����Ǥ���ꥹ�ʤΥ����פȥ�����Хå����٥�Ȥϰʲ����̤�
+  # 設定できるリスナのタイプとコールバックイベントは以下の通り
   #
-  # - ADD_PORT:    Port�ɲû�
-  # - REMOVE_PORT: Port�����
+  # - ADD_PORT:    Port追加時
+  # - REMOVE_PORT: Port削除時
   #
-  # �ꥹ�ʤ� PortActionListener ��Ѿ������ʲ��Υ����˥�������
-  # operator() ��������Ƥ���ɬ�פ����롣
+  # リスナは PortActionListener を継承し、以下のシグニチャを持つ
+  # operator() を実装している必要がある。
   #
   # PortActionListener::operator()(PortProfile& pprof)
   #
-  # �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-  # RTObject�˰ܤꡢRTObject���λ��⤷���ϡ�
-  # removePortActionListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-  # �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-  # ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+  # デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+  # RTObjectに移り、RTObject解体時もしくは、
+  # removePortActionListener() により削除時に自動的に解体される。
+  # リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+  # 数に false を指定し、自動的な解体を抑制することができる。
   #
-  # @param listener_type �ꥹ�ʥ�����
-  # @param memfunc �ؿ����֥�������
+  # @param listener_type リスナタイプ
+  # @param memfunc 関数オブジェクト
   #
   # @else
   # @brief Adding PortAction type listener
@@ -3774,12 +3774,12 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PortActionListener �ꥹ�ʤ�������
+  # @brief PortActionListener リスナを削除する
   #
-  # ���ꤷ���Ƽ�ꥹ�ʤ������롣
+  # 設定した各種リスナを削除する。
   # 
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Removing PortAction type listener
@@ -3800,28 +3800,28 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief ExecutionContextActionListener �ꥹ�ʤ��ɲä���
+  # @brief ExecutionContextActionListener リスナを追加する
   #
-  # ExecutionContext���ɲá�������˥�����Хå������Ƽ�ꥹ�ʤ����ꤹ�롣
+  # ExecutionContextの追加、削除時にコールバックされる各種リスナを設定する。
   #
-  # ����Ǥ���ꥹ�ʤΥ����פȥ�����Хå����٥�Ȥϰʲ����̤�
+  # 設定できるリスナのタイプとコールバックイベントは以下の通り
   #
-  # - ATTACH_EC:    ExecutionContext �����å���
-  # - DETACH_EC:    ExecutionContext �ǥ��å���
+  # - ATTACH_EC:    ExecutionContext アタッチ時
+  # - DETACH_EC:    ExecutionContext デタッチ時
   #
-  # �ꥹ�ʤ� ExecutionContextActionListener ��Ѿ������ʲ��Υ����˥�������
-  # operator() ��������Ƥ���ɬ�פ����롣
+  # リスナは ExecutionContextActionListener を継承し、以下のシグニチャを持つ
+  # operator() を実装している必要がある。
   #
-  # ExecutionContextActionListener::operator()(UniqueId��ec_id)
+  # ExecutionContextActionListener::operator()(UniqueId　ec_id)
   #
-  # �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-  # RTObject�˰ܤꡢRTObject���λ��⤷���ϡ�
-  # removeExecutionContextActionListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-  # �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-  # ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+  # デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+  # RTObjectに移り、RTObject解体時もしくは、
+  # removeExecutionContextActionListener() により削除時に自動的に解体される。
+  # リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+  # 数に false を指定し、自動的な解体を抑制することができる。
   #
-  # @param listener_type �ꥹ�ʥ�����
-  # @param memfunc �ؿ����֥�������
+  # @param listener_type リスナタイプ
+  # @param memfunc 関数オブジェクト
   #
   # @else
   # @brief Adding ExecutionContextAction type listener
@@ -3871,12 +3871,12 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief ExecutionContextActionListener �ꥹ�ʤ�������
+  # @brief ExecutionContextActionListener リスナを削除する
   #
-  # ���ꤷ���Ƽ�ꥹ�ʤ������롣
+  # 設定した各種リスナを削除する。
   # 
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Removing ExecutionContextAction type listener
@@ -3898,29 +3898,29 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PortConnectListener �ꥹ�ʤ��ɲä���
+  # @brief PortConnectListener リスナを追加する
   #
-  # Port����³������³������˸ƤӽФ����Ƽ�ꥹ�ʤ����ꤹ�롣
+  # Portの接続時や接続解除時に呼び出される各種リスナを設定する。
   #
-  # ����Ǥ���ꥹ�ʤΥ����פȥ�����Хå����٥�Ȥϰʲ����̤�
+  # 設定できるリスナのタイプとコールバックイベントは以下の通り
   #
-  # - ON_NOTIFY_CONNECT: notify_connect() �ؿ���ƤӽФ�ľ��
-  # - ON_NOTIFY_DISCONNECT: notify_disconnect() �ƤӽФ�ľ��
-  # - ON_UNSUBSCRIBE_INTERFACES: notify_disconnect() ���IF���ɲ����
+  # - ON_NOTIFY_CONNECT: notify_connect() 関数内呼び出し直後
+  # - ON_NOTIFY_DISCONNECT: notify_disconnect() 呼び出し直後
+  # - ON_UNSUBSCRIBE_INTERFACES: notify_disconnect() 内のIF購読解除時
   #
-  # �ꥹ�ʤ� PortConnectListener ��Ѿ������ʲ��Υ����˥�������
-  # operator() ��������Ƥ���ɬ�פ����롣
+  # リスナは PortConnectListener を継承し、以下のシグニチャを持つ
+  # operator() を実装している必要がある。
   #
   # PortConnectListener::operator()(const char*, ConnectorProfile)
   #
-  # �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-  # RTObject�˰ܤꡢRTObject���λ��⤷���ϡ�
-  # removePortConnectListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-  # �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-  # ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+  # デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+  # RTObjectに移り、RTObject解体時もしくは、
+  # removePortConnectListener() により削除時に自動的に解体される。
+  # リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+  # 数に false を指定し、自動的な解体を抑制することができる。
   #
-  # @param listener_type �ꥹ�ʥ�����
-  # @param memfunc �ؿ����֥�������
+  # @param listener_type リスナタイプ
+  # @param memfunc 関数オブジェクト
   #
   # @else
   # @brief Adding PortConnect type listener
@@ -3971,12 +3971,12 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PortConnectListener �ꥹ�ʤ�������
+  # @brief PortConnectListener リスナを削除する
   #
-  # ���ꤷ���Ƽ�ꥹ�ʤ������롣
+  # 設定した各種リスナを削除する。
   # 
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Removing PortConnect type listener
@@ -3998,31 +3998,31 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PortConnectRetListener �ꥹ�ʤ��ɲä���
+  # @brief PortConnectRetListener リスナを追加する
   #
-  # Port����³������³������˸ƤӽФ����Ƽ�ꥹ�ʤ����ꤹ�롣
+  # Portの接続時や接続解除時に呼び出される各種リスナを設定する。
   #
-  # ����Ǥ���ꥹ�ʤΥ����פȥ�����Хå����٥�Ȥϰʲ����̤�
+  # 設定できるリスナのタイプとコールバックイベントは以下の通り
   #
-  # - ON_CONNECT_NEXTPORT: notify_connect() ��Υ��������ɸƤӽФ�ľ��
-  # - ON_SUBSCRIBE_INTERFACES: notify_connect() ��Υ��󥿡��ե���������ľ��
-  # - ON_CONNECTED: nofity_connect() ��³������λ���˸ƤӽФ����
-  # - ON_DISCONNECT_NEXT: notify_disconnect() ��˥��������ɸƤӽФ�ľ��
-  # - ON_DISCONNECTED: notify_disconnect() �꥿�����
+  # - ON_CONNECT_NEXTPORT: notify_connect() 中のカスケード呼び出し直後
+  # - ON_SUBSCRIBE_INTERFACES: notify_connect() 中のインターフェース購読直後
+  # - ON_CONNECTED: nofity_connect() 接続処理完了時に呼び出される
+  # - ON_DISCONNECT_NEXT: notify_disconnect() 中にカスケード呼び出し直後
+  # - ON_DISCONNECTED: notify_disconnect() リターン時
   #
-  # �ꥹ�ʤ� PortConnectRetListener ��Ѿ������ʲ��Υ����˥�������
-  # operator() ��������Ƥ���ɬ�פ����롣
+  # リスナは PortConnectRetListener を継承し、以下のシグニチャを持つ
+  # operator() を実装している必要がある。
   #
   # PortConnectRetListener::operator()(const char*, ConnectorProfile)
   #
-  # �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-  # RTObject�˰ܤꡢRTObject���λ��⤷���ϡ�
-  # removePortConnectRetListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-  # �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-  # ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+  # デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+  # RTObjectに移り、RTObject解体時もしくは、
+  # removePortConnectRetListener() により削除時に自動的に解体される。
+  # リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+  # 数に false を指定し、自動的な解体を抑制することができる。
   #
-  # @param listener_type �ꥹ�ʥ�����
-  # @param memfunc �ؿ����֥�������
+  # @param listener_type リスナタイプ
+  # @param memfunc 関数オブジェクト
   #
   # @else
   # @brief Adding PortConnectRet type listener
@@ -4076,12 +4076,12 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PortConnectRetListener �ꥹ�ʤ�������
+  # @brief PortConnectRetListener リスナを削除する
   #
-  # ���ꤷ���Ƽ�ꥹ�ʤ������롣
+  # 設定した各種リスナを削除する。
   # 
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Removing PortConnectRet type listener
@@ -4104,16 +4104,16 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ConfigurationParamListener ���ɲä���
+  # @brief ConfigurationParamListener を追加する
   #
-  # update(const char* config_set, const char* config_param) ���ƤФ줿�ݤ�
-  # �����뤵���ꥹ�� ConfigurationParamListener ���ɲä��롣
-  # type �ˤϸ��ߤΤȤ��� ON_UPDATE_CONFIG_PARAM �Τߤ����롣
+  # update(const char* config_set, const char* config_param) が呼ばれた際に
+  # コールされるリスナ ConfigurationParamListener を追加する。
+  # type には現在のところ ON_UPDATE_CONFIG_PARAM のみが入る。
   #
-  # @param type ConfigurationParamListenerType�����͡�
-  #             ON_UPDATE_CONFIG_PARAM �����롣
+  # @param type ConfigurationParamListenerType型の値。
+  #             ON_UPDATE_CONFIG_PARAM がある。
   #
-  # @param memfunc �ؿ����֥�������
+  # @param memfunc 関数オブジェクト
   # 
   # @else
   #
@@ -4155,13 +4155,13 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ConfigurationParamListener ��������
+  # @brief ConfigurationParamListener を削除する
   #
-  # addConfigurationParamListener ���ɲä��줿�ꥹ�ʥ��֥������Ȥ������롣
+  # addConfigurationParamListener で追加されたリスナオブジェクトを削除する。
   #
-  # @param type ConfigurationParamListenerType�����͡�
-  #             ON_UPDATE_CONFIG_PARAM �����롣
-  # @param listener Ϳ�����ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param type ConfigurationParamListenerType型の値。
+  #             ON_UPDATE_CONFIG_PARAM がある。
+  # @param listener 与えたリスナオブジェクトへのポインタ
   # 
   # @else
   #
@@ -4186,19 +4186,19 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ConfigurationSetListener ���ɲä���
+  # @brief ConfigurationSetListener を追加する
   #
-  # ConfigurationSet ���������줿�Ȥ��ʤɤ˸ƤФ��ꥹ��
-  # ConfigurationSetListener ���ɲä��롣�����ǽ�ʥ��٥�Ȥϰʲ���
-  # 2���ब���롣
+  # ConfigurationSet が更新されたときなどに呼ばれるリスナ
+  # ConfigurationSetListener を追加する。設定可能なイベントは以下の
+  # 2種類がある。
   #
-  # - ON_SET_CONFIG_SET: setConfigurationSetValues() ��
-  #                      ConfigurationSet ���ͤ����ꤵ�줿��硣
-  # - ON_ADD_CONFIG_SET: addConfigurationSet() �ǿ�����
-  #                      ConfigurationSet ���ɲä��줿��硣
+  # - ON_SET_CONFIG_SET: setConfigurationSetValues() で
+  #                      ConfigurationSet に値が設定された場合。
+  # - ON_ADD_CONFIG_SET: addConfigurationSet() で新しい
+  #                      ConfigurationSet が追加された場合。
   #
-  # @param type ConfigurationSetListenerType�����͡�
-  # @param memfunc �ؿ����֥�������
+  # @param type ConfigurationSetListenerType型の値。
+  # @param memfunc 関数オブジェクト
   # 
   # @else
   #
@@ -4236,12 +4236,12 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ConfigurationSetListener ��������
+  # @brief ConfigurationSetListener を削除する
   #
-  # addConfigurationSetListener ���ɲä��줿�ꥹ�ʥ��֥������Ȥ������롣
+  # addConfigurationSetListener で追加されたリスナオブジェクトを削除する。
   #
-  # @param type ConfigurationSetListenerType�����͡�
-  # @param listener Ϳ�����ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param type ConfigurationSetListenerType型の値。
+  # @param listener 与えたリスナオブジェクトへのポインタ
   # 
   # @else
   #
@@ -4265,18 +4265,18 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ConfigurationSetNameListener ���ɲä���
+  # @brief ConfigurationSetNameListener を追加する
   #
-  # ConfigurationSetName ���������줿�Ȥ��ʤɤ˸ƤФ��ꥹ��
-  # ConfigurationSetNameListener ���ɲä��롣�����ǽ�ʥ��٥�Ȥϰʲ���
-  # 3���ब���롣
+  # ConfigurationSetName が更新されたときなどに呼ばれるリスナ
+  # ConfigurationSetNameListener を追加する。設定可能なイベントは以下の
+  # 3種類がある。
   #
-  # - ON_UPDATE_CONFIG_SET: ���� ConfigurationSet �����åץǡ��Ȥ��줿
-  # - ON_REMOVE_CONFIG_SET: ���� ConfigurationSet ��������줿
-  # - ON_ACTIVATE_CONFIG_SET: ���� ConfigurationSet �������ƥ��ֲ����줿
+  # - ON_UPDATE_CONFIG_SET: ある ConfigurationSet がアップデートされた
+  # - ON_REMOVE_CONFIG_SET: ある ConfigurationSet が削除された
+  # - ON_ACTIVATE_CONFIG_SET: ある ConfigurationSet がアクティブ化された
   #
-  # @param type ConfigurationSetNameListenerType�����͡�
-  # @param memfunc �ؿ����֥�������
+  # @param type ConfigurationSetNameListenerType型の値。
+  # @param memfunc 関数オブジェクト
   # 
   # @else
   #
@@ -4316,14 +4316,14 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ConfigurationSetNameListener ��������
+  # @brief ConfigurationSetNameListener を削除する
   #
-  # addConfigurationSetNameListener ���ɲä��줿�ꥹ�ʥ��֥������Ȥ�
-  # ������롣
+  # addConfigurationSetNameListener で追加されたリスナオブジェクトを
+  # 削除する。
   #
-  # @param type ConfigurationSetNameListenerType�����͡�
-  #             ON_UPDATE_CONFIG_PARAM �����롣
-  # @param listener Ϳ�����ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param type ConfigurationSetNameListenerType型の値。
+  #             ON_UPDATE_CONFIG_PARAM がある。
+  # @param listener 与えたリスナオブジェクトへのポインタ
   # 
   # @else
   #
@@ -4348,14 +4348,14 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief ConfigurationSetNameListener ��������
+  # @brief ConfigurationSetNameListener を削除する
   #
-  # addConfigurationSetNameListener ���ɲä��줿�ꥹ�ʥ��֥������Ȥ�
-  # ������롣
+  # addConfigurationSetNameListener で追加されたリスナオブジェクトを
+  # 削除する。
   #
-  # @param type ConfigurationSetNameListenerType�����͡�
-  #             ON_UPDATE_CONFIG_PARAM �����롣
-  # @param listener Ϳ�����ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param type ConfigurationSetNameListenerType型の値。
+  #             ON_UPDATE_CONFIG_PARAM がある。
+  # @param listener 与えたリスナオブジェクトへのポインタ
   # 
   # @else
   #
@@ -4379,38 +4379,38 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PreFsmActionListener �ꥹ�ʤ��ɲä���
+  # @brief PreFsmActionListener リスナを追加する
   #
-  # FsmAction �����ؿ��θƤӽФ�ľ���Υ��٥�Ȥ˴�Ϣ����Ƽ��
-  # ���ʤ����ꤹ�롣
+  # FsmAction 実装関数の呼び出し直前のイベントに関連する各種リ
+  # スナを設定する。
   #
-  # ����Ǥ���ꥹ�ʤΥ����פȥ�����Хå����٥�Ȥϰʲ����̤�
+  # 設定できるリスナのタイプとコールバックイベントは以下の通り
   #
-  # - PRE_ON_INITIALIZE:    onInitialize ľ��
-  # - PRE_ON_FINALIZE:      onFinalize ľ��
-  # - PRE_ON_STARTUP:       onStartup ľ��
-  # - PRE_ON_SHUTDOWN:      onShutdown ľ��
-  # - PRE_ON_ACTIVATED:     onActivated ľ��
-  # - PRE_ON_DEACTIVATED:   onDeactivated ľ��
-  # - PRE_ON_ABORTED:       onAborted ľ��
-  # - PRE_ON_ERROR:         onError ľ��
-  # - PRE_ON_RESET:         onReset ľ��
-  # - PRE_ON_EXECUTE:       onExecute ľ��
-  # - PRE_ON_STATE_UPDATE:  onStateUpdate ľ��
+  # - PRE_ON_INITIALIZE:    onInitialize 直前
+  # - PRE_ON_FINALIZE:      onFinalize 直前
+  # - PRE_ON_STARTUP:       onStartup 直前
+  # - PRE_ON_SHUTDOWN:      onShutdown 直前
+  # - PRE_ON_ACTIVATED:     onActivated 直前
+  # - PRE_ON_DEACTIVATED:   onDeactivated 直前
+  # - PRE_ON_ABORTED:       onAborted 直前
+  # - PRE_ON_ERROR:         onError 直前
+  # - PRE_ON_RESET:         onReset 直前
+  # - PRE_ON_EXECUTE:       onExecute 直前
+  # - PRE_ON_STATE_UPDATE:  onStateUpdate 直前
   #
-  # �ꥹ�ʤ� PreFsmActionListener ��Ѿ������ʲ��Υ����˥�������
-  # operator() ��������Ƥ���ɬ�פ����롣
+  # リスナは PreFsmActionListener を継承し、以下のシグニチャを持つ
+  # operator() を実装している必要がある。
   #
   # PreFsmActionListener::operator()(UniqueId ec_id)
   #
-  # �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-  # RTObject�˰ܤꡢRTObject���λ��⤷���ϡ�
-  # removePreFsmActionListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-  # �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-  # ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+  # デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+  # RTObjectに移り、RTObject解体時もしくは、
+  # removePreFsmActionListener() により削除時に自動的に解体される。
+  # リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+  # 数に false を指定し、自動的な解体を抑制することができる。
   #
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Adding PreFsmAction type listener
@@ -4464,12 +4464,12 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PreFsmActionListener �ꥹ�ʤ�������
+  # @brief PreFsmActionListener リスナを削除する
   #
-  # ���ꤷ���Ƽ�ꥹ�ʤ������롣
+  # 設定した各種リスナを削除する。
   # 
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Removing PreFsmAction type listener
@@ -4488,38 +4488,38 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PostFsmActionListener �ꥹ�ʤ��ɲä���
+  # @brief PostFsmActionListener リスナを追加する
   #
-  # FsmAction �����ؿ��θƤӽФ�ľ��Υ��٥�Ȥ˴�Ϣ����Ƽ��
-  # ���ʤ����ꤹ�롣
+  # FsmAction 実装関数の呼び出し直後のイベントに関連する各種リ
+  # スナを設定する。
   #
-  # ����Ǥ���ꥹ�ʤΥ����פȥ�����Хå����٥�Ȥϰʲ����̤�
+  # 設定できるリスナのタイプとコールバックイベントは以下の通り
   #
-  # - POST_ON_INITIALIZE:    onInitialize ľ��
-  # - POST_ON_FINALIZE:      onFinalize ľ��
-  # - POST_ON_STARTUP:       onStartup ľ��
-  # - POST_ON_SHUTDOWN:      onShutdown ľ��
-  # - POST_ON_ACTIVATED:     onActivated ľ��
-  # - POST_ON_DEACTIVATED:   onDeactivated ľ��
-  # - POST_ON_ABORTED:       onAborted ľ��
-  # - POST_ON_ERROR:         onError ľ��
-  # - POST_ON_RESET:         onReset ľ��
-  # - POST_ON_EXECUTE:       onExecute ľ��
-  # - POST_ON_STATE_UPDATE:  onStateUpdate ľ��
+  # - POST_ON_INITIALIZE:    onInitialize 直後
+  # - POST_ON_FINALIZE:      onFinalize 直後
+  # - POST_ON_STARTUP:       onStartup 直後
+  # - POST_ON_SHUTDOWN:      onShutdown 直後
+  # - POST_ON_ACTIVATED:     onActivated 直後
+  # - POST_ON_DEACTIVATED:   onDeactivated 直後
+  # - POST_ON_ABORTED:       onAborted 直後
+  # - POST_ON_ERROR:         onError 直後
+  # - POST_ON_RESET:         onReset 直後
+  # - POST_ON_EXECUTE:       onExecute 直後
+  # - POST_ON_STATE_UPDATE:  onStateUpdate 直後
   #
-  # �ꥹ�ʤ� PostFsmActionListener ��Ѿ������ʲ��Υ����˥�������
-  # operator() ��������Ƥ���ɬ�פ����롣
+  # リスナは PostFsmActionListener を継承し、以下のシグニチャを持つ
+  # operator() を実装している必要がある。
   #
   # PostFsmActionListener::operator()(const char* state, ReturnCode_t ret)
   #
-  # �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-  # RTObject�˰ܤꡢRTObject���λ��⤷���ϡ�
-  # removePostFsmActionListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-  # �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-  # ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+  # デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+  # RTObjectに移り、RTObject解体時もしくは、
+  # removePostFsmActionListener() により削除時に自動的に解体される。
+  # リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+  # 数に false を指定し、自動的な解体を抑制することができる。
   #
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Adding PostFsmAction type listener
@@ -4575,12 +4575,12 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief PostFsmActionListener �ꥹ�ʤ�������
+  # @brief PostFsmActionListener リスナを削除する
   #
-  # ���ꤷ���Ƽ�ꥹ�ʤ������롣
+  # 設定した各種リスナを削除する。
   # 
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Removing PostFsmActionListener type listener
@@ -4600,35 +4600,35 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief FsmProfileListener �ꥹ�ʤ��ɲä���
+  # @brief FsmProfileListener リスナを追加する
   #
-  # FSM�ؤΥץ��ե���������ꡢ���������ޤ�FSM���Τؤξ��֤����ܡ���
-  # �٥�Ȥ��ɲú�����˥�����Хå������Ƽ�ꥹ�ʤ����ꤹ�롣
+  # FSMへのプロファイルの設定、取得時、またFSM自体への状態や遷移、イ
+  # ベントの追加削除時にコールバックされる各種リスナを設定する。
   #
-  # ����Ǥ���ꥹ�ʤΥ����פȥ�����Хå����٥�Ȥϰʲ����̤�
+  # 設定できるリスナのタイプとコールバックイベントは以下の通り
   #
-  # - SET_FSM_PROFILE       : FSM Profile�����
-  # - GET_FSM_PROFILE       : FSM Profile������
-  # - ADD_FSM_STATE         : FSM��State���ɲä��줿
-  # - REMOVE_FSM_STATE      : FSM����State��������줿
-  # - ADD_FSM_TRANSITION    : FSM�����ܤ��ɲä��줿
-  # - REMOVE_FSM_TRANSITION : FSM�������ܤ�������줿
-  # - BIND_FSM_EVENT        : FSM�˥��٥�Ȥ��Х���ɤ��줿
-  # - UNBIND_FSM_EVENT      : FSM�˥��٥�Ȥ�����Х���ɤ��줿
+  # - SET_FSM_PROFILE       : FSM Profile設定時
+  # - GET_FSM_PROFILE       : FSM Profile取得時
+  # - ADD_FSM_STATE         : FSMにStateが追加された
+  # - REMOVE_FSM_STATE      : FSMからStateが削除された
+  # - ADD_FSM_TRANSITION    : FSMに遷移が追加された
+  # - REMOVE_FSM_TRANSITION : FSMから遷移が削除された
+  # - BIND_FSM_EVENT        : FSMにイベントがバインドされた
+  # - UNBIND_FSM_EVENT      : FSMにイベントがアンバインドされた
   #
-  # �ꥹ�ʤ� FsmProfileListener ��Ѿ������ʲ��Υ����˥�������
-  # operator() ��������Ƥ���ɬ�פ����롣
+  # リスナは FsmProfileListener を継承し、以下のシグニチャを持つ
+  # operator() を実装している必要がある。
   #
   # FsmProfileListener::operator()(RTC::FsmProfile& pprof)
   #
-  # �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-  # RTObject�˰ܤꡢRTObject���λ��⤷���ϡ�
-  # removeFsmProfileListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-  # �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-  # ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+  # デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+  # RTObjectに移り、RTObject解体時もしくは、
+  # removeFsmProfileListener() により削除時に自動的に解体される。
+  # リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+  # 数に false を指定し、自動的な解体を抑制することができる。
   #
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Adding FsmProfile type listener
@@ -4683,12 +4683,12 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief FsmProfileListener �ꥹ�ʤ�������
+  # @brief FsmProfileListener リスナを削除する
   #
-  # ���ꤷ���Ƽ�ꥹ�ʤ������롣
+  # 設定した各種リスナを削除する。
   # 
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Removing FsmProfileListener type listener
@@ -4706,29 +4706,29 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief FsmStructureListener �ꥹ�ʤ��ɲä���
+  # @brief FsmStructureListener リスナを追加する
   #
-  # ExtendedFsmService �˴�Ϣ���� FSM structure �����ꡦ�������˥���
-  # ��Хå������Ƽ�ꥹ�ʤ����ꤹ�롣
+  # ExtendedFsmService に関連する FSM structure の設定・取得時にコー
+  # ルバックされる各種リスナを設定する。
   #
-  # ����Ǥ���ꥹ�ʤΥ����פȥ�����Хå����٥�Ȥϰʲ����̤�
+  # 設定できるリスナのタイプとコールバックイベントは以下の通り
   #
-  # - SET_FSM_STRUCTURE: FSM��¤������
-  # - GET_FSM_STRUCTURE: FSM��¤�μ���
+  # - SET_FSM_STRUCTURE: FSM構造の設定
+  # - GET_FSM_STRUCTURE: FSM構造の取得
   #
-  # �ꥹ�ʤ� FsmStructureListener ��Ѿ������ʲ��Υ����˥�������
-  # operator() ��������Ƥ���ɬ�פ����롣
+  # リスナは FsmStructureListener を継承し、以下のシグニチャを持つ
+  # operator() を実装している必要がある。
   #
   # FsmStructureListener::operator()(FsmStructure& structure)
   #
-  # �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-  # RTObject�˰ܤꡢRTObject���λ��⤷���ϡ�
-  # removeFsmStructureListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-  # �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-  # ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+  # デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+  # RTObjectに移り、RTObject解体時もしくは、
+  # removeFsmStructureListener() により削除時に自動的に解体される。
+  # リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+  # 数に false を指定し、自動的な解体を抑制することができる。
   #
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Adding FsmStructure type listener
@@ -4775,12 +4775,12 @@ class RTObject_impl:
 
   ##
   # @if jp
-  # @brief FsmStructureListener �ꥹ�ʤ�������
+  # @brief FsmStructureListener リスナを削除する
   #
-  # ���ꤷ���Ƽ�ꥹ�ʤ������롣
+  # 設定した各種リスナを削除する。
   # 
-  # @param listener_type �ꥹ�ʥ�����
-  # @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+  # @param listener_type リスナタイプ
+  # @param listener リスナオブジェクトへのポインタ
   #
   # @else
   # @brief Removing FsmStructureListener type listener
@@ -4800,11 +4800,11 @@ class RTObject_impl:
   ##
   # @if jp
   #
-  # @brief RTC ��λ����
+  # @brief RTC を終了する
   #
-  # RTC �ν�λ������¹Ԥ��롣
-  # �ݻ����Ƥ����� Port ����Ͽ��������ȤȤ�ˡ��������� CORBA ���֥�������
-  # �������������RTC ��λ���롣
+  # RTC の終了処理を実行する。
+  # 保持している全 Port の登録を解除するとともに、該当する CORBA オブジェクト
+  # を非活性化し、RTC を終了する。
   # 
   # @param self
   #
@@ -5294,7 +5294,7 @@ class RTObject_impl:
 
 
   ##
-  # @brief omniINSPOA��������������֥������Ȥ���Ͽ
+  # @brief omniINSPOAから取得したオブジェクトを登録
   #
   # @param self 
   # @param obj 
@@ -5306,8 +5306,8 @@ class RTObject_impl:
   ##
   # @if jp
   # @class svc_name
-  # @brief SDOService �Υץ��ե�����ꥹ�Ȥ���id�ǥ��������뤿���
-  # �ե��󥯥����饹
+  # @brief SDOService のプロファイルリストからidでサーチするための
+  # ファンクタクラス
   # @else
   #
   # @endif
@@ -5326,7 +5326,7 @@ class RTObject_impl:
   ##
   # @if jp
   # @class nv_name
-  # @brief NVList �����ѥե��󥯥�
+  # @brief NVList 検索用ファンクタ
   # @else
   #
   # @endif
@@ -5341,7 +5341,7 @@ class RTObject_impl:
   ##
   # @if jp
   # @class ec_find
-  # @brief ExecutionContext �����ѥե��󥯥�
+  # @brief ExecutionContext 検索用ファンクタ
   # @else
   #
   # @endif
@@ -5364,7 +5364,7 @@ class RTObject_impl:
   ##
   # @if jp
   # @class ec_copy
-  # @brief ExecutionContext Copy�ѥե��󥯥�
+  # @brief ExecutionContext Copy用ファンクタ
   # @else
   #
   # @endif
@@ -5380,7 +5380,7 @@ class RTObject_impl:
   ##
   # @if jp
   # @class deactivate_comps
-  # @brief RTC ��������ѥե��󥯥�
+  # @brief RTC 非活性化用ファンクタ
   # @else
   #
   # @endif

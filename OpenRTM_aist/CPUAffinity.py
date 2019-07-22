@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file CPUAffinity.py
@@ -15,10 +15,10 @@ import ctypes
 
 ##
 # @if jp
-# @brief CPU¤ÎÈÖ¹æ¥ê¥¹¥È¤òÊÑ´¹
+# @brief CPUã®ç•ªå·ãƒªã‚¹ãƒˆã‚’å¤‰æ›
 #
-# @param cpu_num_list CPU¤ÎÈÖ¹æ¥ê¥¹¥È
-# @return ¿ôÃÍ
+# @param cpu_num_list CPUã®ç•ªå·ãƒªã‚¹ãƒˆ
+# @return æ•°å€¤
 #
 # @else
 # @brief 
@@ -41,10 +41,10 @@ def listToCUPNUM(cpu_num_list):
     
 ##
 # @if jp
-# @brief ¥×¥í¥»¥¹¤ÎCPU¥¢¥Õ¥£¥Ë¥Æ¥£¤òÀßÄê
+# @brief ãƒ—ãƒ­ã‚»ã‚¹ã®CPUã‚¢ãƒ•ã‚£ãƒ‹ãƒ†ã‚£ã‚’è¨­å®š
 #
-# @param cpu_num_list CPU¤ÎÈÖ¹æ¥ê¥¹¥È
-# @return À®¸ù¤ÇTrue¡¢¼ºÇÔ¤ÇFalse
+# @param cpu_num_list CPUã®ç•ªå·ãƒªã‚¹ãƒˆ
+# @return æˆåŠŸã§Trueã€å¤±æ•—ã§False
 #
 # @else
 # @brief 
@@ -103,10 +103,10 @@ def setProcessAffinity(cpu_num_list):
 
 ##
 # @if jp
-# @brief ¥¹¥ì¥Ã¥É¤ÎCPU¥¢¥Õ¥£¥Ë¥Æ¥£¤òÀßÄê
+# @brief ã‚¹ãƒ¬ãƒƒãƒ‰ã®CPUã‚¢ãƒ•ã‚£ãƒ‹ãƒ†ã‚£ã‚’è¨­å®š
 #
-# @param cpu_num_list CPU¤ÎÈÖ¹æ¥ê¥¹¥È
-# @return À®¸ù¤ÇTrue¡¢¼ºÇÔ¤ÇFalse
+# @param cpu_num_list CPUã®ç•ªå·ãƒªã‚¹ãƒˆ
+# @return æˆåŠŸã§Trueã€å¤±æ•—ã§False
 #
 # @else
 # @brief 

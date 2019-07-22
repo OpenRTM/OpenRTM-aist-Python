@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file EventPort.py
@@ -23,9 +23,9 @@ import copy
 #
 # @class Event0
 #
-# @brief �����ʤ��Υ��٥�Ȥ��Ǽ���륯�饹
-# ���٥�ȼ������˥ꥹ�ʤ��Ǽ����Event0���֥������Ȥ�Хåե��˳�Ǽ����
-# �¹Ի���__call__�᥽�åɤˤ�ꥤ�٥�Ȥ�¹ԤǤ���
+# @brief 引数なしのイベントを格納するクラス
+# イベント受信時にリスナを格納し、Event0オブジェクトをバッファに格納する
+# 実行時は__call__メソッドによりイベントを実行できる
 #
 # @since 2.0.0
 #
@@ -44,10 +44,10 @@ class Event0:
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
   # @param self
-  # @param eb ���٥�ȼ������Υꥹ��
+  # @param eb イベント受信時のリスナ
   #
   # @else
   #
@@ -63,7 +63,7 @@ class Event0:
   ##
   # @if jp
   #
-  # @brief ���٥�ȼ¹�
+  # @brief イベント実行
   #
   # @param self
   #
@@ -83,9 +83,9 @@ class Event0:
 #
 # @class Event1
 #
-# @brief ����1�ĤΥ��٥�Ȥ��Ǽ���륯�饹
-# ���٥�ȼ������˥ꥹ�ʡ��������Ǽ����Event1���֥������Ȥ�Хåե��˳�Ǽ����
-# �¹Ի���__call__�᥽�åɤˤ�ꥤ�٥�Ȥ�¹ԤǤ���
+# @brief 引数1つのイベントを格納するクラス
+# イベント受信時にリスナ、引数を格納し、Event1オブジェクトをバッファに格納する
+# 実行時は__call__メソッドによりイベントを実行できる
 #
 # @since 2.0.0
 #
@@ -104,11 +104,11 @@ class Event1(Event0):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
   # @param self
-  # @param eb ���٥�ȼ������Υꥹ��
-  # @param data ���٥�ȼ¹Ի��˻��ꤹ�����
+  # @param eb イベント受信時のリスナ
+  # @param data イベント実行時に指定する引数
   #
   # @else
   #
@@ -126,7 +126,7 @@ class Event1(Event0):
   ##
   # @if jp
   #
-  # @brief ���٥�ȼ¹�
+  # @brief イベント実行
   #
   # @param self
   #
@@ -146,9 +146,9 @@ class Event1(Event0):
 #
 # @class EventBinder0
 #
-# @brief �����ʤ��Υ��٥�ȼ������Υꥹ��
-# InPort��ON_RECEIVED������Хå��˻��ꤹ�뤳�Ȥǡ�
-# ���٥�ȼ������˥Хåե��˥��٥�Ȥ��Ǽ����
+# @brief 引数なしのイベント受信時のリスナ
+# InPortのON_RECEIVEDコールバックに指定することで、
+# イベント受信時にバッファにイベントを格納する
 # 
 #
 # @since 2.0.0
@@ -168,13 +168,13 @@ class EventBinder0(OpenRTM_aist.ConnectorDataListener):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
   # @param self
-  # @param fsm ͭ�¾��֥ޥ���
-  # @param event_name ���٥��̾
-  # @param handler ���٥�ȥϥ�ɥ�
-  # @param buffer ���٥�Ȥ��Ǽ����Хåե�
+  # @param fsm 有限状態マシン
+  # @param event_name イベント名
+  # @param handler イベントハンドラ
+  # @param buffer イベントを格納するバッファ
   #
   # @else
   #
@@ -197,7 +197,7 @@ class EventBinder0(OpenRTM_aist.ConnectorDataListener):
   ##
   # @if jp
   #
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
   # @param self
   #
@@ -214,13 +214,13 @@ class EventBinder0(OpenRTM_aist.ConnectorDataListener):
   ##
   # @if jp
   #
-  # @brief ���٥�ȼ������Υ�����Хå��ؿ�
-  # ���ͥ����ץ��ե������fsm_event_name���ͤ����٥��̾�Ȱ��פ��Ƥ����硢�Хåե��˥��٥�Ȥ��Ǽ����
+  # @brief イベント受信時のコールバック関数
+  # コネクタプロファイルのfsm_event_nameの値がイベント名と一致している場合、バッファにイベントを格納する
   #
   # @param self
-  # @param info ���ͥ����ץ��ե�����
-  # @param data �����ǡ���
-  # @return �꥿���󥳡���
+  # @param info コネクタプロファイル
+  # @param data 受信データ
+  # @return リターンコード
   #
   # @else
   #
@@ -243,8 +243,8 @@ class EventBinder0(OpenRTM_aist.ConnectorDataListener):
   ##
   # @if jp
   #
-  # @brief ���٥�ȼ¹Դؿ�
-  # ���٥�ȥϥ�ɥ�˻��ꤷ��������¹Ԥ���
+  # @brief イベント実行関数
+  # イベントハンドラに指定した処理を実行する
   #
   # @param self
   #
@@ -266,9 +266,9 @@ class EventBinder0(OpenRTM_aist.ConnectorDataListener):
 #
 # @class EventBinder1
 #
-# @brief ����1�ĤΥ��٥�ȼ������Υꥹ��
-# InPort��ON_RECEIVED������Хå��˻��ꤹ�뤳�Ȥǡ�
-# ���٥�ȼ������˥Хåե��˥��٥�Ȥ��Ǽ����
+# @brief 引数1つのイベント受信時のリスナ
+# InPortのON_RECEIVEDコールバックに指定することで、
+# イベント受信時にバッファにイベントを格納する
 # 
 #
 # @since 2.0.0
@@ -288,14 +288,14 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListenerT):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
   # @param self
-  # @param fsm ͭ�¾��֥ޥ���
-  # @param event_name ���٥��̾
-  # @param handler ���٥�ȥϥ�ɥ�
-  # @param data_type ���ϥǡ�����
-  # @param buffer ���٥�Ȥ��Ǽ����Хåե�
+  # @param fsm 有限状態マシン
+  # @param event_name イベント名
+  # @param handler イベントハンドラ
+  # @param data_type 入力データ型
+  # @param buffer イベントを格納するバッファ
   #
   # @else
   #
@@ -320,7 +320,7 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListenerT):
   ##
   # @if jp
   #
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
   # @param self
   #
@@ -338,13 +338,13 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListenerT):
   ##
   # @if jp
   #
-  # @brief ���٥�ȼ������Υ�����Хå��ؿ�
-  # ���ͥ����ץ��ե������fsm_event_name���ͤ����٥��̾�Ȱ��פ��Ƥ����硢�Хåե��˥��٥�Ȥ��Ǽ����
+  # @brief イベント受信時のコールバック関数
+  # コネクタプロファイルのfsm_event_nameの値がイベント名と一致している場合、バッファにイベントを格納する
   #
   # @param self
-  # @param info ���ͥ����ץ��ե�����
-  # @param data �����ǡ���
-  # @return �꥿���󥳡���
+  # @param info コネクタプロファイル
+  # @param data 受信データ
+  # @return リターンコード
   #
   # @else
   #
@@ -367,11 +367,11 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListenerT):
   ##
   # @if jp
   #
-  # @brief ���٥�ȼ¹Դؿ�
-  # ���٥�ȥϥ�ɥ�˻��ꤷ��������¹Ԥ���
+  # @brief イベント実行関数
+  # イベントハンドラに指定した処理を実行する
   #
   # @param self
-  # @param data �����ǡ���
+  # @param data 受信データ
   #
   # @else
   #
@@ -391,12 +391,12 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListenerT):
 #
 # @class EventConnListener
 #
-# @brief ���ͥ�����³���Υꥹ��
-# InPort��ON_CONNECT������Хå��˻��ꤹ��
-# �ݡ��Ȥ��ݻ�����Хåե���write.full_policy��read.empty_policy��do_nothing�����ꤹ�뤳�Ȥǡ�
-# �ݡ��Ȥ��ݻ�����Хåե��Υǡ����ɤ߹��ߡ��񤭹��߻��˥֥��å��䥨�顼����ȯ�������ʤ��褦�ˤ���
-# ͭ�¾��֥ޥ����ݻ�����Хåե��ν������Ԥ�
-# ���Τ��ᡢ�����³�������ͥ���������ǥХåե������꤬��񤭤����
+# @brief コネクタ接続時のリスナ
+# InPortのON_CONNECTコールバックに指定する
+# ポートが保持するバッファのwrite.full_policy、read.empty_policyをdo_nothingに設定することで、
+# ポートが保持するバッファのデータ読み込み、書き込み時にブロックやエラー等を発生させないようにする
+# 有限状態マシンが保持するバッファの初期化を行う
+# このため、後で接続したコネクタの設定でバッファの設定が上書きされる
 # 
 #
 # @since 2.0.0
@@ -416,7 +416,7 @@ class EventConnListener(OpenRTM_aist.ConnectorListener):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
   # @param self
   # @param buffer 
@@ -439,7 +439,7 @@ class EventConnListener(OpenRTM_aist.ConnectorListener):
   ##
   # @if jp
   #
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
   # @param self
   #
@@ -457,11 +457,11 @@ class EventConnListener(OpenRTM_aist.ConnectorListener):
   ##
   # @if jp
   #
-  # @brief ���ͥ�����³���Υ�����Хå��ؿ�
+  # @brief コネクタ接続時のコールバック関数
   #
   # @param self
-  # @param info ���ͥ����ץ��ե�����
-  # @return �꥿���󥳡���
+  # @param info コネクタプロファイル
+  # @return リターンコード
   #
   # @else
   #
@@ -492,26 +492,26 @@ class EventConnListener(OpenRTM_aist.ConnectorListener):
 #
 # @class EventInPort
 #
-# @brief EventInPort �ƥ�ץ졼�ȥ��饹
+# @brief EventInPort テンプレートクラス
 # 
-# EventInPort �μ����Ǥ��� EventInPort<T> �Υƥ�ץ졼�ȥ��饹��
-# <T> ��BasicDataType.idl �ˤ��������Ƥ��뷿�ǡ����ФȤ���
-# Time ���� tm , ����� T���� data ����Ĺ�¤�ΤǤʤ��ƤϤʤ�ʤ���
-# EventInPort �������˥�󥰥Хåե�����������������������줿�ǡ�����缡
-# ���Υ�󥰥Хåե��˳�Ǽ���롣��󥰥Хåե��Υ������ϥǥե���Ȥ�8��
-# �ʤäƤ��뤬�����󥹥ȥ饯�������ˤ�ꥵ��������ꤹ�뤳�Ȥ��Ǥ��롣
-# �ǡ����ϥե饰�ˤ�ä�̤�ɡ����ɾ��֤��������졢isNew(), write(), read(),
-# isFull(), isEmpty() ���Υ᥽�åɤˤ��ϥ�ɥ�󥰤��뤳�Ȥ��Ǥ��롣
+# EventInPort の実装である EventInPort<T> のテンプレートクラス。
+# <T> はBasicDataType.idl にて定義されている型で、メンバとして
+# Time 型の tm , および T型の data を持つ構造体でなくてはならない。
+# EventInPort は内部にリングバッファを持ち、外部から送信されたデータを順次
+# このリングバッファに格納する。リングバッファのサイズはデフォルトで8と
+# なっているが、コンストラクタ引数によりサイズを指定することができる。
+# データはフラグによって未読、既読状態が管理され、isNew(), write(), read(),
+# isFull(), isEmpty() 等のメソッドによりハンドリングすることができる。
 #   
-# OnRead�ϥ�����Хå� (�ɤ߽Ф��˵������륤�٥�Ȥˤ�ꥳ���뤵���)
+# OnRead系コールバック (読み出しに起因するイベントによりコールされる)
 #
 # - void OnRead::operator(): 
-#     EventInPort::read() ��ƤӽФ��ɤ߽Ф���Ԥ��ݤ˥����뤵��롣
+#     EventInPort::read() を呼び出し読み出しを行う際にコールされる。
 #
 # - DataType OnReadConvert::operator(DataType): 
-#     EventInPort::read() ��ƤӽФ����ǡ�����Хåե������ɤߤ����ݤ˸ƤФ�
-#     �ǡ������Ѵ���Ԥ��������ˤϥХåե������ɤ߽Ф��줿�ͤ�Ϳ����졢
-#     �Ѵ���Υǡ���������ͤȤ����֤��������ͤ�read()���֤��ͤȤʤ롣
+#     EventInPort::read() を呼び出し、データをバッファから読みだす際に呼ばれ
+#     データの変換を行う。引数にはバッファから読み出された値が与えられ、
+#     変換後のデータを戻り値として返す。この値がread()の返す値となる。
 #
 # @since 2.0.0
 #
@@ -539,13 +539,13 @@ class EventInPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯����
-  # �ѥ�᡼���Ȥ���Ϳ������ T �����ѿ��˥Х���ɤ���롣
+  # コンストラクタ。
+  # パラメータとして与えられる T 型の変数にバインドされる。
   #
-  # @param name EventInPort ̾��EventInPortBase:name() �ˤ�껲�Ȥ���롣
-  # @param value ���� EventInPort �˥Х���ɤ���� T �����ѿ�
+  # @param name EventInPort 名。EventInPortBase:name() により参照される。
+  # @param value この EventInPort にバインドされる T 型の変数
   #
   # @else
   #
@@ -570,9 +570,9 @@ class EventInPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   #
-  # �ǥ��ȥ饯����
+  # デストラクタ。
   #
   # @else
   #
@@ -587,11 +587,11 @@ class EventInPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �ݡ���̾�Τ�������롣
+  # @brief ポート名称を取得する。
   #
-  # �ݡ���̾�Τ�������롣
+  # ポート名称を取得する。
   #
-  # @return �ݡ���̾��
+  # @return ポート名称
   #
   # @else
   #
@@ -608,10 +608,10 @@ class EventInPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �����
-  # InPortBase�ν�����Τۤ��˥Хåե�������Τ���Υ��ͥ���������Хå��ؿ�����Ͽ��Ԥ�
+  # @brief 初期化
+  # InPortBaseの初期化のほかにバッファ初期化のためのコネクタコールバック関数の登録を行う
   #
-  # @param prop �������
+  # @param prop 設定情報
   #
   #
   # @else
@@ -630,12 +630,12 @@ class EventInPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �����ʤ��Υ��٥�ȥϥ�ɥ����Ͽ����
-  # ���ͥ�����ON_RECEIVED������Хå��¹Ի��˥Хåե��˼¹�ͽ��Υ��٥�ȤȤ��Ƴ�Ǽ����
-  # �Хåե��˳�Ǽ�������٥�Ȥ�Machine��run_event�ؿ��Ǽ¹Ԥ���
+  # @brief 引数なしのイベントハンドラを登録する
+  # コネクタのON_RECEIVEDコールバック実行時にバッファに実行予定のイベントとして格納する
+  # バッファに格納したイベントはMachineのrun_event関数で実行する
   #
-  # @param name ���٥��̾
-  # @param handler ���٥�ȥϥ�ɥ�
+  # @param name イベント名
+  # @param handler イベントハンドラ
   #
   #
   # @else
@@ -653,13 +653,13 @@ class EventInPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ����1�ĤΥ��٥�ȥϥ�ɥ����Ͽ����
-  # ���ͥ�����ON_RECEIVED������Хå��¹Ի��˥Хåե��˼¹�ͽ��Υ��٥�ȤȤ��Ƴ�Ǽ����
-  # �Хåե��˳�Ǽ�������٥�Ȥ�Machine��run_event�ؿ��Ǽ¹Ԥ���
+  # @brief 引数1つのイベントハンドラを登録する
+  # コネクタのON_RECEIVEDコールバック実行時にバッファに実行予定のイベントとして格納する
+  # バッファに格納したイベントはMachineのrun_event関数で実行する
   #
-  # @param name ���٥��̾
-  # @param handler ���٥�ȥϥ�ɥ�
-  # @param data_type �ǡ�����
+  # @param name イベント名
+  # @param handler イベントハンドラ
+  # @param data_type データ型
   #
   #
   # @else

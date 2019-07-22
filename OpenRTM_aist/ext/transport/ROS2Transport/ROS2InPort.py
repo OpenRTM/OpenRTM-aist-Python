@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ROS2InPort.py
@@ -27,8 +27,8 @@ import threading
 ##
 # @if jp
 # @class ROS2InPort
-# @brief ROS2 Subscriber¤ËÂĞ±ş¤¹¤ë¥¯¥é¥¹
-# InPortProvider¥ª¥Ö¥¸¥§¥¯¥È¤È¤·¤Æ»ÈÍÑ¤¹¤ë
+# @brief ROS2 Subscriberã«å¯¾å¿œã™ã‚‹ã‚¯ãƒ©ã‚¹
+# InPortProviderã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã—ã¦ä½¿ç”¨ã™ã‚‹
 #
 # @else
 # @class ROS2InPort
@@ -42,12 +42,12 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
-  # ¥İ¡¼¥È¥×¥í¥Ñ¥Æ¥£¤Ë°Ê²¼¤Î¹àÌÜ¤òÀßÄê¤¹¤ë¡£
-  #  - ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¿¥¤¥× : ROS2
-  #  - ¥Ç¡¼¥¿¥Õ¥í¡¼¥¿¥¤¥× : Push
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«ä»¥ä¸‹ã®é …ç›®ã‚’è¨­å®šã™ã‚‹ã€‚
+  #  - ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ— : ROS2
+  #  - ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚¿ã‚¤ãƒ— : Push
   #
   # @param self 
   #
@@ -84,9 +84,9 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self 
   #
@@ -105,7 +105,7 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ½ªÎ»½èÍı
+  # @brief çµ‚äº†å‡¦ç†
   #
   # @param self 
   #
@@ -122,12 +122,12 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ½é´ü²½
+  # @brief åˆæœŸåŒ–
   #
   # @param self 
-  # @param prop ÀÜÂ³ÀßÄê
-  # marshaling_type ¥·¥ê¥¢¥é¥¤¥¶¤Î¼ïÎà ¥Ç¥Õ¥©¥ë¥È¡§ROS2
-  # topic ¥È¥Ô¥Ã¥¯Ì¾ ¥Ç¥Õ¥©¥ë¥È chatter
+  # @param prop æ¥ç¶šè¨­å®š
+  # marshaling_type ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®ç¨®é¡ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šROS2
+  # topic ãƒˆãƒ”ãƒƒã‚¯å ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ chatter
   #
   # @else
   # @brief 
@@ -174,10 +174,10 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ¥³¥Í¥¯¥¿¥ê¥¹¥Ê¤ÎÀßÄê
+  # @brief ã‚³ãƒã‚¯ã‚¿ãƒªã‚¹ãƒŠã®è¨­å®š
   #
-  # @param info ÀÜÂ³¾ğÊó
-  # @param listeners ¥ê¥¹¥Ê
+  # @param info æ¥ç¶šæƒ…å ±
+  # @param listeners ãƒªã‚¹ãƒŠ
   #
   # @else
   # @brief 
@@ -197,10 +197,10 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief Subscriber¥á¥Ã¥»¡¼¥¸¼õ¿®»ş¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+  # @brief Subscriberãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å—ä¿¡æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
   #
   # @param self 
-  # @param msg ¼õ¿®¥á¥Ã¥»¡¼¥¸
+  # @param msg å—ä¿¡ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
   #
   # @else
   # @brief 
@@ -216,11 +216,11 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
   ##
   # @if jp
-  # @brief ¥Ğ¥Ã¥Õ¥¡¤Ë¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à
+  # @brief ãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
   #
-  # ÀßÄê¤µ¤ì¤¿¥Ğ¥Ã¥Õ¥¡¤Ë¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à¡£
+  # è¨­å®šã•ã‚ŒãŸãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€ã€‚
   #
-  # @param data ½ñ¹şÂĞ¾İ¥Ç¡¼¥¿
+  # @param data æ›¸è¾¼å¯¾è±¡ãƒ‡ãƒ¼ã‚¿
   #
   # @else
   # @brief Write data into the buffer
@@ -342,7 +342,7 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
 ##
 # @if jp
-# @brief ¥â¥¸¥å¡¼¥ëÅĞÏ¿´Ø¿ô
+# @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ç™»éŒ²é–¢æ•°
 #
 #
 # @else

@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file EventDrivenExecutionContext.py
@@ -23,9 +23,9 @@ import RTC
 ##
 # @if jp
 # @class PeriodicExecutionContext
-# @brief PeriodicExecutionContext ¥¯¥é¥¹
+# @brief PeriodicExecutionContext ã‚¯ãƒ©ã‚¹
 #
-# Periodic EventDrivenExecutionContext¥¯¥é¥¹¡£
+# Periodic EventDrivenExecutionContextã‚¯ãƒ©ã‚¹ã€‚
 #
 # @since 2.0.0
 #
@@ -39,10 +39,10 @@ class EventDrivenExecutionContext(OpenRTM_aist.PeriodicExecutionContext):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
-  # ÀßÄê¤µ¤ì¤¿ÃÍ¤ò¥×¥í¥Õ¥¡¥¤¥ë¤ËÀßÄê¤¹¤ë¡£
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # è¨­å®šã•ã‚ŒãŸå€¤ã‚’ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã«è¨­å®šã™ã‚‹ã€‚
   #
   # @else
   # @brief Constructor
@@ -58,11 +58,11 @@ class EventDrivenExecutionContext(OpenRTM_aist.PeriodicExecutionContext):
 
 ##
 # @if jp
-# @brief ExecutionContext ¤ò½é´ü²½¤¹¤ë
+# @brief ExecutionContext ã‚’åˆæœŸåŒ–ã™ã‚‹
 #
-# ExecutionContext µ¯Æ°ÍÑ¥Õ¥¡¥¯¥È¥ê¤òÅĞÏ¿¤¹¤ë¡£
+# ExecutionContext èµ·å‹•ç”¨ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚’ç™»éŒ²ã™ã‚‹ã€‚
 #
-# @param manager ¥Ş¥Í¡¼¥¸¥ã¥ª¥Ö¥¸¥§¥¯¥È
+# @param manager ãƒãƒãƒ¼ã‚¸ãƒ£ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 #
 # @else
 #

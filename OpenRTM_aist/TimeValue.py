@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 
 ##
@@ -26,10 +26,10 @@ if sys.version_info[0] == 3:
 ##
 # @if jp
 # @class TimeValue
-# @brief »ş´Ö·×»»ÍÑ¥¯¥é¥¹
+# @brief æ™‚é–“è¨ˆç®—ç”¨ã‚¯ãƒ©ã‚¹
 # 
-# »ØÄê¤·¤¿»ş´ÖÃÍ¤òÊİ»ı¤¹¤ë¤¿¤á¤Î¥¯¥é¥¹¡£
-# »ş´ÖÃÍ¤ËÂĞ¤¹¤ë³Æ¼ï·×»»ÍÑ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤òÄó¶¡¤¹¤ë¡£
+# æŒ‡å®šã—ãŸæ™‚é–“å€¤ã‚’ä¿æŒã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ã€‚
+# æ™‚é–“å€¤ã«å¯¾ã™ã‚‹å„ç¨®è¨ˆç®—ç”¨ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’æä¾›ã™ã‚‹ã€‚
 #
 # @since 0.4.0
 #
@@ -45,14 +45,14 @@ class TimeValue:
   ##
   # @if jp
   #
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   # 
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
-  # »ØÄê¤µ¤ì¤¿ÉÃ¡¤¥Ş¥¤¥¯¥íÉÃ¤Ç½é´ü²½¤¹¤ë¡£
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # æŒ‡å®šã•ã‚ŒãŸç§’ï¼Œãƒã‚¤ã‚¯ãƒ­ç§’ã§åˆæœŸåŒ–ã™ã‚‹ã€‚
   #
   # @param self
-  # @param sec ÉÃ(¥Ç¥Õ¥©¥ë¥ÈÃÍ:None)
-  # @param usec ¥Ş¥¤¥¯¥íÉÃ(¥Ç¥Õ¥©¥ë¥ÈÃÍ:None)
+  # @param sec ç§’(ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤:None)
+  # @param usec ãƒã‚¤ã‚¯ãƒ­ç§’(ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤:None)
   # 
   # @else
   #
@@ -95,14 +95,14 @@ class TimeValue:
   ##
   # @if jp
   #
-  # @brief »ş´Ö¸º»»
+  # @brief æ™‚é–“æ¸›ç®—
   # 
-  # ÀßÄê¤µ¤ì¤¿»ş´Ö¤«¤é°ú¿ô¤ÇÍ¿¤¨¤é¤ì¤¿»ş´Ö¤ò¸º»»¤¹¤ë¡£
+  # è¨­å®šã•ã‚ŒãŸæ™‚é–“ã‹ã‚‰å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæ™‚é–“ã‚’æ¸›ç®—ã™ã‚‹ã€‚
   #
   # @param self
-  # @param tm ¸º»»»ş´Ö
+  # @param tm æ¸›ç®—æ™‚é–“
   # 
-  # @return ¸º»»·ë²Ì
+  # @return æ¸›ç®—çµæœ
   # 
   # @else
   #
@@ -115,21 +115,21 @@ class TimeValue:
     if self.tv_sec >= tm.tv_sec:
       # +
       if self.tv_usec >= tm.tv_usec:
-        # ·«¤ê²¼¤¬¤êÌµ¤·
+        # ç¹°ã‚Šä¸‹ãŒã‚Šç„¡ã—
         res.tv_sec  = self.tv_sec  - tm.tv_sec
         res.tv_usec = self.tv_usec - tm.tv_usec
       else:
-        # self.tv_usec < tm.tv_usec ·«¤ê²¼¤¬¤êÍ­¤ê
+        # self.tv_usec < tm.tv_usec ç¹°ã‚Šä¸‹ãŒã‚Šæœ‰ã‚Š
         res.tv_sec  = self.tv_sec  - tm.tv_sec - 1
         res.tv_usec = (self.tv_usec + TIMEVALUE_ONE_SECOND_IN_USECS) - tm.tv_usec
     else:
       # self.tv_sec < tm.tv_sec # -
       if tm.tv_usec >= self.tv_usec:
-        # ·«¤ê²¼¤¬¤êÌµ¤·
+        # ç¹°ã‚Šä¸‹ãŒã‚Šç„¡ã—
         res.tv_sec  = -(tm.tv_sec  - self.tv_sec)
         res.tv_usec = -(tm.tv_usec - self.tv_usec)
       else:
-        # tm.tv_usec < self.tv_usec ·«¤ê²¼¤¬¤êÍ­¤ê
+        # tm.tv_usec < self.tv_usec ç¹°ã‚Šä¸‹ãŒã‚Šæœ‰ã‚Š
         res.tv_sec  = -(tm.tv_sec - self.tv_sec - 1)
         res.tv_usec = -(tm.tv_usec + TIMEVALUE_ONE_SECOND_IN_USECS) + self.tv_usec
 
@@ -140,14 +140,14 @@ class TimeValue:
   ##
   # @if jp
   #
-  # @brief »ş´Ö²Ã»»
+  # @brief æ™‚é–“åŠ ç®—
   # 
-  # ÀßÄê¤µ¤ì¤¿»ş´Ö¤Ë°ú¿ô¤ÇÍ¿¤¨¤é¤ì¤¿»ş´Ö¤ò²Ã»»¤¹¤ë¡£
+  # è¨­å®šã•ã‚ŒãŸæ™‚é–“ã«å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸæ™‚é–“ã‚’åŠ ç®—ã™ã‚‹ã€‚
   #
   # @param self
-  # @param tm ²Ã»»»ş´Ö
+  # @param tm åŠ ç®—æ™‚é–“
   # 
-  # @return ²Ã»»·ë²Ì
+  # @return åŠ ç®—çµæœ
   # 
   # @else
   #
@@ -176,14 +176,14 @@ class TimeValue:
   ##
   # @if jp
   #
-  # @brief double·¿¢ª»ş´Ö·¿ÊÑ´¹
+  # @brief doubleå‹â†’æ™‚é–“å‹å¤‰æ›
   # 
-  # °ú¿ô¤ÇÍ¿¤¨¤é¤ì¤¿double·¿¤ò»ş´Ö·¿¤ËÊÑ´¹¤¹¤ë¡£
+  # å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸdoubleå‹ã‚’æ™‚é–“å‹ã«å¤‰æ›ã™ã‚‹ã€‚
   #
   # @param self
-  # @param time ÊÑ´¹¸µÃÍ
+  # @param time å¤‰æ›å…ƒå€¤
   # 
-  # @return ÊÑ´¹·ë²Ì
+  # @return å¤‰æ›çµæœ
   # 
   # @else
   #
@@ -198,12 +198,12 @@ class TimeValue:
   ##
   # @if jp
   #
-  # @brief »ş´Ö·¿¢ªdouble·¿ÊÑ´¹
+  # @brief æ™‚é–“å‹â†’doubleå‹å¤‰æ›
   # 
-  # Êİ»ı¤·¤Æ¤¤¤ëÆâÍÆ¤òdouble·¿¤ËÊÑ´¹¤¹¤ë¡£
+  # ä¿æŒã—ã¦ã„ã‚‹å†…å®¹ã‚’doubleå‹ã«å¤‰æ›ã™ã‚‹ã€‚
   #
   # @param self
-  # @return double·¿ÊÑ´¹·ë²Ì
+  # @return doubleå‹å¤‰æ›çµæœ
   # 
   # @else
   #
@@ -215,13 +215,13 @@ class TimeValue:
 
   ##
   # @if jp
-  # @brief ÀßÄê»ş´Ö¤ò½ĞÎÏ¤¹¤ë
+  # @brief è¨­å®šæ™‚é–“ã‚’å‡ºåŠ›ã™ã‚‹
   #
-  # ÀßÄê»ş´Ö¤òÊ¸»úÎó½ĞÎÏ¤¹¤ë¡£<br>
+  # è¨­å®šæ™‚é–“ã‚’æ–‡å­—åˆ—å‡ºåŠ›ã™ã‚‹ã€‚<br>
   #
   # @param self
   #
-  # @return ÀßÄê»ş´ÖÊ¸»úÎóÉ½¼¨
+  # @return è¨­å®šæ™‚é–“æ–‡å­—åˆ—è¡¨ç¤º
   #
   # @else
   #
@@ -232,13 +232,13 @@ class TimeValue:
 
   ##
   # @if jp
-  # @brief Éä¹æÈ½Äê
+  # @brief ç¬¦å·åˆ¤å®š
   #
-  # Êİ»ı¤·¤Æ¤¤¤ëÆâÍÆ¤ÎÉä¹æ¤òÈ½Äê¤¹¤ë¡£<br>
+  # ä¿æŒã—ã¦ã„ã‚‹å†…å®¹ã®ç¬¦å·ã‚’åˆ¤å®šã™ã‚‹ã€‚<br>
   #
   # @param self
   #
-  # @return Àµ¤Ê¤é¤Ğ1¤ò¡¢Éé¤Ê¤é¤Ğ-1¤ò¡¢0¤Ê¤é¤Ğ0
+  # @return æ­£ãªã‚‰ã°1ã‚’ã€è² ãªã‚‰ã°-1ã‚’ã€0ãªã‚‰ã°0
   #
   # @else
   #
@@ -257,7 +257,7 @@ class TimeValue:
   
   ##
   # @if jp
-  # @brief Àµµ¬²½
+  # @brief æ­£è¦åŒ–
   # @else
   # @brief Normalize
   # @endif

@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file  PublisherNew.py
@@ -23,13 +23,13 @@ import OpenRTM_aist
 ##
 # @if jp
 # @class PublisherNew
-# @brief PublisherNew ¥¯¥é¥¹
+# @brief PublisherNew ã‚¯ãƒ©ã‚¹
 #
-# ¥Ğ¥Ã¥Õ¥¡Æâ¤Ë¿·µ¬¥Ç¡¼¥¿¤¬³ÊÇ¼¤µ¤ì¤¿¥¿¥¤¥ß¥ó¥°¤Ç¡¢¤½¤Î¿·µ¬¥Ç¡¼¥¿¤òÁ÷¿®¤¹¤ë¡£
-# ¥Ç¡¼¥¿Á÷½Ğ¥¿¥¤¥ß¥ó¥°¤òÂÔ¤Ä¥³¥ó¥·¥å¡¼¥Ş¤ò¡¢Á÷½Ğ¤¹¤ëÂ¦¤È¤Ï°Û¤Ê¤ë¥¹¥ì¥Ã¥É¤Ç
-# Æ°ºî¤µ¤»¤ë¾ì¹ç¤Ë»ÈÍÑ¡£
-# Publisher¤Î¶îÆ°¤Ï¡¢¥Ç¡¼¥¿Á÷½Ğ¤Î¥¿¥¤¥ß¥ó¥°¤Ë¤Ê¤ë¤Ş¤Ç¥Ö¥í¥Ã¥¯¤µ¤ì¡¢
-# Á÷½Ğ¥¿¥¤¥ß¥ó¥°¤ÎÄÌÃÎ¤ò¼õ¤±¤ë¤È¡¢Â¨ºÂ¤Ë¥³¥ó¥·¥å¡¼¥Ş¤ÎÁ÷½Ğ½èÍı¤ò¸Æ¤Ó½Ğ¤¹¡£
+# ãƒãƒƒãƒ•ã‚¡å†…ã«æ–°è¦ãƒ‡ãƒ¼ã‚¿ãŒæ ¼ç´ã•ã‚ŒãŸã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§ã€ãã®æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹ã€‚
+# ãƒ‡ãƒ¼ã‚¿é€å‡ºã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚’å¾…ã¤ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã‚’ã€é€å‡ºã™ã‚‹å´ã¨ã¯ç•°ãªã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ã§
+# å‹•ä½œã•ã›ã‚‹å ´åˆã«ä½¿ç”¨ã€‚
+# Publisherã®é§†å‹•ã¯ã€ãƒ‡ãƒ¼ã‚¿é€å‡ºã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã«ãªã‚‹ã¾ã§ãƒ–ãƒ­ãƒƒã‚¯ã•ã‚Œã€
+# é€å‡ºã‚¿ã‚¤ãƒŸãƒ³ã‚°ã®é€šçŸ¥ã‚’å—ã‘ã‚‹ã¨ã€å³åº§ã«ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®é€å‡ºå‡¦ç†ã‚’å‘¼ã³å‡ºã™ã€‚
 #
 # @else
 # @class PublisherNew
@@ -55,15 +55,15 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
-  # ËÜ Publisher ÍÑ¿·µ¬¥¹¥ì¥Ã¥É¤òÀ¸À®¤¹¤ë¡£
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+  # æœ¬ Publisher ç”¨æ–°è¦ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ç”Ÿæˆã™ã‚‹ã€‚
   #
   # @param self
-  # @param consumer ¥Ç¡¼¥¿Á÷½Ğ¤òÂÔ¤Ä¥³¥ó¥·¥å¡¼¥Ş
-  # @param property ËÜPublisher¤Î¶îÆ°À©¸æ¾ğÊó¤òÀßÄê¤·¤¿Property¥ª¥Ö¥¸¥§¥¯¥È
-  #                 (ËÜPublisher¤Ç¤ÏÌ¤»ÈÍÑ)
+  # @param consumer ãƒ‡ãƒ¼ã‚¿é€å‡ºã‚’å¾…ã¤ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒ
+  # @param property æœ¬Publisherã®é§†å‹•åˆ¶å¾¡æƒ…å ±ã‚’è¨­å®šã—ãŸPropertyã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+  #                 (æœ¬Publisherã§ã¯æœªä½¿ç”¨)
   # @else
   # @brief Constructor
   # @endif
@@ -83,9 +83,9 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -111,7 +111,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief PushPolicy ¤ÎÀßÄê
+  # @brief PushPolicy ã®è¨­å®š
   # @else
   # @brief Setting PushPolicy
   # @endif
@@ -158,7 +158,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief Task ¤ÎÀßÄê
+  # @brief Task ã®è¨­å®š
   # @else
   # @brief Setting Task
   # @endif
@@ -206,27 +206,27 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ½é´ü²½
+  # @brief åˆæœŸåŒ–
   #
-  # ¤³¤Î¥¯¥é¥¹¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ò»ÈÍÑ¤¹¤ë¤Î¤ËÀèÎ©¤Á¡¢É¬¤º¤³¤Î´Ø¿ô¤ò¸Æ¤Ó
-  # ½Ğ¤¹É¬Í×¤¬¤¢¤ë¡£°ú¿ô¤Ë¤Ï¡¢¤³¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Î³Æ¼ïÀßÄê¾ğÊó¤ò´Ş¤à
-  # Properties ¤òÍ¿¤¨¤ë¡£¥Ç¡¼¥¿¤ò¥×¥Ã¥·¥å¤¹¤ëºİ¤Î¥İ¥ê¥·¡¼¤È¤·¤Æ
-  # publisher.push_policy ¤ò¥­¡¼¤È¤¹¤ëÃÍ¤Ë¡¢all, fifo, skip, new ¤Î
-  # ¤¤¤º¤ì¤«¤òÍ¿¤¨¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+  # ã“ã®ã‚¯ãƒ©ã‚¹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½¿ç”¨ã™ã‚‹ã®ã«å…ˆç«‹ã¡ã€å¿…ãšã“ã®é–¢æ•°ã‚’å‘¼ã³
+  # å‡ºã™å¿…è¦ãŒã‚ã‚‹ã€‚å¼•æ•°ã«ã¯ã€ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å„ç¨®è¨­å®šæƒ…å ±ã‚’å«ã‚€
+  # Properties ã‚’ä¸ãˆã‚‹ã€‚ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ã™ã‚‹éš›ã®ãƒãƒªã‚·ãƒ¼ã¨ã—ã¦
+  # publisher.push_policy ã‚’ã‚­ãƒ¼ã¨ã™ã‚‹å€¤ã«ã€all, fifo, skip, new ã®
+  # ã„ãšã‚Œã‹ã‚’ä¸ãˆã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
   # 
-  # °Ê²¼¤Î¥ª¥×¥·¥ç¥ó¤òÍ¿¤¨¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+  # ä»¥ä¸‹ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’ä¸ãˆã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
   # 
-  # - thread_type: ¥¹¥ì¥Ã¥É¤Î¥¿¥¤¥× (Ê¸»úÎó¡¢¥Ç¥Õ¥©¥ë¥È: default)
-  # - publisher.push_policy: Push¥İ¥ê¥·¡¼ (all, fifo, skip, new)
-  # - publisher.skip_count: ¾åµ­¥İ¥ê¥·¤¬ skip ¤Î¤È¤­¤Î¥¹¥­¥Ã¥×¿ô
-  # - measurement.exec_time: ¥¿¥¹¥¯¼Â¹Ô»ş´Ö·×Â¬ (enable/disable)
-  # - measurement.exec_count: ¥¿¥¹¥¯´Ø¿ô¼Â¹Ô»ş´Ö·×Â¬¼ş´ü (¿ôÃÍ, ²ó¿ô)
-  # - measurement.period_time: ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬ (enable/disable)
-  # - measurement.period_count: ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬¼ş´ü (¿ôÃÍ, ²ó¿ô)
+  # - thread_type: ã‚¹ãƒ¬ãƒƒãƒ‰ã®ã‚¿ã‚¤ãƒ— (æ–‡å­—åˆ—ã€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ: default)
+  # - publisher.push_policy: Pushãƒãƒªã‚·ãƒ¼ (all, fifo, skip, new)
+  # - publisher.skip_count: ä¸Šè¨˜ãƒãƒªã‚·ãŒ skip ã®ã¨ãã®ã‚¹ã‚­ãƒƒãƒ—æ•°
+  # - measurement.exec_time: ã‚¿ã‚¹ã‚¯å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬ (enable/disable)
+  # - measurement.exec_count: ã‚¿ã‚¹ã‚¯é–¢æ•°å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬å‘¨æœŸ (æ•°å€¤, å›æ•°)
+  # - measurement.period_time: ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬ (enable/disable)
+  # - measurement.period_count: ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬å‘¨æœŸ (æ•°å€¤, å›æ•°)
   #
-  # @param property ËÜPublisher¤Î¶îÆ°À©¸æ¾ğÊó¤òÀßÄê¤·¤¿Property¥ª¥Ö¥¸¥§¥¯¥È
-  # @return ReturnCode PORT_OK Àµ¾ï½ªÎ»
-  #                    INVALID_ARGS Properties ¤¬ÉÔÀµ¤ÊÃÍ¤ò´Ş¤à
+  # @param property æœ¬Publisherã®é§†å‹•åˆ¶å¾¡æƒ…å ±ã‚’è¨­å®šã—ãŸPropertyã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+  # @return ReturnCode PORT_OK æ­£å¸¸çµ‚äº†
+  #                    INVALID_ARGS Properties ãŒä¸æ­£ãªå€¤ã‚’å«ã‚€
   #
   # @else
   # @brief Initialization
@@ -263,15 +263,15 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief InPort¥³¥ó¥·¥å¡¼¥Ş¤Î¥»¥Ã¥È
+  # @brief InPortã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®ã‚»ãƒƒãƒˆ
   #
-  # ¤³¤Î´Ø¿ô¤Ç¤Ï¡¢¤³¤Î Publisher ¤Ë´ØÏ¢ÉÕ¤±¤é¤ì¤ë¥³¥ó¥·¥å¡¼¥Ş¤ò¥»¥Ã¥È¤¹¤ë¡£
-  # ¥³¥ó¥·¥å¡¼¥Ş¥ª¥Ö¥¸¥§¥¯¥È¤¬¥Ì¥ë¥İ¥¤¥ó¥¿¤Î¾ì¹ç¡¢INVALID_ARGS¤¬ÊÖ¤µ¤ì¤ë¡£
-  # ¤½¤ì°Ê³°¤Î¾ì¹ç¤Ï¡¢PORT_OK ¤¬ÊÖ¤µ¤ì¤ë¡£
+  # ã“ã®é–¢æ•°ã§ã¯ã€ã“ã® Publisher ã«é–¢é€£ä»˜ã‘ã‚‰ã‚Œã‚‹ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã€‚
+  # ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒŒãƒ«ãƒã‚¤ãƒ³ã‚¿ã®å ´åˆã€INVALID_ARGSãŒè¿”ã•ã‚Œã‚‹ã€‚
+  # ãã‚Œä»¥å¤–ã®å ´åˆã¯ã€PORT_OK ãŒè¿”ã•ã‚Œã‚‹ã€‚
   #
-  # @param consumer Consumer ¤Ø¤Î¥İ¥¤¥ó¥¿
-  # @return ReturnCode PORT_OK Àµ¾ï½ªÎ»
-  #                    INVALID_ARGS °ú¿ô¤ËÉÔÀµ¤ÊÃÍ¤¬´Ş¤Ş¤ì¤Æ¤¤¤ë
+  # @param consumer Consumer ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+  # @return ReturnCode PORT_OK æ­£å¸¸çµ‚äº†
+  #                    INVALID_ARGS å¼•æ•°ã«ä¸æ­£ãªå€¤ãŒå«ã¾ã‚Œã¦ã„ã‚‹
   #
   # @else
   # @brief Store InPort consumer
@@ -299,15 +299,15 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ¥Ğ¥Ã¥Õ¥¡¤Î¥»¥Ã¥È
+  # @brief ãƒãƒƒãƒ•ã‚¡ã®ã‚»ãƒƒãƒˆ
   #
-  # ¤³¤Î´Ø¿ô¤Ç¤Ï¡¢¤³¤Î Publisher ¤Ë´ØÏ¢ÉÕ¤±¤é¤ì¤ë¥Ğ¥Ã¥Õ¥¡¤ò¥»¥Ã¥È¤¹¤ë¡£
-  # ¥Ğ¥Ã¥Õ¥¡¥ª¥Ö¥¸¥§¥¯¥È¤¬¥Ì¥ë¥İ¥¤¥ó¥¿¤Î¾ì¹ç¡¢INVALID_ARGS¤¬ÊÖ¤µ¤ì¤ë¡£
-  # ¤½¤ì°Ê³°¤Î¾ì¹ç¤Ï¡¢PORT_OK ¤¬ÊÖ¤µ¤ì¤ë¡£
+  # ã“ã®é–¢æ•°ã§ã¯ã€ã“ã® Publisher ã«é–¢é€£ä»˜ã‘ã‚‰ã‚Œã‚‹ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã€‚
+  # ãƒãƒƒãƒ•ã‚¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒŒãƒ«ãƒã‚¤ãƒ³ã‚¿ã®å ´åˆã€INVALID_ARGSãŒè¿”ã•ã‚Œã‚‹ã€‚
+  # ãã‚Œä»¥å¤–ã®å ´åˆã¯ã€PORT_OK ãŒè¿”ã•ã‚Œã‚‹ã€‚
   #
-  # @param buffer CDR buffer ¤Ø¤Î¥İ¥¤¥ó¥¿
-  # @return ReturnCode PORT_OK Àµ¾ï½ªÎ»
-  #                    INVALID_ARGS °ú¿ô¤ËÉÔÀµ¤ÊÃÍ¤¬´Ş¤Ş¤ì¤Æ¤¤¤ë
+  # @param buffer CDR buffer ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+  # @return ReturnCode PORT_OK æ­£å¸¸çµ‚äº†
+  #                    INVALID_ARGS å¼•æ•°ã«ä¸æ­£ãªå€¤ãŒå«ã¾ã‚Œã¦ã„ã‚‹
   #
   # @else
   # @brief Setting buffer pointer
@@ -335,19 +335,19 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ¥ê¥¹¥Ê¤òÀßÄê¤¹¤ë¡£
+  # @brief ãƒªã‚¹ãƒŠã‚’è¨­å®šã™ã‚‹ã€‚
   #
-  # Publisher ¤ËÂĞ¤·¤Æ¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È ConnectorListeners ¤òÀßÄê¤¹¤ë¡£
-  # ³Æ¼ï¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È¤ò´Ş¤à ConnectorListeners ¤ò¥»¥Ã¥È¤¹¤ë¤³¤È¤Ç¡¢
-  # ¥Ğ¥Ã¥Õ¥¡¤ÎÆÉ¤ß½ñ¤­¡¢¥Ç¡¼¥¿¤ÎÁ÷¿®»şÅù¤Ë¤³¤ì¤é¤Î¥ê¥¹¥Ê¤ò¥³¡¼¥ë¤¹¤ë¡£
-  # ConnectorListeners ¥ª¥Ö¥¸¥§¥¯¥È¤Î½êÍ­¸¢¤Ï¥İ¡¼¥È¤Ş¤¿¤Ï RTObject ¤¬»ı¤Á
-  # Publisher ºï½ü»ş¤Ë ConnectorListeners ¤Ïºï½ü¤µ¤ì¤ë¤³¤È¤Ï¤Ê¤¤¡£
-  # ConnectorListeners ¤¬¥Ì¥ë¥İ¥¤¥ó¥¿¤Î¾ì¹ç INVALID_ARGS ¤òÊÖ¤¹¡£
+  # Publisher ã«å¯¾ã—ã¦ãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ ConnectorListeners ã‚’è¨­å®šã™ã‚‹ã€‚
+  # å„ç¨®ãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å«ã‚€ ConnectorListeners ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã“ã¨ã§ã€
+  # ãƒãƒƒãƒ•ã‚¡ã®èª­ã¿æ›¸ãã€ãƒ‡ãƒ¼ã‚¿ã®é€ä¿¡æ™‚ç­‰ã«ã“ã‚Œã‚‰ã®ãƒªã‚¹ãƒŠã‚’ã‚³ãƒ¼ãƒ«ã™ã‚‹ã€‚
+  # ConnectorListeners ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ‰€æœ‰æ¨©ã¯ãƒãƒ¼ãƒˆã¾ãŸã¯ RTObject ãŒæŒã¡
+  # Publisher å‰Šé™¤æ™‚ã« ConnectorListeners ã¯å‰Šé™¤ã•ã‚Œã‚‹ã“ã¨ã¯ãªã„ã€‚
+  # ConnectorListeners ãŒãƒŒãƒ«ãƒã‚¤ãƒ³ã‚¿ã®å ´åˆ INVALID_ARGS ã‚’è¿”ã™ã€‚
   #
-  # @param info ConnectorProfile ¤ò¥í¡¼¥«¥ë²½¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È ConnectorInfo
-  # @param listeners ¥ê¥¹¥Ê¤òÂ¿¿ôÊİ»ı¤¹¤ë ConnectorListeners ¥ª¥Ö¥¸¥§¥¯¥È
-  # @return PORT_OK      Àµ¾ï½ªÎ»
-  #         INVALID_ARGS ÉÔÀµ¤Ê°ú¿ô
+  # @param info ConnectorProfile ã‚’ãƒ­ãƒ¼ã‚«ãƒ«åŒ–ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ ConnectorInfo
+  # @param listeners ãƒªã‚¹ãƒŠã‚’å¤šæ•°ä¿æŒã™ã‚‹ ConnectorListeners ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+  # @return PORT_OK      æ­£å¸¸çµ‚äº†
+  #         INVALID_ARGS ä¸æ­£ãªå¼•æ•°
   # @else
   # @brief Set the listener. 
   #
@@ -382,40 +382,40 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
   #
-  # Publisher ¤¬Êİ»ı¤¹¤ë¥Ğ¥Ã¥Õ¥¡¤ËÂĞ¤·¤Æ¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à¡£¥³¥ó¥·¥å¡¼
-  # ¥Ş¡¢¥Ğ¥Ã¥Õ¥¡¡¢¥ê¥¹¥ÊÅù¤¬Å¬ÀÚ¤ËÀßÄê¤µ¤ì¤Æ¤¤¤Ê¤¤Åù¡¢Publisher ¥ª¥Ö
-  # ¥¸¥§¥¯¥È¤¬Àµ¤·¤¯½é´ü²½¤µ¤ì¤Æ¤¤¤Ê¤¤¾ì¹ç¡¢¤³¤Î´Ø¿ô¤ò¸Æ¤Ó½Ğ¤¹¤È¥¨¥é¡¼
-  # ¥³¡¼¥É PRECONDITION_NOT_MET ¤¬ÊÖ¤µ¤ì¡¢¥Ğ¥Ã¥Õ¥¡¤Ø¤Î½ñ¤­¹ş¤ßÅù¤ÎÁà
-  # ºî¤Ï°ìÀÚ¹Ô¤ï¤ì¤Ê¤¤¡£
+  # Publisher ãŒä¿æŒã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã«å¯¾ã—ã¦ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€ã€‚ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼
+  # ãƒã€ãƒãƒƒãƒ•ã‚¡ã€ãƒªã‚¹ãƒŠç­‰ãŒé©åˆ‡ã«è¨­å®šã•ã‚Œã¦ã„ãªã„ç­‰ã€Publisher ã‚ªãƒ–
+  # ã‚¸ã‚§ã‚¯ãƒˆãŒæ­£ã—ãåˆæœŸåŒ–ã•ã‚Œã¦ã„ãªã„å ´åˆã€ã“ã®é–¢æ•°ã‚’å‘¼ã³å‡ºã™ã¨ã‚¨ãƒ©ãƒ¼
+  # ã‚³ãƒ¼ãƒ‰ PRECONDITION_NOT_MET ãŒè¿”ã•ã‚Œã€ãƒãƒƒãƒ•ã‚¡ã¸ã®æ›¸ãè¾¼ã¿ç­‰ã®æ“
+  # ä½œã¯ä¸€åˆ‡è¡Œã‚ã‚Œãªã„ã€‚
   #
-  # ¥Ğ¥Ã¥Õ¥¡¤Ø¤Î½ñ¤­¹ş¤ß¤È¡¢InPort¤Ø¤Î¥Ç¡¼¥¿¤ÎÁ÷¿®¤ÏÈóÆ±´üÅª¤Ë¹Ô¤ï¤ì
-  # ¤ë¤¿¤á¡¢¤³¤Î´Ø¿ô¤Ï¡¢InPort¤Ø¤Î¥Ç¡¼¥¿Á÷¿®¤Î·ë²Ì¤ò¼¨¤¹¡¢
-  # CONNECTION_LOST, BUFFER_FULL ¤Ê¤É¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É¤òÊÖ¤¹¤³¤È¤¬¤¢
-  # ¤ë¡£¤³¤Î¾ì¹ç¡¢¥Ç¡¼¥¿¤Î¥Ğ¥Ã¥Õ¥¡¤Ø¤Î½ñ¤­¹ş¤ß¤Ï¹Ô¤ï¤ì¤Ê¤¤¡£
+  # ãƒãƒƒãƒ•ã‚¡ã¸ã®æ›¸ãè¾¼ã¿ã¨ã€InPortã¸ã®ãƒ‡ãƒ¼ã‚¿ã®é€ä¿¡ã¯éåŒæœŸçš„ã«è¡Œã‚ã‚Œ
+  # ã‚‹ãŸã‚ã€ã“ã®é–¢æ•°ã¯ã€InPortã¸ã®ãƒ‡ãƒ¼ã‚¿é€ä¿¡ã®çµæœã‚’ç¤ºã™ã€
+  # CONNECTION_LOST, BUFFER_FULL ãªã©ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™ã“ã¨ãŒã‚
+  # ã‚‹ã€‚ã“ã®å ´åˆã€ãƒ‡ãƒ¼ã‚¿ã®ãƒãƒƒãƒ•ã‚¡ã¸ã®æ›¸ãè¾¼ã¿ã¯è¡Œã‚ã‚Œãªã„ã€‚
   #
-  # ¥Ğ¥Ã¥Õ¥¡¤Ø¤Î½ñ¤­¹ş¤ß¤ËÂĞ¤·¤Æ¡¢¥Ğ¥Ã¥Õ¥¡¤¬¥Õ¥ë¾õÂÖ¡¢¥Ğ¥Ã¥Õ¥¡¤Î¥¨
-  # ¥é¡¼¡¢¥Ğ¥Ã¥Õ¥¡¤Ø¤Î½ñ¤­¹ş¤ß¤¬¥¿¥¤¥à¥¢¥¦¥È¤·¤¿¾ì¹ç¡¢¥Ğ¥Ã¥Õ¥¡¤Î»öÁ°
-  # ¾ò·ï¤¬Ëş¤¿¤µ¤ì¤Ê¤¤¾ì¹ç¤Ë¤Ï¤½¤ì¤¾¤ì¡¢¥¨¥é¡¼¥³¡¼¥É BUFFER_FULL,
-  # BUFFER_ERROR, BUFFER_TIMEOUT, PRECONDITION_NOT_MET ¤¬ÊÖ¤µ¤ì¤ë¡£
+  # ãƒãƒƒãƒ•ã‚¡ã¸ã®æ›¸ãè¾¼ã¿ã«å¯¾ã—ã¦ã€ãƒãƒƒãƒ•ã‚¡ãŒãƒ•ãƒ«çŠ¶æ…‹ã€ãƒãƒƒãƒ•ã‚¡ã®ã‚¨
+  # ãƒ©ãƒ¼ã€ãƒãƒƒãƒ•ã‚¡ã¸ã®æ›¸ãè¾¼ã¿ãŒã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ãŸå ´åˆã€ãƒãƒƒãƒ•ã‚¡ã®äº‹å‰
+  # æ¡ä»¶ãŒæº€ãŸã•ã‚Œãªã„å ´åˆã«ã¯ãã‚Œãã‚Œã€ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ BUFFER_FULL,
+  # BUFFER_ERROR, BUFFER_TIMEOUT, PRECONDITION_NOT_MET ãŒè¿”ã•ã‚Œã‚‹ã€‚
   #
-  # ¤³¤ì¤é°Ê³°¤Î¥¨¥é¡¼¤Î¾ì¹ç¡¢PORT_ERROR ¤¬ÊÖ¤µ¤ì¤ë¡£
+  # ã“ã‚Œã‚‰ä»¥å¤–ã®ã‚¨ãƒ©ãƒ¼ã®å ´åˆã€PORT_ERROR ãŒè¿”ã•ã‚Œã‚‹ã€‚
   # 
   #
-  # @param data ½ñ¤­¹ş¤à¥Ç¡¼¥¿ 
-  # @param sec ¥¿¥¤¥à¥¢¥¦¥È»ş´Ö
-  # @param nsec ¥¿¥¤¥à¥¢¥¦¥È»ş´Ö
+  # @param data æ›¸ãè¾¼ã‚€ãƒ‡ãƒ¼ã‚¿ 
+  # @param sec ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆæ™‚é–“
+  # @param nsec ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆæ™‚é–“
   #
-  # @return PORT_OK             Àµ¾ï½ªÎ»
-  #         PRECONDITION_NO_MET consumer, buffer, listenerÅù¤¬Å¬ÀÚ¤ËÀßÄê
-  #                             ¤µ¤ì¤Æ¤¤¤Ê¤¤Åù¡¢¤³¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Î»öÁ°¾ò·ï
-  #                             ¤òËş¤¿¤µ¤Ê¤¤¾ì¹ç¡£
-  #         CONNECTION_LOST     ÀÜÂ³¤¬ÀÚÃÇ¤µ¤ì¤¿¤³¤È¤ò¸¡ÃÎ¤·¤¿¡£
-  #         BUFFER_FULL         ¥Ğ¥Ã¥Õ¥¡¤¬¥Õ¥ë¾õÂÖ¤Ç¤¢¤ë¡£
-  #         BUFFER_ERROR        ¥Ğ¥Ã¥Õ¥¡¤Ë²¿¤é¤«¤Î¥¨¥é¡¼¤¬À¸¤¸¤¿¾ì¹ç¡£
-  #         NOT_SUPPORTED       ¥µ¥İ¡¼¥È¤µ¤ì¤Ê¤¤Áàºî¤¬¹Ô¤ï¤ì¤¿¡£
-  #         TIMEOUT             ¥¿¥¤¥à¥¢¥¦¥È¤·¤¿¡£
+  # @return PORT_OK             æ­£å¸¸çµ‚äº†
+  #         PRECONDITION_NO_MET consumer, buffer, listenerç­‰ãŒé©åˆ‡ã«è¨­å®š
+  #                             ã•ã‚Œã¦ã„ãªã„ç­‰ã€ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®äº‹å‰æ¡ä»¶
+  #                             ã‚’æº€ãŸã•ãªã„å ´åˆã€‚
+  #         CONNECTION_LOST     æ¥ç¶šãŒåˆ‡æ–­ã•ã‚ŒãŸã“ã¨ã‚’æ¤œçŸ¥ã—ãŸã€‚
+  #         BUFFER_FULL         ãƒãƒƒãƒ•ã‚¡ãŒãƒ•ãƒ«çŠ¶æ…‹ã§ã‚ã‚‹ã€‚
+  #         BUFFER_ERROR        ãƒãƒƒãƒ•ã‚¡ã«ä½•ã‚‰ã‹ã®ã‚¨ãƒ©ãƒ¼ãŒç”Ÿã˜ãŸå ´åˆã€‚
+  #         NOT_SUPPORTED       ã‚µãƒãƒ¼ãƒˆã•ã‚Œãªã„æ“ä½œãŒè¡Œã‚ã‚ŒãŸã€‚
+  #         TIMEOUT             ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ãŸã€‚
   #
   # @else
   # @brief Write data 
@@ -488,14 +488,14 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
   ##
   # @if jp
   #
-  # @brief ¥¢¥¯¥Æ¥£¥Ö²½³ÎÇ§
+  # @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ç¢ºèª
   # 
-  # Publisher ¤Ï¥Ç¡¼¥¿¥İ¡¼¥È¤ÈÆ±´ü¤·¤Æ activate/deactivate ¤µ¤ì¤ë¡£
-  # activate() / deactivate() ´Ø¿ô¤Ë¤è¤Ã¤Æ¡¢¥¢¥¯¥Æ¥£¥Ö¾õÂÖ¤ÈÈó¥¢¥¯¥Æ¥£
-  # ¥Ö¾õÂÖ¤¬ÀÚ¤êÂØ¤ï¤ë¡£¤³¤Î´Ø¿ô¤Ë¤è¤ê¡¢¸½ºß¥¢¥¯¥Æ¥£¥Ö¾õÂÖ¤«¡¢Èó¥¢¥¯
-  # ¥Æ¥£¥Ö¾õÂÖ¤«¤ò³ÎÇ§¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+  # Publisher ã¯ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆã¨åŒæœŸã—ã¦ activate/deactivate ã•ã‚Œã‚‹ã€‚
+  # activate() / deactivate() é–¢æ•°ã«ã‚ˆã£ã¦ã€ã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã¨éã‚¢ã‚¯ãƒ†ã‚£
+  # ãƒ–çŠ¶æ…‹ãŒåˆ‡ã‚Šæ›¿ã‚ã‚‹ã€‚ã“ã®é–¢æ•°ã«ã‚ˆã‚Šã€ç¾åœ¨ã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã‹ã€éã‚¢ã‚¯
+  # ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã‹ã‚’ç¢ºèªã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
   #
-  # @return ¾õÂÖ³ÎÇ§·ë²Ì(¥¢¥¯¥Æ¥£¥Ö¾õÂÖ:true¡¢Èó¥¢¥¯¥Æ¥£¥Ö¾õÂÖ:false)
+  # @return çŠ¶æ…‹ç¢ºèªçµæœ(ã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹:trueã€éã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹:false)
   #
   # @else
   #
@@ -518,15 +518,15 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+  # @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
   #
-  # Publisher ¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë¡£¤³¤Î´Ø¿ô¤ò¸Æ¤Ó½Ğ¤¹¤³¤È¤Ë¤è¤ê¡¢
-  # Publisher¤¬»ı¤Ä¡¢¥Ç¡¼¥¿¤òÁ÷¿®¤¹¤ë¥¹¥ì¥Ã¥É¤¬Æ°ºî¤ò³«»Ï¤¹¤ë¡£½é´ü
-  # ²½¤¬¹Ô¤ï¤ì¤Æ¤¤¤Ê¤¤¤Ê¤É¤Ë¤è¤ê¡¢»öÁ°¾ò·ï¤òËş¤¿¤µ¤Ê¤¤¾ì¹ç¡¢¥¨¥é¡¼¥³¡¼
-  # ¥É PRECONDITION_NOT_MET ¤òÊÖ¤¹¡£
+  # Publisher ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹ã€‚ã“ã®é–¢æ•°ã‚’å‘¼ã³å‡ºã™ã“ã¨ã«ã‚ˆã‚Šã€
+  # PublisherãŒæŒã¤ã€ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ãŒå‹•ä½œã‚’é–‹å§‹ã™ã‚‹ã€‚åˆæœŸ
+  # åŒ–ãŒè¡Œã‚ã‚Œã¦ã„ãªã„ãªã©ã«ã‚ˆã‚Šã€äº‹å‰æ¡ä»¶ã‚’æº€ãŸã•ãªã„å ´åˆã€ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼
+  # ãƒ‰ PRECONDITION_NOT_MET ã‚’è¿”ã™ã€‚
   #
-  # @return PORT_OK Àµ¾ï½ªÎ»
-  #         PRECONDITION_NOT_MET »öÁ°¾ò·ï¤òËş¤¿¤µ¤Ê¤¤
+  # @return PORT_OK æ­£å¸¸çµ‚äº†
+  #         PRECONDITION_NOT_MET äº‹å‰æ¡ä»¶ã‚’æº€ãŸã•ãªã„
   #
   # @else
   # @brief activation
@@ -548,15 +548,15 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief Èó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+  # @brief éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
   #
-  # Publisher ¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë¡£¤³¤Î´Ø¿ô¤ò¸Æ¤Ó½Ğ¤¹¤³¤È¤Ë¤è¤ê¡¢
-  # Publisher¤¬»ı¤Ä¡¢¥Ç¡¼¥¿¤òÁ÷¿®¤¹¤ë¥¹¥ì¥Ã¥É¤¬Æ°ºî¤òÄä»ß¤¹¤ë¡£½é´ü
-  # ²½¤¬¹Ô¤ï¤ì¤Æ¤¤¤Ê¤¤¤Ê¤É¤Ë¤è¤ê¡¢»öÁ°¾ò·ï¤òËş¤¿¤µ¤Ê¤¤¾ì¹ç¡¢¥¨¥é¡¼¥³¡¼
-  # ¥É PRECONDITION_NOT_MET ¤òÊÖ¤¹¡£
+  # Publisher ã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹ã€‚ã“ã®é–¢æ•°ã‚’å‘¼ã³å‡ºã™ã“ã¨ã«ã‚ˆã‚Šã€
+  # PublisherãŒæŒã¤ã€ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ãŒå‹•ä½œã‚’åœæ­¢ã™ã‚‹ã€‚åˆæœŸ
+  # åŒ–ãŒè¡Œã‚ã‚Œã¦ã„ãªã„ãªã©ã«ã‚ˆã‚Šã€äº‹å‰æ¡ä»¶ã‚’æº€ãŸã•ãªã„å ´åˆã€ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼
+  # ãƒ‰ PRECONDITION_NOT_MET ã‚’è¿”ã™ã€‚
   #
-  # @return PORT_OK Àµ¾ï½ªÎ»
-  #         PRECONDITION_NOT_MET »öÁ°¾ò·ï¤òËş¤¿¤µ¤Ê¤¤
+  # @return PORT_OK æ­£å¸¸çµ‚äº†
+  #         PRECONDITION_NOT_MET äº‹å‰æ¡ä»¶ã‚’æº€ãŸã•ãªã„
   #
   # @else
   # @brief deactivation
@@ -578,9 +578,9 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô
+  # @brief ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œé–¢æ•°
   #
-  # coil::PeriodicTask ¤Ë¤è¤ê¼ş´ü¼Â¹Ô¤µ¤ì¤ë¥¿¥¹¥¯¼Â¹Ô´Ø¿ô¡£
+  # coil::PeriodicTask ã«ã‚ˆã‚Šå‘¨æœŸå®Ÿè¡Œã•ã‚Œã‚‹ã‚¿ã‚¹ã‚¯å®Ÿè¡Œé–¢æ•°ã€‚
   #
   # @else
   # @brief Thread execution function
@@ -748,11 +748,11 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief BufferStatus ¤«¤é DataPortStatus ¤Ø¤ÎÊÑ´¹
+  # @brief BufferStatus ã‹ã‚‰ DataPortStatus ã¸ã®å¤‰æ›
   #
-  # ¥Ğ¥Ã¥Õ¥¡¤«¤é¤ÎÌá¤êÃÍ¤ò DataPortStatus::Enum ·¿¤ØÊÑ´¹¤¹¤ë´Ø¿ô¡£¤½
-  # ¤ì¤¾¤ì¡¢°Ê²¼¤Î¤è¤¦¤ËÊÑ´¹¤µ¤ì¤ë¡£ÊÑ´¹»ş¤Ë¥³¡¼¥ë¥Ğ¥Ã¥¯¤ò¸Æ¤Ö¾ì¹ç¡¢
-  # ¥³¡¼¥ë¥Ğ¥¯´Ø¿ô¤âÉÕµ­¤¹¤ë¡£
+  # ãƒãƒƒãƒ•ã‚¡ã‹ã‚‰ã®æˆ»ã‚Šå€¤ã‚’ DataPortStatus::Enum å‹ã¸å¤‰æ›ã™ã‚‹é–¢æ•°ã€‚ã
+  # ã‚Œãã‚Œã€ä»¥ä¸‹ã®ã‚ˆã†ã«å¤‰æ›ã•ã‚Œã‚‹ã€‚å¤‰æ›æ™‚ã«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã¶å ´åˆã€
+  # ã‚³ãƒ¼ãƒ«ãƒã‚¯é–¢æ•°ã‚‚ä»˜è¨˜ã™ã‚‹ã€‚
   # 
   # - BUFFER_OK: PORT_OK
   #  - None
@@ -771,7 +771,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
   #
   # @param status BufferStatus
   # @param data cdrMemoryStream
-  # @return DataPortStatu ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @return DataPortStatu å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   # @brief Convertion from BufferStatus to DataPortStatus
@@ -840,11 +840,11 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief DataPortStatus¤Ë½¾¤Ã¤Æ¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë´Ø¿ô¤ò¸Æ¤Ó½Ğ¤¹¡£
+  # @brief DataPortStatusã«å¾“ã£ã¦ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹é–¢æ•°ã‚’å‘¼ã³å‡ºã™ã€‚
   #
   # @param status DataPortStatus
   # @param data cdrMemoryStream
-  # @return ¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @return ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   # @brief Call listeners according to the DataPortStatus
@@ -888,7 +888,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ON_BUFFER_WRITE¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_BUFFER_WRITEã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_BUFFER_WRITE event to listeners
@@ -903,7 +903,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ON_BUFFER_FULL¥ê¥¹¥Ê¤Ø¥¤¥Ù¥ó¥È¤òÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_BUFFER_FULLãƒªã‚¹ãƒŠã¸ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_BUFFER_FULL event to listeners
@@ -918,7 +918,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ON_BUFFER_WRITE_TIMEOUT¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_BUFFER_WRITE_TIMEOUTã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_BUFFER_WRITE_TIMEOUT event to listeners
@@ -933,7 +933,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ON_BUFFER_OVERWRITE¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_BUFFER_OVERWRITEã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_BUFFER_OVERWRITE event to listeners
@@ -948,7 +948,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ON_BUFFER_READ¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_BUFFER_READã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_BUFFER_READ event to listeners
@@ -963,7 +963,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ON_SEND¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_SENDã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_SEND event to listners
@@ -978,7 +978,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ON_RECEIVED¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_RECEIVEDã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_RECEIVED event to listeners
@@ -993,7 +993,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ON_RECEIVER_FULL¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_RECEIVER_FULLã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_RECEIVER_FULL event to listeners
@@ -1008,7 +1008,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ON_RECEIVER_TIMEOUT¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_RECEIVER_TIMEOUTã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
@@ -1023,7 +1023,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ON_RECEIVER_ERROR¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_RECEIVER_ERRORã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_RECEIVER_ERROR event to listeners
@@ -1038,7 +1038,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
   ##
   # @if jp
-  # @brief ON_SENDER_ERROR¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+  # @brief ON_SENDER_ERRORã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
   # @param data cdrMemoryStream
   # @else
   # @brief Notify an ON_SENDER_ERROR event to listeners

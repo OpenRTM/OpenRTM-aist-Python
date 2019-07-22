@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file FiniteStateMachineComponentBase.py
@@ -24,9 +24,9 @@ import RTC
 ##
 # @if jp
 # @brief 
-# FiniteStateMachine�Υ١������饹��
-# �桼����������RT����ݡ��ͥ�Ȥ����������ϡ����Υ��饹���ĥ���롣
-# ��RT����ݡ��ͥ�ȤΥ١����Ȥʤ륯�饹��}
+# FiniteStateMachineのベースクラス。
+# ユーザが新たなRTコンポーネントを作成する場合は、このクラスを拡張する。
+# 各RTコンポーネントのベースとなるクラス。}
 #
 #
 # @else
@@ -39,9 +39,9 @@ import RTC
 class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
   #
@@ -59,21 +59,21 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [CORBA interface] RTC����������
+  # @brief [CORBA interface] RTCを初期化する
   #
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��ơ�ComponentAction::on_initialize
-  # ������Хå��ؿ����ƤФ�롣
+  # このオペレーション呼び出しの結果として、ComponentAction::on_initialize
+  # コールバック関数が呼ばれる。
   # 
-  # ����
-  # - RTC �� Created���֤ξ��߽�������Ԥ��롣¾�ξ��֤ˤ�����ˤ�
-  #   ReturnCode_t::PRECONDITION_NOT_MET ���֤���ƤӽФ��ϼ��Ԥ��롣
-  # - ���Υ��ڥ졼������ RTC �Υߥɥ륦��������ƤФ�뤳�Ȥ����ꤷ�Ƥ��ꡢ
-  #   ���ץꥱ�������ȯ�Ԥ�ľ�ܤ��Υ��ڥ졼������Ƥ֤��Ȥ�����
-  #   ����Ƥ��ʤ���
+  # 制約
+  # - RTC は Created状態の場合み初期化が行われる。他の状態にいる場合には
+  #   ReturnCode_t::PRECONDITION_NOT_MET が返され呼び出しは失敗する。
+  # - このオペレーションは RTC のミドルウエアから呼ばれることを想定しており、
+  #   アプリケーション開発者は直接このオペレーションを呼ぶことは想定
+  #   されていない。
   #
   # @param self
   # 
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   #
@@ -100,26 +100,26 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [CORBA interface] RTC ��λ����
+  # @brief [CORBA interface] RTC を終了する
   #
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� ComponentAction::on_finalize()
-  # ��ƤӽФ���
+  # このオペレーション呼び出しの結果として ComponentAction::on_finalize()
+  # を呼び出す。
   #
-  # ����
-  # - RTC �� ExecutionContext �˽�°���Ƥ���֤Ͻ�λ����ʤ������ξ��ϡ�
-  #   �ޤ��ǽ�� ExecutionContextOperations::remove_component �ˤ�äƻ��ä�
-  #   ������ʤ���Фʤ�ʤ�������ʳ��ξ��ϡ����Υ��ڥ졼�����ƤӽФ���
-  #   �����ʤ���� ReturnCode_t::PRECONDITION_NOT_ME �Ǽ��Ԥ��롣
-  # - RTC �� Created ���֤Ǥ����硢��λ�����ϹԤ��ʤ���
-  #   ���ξ�硢���Υ��ڥ졼�����ƤӽФ��Ϥ����ʤ����
-  #   ReturnCode_t::PRECONDITION_NOT_MET �Ǽ��Ԥ��롣
-  # - ���Υ��ڥ졼������RTC�Υߥɥ륦��������ƤФ�뤳�Ȥ����ꤷ�Ƥ��ꡢ
-  #   ���ץꥱ�������ȯ�Ԥ�ľ�ܤ��Υ��ڥ졼������Ƥ֤��Ȥ�����
-  #   ����Ƥ��ʤ���
+  # 制約
+  # - RTC が ExecutionContext に所属している間は終了されない。この場合は、
+  #   まず最初に ExecutionContextOperations::remove_component によって参加を
+  #   解除しなければならない。これ以外の場合は、このオペレーション呼び出しは
+  #   いかなる場合も ReturnCode_t::PRECONDITION_NOT_ME で失敗する。
+  # - RTC が Created 状態である場合、終了処理は行われない。
+  #   この場合、このオペレーション呼び出しはいかなる場合も
+  #   ReturnCode_t::PRECONDITION_NOT_MET で失敗する。
+  # - このオペレーションはRTCのミドルウエアから呼ばれることを想定しており、
+  #   アプリケーション開発者は直接このオペレーションを呼ぶことは想定
+  #   されていない。
   #
   # @param self
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   #
@@ -150,25 +150,25 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [CORBA interface] RTC �������ʡ��Ǥ��� ExecutionContext ��
-  #        ��ߤ��������Υ���ƥ�Ĥȶ��˽�λ������
+  # @brief [CORBA interface] RTC がオーナーである ExecutionContext を
+  #        停止させ、そのコンテンツと共に終了させる
   #
-  # ���� RTC �������ʡ��Ǥ��뤹�٤Ƥμ¹ԥ���ƥ����Ȥ���ߤ��롣
-  # ���� RTC ��¾�μ¹ԥ���ƥ����Ȥ��ͭ���� RTC ��°����¹ԥ���ƥ�����
-  # (i.e. �¹ԥ���ƥ����Ȥ��ͭ���� RTC �Ϥ��ʤ�����μ¹ԥ���ƥ����Ȥ�
-  # �����ʡ��Ǥ��롣)�˻��ä��Ƥ����硢���� RTC �Ϥ����Υ���ƥ����Ⱦ�
-  # �������������ʤ���Фʤ�ʤ���
-  # RTC ���¹���Τɤ� ExecutionContext �Ǥ� Active ���֤ǤϤʤ��ʤä��塢
-  # ���� RTC �Ȥ���˴ޤޤ�� RTC ����λ���롣
+  # この RTC がオーナーであるすべての実行コンテキストを停止する。
+  # この RTC が他の実行コンテキストを所有する RTC に属する実行コンテキスト
+  # (i.e. 実行コンテキストを所有する RTC はすなわちその実行コンテキストの
+  # オーナーである。)に参加している場合、当該 RTC はそれらのコンテキスト上
+  # で非活性化されなければならない。
+  # RTC が実行中のどの ExecutionContext でも Active 状態ではなくなった後、
+  # この RTC とこれに含まれる RTC が終了する。
   # 
-  # ����
-  # - RTC �����������Ƥ��ʤ���С���λ�����뤳�ȤϤǤ��ʤ���
-  #   Created ���֤ˤ��� RTC �� exit() ��ƤӽФ�����硢
-  #   ReturnCode_t::PRECONDITION_NOT_MET �Ǽ��Ԥ��롣
+  # 制約
+  # - RTC が初期化されていなければ、終了させることはできない。
+  #   Created 状態にある RTC に exit() を呼び出した場合、
+  #   ReturnCode_t::PRECONDITION_NOT_MET で失敗する。
   #
   # @param self
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   # 
   # @else
   #
@@ -199,21 +199,21 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [CORBA interface] RTC �� Alive ���֤Ǥ��뤫�ɤ�����ǧ���롣
+  # @brief [CORBA interface] RTC が Alive 状態であるかどうか確認する。
   #
-  # RTC �����ꤷ�� ExecutionContext ���Ф��� Alive���֤Ǥ��뤫�ɤ�����ǧ���롣
-  # RTC �ξ��֤� Active �Ǥ��뤫��Inactive �Ǥ��뤫��Error �Ǥ��뤫�ϼ¹����
-  # ExecutionContext �˰�¸���롣���ʤ�������� ExecutionContext ���Ф��Ƥ�
-  # Active  ���֤Ǥ��äƤ⡢¾�� ExecutionContext ���Ф��Ƥ� Inactive ���֤�
-  # �ʤ���⤢�ꤨ�롣���äơ����Υ��ڥ졼�����ϻ��ꤵ�줿
-  # ExecutionContext ���䤤��碌�ơ����� RTC �ξ��֤� Active��Inactive��
-  # Error �ξ��ˤ� Alive ���֤Ȥ����֤���
+  # RTC が指定した ExecutionContext に対して Alive状態であるかどうか確認する。
+  # RTC の状態が Active であるか、Inactive であるか、Error であるかは実行中の
+  # ExecutionContext に依存する。すなわち、ある ExecutionContext に対しては
+  # Active  状態であっても、他の ExecutionContext に対しては Inactive 状態と
+  # なる場合もありえる。従って、このオペレーションは指定された
+  # ExecutionContext に問い合わせて、この RTC の状態が Active、Inactive、
+  # Error の場合には Alive 状態として返す。
   #
   # @param self
   #
-  # @param exec_context �����о� ExecutionContext �ϥ�ɥ�
+  # @param exec_context 取得対象 ExecutionContext ハンドル
   #
-  # @return Alive ���ֳ�ǧ���
+  # @return Alive 状態確認結果
   #
   # @else
   #
@@ -240,11 +240,11 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
 
   ##
   # @if jp
-  # @brief [CORBA interface] ��ͭ���� ExecutionContextList�� ��������
+  # @brief [CORBA interface] 所有する ExecutionContextListを 取得する
   #
-  # ���� RTC ����ͭ���� ExecutionContext �Υꥹ�Ȥ�������롣
+  # この RTC が所有する ExecutionContext のリストを取得する。
   #
-  # @return ExecutionContext �ꥹ��
+  # @return ExecutionContext リスト
   #
   # @else
   # @brief [CORBA interface] Get ExecutionContextList.
@@ -262,14 +262,14 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
 
   ##
   # @if jp
-  # @brief [CORBA interface] ExecutionContext���������
+  # @brief [CORBA interface] ExecutionContextを取得する
   #
-  # ���ꤷ���ϥ�ɥ�� ExecutionContext ��������롣
-  # �ϥ�ɥ뤫�� ExecutionContext �ؤΥޥåԥ󥰤ϡ������ RTC ���󥹥��󥹤�
-  # ��ͭ�Ǥ��롣�ϥ�ɥ�Ϥ��� RTC �� attach_context �����ݤ˼����Ǥ��롣
+  # 指定したハンドルの ExecutionContext を取得する。
+  # ハンドルから ExecutionContext へのマッピングは、特定の RTC インスタンスに
+  # 固有である。ハンドルはこの RTC を attach_context した際に取得できる。
   #
   # @param self
-  # @param ec_id �����о� ExecutionContext �ϥ�ɥ�
+  # @param ec_id 取得対象 ExecutionContext ハンドル
   #
   # @return ExecutionContext
   #
@@ -295,14 +295,14 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
 
   ##
   # @if jp
-  # @brief [CORBA interface] ExecutionContext���������
+  # @brief [CORBA interface] ExecutionContextを取得する
   #
-  # ���ꤷ���ϥ�ɥ�� ExecutionContext ��������롣
-  # �ϥ�ɥ뤫�� ExecutionContext �ؤΥޥåԥ󥰤ϡ������ RTC ���󥹥��󥹤�
-  # ��ͭ�Ǥ��롣�ϥ�ɥ�Ϥ��� RTC �� attach_context �����ݤ˼����Ǥ��롣
+  # 指定したハンドルの ExecutionContext を取得する。
+  # ハンドルから ExecutionContext へのマッピングは、特定の RTC インスタンスに
+  # 固有である。ハンドルはこの RTC を attach_context した際に取得できる。
   #
   # @param self
-  # @param ec_id �����о� ExecutionContext �ϥ�ɥ�
+  # @param ec_id 取得対象 ExecutionContext ハンドル
   #
   # @return ExecutionContext
   #
@@ -329,11 +329,11 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
 
   ##
   # @if jp
-  # @brief [CORBA interface] ���ä��Ƥ��� ExecutionContextList ���������
+  # @brief [CORBA interface] 参加している ExecutionContextList を取得する
   #
-  # ���� RTC �����ä��Ƥ��� ExecutionContext �Υꥹ�Ȥ�������롣
+  # この RTC が参加している ExecutionContext のリストを取得する。
   #
-  # @return ExecutionContext �ꥹ��
+  # @return ExecutionContext リスト
   #
   # @else
   # @brief [CORBA interface] Get participating ExecutionContextList.
@@ -352,13 +352,13 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
 
   ##
   # @if jp
-  # @brief [CORBA interface] ExecutionContext �Υϥ�ɥ���֤�
+  # @brief [CORBA interface] ExecutionContext のハンドルを返す
   #
-  # @param ExecutionContext �¹ԥ���ƥ�����
+  # @param ExecutionContext 実行コンテキスト
   #
   # @return ExecutionContextHandle
   #
-  # Ϳ����줿�¹ԥ���ƥ����Ȥ˴�Ϣ�դ���줿�ϥ�ɥ���֤���
+  # 与えられた実行コンテキストに関連付けられたハンドルを返す。
   #
   # @else
   # @brief [CORBA interface] Return a handle of a ExecutionContext
@@ -382,13 +382,13 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [RTObject CORBA interface] ����ݡ��ͥ�ȥץ��ե�������������
+  # @brief [RTObject CORBA interface] コンポーネントプロファイルを取得する
   #
-  # ��������ݡ��ͥ�ȤΥץ��ե����������֤��� 
+  # 当該コンポーネントのプロファイル情報を返す。 
   #
   # @param self
   #
-  # @return ����ݡ��ͥ�ȥץ��ե�����
+  # @return コンポーネントプロファイル
   #
   # @else
   #
@@ -409,13 +409,13 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [RTObject CORBA interface] �ݡ��Ȥ��������
+  # @brief [RTObject CORBA interface] ポートを取得する
   #
-  # ��������ݡ��ͥ�Ȥ���ͭ����ݡ��Ȥλ��Ȥ��֤���
+  # 当該コンポーネントが保有するポートの参照を返す。
   #
   # @param self
   #
-  # @return �ݡ��ȥꥹ��
+  # @return ポートリスト
   #
   # @else
   #
@@ -434,18 +434,18 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
 
   ##
   # @if jp
-  # @brief [CORBA interface] ExecutionContext��attach����
+  # @brief [CORBA interface] ExecutionContextをattachする
   #
-  # ���ꤷ�� ExecutionContext �ˤ��� RTC ���°�����롣���� RTC �ȴ�Ϣ���� 
-  # ExecutionContext �Υϥ�ɥ���֤���
-  # ���Υ��ڥ졼�����ϡ�ExecutionContextOperations::add_component ���ƤФ줿
-  # �ݤ˸ƤӽФ���롣�֤��줿�ϥ�ɥ��¾�Υ��饤����Ȥǻ��Ѥ��뤳�Ȥ�����
-  # ���Ƥ��ʤ���
+  # 指定した ExecutionContext にこの RTC を所属させる。この RTC と関連する 
+  # ExecutionContext のハンドルを返す。
+  # このオペレーションは、ExecutionContextOperations::add_component が呼ばれた
+  # 際に呼び出される。返されたハンドルは他のクライアントで使用することを想定
+  # していない。
   #
   # @param self
-  # @param exec_context ��°�� ExecutionContext
+  # @param exec_context 所属先 ExecutionContext
   #
-  # @return ExecutionContext �ϥ�ɥ�
+  # @return ExecutionContext ハンドル
   #
   # @else
   # @brief [CORBA interface] Attach ExecutionContext.
@@ -471,23 +471,23 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
 
   ##
   # @if jp
-  # @brief [CORBA interface] ExecutionContext��detach����
+  # @brief [CORBA interface] ExecutionContextをdetachする
   #
-  # ���ꤷ�� ExecutionContext ���餳�� RTC �ν�°�������롣
-  # ���Υ��ڥ졼�����ϡ�ExecutionContextOperations::remove_component ���Ƥ�
-  # �줿�ݤ˸ƤӽФ���롣�֤��줿�ϥ�ɥ��¾�Υ��饤����Ȥǻ��Ѥ��뤳�Ȥ�
-  # ���ꤷ�Ƥ��ʤ���
+  # 指定した ExecutionContext からこの RTC の所属を解除する。
+  # このオペレーションは、ExecutionContextOperations::remove_component が呼ば
+  # れた際に呼び出される。返されたハンドルは他のクライアントで使用することを
+  # 想定していない。
   # 
-  # ����
-  # - ���ꤵ�줿 ExecutionContext �� RTC �����Ǥ˽�°���Ƥ��ʤ����ˤϡ�
-  #   ReturnCode_t::PRECONDITION_NOT_MET ���֤���롣
-  # - ���ꤵ�줿 ExecutionContext �ˤ��������Ф��� RTC ��Active ���֤Ǥ����
-  #   ��ˤϡ� ReturnCode_t::PRECONDITION_NOT_MET ���֤���롣
+  # 制約
+  # - 指定された ExecutionContext に RTC がすでに所属していない場合には、
+  #   ReturnCode_t::PRECONDITION_NOT_MET が返される。
+  # - 指定された ExecutionContext にたしいて対して RTC がActive 状態である場
+  #   合には、 ReturnCode_t::PRECONDITION_NOT_MET が返される。
   #
   # @param self
-  # @param ec_id ����о� ExecutionContext�ϥ�ɥ�
+  # @param ec_id 解除対象 ExecutionContextハンドル
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   # @brief [CORBA interface] Attach ExecutionContext.
@@ -520,16 +520,16 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �ν����
+  # @brief [ComponentAction CORBA interface] RTC の初期化
   #
-  # RTC ����������졢Alive ���֤����ܤ��롣
-  # RTC ��ͭ�ν���������Ϥ����Ǽ¹Ԥ��롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onInitialize() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # RTC が初期化され、Alive 状態に遷移する。
+  # RTC 固有の初期化処理はここで実行する。
+  # このオペレーション呼び出しの結果として onInitialize() コールバック関数が
+  # 呼び出される。
   #
   # @param self
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -550,16 +550,16 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �ν�λ
+  # @brief [ComponentAction CORBA interface] RTC の終了
   #
-  # RTC ���˴�����롣
-  # RTC ��ͭ�ν�λ�����Ϥ����Ǽ¹Ԥ��롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onFinalize() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # RTC が破棄される。
+  # RTC 固有の終了処理はここで実行する。
+  # このオペレーション呼び出しの結果として onFinalize() コールバック関数が
+  # 呼び出される。
   #
   # @param self
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -581,17 +581,17 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �γ���
+  # @brief [ComponentAction CORBA interface] RTC の開始
   #
-  # RTC ����°���� ExecutionContext �� Stopped ���֤��� Running ���֤�����
-  # �������˸ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onStartup() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # RTC が所属する ExecutionContext が Stopped 状態から Running 状態へ遷移
+  # した場合に呼び出される。
+  # このオペレーション呼び出しの結果として onStartup() コールバック関数が
+  # 呼び出される。
   #
   # @param self
-  # @param ec_id �������ܤ��� ExecutionContext �� ID
+  # @param ec_id 状態遷移した ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -613,17 +613,17 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �����
+  # @brief [ComponentAction CORBA interface] RTC の停止
   #
-  # RTC ����°���� ExecutionContext �� Running ���֤��� Stopped ���֤�����
-  # �������˸ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onShutdown() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # RTC が所属する ExecutionContext が Running 状態から Stopped 状態へ遷移
+  # した場合に呼び出される。
+  # このオペレーション呼び出しの結果として onShutdown() コールバック関数が
+  # 呼び出される。
   #
   # @param self
-  # @param ec_id �������ܤ��� ExecutionContext �� ID
+  # @param ec_id 状態遷移した ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -646,16 +646,16 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �γ�����
+  # @brief [ComponentAction CORBA interface] RTC の活性化
   #
-  # ��°���� ExecutionContext ���� RTC �����������줿�ݤ˸ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onActivated() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # 所属する ExecutionContext から RTC が活性化された際に呼び出される。
+  # このオペレーション呼び出しの結果として onActivated() コールバック関数が
+  # 呼び出される。
   #
   # @param self
-  # @param ec_id ������ ExecutionContext �� ID
+  # @param ec_id 活性化 ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -678,16 +678,16 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC ���������
+  # @brief [ComponentAction CORBA interface] RTC の非活性化
   #
-  # ��°���� ExecutionContext ���� RTC ������������줿�ݤ˸ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onDeactivated() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # 所属する ExecutionContext から RTC が非活性化された際に呼び出される。
+  # このオペレーション呼び出しの結果として onDeactivated() コールバック関数が
+  # 呼び出される。
   #
   # @param self
-  # @param ec_id ������� ExecutionContext �� ID
+  # @param ec_id 非活性化 ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -709,23 +709,23 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �Υ��顼����
+  # @brief [ComponentAction CORBA interface] RTC のエラー処理
   #
-  # RTC �����顼���֤ˤ���ݤ˸ƤӽФ���롣
-  # RTC �����顼���֤ξ��ˡ��оݤȤʤ� ExecutionContext ��ExecutionKind ��
-  # �����������ߥ󥰤ǸƤӽФ���롣�㤨�С�
-  # - ExecutionKind �� PERIODIC �ξ�硢�ܥ��ڥ졼������
-  #   DataFlowComponentAction::on_execute �� on_state_update ���ؤ��ˡ�
-  #   ���ꤵ�줿���֡����ꤵ�줿�����ǸƤӽФ���롣
-  # - ExecutionKind �� EVENT_DRIVEN �ξ�硢�ܥ��ڥ졼������
-  #   FsmParticipantAction::on_action ���ƤФ줿�ݤˡ��ؤ��˸ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onError() ������Хå��ؿ����Ƥӽ�
-  # ����롣
+  # RTC がエラー状態にいる際に呼び出される。
+  # RTC がエラー状態の場合に、対象となる ExecutionContext のExecutionKind に
+  # 応じたタイミングで呼び出される。例えば、
+  # - ExecutionKind が PERIODIC の場合、本オペレーションは
+  #   DataFlowComponentAction::on_execute と on_state_update の替わりに、
+  #   設定された順番、設定された周期で呼び出される。
+  # - ExecutionKind が EVENT_DRIVEN の場合、本オペレーションは
+  #   FsmParticipantAction::on_action が呼ばれた際に、替わりに呼び出される。
+  # このオペレーション呼び出しの結果として onError() コールバック関数が呼び出
+  # される。
   #
   # @param self
-  # @param ec_id �о� ExecutionContext �� ID
+  # @param ec_id 対象 ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -734,7 +734,7 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   # The RTC remains in the Error state.
   # If the RTC is in the Error state relative to some execution context when
   # it would otherwise be invoked from that context (according to the 
-  # context��s ExecutionKind), this callback shall be invoked instead. 
+  # context’s ExecutionKind), this callback shall be invoked instead. 
   # For example,
   # - If the ExecutionKind is PERIODIC, this operation shall be invoked in 
   #   sorted order at the rate of the context instead of 
@@ -757,18 +757,18 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �Υ��顼���֤ؤ�����
+  # @brief [ComponentAction CORBA interface] RTC のエラー状態への遷移
   #
-  # RTC ����°���� ExecutionContext �� Active ���֤��� Error ���֤����ܤ���
-  # ���˸ƤӽФ���롣
-  # ���Υ��ڥ졼������ RTC �� Error ���֤����ܤ����ݤ˰��٤����ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onAborting() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # RTC が所属する ExecutionContext が Active 状態から Error 状態へ遷移した
+  # 場合に呼び出される。
+  # このオペレーションは RTC が Error 状態に遷移した際に一度だけ呼び出される。
+  # このオペレーション呼び出しの結果として onAborting() コールバック関数が
+  # 呼び出される。
   #
   # @param self
-  # @param ec_id �������ܤ��� ExecutionContext �� ID
+  # @param ec_id 状態遷移した ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -795,19 +795,19 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
   ##
   # @if jp
   #
-  # @brief [ComponentAction CORBA interface] RTC �Υꥻ�å�
+  # @brief [ComponentAction CORBA interface] RTC のリセット
   #
-  # Error ���֤ˤ��� RTC �Υꥫ�Х������¹Ԥ���Inactive ���֤�����������
-  # ���˸ƤӽФ���롣
-  # RTC �Υꥫ�Х������������������ Inactive ���֤��������뤬������ʳ���
-  # ���ˤ� Error ���֤�α�ޤ롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onReset() ������Хå��ؿ����Ƥ�
-  # �Ф���롣
+  # Error 状態にある RTC のリカバリ処理を実行し、Inactive 状態に復帰させる
+  # 場合に呼び出される。
+  # RTC のリカバリ処理が成功した場合は Inactive 状態に復帰するが、それ以外の
+  # 場合には Error 状態に留まる。
+  # このオペレーション呼び出しの結果として onReset() コールバック関数が呼び
+  # 出される。
   #
   # @param self
-  # @param ec_id �ꥻ�å��о� ExecutionContext �� ID
+  # @param ec_id リセット対象 ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #

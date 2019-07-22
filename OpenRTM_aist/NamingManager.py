@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file NamingManager.py
@@ -30,12 +30,12 @@ import CosNaming
 # @if jp
 #
 # @class NamingBase
-# @brief NamingService ´ÉÍıÍÑÃê¾İ¥¯¥é¥¹
+# @brief NamingService ç®¡ç†ç”¨æŠ½è±¡ã‚¯ãƒ©ã‚¹
 #
-# NamingServer ´ÉÍıÍÑÃê¾İ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¯¥é¥¹¡£
-# ¶ñ¾İ´ÉÍı¥¯¥é¥¹¤Ï¡¢°Ê²¼¤Î´Ø¿ô¤Î¼ÂÁõ¤òÄó¶¡¤·¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
-# - bindObject() : »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ÎNamingService¤Ø¤Î¥Ğ¥¤¥ó¥É
-# - unbindObject() : »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ÎNamingService¤«¤é¤Î¥¢¥ó¥Ğ¥¤¥ó¥É
+# NamingServer ç®¡ç†ç”¨æŠ½è±¡ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã€‚
+# å…·è±¡ç®¡ç†ã‚¯ãƒ©ã‚¹ã¯ã€ä»¥ä¸‹ã®é–¢æ•°ã®å®Ÿè£…ã‚’æä¾›ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
+# - bindObject() : æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®NamingServiceã¸ã®ãƒã‚¤ãƒ³ãƒ‰
+# - unbindObject() : æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®NamingServiceã‹ã‚‰ã®ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰
 #
 # @since 0.4.0
 #
@@ -49,14 +49,14 @@ class NamingBase:
   ##
   # @if jp
   #
-  # @brief NamingService¤Ø¥Ğ¥¤¥ó¥É¤¹¤ë´Ø¿ô(¥µ¥Ö¥¯¥é¥¹¼ÂÁõÍÑ)
+  # @brief NamingServiceã¸ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹é–¢æ•°(ã‚µãƒ–ã‚¯ãƒ©ã‚¹å®Ÿè£…ç”¨)
   #
-  # »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤Ø¥Ğ¥¤¥ó¥É¤¹¤ë<BR>
-  # ¢¨¥µ¥Ö¥¯¥é¥¹¤Ç¤Î¼ÂÁõ»²¾ÈÍÑ
+  # æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã¸ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹<BR>
+  # â€»ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ã®å®Ÿè£…å‚ç…§ç”¨
   #
   # @param self
-  # @param name ¥Ğ¥¤¥ó¥É»ş¤ÎÌ¾¾Î
-  # @param rtobj ¥Ğ¥¤¥ó¥ÉÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ãƒã‚¤ãƒ³ãƒ‰æ™‚ã®åç§°
+  # @param rtobj ãƒã‚¤ãƒ³ãƒ‰å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -70,13 +70,13 @@ class NamingBase:
   ##
   # @if jp
   #
-  # @brief NamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É¤¹¤ë´Ø¿ô(¥µ¥Ö¥¯¥é¥¹¼ÂÁõÍÑ)
+  # @brief NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹é–¢æ•°(ã‚µãƒ–ã‚¯ãƒ©ã‚¹å®Ÿè£…ç”¨)
   #
-  # »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É¤¹¤ë<BR>
-  # ¢¨¥µ¥Ö¥¯¥é¥¹¤Ç¤Î¼ÂÁõ»²¾ÈÍÑ
+  # æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹<BR>
+  # â€»ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ã®å®Ÿè£…å‚ç…§ç”¨
   #
   # @param self
-  # @param name ¥¢¥ó¥Ğ¥¤¥ó¥ÉÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -87,9 +87,9 @@ class NamingBase:
   ##
   # @if jp
   #
-  # @brief ¥Í¡¼¥à¥µ¡¼¥Ğ¤ÎÀ¸Â¸¤ò³ÎÇ§¤¹¤ë¡£
+  # @brief ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒã®ç”Ÿå­˜ã‚’ç¢ºèªã™ã‚‹ã€‚
   # 
-  # @return true:À¸Â¸¤·¤Æ¤¤¤ë, false:À¸Â¸¤·¤Æ¤¤¤Ê¤¤
+  # @return true:ç”Ÿå­˜ã—ã¦ã„ã‚‹, false:ç”Ÿå­˜ã—ã¦ã„ãªã„
   #
   # @else
   #
@@ -106,9 +106,9 @@ class NamingBase:
   ##
   # @if jp
   #
-  # @brief rtcloc·Á¼°¤ÇRTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤ò¼èÆÀ¤¹¤ë
+  # @brief rtclocå½¢å¼ã§RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹
   # 
-  # @return RTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹
+  # @return RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹
   #
   # @else
   #
@@ -127,10 +127,10 @@ class NamingBase:
 # @if jp
 #
 # @class NamingOnCorba
-# @brief CORBA ÍÑ NamingServer ´ÉÍı¥¯¥é¥¹
+# @brief CORBA ç”¨ NamingServer ç®¡ç†ã‚¯ãƒ©ã‚¹
 #
-# CORBA ÍÑ NamingServer ´ÉÍıÍÑ¥¯¥é¥¹¡£
-# CORBA ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎNamingService¤Ø¤ÎÅĞÏ¿¡¢²ò½ü¤Ê¤É¤ò´ÉÍı¤¹¤ë¡£
+# CORBA ç”¨ NamingServer ç®¡ç†ç”¨ã‚¯ãƒ©ã‚¹ã€‚
+# CORBA ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®NamingServiceã¸ã®ç™»éŒ²ã€è§£é™¤ãªã©ã‚’ç®¡ç†ã™ã‚‹ã€‚
 #
 # @since 0.4.0
 #
@@ -146,13 +146,13 @@ class NamingOnCorba(NamingBase):
   ##
   # @if jp
   #
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   # @param orb ORB
-  # @param names NamingServer Ì¾¾Î
+  # @param names NamingServer åç§°
   #
   # @else
   #
@@ -166,14 +166,14 @@ class NamingOnCorba(NamingBase):
   ##
   # @if jp
   #
-  # @brief »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤ÎNamingService¤Ø¥Ğ¥¤¥ó¥É
+  # @brief æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®NamingServiceã¸ãƒã‚¤ãƒ³ãƒ‰
   # 
-  # »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤ò»ØÄê¤·¤¿Ì¾¾Î¤Ç CORBA NamingService ¤Ø
-  # ¥Ğ¥¤¥ó¥É¤¹¤ë¡£
+  # æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒ‡å®šã—ãŸåç§°ã§ CORBA NamingService ã¸
+  # ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã€‚
   # 
   # @param self
-  # @param name ¥Ğ¥¤¥ó¥É»ş¤ÎÌ¾¾Î
-  # @param rtobj or mgr ¥Ğ¥¤¥ó¥ÉÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ãƒã‚¤ãƒ³ãƒ‰æ™‚ã®åç§°
+  # @param rtobj or mgr ãƒã‚¤ãƒ³ãƒ‰å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -191,14 +191,14 @@ class NamingOnCorba(NamingBase):
   ##
   # @if jp
   #
-  # @brief »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤ÎNamingService¤Ø¥Ğ¥¤¥ó¥É
+  # @brief æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®NamingServiceã¸ãƒã‚¤ãƒ³ãƒ‰
   # 
-  # »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤ò»ØÄê¤·¤¿Ì¾¾Î¤Ç CORBA NamingService ¤Ø
-  # ¥Ğ¥¤¥ó¥É¤¹¤ë¡£
+  # æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒ‡å®šã—ãŸåç§°ã§ CORBA NamingService ã¸
+  # ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã€‚
   # 
   # @param self
-  # @param name ¥Ğ¥¤¥ó¥É»ş¤ÎÌ¾¾Î
-  # @param port ¥Ğ¥¤¥ó¥ÉÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ãƒã‚¤ãƒ³ãƒ‰æ™‚ã®åç§°
+  # @param port ãƒã‚¤ãƒ³ãƒ‰å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -216,12 +216,12 @@ class NamingOnCorba(NamingBase):
   ##
   # @if jp
   #
-  # @brief »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É
+  # @brief æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰
   # 
-  # »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤ò CORBA NamingService ¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É¤¹¤ë¡£
+  # æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ CORBA NamingService ã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã€‚
   # 
   # @param self
-  # @param name ¥¢¥ó¥Ğ¥¤¥ó¥ÉÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -239,9 +239,9 @@ class NamingOnCorba(NamingBase):
   ##
   # @if jp
   #
-  # @brief ¥Í¡¼¥à¥µ¡¼¥Ğ¤ÎÀ¸Â¸¤ò³ÎÇ§¤¹¤ë¡£
+  # @brief ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒã®ç”Ÿå­˜ã‚’ç¢ºèªã™ã‚‹ã€‚
   # 
-  # @return true:À¸Â¸¤·¤Æ¤¤¤ë, false:À¸Â¸¤·¤Æ¤¤¤Ê¤¤
+  # @return true:ç”Ÿå­˜ã—ã¦ã„ã‚‹, false:ç”Ÿå­˜ã—ã¦ã„ãªã„
   #
   # @else
   #
@@ -264,15 +264,15 @@ class NamingOnCorba(NamingBase):
   ##
   # @if jp
   #
-  # @brief RTC¤Î¸¡º÷
+  # @brief RTCã®æ¤œç´¢
   #
-  # ¥Í¡¼¥ß¥ó¥°¥µ¡¼¥Ó¥¹¤«¤éRTC¤ò¥¤¥ó¥¹¥¿¥ó¥¹Ì¾¤«¤é¸¡º÷¤·¡¢
-  # °ìÃ×¤¹¤ëRTC¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+  # ãƒãƒ¼ãƒŸãƒ³ã‚°ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰RTCã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åã‹ã‚‰æ¤œç´¢ã—ã€
+  # ä¸€è‡´ã™ã‚‹RTCã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
   # 
   # @param self
-  # @param context ¸½ºß¸¡º÷Ãæ¤Î¥³¥ó¥Æ¥­¥¹¥È
-  # @param name RTC¤Î¥¤¥ó¥¹¥¿¥ó¥¹Ì¾
-  # @param rtcs RTC¤Î¥ê¥¹¥È
+  # @param context ç¾åœ¨æ¤œç´¢ä¸­ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+  # @param name RTCã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å
+  # @param rtcs RTCã®ãƒªã‚¹ãƒˆ
   #
   # @return
   #
@@ -302,10 +302,10 @@ class NamingOnCorba(NamingBase):
   ##
   # @if jp
   #
-  # @brief rtcname·Á¼°¤ÇRTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤ò¼èÆÀ¤¹¤ë
+  # @brief rtcnameå½¢å¼ã§RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹
   #
-  # @param name RTCÌ¾
-  # @return RTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤Î¥ê¥¹¥È
+  # @param name RTCå
+  # @return RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã®ãƒªã‚¹ãƒˆ
   #
   # @else
   #
@@ -364,7 +364,7 @@ class NamingOnCorba(NamingBase):
 # @if jp
 #
 # @class NamingOnManager
-# @brief Manager ÍÑ NamingServer ´ÉÍı¥¯¥é¥¹
+# @brief Manager ç”¨ NamingServer ç®¡ç†ã‚¯ãƒ©ã‚¹
 #
 #
 # @since 1.2.0
@@ -381,13 +381,13 @@ class NamingOnManager(NamingBase):
   ##
   # @if jp
   #
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   # @param orb ORB
-  # @param mgr ¥Ş¥Í¡¼¥¸¥ã
+  # @param mgr ãƒãƒãƒ¼ã‚¸ãƒ£
   #
   # @else
   #
@@ -411,8 +411,8 @@ class NamingOnManager(NamingBase):
   # 
   # 
   # @param self
-  # @param name ¥Ğ¥¤¥ó¥É»ş¤ÎÌ¾¾Î
-  # @param rtobj or mgr ¥Ğ¥¤¥ó¥ÉÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ãƒã‚¤ãƒ³ãƒ‰æ™‚ã®åç§°
+  # @param rtobj or mgr ãƒã‚¤ãƒ³ãƒ‰å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -433,8 +433,8 @@ class NamingOnManager(NamingBase):
   # 
   # 
   # @param self
-  # @param name ¥Ğ¥¤¥ó¥É»ş¤ÎÌ¾¾Î
-  # @param port ¥Ğ¥¤¥ó¥ÉÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ãƒã‚¤ãƒ³ãƒ‰æ™‚ã®åç§°
+  # @param port ãƒã‚¤ãƒ³ãƒ‰å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -452,7 +452,7 @@ class NamingOnManager(NamingBase):
   # 
   # 
   # @param self
-  # @param name ¥¢¥ó¥Ğ¥¤¥ó¥ÉÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -468,7 +468,7 @@ class NamingOnManager(NamingBase):
   #
   # @brief 
   # 
-  # @return true:À¸Â¸¤·¤Æ¤¤¤ë, false:À¸Â¸¤·¤Æ¤¤¤Ê¤¤
+  # @return true:ç”Ÿå­˜ã—ã¦ã„ã‚‹, false:ç”Ÿå­˜ã—ã¦ã„ãªã„
   #
   # @else
   #
@@ -486,11 +486,11 @@ class NamingOnManager(NamingBase):
   ##
   # @if jp
   #
-  # @brief rtcloc·Á¼°¤ÇRTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤ò¼èÆÀ¤¹¤ë
+  # @brief rtclocå½¢å¼ã§RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹
   #
-  # @param name rtcloc·Á¼°¤Ç¤ÎRTCÌ¾
+  # @param name rtclocå½¢å¼ã§ã®RTCå
   # rtcloc://localhost:2809/example/ConsoleIn
-  # @return RTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤Î¥ê¥¹¥È
+  # @return RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã®ãƒªã‚¹ãƒˆ
   #
   # @else
   #
@@ -532,11 +532,11 @@ class NamingOnManager(NamingBase):
   ##
   # @if jp
   #
-  # @brief »ØÄê¥Û¥¹¥ÈÌ¾¡¢¥İ¡¼¥ÈÌ¾¤ÇManager¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤ò¼èÆÀ
+  # @brief æŒ‡å®šãƒ›ã‚¹ãƒˆåã€ãƒãƒ¼ãƒˆåã§Managerã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—
   #
-  # @param name ¥Û¥¹¥ÈÌ¾¡¢¥İ¡¼¥ÈÌ¾
+  # @param name ãƒ›ã‚¹ãƒˆåã€ãƒãƒ¼ãƒˆå
   # 
-  # @return Manager¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹
+  # @return Managerã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹
   #
   # @else
   #
@@ -585,10 +585,10 @@ class NamingOnManager(NamingBase):
 # @if jp
 #
 # @class NamingManager
-# @brief NamingServer ´ÉÍı¥¯¥é¥¹
+# @brief NamingServer ç®¡ç†ã‚¯ãƒ©ã‚¹
 #
-# NamingServer ´ÉÍıÍÑ¥¯¥é¥¹¡£
-# ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎNamingService¤Ø¤ÎÅĞÏ¿¡¢²ò½ü¤Ê¤É¤ò´ÉÍı¤¹¤ë¡£
+# NamingServer ç®¡ç†ç”¨ã‚¯ãƒ©ã‚¹ã€‚
+# ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®NamingServiceã¸ã®ç™»éŒ²ã€è§£é™¤ãªã©ã‚’ç®¡ç†ã™ã‚‹ã€‚
 #
 # @since 0.4.0
 #
@@ -606,12 +606,12 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
-  # @param manager ¥Ş¥Í¡¼¥¸¥ã¥ª¥Ö¥¸¥§¥¯¥È
+  # @param manager ãƒãƒãƒ¼ã‚¸ãƒ£ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -634,14 +634,14 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief NameServer ¤ÎÅĞÏ¿
+  # @brief NameServer ã®ç™»éŒ²
   #
-  # »ØÄê¤·¤¿·Á¼°¤Î NameServer ¤òÅĞÏ¿¤¹¤ë¡£
-  # CORBA¤ÈManager¤¬»ØÄê²ÄÇ½
+  # æŒ‡å®šã—ãŸå½¢å¼ã® NameServer ã‚’ç™»éŒ²ã™ã‚‹ã€‚
+  # CORBAã¨ManagerãŒæŒ‡å®šå¯èƒ½
   #
   # @param self
-  # @param method NamingService ¤Î·Á¼°
-  # @param name_server ÅĞÏ¿¤¹¤ë NameServer ¤ÎÌ¾¾Î
+  # @param method NamingService ã®å½¢å¼
+  # @param name_server ç™»éŒ²ã™ã‚‹ NameServer ã®åç§°
   #
   # @else
   #
@@ -656,13 +656,13 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ÎNamingService¤Ø¥Ğ¥¤¥ó¥É
+  # @brief æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®NamingServiceã¸ãƒã‚¤ãƒ³ãƒ‰
   # 
-  # »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ò»ØÄê¤·¤¿Ì¾¾Î¤Ç CORBA NamingService ¤Ø¥Ğ¥¤¥ó¥É¤¹¤ë¡£
+  # æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒ‡å®šã—ãŸåç§°ã§ CORBA NamingService ã¸ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã€‚
   # 
   # @param self
-  # @param name ¥Ğ¥¤¥ó¥É»ş¤ÎÌ¾¾Î
-  # @param rtobj ¥Ğ¥¤¥ó¥ÉÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ãƒã‚¤ãƒ³ãƒ‰æ™‚ã®åç§°
+  # @param rtobj ãƒã‚¤ãƒ³ãƒ‰å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -697,11 +697,11 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief »ØÄê¤·¤¿¥İ¡¼¥È¤ÎNamingService¤Ø¥Ğ¥¤¥ó¥É
+  # @brief æŒ‡å®šã—ãŸãƒãƒ¼ãƒˆã®NamingServiceã¸ãƒã‚¤ãƒ³ãƒ‰
   # 
   # @param self
-  # @param name ¥Ğ¥¤¥ó¥É»ş¤ÎÌ¾¾Î
-  # @param port ¥Ğ¥¤¥ó¥ÉÂĞ¾İ¤Î¥İ¡¼¥È
+  # @param name ãƒã‚¤ãƒ³ãƒ‰æ™‚ã®åç§°
+  # @param port ãƒã‚¤ãƒ³ãƒ‰å¯¾è±¡ã®ãƒãƒ¼ãƒˆ
   #
   # @else
   #
@@ -727,10 +727,10 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief NamingServer ¤Î¾ğÊó¤Î¹¹¿·
+  # @brief NamingServer ã®æƒ…å ±ã®æ›´æ–°
   # 
-  # ÀßÄê¤µ¤ì¤Æ¤¤¤ë NameServer Æâ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ª¥Ö¥¸¥§¥¯¥È¤Î¾ğÊó¤ò
-  # ¹¹¿·¤¹¤ë¡£
+  # è¨­å®šã•ã‚Œã¦ã„ã‚‹ NameServer å†…ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æƒ…å ±ã‚’
+  # æ›´æ–°ã™ã‚‹ã€‚
   # 
   # @param self
   # 
@@ -773,12 +773,12 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É
+  # @brief æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰
   # 
-  # »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ò NamingService ¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É¤¹¤ë¡£
+  # æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ NamingService ã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã€‚
   # 
   # @param self
-  # @param name ¥¢¥ó¥Ğ¥¤¥ó¥ÉÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
   # @else
   #
@@ -797,9 +797,9 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief Á´¤Æ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É
+  # @brief å…¨ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰
   # 
-  # Á´¤Æ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ò CORBA NamingService ¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É¤¹¤ë¡£
+  # å…¨ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ CORBA NamingService ã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã€‚
   # 
   # @param self
   # 
@@ -833,13 +833,13 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief ¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ëÁ´¤Æ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ò¼èÆÀ
+  # @brief ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ã‚‹å…¨ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—
   # 
-  # ¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ëÁ´¤Æ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ò ¼èÆÀ¤¹¤ë¡£
+  # ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ã‚‹å…¨ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ å–å¾—ã™ã‚‹ã€‚
   # 
   # @param self
   #
-  # @return ¥Ğ¥¤¥ó¥ÉºÑ¤ß¥ª¥Ö¥¸¥§¥¯¥È ¥ê¥¹¥È
+  # @return ãƒã‚¤ãƒ³ãƒ‰æ¸ˆã¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ ãƒªã‚¹ãƒˆ
   # 
   # @else
   #
@@ -855,15 +855,15 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief NameServer ´ÉÍıÍÑ¥ª¥Ö¥¸¥§¥¯¥È¤ÎÀ¸À®
+  # @brief NameServer ç®¡ç†ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
   # 
-  # »ØÄê¤·¤¿·¿¤ÎNameServer ´ÉÍıÍÑ¥ª¥Ö¥¸¥§¥¯¥È¤òÀ¸À®¤¹¤ë¡£
+  # æŒ‡å®šã—ãŸå‹ã®NameServer ç®¡ç†ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹ã€‚
   #
   # @param self
-  # @param method NamingService ·Á¼°
-  # @param name_server NameServer Ì¾¾Î
+  # @param method NamingService å½¢å¼
+  # @param name_server NameServer åç§°
   # 
-  # @return À¸À®¤·¤¿ NameServer ¥ª¥Ö¥¸¥§¥¯¥È
+  # @return ç”Ÿæˆã—ãŸ NameServer ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   # 
   # @else
   #
@@ -894,12 +894,12 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief ÀßÄêºÑ¤ß¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò NameServer ¤ËÅĞÏ¿
+  # @brief è¨­å®šæ¸ˆã¿ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ NameServer ã«ç™»éŒ²
   # 
-  # ÀßÄêºÑ¤ß¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò»ØÄê¤·¤¿ NameServer ¤ËÅĞÏ¿¤¹¤ë¡£
+  # è¨­å®šæ¸ˆã¿ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’æŒ‡å®šã—ãŸ NameServer ã«ç™»éŒ²ã™ã‚‹ã€‚
   #
   # @param self
-  # @param ns ÅĞÏ¿ÂĞ¾İ NameServer
+  # @param ns ç™»éŒ²å¯¾è±¡ NameServer
   # 
   # @else
   #
@@ -912,13 +912,13 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief NameServer ¤ËÅĞÏ¿¤¹¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÀßÄê
+  # @brief NameServer ã«ç™»éŒ²ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®è¨­å®š
   # 
-  # NameServer ¤ËÅĞÏ¿¤¹¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀßÄê¤¹¤ë¡£
+  # NameServer ã«ç™»éŒ²ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’è¨­å®šã™ã‚‹ã€‚
   #
   # @param self
-  # @param name ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÅĞÏ¿»şÌ¾¾Î
-  # @param rtobj ÅĞÏ¿ÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ç™»éŒ²æ™‚åç§°
+  # @param rtobj ç™»éŒ²å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   # 
   # @else
   #
@@ -945,12 +945,12 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief NameServer ¤ËÅĞÏ¿¤¹¤ë¥İ¡¼¥È¤ÎÀßÄê
+  # @brief NameServer ã«ç™»éŒ²ã™ã‚‹ãƒãƒ¼ãƒˆã®è¨­å®š
   # 
   #
   # @param self
-  # @param name ¥İ¡¼¥È¤ÎÅĞÏ¿»şÌ¾¾Î
-  # @param port ÅĞÏ¿ÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+  # @param name ãƒãƒ¼ãƒˆã®ç™»éŒ²æ™‚åç§°
+  # @param port ç™»éŒ²å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   # 
   # @else
   # @param self
@@ -970,12 +970,12 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief NameServer ¤ËÅĞÏ¿¤¹¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÀßÄê²ò½ü
+  # @brief NameServer ã«ç™»éŒ²ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®è¨­å®šè§£é™¤
   # 
-  # NameServer ¤ËÅĞÏ¿¤¹¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÀßÄê¤ò²ò½ü¤¹¤ë¡£
+  # NameServer ã«ç™»éŒ²ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®è¨­å®šã‚’è§£é™¤ã™ã‚‹ã€‚
   #
   # @param self
-  # @param name ÀßÄê²ò½üÂĞ¾İ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÌ¾¾Î
+  # @param name è¨­å®šè§£é™¤å¯¾è±¡ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®åç§°
   # 
   # @else
   #
@@ -1003,11 +1003,11 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief NameServer ¤ËÅĞÏ¿¤¹¤ë¥İ¡¼¥È¤ÎÀßÄê²ò½ü
+  # @brief NameServer ã«ç™»éŒ²ã™ã‚‹ãƒãƒ¼ãƒˆã®è¨­å®šè§£é™¤
   # 
   #
   # @param self
-  # @param name ÀßÄê²ò½üÂĞ¾İ¥İ¡¼¥È¤ÎÌ¾¾Î
+  # @param name è¨­å®šè§£é™¤å¯¾è±¡ãƒãƒ¼ãƒˆã®åç§°
   # 
   # @else
   #
@@ -1028,9 +1028,9 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief ¥³¥ó¥İ¥Í¥ó¥È¤ò¥ê¥Ğ¥¤¥ó¥É¤¹¤ë
+  # @brief ã‚³ãƒ³ãƒãƒãƒ³ãƒˆã‚’ãƒªãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹
   # 
-  # ¥Í¡¼¥à¥µ¡¼¥Ğ¤ÈÀÜÂ³¤·¤Æ¥³¥ó¥İ¥Í¥ó¥È¤ò¥ê¥Ğ¥¤¥ó¥É¤¹¤ë¡£
+  # ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒã¨æ¥ç¶šã—ã¦ã‚³ãƒ³ãƒãƒãƒ³ãƒˆã‚’ãƒªãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã€‚
   #
   # @param ns NameServer
   # 
@@ -1073,9 +1073,9 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief ÅĞÏ¿¤·¤¿¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+  # @brief ç™»éŒ²ã—ãŸãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
   # 
-  # @return ¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤Î¥ê¥¹¥È
+  # @return ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã®ãƒªã‚¹ãƒˆ
   # 
   # @else
   #
@@ -1092,11 +1092,11 @@ class NamingManager:
   ##
   # @if jp
   #
-  # @brief rtcloc·Á¼°¤ÇRTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤ò¼èÆÀ
+  # @brief rtclocå½¢å¼ã§RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—
   #
-  # @param name rtcloc·Á¼°¤Ç¤ÎRTCÌ¾
+  # @param name rtclocå½¢å¼ã§ã®RTCå
   # rtcloc://localhost:2809/example/ConsoleIn
-  # @return RTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤Î¥ê¥¹¥È
+  # @return RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã®ãƒªã‚¹ãƒˆ
   # 
   # @else
   #
@@ -1119,7 +1119,7 @@ class NamingManager:
   ##
   # @if jp
   # @class NameServer
-  # @brief NameServer ´ÉÍıÍÑ¥¯¥é¥¹
+  # @brief NameServer ç®¡ç†ç”¨ã‚¯ãƒ©ã‚¹
   # @else
   #
   # @endif
@@ -1134,7 +1134,7 @@ class NamingManager:
   ##
   # @if jp
   # @class Comps
-  # @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È´ÉÍıÍÑ¥¯¥é¥¹
+  # @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç®¡ç†ç”¨ã‚¯ãƒ©ã‚¹
   # @else
   #
   # @endif
@@ -1153,7 +1153,7 @@ class NamingManager:
   ##
   # @if jp
   # @class Port
-  # @brief ¥İ¡¼¥È´ÉÍıÍÑ¥¯¥é¥¹
+  # @brief ãƒãƒ¼ãƒˆç®¡ç†ç”¨ã‚¯ãƒ©ã‚¹
   # @else
   #
   # @endif

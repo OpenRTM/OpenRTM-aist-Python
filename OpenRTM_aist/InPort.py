@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file InPort.py
@@ -27,15 +27,15 @@ import threading
 #
 # @class InPort
 #
-# @brief InPort ���饹
+# @brief InPort クラス
 # 
-# InPort �μ������饹��
-# InPort �������˥�󥰥Хåե�����������������������줿�ǡ�����缡
-# ���Υ�󥰥Хåե��˳�Ǽ���롣��󥰥Хåե��Υ������ϥǥե���Ȥ�64��
-# �ʤäƤ��뤬�����󥹥ȥ饯�������ˤ�ꥵ��������ꤹ�뤳�Ȥ��Ǥ��롣
-# �ǡ����ϥե饰�ˤ�ä�̤�ɡ����ɾ��֤��������졢isNew(), getNewDataLen()
-# getNewList(), getNewListReverse() ���Υ᥽�åɤˤ��ϥ�ɥ�󥰤��뤳�Ȥ�
-# �Ǥ��롣
+# InPort の実装クラス。
+# InPort は内部にリングバッファを持ち、外部から送信されたデータを順次
+# このリングバッファに格納する。リングバッファのサイズはデフォルトで64と
+# なっているが、コンストラクタ引数によりサイズを指定することができる。
+# データはフラグによって未読、既読状態が管理され、isNew(), getNewDataLen()
+# getNewList(), getNewListReverse() 等のメソッドによりハンドリングすることが
+# できる。
 #
 # @since 0.2.0
 #
@@ -64,13 +64,13 @@ class InPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯����
+  # コンストラクタ。
   #
   # @param self
-  # @param name InPort ̾��InPortBase:name() �ˤ�껲�Ȥ���롣
-  # @param value ���� InPort �˥Х���ɤ�����ѿ�
+  # @param name InPort 名。InPortBase:name() により参照される。
+  # @param value この InPort にバインドされる変数
   #
   # @else
   #
@@ -105,13 +105,13 @@ class InPort(OpenRTM_aist.InPortBase):
 
   ##
   # @if jp
-  # @brief �ݡ���̾�Τ�������롣
+  # @brief ポート名称を取得する。
   #
-  # �ݡ���̾�Τ�������롣
+  # ポート名称を取得する。
   #
   # @param self
   #
-  # @return �ݡ���̾��
+  # @return ポート名称
   #
   # @else
   #
@@ -124,15 +124,15 @@ class InPort(OpenRTM_aist.InPortBase):
 
   ##
   # @if jp
-  # @brief �ǿ��ǡ�������ǧ
+  # @brief 最新データか確認
   #
-  # ���ߤΥХåե����֤˳�Ǽ����Ƥ���ǡ������ǿ��ǡ�������ǧ���롣
+  # 現在のバッファ位置に格納されているデータが最新データか確認する。
   #
   # @param self
   #
-  # @return �ǿ��ǡ�����ǧ���
-  #            ( true:�ǿ��ǡ������ǡ����Ϥޤ��ɤ߽Ф���Ƥ��ʤ�
-  #             false:���Υǡ������ǡ����ϴ����ɤ߽Ф���Ƥ���)
+  # @return 最新データ確認結果
+  #            ( true:最新データ．データはまだ読み出されていない
+  #             false:過去のデータ．データは既に読み出されている)
   #
   # @else
   #
@@ -192,13 +192,13 @@ class InPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �Хåե��������ɤ�����ǧ����
+  # @brief バッファが空かどうか確認する
   # 
-  # InPort�ΥХåե��������ɤ����� bool �ͤ��֤���
-  # ���ξ��� true, ̤�ɥǡ������������ false ���֤���
+  # InPortのバッファが空かどうかを bool 値で返す。
+  # 空の場合は true, 未読データがある場合は false を返す。
   #
-  # @return true  �Хåե��϶�
-  #         false �Хåե���̤�ɥǡ���������
+  # @return true  バッファは空
+  #         false バッファに未読データがある
   # 
   # @else
   #
@@ -208,7 +208,7 @@ class InPort(OpenRTM_aist.InPortBase):
   #
   # @return Newest data check result
   #         ( true:Newest data. Data has not been readout yet.
-  #          false:Past data��Data has already been readout.)
+  #          false:Past data．Data has already been readout.)
   # 
   # @endif
   #
@@ -256,51 +256,51 @@ class InPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief DataPort �����ͤ��ɤ߽Ф�
+  # @brief DataPort から値を読み出す
   #
-  # InPort�˽񤭹��ޤ줿�ǡ������ɤߤ�������³����0���ޤ��ϥХåե���
-  # �ǡ������񤭹��ޤ�Ƥ��ʤ����֤��ɤߤ�������������ͤ�����Ǥ��롣
-  # �Хåե������ξ��֤ΤȤ���
-  # ���������ꤵ�줿�⡼�� (readback, do_nothing, block) �˱����ơ�
-  # �ʲ��Τ褦��ư��򤹤롣
+  # InPortに書き込まれたデータを読みだす。接続数が0、またはバッファに
+  # データが書き込まれていない状態で読みだした場合の戻り値は不定である。
+  # バッファが空の状態のとき、
+  # 事前に設定されたモード (readback, do_nothing, block) に応じて、
+  # 以下のような動作をする。
   #
-  # - readback: �Ǹ���ͤ��ɤߤʤ�����
+  # - readback: 最後の値を読みなおす。
   #
-  # - do_nothing: ���⤷�ʤ�
+  # - do_nothing: 何もしない
   #
-  # - block: �֥��å����롣�����ॢ���Ȥ����ꤵ��Ƥ�����ϡ�
-  #       �����ॢ���Ȥ���ޤ��Ԥġ�
+  # - block: ブロックする。タイムアウトが設定されている場合は、
+  #       タイムアウトするまで待つ。
   #
-  # �Хåե������ξ��֤Ǥϡ�InPort�˥Х���ɤ��줿�ѿ����ͤ��֤���롣
-  # �������äơ�����ɤ߽Ф����ˤ������ͤ��֤���ǽ�������롣
-  # ���δؿ������Ѥ���ݤˤϡ�
+  # バッファが空の状態では、InPortにバインドされた変数の値が返される。
+  # したがって、初回読み出し時には不定値を返す可能性がある。
+  # この関数を利用する際には、
   #
-  # - isNew(), isEmpty() ��ʻ�Ѥ��������˥Хåե����֤�����å����롣
+  # - isNew(), isEmpty() と併用し、事前にバッファ状態をチェックする。
   # 
-  # - ����ɤ߽Ф����������ͤ��֤��ʤ��褦�˥Х�����ѿ�������˽��������
+  # - 初回読み出し時に不定値を返さないようにバインド変数を事前に初期化する
   # 
   #
-  # �ƥ�����Хå��ؿ��ϰʲ��Τ褦�˸ƤӽФ���롣
-  # - OnRead: read() �ؿ����ƤФ��ݤ�ɬ���ƤФ�롣
+  # 各コールバック関数は以下のように呼び出される。
+  # - OnRead: read() 関数が呼ばれる際に必ず呼ばれる。
   # 
-  # - OnReadConvert: �ǡ������ɤ߽Ф�������������硢�ɤߤ������ǡ�����
-  #       �����Ȥ���OnReadConvert���ƤӽФ��졢����ͤ�read()�������
-  #       �Ȥ����֤���
+  # - OnReadConvert: データの読み出しが成功した場合、読みだしたデータを
+  #       引数としてOnReadConvertが呼び出され、戻り値をread()が戻り値
+  #       として返す。
   #
-  # - OnEmpty: �Хåե������Τ���ǡ������ɤ߽Ф��˼��Ԥ������ƤӽФ���롣
-  #        OnEmpty ������ͤ� read() ������ͤȤ����֤���
+  # - OnEmpty: バッファが空のためデータの読み出しに失敗した場合呼び出される。
+  #        OnEmpty の戻り値を read() の戻り値として返す。
   #
-  # - OnBufferTimeout: �ǡ����ե�������Push���ξ��ˡ��ɤ߽Ф�
-  #        �����ॢ���ȤΤ���˥ǡ������ɤ߽Ф��˼��Ԥ������˸ƤФ�롣
+  # - OnBufferTimeout: データフロー型がPush型の場合に、読み出し
+  #        タイムアウトのためにデータの読み出しに失敗した場合に呼ばれる。
   #
-  # - OnRecvTimeout: �ǡ����ե�������Pull���ξ��ˡ��ɤ߽Ф������ॢ����
-  #        �Τ���˥ǡ����ɤ߽Ф��˼��Ԥ������˸ƤФ�롣
+  # - OnRecvTimeout: データフロー型がPull型の場合に、読み出しタイムアウト
+  #        のためにデータ読み出しに失敗した場合に呼ばれる。
   #
-  # - OnReadError: �嵭�ʳ�����ͳ���ɤߤ����˼��Ԥ������˸ƤФ�롣
-  #        ��ͳ�Ȥ��Ƥϡ��Хåե�����������硢�㳰��ȯ���ʤɤ��ͤ�����
-  #        ���̾�ϵ����ꤨ�ʤ�����Х��β�ǽ�������롣
+  # - OnReadError: 上記以外の理由で読みだしに失敗した場合に呼ばれる。
+  #        理由としては、バッファ設定の不整合、例外の発生などが考えられる
+  #        が通常は起こりえないためバグの可能性がある。
   #
-  # @return �ɤ߽Ф����ǡ���
+  # @return 読み出したデータ
   #
   # @else
   #
@@ -391,12 +391,12 @@ class InPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �Х���ɤ��줿�ѿ��� InPort �Хåե��κǿ��ͤ��ɤ߹���
+  # @brief バインドされた変数に InPort バッファの最新値を読み込む
   #
-  # �Х���ɤ��줿�ǡ����� InPort �κǿ��ͤ��ɤ߹��ࡣ
-  # ���󥹥ȥ饯�����ѿ��� InPort ���Х���ɤ���Ƥ��ʤ���Фʤ�ʤ���
-  # ���Υ᥽�åɤϥݥ�⡼�ե��å��˻��Ѥ�����������Ȥ��Ƥ��뤿�ᡢ
-  # ���˰�¸���ʤ�����������ͤȤʤäƤ��롣
+  # バインドされたデータに InPort の最新値を読み込む。
+  # コンストラクタで変数と InPort がバインドされていなければならない。
+  # このメソッドはポリモーフィックに使用される事を前提としているため、
+  # 型に依存しない引数、戻り値となっている。
   #
   # @param self
   #
@@ -412,13 +412,13 @@ class InPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief InPort �Хåե��إǡ����ɤ߹��߻��Υ�����Хå�������
+  # @brief InPort バッファへデータ読み込み時のコールバックの設定
   #
-  # InPort �����ĥХåե�����ǡ������ɤ߹��ޤ��ľ���˸ƤФ�륳����Хå�
-  # ���֥������Ȥ����ꤹ�롣
+  # InPort が持つバッファからデータが読み込まれる直前に呼ばれるコールバック
+  # オブジェクトを設定する。
   # 
   # @param self
-  # @param on_read �����оݥ�����Хå����֥�������
+  # @param on_read 設定対象コールバックオブジェクト
   #
   # @else
   #
@@ -430,14 +430,14 @@ class InPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief InPort �Хåե��إǡ����ɤ߽Ф����Υ�����Хå�������
+  # @brief InPort バッファへデータ読み出し時のコールバックの設定
   #
-  # InPort �����ĥХåե�����ǡ������ɤ߽Ф����ݤ˸ƤФ�륳����Хå�
-  # ���֥������Ȥ����ꤹ�롣������Хå����֥������Ȥ�����ͤ�read()�᥽�å�
-  # �θƽз�̤Ȥʤ롣
+  # InPort が持つバッファからデータが読み出される際に呼ばれるコールバック
+  # オブジェクトを設定する。コールバックオブジェクトの戻り値がread()メソッド
+  # の呼出結果となる。
   # 
   # @param self
-  # @param on_rconvert �����оݥ�����Хå����֥�������
+  # @param on_rconvert 設定対象コールバックオブジェクト
   #
   # @else
   #
@@ -448,10 +448,10 @@ class InPort(OpenRTM_aist.InPortBase):
   ##
   # @if jp
   #
-  # @brief �ǡ���������쥯�Ȥ˽񤭹���
+  # @brief データをダイレクトに書き込む
   #
   # @param self
-  # @param data �񤭹���ǡ���
+  # @param data 書き込むデータ
   #
   # @else
   # @brief 

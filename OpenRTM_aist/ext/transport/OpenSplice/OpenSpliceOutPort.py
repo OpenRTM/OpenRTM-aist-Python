@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file OpenSpliceOutPort.py
@@ -27,8 +27,8 @@ import RTC
 ##
 # @if jp
 # @class OpenSpliceOutPort
-# @brief OpenSplice Publisher¤ËÂĞ±ş¤¹¤ë¥¯¥é¥¹
-# InPortConsumer¥ª¥Ö¥¸¥§¥¯¥È¤È¤·¤Æ»ÈÍÑ¤¹¤ë
+# @brief OpenSplice Publisherã«å¯¾å¿œã™ã‚‹ã‚¯ãƒ©ã‚¹
+# InPortConsumerã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã—ã¦ä½¿ç”¨ã™ã‚‹
 #
 # @else
 # @class OpenSpliceOutPort
@@ -42,9 +42,9 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -65,9 +65,9 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -85,14 +85,14 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
     
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
-  # InPortConsumer¤Î³Æ¼ïÀßÄê¤ò¹Ô¤¦
+  # InPortConsumerã®å„ç¨®è¨­å®šã‚’è¡Œã†
   #
   # @param self
-  # @param prop ÀÜÂ³ÀßÄê
-  # marshaling_type ¥·¥ê¥¢¥é¥¤¥¶¤Î¼ïÎà ¥Ç¥Õ¥©¥ë¥È¡§OpenSplice
-  # topic ¥È¥Ô¥Ã¥¯Ì¾ ¥Ç¥Õ¥©¥ë¥È chatter
+  # @param prop æ¥ç¶šè¨­å®š
+  # marshaling_type ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®ç¨®é¡ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šOpenSplice
+  # topic ãƒˆãƒ”ãƒƒã‚¯å ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ chatter
   #
   # @else
   # @brief Initializing configuration
@@ -132,20 +132,20 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ÀÜÂ³Àè¤Ø¤Î¥Ç¡¼¥¿Á÷¿®
+  # @brief æ¥ç¶šå…ˆã¸ã®ãƒ‡ãƒ¼ã‚¿é€ä¿¡
   #
-  # ÀÜÂ³Àè¤Î¥İ¡¼¥È¤Ø¥Ç¡¼¥¿¤òÁ÷¿®¤¹¤ë¤¿¤á¤Î½ã¿è²¾ÁÛ´Ø¿ô¡£
+  # æ¥ç¶šå…ˆã®ãƒãƒ¼ãƒˆã¸ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã™ã‚‹ãŸã‚ã®ç´”ç²‹ä»®æƒ³é–¢æ•°ã€‚
   # 
-  # ¤³¤Î´Ø¿ô¤Ï¡¢°Ê²¼¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É¤òÊÖ¤¹¡£
+  # ã“ã®é–¢æ•°ã¯ã€ä»¥ä¸‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰ã‚’è¿”ã™ã€‚
   #
-  # - PORT_OK:       Àµ¾ï½ªÎ»¡£
-  # - PORT_ERROR:    ¥Ç¡¼¥¿Á÷¿®¤Î²áÄø¤Ç²¿¤é¤«¤Î¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
-  # - SEND_FULL:     ¥Ç¡¼¥¿¤òÁ÷¿®¤·¤¿¤¬¡¢Áê¼êÂ¦¥Ğ¥Ã¥Õ¥¡¤¬¥Õ¥ë¤À¤Ã¤¿¡£
-  # - SEND_TIMEOUT:  ¥Ç¡¼¥¿¤òÁ÷¿®¤·¤¿¤¬¡¢Áê¼êÂ¦¥Ğ¥Ã¥Õ¥¡¤¬¥¿¥¤¥à¥¢¥¦¥È¤·¤¿¡£
-  # - UNKNOWN_ERROR: ¸¶°øÉÔÌÀ¤Î¥¨¥é¡¼
+  # - PORT_OK:       æ­£å¸¸çµ‚äº†ã€‚
+  # - PORT_ERROR:    ãƒ‡ãƒ¼ã‚¿é€ä¿¡ã®éç¨‹ã§ä½•ã‚‰ã‹ã®ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ãŸã€‚
+  # - SEND_FULL:     ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã—ãŸãŒã€ç›¸æ‰‹å´ãƒãƒƒãƒ•ã‚¡ãŒãƒ•ãƒ«ã ã£ãŸã€‚
+  # - SEND_TIMEOUT:  ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ã—ãŸãŒã€ç›¸æ‰‹å´ãƒãƒƒãƒ•ã‚¡ãŒã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ãŸã€‚
+  # - UNKNOWN_ERROR: åŸå› ä¸æ˜ã®ã‚¨ãƒ©ãƒ¼
   #
-  # @param data Á÷¿®¤¹¤ë¥Ç¡¼¥¿
-  # @return ¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @param data é€ä¿¡ã™ã‚‹ãƒ‡ãƒ¼ã‚¿
+  # @return ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   # @brief Send data to the destination port
@@ -180,14 +180,14 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë
+  # @brief InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
   #
-  # InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë¡£
-  # °ú¿ô¤Ç»ØÄê¤¹¤ë¥×¥í¥Ñ¥Æ¥£¾ğÊóÆâ¤Î NameValue ¥ª¥Ö¥¸¥§¥¯¥È¤Î
-  # dataport.interface_type ÃÍ¤òÄ´¤Ù¡¢Åö³º¥İ¡¼¥È¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ë
-  # ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¿¥¤¥×¤È°ìÃ×¤¹¤ë¾ì¹ç¤Î¤ß¾ğÊó¤ò¼èÆÀ¤¹¤ë¡£
+  # InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹ã€‚
+  # å¼•æ•°ã§æŒ‡å®šã™ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±å†…ã® NameValue ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®
+  # dataport.interface_type å€¤ã‚’èª¿ã¹ã€å½“è©²ãƒãƒ¼ãƒˆã«è¨­å®šã•ã‚Œã¦ã„ã‚‹
+  # ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—ã¨ä¸€è‡´ã™ã‚‹å ´åˆã®ã¿æƒ…å ±ã‚’å–å¾—ã™ã‚‹ã€‚
   #
-  # @param properties InterfaceProfile¾ğÊó¤ò¼õ¤±¼è¤ë¥×¥í¥Ñ¥Æ¥£
+  # @param properties InterfaceProfileæƒ…å ±ã‚’å—ã‘å–ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   #
   # @else
   # @brief Publish InterfaceProfile information
@@ -207,13 +207,13 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤Ø¤ÎÅĞÏ¿
+  # @brief ãƒ‡ãƒ¼ã‚¿é€ä¿¡é€šçŸ¥ã¸ã®ç™»éŒ²
   #
-  # »ØÄê¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¤Ë´ğ¤Å¤¤¤Æ¡¢¥Ç¡¼¥¿Á÷½ĞÄÌÃÎ¤Î¼õ¤±¼è¤ê¤ËÅĞÏ¿¤¹¤ë¡£
+  # æŒ‡å®šã•ã‚ŒãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«åŸºã¥ã„ã¦ã€ãƒ‡ãƒ¼ã‚¿é€å‡ºé€šçŸ¥ã®å—ã‘å–ã‚Šã«ç™»éŒ²ã™ã‚‹ã€‚
   #
-  # @param properties ÅĞÏ¿¾ğÊó
+  # @param properties ç™»éŒ²æƒ…å ±
   #
-  # @return ÅĞÏ¿½èÍı·ë²Ì(ÅĞÏ¿À®¸ù:true¡¢ÅĞÏ¿¼ºÇÔ:false)
+  # @return ç™»éŒ²å‡¦ç†çµæœ(ç™»éŒ²æˆåŠŸ:trueã€ç™»éŒ²å¤±æ•—:false)
   #
   # @else
   # @brief Subscribe to the data sending notification
@@ -233,11 +233,11 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
     
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½ü
+  # @brief ãƒ‡ãƒ¼ã‚¿é€ä¿¡é€šçŸ¥ã‹ã‚‰ã®ç™»éŒ²è§£é™¤
   #
-  # ¥Ç¡¼¥¿Á÷½ĞÄÌÃÎ¤Î¼õ¤±¼è¤ê¤«¤éÅĞÏ¿¤ò²ò½ü¤¹¤ë¡£
+  # ãƒ‡ãƒ¼ã‚¿é€å‡ºé€šçŸ¥ã®å—ã‘å–ã‚Šã‹ã‚‰ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹ã€‚
   #
-  # @param properties ÅĞÏ¿²ò½ü¾ğÊó
+  # @param properties ç™»éŒ²è§£é™¤æƒ…å ±
   #
   # @else
   # @brief Unsubscribe the data send notification
@@ -259,7 +259,7 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
 
 ##
 # @if jp
-# @brief ¥â¥¸¥å¡¼¥ëÅĞÏ¿´Ø¿ô
+# @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ç™»éŒ²é–¢æ•°
 #
 #
 # @else

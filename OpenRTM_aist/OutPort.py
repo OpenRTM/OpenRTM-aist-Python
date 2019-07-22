@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 
 ##
@@ -26,13 +26,13 @@ import threading
 
 ##
 # @if jp
-# @brief �ǡ����˥����ॹ����פ򥻥åȤ���
+# @brief データにタイムスタンプをセットする
 #
-# �ǡ����ݡ��ȤΥǡ������Ф��ƥ����ॹ����פ򥻥åȤ��롣�ǡ����ݡ���
-# �Υǡ����Ϲ�¤�ΤΥ��С��Ȥ��� tm.sec, tm.nsec �����ɬ�פ����롣
+# データポートのデータに対してタイムスタンプをセットする。データポート
+# のデータは構造体のメンバーとして tm.sec, tm.nsec を持つ必要がある。
 #
-# @param data �����ॹ����פ򥻥åȤ���ǡ������¹Ը�¹Ի��Υ����ॹ
-#             ����פ����åȤ����
+# @param data タイムスタンプをセットするデータ。実行後実行時のタイムス
+#             タンプがセットされる
 #
 # @else
 # @brief Setting timestamp to data
@@ -58,9 +58,9 @@ def setTimestamp(data):
 #
 # @class OutPort
 #
-# @brief OutPort ���饹
+# @brief OutPort クラス
 # 
-# OutPort �ѥ��饹
+# OutPort 用クラス
 #
 # @since 0.2.0
 #
@@ -76,14 +76,14 @@ class OutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
-  # @param name �ݡ���̾
-  # @param value ���Υݡ��Ȥ˥Х���ɤ����ǡ����ѿ�
-  # @param buffer_ �Хåե�
+  # @param name ポート名
+  # @param value このポートにバインドされるデータ変数
+  # @param buffer_ バッファ
   #
   # @else
   #
@@ -117,23 +117,23 @@ class OutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �ǡ����񤭹���
+  # @brief データ書き込み
   #
-  # �ݡ��Ȥإǡ�����񤭹��ࡣ
+  # ポートへデータを書き込む。
   #
-  # - ������Хå��ե��󥯥� OnWrite �����åȤ���Ƥ����硢
-  #   OutPort ���ݻ�����Хåե��˽񤭹������� OnWrite ���ƤФ�롣
-  # - OutPort ���ݻ�����Хåե��������С��ե����򸡽ФǤ���Хåե��Ǥ��ꡢ
-  #   ���ġ��񤭹���ݤ˥Хåե��������С��ե����򸡽Ф�����硢
-  #   ������Хå��ե��󥯥� OnOverflow ���ƤФ�롣
-  # - ������Хå��ե��󥯥� OnWriteConvert �����åȤ���Ƥ����硢
-  #   �Хåե��񤭹��߻��ˡ� OnWriteConvert �� operator() ������ͤ�
-  #   �Хåե��˽񤭹��ޤ�롣
+  # - コールバックファンクタ OnWrite がセットされている場合、
+  #   OutPort が保持するバッファに書き込む前に OnWrite が呼ばれる。
+  # - OutPort が保持するバッファがオーバーフローを検出できるバッファであり、
+  #   かつ、書き込む際にバッファがオーバーフローを検出した場合、
+  #   コールバックファンクタ OnOverflow が呼ばれる。
+  # - コールバックファンクタ OnWriteConvert がセットされている場合、
+  #   バッファ書き込み時に、 OnWriteConvert の operator() の戻り値が
+  #   バッファに書き込まれる。
   #
   # @param self
-  # @param value �񤭹����оݥǡ���
+  # @param value 書き込み対象データ
   #
-  # @return �񤭹��߽������(�񤭹�������:true���񤭹��߼���:false)
+  # @return 書き込み処理結果(書き込み成功:true、書き込み失敗:false)
   #
   # @else
   #
@@ -144,15 +144,15 @@ class OutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �ǡ����񤭹���
+  # @brief データ書き込み
   #
-  # �ݡ��Ȥإǡ�����񤭹��ࡣ
-  # ���ꤵ�줿�ͤ�ݡ��Ȥ˽񤭹��ࡣ
+  # ポートへデータを書き込む。
+  # 設定された値をポートに書き込む。
   #
   # @param self
-  # @param value �񤭹����оݥǡ���
+  # @param value 書き込み対象データ
   #
-  # @return �񤭹��߽������(�񤭹�������:true���񤭹��߼���:false)
+  # @return 書き込み処理結果(書き込み成功:true、書き込み失敗:false)
   #
   # @else
   #
@@ -202,14 +202,14 @@ class OutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �ǡ����񤭹��߽����Υ֥��å��⡼�ɤ�����
+  # @brief データ書き込み処理のブロックモードの設定
   #
-  # �񤭹��߽������Ф��ƥ֥��å��⡼�ɤ����ꤹ�롣
-  # �֥��å��⡼�ɤ���ꤷ����硢�Хåե��˽񤭹����ΰ褬�Ǥ��뤫
-  # �����ॢ���Ȥ�ȯ������ޤ� write() �᥽�åɤθƤӤ������֥��å�����롣
+  # 書き込み処理に対してブロックモードを設定する。
+  # ブロックモードを指定した場合、バッファに書き込む領域ができるか
+  # タイムアウトが発生するまで write() メソッドの呼びだしがブロックされる。
   #
   # @param self
-  # @param block �֥��å��⡼�ɥե饰
+  # @param block ブロックモードフラグ
   #
   # @else
   #
@@ -223,13 +223,13 @@ class OutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �񤭹��߽����Υ����ॢ���Ȼ��֤�����
+  # @brief 書き込み処理のタイムアウト時間の設定
   # 
-  # write() �Υ����ॢ���Ȼ��֤� usec �����ꤹ�롣
-  # write() �ϥ֥��å��⡼�ɤǤʤ���Фʤ�ʤ���
+  # write() のタイムアウト時間を usec で設定する。
+  # write() はブロックモードでなければならない。
   #
   # @param self
-  # @param timeout �����ॢ���Ȼ��� [usec]
+  # @param timeout タイムアウト時間 [usec]
   #
   # @else
   #
@@ -243,12 +243,12 @@ class OutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief OnWrite ������Хå�������
+  # @brief OnWrite コールバックの設定
   #
-  # �ǡ����񤭹���ľ���˸ƤФ�� OnWrite ������Хå��ե��󥯥������ꤹ�롣
+  # データ書き込み直前に呼ばれる OnWrite コールバックファンクタを設定する。
   #
   # @param self
-  # @param on_write OnWrite ������Хå��ե��󥯥�
+  # @param on_write OnWrite コールバックファンクタ
   #
   # @else
   #
@@ -262,15 +262,15 @@ class OutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief OnWriteConvert ������Хå�������
+  # @brief OnWriteConvert コールバックの設定
   #
-  # �ǡ����񤭹��߻��˸ƤФ�� OnWriteConvert ������Хå��ե��󥯥�������
-  # ���롣
-  # ���Υ�����Хå��ؿ��ν�����̤��񤭹��ޤ�롣
-  # ���Τ���񤭹��ߥǡ����Υե��륿��󥰤���ǽ�Ȥʤ롣
+  # データ書き込み時に呼ばれる OnWriteConvert コールバックファンクタを設定
+  # する。
+  # このコールバック関数の処理結果が書き込まれる。
+  # このため書き込みデータのフィルタリングが可能となる。
   #
   # @param self
-  # @param on_wconvert OnWriteConvert ������Хå��ե��󥯥�
+  # @param on_wconvert OnWriteConvert コールバックファンクタ
   #
   # @else
   #
@@ -284,13 +284,13 @@ class OutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �ǡ�����̾�����ѥ᥽�å�
+  # @brief データ型名取得用メソッド
   #
-  # �ǡ����η�̾��������뤿�ᡢInPortCorbaProvider����ƤФ�롣
+  # データの型名を取得するため、InPortCorbaProviderから呼ばれる。
   # 
   # @param self
   #
-  # @return �Хåե������ꤵ��Ƥ���ǡ����η�̾
+  # @return バッファに設定されているデータの型名
   #
   # @else
   #
@@ -303,10 +303,10 @@ class OutPort(OpenRTM_aist.OutPortBase):
   ##
   # @if jp
   #
-  # @brief �ǡ���������쥯�Ȥ��ɤ߹���
+  # @brief データをダイレクトに読み込む
   #
   # @param self
-  # @return �ɤ߹�����ǡ���
+  # @return 読み込んだデータ
   #
   # @else
   # @brief 

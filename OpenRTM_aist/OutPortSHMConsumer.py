@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 
 ##
@@ -23,9 +23,9 @@ import threading
 # @if jp
 # @class OutPortSHMConsumer
 #
-# @brief OutPortSHMConsumer ¥¯¥é¥¹
+# @brief OutPortSHMConsumer ã‚¯ãƒ©ã‚¹
 #
-# ÄÌ¿®¼êÃÊ¤Ë ¶¦Í­¥á¥â¥ê ¤òÍøÍÑ¤·¤¿½ĞÎÏ¥İ¡¼¥È¥×¥í¥Ğ¥¤¥À¡¼¤Î¼ÂÁõ¥¯¥é¥¹¡£
+# é€šä¿¡æ‰‹æ®µã« å…±æœ‰ãƒ¡ãƒ¢ãƒª ã‚’åˆ©ç”¨ã—ãŸå‡ºåŠ›ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒã‚¤ãƒ€ãƒ¼ã®å®Ÿè£…ã‚¯ãƒ©ã‚¹ã€‚
 #
 #
 # @else
@@ -42,9 +42,9 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @else
   # @brief Constructor
@@ -66,9 +66,9 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
 
   ##
   # @if jp
-  # @brief ¥Ç¥¹¥È¥é¥¯¥¿
+  # @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥Ç¥¹¥È¥é¥¯¥¿
+  # ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @else
   # @brief Destructor
@@ -95,12 +95,12 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
 
   ##
   # @if jp
-  # @brief ÀßÄê½é´ü²½
+  # @brief è¨­å®šåˆæœŸåŒ–
   #
-  # OutPortConsumer¤Î³Æ¼ïÀßÄê¤ò¹Ô¤¦
+  # OutPortConsumerã®å„ç¨®è¨­å®šã‚’è¡Œã†
   #
   # @param self
-  # @param prop ¥³¥Í¥¯¥¿¥×¥í¥Ñ¥Æ¥£
+  # @param prop ã‚³ãƒã‚¯ã‚¿ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
   #
   # @else
   # @brief Initializing configuration
@@ -128,16 +128,16 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
 
   ##
   # @if jp
-  # @brief ¥Ç¡¼¥¿¤òÆÉ¤ß½Ğ¤¹
+  # @brief ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿å‡ºã™
   #
-  # ÀßÄê¤µ¤ì¤¿¥Ç¡¼¥¿¤òÆÉ¤ß½Ğ¤¹¡£
+  # è¨­å®šã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿å‡ºã™ã€‚
   #
-  # ¥Ç¡¼¥¿¤Î¥µ¥¤¥º¤Ï¶¦Í­¥á¥â¥ê¤âÀèÆ¬8byte¤«¤é¼èÆÀ¤¹¤ë
-  # ¥Ç¡¼¥¿¤Ï¶¦Í­¥á¥â¥ê¤«¤éÆÉ¤ß¹ş¤à
+  # ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚ºã¯å…±æœ‰ãƒ¡ãƒ¢ãƒªã‚‚å…ˆé ­8byteã‹ã‚‰å–å¾—ã™ã‚‹
+  # ãƒ‡ãƒ¼ã‚¿ã¯å…±æœ‰ãƒ¡ãƒ¢ãƒªã‹ã‚‰èª­ã¿è¾¼ã‚€
   #
-  # @param data ÆÉ¤ß½Ğ¤·¤¿¥Ç¡¼¥¿¤ò¼õ¤±¼è¤ë¥ª¥Ö¥¸¥§¥¯¥È
+  # @param data èª­ã¿å‡ºã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’å—ã‘å–ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
   #
-  # @return ¥ê¥¿¡¼¥ó¥³¡¼¥É
+  # @return ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
   #
   # @else
   # @brief Read data

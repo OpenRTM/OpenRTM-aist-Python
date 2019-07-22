@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file Async.py
@@ -82,22 +82,22 @@ class Async_ref_t(OpenRTM_aist.Task):
   
 ##
 # @if jp
-# @brief ��Ʊ�����С��ؿ��ƤӽФ��إ�ѡ��ؿ�
+# @brief 非同期メンバー関数呼び出しヘルパー関数
 #
-# ���С��ؿ�����Ʊ���˸Ƥ֤���Υإ�ѡ��ؿ�
-# ��
+# メンバー関数を非同期に呼ぶためのヘルパー関数
+# 例
 #
 #  class A
 #  {
 #  public:
-#    // ���֤Τ�����ؿ�
+#    // 時間のかかる関数
 #    void hoge() {
 #      for (int i(0); i < 5; ++i) {
 #        std::cout << "hoge" << std::endl;
 #        sleep(1);
 #      }
 #    }
-#    // ���֤Τ�����ؿ�
+#    // 時間のかかる関数
 #    void munya(const char* msg) {
 #      for (int i(0); i < 10; ++i) {
 #        std::cout << "message is: " << msg << std::endl;
@@ -108,22 +108,22 @@ class Async_ref_t(OpenRTM_aist.Task):
 #      return val + 1;
 #    }
 #  };
-# �����ͤʥ��饹�Υ��֥������Ȥ��Ф��ơ�
+# この様なクラスのオブジェクトに対して、
 #
 #  A a;
 #  Async* invoker0(AsyncInvoker(&a,
 #                               std::mem_fun(&A::hoge)));
 #  Async* invoker1(AsyncInvoker(&a,
 #                               std::bind2nd(std::mem_fun(&A::munya),
-#                                            "�ۤ�")));
-#  invoker0->invoke(); // ���������
-#  invoker1->invoke(); // ���������
+#                                            "ほげ")));
+#  invoker0->invoke(); // すぐに戻る
+#  invoker1->invoke(); // すぐに戻る
 #
-#  delete invoker0; // ɬ��������뤳��
-#  delete invoker1; // ɬ��������뤳��
+#  delete invoker0; // 必ず削除すること
+#  delete invoker1; // 必ず削除すること
 #
-# �Τ褦����Ʊ���θƤӽФ����Ǥ��롣
-# �ƤӽФ�������ͤ�������������ϡ������δؿ����֥������Ȥ��Ѱդ��롣
+# のように非同期の呼び出しができる。
+# 呼び出しの戻り値を取得したい場合は、自前の関数オブジェクトを用意する。
 #
 #  class add_one_functor
 #  {
@@ -138,7 +138,7 @@ class Async_ref_t(OpenRTM_aist.Task):
 #    }
 #  };
 #
-# �嵭�δؿ����֥������ȤΥ��󥹥��󥹤�����������Υݥ��󥿤��Ϥ���
+# 上記の関数オブジェクトのインスタンスを作成し、そのポインタを渡す。
 #
 #  add_one_functor aof(100);
 #  Async* invoker2(AsyncInvoker(&a, &aof));
@@ -147,14 +147,14 @@ class Async_ref_t(OpenRTM_aist.Task):
 #  std::cout << "result: " << aof.get_ret() << std::endl;
 #  delete invoker2;
 #
-# �̾AsyncInvoker ���֤����֥������Ȥ�����Ū�˺�����ʤ����
-# �ʤ�ʤ������軰������ true ���Ϥ����Ȥǡ���Ʊ���¹Ԥ���λ�����Ʊ����
-# ��ưŪ�˥��󥹥��󥹤��������롣
+# 通常、AsyncInvoker が返すオブジェクトは明示的に削除しなければ
+# ならないが、第三引数に true を渡すことで、非同期実行が終了すると同時に
+# 自動的にインスタンスが削除される。
 #
-# // invoker3 �Ϻ�� (delete invoker3) ���ƤϤ����ʤ�
+# // invoker3 は削除 (delete invoker3) してはいけない
 # Async* invoker3(AsyncInvoker(&a, std::mem_fun(&A::hoge), true));
 #
-# // ���󥹥���������Ʊ���˼¹Ԥ��뤳�Ȥ�Ǥ��롣
+# // インスタンス生成と同時に実行することもできる。
 # AsyncInvoker(&a, std::mem_fun(&A::hoge))->invoke();
 #
 # @else

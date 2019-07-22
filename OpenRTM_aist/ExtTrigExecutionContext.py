@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+ï»¿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # @file ExtTrigExecutionContext.py
@@ -26,11 +26,11 @@ import OpenRTM__POA, RTC
 ##
 # @if jp
 # @class ExtTrigExecutionContext
-# @brief ¥¹¥Æ¥Ã¥×¼Â¹Ô¤¬²ÄÇ½¤Ê ExecutionContext ¥¯¥é¥¹
+# @brief ã‚¹ãƒ†ãƒƒãƒ—å®Ÿè¡ŒãŒå¯èƒ½ãª ExecutionContext ã‚¯ãƒ©ã‚¹
 #
-# £±¼ş´üËè¤Î¼Â¹Ô¤¬²ÄÇ½¤ÊPeriodic Sampled Data Processing(¼ş´ü¼Â¹ÔÍÑ)
-# ExecutionContext¥¯¥é¥¹¡£
-# ³°Éô¤«¤é¤Î¥á¥½¥Ã¥É¸Æ¤Ó¤À¤·¤Ë¤è¤Ã¤Æ»ş´Ö¤ò£±¼ş´ü¤Å¤Ä¿Ê¤á¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+# ï¼‘å‘¨æœŸæ¯ã®å®Ÿè¡ŒãŒå¯èƒ½ãªPeriodic Sampled Data Processing(å‘¨æœŸå®Ÿè¡Œç”¨)
+# ExecutionContextã‚¯ãƒ©ã‚¹ã€‚
+# å¤–éƒ¨ã‹ã‚‰ã®ãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³ã ã—ã«ã‚ˆã£ã¦æ™‚é–“ã‚’ï¼‘å‘¨æœŸã¥ã¤é€²ã‚ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
 #
 # @since 0.4.0
 #
@@ -45,9 +45,9 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
-  # ¥³¥ó¥¹¥È¥é¥¯¥¿
+  # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   #
   # @param self
   #
@@ -100,7 +100,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContextÍÑ¥¢¥¯¥Æ¥£¥Ó¥Æ¥£¥¹¥ì¥Ã¥É¤òÀ¸À®¤¹¤ë
+  # @brief ExecutionContextç”¨ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
   # @else
   # @brief Generate internal activity thread for ExecutionContext
   # @endif
@@ -113,7 +113,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ³Æ Component ¤Î½èÍı¤ò¸Æ¤Ó½Ğ¤¹¡£
+  # @brief å„ Component ã®å‡¦ç†ã‚’å‘¼ã³å‡ºã™ã€‚
   # @else
   # @brief Invoke each component's operation
   # @endif
@@ -167,7 +167,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext ÍÑ¤Î¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô
+  # @brief ExecutionContext ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œé–¢æ•°
   # @else
   # @brief Thread execution function for ExecutionContext
   # @endif
@@ -185,7 +185,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ½èÍı¤ò1¥¹¥Æ¥Ã¥×¿Ê¤á¤ë
+  # @brief å‡¦ç†ã‚’1ã‚¹ãƒ†ãƒƒãƒ—é€²ã‚ã‚‹
   # @else
   # @brief Move forward one step of ExecutionContext
   # @endif
@@ -213,7 +213,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext ¼Â¹Ô¾õÂÖ³ÎÇ§´Ø¿ô
+  # @brief ExecutionContext å®Ÿè¡ŒçŠ¶æ…‹ç¢ºèªé–¢æ•°
   # @else
   # @brief Check for ExecutionContext running state
   # @endif
@@ -225,7 +225,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext ¤Î¼Â¹Ô¤ò³«»Ï
+  # @brief ExecutionContext ã®å®Ÿè¡Œã‚’é–‹å§‹
   # @else
   # @brief Start the ExecutionContext
   # @endif
@@ -237,7 +237,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext ¤Î¼Â¹Ô¤òÄä»ß
+  # @brief ExecutionContext ã®å®Ÿè¡Œã‚’åœæ­¢
   # @else
   # @brief Stop the ExecutionContext
   # @endif
@@ -249,7 +249,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext ¤Î¼Â¹Ô¼ş´ü(Hz)¤ò¼èÆÀ¤¹¤ë
+  # @brief ExecutionContext ã®å®Ÿè¡Œå‘¨æœŸ(Hz)ã‚’å–å¾—ã™ã‚‹
   # @else
   # @brief Get execution rate(Hz) of ExecutionContext
   # @endif
@@ -261,7 +261,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext ¤Î¼Â¹Ô¼ş´ü(Hz)¤òÀßÄê¤¹¤ë
+  # @brief ExecutionContext ã®å®Ÿè¡Œå‘¨æœŸ(Hz)ã‚’è¨­å®šã™ã‚‹
   # @else
   # @brief Set execution rate(Hz) of ExecutionContext
   # @endif
@@ -273,7 +273,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÄÉ²Ã¤¹¤ë
+  # @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’è¿½åŠ ã™ã‚‹
   # @else
   # @brief Add an RT-Component
   # @endif
@@ -286,7 +286,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥³¥ó¥İ¡¼¥Í¥ó¥È¥ê¥¹¥È¤«¤éºï½ü¤¹¤ë
+  # @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã™ã‚‹
   # @else
   # @brief Remove the RT-Component from participant list
   # @endif
@@ -299,7 +299,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+  # @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
   # @else
   # @brief Activate an RT-Component
   # @endif
@@ -312,7 +312,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+  # @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
   # @else
   # @brief Deactivate an RT-Component
   # @endif
@@ -325,7 +325,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥ê¥»¥Ã¥È¤¹¤ë
+  # @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
   # @else
   # @brief Reset the RT-Component
   # @endif
@@ -338,7 +338,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¾õÂÖ¤ò¼èÆÀ¤¹¤ë
+  # @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®çŠ¶æ…‹ã‚’å–å¾—ã™ã‚‹
   # @else
   # @brief Get RT-Component's state
   # @endif
@@ -351,7 +351,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionKind ¤ò¼èÆÀ¤¹¤ë
+  # @brief ExecutionKind ã‚’å–å¾—ã™ã‚‹
   # @else
   # @brief Get the ExecutionKind
   # @endif
@@ -367,7 +367,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContextProfile ¤ò¼èÆÀ¤¹¤ë
+  # @brief ExecutionContextProfile ã‚’å–å¾—ã™ã‚‹
   # @else
   # @brief Get the ExecutionContextProfile
   # @endif
@@ -480,9 +480,9 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
   ##
   # @if jp
   # @class Worker
-  # @brief ExecutionContext ¶îÆ°¥¯¥é¥¹
+  # @brief ExecutionContext é§†å‹•ã‚¯ãƒ©ã‚¹
   #
-  # ¼Â¹Ô½èÍı¤Ë´Ø¤¹¤ëÇÓÂ¾À©¸æ¤Ê¤É¡¢¼Âºİ¤Î½èÍı¤ò´Æ»ë¡¦À©¸æ¤¹¤ë¤¿¤á¤Î¥¯¥é¥¹¡£
+  # å®Ÿè¡Œå‡¦ç†ã«é–¢ã™ã‚‹æ’ä»–åˆ¶å¾¡ãªã©ã€å®Ÿéš›ã®å‡¦ç†ã‚’ç›£è¦–ãƒ»åˆ¶å¾¡ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ã€‚
   #
   # @since 0.4.0
   #
@@ -495,9 +495,9 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     
     ##
     # @if jp
-    # @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
-    # ¥³¥ó¥¹¥È¥é¥¯¥¿
+    # ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     #
     # @param self
     #
@@ -513,10 +513,10 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
 ##
 # @if jp
-# @brief Åö³º ExecutionContext ÍÑFactory¥¯¥é¥¹¤ÎÅĞÏ¿¡£
+# @brief å½“è©² ExecutionContext ç”¨Factoryã‚¯ãƒ©ã‚¹ã®ç™»éŒ²ã€‚
 #
-# ¤³¤ÎExecutionContext¤òÀ¸À®¤¹¤ëFactory¥¯¥é¥¹¤ò
-# ExecutionContext´ÉÍıÍÑObjectManager¤ËÅĞÏ¿¤¹¤ë¡£
+# ã“ã®ExecutionContextã‚’ç”Ÿæˆã™ã‚‹Factoryã‚¯ãƒ©ã‚¹ã‚’
+# ExecutionContextç®¡ç†ç”¨ObjectManagerã«ç™»éŒ²ã™ã‚‹ã€‚
 #
 # @else
 #

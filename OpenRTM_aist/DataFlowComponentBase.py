@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ##
 # \file DataFlowComponentBase.py
@@ -22,11 +22,11 @@ import RTC
 ##
 # @if jp
 # @class DataFlowComponentBase
-# @brief DataFlowComponentBase ���饹
+# @brief DataFlowComponentBase クラス
 #
-# �ǡ����ե�����RTComponent�δ��쥯�饹��
-# �Ƽ�ǡ����ե�����RTComponent�����������ϡ��ܥ��饹��Ѿ�������Ǽ���
-# ���롣
+# データフロー型RTComponentの基底クラス。
+# 各種データフロー型RTComponentを実装する場合は、本クラスを継承する形で実装
+# する。
 #
 # @since 0.4.0
 #
@@ -41,12 +41,12 @@ class DataFlowComponentBase(OpenRTM_aist.RTObject_impl, OpenRTM__POA.DataFlowCom
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
+  # コンストラクタ
   #
   # @param self
-  # @param manager �ޥ͡����㥪�֥�������
+  # @param manager マネージャオブジェクト
   #
   # @else
   # @brief Constructor
@@ -58,10 +58,10 @@ class DataFlowComponentBase(OpenRTM_aist.RTObject_impl, OpenRTM__POA.DataFlowCom
 
   ##
   # @if jp
-  # @brief �����(���֥��饹������)
+  # @brief 初期化(サブクラス実装用)
   #
-  # �ǡ����ե����� RTComponent �ν������¹Ԥ��롣
-  # �ºݤν���������ϡ��ƶ�ݥ��饹��˵��Ҥ��롣
+  # データフロー型 RTComponent の初期化を実行する。
+  # 実際の初期化処理は、各具象クラス内に記述する。
   #
   # @param self
   #
@@ -75,23 +75,23 @@ class DataFlowComponentBase(OpenRTM_aist.RTObject_impl, OpenRTM__POA.DataFlowCom
   ##
   # @if jp
   #
-  # @brief [DataFlowComponentAction CORBA interface] RTC ��������(������)
+  # @brief [DataFlowComponentAction CORBA interface] RTC の定常処理(第一周期)
   #
-  # �ʲ��ξ��֤��ݻ�����Ƥ�����ˡ����ꤵ�줿���������Ū�˸ƤӽФ���롣
-  # - RTC �� Alive ���֤Ǥ��롣
-  # - ���ꤵ�줿 ExecutionContext �� Running ���֤Ǥ��롣
-  # �ܥ��ڥ졼�����ϡ�Two-Pass Execution ���������Ǽ¹Ԥ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onExecute() ������Хå��ؿ����Ƥ�
-  # �Ф���롣
+  # 以下の状態が保持されている場合に、設定された周期で定期的に呼び出される。
+  # - RTC は Alive 状態である。
+  # - 指定された ExecutionContext が Running 状態である。
+  # 本オペレーションは、Two-Pass Execution の第一周期で実行される。
+  # このオペレーション呼び出しの結果として onExecute() コールバック関数が呼び
+  # 出される。
   #
-  # ����
-  # - ���ꤵ�줿 ExecutionContext �� ExecutionKind �ϡ� PERIODIC �Ǥʤ���Ф�
-  #   ��ʤ�
+  # 制約
+  # - 指定された ExecutionContext の ExecutionKind は、 PERIODIC でなければな
+  #   らない
   #
   # @param self
-  # @param ec_id �������о� ExecutionContext �� ID
+  # @param ec_id 定常処理対象 ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -135,23 +135,23 @@ class DataFlowComponentBase(OpenRTM_aist.RTObject_impl, OpenRTM__POA.DataFlowCom
   ##
   # @if jp
   #
-  # @brief [DataFlowComponentAction CORBA interface] RTC ��������(�������)
+  # @brief [DataFlowComponentAction CORBA interface] RTC の定常処理(第二周期)
   #
-  # �ʲ��ξ��֤��ݻ�����Ƥ�����ˡ����ꤵ�줿���������Ū�˸ƤӽФ���롣
-  # - RTC �� Alive ���֤Ǥ��롣
-  # - ���ꤵ�줿 ExecutionContext �� Running ���֤Ǥ��롣
-  # �ܥ��ڥ졼�����ϡ�Two-Pass Execution ����������Ǽ¹Ԥ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onStateUpdate() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # 以下の状態が保持されている場合に、設定された周期で定期的に呼び出される。
+  # - RTC は Alive 状態である。
+  # - 指定された ExecutionContext が Running 状態である。
+  # 本オペレーションは、Two-Pass Execution の第二周期で実行される。
+  # このオペレーション呼び出しの結果として onStateUpdate() コールバック関数が
+  # 呼び出される。
   #
-  # ����
-  # - ���ꤵ�줿 ExecutionContext �� ExecutionKind �ϡ� PERIODIC �Ǥʤ���Ф�
-  #   ��ʤ�
+  # 制約
+  # - 指定された ExecutionContext の ExecutionKind は、 PERIODIC でなければな
+  #   らない
   #
   # @param self
-  # @param ec_id �������о� ExecutionContext �� ID
+  # @param ec_id 定常処理対象 ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -191,21 +191,21 @@ class DataFlowComponentBase(OpenRTM_aist.RTObject_impl, OpenRTM__POA.DataFlowCom
   ##
   # @if jp
   #
-  # @brief [DataFlowComponentAction CORBA interface] �¹Լ����ѹ�����
+  # @brief [DataFlowComponentAction CORBA interface] 実行周期変更通知
   #
-  # �ܥ��ڥ졼�����ϡ�ExecutionContext �μ¹Լ������ѹ����줿���Ȥ����Τ���
-  # �ݤ˸ƤӽФ���롣
-  # ���Υ��ڥ졼�����ƤӽФ��η�̤Ȥ��� onRateChanged() ������Хå��ؿ���
-  # �ƤӽФ���롣
+  # 本オペレーションは、ExecutionContext の実行周期が変更されたことを通知する
+  # 際に呼び出される。
+  # このオペレーション呼び出しの結果として onRateChanged() コールバック関数が
+  # 呼び出される。
   #
-  # ����
-  # - ���ꤵ�줿 ExecutionContext �� ExecutionKind �ϡ� PERIODIC �Ǥʤ���Ф�
-  #   ��ʤ�
+  # 制約
+  # - 指定された ExecutionContext の ExecutionKind は、 PERIODIC でなければな
+  #   らない
   #
   # @param self
-  # @param ec_id �������о� ExecutionContext �� ID
+  # @param ec_id 定常処理対象 ExecutionContext の ID
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
