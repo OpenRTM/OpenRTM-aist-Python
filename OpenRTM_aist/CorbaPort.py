@@ -1229,7 +1229,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
       self._rtcout.RTC_WARN("Cannot extract Provider IOR string")
       return False, ior_
 
-    self._rtcout.RTC_ERROR("interface matched with new descriptor: %s", newdesc)
+    self._rtcout.RTC_TRACE("interface matched with new descriptor: %s", newdesc)
 
     return True, ior_
 
@@ -1285,7 +1285,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
       self._rtcout.RTC_WARN("Cannot extract Provider IOR string")
       return False, ior_
 
-    self._rtcout.RTC_ERROR("interface matched with old descriptor: %s", olddesc)
+    self._rtcout.RTC_TRACE("interface matched with old descriptor: %s", olddesc)
 
     return True, ior_
 
