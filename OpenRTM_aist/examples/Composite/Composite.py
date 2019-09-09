@@ -21,15 +21,16 @@ import sys
 
 import OpenRTM_aist
 
+
 def main():
-  manager = OpenRTM_aist.Manager.init(sys.argv)
+    manager = OpenRTM_aist.Manager.init(sys.argv)
 
-  manager.activateManager()
-  
-  manager.runManager()
+    manager.activateManager()
 
-  return 0
+    manager.runManager()
+
+    return 0
 
 
 if __name__ == "__main__":
-  main()
+    main()

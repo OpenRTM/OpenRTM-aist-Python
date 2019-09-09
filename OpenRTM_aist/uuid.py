@@ -3,7 +3,7 @@
 
 ##
 # @file uuid.py
-# @brief 
+# @brief
 # @date $Date: 2006/06/12 $
 # @author Ka-Ping Yee <ping@zesty.ca>
 #
@@ -25,14 +25,11 @@ if sys.version_info[0] == 3:
     long = int
 
 
-
-
-
 ##
 # @if jp
 # @class UUID
 # @brief UUID保持クラス
-# 
+#
 # 生成した UUID の情報を保持するためのクラス。
 #
 # @since 0.4.0
@@ -43,7 +40,7 @@ if sys.version_info[0] == 3:
 class UUID(object):
 
     def __init__(self, hex=None, bytes=None, fields=None, int_value=None,
-                       version=None):
+                 version=None):
         r"""Create a UUID from either a string of 32 hexadecimal digits,
         a string of 16 bytes as the 'bytes' argument, a tuple of six
         integers (32-bit time_low, 16-bit time_mid, 16-bit time_hi_version,
@@ -66,7 +63,6 @@ class UUID(object):
         overriding bits in the given 'hex', 'bytes', 'fields', or 'int'.
         """
 
-            
         if [hex, bytes, fields, int_value].count(None) != 3:
             raise TypeError('need just one of hex, bytes, fields, or int')
         if hex:
@@ -78,34 +74,35 @@ class UUID(object):
         if bytes:
             if len(bytes) != 16:
                 raise ValueError('bytes is not a 16-char string')
+
             def ord_func(v):
                 if sys.version_info[0] == 3:
                     return ord(chr(v))
                 else:
                     return ord(v)
-            int_value = long(('%02x'*16) % tuple(map(ord_func, bytes)), 16)
+            int_value = long(('%02x' * 16) % tuple(map(ord_func, bytes)), 16)
         if fields:
             if len(fields) != 6:
                 raise ValueError('fields is not a 6-tuple')
             (time_low, time_mid, time_hi_version,
              clock_seq_hi_variant, clock_seq_low, node) = fields
-            if not 0 <= time_low < 1<<32:
+            if not 0 <= time_low < 1 << 32:
                 raise ValueError('field 1 out of range (need a 32-bit value)')
-            if not 0 <= time_mid < 1<<16:
+            if not 0 <= time_mid < 1 << 16:
                 raise ValueError('field 2 out of range (need a 16-bit value)')
-            if not 0 <= time_hi_version < 1<<16:
+            if not 0 <= time_hi_version < 1 << 16:
                 raise ValueError('field 3 out of range (need a 16-bit value)')
-            if not 0 <= clock_seq_hi_variant < 1<<8:
+            if not 0 <= clock_seq_hi_variant < 1 << 8:
                 raise ValueError('field 4 out of range (need an 8-bit value)')
-            if not 0 <= clock_seq_low < 1<<8:
+            if not 0 <= clock_seq_low < 1 << 8:
                 raise ValueError('field 5 out of range (need an 8-bit value)')
-            if not 0 <= node < 1<<48:
+            if not 0 <= node < 1 << 48:
                 raise ValueError('field 6 out of range (need a 48-bit value)')
             clock_seq = (clock_seq_hi_variant << 8) | clock_seq_low
             int_value = ((time_low << 96) | (time_mid << 80) |
-                   (time_hi_version << 64) | (clock_seq << 48) | node)
+                         (time_hi_version << 64) | (clock_seq << 48) | node)
         if int_value:
-            if not 0 <= int_value < 1<<128:
+            if not 0 <= int_value < 1 << 128:
                 raise ValueError('int is out of range (need a 128-bit value)')
         if version:
             if not 1 <= version <= 5:
@@ -156,7 +153,7 @@ class UUID(object):
 
     def get_time_low(self):
         return self.int_value >> 96
-   
+
     time_low = property(get_time_low)
 
     def get_time_mid(self):
@@ -166,14 +163,14 @@ class UUID(object):
 
     def get_time_hi_version(self):
         return (self.int_value >> 64) & 0xffff
-    
+
     time_hi_version = property(get_time_hi_version)
 
     def get_clock_seq_hi_variant(self):
         return (self.int_value >> 56) & 0xff
 
     clock_seq_hi_variant = property(get_clock_seq_hi_variant)
-    
+
     def get_clock_seq_low(self):
         return (self.int_value >> 48) & 0xff
 
@@ -190,7 +187,7 @@ class UUID(object):
                 self.clock_seq_low)
 
     clock_seq = property(get_clock_seq)
-    
+
     def get_node(self):
         return self.int_value & 0xffffffffffff
 
@@ -225,6 +222,7 @@ class UUID(object):
 
     version = property(get_version)
 
+
 def _ifconfig_getnode():
     """Get the hardware address on Unix by running ifconfig."""
     import os
@@ -232,21 +230,23 @@ def _ifconfig_getnode():
     pipe = os.popen(os.path.join(dir, 'ifconfig'))
 
     for line in pipe:
-      words = line.lower().split()
-      for i in range(len(words)):
-        if words[i] in ['hwaddr', 'ether']:
-          return int(words[i + 1].replace(':', ''), 16)
+        words = line.lower().split()
+        for i in range(len(words)):
+            if words[i] in ['hwaddr', 'ether']:
+                return int(words[i + 1].replace(':', ''), 16)
+
 
 def _ipconfig_getnode():
     """Get the hardware address on Windows by running ipconfig.exe."""
-    import os, re
+    import os
+    import re
     dirs = ['', r'c:\windows\system32', r'c:\winnt\system32']
     try:
         import ctypes
         buffer = ctypes.create_string_buffer(300)
         ctypes.windll.kernel32.GetSystemDirectoryA(buffer, 300)
         dirs.insert(0, buffer.value.decode('mbcs'))
-    except:
+    except BaseException:
         pass
     for dir in dirs:
         try:
@@ -258,10 +258,12 @@ def _ipconfig_getnode():
             if re.match('([0-9a-f][0-9a-f]-){5}[0-9a-f][0-9a-f]', value):
                 return int(value.replace('-', ''), 16)
 
+
 def _netbios_getnode():
     """Get the hardware address on Windows using NetBIOS calls.
     See http://support.microsoft.com/kb/118623 for details."""
-    import win32wnet, netbios
+    import win32wnet
+    import netbios
     ncb = netbios.NCB()
     ncb.Command = netbios.NCBENUM
     ncb.Buffer = adapters = netbios.LANA_ENUM()
@@ -284,15 +286,17 @@ def _netbios_getnode():
             continue
         status._unpack()
         bytes = map(ord, status.adapter_address)
-        return ((bytes[0]<<40) + (bytes[1]<<32) + (bytes[2]<<24) +
-                (bytes[3]<<16) + (bytes[4]<<8) + bytes[5])
+        return ((bytes[0] << 40) + (bytes[1] << 32) + (bytes[2] << 24) +
+                (bytes[3] << 16) + (bytes[4] << 8) + bytes[5])
 
 # Thanks to Thomas Heller for ctypes and for his help with its use here.
+
 
 # If ctypes is available, use it to find system routines for UUID generation.
 _uuid_generate_random = _uuid_generate_time = _UuidCreate = None
 try:
-    import ctypes, ctypes.util
+    import ctypes
+    import ctypes.util
     _buffer = ctypes.create_string_buffer(16)
 
     # The uuid_generate_* routines are provided by libuuid on at least
@@ -300,7 +304,7 @@ try:
     for libname in ['uuid', 'c']:
         try:
             lib = ctypes.CDLL(ctypes.util.find_library(libname))
-        except:
+        except BaseException:
             continue
         if hasattr(lib, 'uuid_generate_random'):
             _uuid_generate_random = lib.uuid_generate_random
@@ -313,29 +317,34 @@ try:
     # hardware address.  These routines are provided by the RPC runtime.
     try:
         lib = ctypes.windll.rpcrt4
-    except:
+    except BaseException:
         lib = None
     _UuidCreate = getattr(lib, 'UuidCreateSequential',
                           getattr(lib, 'UuidCreate', None))
-except:
+except BaseException:
     pass
+
 
 def _unixdll_getnode():
     """Get the hardware address on Unix using ctypes."""
     _uuid_generate_time(_buffer)
     return UUID(bytes=_buffer.raw).node
 
+
 def _windll_getnode():
     """Get the hardware address on Windows using ctypes."""
     if _UuidCreate(_buffer) == 0:
         return UUID(bytes=_buffer.raw).node
 
+
 def _random_getnode():
     """Get a random node ID, with eighth bit set as suggested by RFC 4122."""
     import random
-    return random.randrange(0, 1<<48) | 0x010000000000
+    return random.randrange(0, 1 << 48) | 0x010000000000
+
 
 _node = None
+
 
 def getnode():
     """Get the hardware address as a 48-bit integer.  The first time this
@@ -356,10 +365,11 @@ def getnode():
     for getter in getters + [_random_getnode]:
         try:
             _node = getter()
-        except:
+        except BaseException:
             continue
         if _node:
             return _node
+
 
 def uuid1(node=None, clock_seq=None):
     """Generate a UUID from a host ID, sequence number, and the current time.
@@ -377,10 +387,10 @@ def uuid1(node=None, clock_seq=None):
     nanoseconds = int(time.time() * 1e9)
     # 0x01b21dd213814000 is the number of 100-ns intervals between the
     # UUID epoch 1582-10-15 00:00:00 and the Unix epoch 1970-01-01 00:00:00.
-    timestamp = int(nanoseconds/100) + 0x01b21dd213814000
+    timestamp = int(nanoseconds / 100) + 0x01b21dd213814000
     if clock_seq is None:
         import random
-        clock_seq = random.randrange(1<<14) # instead of stable storage
+        clock_seq = random.randrange(1 << 14)  # instead of stable storage
     time_low = timestamp & 0xffffffff
     time_mid = (timestamp >> 32) & 0xffff
     time_hi_version = (timestamp >> 48) & 0x0fff
@@ -391,11 +401,13 @@ def uuid1(node=None, clock_seq=None):
     return UUID(fields=(time_low, time_mid, time_hi_version,
                         clock_seq_hi_variant, clock_seq_low, node), version=1)
 
+
 def uuid3(namespace, name):
     """Generate a UUID from the MD5 hash of a namespace UUID and a name."""
     import md5
     hash = md5.md5(namespace.bytes + name).digest()
     return UUID(bytes=hash[:16], version=3)
+
 
 def uuid4():
     """Generate a random UUID."""
@@ -409,10 +421,11 @@ def uuid4():
     try:
         import os
         return UUID(bytes=os.urandom(16), version=4)
-    except:
+    except BaseException:
         import random
         bytes = [chr(random.randrange(256)) for i in range(16)]
         return UUID(bytes=bytes, version=4)
+
 
 def uuid5(namespace, name):
     """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
@@ -421,6 +434,7 @@ def uuid5(namespace, name):
     return UUID(bytes=hash[:16], version=5)
 
 # The following standard UUIDs are for use with uuid3() or uuid5().
+
 
 NAMESPACE_DNS = UUID('6ba7b810-9dad-11d1-80b4-00c04fd430c8')
 NAMESPACE_URL = UUID('6ba7b811-9dad-11d1-80b4-00c04fd430c8')

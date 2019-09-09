@@ -39,67 +39,67 @@ import OpenRTM_aist
 # @class InPortConsumer
 # @brief InPortConsumer class
 # @endif
+
+
 class InPortConsumer(OpenRTM_aist.DataPortStatus):
-  """
-  """
+    """
+    """
 
-  def put(self, data):
-    return self.CONNECTION_LOST
-    
-  def isWritable(self):
-    return True
+    def put(self, data):
+        return self.CONNECTION_LOST
 
+    def isWritable(self):
+        return True
 
-  ##
-  # @if jp
-  # @brief インターフェースプロファイルを公開するたのファンクタ
-  # @else
-  # @brief Functor to publish interface profile
-  # @endif
-  #
-  class publishInterfaceProfileFunc:
-    def __init__(self, prop):
-      self._prop = prop
+    ##
+    # @if jp
+    # @brief インターフェースプロファイルを公開するたのファンクタ
+    # @else
+    # @brief Functor to publish interface profile
+    # @endif
+    #
 
-    def __call__(self, consumer):
-      consumer.publishInterfaceProfile(self._prop)
+    class publishInterfaceProfileFunc:
+        def __init__(self, prop):
+            self._prop = prop
 
+        def __call__(self, consumer):
+            consumer.publishInterfaceProfile(self._prop)
 
-  ##
-  # @if jp
-  # @brief インターフェースプロファイルを公開するたのファンクタ
-  # @else
-  # @brief Functor to publish interface profile
-  # @endif
-  #
-  class subscribeInterfaceFunc:
-    def __init__(self, prop):
-      self._prop = prop
+    ##
+    # @if jp
+    # @brief インターフェースプロファイルを公開するたのファンクタ
+    # @else
+    # @brief Functor to publish interface profile
+    # @endif
+    #
 
-    def __call__(self, consumer):
-      return consumer.subscribeInterface(self._prop)
+    class subscribeInterfaceFunc:
+        def __init__(self, prop):
+            self._prop = prop
+
+        def __call__(self, consumer):
+            return consumer.subscribeInterface(self._prop)
 
 
 inportconsumerfactory = None
 
-class InPortConsumerFactory(OpenRTM_aist.Factory,InPortConsumer):
 
-  def __init__(self):
-    OpenRTM_aist.Factory.__init__(self)
-    pass
+class InPortConsumerFactory(OpenRTM_aist.Factory, InPortConsumer):
 
+    def __init__(self):
+        OpenRTM_aist.Factory.__init__(self)
+        pass
 
-  def __del__(self):
-    pass
+    def __del__(self):
+        pass
 
+    def instance():
+        global inportconsumerfactory
 
-  def instance():
-    global inportconsumerfactory
+        if inportconsumerfactory is None:
+            inportconsumerfactory = InPortConsumerFactory()
 
-    if inportconsumerfactory is None:
-      inportconsumerfactory = InPortConsumerFactory()
+        return inportconsumerfactory
 
-    return inportconsumerfactory
-
-  instance = staticmethod(instance)
-
+    instance = staticmethod(instance)

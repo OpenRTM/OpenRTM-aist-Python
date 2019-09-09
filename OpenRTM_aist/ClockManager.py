@@ -43,33 +43,33 @@ import OpenRTM_aist
 #
 # @endif
 class IClock:
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief 時刻を取得する
-  # @return 現在の時刻
-  # @else
-  # @brief Getting time
-  # @return Current time
-  # @endif
-  # virtual coil::TimeValue gettime() const = 0;
-  def gettime(self):
-    pass
+    ##
+    # @if jp
+    # @brief 時刻を取得する
+    # @return 現在の時刻
+    # @else
+    # @brief Getting time
+    # @return Current time
+    # @endif
+    # virtual coil::TimeValue gettime() const = 0;
+    def gettime(self):
+        pass
 
+    ##
+    # @if jp
+    # @brief 時刻を設定する
+    # @param clocktime 現在の時刻
+    # @else
+    # @brief Setting time
+    # @param clocktime Current time
+    # @endif
+    # virtual bool settime(coil::TimeValue clocktime) = 0;
 
-  ##
-  # @if jp
-  # @brief 時刻を設定する
-  # @param clocktime 現在の時刻
-  # @else
-  # @brief Setting time
-  # @param clocktime Current time
-  # @endif
-  # virtual bool settime(coil::TimeValue clocktime) = 0;
-  def settime(self, clocktime):
-    pass
+    def settime(self, clocktime):
+        pass
 
 
 ##
@@ -85,16 +85,16 @@ class IClock:
 #
 # @endif
 class SystemClock(IClock):
-  """
-  """
+    """
+    """
 
-  # virtual coil::TimeValue gettime() const;
-  def gettime(self):
-    return OpenRTM_aist.Time().getTime()
+    # virtual coil::TimeValue gettime() const;
+    def gettime(self):
+        return OpenRTM_aist.Time().getTime()
 
-  # virtual bool settime(coil::TimeValue clocktime);
-  def settime(self, clocktime):
-    return OpenRTM_aist.Time().settimeofday(clocktime, 0)
+    # virtual bool settime(coil::TimeValue clocktime);
+    def settime(self, clocktime):
+        return OpenRTM_aist.Time().settimeofday(clocktime, 0)
 
 
 ##
@@ -112,25 +112,25 @@ class SystemClock(IClock):
 #
 # @endif
 class LogicalClock(IClock):
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    self._currentTime = OpenRTM_aist.TimeValue(0.0)
-    self._currentTimeMutex = threading.RLock()
-    return
+    def __init__(self):
+        self._currentTime = OpenRTM_aist.TimeValue(0.0)
+        self._currentTimeMutex = threading.RLock()
+        return
 
-  # virtual coil::TimeValue gettime() const;
-  def gettime(self):
-    guard = OpenRTM_aist.ScopedLock(self._currentTimeMutex)
-    return self._currentTime
+    # virtual coil::TimeValue gettime() const;
+    def gettime(self):
+        guard = OpenRTM_aist.ScopedLock(self._currentTimeMutex)
+        return self._currentTime
 
-  # virtual bool settime(coil::TimeValue clocktime);
-  def settime(self, clocktime):
-    guard = OpenRTM_aist.ScopedLock(self._currentTimeMutex)
-    self._currentTime = clocktime
-    return True
-    
+    # virtual bool settime(coil::TimeValue clocktime);
+    def settime(self, clocktime):
+        guard = OpenRTM_aist.ScopedLock(self._currentTimeMutex)
+        self._currentTime = clocktime
+        return True
+
 
 ##
 # @if jp
@@ -147,25 +147,26 @@ class LogicalClock(IClock):
 #
 # @endif
 class AdjustedClock(IClock):
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    self._offset = OpenRTM_aist.TimeValue(0.0)
-    self._offsetMutex = threading.RLock()
-    return
+    def __init__(self):
+        self._offset = OpenRTM_aist.TimeValue(0.0)
+        self._offsetMutex = threading.RLock()
+        return
 
+    # virtual coil::TimeValue gettime() const;
 
-  # virtual coil::TimeValue gettime() const;
-  def gettime(self):
-    guard = OpenRTM_aist.ScopedLock(self._offsetMutex)
-    return OpenRTM_aist.Time().getTime() - self._offset
-    
-  # virtual bool settime(coil::TimeValue clocktime);
-  def settime(self, clocktime):
-    guard = OpenRTM_aist.ScopedLock(self._offsetMutex)
-    self._offset = OpenRTM_aist.Time().getTime() - clocktime
-    return True
+    def gettime(self):
+        guard = OpenRTM_aist.ScopedLock(self._offsetMutex)
+        return OpenRTM_aist.Time().getTime() - self._offset
+
+    # virtual bool settime(coil::TimeValue clocktime);
+    def settime(self, clocktime):
+        guard = OpenRTM_aist.ScopedLock(self._offsetMutex)
+        self._offset = OpenRTM_aist.Time().getTime() - clocktime
+        return True
+
 
 clockmgr = None
 clockmgr_mutex = threading.RLock()
@@ -188,34 +189,35 @@ clockmgr_mutex = threading.RLock()
 # available.
 #
 # @endif
+
+
 class ClockManager:
-  """
-  """
-  
-  def __init__(self):
-    self._systemClock   = SystemClock()
-    self._logicalClock  = LogicalClock()
-    self._adjustedClock = AdjustedClock()
-    return
+    """
+    """
 
-  def getClock(self, clocktype):
-    if clocktype == "logical":
-      return self._logicalClock
-    elif clocktype == "adjusted":
-      return self._adjustedClock
-    elif clocktype == "system":
-      return self._systemClock
+    def __init__(self):
+        self._systemClock = SystemClock()
+        self._logicalClock = LogicalClock()
+        self._adjustedClock = AdjustedClock()
+        return
 
-    return self._systemClock
+    def getClock(self, clocktype):
+        if clocktype == "logical":
+            return self._logicalClock
+        elif clocktype == "adjusted":
+            return self._adjustedClock
+        elif clocktype == "system":
+            return self._systemClock
 
-  def instance():
-    global clockmgr
-    global clockmgr_mutex
+        return self._systemClock
 
-    if not clockmgr:
-      guard = OpenRTM_aist.ScopedLock(clockmgr_mutex)
-      clockmgr = ClockManager()
+    def instance():
+        global clockmgr
+        global clockmgr_mutex
 
-    return clockmgr
-  instance = staticmethod(instance)
+        if not clockmgr:
+            guard = OpenRTM_aist.ScopedLock(clockmgr_mutex)
+            clockmgr = ClockManager()
 
+        return clockmgr
+    instance = staticmethod(instance)

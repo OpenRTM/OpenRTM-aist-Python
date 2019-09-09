@@ -1,12 +1,12 @@
 ﻿#!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 ##
 # @file NVUtil.py
 # @brief NameValue and NVList utility functions
 # @date $Date: 2007/09/11$
 # @author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
-# 
+#
 # Copyright (C) 2006-2008
 #     Noriaki Ando
 #     Task-intelligence Research Group,
@@ -47,15 +47,14 @@ import SDOPackage
 #
 # @endif
 def newNV(name, value):
-  try:
-    any_val = any.to_any(value)
-  except:
-    print("ERROR  NVUtil.newNV : Can't convert to any. ", type(value))
-    raise
+    try:
+        any_val = any.to_any(value)
+    except BaseException:
+        print("ERROR  NVUtil.newNV : Can't convert to any. ", type(value))
+        raise
 
-    
-  nv = SDOPackage.NameValue(name, any_val)
-  return nv
+    nv = SDOPackage.NameValue(name, any_val)
+    return nv
 
 
 ##
@@ -80,17 +79,18 @@ def newNV(name, value):
 # @param prop Properties that is copies from
 #
 # @endif
-# void copyFromProperties(SDOPackage::NVList& nv, const coil::Properties& prop);
+# void copyFromProperties(SDOPackage::NVList& nv, const coil::Properties&
+# prop);
 def copyFromProperties(nv, prop):
-  keys = prop.propertyNames()
-  keys_len = len(keys)
-  nv_len = len(nv)
-  if nv_len > 0:
-    for i in range(nv_len):
-      del nv[-1]
+    keys = prop.propertyNames()
+    keys_len = len(keys)
+    nv_len = len(nv)
+    if nv_len > 0:
+        for i in range(nv_len):
+            del nv[-1]
 
-  for i in range(keys_len):
-    nv.append(newNV(keys[i], prop.getProperty(keys[i])))
+    for i in range(keys_len):
+        nv.append(newNV(keys[i], prop.getProperty(keys[i])))
 
 
 ##
@@ -115,14 +115,13 @@ def copyFromProperties(nv, prop):
 # @endif
 # void copyToProperties(coil::Properties& prop, const SDOPackage::NVList& nv);
 def copyToProperties(prop, nvlist):
-  for nv in nvlist:
-    try:
-      val = str(any.from_any(nv.value, keep_structs=True))
-      prop.setProperty(str(nv.name),val)
-    except:
-      print(OpenRTM_aist.Logger.print_exception())
-      pass
-
+    for nv in nvlist:
+        try:
+            val = str(any.from_any(nv.value, keep_structs=True))
+            prop.setProperty(str(nv.name), val)
+        except BaseException:
+            print(OpenRTM_aist.Logger.print_exception())
+            pass
 
 
 ##
@@ -131,12 +130,11 @@ def copyToProperties(prop, nvlist):
 # @brief NVList → Properties 変換用ファンクタ
 # @endif
 class to_prop:
-  def __init__(self):
-    self._prop = OpenRTM_aist.Properties()
-    
-  def __call__(self, nv):
-    self._prop.setProperty(nv.name, nv.value)
+    def __init__(self):
+        self._prop = OpenRTM_aist.Properties()
 
+    def __call__(self, nv):
+        self._prop.setProperty(nv.name, nv.value)
 
 
 ##
@@ -155,9 +153,8 @@ class to_prop:
 # @endif
 # coil::Properties toProperties(const SDOPackage::NVList& nv);
 def toProperties(nv):
-  p = OpenRTM_aist.CORBA_SeqUtil.for_each(nv, to_prop())
-  return p._prop
-
+    p = OpenRTM_aist.CORBA_SeqUtil.for_each(nv, to_prop())
+    return p._prop
 
 
 ##
@@ -166,14 +163,14 @@ def toProperties(nv):
 # @brief NVList 検索用ファンクタ
 # @endif
 class nv_find:
-  """
-  """
+    """
+    """
 
-  def __init__(self, name):
-    self._name = name
+    def __init__(self, name):
+        self._name = name
 
-  def __call__(self, nv):
-    return str(self._name) == str(nv.name)
+    def __call__(self, nv):
+        return str(self._name) == str(nv.name)
 
 
 ##
@@ -201,12 +198,12 @@ class nv_find:
 #
 # @endif
 def find(nv, name):
-  index = OpenRTM_aist.CORBA_SeqUtil.find(nv, nv_find(name))
+    index = OpenRTM_aist.CORBA_SeqUtil.find(nv, nv_find(name))
 
-  if index < 0:
-    raise "Not found."
+    if index < 0:
+        raise "Not found."
 
-  return nv[index].value
+    return nv[index].value
 
 
 ##
@@ -226,7 +223,7 @@ def find(nv, name):
 #
 # @endif
 def find_index(nv, name):
-  return OpenRTM_aist.CORBA_SeqUtil.find(nv, nv_find(name))
+    return OpenRTM_aist.CORBA_SeqUtil.find(nv, nv_find(name))
 
 
 ##
@@ -246,12 +243,12 @@ def find_index(nv, name):
 #
 # @endif
 def isString(nv, name):
-  try:
-    value = find(nv, name)
-    val = any.from_any(value, keep_structs=True)
-    return type(val) == str
-  except:
-    return False
+    try:
+        value = find(nv, name)
+        val = any.from_any(value, keep_structs=True)
+        return isinstance(val, str)
+    except BaseException:
+        return False
 
 
 ##
@@ -273,10 +270,10 @@ def isString(nv, name):
 #
 # @endif
 def isStringValue(nv, name, value):
-  if isString(nv, name):
-    if toString(nv, name) == value:
-      return True
-  return False
+    if isString(nv, name):
+        if toString(nv, name) == value:
+            return True
+    return False
 
 
 ##
@@ -308,21 +305,21 @@ def isStringValue(nv, name, value):
 #
 # @endif
 def toString(nv, name=None):
-  if not name:
-    str_ = [""]
-    return dump_to_stream(str_, nv)
+    if not name:
+        str_ = [""]
+        return dump_to_stream(str_, nv)
 
-  str_value = ""
-  try:
-    ret_value = find(nv, name)
-    val = any.from_any(ret_value, keep_structs=True)
-    if type(val) == str:
-      str_value = val
-  except:
-    print(OpenRTM_aist.Logger.print_exception())
-    pass
-  
-  return str_value
+    str_value = ""
+    try:
+        ret_value = find(nv, name)
+        val = any.from_any(ret_value, keep_structs=True)
+        if isinstance(val, str):
+            str_value = val
+    except BaseException:
+        print(OpenRTM_aist.Logger.print_exception())
+        pass
+
+    return str_value
 
 
 ##
@@ -349,23 +346,23 @@ def toString(nv, name=None):
 #
 # @endif
 def appendStringValue(nv, name, value):
-  index = find_index(nv, name)
-  if index >= 0:
-    tmp_str = nv[index].value.value()
-    values = OpenRTM_aist.split(tmp_str,",")
-    find_flag = False
-    for val in values:
-      if val == value:
-        find_flag = True
+    index = find_index(nv, name)
+    if index >= 0:
+        tmp_str = nv[index].value.value()
+        values = OpenRTM_aist.split(tmp_str, ",")
+        find_flag = False
+        for val in values:
+            if val == value:
+                find_flag = True
 
-    if not find_flag:
-      tmp_str += ", "
-      tmp_str += value
-      nv[index].value = any.to_any(tmp_str)
-  else:
-    OpenRTM_aist.CORBA_SeqUtil.push_back(nv, newNV(name, value))
+        if not find_flag:
+            tmp_str += ", "
+            tmp_str += value
+            nv[index].value = any.to_any(tmp_str)
+    else:
+        OpenRTM_aist.CORBA_SeqUtil.push_back(nv, newNV(name, value))
 
-  return True
+    return True
 
 
 ##
@@ -383,8 +380,8 @@ def appendStringValue(nv, name, value):
 #
 # @endif
 def append(dest, src):
-  for i in range(len(src)):
-    OpenRTM_aist.CORBA_SeqUtil.push_back(dest, src[i])
+    for i in range(len(src)):
+        OpenRTM_aist.CORBA_SeqUtil.push_back(dest, src[i])
 
 
 ##
@@ -395,14 +392,14 @@ def append(dest, src):
 # @endif
 # std::ostream& dump_to_stream(std::ostream& out, const SDOPackage::NVList& nv)
 def dump_to_stream(out, nv):
-  for i in range(len(nv)):
-    val = any.from_any(nv[i].value, keep_structs=True)
-    if type(val) == str:
-	    out[0] += (nv[i].name + ": " + str(nv[i].value) + "\n")
-    else:
-	    out[0] += (nv[i].name + ": not a string value \n")
+    for i in range(len(nv)):
+        val = any.from_any(nv[i].value, keep_structs=True)
+        if isinstance(val, str):
+            out[0] += (nv[i].name + ": " + str(nv[i].value) + "\n")
+        else:
+            out[0] += (nv[i].name + ": not a string value \n")
 
-  return out[0]
+    return out[0]
 
 
 ##
@@ -420,5 +417,5 @@ def dump_to_stream(out, nv):
 #
 # @endif
 def dump(nv):
-  out = [""]
-  print(dump_to_stream(out, nv))
+    out = [""]
+    print(dump_to_stream(out, nv))

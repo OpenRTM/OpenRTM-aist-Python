@@ -5,25 +5,25 @@
 #  @brief OpenRTM-aist name server launcher
 #  @date $Date: 2007/10/25 $
 #  @author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
-# 
+#
 #  Copyright (C) 2003-2009
 #      Task-intelligence Research Group,
 #      Intelligent Systems Research Institute,
 #      National Institute of
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
-# 
+#
 
-default_orb="omniORB"
-orb=default_orb
-default_port="2809"
-
-
-import sys,os,platform
+import platform
+import os
+import sys
+default_orb = "omniORB"
+orb = default_orb
+default_port = "2809"
 
 
 def get_hostname():
-    sysinfo  = platform.uname()
+    sysinfo = platform.uname()
     hostname = sysinfo[1]
     return str(hostname)
 
@@ -40,11 +40,11 @@ def get_tempdir():
     return os.getcwd()
 
 
-def find_nscmd(ns_cmd, ns_env = ""):
+def find_nscmd(ns_cmd, ns_env=""):
     if sys.platform == "win32":
-        ns_path = os.path.join(sys.exec_prefix,ns_cmd)
+        ns_path = os.path.join(sys.exec_prefix, ns_cmd)
     else:
-        ns_path = os.path.join(sys.exec_prefix,'bin',ns_cmd)
+        ns_path = os.path.join(sys.exec_prefix, 'bin', ns_cmd)
 
     if os.path.exists(ns_path):
         return ns_path
@@ -75,7 +75,7 @@ def usage():
     print("Usage: python rtm-naming.py port_number")
 
 
-def omninames(port = "", endpoint = ""):
+def omninames(port="", endpoint=""):
     hostname = get_hostname()
     log_path = get_tempdir()
 
@@ -111,7 +111,7 @@ def omninames(port = "", endpoint = ""):
         print("Not found omniNames.")
         sys.exit()
 
-    cmd  = omniNames 
+    cmd = omniNames
     cmd += " -start " + str(port)
     cmd += " -logdir \"" + str(log_path) + "\""
     print(cmd)
@@ -125,9 +125,9 @@ if __name__ == "__main__":
 
             if sys.argv[1] == "-u" or sys.argv[1] == "-h" or sys.argv[1] == "--help":
                 usage()
-    except:
+    except BaseException:
         usage()
         sys.exit(1)
-        
+
     if orb == "omniORB":
         omninames()

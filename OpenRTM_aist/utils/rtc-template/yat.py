@@ -11,14 +11,14 @@
 
 #
 # Usage:
-#------------------------------------------------------------
+# ------------------------------------------------------------
 # import yaml
 # import yat
 #
 # dict   = yaml.load(open(filename, "r").read())
 # t      = yat.Template(template, "\[", "\]")
 # result = t.generate(dict)
-#------------------------------------------------------------
+# ------------------------------------------------------------
 #
 # 1. Simple directive:
 #    [dictionary_key]
@@ -60,11 +60,11 @@
 #
 # template:
 # [for lst in list]
-# [lst],  
+# [lst],
 # [endfor]
 # [for lst in listed_dict]
 # [lst.name]: [lst.value]
-# 
+#
 # [endfor]
 #
 # result:
@@ -171,6 +171,7 @@ import re
 from types import StringType, IntType, FloatType, DictType, ListType, ClassType
 import sys
 
+
 class Template:
     """
     usage:
@@ -180,8 +181,8 @@ class Template:
       generated_text = t.generate(dictionary)
 
     """
-    
-    def __init__(self, template, begin_mark="\[", end_mark="\]"):
+
+    def __init__(self, template, begin_mark=r"\[", end_mark=r"\]"):
         self.__procs = [self.__proc_text,
                         self.__proc_cmd,
                         self.__proc_bracket]
@@ -203,37 +204,37 @@ class Template:
         #     NAME     : (alphanum | '_' | '-' | '.')+
         # (2) BEGIN_MARK_ESCAPE : '[[]'
         # (3) COMMENT  : '[#' not-rbracket
-        #        
+        #
         # re_item      = r'(?:"(?:[^\\"]|\\.)*"|[-\w.]+)'
         # re_command   = r'\[(%s(?: +%s)*)\]' % (re_item, re_item)
         # re_beginmark = r'\[\[\]'
         # re_comment   = r'\[#[^\]]*\]'
-        # re_parse     = re.compile(r'%s|(%s)|%s' 
+        # re_parse     = re.compile(r'%s|(%s)|%s'
         #                     % (re_command, re_beginmark, re_comment))
         # re_args      = re.compile(r'"(?:[^\\"]|\\.)*"|[-\w.]+')
         #
         #
-        re_item      = r'(?:"(?:[^\\"]|\\.)*"|[-\w.:]+)'
-        re_command   = r'%s(%s(?: +%s)*)%s' % \
+        re_item = r'(?:"(?:[^\\"]|\\.)*"|[-\w.:]+)'
+        re_command = r'%s(%s(?: +%s)*)%s' % \
             (begin_mark, re_item, re_item, end_mark)
-        re_bracket   = r'%s%s%s' % \
+        re_bracket = r'%s%s%s' % \
             (begin_mark, begin_mark, end_mark)
-        re_comment   = r'%s#[^%s]*%s' % \
+        re_comment = r'%s#[^%s]*%s' % \
             (begin_mark, end_mark, end_mark)
-        self.begin_mark = begin_mark.replace("\\","")
-        self.re_parse = re.compile(r'%s|(%s)|%s' % \
-                                       (re_command, re_bracket, re_comment))
-        self.re_args  = re.compile(r'"(?:[^\\"]|\\.)*"|[-\w.:]+')
+        self.begin_mark = begin_mark.replace("\\", "")
+        self.re_parse = re.compile(r'%s|(%s)|%s' %
+                                   (re_command, re_bracket, re_comment))
+        self.re_args = re.compile(r'"(?:[^\\"]|\\.)*"|[-\w.:]+')
         self.re_number = re.compile(r'[0-9]+')
 
         # tokenize input text
         self.token = self.re_parse.split(self.template)
-        self.token_len  = len(self.token)
-        
+        self.token_len = len(self.token)
+
         # initialize variables
         self.script = program
         self.indent = 4
-        self.script_level  = 2
+        self.script_level = 2
         self.level = 0
         self.index = 0
         self.cmd_cxt = []
@@ -261,13 +262,13 @@ class Template:
         self.level -= 1
 
     def __write_cmd(self, cmd):
-        tmp_cmd  = self.__indent()
+        tmp_cmd = self.__indent()
         tmp_cmd += "self.set_index(%s)\n" % (self.index)
         self.script += tmp_cmd
         self.__write_cmd_noindex(cmd)
 
     def __write_cmd_noindex(self, cmd):
-        tmp_cmd  = self.__indent()
+        tmp_cmd = self.__indent()
         tmp_cmd += cmd + "\n"
         self.script += tmp_cmd
 
@@ -289,24 +290,24 @@ class Template:
             self.index += 1
 
     def __proc_text(self):
-        if self.token[self.index] == None:
+        if self.token[self.index] is None:
             return
         cmd_text = "self.write_token(%s)" % (self.index)
         self.__write_cmd(cmd_text)
         return True
- 
+
     def __proc_bracket(self):
-        if self.token[self.index] == None:
+        if self.token[self.index] is None:
             return
         cmd_text = "self.write(\"" + self.begin_mark + "\")"
         self.__write_cmd(cmd_text)
         return True
-            
+
     def __proc_cmd(self):
         cmd = self.token[self.index]
         try:
             args = self.re_args.findall(cmd)
-        except:
+        except BaseException:
             return
         self.del_nl_after_cmd()
         argc = len(args)
@@ -315,7 +316,7 @@ class Template:
 
         # simple directive
         if argc == 1:
-            if   args[0] == "endfor":
+            if args[0] == "endfor":
                 self.__endfor_cmd(args)
                 return
             elif args[0] == "else":
@@ -334,7 +335,7 @@ class Template:
             if args[0] == "if-any":
                 self.__if_any_cmd(args)
                 return
-        elif argc == 4: # [for key in value]
+        elif argc == 4:  # [for key in value]
             if args[0] == "for" and args[2] == "in":
                 self.__for_cmd(args)
                 return True
@@ -356,12 +357,12 @@ class Template:
         cmd_text = "self.write_dict(\"%s\")" % (args[0])
         self.__write_cmd(cmd_text)
 
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     # [for] commands
     # - for
     # - last
     # - endfor
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     def __for_cmd(self, args):
         """
         The following [for] directive
@@ -396,20 +397,20 @@ class Template:
                 raise UnmatchedBlock(self.lineno(), "endfor")
             self.__write_cmd("self.pop_dict()")
             self.__pop_level()
-        except:
+        except BaseException:
             print(args, self.lineno())
             raise UnmatchedBlock(self.lineno(), "endfor")
         return
 
     # end of [for] commands
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
 
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     # [if] commands
     # - if
     # - if-index
     # - if-any
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     def __if_cmd(self, args):
         """
         The following [if] directive
@@ -443,16 +444,16 @@ class Template:
         # [if-index KEY is [first|even|odd|last|NUMBER]]
         #  ~~~0~~~  ~1~  2 ~~~~~~~~~~~~~~3~~~~~~~~~~~~
         cmdlist = {"first": "if %s_index == 0:",
-                   "even" : "if (%s_index %% 2) == 0:",
-                   "odd"  : "if (%s_index %% 2) != 0:",
-                   "last" : "if %s_index == %s_len - 1:"}
+                   "even": "if (%s_index %% 2) == 0:",
+                   "odd": "if (%s_index %% 2) != 0:",
+                   "last": "if %s_index == %s_len - 1:"}
         key = args[1]
         cmd = args[3]
         if len(self.re_number.findall(cmd)) == 1:
             cmd_text = "if %s_index == %s:" % (key, cmd)
         elif cmd in cmdlist:
             if cmd == "last":
-                cmd_text = cmdlist[cmd] % (key,key)
+                cmd_text = cmdlist[cmd] % (key, key)
             else:
                 cmd_text = cmdlist[cmd] % (key)
         else:
@@ -467,16 +468,16 @@ class Template:
         # [elif-index KEY is [first|even|odd|last|NUMBER]]
         #  ~~~0~~~  ~1~  2 ~~~~~~~~~~~~~~3~~~~~~~~~~~~
         cmdlist = {"first": "elif %s_index == 0:",
-                   "even" : "elif (%s_index %% 2) == 0:",
-                   "odd"  : "elif (%s_index %% 2) != 0:",
-                   "last" : "elif %s_index == %s_len - 1:"}
+                   "even": "elif (%s_index %% 2) == 0:",
+                   "odd": "elif (%s_index %% 2) != 0:",
+                   "last": "elif %s_index == %s_len - 1:"}
         key = args[1]
         cmd = args[3]
         if len(self.re_number.findall(cmd)) == 1:
             cmd_text = "elif %s_index == %s:" % (key, cmd)
         elif cmd in cmdlist:
             if cmd == "last":
-                cmd_text = cmdlist[cmd] % (key,key)
+                cmd_text = cmdlist[cmd] % (key, key)
             else:
                 cmd_text = cmdlist[cmd] % (key)
         else:
@@ -522,7 +523,7 @@ class Template:
         self.__pop_level()
         return
     # end of [if] commands
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
 
     def __print_error(self, e):
         print("Parse Error: line", e.lineno, "in input data")
@@ -530,20 +531,22 @@ class Template:
         lines = self.template.split("\n")
         length = len(lines)
         print("------------------------------------------------------------")
-        for i in range(1,10):
+        for i in range(1, 10):
             l = e.lineno - 6 + i
             if l > 0 and l < length:
                 print(lines[l])
                 if i == 5:
-                    uline = '~'*len(lines[l])
+                    uline = '~' * len(lines[l])
                     print(uline)
         print("------------------------------------------------------------")
-    
+
     def del_nl_after_cmd(self):
         # next text index after command
         next = self.index + 2
-        if next > self.token_len: return
-        if self.token[next] == None: return
+        if next > self.token_len:
+            return
+        if self.token[next] is None:
+            return
         text = self.token[next]
         tlen = len(text)
         if tlen > 0 and text[0] == '\n':
@@ -565,9 +568,9 @@ class Template:
         return l
 
 
-#------------------------------------------------------------
+# ------------------------------------------------------------
 # Generator and GeneratorBase classes
-#------------------------------------------------------------
+# ------------------------------------------------------------
 program = """
 class Generator(GeneratorBase):
     def __init__(self, token, dict):
@@ -583,6 +586,7 @@ class Generator(GeneratorBase):
     def process(self):
 """
 
+
 class GeneratorBase:
     def __init__(self, token, dict):
         self.token = token
@@ -595,7 +599,7 @@ class GeneratorBase:
         print("  " + ''.join(nesteditem(e.value)))
         temp = ""
         for i, s in enumerate(self.token):
-            if s != None:
+            if s is not None:
                 if i % 3 == 1:
                     temp += "[" + s + "]\n"
                 else:
@@ -603,15 +607,15 @@ class GeneratorBase:
         lines = temp.split("\n")
         length = len(lines)
         print("------------------------------------------------------------")
-        for i in range(1,10):
+        for i in range(1, 10):
             l = e.lineno - 6 + i
             if l > 0 and l < length:
                 print(lines[l])
                 if i == 5:
-                    uline = '~'*len(lines[l])
+                    uline = '~' * len(lines[l])
                     print(uline)
         print("------------------------------------------------------------")
-        
+
     def set_index(self, index):
         self.index = index
 
@@ -635,22 +639,22 @@ class GeneratorBase:
     def lineno(self):
         cnt = 1
         for i in range(0, self.index, 3):
-            if self.token[i] != None:
+            if self.token[i] is not None:
                 cnt += self.token[i].count('\n')
         # count deleted '\n' after commands
         for i in range(1, self.index, 3):
-            if self.token[i] != None:
+            if self.token[i] is not None:
                 cnt += 1
         return cnt
-                                
+
     def get_text(self, keytext):
         val = self.get_value(keytext)
         if isinstance(val, StringType):
             return val
         if isinstance(val, IntType) or isinstance(val, FloatType):
             return str(val)
-        raise UnexpectedData(self.lineno(), "\"" + keytext + \
-                                 "\" should have string, int or float value.")
+        raise UnexpectedData(self.lineno(), "\"" + keytext +
+                             "\" should have string, int or float value.")
 
     def get_list(self, keytext):
         val = self.get_value(keytext)
@@ -670,9 +674,9 @@ class GeneratorBase:
         keys = keytext.split('.')
         for i in range(len(self.dicts) - 1, -1, -1):
             dict_value = self.get_dict_value(keys, self.dicts[i])
-            if dict_value != None:
+            if dict_value is not None:
                 return dict_value
-        raise NotFound(self.lineno(), keytext) 
+        raise NotFound(self.lineno(), keytext)
 
     def get_dict_value(self, keys, dict):
         length = len(keys)
@@ -685,66 +689,74 @@ class GeneratorBase:
         return d
 
 
-#------------------------------------------------------------
-# Exceptions                                
-#------------------------------------------------------------
+# ------------------------------------------------------------
+# Exceptions
+# ------------------------------------------------------------
 class YATException(Exception):
     pass
+
 
 class UnknownError(YATException):
     def __init__(self, lineno):
         self.lineno = lineno
         self.value = "Unknown error."
 
+
 class UnmatchedBlock(YATException):
     def __init__(self, lineno, msg):
         self.lineno = lineno
         self.value = "Unmatched block error: " + msg
+
 
 class UnexpectedData(YATException):
     def __init__(self, lineno, msg):
         self.lineno = lineno
         self.value = msg
 
+
 class NotFinalElement(YATException):
     def __init__(self, dictkey, dictvalue):
         self.value = "Specified key is not final element: ",\
             dictkey, "=>", dictvalue
+
 
 class InvalidDirective(YATException):
     def __init__(self, lineno, directive):
         self.lineno = lineno
         self.value = "Invalid directive: \"[" + directive + "]\""
 
+
 class UnmatchedData(YATException):
     def __init__(self, lineno, description):
         self.lineno = lineno
         self.value = "Unmatched data and input: ", description
+
 
 class NotFound(YATException):
     def __init__(self, lineno, description):
         self.lineno = lineno
         self.value = "Value not found for: \"" + description + "\""
 
-#------------------------------------------------------------
+# ------------------------------------------------------------
 # other functions
-#------------------------------------------------------------
+# ------------------------------------------------------------
+
+
 def nesteditem(aList):
     for anItem in aList:
-        if type(anItem)==list:
+        if isinstance(anItem, list):
             for subitem in nesteditem(anItem):
                 yield subitem
         else:
             yield anItem
 
 
-
 if __name__ == "__main__":
     dict = []
     template = []
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     # Example 0
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     dict.append({"a": "This is a",
                  "b": {"1": "This is b.1",
                        "2": "This is b.2"}
@@ -755,26 +767,26 @@ if __name__ == "__main__":
 
 [b.2]""")
 
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     # Example 1
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     dict.append({"list": [0, 1, 2],
                  "listed_dict": [
                 {"name": "x", "value": "1.0"},
                 {"name": "y", "value": "0.2"},
                 {"name": "z", "value": "0.1"}]})
     template.append("""[for lst in list]
-[lst],  
+[lst],
 [endfor]
 [for lst in listed_dict]
 [lst.name]: [lst.value]
 
 [endfor]""")
 
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     # Example 2
-    #------------------------------------------------------------
-    dict.append({"list": [0,1,2,3,4,5,6,7,8,9,10]})
+    # ------------------------------------------------------------
+    dict.append({"list": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]})
     template.append("""[for key in list]
 [if-index key is 3] [key] is hoge!!
 [elif-index key is 6] [key] is foo!!
@@ -786,9 +798,9 @@ if __name__ == "__main__":
 [endif]
 [endfor]""")
 
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     # Example 3
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     dict.append({"key1": "a", "key2": "b"})
     template.append("""[if key1 is a]
 The key1 is "a".
@@ -796,9 +808,9 @@ The key1 is "a".
 This key1 is not "a".
 [endif]""")
 
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     # Example 4
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     dict.append({"key1": "a", "key2": "b"})
     template.append("""[if-any key1]
 key1 exists.
@@ -816,7 +828,7 @@ key3 does not exists.
 
     import yaml
     if len(dict) == len(template):
-        for i in range(len(dict)-1,len(dict)):
+        for i in range(len(dict) - 1, len(dict)):
             t = Template(template[i])
             print("-" * 60)
             print("Example:", i)

@@ -15,8 +15,6 @@
 #     All rights reserved.
 
 
-
-
 import OpenRTM_aist
 import RTC
 
@@ -33,27 +31,28 @@ import RTC
 # @class EventDrivenExecutionContext
 # @brief EventDrivenExecutionContext class
 # @endif
+
+
 class EventDrivenExecutionContext(OpenRTM_aist.PeriodicExecutionContext):
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  # コンストラクタ
-  # 設定された値をプロファイルに設定する。
-  #
-  # @else
-  # @brief Constructor
-  # @endif
-  def __init__(self):
-    OpenRTM_aist.PeriodicExecutionContext.__init__(self)
-    self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("rtobject.eventdriven_ec")
-    self.setKind(RTC.EVENT_DRIVEN)
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    # 設定された値をプロファイルに設定する。
+    #
+    # @else
+    # @brief Constructor
+    # @endif
+    def __init__(self):
+        OpenRTM_aist.PeriodicExecutionContext.__init__(self)
+        self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("rtobject.eventdriven_ec")
+        self.setKind(RTC.EVENT_DRIVEN)
 
-    return
-
+        return
 
 
 ##
@@ -68,7 +67,7 @@ class EventDrivenExecutionContext(OpenRTM_aist.PeriodicExecutionContext):
 #
 # @endif
 def EventDrivenExecutionContextInit(manager):
-  OpenRTM_aist.ExecutionContextFactory.instance().addFactory("EventDrivenExecutionContext",
-                                                             OpenRTM_aist.EventDrivenExecutionContext,
-                                                             OpenRTM_aist.ECDelete)
-  return
+    OpenRTM_aist.ExecutionContextFactory.instance().addFactory("EventDrivenExecutionContext",
+                                                               OpenRTM_aist.EventDrivenExecutionContext,
+                                                               OpenRTM_aist.ECDelete)
+    return

@@ -75,336 +75,340 @@ import OpenRTM_aist
 # @endif
 #
 class InPortPullConnector(OpenRTM_aist.InPortConnector):
-  """
-  """
-    
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  # InPortPullConnector のコンストラクタはオブジェクト生成時に下記
-  # を引数にとる。ConnectorInfo は接続情報を含み、この情報に従いバッ
-  # ファ等を生成する。OutPort インターフェースのプロバイダオブジェク
-  # トへのポインタを取り、所有権を持つので、InPortPullConnector は
-  # OutPortConsumer の解体責任を持つ。各種イベントに対するコールバッ
-  # ク機構を提供する ConnectorListeners を持ち、適切なタイミングでコー
-  # ルバックを呼び出す。データバッファがもし InPortBase から提供さ
-  # れる場合はそのポインタを取る。
-  #
-  # @param info ConnectorInfo
-  # @param consumer OutPortConsumer
-  # @param listeners ConnectorListeners 型のリスナオブジェクトリスト
-  # @param buffer CdrBufferBase 型のバッファ
-  #
-  # @else
-  # @brief Constructor
-  #
-  # InPortPullConnector's constructor is given the following
-  # arguments.  According to ConnectorInfo which includes
-  # connection information, a buffer is created.  It is also given
-  # a pointer to the consumer object for the OutPort interface.
-  # The owner-ship of the pointer is owned by this
-  # OutPortPullConnector, it has responsibility to destruct the
-  # OutPortConsumer.  OutPortPullConnector also has
-  # ConnectorListeners to provide event callback mechanisms, and
-  # they would be called at the proper timing.  If data buffer is
-  # given by OutPortBase, the pointer to the buffer is also given
-  # as arguments.
-  #
-  # @param info ConnectorInfo
-  # @param consumer OutPortConsumer
-  # @param listeners ConnectorListeners type lsitener object list
-  # @param buffer CdrBufferBase type buffer
-  #
-  # @endif
-  #
-  # InPortPullConnector(ConnectorInfo info,
-  #                     OutPortConsumer* consumer,
-  #                     ConnectorListeners& listeners,
-  #                     CdrBufferBase* buffer = 0);
-  def __init__(self, info, consumer, listeners, buffer = None):
-    OpenRTM_aist.InPortConnector.__init__(self, info, buffer)
-    self._consumer = consumer
-    self._listeners = listeners
-    self._directOutPort = None
-    self._outPortListeners = None
+    """
+    """
 
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # InPortPullConnector のコンストラクタはオブジェクト生成時に下記
+    # を引数にとる。ConnectorInfo は接続情報を含み、この情報に従いバッ
+    # ファ等を生成する。OutPort インターフェースのプロバイダオブジェク
+    # トへのポインタを取り、所有権を持つので、InPortPullConnector は
+    # OutPortConsumer の解体責任を持つ。各種イベントに対するコールバッ
+    # ク機構を提供する ConnectorListeners を持ち、適切なタイミングでコー
+    # ルバックを呼び出す。データバッファがもし InPortBase から提供さ
+    # れる場合はそのポインタを取る。
+    #
+    # @param info ConnectorInfo
+    # @param consumer OutPortConsumer
+    # @param listeners ConnectorListeners 型のリスナオブジェクトリスト
+    # @param buffer CdrBufferBase 型のバッファ
+    #
+    # @else
+    # @brief Constructor
+    #
+    # InPortPullConnector's constructor is given the following
+    # arguments.  According to ConnectorInfo which includes
+    # connection information, a buffer is created.  It is also given
+    # a pointer to the consumer object for the OutPort interface.
+    # The owner-ship of the pointer is owned by this
+    # OutPortPullConnector, it has responsibility to destruct the
+    # OutPortConsumer.  OutPortPullConnector also has
+    # ConnectorListeners to provide event callback mechanisms, and
+    # they would be called at the proper timing.  If data buffer is
+    # given by OutPortBase, the pointer to the buffer is also given
+    # as arguments.
+    #
+    # @param info ConnectorInfo
+    # @param consumer OutPortConsumer
+    # @param listeners ConnectorListeners type lsitener object list
+    # @param buffer CdrBufferBase type buffer
+    #
+    # @endif
+    #
+    # InPortPullConnector(ConnectorInfo info,
+    #                     OutPortConsumer* consumer,
+    #                     ConnectorListeners& listeners,
+    #                     CdrBufferBase* buffer = 0);
+    def __init__(self, info, consumer, listeners, buffer=None):
+        OpenRTM_aist.InPortConnector.__init__(self, info, buffer)
+        self._consumer = consumer
+        self._listeners = listeners
+        self._directOutPort = None
+        self._outPortListeners = None
 
-    if buffer is None:
-      self._buffer = self.createBuffer(self._profile)
+        if buffer is None:
+            self._buffer = self.createBuffer(self._profile)
 
-    if not self._buffer or not self._consumer:
-      raise
-        
-    self._buffer.init(info.properties.getNode("buffer"))
-    self._consumer.init(info.properties)
-    self._consumer.setBuffer(self._buffer)
-    self._consumer.setListener(info, self._listeners)
-    self.onConnect()
+        if not self._buffer or not self._consumer:
+            raise
 
-    self._marshaling_type = info.properties.getProperty("marshaling_type", "corba")
-    self._marshaling_type = info.properties.getProperty("in.marshaling_type", self._marshaling_type)
-    self._marshaling_type = self._marshaling_type.strip()
+        self._buffer.init(info.properties.getNode("buffer"))
+        self._consumer.init(info.properties)
+        self._consumer.setBuffer(self._buffer)
+        self._consumer.setListener(info, self._listeners)
+        self.onConnect()
 
-    self._serializer = OpenRTM_aist.SerializerFactory.instance().createObject(self._marshaling_type)
-    
-    return
+        self._marshaling_type = info.properties.getProperty(
+            "marshaling_type", "corba")
+        self._marshaling_type = info.properties.getProperty(
+            "in.marshaling_type", self._marshaling_type)
+        self._marshaling_type = self._marshaling_type.strip()
 
+        self._serializer = OpenRTM_aist.SerializerFactory.instance(
+        ).createObject(self._marshaling_type)
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  #
-  # disconnect() が呼ばれ、consumer, publisher, buffer が解体・削除される。
-  #
-  # @else
-  #
-  # @brief Destructor
-  #
-  # This operation calls disconnect(), which destructs and deletes
-  # the consumer, the publisher and the buffer.
-  #
-  # @endif
-  #
-  def __del__(self):
-    return
+        return
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    #
+    # disconnect() が呼ばれ、consumer, publisher, buffer が解体・削除される。
+    #
+    # @else
+    #
+    # @brief Destructor
+    #
+    # This operation calls disconnect(), which destructs and deletes
+    # the consumer, the publisher and the buffer.
+    #
+    # @endif
+    #
 
-  ##
-  # @if jp
-  # @brief read 関数
-  #
-  # OutPortConsumer からデータを取得する。正常に読み出せた場合、戻り
-  # 値は PORT_OK となり、data に読み出されたデータが格納される。それ
-  # 以外の場合には、エラー値として BUFFER_EMPTY, TIMEOUT,
-  # PRECONDITION_NOT_MET, PORT_ERROR が返される。
-  #
-  # @return PORT_OK              正常終了
-  #         BUFFER_EMPTY         バッファは空である
-  #         TIMEOUT              タイムアウトした
-  #         PRECONDITION_NOT_MET 事前条件を満たさない
-  #         PORT_ERROR           その他のエラー
-  #
-  # @else
-  # @brief Destructor
-  #
-  # This function get data from OutPortConsumer.  If data is read
-  # properly, this function will return PORT_OK return code. Except
-  # normal return, BUFFER_EMPTY, TIMEOUT, PRECONDITION_NOT_MET and
-  # PORT_ERROR will be returned as error codes.
-  #  
-  # @return PORT_OK              Normal return
-  #         BUFFER_EMPTY         Buffer empty
-  #         TIMEOUT              Timeout
-  #         PRECONDITION_NOT_MET Preconditin not met
-  #         PORT_ERROR           Other error
-  #
-  # @endif
-  #
-  # virtual ReturnCode read(cdrMemoryStream& data);
-  def read(self, data=None):
-    self._rtcout.RTC_TRACE("InPortPullConnector.read()")
+    def __del__(self):
+        return
 
-    if self._directOutPort is not None:
-      if self._directOutPort.isEmpty():
-        self._listeners.connector_[OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY].notify(self._profile)
-        self._outPortListeners.connector_[OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY].notify(self._profile)
-        self._rtcout.RTC_TRACE("ON_BUFFER_EMPTY(InPort,OutPort), ")
-        self._rtcout.RTC_TRACE("ON_SENDER_EMPTY(InPort,OutPort) ")
-        self._rtcout.RTC_TRACE("callback called in direct mode.")
+    ##
+    # @if jp
+    # @brief read 関数
+    #
+    # OutPortConsumer からデータを取得する。正常に読み出せた場合、戻り
+    # 値は PORT_OK となり、data に読み出されたデータが格納される。それ
+    # 以外の場合には、エラー値として BUFFER_EMPTY, TIMEOUT,
+    # PRECONDITION_NOT_MET, PORT_ERROR が返される。
+    #
+    # @return PORT_OK              正常終了
+    #         BUFFER_EMPTY         バッファは空である
+    #         TIMEOUT              タイムアウトした
+    #         PRECONDITION_NOT_MET 事前条件を満たさない
+    #         PORT_ERROR           その他のエラー
+    #
+    # @else
+    # @brief Destructor
+    #
+    # This function get data from OutPortConsumer.  If data is read
+    # properly, this function will return PORT_OK return code. Except
+    # normal return, BUFFER_EMPTY, TIMEOUT, PRECONDITION_NOT_MET and
+    # PORT_ERROR will be returned as error codes.
+    #
+    # @return PORT_OK              Normal return
+    #         BUFFER_EMPTY         Buffer empty
+    #         TIMEOUT              Timeout
+    #         PRECONDITION_NOT_MET Preconditin not met
+    #         PORT_ERROR           Other error
+    #
+    # @endif
+    #
+    # virtual ReturnCode read(cdrMemoryStream& data);
 
-      data = self._directOutPort.read()
-      #self._outPortListeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ].notify(self._profile, data)
-      self._rtcout.RTC_TRACE("ON_BUFFER_READ(OutPort), ")
-      self._rtcout.RTC_TRACE("callback called in direct mode.")
-      #self._outPortListeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(self._profile, data)
-      self._rtcout.RTC_TRACE("ON_SEND(OutPort), ")
-      self._rtcout.RTC_TRACE("callback called in direct mode.")
-      #self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED].notify(self._profile, data)
-      self._rtcout.RTC_TRACE("ON_RECEIVED(InPort), ")
-      self._rtcout.RTC_TRACE("callback called in direct mode.")
-      #self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(self._profile, data)
-      self._rtcout.RTC_TRACE("ON_BUFFER_WRITE(InPort), ")
-      self._rtcout.RTC_TRACE("callback called in direct mode.")
-      return self.PORT_OK, data
+    def read(self, data=None):
+        self._rtcout.RTC_TRACE("InPortPullConnector.read()")
 
+        if self._directOutPort is not None:
+            if self._directOutPort.isEmpty():
+                self._listeners.connector_[
+                    OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY].notify(
+                    self._profile)
+                self._outPortListeners.connector_[
+                    OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY].notify(
+                    self._profile)
+                self._rtcout.RTC_TRACE("ON_BUFFER_EMPTY(InPort,OutPort), ")
+                self._rtcout.RTC_TRACE("ON_SENDER_EMPTY(InPort,OutPort) ")
+                self._rtcout.RTC_TRACE("callback called in direct mode.")
 
+            data = self._directOutPort.read()
+            #self._outPortListeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ].notify(self._profile, data)
+            self._rtcout.RTC_TRACE("ON_BUFFER_READ(OutPort), ")
+            self._rtcout.RTC_TRACE("callback called in direct mode.")
+            #self._outPortListeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(self._profile, data)
+            self._rtcout.RTC_TRACE("ON_SEND(OutPort), ")
+            self._rtcout.RTC_TRACE("callback called in direct mode.")
+            #self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED].notify(self._profile, data)
+            self._rtcout.RTC_TRACE("ON_RECEIVED(InPort), ")
+            self._rtcout.RTC_TRACE("callback called in direct mode.")
+            #self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(self._profile, data)
+            self._rtcout.RTC_TRACE("ON_BUFFER_WRITE(InPort), ")
+            self._rtcout.RTC_TRACE("callback called in direct mode.")
+            return self.PORT_OK, data
 
-    if not self._consumer:
-      return self.PORT_ERROR, data
+        if not self._consumer:
+            return self.PORT_ERROR, data
 
+        ret, cdr_data = self._consumer.get()
 
+        if ret == self.PORT_OK:
+            if data is None:
+                self._rtcout.RTC_ERROR("argument is invalid")
+                return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
 
-    ret, cdr_data = self._consumer.get()
+            self._serializer.isLittleEndian(self._endian)
+            ser_ret, data = self._serializer.deserialize(cdr_data, data)
 
-    if ret == self.PORT_OK:
-      if data is None:
-        self._rtcout.RTC_ERROR("argument is invalid")
-        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
-      
-      self._serializer.isLittleEndian(self._endian)
-      ser_ret, data = self._serializer.deserialize(cdr_data, data)
-      
-      if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
-        self._rtcout.RTC_ERROR("unknown endian from connector")
-        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
-      elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR:
-        self._rtcout.RTC_ERROR("unknown error")
-        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
-      elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
-        self._rtcout.RTC_ERROR("unknown serializer from connector")
-        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
-    
-    return ret, data
+            if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
+                self._rtcout.RTC_ERROR("unknown endian from connector")
+                return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
+            elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR:
+                self._rtcout.RTC_ERROR("unknown error")
+                return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
+            elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
+                self._rtcout.RTC_ERROR("unknown serializer from connector")
+                return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
 
+        return ret, data
 
-  ##
-  # @if jp
-  # @brief 接続解除関数
-  #
-  # Connector が保持している接続を解除する
-  #
-  # @else
-  # @brief Disconnect connection
-  #
-  # This operation disconnect this connection
-  #
-  # @endif
-  #
-  # virtual ReturnCode disconnect();
-  def disconnect(self):
-    self._rtcout.RTC_TRACE("disconnect()")
-    self.onDisconnect()
-    # delete consumer
-    if self._consumer:
-      OpenRTM_aist.OutPortConsumerFactory.instance().deleteObject(self._consumer)
-    self._consumer = None
+    ##
+    # @if jp
+    # @brief 接続解除関数
+    #
+    # Connector が保持している接続を解除する
+    #
+    # @else
+    # @brief Disconnect connection
+    #
+    # This operation disconnect this connection
+    #
+    # @endif
+    #
+    # virtual ReturnCode disconnect();
 
-    if self._serializer:
-      OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
-    self._serializer = None
+    def disconnect(self):
+        self._rtcout.RTC_TRACE("disconnect()")
+        self.onDisconnect()
+        # delete consumer
+        if self._consumer:
+            OpenRTM_aist.OutPortConsumerFactory.instance().deleteObject(self._consumer)
+        self._consumer = None
 
+        if self._serializer:
+            OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
+        self._serializer = None
 
-    return self.PORT_OK
-        
-  ##
-  # @if jp
-  # @brief アクティブ化
-  #
-  # このコネクタをアクティブ化する
-  #
-  # @else
-  #
-  # @brief Connector activation
-  #
-  # This operation activates this connector
-  #
-  # @endif
-  #
-  # virtual void activate(){}; // do nothing
-  def activate(self): # do nothing
-    pass
+        return self.PORT_OK
 
-  ##
-  # @if jp
-  # @brief 非アクティブ化
-  #
-  # このコネクタを非アクティブ化する
-  #
-  # @else
-  #
-  # @brief Connector deactivation
-  #
-  # This operation deactivates this connector
-  #
-  # @endif
-  #
-  # virtual void deactivate(){}; // do nothing
-  def deactivate(self): # do nothing
-    pass
-  
-  ##
-  # @if jp
-  # @brief Bufferの生成
-  #
-  # 与えられた接続情報に基づきバッファを生成する。
-  #
-  # @param info 接続情報
-  # @return バッファへのポインタ
-  #
-  # @else
-  # @brief create buffer
-  #
-  # This function creates a buffer based on given information.
-  #
-  # @param info Connector information
-  # @return The poitner to the buffer
-  #
-  # @endif
-  #
-  # CdrBufferBase* createBuffer(Profile& profile);
-  def createBuffer(self, profile):
-    buf_type = profile.properties.getProperty("buffer_type","ring_buffer")
-    return OpenRTM_aist.CdrBufferFactory.instance().createObject(buf_type)
-    
-  ##
-  # @if jp
-  # @brief 接続確立時にコールバックを呼ぶ
-  # @else
-  # @brief Invoke callback when connection is established
-  # @endif
-  # void onConnect()
-  def onConnect(self):
-    if self._listeners and self._profile:
-      self._listeners.connector_[OpenRTM_aist.ConnectorListenerType.ON_CONNECT].notify(self._profile)
-    return
+    ##
+    # @if jp
+    # @brief アクティブ化
+    #
+    # このコネクタをアクティブ化する
+    #
+    # @else
+    #
+    # @brief Connector activation
+    #
+    # This operation activates this connector
+    #
+    # @endif
+    #
+    # virtual void activate(){}; // do nothing
+    def activate(self):  # do nothing
+        pass
 
-  ##
-  # @if jp
-  # @brief 接続切断時にコールバックを呼ぶ
-  # @else
-  # @brief Invoke callback when connection is destroied
-  # @endif
-  # void onDisconnect()
-  def onDisconnect(self):
-    if self._listeners and self._profile:
-      self._listeners.connector_[OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT].notify(self._profile)
-    return
+    ##
+    # @if jp
+    # @brief 非アクティブ化
+    #
+    # このコネクタを非アクティブ化する
+    #
+    # @else
+    #
+    # @brief Connector deactivation
+    #
+    # This operation deactivates this connector
+    #
+    # @endif
+    #
+    # virtual void deactivate(){}; // do nothing
+    def deactivate(self):  # do nothing
+        pass
 
+    ##
+    # @if jp
+    # @brief Bufferの生成
+    #
+    # 与えられた接続情報に基づきバッファを生成する。
+    #
+    # @param info 接続情報
+    # @return バッファへのポインタ
+    #
+    # @else
+    # @brief create buffer
+    #
+    # This function creates a buffer based on given information.
+    #
+    # @param info Connector information
+    # @return The poitner to the buffer
+    #
+    # @endif
+    #
+    # CdrBufferBase* createBuffer(Profile& profile);
+    def createBuffer(self, profile):
+        buf_type = profile.properties.getProperty("buffer_type", "ring_buffer")
+        return OpenRTM_aist.CdrBufferFactory.instance().createObject(buf_type)
 
+    ##
+    # @if jp
+    # @brief 接続確立時にコールバックを呼ぶ
+    # @else
+    # @brief Invoke callback when connection is established
+    # @endif
+    # void onConnect()
+    def onConnect(self):
+        if self._listeners and self._profile:
+            self._listeners.connector_[
+                OpenRTM_aist.ConnectorListenerType.ON_CONNECT].notify(
+                self._profile)
+        return
 
-  ##
-  # @if jp
-  # @brief データをダイレクトに書き込むためのOutPortのサーバントを設定する
-  #
-  # @param self
-  # @param directOutPort OutPortのサーバント
-  # @return True: 設定に成功 False: 既に設定済みのため失敗
-  # @else
-  # @brief 
-  #
-  # @param self
-  # @param directOutPort 
-  # @return 
-  # @endif
-  #
-  # bool setOutPort(setOutPort* directOutPort);
-  def setOutPort(self, directOutPort):
-    if self._directOutPort is not None:
-      return False
-    self._directOutPort = directOutPort
-    self._outPortListeners = self._directOutPort._listeners
-    return True
+    ##
+    # @if jp
+    # @brief 接続切断時にコールバックを呼ぶ
+    # @else
+    # @brief Invoke callback when connection is destroied
+    # @endif
+    # void onDisconnect()
+    def onDisconnect(self):
+        if self._listeners and self._profile:
+            self._listeners.connector_[
+                OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT].notify(
+                self._profile)
+        return
 
+    ##
+    # @if jp
+    # @brief データをダイレクトに書き込むためのOutPortのサーバントを設定する
+    #
+    # @param self
+    # @param directOutPort OutPortのサーバント
+    # @return True: 設定に成功 False: 既に設定済みのため失敗
+    # @else
+    # @brief
+    #
+    # @param self
+    # @param directOutPort
+    # @return
+    # @endif
+    #
+    # bool setOutPort(setOutPort* directOutPort);
 
-  ##
-  # @if jp
-  # @brief コンシューマのインターフェースの登録を取り消す
-  # @param prop コネクタプロファイルのプロパティ
-  # @else
-  # @brief 
-  # @param prop
-  # @endif
-  def unsubscribeInterface(self, prop):
-    if self._consumer:
-      self._consumer.unsubscribeInterface(prop)
+    def setOutPort(self, directOutPort):
+        if self._directOutPort is not None:
+            return False
+        self._directOutPort = directOutPort
+        self._outPortListeners = self._directOutPort._listeners
+        return True
+
+    ##
+    # @if jp
+    # @brief コンシューマのインターフェースの登録を取り消す
+    # @param prop コネクタプロファイルのプロパティ
+    # @else
+    # @brief
+    # @param prop
+    # @endif
+
+    def unsubscribeInterface(self, prop):
+        if self._consumer:
+            self._consumer.unsubscribeInterface(prop)

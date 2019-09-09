@@ -5,16 +5,16 @@
 #  @brief rtc-template Python soruce code generator class
 #  @date $Date: 2005/08/26 12:02:37 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
-# 
+#
 #  Copyright (C) 2004-2008
 #      Task-intelligence Research Group,
 #      Intelligent Systems Research Institute,
 #      National Institute of
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
-# 
+#
 #  $Id: python_gen.py 775 2008-07-28 16:14:45Z n-ando $
-# 
+#
 
 import re
 import os
@@ -22,14 +22,16 @@ import gen_base
 import string
 import sys
 
+
 def description():
-  return "Python component code generator"
+    return "Python component code generator"
+
 
 def usage():
-  """
-  Python generator specific usage
-  """
-  return """
+    """
+    Python generator specific usage
+    """
+    return """
 ----------------------------------
   Help for Python code generator
 ----------------------------------
@@ -41,8 +43,10 @@ No additional options are available for Python code generator.
 
 """
 
+
 def get_opt_fmt():
-  return []
+    return []
+
 
 service_impl = """\
 [for sidl in service_idl]
@@ -55,15 +59,15 @@ import _GlobalIDL, _GlobalIDL__POA
 no_global_idl = ""
 
 module_spec = """\
-[l_name]_spec = ["implementation_id", "[basicInfo.name]", 
-		 "type_name",         "[basicInfo.name]", 
-		 "description",       "[basicInfo.description]", 
-		 "version",           "[basicInfo.version]", 
-		 "vendor",            "[basicInfo.vendor]", 
-		 "category",          "[basicInfo.category]", 
-		 "activity_type",     "[basicInfo.componentType]", 
-		 "max_instance",      "[basicInfo.maxInstances]", 
-		 "language",          "Python", 
+[l_name]_spec = ["implementation_id", "[basicInfo.name]",
+		 "type_name",         "[basicInfo.name]",
+		 "description",       "[basicInfo.description]",
+		 "version",           "[basicInfo.version]",
+		 "vendor",            "[basicInfo.vendor]",
+		 "category",          "[basicInfo.category]",
+		 "activity_type",     "[basicInfo.componentType]",
+		 "max_instance",      "[basicInfo.maxInstances]",
+		 "language",          "Python",
 		 "lang_type",         "SCRIPT",
 [if-any configurationSet.configuration]
 [for config in configurationSet.configuration]
@@ -117,9 +121,9 @@ bind_config = """
 [endfor]"""
 
 
-#------------------------------------------------------------
+# ------------------------------------------------------------
 # Python component source code template
-#------------------------------------------------------------
+# ------------------------------------------------------------
 py_source = """#!/usr/bin/env python
 # -*- Python -*-
 
@@ -201,196 +205,195 @@ if __name__ == "__main__":
 """
 
 
-
-
 class python_gen(gen_base.gen_base):
-  """
-  Python component source code generation class
-  """
-  def __init__(self, data, opts):
-    self.data = data
-    self.data['fname'] = self.data['basicInfo']['name']
-    self.data['fname_py'] = self.data['fname'] + ".py"
-    self.data["u_name"] = self.data["fname"].upper()
-    self.data["l_name"] = self.data["fname"].lower()
+    """
+    Python component source code generation class
+    """
 
-    self.CreateActivityFuncs(self.data)
-    self.CreateDataPorts(self.data)
-    self.CreateService(self.data)
-    self.CreateConfiguration(self.data)
-    self.tags = {}
-    self.tags["service_impl"]    = service_impl
-    if len(self.data["service_idl"]) > 0 or \
-          len(self.data["consumer_idl"]) > 0:
-      self.tags["global_idl"] = global_idl
-    else:
-      self.tags["global_idl"] = no_global_idl
-    self.tags["module_spec"]     = module_spec
-    self.tags["data_ports"]      = data_ports
-    self.tags["service_ports"]   = service_ports
-    self.tags["configurations"]  = configurations
-    self.tags["bind_config"]     = bind_config
-    self.gen_tags(self.tags)
-    return
+    def __init__(self, data, opts):
+        self.data = data
+        self.data['fname'] = self.data['basicInfo']['name']
+        self.data['fname_py'] = self.data['fname'] + ".py"
+        self.data["u_name"] = self.data["fname"].upper()
+        self.data["l_name"] = self.data["fname"].lower()
 
-
-  def CreateActivityFuncs(self, dict):
-    acts = (("onFinalize",    None), \
-              ("onStartup",     "ec_id"), \
-              ("onShutdown",    "ec_id"), \
-              ("onActivated",   "ec_id"), \
-              ("onDeactivated", "ec_id"), \
-              ("onExecute",     "ec_id"), \
-              ("onAborting",    "ec_id"), \
-              ("onError",       "ec_id"), \
-              ("onReset",       "ec_id"), \
-              ("onStateUpdate", "ec_id"), \
-              ("onRateChanged", "ec_id"))
-    actlist = []
-    for name, args in acts:
-      a = {}
-      a["name"] = name
-      a["args"] = args
-      actlist.append(a)
-	
-    dict["activity"] = actlist
-    return
-	
-  def CreateService(self, dict):
-    if dict["service_idl"]:
-      for svc in dict["service_idl"]:
-        svc["impl_py"] = svc["idl_basename"] + \
-            "_idl_example.py"
-			
-    if dict["consumer_idl"]:
-      for cons in dict["consumer_idl"]:
-        try:
-          cons["modulename"] = "_GlobalIDL"
-          f = open(cons["idl_fname"], 'a+')
-          while 1:
-            _str = f.readline()
-            if not _str:
-              break
-            mod_idx = _str.find("module", 0)
-            if mod_idx < 0:
-              break;
-            _str = _str[mod_idx + 6:]
-            idx = _str.find("{", 0)
-            if idx < 0:
-              break
-            _str = _str[:idx]
-            cons["modulename"] = \
-                string.strip(_str)
-            break
-          f.close()
-        except IOError:
-          print("Can't find file:", file)
-    return
-
-  def CreateDataPorts(self, dict):
-    if dict["dataPorts"] == None:
-      return
-    for dport in dict["dataPorts"]:
-      if self.check_data_type(dport["type"]) == "sequence":
-        dport["data_type_args"] = "RTC.Time(0,0),[]"
-      else:
-        dport["data_type_args"] = "RTC.Time(0,0),0"
-    return
-	
-  def CreateConfiguration(self, dict):
-    config = dict["configurationSet"]["configuration"]
-    if config:
-      for i, conf in enumerate(config):
-        split_data = conf["defaultValue"].split(",")
-        if len(split_data) > 1:
-          _data = []
-          _type = self.get_type(conf["type"])
-          for d in split_data:
-            _data.append(_type(d))
-          conf["defaultData"] = str([_data])
+        self.CreateActivityFuncs(self.data)
+        self.CreateDataPorts(self.data)
+        self.CreateService(self.data)
+        self.CreateConfiguration(self.data)
+        self.tags = {}
+        self.tags["service_impl"] = service_impl
+        if len(self.data["service_idl"]) > 0 or \
+                len(self.data["consumer_idl"]) > 0:
+            self.tags["global_idl"] = global_idl
         else:
-          _type = self.get_type(conf["type"])
-          conf["defaultData"] = \
-              str([_type(conf["defaultValue"])])
-    return
+            self.tags["global_idl"] = no_global_idl
+        self.tags["module_spec"] = module_spec
+        self.tags["data_ports"] = data_ports
+        self.tags["service_ports"] = service_ports
+        self.tags["configurations"] = configurations
+        self.tags["bind_config"] = bind_config
+        self.gen_tags(self.tags)
+        return
 
-  def check_data_type(self, _type):
-    if str(_type) in ["TimedShortSeq", "TimedLongSeq",
-                      "TimedUShortSeq", "TimedULongSeq",
-                      "TimedFloatSeq", "TimedDoubleSeq",
-                      "TimedCharSeq","TimedBooleanSeq",
-                      "TimedOctetSeq", "TimedStringSeq"]:
-      return "sequence"
-    else:
-      return None
-    return None
+    def CreateActivityFuncs(self, dict):
+        acts = (("onFinalize", None),
+                ("onStartup", "ec_id"),
+                ("onShutdown", "ec_id"),
+                ("onActivated", "ec_id"),
+                ("onDeactivated", "ec_id"),
+                ("onExecute", "ec_id"),
+                ("onAborting", "ec_id"),
+                ("onError", "ec_id"),
+                ("onReset", "ec_id"),
+                ("onStateUpdate", "ec_id"),
+                ("onRateChanged", "ec_id"))
+        actlist = []
+        for name, args in acts:
+            a = {}
+            a["name"] = name
+            a["args"] = args
+            actlist.append(a)
 
-  def get_type(self, _type):
-    if str(_type) == "int":
-      return int
-    elif str(_type) == "long":
-      return long
-    elif str(_type) == "float":
-      return float
-    elif str(_type) == "double":
-      return float
-    elif str(_type) == "string":
-      return str
-    else:
-      return str
+        dict["activity"] = actlist
+        return
 
-    return str
-		
-  def print_impl(self):
-    for sidl in self.data["service_idl"]:
-      if not os.access(sidl["idl_fname"], os.F_OK):
-        sys.stderr.write("Error: IDL file \"" \
-                           + sidl["idl_fname"] \
-                           + "\" not found.\n")
-        sys.exit(1)
-          
-      try:
-        cmd = "omniidl -bpython -Wbexample " + \
-            sidl["idl_fname"]
-        os.system(cmd)
-      except:
-        sys.stderr.write("Generate error: " \
-                           + sidl["impl_py"] + "\n")
-        
-      print("  File \"" \
-          + sidl["impl_py"] \
-          + "\" was generated.")
+    def CreateService(self, dict):
+        if dict["service_idl"]:
+            for svc in dict["service_idl"]:
+                svc["impl_py"] = svc["idl_basename"] + \
+                    "_idl_example.py"
 
-    for cons in self.data["consumer_idl"]:
-      dup = False
-      for svc in self.data["service_idl"]:
-        if cons["idl_fname"] == svc["idl_fname"]:
-          dup = True
+        if dict["consumer_idl"]:
+            for cons in dict["consumer_idl"]:
+                try:
+                    cons["modulename"] = "_GlobalIDL"
+                    f = open(cons["idl_fname"], 'a+')
+                    while True:
+                        _str = f.readline()
+                        if not _str:
+                            break
+                        mod_idx = _str.find("module", 0)
+                        if mod_idx < 0:
+                            break
+                        _str = _str[mod_idx + 6:]
+                        idx = _str.find("{", 0)
+                        if idx < 0:
+                            break
+                        _str = _str[:idx]
+                        cons["modulename"] = \
+                            string.strip(_str)
+                        break
+                    f.close()
+                except IOError:
+                    print("Can't find file:", file)
+        return
 
-      if not dup:
-        if not os.access(cons["idl_fname"], os.F_OK):
-          sys.stderr.write("Error: IDL file \"" \
-                             + cons["idl_fname"] \
-                             + "\" not found.\n")
-          sys.exit(1)
+    def CreateDataPorts(self, dict):
+        if dict["dataPorts"] is None:
+            return
+        for dport in dict["dataPorts"]:
+            if self.check_data_type(dport["type"]) == "sequence":
+                dport["data_type_args"] = "RTC.Time(0,0),[]"
+            else:
+                dport["data_type_args"] = "RTC.Time(0,0),0"
+        return
 
-        try:
-          cmd = "omniidl -bpython " + \
-              cons["idl_fname"]
-          os.system(cmd)
-        except:
-          sys.stderr.write("Generate error: omniidl -bpython " + cons["idl_fname"])
-    return
+    def CreateConfiguration(self, dict):
+        config = dict["configurationSet"]["configuration"]
+        if config:
+            for i, conf in enumerate(config):
+                split_data = conf["defaultValue"].split(",")
+                if len(split_data) > 1:
+                    _data = []
+                    _type = self.get_type(conf["type"])
+                    for d in split_data:
+                        _data.append(_type(d))
+                    conf["defaultData"] = str([_data])
+                else:
+                    _type = self.get_type(conf["type"])
+                    conf["defaultData"] = \
+                        str([_type(conf["defaultValue"])])
+        return
 
-  def print_pysrc(self):
-    """
-    Generate component class script
-    """
-    self.gen(self.data["fname_py"], py_source, self.data, self.tags)
-    return
+    def check_data_type(self, _type):
+        if str(_type) in ["TimedShortSeq", "TimedLongSeq",
+                          "TimedUShortSeq", "TimedULongSeq",
+                          "TimedFloatSeq", "TimedDoubleSeq",
+                          "TimedCharSeq", "TimedBooleanSeq",
+                          "TimedOctetSeq", "TimedStringSeq"]:
+            return "sequence"
+        else:
+            return None
+        return None
 
+    def get_type(self, _type):
+        if str(_type) == "int":
+            return int
+        elif str(_type) == "long":
+            return long
+        elif str(_type) == "float":
+            return float
+        elif str(_type) == "double":
+            return float
+        elif str(_type) == "string":
+            return str
+        else:
+            return str
 
-  def print_all(self):
-    self.print_impl()
-    self.print_pysrc()
-    return
+        return str
+
+    def print_impl(self):
+        for sidl in self.data["service_idl"]:
+            if not os.access(sidl["idl_fname"], os.F_OK):
+                sys.stderr.write("Error: IDL file \""
+                                 + sidl["idl_fname"]
+                                 + "\" not found.\n")
+                sys.exit(1)
+
+            try:
+                cmd = "omniidl -bpython -Wbexample " + \
+                    sidl["idl_fname"]
+                os.system(cmd)
+            except BaseException:
+                sys.stderr.write("Generate error: "
+                                 + sidl["impl_py"] + "\n")
+
+            print("  File \""
+                  + sidl["impl_py"]
+                  + "\" was generated.")
+
+        for cons in self.data["consumer_idl"]:
+            dup = False
+            for svc in self.data["service_idl"]:
+                if cons["idl_fname"] == svc["idl_fname"]:
+                    dup = True
+
+            if not dup:
+                if not os.access(cons["idl_fname"], os.F_OK):
+                    sys.stderr.write("Error: IDL file \""
+                                     + cons["idl_fname"]
+                                     + "\" not found.\n")
+                    sys.exit(1)
+
+                try:
+                    cmd = "omniidl -bpython " + \
+                        cons["idl_fname"]
+                    os.system(cmd)
+                except BaseException:
+                    sys.stderr.write(
+                        "Generate error: omniidl -bpython " +
+                        cons["idl_fname"])
+        return
+
+    def print_pysrc(self):
+        """
+        Generate component class script
+        """
+        self.gen(self.data["fname_py"], py_source, self.data, self.tags)
+        return
+
+    def print_all(self):
+        self.print_impl()
+        self.print_pysrc()
+        return

@@ -16,10 +16,9 @@
 #     All rights reserved.
 
 
-
-
 import OpenRTM_aist
-import OpenRTM__POA,OpenRTM
+import OpenRTM__POA
+import OpenRTM
 
 ##
 # @if jp
@@ -36,250 +35,266 @@ import OpenRTM__POA,OpenRTM
 # @class InPortCorbaCdrProvider
 # @brief InPortCorbaCdrProvider class
 #
-# This is an implementation class of the input port Provider 
+# This is an implementation class of the input port Provider
 # that uses CORBA for means of communication.
 #
-# @param DataType Data type held by the buffer that attached 
+# @param DataType Data type held by the buffer that attached
 #                 to this provider.
 #
 # @since 0.4.0
 #
 # @endif
 #
+
+
 class InPortCorbaCdrProvider(OpenRTM_aist.InPortProvider,
                              OpenRTM__POA.InPortCdr):
-    
-  """
-  """
 
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  # コンストラクタ
-  # ポートプロパティに以下の項目を設定する。
-  #  - インターフェースタイプ : CORBA_Any
-  #  - データフロータイプ : Push, Pull
-  #  - サブスクリプションタイプ : Any
-  #
-  # @param buffer 当該プロバイダに割り当てるバッファオブジェクト
-  #
-  # @else
-  # @brief Constructor
-  #
-  # Constructor
-  # Set the following items to port properties
-  #  - Interface type : CORBA_Any
-  #  - Data flow type : Push, Pull
-  #  - Subscription type : Any
-  #
-  # @param buffer Buffer object that is attached to this provider
-  #
-  # @endif
-  #
-  def __init__(self):
-    OpenRTM_aist.InPortProvider.__init__(self)
+    """
+    """
 
-    # PortProfile setting
-    self.setInterfaceType("corba_cdr")
-    
-    # ConnectorProfile setting
-    self._objref = self._this()
-    
-    self._buffer = None
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    # ポートプロパティに以下の項目を設定する。
+    #  - インターフェースタイプ : CORBA_Any
+    #  - データフロータイプ : Push, Pull
+    #  - サブスクリプションタイプ : Any
+    #
+    # @param buffer 当該プロバイダに割り当てるバッファオブジェクト
+    #
+    # @else
+    # @brief Constructor
+    #
+    # Constructor
+    # Set the following items to port properties
+    #  - Interface type : CORBA_Any
+    #  - Data flow type : Push, Pull
+    #  - Subscription type : Any
+    #
+    # @param buffer Buffer object that is attached to this provider
+    #
+    # @endif
+    #
+    def __init__(self):
+        OpenRTM_aist.InPortProvider.__init__(self)
 
-    self._profile = None
-    self._listeners = None
+        # PortProfile setting
+        self.setInterfaceType("corba_cdr")
 
-    # set InPort's reference
-    orb = OpenRTM_aist.Manager.instance().getORB()
+        # ConnectorProfile setting
+        self._objref = self._this()
 
-    self._properties.append(OpenRTM_aist.NVUtil.newNV("dataport.corba_cdr.inport_ior",
-                                                      orb.object_to_string(self._objref)))
-    self._properties.append(OpenRTM_aist.NVUtil.newNV("dataport.corba_cdr.inport_ref",
-                                                      self._objref))
+        self._buffer = None
 
-    return
+        self._profile = None
+        self._listeners = None
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  #
-  # デストラクタ
-  #
-  # @else
-  # @brief Destructor
-  #
-  # Destructor
-  #
-  # @endif
-  #
-  def __del__(self):
-    return
+        # set InPort's reference
+        orb = OpenRTM_aist.Manager.instance().getORB()
 
-  ##
-  # @if jp
-  # @brief 終了処理
-  #
-  # @else
-  # @brief 
-  #
-  # 
-  #
-  # @endif
-  #
-  def exit(self):
-    oid = OpenRTM_aist.Manager.instance().getPOA().servant_to_id(self)
-    OpenRTM_aist.Manager.instance().getPOA().deactivate_object(oid)
+        self._properties.append(OpenRTM_aist.NVUtil.newNV("dataport.corba_cdr.inport_ior",
+                                                          orb.object_to_string(self._objref)))
+        self._properties.append(OpenRTM_aist.NVUtil.newNV("dataport.corba_cdr.inport_ref",
+                                                          self._objref))
 
-  ## virtual void init(coil::Properties& prop);
-  def init(self, prop):
-    pass
+        return
 
-  ## virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
-  def setBuffer(self, buffer):
-    self._buffer = buffer
-    return
+    ##
+    # @if jp
+    # @brief デストラクタ
+    #
+    # デストラクタ
+    #
+    # @else
+    # @brief Destructor
+    #
+    # Destructor
+    #
+    # @endif
+    #
+    def __del__(self):
+        return
 
-  # void setListener(ConnectorInfo& info,
-  #                  ConnectorListeners* listeners);
-  def setListener(self, info, listeners):
-    self._profile = info
-    self._listeners = listeners
-    return
+    ##
+    # @if jp
+    # @brief 終了処理
+    #
+    # @else
+    # @brief
+    #
+    #
+    #
+    # @endif
+    #
+    def exit(self):
+        oid = OpenRTM_aist.Manager.instance().getPOA().servant_to_id(self)
+        OpenRTM_aist.Manager.instance().getPOA().deactivate_object(oid)
 
-  ##
-  # @if jp
-  # @brief [CORBA interface] バッファにデータを書き込む
-  #
-  # 設定されたバッファにデータを書き込む。
-  #
-  # @param data 書込対象データ
-  #
-  # @else
-  # @brief [CORBA interface] Write data into the buffer
-  #
-  # Write data into the specified buffer.
-  #
-  # @param data The target data for writing
-  #
-  # @endif
-  #
-  # virtual ::OpenRTM::PortStatus put(const ::OpenRTM::CdrData& data)
-  #  throw (CORBA::SystemException);
-  def put(self, data):
-    try:
-      self._rtcout.RTC_PARANOID("InPortCorbaCdrProvider.put()")
-            
-      if not self._connector:
-        self.onReceiverError(data)
-        return OpenRTM.PORT_ERROR
+    # virtual void init(coil::Properties& prop);
+    def init(self, prop):
+        pass
 
-      self._rtcout.RTC_PARANOID("received data size: %d", len(data))
+    # virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
+    def setBuffer(self, buffer):
+        self._buffer = buffer
+        return
 
-      self.onReceived(data)
+    # void setListener(ConnectorInfo& info,
+    #                  ConnectorListeners* listeners);
+    def setListener(self, info, listeners):
+        self._profile = info
+        self._listeners = listeners
+        return
 
-      ret = self._connector.write(data)
+    ##
+    # @if jp
+    # @brief [CORBA interface] バッファにデータを書き込む
+    #
+    # 設定されたバッファにデータを書き込む。
+    #
+    # @param data 書込対象データ
+    #
+    # @else
+    # @brief [CORBA interface] Write data into the buffer
+    #
+    # Write data into the specified buffer.
+    #
+    # @param data The target data for writing
+    #
+    # @endif
+    #
+    # virtual ::OpenRTM::PortStatus put(const ::OpenRTM::CdrData& data)
+    #  throw (CORBA::SystemException);
+    def put(self, data):
+        try:
+            self._rtcout.RTC_PARANOID("InPortCorbaCdrProvider.put()")
 
-      return self.convertReturn(ret, data)
+            if not self._connector:
+                self.onReceiverError(data)
+                return OpenRTM.PORT_ERROR
 
-    except:
-      self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
-      return OpenRTM.UNKNOWN_ERROR
+            self._rtcout.RTC_PARANOID("received data size: %d", len(data))
 
+            self.onReceived(data)
 
+            ret = self._connector.write(data)
 
-  def convertReturn(self, status, data):
-    if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
-      self.onBufferWrite(data)
-      return OpenRTM.PORT_OK
-            
-    elif status == OpenRTM_aist.BufferStatus.BUFFER_ERROR:
-      self.onReceiverError(data)
-      return OpenRTM.PORT_ERROR
+            return self.convertReturn(ret, data)
 
-    elif status == OpenRTM_aist.BufferStatus.BUFFER_FULL:
-      self.onBufferFull(data)
-      self.onReceiverFull(data)
-      return OpenRTM.BUFFER_FULL
+        except BaseException:
+            self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
+            return OpenRTM.UNKNOWN_ERROR
 
-    elif status == OpenRTM_aist.BufferStatus.BUFFER_EMPTY:
-      return OpenRTM.BUFFER_EMPTY
+    def convertReturn(self, status, data):
+        if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
+            self.onBufferWrite(data)
+            return OpenRTM.PORT_OK
 
-    elif status == OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET:
-      self.onReceiverError(data)
-      return OpenRTM.PORT_ERROR
+        elif status == OpenRTM_aist.BufferStatus.BUFFER_ERROR:
+            self.onReceiverError(data)
+            return OpenRTM.PORT_ERROR
 
-    elif status == OpenRTM_aist.BufferStatus.TIMEOUT:
-      self.onBufferWriteTimeout(data)
-      self.onReceiverTimeout(data)
-      return OpenRTM.BUFFER_TIMEOUT
+        elif status == OpenRTM_aist.BufferStatus.BUFFER_FULL:
+            self.onBufferFull(data)
+            self.onReceiverFull(data)
+            return OpenRTM.BUFFER_FULL
 
-    else:
-      self.onReceiverError(data)
-      return OpenRTM.UNKNOWN_ERROR
-        
+        elif status == OpenRTM_aist.BufferStatus.BUFFER_EMPTY:
+            return OpenRTM.BUFFER_EMPTY
 
-  ##
-  # @brief Connector data listener functions
-  #
-  # inline void onBufferWrite(const cdrMemoryStream& data)
-  def onBufferWrite(self, data):
-    if self._listeners is not None and self._profile is not None:
-      self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE].notify(self._profile, data)
-    return
+        elif status == OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET:
+            self.onReceiverError(data)
+            return OpenRTM.PORT_ERROR
 
+        elif status == OpenRTM_aist.BufferStatus.TIMEOUT:
+            self.onBufferWriteTimeout(data)
+            self.onReceiverTimeout(data)
+            return OpenRTM.BUFFER_TIMEOUT
 
-  ## inline void onBufferFull(const cdrMemoryStream& data)
-  def onBufferFull(self, data):
-    if self._listeners is not None and self._profile is not None:
-      self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL].notify(self._profile, data)
-    return
+        else:
+            self.onReceiverError(data)
+            return OpenRTM.UNKNOWN_ERROR
 
+    ##
+    # @brief Connector data listener functions
+    #
+    # inline void onBufferWrite(const cdrMemoryStream& data)
 
-  ## inline void onBufferWriteTimeout(const cdrMemoryStream& data)
-  def onBufferWriteTimeout(self, data):
-    if self._listeners is not None and self._profile is not None:
-      self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT].notify(self._profile, data)
-    return
+    def onBufferWrite(self, data):
+        if self._listeners is not None and self._profile is not None:
+            self._listeners.connectorData_[
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE].notify(
+                self._profile, data)
+        return
 
-  ## inline void onBufferWriteOverwrite(const cdrMemoryStream& data)
-  def onBufferWriteOverwrite(self, data):
-    if self._listeners is not None and self._profile is not None:
-      self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_OVERWRITE].notify(self._profile, data)
-    return
+    # inline void onBufferFull(const cdrMemoryStream& data)
 
+    def onBufferFull(self, data):
+        if self._listeners is not None and self._profile is not None:
+            self._listeners.connectorData_[
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL].notify(
+                self._profile, data)
+        return
 
-  ## inline void onReceived(const cdrMemoryStream& data)
-  def onReceived(self, data):
-    if self._listeners is not None and self._profile is not None:
-      self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED].notify(self._profile, data)
-    return
+    # inline void onBufferWriteTimeout(const cdrMemoryStream& data)
 
+    def onBufferWriteTimeout(self, data):
+        if self._listeners is not None and self._profile is not None:
+            self._listeners.connectorData_[
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT].notify(
+                self._profile, data)
+        return
 
-  ## inline void onReceiverFull(const cdrMemoryStream& data)
-  def onReceiverFull(self, data):
-    if self._listeners is not None and self._profile is not None:
-      self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL].notify(self._profile, data)
-    return
+    # inline void onBufferWriteOverwrite(const cdrMemoryStream& data)
+    def onBufferWriteOverwrite(self, data):
+        if self._listeners is not None and self._profile is not None:
+            self._listeners.connectorData_[
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_OVERWRITE].notify(
+                self._profile, data)
+        return
 
+    # inline void onReceived(const cdrMemoryStream& data)
 
-  ## inline void onReceiverTimeout(const cdrMemoryStream& data)
-  def onReceiverTimeout(self, data):
-    if self._listeners is not None and self._profile is not None:
-      self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT].notify(self._profile, data)
-    return
+    def onReceived(self, data):
+        if self._listeners is not None and self._profile is not None:
+            self._listeners.connectorData_[
+                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED].notify(
+                self._profile, data)
+        return
 
+    # inline void onReceiverFull(const cdrMemoryStream& data)
 
-  ## inline void onReceiverError(const cdrMemoryStream& data)
-  def onReceiverError(self, data):
-    if self._listeners is not None and self._profile is not None:
-      self._listeners.connectorData_[OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR].notify(self._profile, data)
-    return
+    def onReceiverFull(self, data):
+        if self._listeners is not None and self._profile is not None:
+            self._listeners.connectorData_[
+                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL].notify(
+                self._profile, data)
+        return
+
+    # inline void onReceiverTimeout(const cdrMemoryStream& data)
+
+    def onReceiverTimeout(self, data):
+        if self._listeners is not None and self._profile is not None:
+            self._listeners.connectorData_[
+                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT].notify(
+                self._profile, data)
+        return
+
+    # inline void onReceiverError(const cdrMemoryStream& data)
+
+    def onReceiverError(self, data):
+        if self._listeners is not None and self._profile is not None:
+            self._listeners.connectorData_[
+                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR].notify(
+                self._profile, data)
+        return
 
 
 def InPortCorbaCdrProviderInit():
-  factory = OpenRTM_aist.InPortProviderFactory.instance()
-  factory.addFactory("corba_cdr",
-                     OpenRTM_aist.InPortCorbaCdrProvider,
-                     OpenRTM_aist.Delete)
+    factory = OpenRTM_aist.InPortProviderFactory.instance()
+    factory.addFactory("corba_cdr",
+                       OpenRTM_aist.InPortCorbaCdrProvider,
+                       OpenRTM_aist.Delete)

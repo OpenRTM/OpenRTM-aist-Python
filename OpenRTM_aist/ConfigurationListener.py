@@ -14,7 +14,6 @@
 #     All rights reserved.
 
 
-
 ##
 # @if jp
 # @brief ConfigurationParamListener のタイプ
@@ -23,21 +22,20 @@
 #
 # @else
 # @brief The types of ConnectorDataListener
-# 
+#
 # - ON_UPDATE_CONFIG_PARAM,
 #
 # @endif
 #
 class ConfigurationParamListenerType:
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    pass
+    def __init__(self):
+        pass
 
-  ON_UPDATE_CONFIG_PARAM      = 0
-  CONFIG_PARAM_LISTENER_NUM   = 1
-
+    ON_UPDATE_CONFIG_PARAM = 0
+    CONFIG_PARAM_LISTENER_NUM = 1
 
 
 ##
@@ -62,79 +60,78 @@ class ConfigurationParamListenerType:
 #
 # @endif
 class ConfigurationParamListener:
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    pass
+    def __init__(self):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief ConfigurationParamListenerType を文字列に変換
-  #
-  # ConfigurationParamListenerType を文字列に変換する
-  #
-  # @param type 変換対象 ConfigurationParamListenerType
-  #
-  # @return 文字列変換結果
-  #
-  # @else
-  #
-  # @brief Convert ConfigurationParamListenerType into the string.
-  #
-  # Convert ConfigurationParamListenerType into the string.
-  #
-  # @param type The target ConfigurationParamListenerType for transformation
-  #
-  # @return Trnasformation result of string representation
-  #
-  # @endif
-  # static const char* toString(ConfigurationParamListenerType type)
-  def toString(type):
-    typeString = ["ON_UPDATE_CONFIG_PARAM",
-                  "CONFIG_PARAM_LISTENER_NUM"]
-                      
-    if type < ConfigurationParamListenerType.CONFIG_PARAM_LISTENER_NUM:
-      return typeString[type]
-        
-    return "";
+    ##
+    # @if jp
+    #
+    # @brief ConfigurationParamListenerType を文字列に変換
+    #
+    # ConfigurationParamListenerType を文字列に変換する
+    #
+    # @param type 変換対象 ConfigurationParamListenerType
+    #
+    # @return 文字列変換結果
+    #
+    # @else
+    #
+    # @brief Convert ConfigurationParamListenerType into the string.
+    #
+    # Convert ConfigurationParamListenerType into the string.
+    #
+    # @param type The target ConfigurationParamListenerType for transformation
+    #
+    # @return Trnasformation result of string representation
+    #
+    # @endif
+    # static const char* toString(ConfigurationParamListenerType type)
+    def toString(type):
+        typeString = ["ON_UPDATE_CONFIG_PARAM",
+                      "CONFIG_PARAM_LISTENER_NUM"]
 
-  toString = staticmethod(toString)
+        if type < ConfigurationParamListenerType.CONFIG_PARAM_LISTENER_NUM:
+            return typeString[type]
+
+        return ""
+
+    toString = staticmethod(toString)
+
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+
+    def __del__(self):
+        pass
+
+    ##
+    # @if jp
+    #
+    # @brief 仮想コールバック関数
+    #
+    # ConfigurationParamListener のコールバック関数
+    #
+    # @else
+    #
+    # @brief Virtual Callback function
+    #
+    # This is a the Callback function for ConfigurationParamListener.
+    #
+    # @endif
+    # virtual void operator()(const char* config_set_name,
+    #                         const char* config_param_name) = 0;
+
+    def __call__(self, config_set_name, config_param_name):
+        pass
 
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  def __del__(self):
-    pass
-
-
-  ##
-  # @if jp
-  #
-  # @brief 仮想コールバック関数
-  #
-  # ConfigurationParamListener のコールバック関数
-  #
-  # @else
-  #
-  # @brief Virtual Callback function
-  #
-  # This is a the Callback function for ConfigurationParamListener.
-  #
-  # @endif
-  # virtual void operator()(const char* config_set_name,
-  #                         const char* config_param_name) = 0;
-  def __call__(self, config_set_name, config_param_name):
-    pass
-
-
-
-#============================================================
+# ============================================================
 ##
 # @if jp
 # @brief ConfigurationSetListener のタイプ
@@ -144,22 +141,21 @@ class ConfigurationParamListener:
 #
 # @else
 # @brief The types of ConfigurationSetListener
-# 
-# - ON_SET_CONFIG_SET: Value list has been set as a configuration set 
+#
+# - ON_SET_CONFIG_SET: Value list has been set as a configuration set
 # - ON_ADD_CONFIG_SET: A new configuration set has been added
 #
 # @endif
 class ConfigurationSetListenerType:
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    pass
+    def __init__(self):
+        pass
 
-  ON_SET_CONFIG_SET       = 0
-  ON_ADD_CONFIG_SET       = 1
-  CONFIG_SET_LISTENER_NUM = 2
-
+    ON_SET_CONFIG_SET = 0
+    ON_ADD_CONFIG_SET = 1
+    CONFIG_SET_LISTENER_NUM = 2
 
 
 ##
@@ -180,105 +176,103 @@ class ConfigurationSetListenerType:
 # This class is abstract base class for listener classes that
 # provides callbacks for configuration set's related events.
 #
-# - ON_SET_CONFIG_SET: Value list has been set as a configuration set 
+# - ON_SET_CONFIG_SET: Value list has been set as a configuration set
 # - ON_ADD_CONFIG_SET: A new configuration set has been added
 #
 # @endif
 class ConfigurationSetListener:
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    pass
+    def __init__(self):
+        pass
+
+    ##
+    # @if jp
+    #
+    # @brief ConfigurationSetListenerType を文字列に変換
+    #
+    # ConfigurationSetListenerType を文字列に変換する
+    #
+    # @param type 変換対象 ConfigurationSetListenerType
+    #
+    # @return 文字列変換結果
+    #
+    # @else
+    #
+    # @brief Convert ConfigurationSetListenerType into the string.
+    #
+    # Convert ConfigurationSetListenerType into the string.
+    #
+    # @param type The target ConfigurationSetListenerType for
+    #             transformation
+    #
+    # @return Trnasformation result of string representation
+    #
+    # @endif
+    # static const char* toString(ConfigurationSetListenerType type)
+
+    def toString(type):
+        typeString = ["ON_SET_CONFIG_SET",
+                      "ON_ADD_CONFIG_SET",
+                      "CONFIG_SET_LISTENER_NUM"]
+        if type < ConfigurationSetListenerType.CONFIG_SET_LISTENER_NUM:
+            return typeString[type]
+
+        return ""
+
+    toString = staticmethod(toString)
+
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+
+    def __del__(self):
+        pass
+
+    ##
+    # @if jp
+    #
+    # @brief 仮想コールバック関数
+    #
+    # ConfigurationSetListener のコールバック関数
+    #
+    # @else
+    #
+    # @brief Virtual Callback function
+    #
+    # This is a the Callback function for ConfigurationSetListener
+    #
+    # @endif
+    # virtual void operator()(const coil::Properties& config_set) = 0;
+
+    def __call__(self, config_set):
+        pass
 
 
-  ##
-  # @if jp
-  #
-  # @brief ConfigurationSetListenerType を文字列に変換
-  #
-  # ConfigurationSetListenerType を文字列に変換する
-  #
-  # @param type 変換対象 ConfigurationSetListenerType
-  #
-  # @return 文字列変換結果
-  #
-  # @else
-  #
-  # @brief Convert ConfigurationSetListenerType into the string.
-  #
-  # Convert ConfigurationSetListenerType into the string.
-  #
-  # @param type The target ConfigurationSetListenerType for
-  #             transformation
-  #
-  # @return Trnasformation result of string representation
-  #
-  # @endif
-  # static const char* toString(ConfigurationSetListenerType type)
-  def toString(type):
-    typeString = ["ON_SET_CONFIG_SET",
-                  "ON_ADD_CONFIG_SET",
-                  "CONFIG_SET_LISTENER_NUM"]
-    if type < ConfigurationSetListenerType.CONFIG_SET_LISTENER_NUM:
-      return typeString[type]
-
-    return "";
-
-  toString = staticmethod(toString)
-
-
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  def __del__(self):
-    pass
-
-
-  ##
-  # @if jp
-  #
-  # @brief 仮想コールバック関数
-  #
-  # ConfigurationSetListener のコールバック関数
-  #
-  # @else
-  #
-  # @brief Virtual Callback function
-  #
-  # This is a the Callback function for ConfigurationSetListener
-  #
-  # @endif
-  # virtual void operator()(const coil::Properties& config_set) = 0;
-  def __call__(self, config_set):
-    pass
-
-
-
-#============================================================
+# ============================================================
 ##
 # @if jp
 # @brief ConfigurationSetNameListenerType
 #
 # @else
 # @brief The types of ConfigurationSetNameListener
-# 
+#
 # @endif
 class ConfigurationSetNameListenerType:
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    pass
+    def __init__(self):
+        pass
 
-  ON_UPDATE_CONFIG_SET          = 0
-  ON_REMOVE_CONFIG_SET          = 1
-  ON_ACTIVATE_CONFIG_SET        = 2
-  CONFIG_SET_NAME_LISTENER_NUM  = 3
-
+    ON_UPDATE_CONFIG_SET = 0
+    ON_REMOVE_CONFIG_SET = 1
+    ON_ACTIVATE_CONFIG_SET = 2
+    CONFIG_SET_NAME_LISTENER_NUM = 3
 
 
 ##
@@ -305,78 +299,77 @@ class ConfigurationSetNameListenerType:
 #
 # @endif
 class ConfigurationSetNameListener:
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    pass
-  
+    def __init__(self):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief ConfigurationSetNameListenerType を文字列に変換
-  #
-  # ConfigurationSetNameListenerType を文字列に変換する
-  #
-  # @param type 変換対象 ConfigurationSetNameListenerType
-  #
-  # @return 文字列変換結果
-  #
-  # @else
-  #
-  # @brief Convert ConfigurationSetNameListenerType into the string.
-  #
-  # Convert ConfigurationSetNameListenerType into the string.
-  #
-  # @param type The target ConfigurationSetNameListenerType for
-  #             transformation
-  #
-  # @return Trnasformation result of string representation
-  #
-  # @endif
-  # static const char* toString(ConfigurationSetNameListenerType type)
-  def toString(type):
-    typeString = ["ON_UPDATE_CONFIG_SET",
-                  "ON_REMOVE_CONFIG_SET",
-                  "ON_ACTIVATE_CONFIG_SET",
-                  "CONFIG_SET_NAME_LISTENER_NUM"]
-    if type < ConfigurationSetNameListenerType.CONFIG_SET_NAME_LISTENER_NUM:
-      return typeString[type]
+    ##
+    # @if jp
+    #
+    # @brief ConfigurationSetNameListenerType を文字列に変換
+    #
+    # ConfigurationSetNameListenerType を文字列に変換する
+    #
+    # @param type 変換対象 ConfigurationSetNameListenerType
+    #
+    # @return 文字列変換結果
+    #
+    # @else
+    #
+    # @brief Convert ConfigurationSetNameListenerType into the string.
+    #
+    # Convert ConfigurationSetNameListenerType into the string.
+    #
+    # @param type The target ConfigurationSetNameListenerType for
+    #             transformation
+    #
+    # @return Trnasformation result of string representation
+    #
+    # @endif
+    # static const char* toString(ConfigurationSetNameListenerType type)
 
-    return "";
+    def toString(type):
+        typeString = ["ON_UPDATE_CONFIG_SET",
+                      "ON_REMOVE_CONFIG_SET",
+                      "ON_ACTIVATE_CONFIG_SET",
+                      "CONFIG_SET_NAME_LISTENER_NUM"]
+        if type < ConfigurationSetNameListenerType.CONFIG_SET_NAME_LISTENER_NUM:
+            return typeString[type]
 
-  toString = staticmethod(toString)
+        return ""
 
+    toString = staticmethod(toString)
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  def __del__(self):
-    pass
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
 
+    def __del__(self):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief 仮想コールバック関数
-  #
-  # ConfigurationSetNameListener のコールバック関数
-  #
-  # @else
-  #
-  # @brief Virtual Callback function
-  #
-  # This is a the Callback function for ConfigurationSetNameListener.
-  #
-  # @endif
-  # virtual void operator()(const char* config_set_name) = 0;
-  def __call__(self, config_set_name):
-    pass
+    ##
+    # @if jp
+    #
+    # @brief 仮想コールバック関数
+    #
+    # ConfigurationSetNameListener のコールバック関数
+    #
+    # @else
+    #
+    # @brief Virtual Callback function
+    #
+    # This is a the Callback function for ConfigurationSetNameListener.
+    #
+    # @endif
+    # virtual void operator()(const char* config_set_name) = 0;
 
+    def __call__(self, config_set_name):
+        pass
 
 
 ##
@@ -395,109 +388,108 @@ class ConfigurationSetNameListener:
 #
 # @endif
 class ConfigurationParamListenerHolder:
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  # ConfigurationParamListenerHolder();
-  def __init__(self):
-    self._listeners = []
-    pass
-  
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    # ConfigurationParamListenerHolder();
+    def __init__(self):
+        self._listeners = []
+        pass
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  def __del__(self):
-    for (idx, listener) in enumerate(self._listeners):
-      del self._listeners[idx]
-    return
-  
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーの追加
-  #
-  # リスナーを追加する。
-  #
-  # @param listener 追加するリスナ
-  # @else
-  #
-  # @brief Add the listener.
-  #
-  # This method adds the listener. 
-  #
-  # @param listener Added listener
-  # @endif
-  # void addListener(ConfigurationParamListener* listener);
-  def addListener(self, listener):
-    self._listeners.append(listener)
-    return
-
-
-  ##
-  # @if jp
-  #
-  # @brief リスナーの削除
-  #
-  # リスナを削除する。
-  #
-  # @param listener 削除するリスナ
-  # @else
-  #
-  # @brief Remove the listener. 
-  #
-  # This method removes the listener. 
-  #
-  # @param listener Removed listener
-  # @endif
-  # void removeListener(ConfigurationParamListener* listener);
-  def removeListener(self, listener):
-    len_ = len(self._listeners)
-    for i in range(len_):
-      idx = (len_ - 1) - i
-      if self._listeners[idx] == listener:
-        del self._listeners[idx]
+    def __del__(self):
+        for (idx, listener) in enumerate(self._listeners):
+            del self._listeners[idx]
         return
-    return
-    
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーへ通知する
-  #
-  # 登録されているリスナのコールバックメソッドを呼び出す。
-  #
-  # @param info ConnectorInfo
-  # @param cdrdata データ
-  # @else
-  #
-  # @brief Notify listeners. 
-  #
-  # This calls the Callback method of the registered listener. 
-  #
-  # @param info ConnectorInfo
-  # @param cdrdata Data
-  # @endif
-  # void notify(const char* config_set_name, const char* config_param_name);
-  def notify(self, config_set_name, config_param_name):
-    for listener in self._listeners:
-      listener(config_set_name, config_param_name)
-    return
-    
+    ##
+    # @if jp
+    #
+    # @brief リスナーの追加
+    #
+    # リスナーを追加する。
+    #
+    # @param listener 追加するリスナ
+    # @else
+    #
+    # @brief Add the listener.
+    #
+    # This method adds the listener.
+    #
+    # @param listener Added listener
+    # @endif
+    # void addListener(ConfigurationParamListener* listener);
+
+    def addListener(self, listener):
+        self._listeners.append(listener)
+        return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーの削除
+    #
+    # リスナを削除する。
+    #
+    # @param listener 削除するリスナ
+    # @else
+    #
+    # @brief Remove the listener.
+    #
+    # This method removes the listener.
+    #
+    # @param listener Removed listener
+    # @endif
+    # void removeListener(ConfigurationParamListener* listener);
+
+    def removeListener(self, listener):
+        len_ = len(self._listeners)
+        for i in range(len_):
+            idx = (len_ - 1) - i
+            if self._listeners[idx] == listener:
+                del self._listeners[idx]
+                return
+        return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーへ通知する
+    #
+    # 登録されているリスナのコールバックメソッドを呼び出す。
+    #
+    # @param info ConnectorInfo
+    # @param cdrdata データ
+    # @else
+    #
+    # @brief Notify listeners.
+    #
+    # This calls the Callback method of the registered listener.
+    #
+    # @param info ConnectorInfo
+    # @param cdrdata Data
+    # @endif
+    # void notify(const char* config_set_name, const char* config_param_name);
+
+    def notify(self, config_set_name, config_param_name):
+        for listener in self._listeners:
+            listener(config_set_name, config_param_name)
+        return
 
 
-#============================================================
+# ============================================================
 ##
 # @if jp
 # @class ConfigurationSetListenerHolder
@@ -514,110 +506,109 @@ class ConfigurationParamListenerHolder:
 #
 # @endif
 class ConfigurationSetListenerHolder:
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  # ConfigurationSetListenerHolder();
-  def __init__(self):
-    self._listeners = []
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    # ConfigurationSetListenerHolder();
+    def __init__(self):
+        self._listeners = []
+        pass
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  def __del__(self):
-    return
-    
-
-  ##
-  # @if jp
-  #
-  # @brief リスナーの追加
-  #
-  # リスナーを追加する。
-  #
-  # @param listener 追加するリスナ
-  # @else
-  #
-  # @brief Add the listener.
-  #
-  # This method adds the listener. 
-  #
-  # @param listener Added listener
-  # @endif
-  # void addListener(ConfigurationSetListener* listener);
-  def addListener(self, listener):
-    self._listeners.append(listener)
-    return
-  
-    
-  ##
-  # @if jp
-  #
-  # @brief リスナーの削除
-  #
-  # リスナを削除する。
-  #
-  # @param listener 削除するリスナ
-  # @else
-  #
-  # @brief Remove the listener. 
-  #
-  # This method removes the listener. 
-  #
-  # @param listener Removed listener
-  # @endif
-  # void removeListener(ConfigurationSetListener* listener);
-  def removeListener(self, listener):
-    len_ = len(self._listeners)
-    for i in range(len_):
-      idx = (len_ - 1) - i
-      if self._listeners[idx] == listener:
-        del self._listeners[idx]
+    def __del__(self):
         return
-    return
-    
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーへ通知する
-  #
-  # 登録されているリスナのコールバックメソッドを呼び出す。
-  #
-  # @param info ConnectorInfo
-  # @param cdrdata データ
-  # @else
-  #
-  # @brief Notify listeners. 
-  #
-  # This calls the Callback method of the registered listener. 
-  #
-  # @param info ConnectorInfo
-  # @param cdrdata Data
-  # @endif
-  # void notify(const coil::Properties& config_set);
-  def notify(self, config_set):
-    for listener in self._listeners:
-      listener(config_set)
-    return
-    
+    ##
+    # @if jp
+    #
+    # @brief リスナーの追加
+    #
+    # リスナーを追加する。
+    #
+    # @param listener 追加するリスナ
+    # @else
+    #
+    # @brief Add the listener.
+    #
+    # This method adds the listener.
+    #
+    # @param listener Added listener
+    # @endif
+    # void addListener(ConfigurationSetListener* listener);
+
+    def addListener(self, listener):
+        self._listeners.append(listener)
+        return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーの削除
+    #
+    # リスナを削除する。
+    #
+    # @param listener 削除するリスナ
+    # @else
+    #
+    # @brief Remove the listener.
+    #
+    # This method removes the listener.
+    #
+    # @param listener Removed listener
+    # @endif
+    # void removeListener(ConfigurationSetListener* listener);
+
+    def removeListener(self, listener):
+        len_ = len(self._listeners)
+        for i in range(len_):
+            idx = (len_ - 1) - i
+            if self._listeners[idx] == listener:
+                del self._listeners[idx]
+                return
+        return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーへ通知する
+    #
+    # 登録されているリスナのコールバックメソッドを呼び出す。
+    #
+    # @param info ConnectorInfo
+    # @param cdrdata データ
+    # @else
+    #
+    # @brief Notify listeners.
+    #
+    # This calls the Callback method of the registered listener.
+    #
+    # @param info ConnectorInfo
+    # @param cdrdata Data
+    # @endif
+    # void notify(const coil::Properties& config_set);
+
+    def notify(self, config_set):
+        for listener in self._listeners:
+            listener(config_set)
+        return
 
 
-#============================================================
+# ============================================================
 ##
 # @if jp
-# @class ConfigurationSetNameListenerHolder 
+# @class ConfigurationSetNameListenerHolder
 # @brief ConfigurationSetNameListener ホルダクラス
 #
 # 複数の ConfigurationSetNameListener を保持し管理するクラス。
@@ -631,105 +622,104 @@ class ConfigurationSetListenerHolder:
 #
 # @endif
 class ConfigurationSetNameListenerHolder:
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  # ConfigurationSetNameListenerHolder();
-  def __init__(self):
-    self._listeners = []
-    pass
-    
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    # ConfigurationSetNameListenerHolder();
+    def __init__(self):
+        self._listeners = []
+        pass
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  def __del__(self):
-    return
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
 
-
-  ##
-  # @if jp
-  #
-  # @brief リスナーの追加
-  #
-  # リスナーを追加する。
-  #
-  # @param listener 追加するリスナ
-  # @else
-  #
-  # @brief Add the listener.
-  #
-  # This method adds the listener. 
-  #
-  # @param listener Added listener
-  # @endif
-  # void addListener(ConfigurationSetNameListener* listener);
-  def addListener(self, listener):
-    self._listeners.append(listener)
-    return
-    
-
-  ##
-  # @if jp
-  #
-  # @brief リスナーの削除
-  #
-  # リスナを削除する。
-  #
-  # @param listener 削除するリスナ
-  # @else
-  #
-  # @brief Remove the listener. 
-  #
-  # This method removes the listener. 
-  #
-  # @param listener Removed listener
-  # @endif
-  # void removeListener(ConfigurationSetNameListener* listener);
-  def removeListener(self, listener):
-    len_ = len(self._listeners)
-    for i in range(len_):
-      idx = (len_ - 1) - i
-      if self._listeners[idx] == listener:
-        del self._listeners[idx]
+    def __del__(self):
         return
-    return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーの追加
+    #
+    # リスナーを追加する。
+    #
+    # @param listener 追加するリスナ
+    # @else
+    #
+    # @brief Add the listener.
+    #
+    # This method adds the listener.
+    #
+    # @param listener Added listener
+    # @endif
+    # void addListener(ConfigurationSetNameListener* listener);
+
+    def addListener(self, listener):
+        self._listeners.append(listener)
+        return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーの削除
+    #
+    # リスナを削除する。
+    #
+    # @param listener 削除するリスナ
+    # @else
+    #
+    # @brief Remove the listener.
+    #
+    # This method removes the listener.
+    #
+    # @param listener Removed listener
+    # @endif
+    # void removeListener(ConfigurationSetNameListener* listener);
+
+    def removeListener(self, listener):
+        len_ = len(self._listeners)
+        for i in range(len_):
+            idx = (len_ - 1) - i
+            if self._listeners[idx] == listener:
+                del self._listeners[idx]
+                return
+        return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーへ通知する
+    #
+    # 登録されているリスナのコールバックメソッドを呼び出す。
+    #
+    # @param info ConnectorInfo
+    # @else
+    #
+    # @brief Notify listeners.
+    #
+    # This calls the Callback method of the registered listener.
+    #
+    # @param info ConnectorInfo
+    # @endif
+    # void notify(const char* config_set_name);
+
+    def notify(self, config_set_name):
+        for listener in self._listeners:
+            listener(config_set_name)
+        return
 
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーへ通知する
-  #
-  # 登録されているリスナのコールバックメソッドを呼び出す。
-  #
-  # @param info ConnectorInfo
-  # @else
-  #
-  # @brief Notify listeners. 
-  #
-  # This calls the Callback method of the registered listener. 
-  #
-  # @param info ConnectorInfo
-  # @endif
-  # void notify(const char* config_set_name);
-  def notify(self, config_set_name):
-    for listener in self._listeners:
-      listener(config_set_name)
-    return
-     
-
-
-#------------------------------------------------------------
+# ------------------------------------------------------------
 ##
 # @if jp
 # @class ConfigurationActionListeners
@@ -743,42 +733,42 @@ class ConfigurationSetNameListenerHolder:
 #
 # @endif
 class ConfigurationListeners:
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    ##
-    # @if jp
-    # @brief ConfigurationParamListenerTypeリスナ配列
-    # ConfigurationParamTypeリスナを格納
-    # @else
-    # @brief ConfigurationParamListenerType listener array
-    # The ConfigurationParamListenerType listener is stored.
-    # @endif
-    self.configparam_num = ConfigurationParamListenerType.CONFIG_PARAM_LISTENER_NUM
-    self.configparam_ = [ConfigurationParamListenerHolder()
-                  for i in range(self.configparam_num)]
+    def __init__(self):
+        ##
+        # @if jp
+        # @brief ConfigurationParamListenerTypeリスナ配列
+        # ConfigurationParamTypeリスナを格納
+        # @else
+        # @brief ConfigurationParamListenerType listener array
+        # The ConfigurationParamListenerType listener is stored.
+        # @endif
+        self.configparam_num = ConfigurationParamListenerType.CONFIG_PARAM_LISTENER_NUM
+        self.configparam_ = [ConfigurationParamListenerHolder()
+                             for i in range(self.configparam_num)]
 
-    ##
-    # @if jp
-    # @brief ConfigurationSetListenerTypeリスナ配列
-    # ConfigurationSetListenerTypeリスナを格納
-    # @else
-    # @brief ConfigurationSetListenerType listener array
-    # The ConfigurationSetListenerType listener is stored.
-    # @endif
-    self.configset_num = ConfigurationSetListenerType.CONFIG_SET_LISTENER_NUM
-    self.configset_ = [ConfigurationSetListenerHolder()
-                for i in range(self.configset_num)]
+        ##
+        # @if jp
+        # @brief ConfigurationSetListenerTypeリスナ配列
+        # ConfigurationSetListenerTypeリスナを格納
+        # @else
+        # @brief ConfigurationSetListenerType listener array
+        # The ConfigurationSetListenerType listener is stored.
+        # @endif
+        self.configset_num = ConfigurationSetListenerType.CONFIG_SET_LISTENER_NUM
+        self.configset_ = [ConfigurationSetListenerHolder()
+                           for i in range(self.configset_num)]
 
-    ##
-    # @if jp
-    # @brief ConfigurationSetNameListenerTypeリスナ配列
-    # ConfigurationSetNameListenerTypeリスナを格納
-    # @else
-    # @brief ConfigurationSetNameListenerType listener array
-    # The ConfigurationSetNameListenerType listener is stored. 
-    # @endif
-    self.configsetname_num = ConfigurationSetNameListenerType.CONFIG_SET_NAME_LISTENER_NUM
-    self.configsetname_ = [ConfigurationSetNameListenerHolder()
-                    for i in range(self.configsetname_num)]
+        ##
+        # @if jp
+        # @brief ConfigurationSetNameListenerTypeリスナ配列
+        # ConfigurationSetNameListenerTypeリスナを格納
+        # @else
+        # @brief ConfigurationSetNameListenerType listener array
+        # The ConfigurationSetNameListenerType listener is stored.
+        # @endif
+        self.configsetname_num = ConfigurationSetNameListenerType.CONFIG_SET_NAME_LISTENER_NUM
+        self.configsetname_ = [ConfigurationSetNameListenerHolder()
+                               for i in range(self.configsetname_num)]

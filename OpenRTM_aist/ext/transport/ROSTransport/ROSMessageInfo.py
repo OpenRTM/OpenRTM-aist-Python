@@ -26,137 +26,13 @@ import OpenRTM_aist
 #
 # @else
 # @class ROSOutPort
-# @brief 
+# @brief
 #
 #
 # @endif
+
+
 class ROSMessageInfoBase(object):
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  # コンストラクタ
-  #
-  # @param self
-  #
-  # @else
-  # @brief Constructor
-  #
-  # @param self
-  #
-  # @endif
-  def __init__(self):
-    pass
-  ##
-  # @if jp
-  # @brief デストラクタ
-  #
-  # デストラクタ
-  #
-  # @param self
-  #
-  # @else
-  # @brief Destructor
-  #
-  # Destructor
-  #
-  # @param self
-  #
-  # @endif
-  #
-  def __del__(self):
-    pass
-
-  ##
-  # @if jp
-  # @brief メッセージの型名を取得
-  #
-  # @param self
-  # @return 型名
-  #
-  # @else
-  # @brief 
-  #
-  #
-  # @param self
-  # @return
-  #
-  # @endif
-  #
-  def datatype(self):
-    return ""
-
-  ##
-  # @if jp
-  # @brief メッセージのMD5チェックサムを取得
-  #
-  # @param self
-  # @return MD5チェックサム
-  #
-  # @else
-  # @brief 
-  #
-  #
-  # @param self
-  # @return
-  #
-  # @endif
-  #
-  def md5sum(self):
-    return ""
-
-  ##
-  # @if jp
-  # @brief メッセージの詳細説明を取得
-  #
-  # @param self
-  # @return 詳細説明
-  #
-  # @else
-  # @brief 
-  #
-  #
-  # @param self
-  # @return
-  #
-  # @endif
-  #
-  def message_definition(self):
-    return ""
-  
-
-##
-# @if jp
-# @brief メッセージの情報格納オブジェクト生成関数
-#
-# @param data_class ROSメッセージ型
-# @return メッセージの情報格納オブジェクト
-#
-# @else
-# @brief 
-#
-# @param data_class 
-# @return 
-#
-# @endif
-#
-def ros_message_info(data_class):
-  ##
-  # @if jp
-  # @class ROSMessageInfo
-  # @brief メッセージの情報格納クラス
-  #
-  #
-  # @else
-  # @class ROSMessageInfo
-  # @brief 
-  #
-  #
-  # @endif
-  class ROSMessageInfo(ROSMessageInfoBase):
-    """
-    """
-
     ##
     # @if jp
     # @brief コンストラクタ
@@ -172,23 +48,27 @@ def ros_message_info(data_class):
     #
     # @endif
     def __init__(self):
-      super(ROSMessageInfo, self).__init__()
-      
-
+        pass
     ##
     # @if jp
     # @brief デストラクタ
     #
+    # デストラクタ
     #
     # @param self
     #
     # @else
+    # @brief Destructor
     #
-    # @brief self
+    # Destructor
+    #
+    # @param self
     #
     # @endif
+    #
+
     def __del__(self):
-      pass
+        pass
 
     ##
     # @if jp
@@ -198,7 +78,7 @@ def ros_message_info(data_class):
     # @return 型名
     #
     # @else
-    # @brief 
+    # @brief
     #
     #
     # @param self
@@ -207,7 +87,7 @@ def ros_message_info(data_class):
     # @endif
     #
     def datatype(self):
-      return data_class._type
+        return ""
 
     ##
     # @if jp
@@ -217,7 +97,7 @@ def ros_message_info(data_class):
     # @return MD5チェックサム
     #
     # @else
-    # @brief 
+    # @brief
     #
     #
     # @param self
@@ -226,17 +106,17 @@ def ros_message_info(data_class):
     # @endif
     #
     def md5sum(self):
-      return data_class._md5sum
+        return ""
 
     ##
     # @if jp
-    # @brief メッセージのMD5チェックサムを取得
+    # @brief メッセージの詳細説明を取得
     #
     # @param self
-    # @return MD5チェックサム
+    # @return 詳細説明
     #
     # @else
-    # @brief 
+    # @brief
     #
     #
     # @param self
@@ -245,9 +125,131 @@ def ros_message_info(data_class):
     # @endif
     #
     def message_definition(self):
-      return data_class._full_text
-  return ROSMessageInfo
+        return ""
 
+
+##
+# @if jp
+# @brief メッセージの情報格納オブジェクト生成関数
+#
+# @param data_class ROSメッセージ型
+# @return メッセージの情報格納オブジェクト
+#
+# @else
+# @brief
+#
+# @param data_class
+# @return
+#
+# @endif
+#
+def ros_message_info(data_class):
+    ##
+    # @if jp
+    # @class ROSMessageInfo
+    # @brief メッセージの情報格納クラス
+    #
+    #
+    # @else
+    # @class ROSMessageInfo
+    # @brief
+    #
+    #
+    # @endif
+    class ROSMessageInfo(ROSMessageInfoBase):
+        """
+        """
+
+        ##
+        # @if jp
+        # @brief コンストラクタ
+        #
+        # コンストラクタ
+        #
+        # @param self
+        #
+        # @else
+        # @brief Constructor
+        #
+        # @param self
+        #
+        # @endif
+        def __init__(self):
+            super(ROSMessageInfo, self).__init__()
+
+        ##
+        # @if jp
+        # @brief デストラクタ
+        #
+        #
+        # @param self
+        #
+        # @else
+        #
+        # @brief self
+        #
+        # @endif
+
+        def __del__(self):
+            pass
+
+        ##
+        # @if jp
+        # @brief メッセージの型名を取得
+        #
+        # @param self
+        # @return 型名
+        #
+        # @else
+        # @brief
+        #
+        #
+        # @param self
+        # @return
+        #
+        # @endif
+        #
+        def datatype(self):
+            return data_class._type
+
+        ##
+        # @if jp
+        # @brief メッセージのMD5チェックサムを取得
+        #
+        # @param self
+        # @return MD5チェックサム
+        #
+        # @else
+        # @brief
+        #
+        #
+        # @param self
+        # @return
+        #
+        # @endif
+        #
+        def md5sum(self):
+            return data_class._md5sum
+
+        ##
+        # @if jp
+        # @brief メッセージのMD5チェックサムを取得
+        #
+        # @param self
+        # @return MD5チェックサム
+        #
+        # @else
+        # @brief
+        #
+        #
+        # @param self
+        # @return
+        #
+        # @endif
+        #
+        def message_definition(self):
+            return data_class._full_text
+    return ROSMessageInfo
 
 
 rosmessageinfofactory = None
@@ -260,70 +262,69 @@ rosmessageinfofactory = None
 #
 # @else
 # @class ROSMessageInfoFactory
-# @brief 
+# @brief
 #
 #
 # @endif
-class ROSMessageInfoFactory(OpenRTM_aist.Factory,ROSMessageInfoBase):
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  # コンストラクタ
-  #
-  # @param self
-  #
-  # @else
-  # @brief Constructor
-  #
-  # @param self
-  #
-  # @endif
-  def __init__(self):
-    OpenRTM_aist.Factory.__init__(self)
+class ROSMessageInfoFactory(OpenRTM_aist.Factory, ROSMessageInfoBase):
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @param self
+    #
+    # @else
+    # @brief Constructor
+    #
+    # @param self
+    #
+    # @endif
+    def __init__(self):
+        OpenRTM_aist.Factory.__init__(self)
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  #
-  # デストラクタ
-  #
-  # @param self
-  #
-  # @else
-  # @brief Destructor
-  #
-  # Destructor
-  #
-  # @param self
-  #
-  # @endif
-  #
-  def __del__(self):
-    pass
+    ##
+    # @if jp
+    # @brief デストラクタ
+    #
+    # デストラクタ
+    #
+    # @param self
+    #
+    # @else
+    # @brief Destructor
+    #
+    # Destructor
+    #
+    # @param self
+    #
+    # @endif
+    #
+    def __del__(self):
+        pass
 
-  ##
-  # @if jp
-  # @brief インスタンス取得
-  #
-  #
-  # @return インスタンス
-  #
-  # @else
-  # @brief 
-  #
-  #
-  # @return
-  #
-  # @endif
-  #
-  def instance():
-    global rosmessageinfofactory
+    ##
+    # @if jp
+    # @brief インスタンス取得
+    #
+    #
+    # @return インスタンス
+    #
+    # @else
+    # @brief
+    #
+    #
+    # @return
+    #
+    # @endif
+    #
+    def instance():
+        global rosmessageinfofactory
 
-    if rosmessageinfofactory is None:
-      rosmessageinfofactory = ROSMessageInfoFactory()
+        if rosmessageinfofactory is None:
+            rosmessageinfofactory = ROSMessageInfoFactory()
 
-    return rosmessageinfofactory
+        return rosmessageinfofactory
 
-  instance = staticmethod(instance)
-
+    instance = staticmethod(instance)

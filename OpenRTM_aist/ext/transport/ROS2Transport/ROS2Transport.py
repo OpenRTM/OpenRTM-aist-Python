@@ -32,49 +32,49 @@ from ROS2TopicManager import ROS2TopicManager
 #
 # @else
 # @class ManagerActionListener
-# @brief 
+# @brief
 #
 #
 # @endif
 class ManagerActionListener:
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @brief self
-  #
-  # @endif
-  def __init__(self):
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
+    def __init__(self):
+        pass
 
-  def preShutdown(self):
-    pass
-  ##
-  # @if jp
-  # @brief RTMマネージャ終了後にROSTopicManagerの終了処理を実行
-  #
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @brief self
-  #
-  # @endif
-  def postShutdown(self):
-    ROS2TopicManager.shutdown_global()
+    def preShutdown(self):
+        pass
+    ##
+    # @if jp
+    # @brief RTMマネージャ終了後にROSTopicManagerの終了処理を実行
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
 
-  def preReinit(self):
-    pass
+    def postShutdown(self):
+        ROS2TopicManager.shutdown_global()
 
-  def postReinit(self):
-    pass
+    def preReinit(self):
+        pass
 
+    def postReinit(self):
+        pass
 
 
 ##
@@ -83,15 +83,14 @@ class ManagerActionListener:
 #
 #
 # @else
-# @brief 
+# @brief
 #
 #
 # @endif
 #
 def ROS2TransportInit(mgr):
-  ROS2InPort.ROS2InPortInit()
-  ROS2OutPort.ROS2OutPortInit()
-  ROS2Serializer.ROS2SerializerInit()
+    ROS2InPort.ROS2InPortInit()
+    ROS2OutPort.ROS2OutPortInit()
+    ROS2Serializer.ROS2SerializerInit()
 
-  mgr.addManagerActionListener(ManagerActionListener())
-
+    mgr.addManagerActionListener(ManagerActionListener())

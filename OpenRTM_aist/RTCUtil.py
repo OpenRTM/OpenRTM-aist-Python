@@ -39,9 +39,11 @@ import OpenRTM
 # @else
 #
 # @endif
+
+
 def isDataFlowComponent(obj):
-  dfp = obj._narrow(OpenRTM.DataFlowComponent)
-  return not CORBA.is_nil(dfp)
+    dfp = obj._narrow(OpenRTM.DataFlowComponent)
+    return not CORBA.is_nil(dfp)
 
 
 ##
@@ -64,8 +66,8 @@ def isDataFlowComponent(obj):
 #
 # @endif
 def isFsmParticipant(obj):
-  fsmp = obj._narrow(RTC.FsmParticipant)
-  return not CORBA.is_nil(fsmp)
+    fsmp = obj._narrow(RTC.FsmParticipant)
+    return not CORBA.is_nil(fsmp)
 
 
 ##
@@ -87,8 +89,8 @@ def isFsmParticipant(obj):
 #
 # @endif
 def isFsmObject(obj):
-  fsm = obj._narrow(RTC.FsmObject)
-  return not CORBA.is_nil(fsm)
+    fsm = obj._narrow(RTC.FsmObject)
+    return not CORBA.is_nil(fsm)
 
 
 ##
@@ -97,7 +99,7 @@ def isFsmObject(obj):
 # @brief multiModeComponent であるか判定する
 #
 # 指定されたRTコンポーネントが multiModeComponent であるか判定する。
-# multiModeComponent は、 ExecutionContext の Semantics が Modes of Operatin 
+# multiModeComponent は、 ExecutionContext の Semantics が Modes of Operatin
 # の場合に、 Mode を定義するために利用されるRTコンポーネントの型である。
 #
 # @param obj 判定対象の CORBA オブジェクト
@@ -110,10 +112,8 @@ def isFsmObject(obj):
 #
 # @endif
 def isMultiModeObject(obj):
-  mmc = obj._narrow(RTC.MultiModeObject)
-  return not CORBA.is_nil(mmc)
-
-
+    mmc = obj._narrow(RTC.MultiModeObject)
+    return not CORBA.is_nil(mmc)
 
 
 #########################################################################
@@ -122,44 +122,51 @@ def isMultiModeObject(obj):
 #  DataType for CORBA
 #
 def instantiateDataType(dtype):
-    if isinstance(dtype, int) : desc = [dtype]
-    elif isinstance(dtype, tuple) : desc = dtype
-    else : 
-        desc=omniORB.findType(dtype._NP_RepositoryId) 
+    if isinstance(dtype, int):
+        desc = [dtype]
+    elif isinstance(dtype, tuple):
+        desc = dtype
+    else:
+        desc = omniORB.findType(dtype._NP_RepositoryId)
 
-    if desc[0] in [omniORB.tcInternal.tv_alias ]: return instantiateDataType(desc[3])
+    if desc[0] in [omniORB.tcInternal.tv_alias]:
+        return instantiateDataType(desc[3])
 
-    if desc[0] in [omniORB.tcInternal.tv_short, 
-                   omniORB.tcInternal.tv_long, 
-                   omniORB.tcInternal.tv_ushort, 
+    if desc[0] in [omniORB.tcInternal.tv_short,
+                   omniORB.tcInternal.tv_long,
+                   omniORB.tcInternal.tv_ushort,
                    omniORB.tcInternal.tv_ulong,
                    omniORB.tcInternal.tv_boolean,
                    omniORB.tcInternal.tv_char,
                    omniORB.tcInternal.tv_octet,
                    omniORB.tcInternal.tv_longlong,
                    omniORB.tcInternal.tv_enum
-                  ]: return 0
+                   ]:
+                      return 0
 
-    if desc[0] in [omniORB.tcInternal.tv_float, 
+    if desc[0] in [omniORB.tcInternal.tv_float,
                    omniORB.tcInternal.tv_double,
                    omniORB.tcInternal.tv_longdouble
-                  ]: return 0.0
+                   ]:
+                      return 0.0
 
-    if desc[0] in [omniORB.tcInternal.tv_sequence, 
+    if desc[0] in [omniORB.tcInternal.tv_sequence,
                    omniORB.tcInternal.tv_array,
-                  ]: return []
+                   ]:
+                      return []
 
-
-    if desc[0] in [omniORB.tcInternal.tv_string ]: return ""
+    if desc[0] in [omniORB.tcInternal.tv_string]:
+        return ""
     if desc[0] in [omniORB.tcInternal.tv_wstring,
                    omniORB.tcInternal.tv_wchar
-                  ]: return u""
+                   ]:
+                      return u""
 
     if desc[0] == omniORB.tcInternal.tv_struct:
         arg = []
-        for i in  range(4, len(desc), 2):
+        for i in range(4, len(desc), 2):
             attr = desc[i]
-            attr_type = desc[i+1]
+            attr_type = desc[i + 1]
             arg.append(instantiateDataType(attr_type))
         return desc[1](*arg)
     return None
