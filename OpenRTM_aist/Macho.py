@@ -268,7 +268,7 @@ class Link(_StateSpecification):
         if isinstance(class_, str):
             if self.__class__.__name__ == class_:
                 return self
-        elif isinstance(self, class_):
+        elif type(self) == class_:
             return self
         obj = self
         while hasattr(obj, "super_obj"):
@@ -277,7 +277,7 @@ class Link(_StateSpecification):
             if isinstance(class_, str):
                 if obj.__class__.__name__ == class_:
                     return obj
-            elif isinstance(obj, class_):
+            elif type(obj) == class_:
                 return obj
 
         return None
