@@ -3285,7 +3285,7 @@ class Manager:
                     comp_ref = rtcs[0]
                 ret = OpenRTM_aist.CORBA_RTCUtil.activate(comp_ref)
                 if ret != RTC.RTC_OK:
-                    self._rtcout.RTC_ERROR("%s activation filed." % c)
+                    self._rtcout.RTC_ERROR("%s activation failed." % c)
                 else:
                     self._rtcout.RTC_INFO("%s activated." % c)
 
