@@ -270,16 +270,20 @@ class ModuleManager:
         if not self.fileExist(file_path):
             raise ModuleManager.FileNotFound(file_name)
 
-        for _, alias in encodings.aliases.aliases.items():
-            try:
-                with codecs.open(str(file_path), "r", encoding=alias) as f:
-                    if init_func is not None:
-                        if f.read().find(init_func) == -1:
+        try:
+            code = "UTF-8-SIG"
+            import chardet
+            with open(str(file_path), mode='rb') as f:
+                code = chardet.detect(f.read())["encoding"]
+
+            with codecs.open(str(file_path), "r", encoding=code) as f:
+                if init_func is not None:
+                    s = f.read()
+                    if isinstance(s, str):
+                        if s.find(init_func) == -1:
                             raise ModuleManager.FileNotFound(file_name)
-                        else:
-                            break
-            except BaseException:
-                pass
+        except BaseException:
+            pass
 
         if not pathChanged:
             splitted_name = os.path.split(file_path)
@@ -471,12 +475,19 @@ class ModuleManager:
         comp_spec_name = classname + "_spec"
 
         try:
-            with open(str(fullname)) as f:
-                if f.read().find(comp_spec_name) == -1:
+            code = "UTF-8-SIG"
+            import chardet
+            with open(str(fullname), mode='rb') as f:
+                code = chardet.detect(f.read())["encoding"]
+
+            with codecs.open(str(fullname), "r", encoding=code) as f:
+                s = f.read()
+                if s.find(comp_spec_name) == -1:
                     return None
-            imp_file = __import__(basename.split(".")[0])
         except BaseException:
-            return None
+            pass
+
+        imp_file = __import__(basename.split(".")[0])
         comp_spec = getattr(imp_file, comp_spec_name, None)
         if not comp_spec:
             return None
