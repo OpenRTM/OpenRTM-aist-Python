@@ -25,7 +25,7 @@ import MicrowaveFsm
 
 microwave_spec = ["implementation_id", "Microwave",
                   "type_name", "Microwave",
-                  "description", "Console input component",
+                  "description", "Microwave Static FSM component",
                   "version", "1.0",
                   "vendor", "Nobuhiko Miyamoto",
                   "category", "example",
