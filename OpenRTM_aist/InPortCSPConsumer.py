@@ -162,6 +162,7 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
     #
     #
     # @param self
+    # @param retry True：再検索、False：通常の書き込み確認
     # @return True：書き込み可能、False：書き込み不可
     #
     # @else
@@ -169,16 +170,17 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
     #
     #
     # @param self
+    # @param retry
     # @return
     #
     # @endif
     #
-    def isWritable(self):
+    def isWritable(self, retry=False):
         self._rtcout.RTC_PARANOID("isWritable()")
         try:
             outportcsp = self._ptr()
             if outportcsp:
-                return outportcsp.is_writable()
+                return outportcsp.is_writable(retry)
             return False
         except BaseException:
             self._rtcout.RTC_WARN("Exception caught from InPort.isWritable().")

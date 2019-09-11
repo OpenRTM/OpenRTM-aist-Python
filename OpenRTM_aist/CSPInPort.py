@@ -40,6 +40,12 @@ import threading
 # @endif
 #
 class CSPInPort(OpenRTM_aist.InPortBase):
+    SUCCESSFUL_GET_DATA = 0
+    FAILED_DESERIALIZE = 1
+    FAILED_TIMEOUT = 2
+    FAILED_EMPTY = 3
+    FAILED_GET_DATA = 4
+
     ##
     # @if jp
     #
@@ -83,6 +89,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         if manager:
             manager.addInPort(self)
         self._writingConnector = None
+        self._syncmode = False
 
     ##
     # @if jp
@@ -154,8 +161,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
 
         num = 10
         ret, num = OpenRTM_aist.stringTo(
-            num, self._properties.getProperty(
-                "channel_timeout", "10"))
+            num, self._properties.getProperty("channel_timeout", "10"))
         if ret:
             self._channeltimeout = num
 
@@ -169,6 +175,9 @@ class CSPInPort(OpenRTM_aist.InPortBase):
             self._bufferzeromode = True
 
         self._thebuffer.init(buff_prop)
+
+        self._syncmode = OpenRTM_aist.toBool(
+            prop.getProperty("csp.sync_wait"), "YES", "NO", False)
 
         if not self._bufferzeromode:
             self._writable_listener = OpenRTM_aist.CSPInPort.IsWritableListener(
@@ -264,18 +273,19 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     def notify(self):
         for con in self._connectors:
-            guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            guard_ctrl = None
+            if not self._syncmode:
+                guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             if self._ctrl._writing:
                 self._ctrl._cond.wait(self._channeltimeout)
             if not self._thebuffer.full():
-                if con.isReadable():
+                if con.isReadable(False):
                     ret, cdr = con.readBuff()
                     if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
                         self._thebuffer.write(cdr)
                     else:
                         self._rtcout.RTC_ERROR(
-                            "notify read error:%s",
-                            (OpenRTM_aist.DataPortStatus.toString(ret)))
+                            "notify read error:%s", (OpenRTM_aist.DataPortStatus.toString(ret)))
 
     ##
     # @if jp
@@ -312,14 +322,80 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     ##
     # @if jp
     #
-    # @brief リングバッファ使用モード時のデータ読み込み処理
-    # バッファがemptyではない場合はバッファから読み込む
-    # コネクタの中に読み込み可能なものがある場合は、そのコネクタから読み込む
-    # ただし、書き込み中の場合は書き込み終了までブロックする
+    # @brief リングバッファ使用モード時に指定コネクタの読み込み確認、データの読み込みを行う
     #
     # @param self
-    # @param connector_profile コネクタプロファイル
-    # @return ret, prof
+    # @param con コネクタ
+    # @param retry True：再検索、False：通常の書き込み確認
+    # @return ret, data
+    # ret：SUCCESSFUL_GET_DATA：データ取得成功、FAILED_DESERIALIZE：復号失敗、FAILED_TIMEOUT：タイムアウトにより失敗、FAILED_EMPTY：空のデータを取得、FAILED_GET_DATA：データの読み込み可能なコネクタが存在しない
+    # prof：読み込んだデータ
+    #
+    # @return ポート名称
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param con 
+    # @param retry 
+    # @return ret, data
+    #
+    # @endif
+    #
+    def getDataBufferMode(self, con, retry):
+        guard_ctrl = None
+        if not self._syncmode:
+            guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+        if not self._thebuffer.empty():
+            _, value = self._thebuffer.read(value)
+            if guard_ctrl is not None:
+                del guard_ctrl
+            self.notify()
+            ret, data = con.deserializeData(value)
+            if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
+                return CSPInPort.SUCCESSFUL_GET_DATA, data
+            else:
+                self._rtcout.RTC_ERROR("deserialize error")
+        elif self._ctrl._writing:
+            self._ctrl._cond.wait(self._channeltimeout)
+            if not self._thebuffer.empty():
+                _, value = self._thebuffer.read()
+                if guard_ctrl is not None:
+                    del guard_ctrl
+                self.notify()
+                ret, data = con.deserializeData(value[0])
+                if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
+                    return CSPInPort.SUCCESSFUL_GET_DATA, data
+                else:
+                    self._rtcout.RTC_ERROR("deserialize error")
+                    return CSPInPort.FAILED_DESERIALIZE, None
+            else:
+                self._rtcout.RTC_ERROR("read timeout")
+                return CSPInPort.FAILED_TIMEOUT, None
+        else:
+            if guard_ctrl is not None:
+                del guard_ctrl
+            readable = con.isReadable(retry)
+            guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            if readable:
+                ret, value = con.read()
+                if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
+                    return CSPInPort.SUCCESSFUL_GET_DATA, value
+                else:
+                    self._rtcout.RTC_ERROR("empty read error:%s",
+                                           (OpenRTM_aist.DataPortStatus.toString(ret)))
+                    return CSPInPort.FAILED_EMPTY, None
+        return CSPInPort.FAILED_GET_DATA, None
+
+    ##
+    # @if jp
+    #
+    # @brief リングバッファ使用モード時にデータの受信を行う
+    #
+    # @param self
+    # @return ret, data
     # ret：True：読み込み成功、False：バッファがemptyでかつ読み込み可能なコネクタが存在しない
     # data：データ
     #
@@ -333,8 +409,10 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @endif
     #
-
     def dataPullBufferMode(self):
+
+        guard_ctrl = None
+
         guard_con = OpenRTM_aist.ScopedLock(self._connector_mutex)
         if not self._connectors:
             self._rtcout.RTC_DEBUG("no connectors")
@@ -342,43 +420,20 @@ class CSPInPort(OpenRTM_aist.InPortBase):
 
         if self._thebuffer.empty():
             for con in self._connectors:
-                guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-                if not self._thebuffer.empty():
-                    _, value = self._thebuffer.read(value)
-                    del guard_ctrl
-                    self.notify()
-                    ret, data = con.deserializeData(value)
-                    if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
-                        return True, data
-                    else:
-                        self._rtcout.RTC_ERROR("deserialize error")
-                elif self._ctrl._writing:
-                    self._ctrl._cond.wait(self._channeltimeout)
-                    if not self._thebuffer.empty():
-                        _, value = self._thebuffer.read()
-                        del guard_ctrl
-                        self.notify()
-                        ret, data = con.deserializeData(value[0])
-                        if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
-                            return True, data
-                        else:
-                            self._rtcout.RTC_ERROR("deserialize error")
-                            return False, None
-                    else:
-                        self._rtcout.RTC_ERROR("read timeout")
-                        return False, None
+                ret, value = self.getDataBufferMode(con, False)
+                if ret == CSPEventPort.SUCCESSFUL_GET_DATA:
+                    self._ctrl._connectors = []
+                    self._ctrl._searched_connectors = []
+                    return True, value
+                elif ret != CSPInPort.FAILED_GET_DATA:
+                    return False, value
                 else:
-                    readable = con.isReadable()
-                    if readable:
-                        ret, value = con.read()
-                        if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
-                            return True, value
-                        else:
-                            self._rtcout.RTC_ERROR(
-                                "empty read error:%s", (OpenRTM_aist.DataPortStatus.toString(ret)))
-                            return False, None
+                    self._ctrl._searched_connectors.append(con)
+
         else:
-            guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            if not self._syncmode:
+                guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+
             if not self._thebuffer.empty():
                 _, value = self._thebuffer.read()
                 del guard_ctrl
@@ -390,9 +445,8 @@ class CSPInPort(OpenRTM_aist.InPortBase):
                     self._rtcout.RTC_ERROR("deserialize error")
                     return False, None
             else:
-                self._rtcout.RTC_ERROR(
-                    "value read error:%s",
-                    (OpenRTM_aist.BufferStatus.toString(ret)))
+                self._rtcout.RTC_ERROR("value read error:%s",
+                                       (OpenRTM_aist.BufferStatus.toString(ret)))
                 del guard_ctrl
                 self.notify()
                 return False, None
@@ -401,15 +455,16 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     ##
     # @if jp
     #
-    # @brief 非リングバッファ使用モード時のデータ読み込み処理
-    # データ読み込み可能なコネクタが存在する場合は、そのコネクタからデータを読み込む
-    #
+    # @brief リングバッファ使用モード時にデータの再受信を行う
+    # データの送受信時は片方がコネクタ選択時にスレッドをロックするロックモード、
+    # もう片方がスレッドをロックしない非ロックモードに設定する必要がある。
+    # 非ロックモードの場合はデータ選択時にis_writable、is_readable関数が呼ばれた場合、
+    # 再検索するコネクタのリストに追加して後で再検索する。
     #
     # @param self
-    # @param connector_profile コネクタプロファイル
-    # @return ret, prof
-    # ret：True：読み込み成功、False：データ読み込み可能なコネクタが存在しない
-    # data：データ(読み込み失敗の場合はNone)
+    # @return ret, data
+    # ret：True：読み込み成功、False：バッファがemptyでかつ読み込み可能なコネクタが存在しない
+    # data：データ
     #
     #
     # @else
@@ -417,24 +472,148 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # @brief
     #
     # @param self
-    # @param connector_profile
-    # @return ret, prof
+    # @return ret, data
     #
     # @endif
     #
+    def dataPullBufferModeRetry(self):
+        if self._thebuffer.empty():
+            cons = self._ctrl._connectors[:]
+            for con in cons:
+                ret, value = self.getDataBufferMode(con, True)
+                if ret == CSPInPort.SUCCESSFUL_GET_DATA:
+                    self._ctrl._connectors = []
+                    self._ctrl._searched_connectors = []
+                    return True, value
+                elif ret != CSPInPort.FAILED_GET_DATA:
+                    return False, value
+            self._ctrl._connectors = []
+            self._ctrl._searched_connectors = []
 
+        else:
+            if not self._thebuffer.empty():
+                _, value = self._thebuffer.read()
+                self.notify()
+                ret, data = self._connectors[0].deserializeData(value)
+                if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
+                    return True, data
+                else:
+                    self._rtcout.RTC_ERROR("deserialize error")
+                    return False, None
+            else:
+                self._rtcout.RTC_ERROR("value read error:%s",
+                                       (OpenRTM_aist.BufferStatus.toString(ret)))
+                self.notify()
+                return False, None
+        return False, None
+
+    ##
+    # @if jp
+    #
+    # @brief 非リングバッファ使用モード時に指定コネクタの読み込み確認、データの読み込みを行う
+    #
+    # @param self
+    # @param con コネクタ
+    # @param retry True：再検索、False：通常の書き込み確認
+    # @return ret, data
+    # ret：SUCCESSFUL_GET_DATA：データ取得成功、FAILED_DESERIALIZE：復号失敗、FAILED_GET_DATA：データの読み込み可能なコネクタが存在しない
+    # prof：読み込んだデータ
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param con
+    # @param retry
+    # @return ret, data
+    #
+    # @endif
+    #
+    def getDataZeroMode(self, con, retry):
+        if con.isReadable(retry):
+            if not self._syncmode:
+                guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            ret, value = con.read()
+            if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
+                return CSPInPort.SUCCESSFUL_GET_DATA, value
+            else:
+                self._rtcout.RTC_ERROR(
+                    "read error:%s", (OpenRTM_aist.DataPortStatus.toString(ret)))
+                return CSPInPort.FAILED_DESERIALIZE, None
+        return CSPInPort.FAILED_GET_DATA, None
+
+    ##
+    # @if jp
+    #
+    # @brief 非リングバッファ使用モード時にデータの受信を行う
+    #
+    # @param self
+    # @return ret, data
+    # ret：True：読み込み成功、False：読み込み可能なコネクタが存在しない
+    # data：データ
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return ret, data
+    #
+    # @endif
+    #
     def dataPullZeroMode(self):
         guard_con = OpenRTM_aist.ScopedLock(self._connector_mutex)
         for con in self._connectors:
-            if con.isReadable():
-                guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-                ret, value = con.read()
-                if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
-                    return True, value
-                else:
-                    self._rtcout.RTC_ERROR(
-                        "read error:%s", (OpenRTM_aist.DataPortStatus.toString(ret)))
-                    return False, None
+            ret, value = self.getDataZeroMode(con, False)
+            if ret == CSPInPort.SUCCESSFUL_GET_DATA:
+                self._ctrl._connectors = []
+                self._ctrl._searched_connectors = []
+                return True, value
+            elif ret != CSPInPort.FAILED_GET_DATA:
+                return False, value
+            else:
+                self._ctrl._searched_connectors.append(con)
+
+        return False, None
+
+    ##
+    # @if jp
+    #
+    # @brief 非リングバッファ使用モード時にデータの再受信確認を行う
+    #
+    # @param self
+    # @return ret, data
+    # ret：True：読み込み成功、False：バッファがemptyでかつ読み込み可能なコネクタが存在しない
+    # data：データ
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return ret, data
+    #
+    # @endif
+    #
+    def dataPullZeroModeRetry(self):
+        cons = self._ctrl._connectors[:]
+        self._rtcout.RTC_TRACE("reselect %d connectors", (len(cons)))
+        for con in cons:
+            ret, value = self.getDataZeroMode(con, True)
+            if ret == CSPInPort.SUCCESSFUL_GET_DATA:
+                self._ctrl._connectors = []
+                self._ctrl._searched_connectors = []
+                return True, value
+            elif ret != CSPInPort.FAILED_GET_DATA:
+                self._ctrl._connectors = []
+                self._ctrl._searched_connectors = []
+                return False, value
+        self._ctrl._connectors = []
+        self._ctrl._searched_connectors = []
         return False, None
 
     ##
@@ -460,14 +639,108 @@ class CSPInPort(OpenRTM_aist.InPortBase):
 
     def select(self):
         self._rtcout.RTC_TRACE("select()")
-        if not self._bufferzeromode:
-            ret, value = self.dataPullBufferMode()
-        else:
-            ret, value = self.dataPullZeroMode()
         guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+
+        self._ctrl._connectors = []
+        self._ctrl._searched_connectors = []
+
+        if not self._syncmode:
+            del guard
+            guard = None
+
+        if not self._bufferzeromode:
+            ret, value = self.dataPullBufferMode(False)
+        else:
+            ret, value = self.dataPullZeroMode(False)
+        if not self._syncmode:
+            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
         if ret:
             self._value = value
         return ret
+
+    ##
+    # @if jp
+    #
+    # @brief 再検索リストのコネクタからデータ読み込み可能なコネクタを選択し、
+    # self._valueに読み込んだデータを格納する
+    #
+    #
+    # @param self
+    # @return True：読み込み成功、False：読み込み不可
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    #
+    def reselect(self):
+        self._rtcout.RTC_TRACE("reselect()")
+        guard = None
+        if self._syncmode:
+            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+
+        if not self._bufferzeromode:
+            ret, value = self.dataPullBufferModeRetry()
+        else:
+            ret, value = self.dataPullZeroModeRetry()
+        if not self._syncmode:
+            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+        if ret:
+            self._value = value
+        return ret
+
+    ##
+    # @if jp
+    #
+    # @brief ロックモード、非ロックモードの設定
+    # データの送受信時は片方がコネクタ選択時にスレッドをロックするロックモード、
+    # もう片方がスレッドをロックしない非ロックモードに設定する必要がある。
+    # 非ロックモードの場合はデータ選択時にis_writable、is_readable関数が呼ばれた場合、
+    # 再検索するコネクタのリストに追加して後で再検索する。
+    #
+    #
+    # @param self
+    # @param mode True：ロックモード、False：非ロックモード
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param mode
+    #
+    # @endif
+    #
+    def setSyncMode(self, mode):
+        self._syncmode = mode
+
+    ##
+    # @if jp
+    #
+    # @brief ロックモード、非ロックモードの取得
+    #
+    #
+    # @param self
+    # @return True：ロックモード、False：非ロックモード
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    #
+    def getSyncMode(self):
+        return self._syncmode
 
     ##
     # @if jp
@@ -488,6 +761,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @endif
     #
+
     def readData(self):
         guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
         self._rtcout.RTC_TRACE("readData()")
@@ -565,11 +839,22 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
 
     def readBufferMode(self):
+        guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+        self._ctrl._connectors = []
+        self._ctrl._searched_connectors = []
+        if not self._syncmode:
+            del guard
+            guard = None
+
         ret, data = self.dataPullBufferMode()
         if ret:
             return data
         else:
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            if not self._syncmode:
+                guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+                ret, data = self.dataPullBufferModeRetry()
+                if ret:
+                    return data
             if self._ctrl._writing or self._thebuffer.empty():
                 self._ctrl._cond.wait(self._channeltimeout)
             if not self._thebuffer.empty():
@@ -606,11 +891,23 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # @endif
     #
     def readZeroMode(self):
+        guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+        self._ctrl._connectors = []
+        self._ctrl._searched_connectors = []
+        if not self._syncmode:
+            del guard
+            guard = None
+
         ret, data = self.dataPullZeroMode()
         if ret:
             return data
         else:
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            if not self._syncmode:
+                guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+
+                ret, data = self.dataPullZeroModeRetry()
+                if ret:
+                    return data
             self._ctrl._waiting = True
             self._ctrl._cond.wait(self._channeltimeout)
             self._ctrl._waiting = False
@@ -700,6 +997,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @param self
         # @param con InPortConnector
+        # @param retry True：再検索、False：通常の書き込み確認
         # @return True：書き込み可能、False：書き込み不可
         #
         #
@@ -710,13 +1008,19 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @param self
         # @param con
+        # @param retry
         # @return
         #
         # @endif
         #
 
-        def __call__(self, con):
+        def __call__(self, con, retry=False):
             guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+
+            if retry:
+                if con not in self._ctrl._searched_connectors:
+                    return False
+
             if self._manager:
                 if self._manager.notify(inport=self._port):
                     guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
@@ -732,6 +1036,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
                 return True
             else:
                 self._ctrl._writing = False
+                self._ctrl._connectors.append(con)
                 return False
 
         ##
@@ -924,6 +1229,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @param self
         # @param con InPortConnector
+        # @param retry True：再検索、False：通常の書き込み確認
         # @return True：書き込み可能、False：書き込み不可
         #
         #
@@ -934,13 +1240,17 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @param self
         # @param con
+        # @param retry 
         # @return
         #
         # @endif
         #
 
-        def __call__(self, con):
+        def __call__(self, con, retry=False):
             guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+            if retry:
+                if con not in self._ctrl._searched_connectors:
+                    return False
             if self._manager:
                 if self._manager.notify(inport=self._port):
                     guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
@@ -956,6 +1266,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
                 return True
             else:
                 self._ctrl._writing = False
+                self._ctrl._connectors.append(con)
                 return False
 
         ##
@@ -1087,3 +1398,5 @@ class CSPInPort(OpenRTM_aist.InPortBase):
             self._cond = threading.Condition(self._mutex)
             self._writing = False
             self._waiting = False
+            self._connectors = []
+            self._searched_connectors = []

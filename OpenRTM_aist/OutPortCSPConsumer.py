@@ -169,23 +169,25 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
     # @brief データ読み込み可能かを接続先のproviderに確認
     #
     #
-    # @return True：書き込み可能、False：書き込み不可
+    # @param self
+    # @param retry True：再検索、False：通常の読み込み確認
+    # @return True：読み込み可能、False：読み込み不可
     # 通信エラーが発生した場合はFalseを返す
     #
     # @else
     # @brief
     #
-    #
-    #
+    # @param self
+    # @param retry
     # @return
     #
     # @endif
     #
-    def isReadable(self):
+    def isReadable(self, retry=False):
         self._rtcout.RTC_PARANOID("isReadable()")
         try:
             outportcsp = self._ptr()
-            return outportcsp.is_readable()
+            return outportcsp.is_readable(retry)
         except BaseException:
             self._rtcout.RTC_WARN(
                 "Exception caught from OutPort.isReadable().")

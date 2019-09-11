@@ -157,6 +157,109 @@ class CSPManager(object):
     ##
     # @if jp
     #
+    # @brief ポートをロックモードと非ロックモードに仕分けする
+    #
+    # @param self
+    # @return ports1, ports2
+    # ports1:ロックモードのポート
+    # ports2:非ロックモードのポート
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    #
+    def getPorts(self):
+        ports1 = []
+        ports2 = []
+        for port in self._inports:
+            if port.getSyncMode():
+                ports1.append(port)
+            else:
+                ports2.append(port)
+
+        for port in self._outports:
+            if port.getSyncMode():
+                ports1.append(port)
+            else:
+                ports2.append(port)
+        return ports1, ports2
+
+    ##
+    # @if jp
+    #
+    # @brief ポート一覧から通信可能なポートを自動選択する
+    #
+    # @param self
+    # @param ports 選択対象のポート一覧
+    # @return ret, outport, inport
+    # ret:True：選択成功、False：選択失敗
+    # outport：選択したOutPort。OutPortを選択しなかった場合はNone
+    # inport：選択したInPort。InPortを選択しなかった場合はNone
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param ports
+    # @return
+    #
+    # @endif
+    #
+    def selectPort(self, ports):
+        for port in ports:
+            ret = port.select()
+            if ret:
+                if isinstance(port, OpenRTM_aist.CSPInPort):
+                    return True, None, port
+                elif isinstance(port, OpenRTM_aist.CSPEventPort.CSPEventPort):
+                    return True, None, port
+                elif isinstance(port, OpenRTM_aist.CSPOutPort):
+                    return True, port, None
+        return False, None, None
+
+    ##
+    # @if jp
+    #
+    # @brief ポート一覧から通信可能なポートを再選択する
+    #
+    # @param self
+    # @param ports 選択対象のポート一覧
+    # @return ret, outport, inport
+    # ret:True：選択成功、False：選択失敗
+    # outport：選択したOutPort。OutPortを選択しなかった場合はNone
+    # inport：選択したInPort。InPortを選択しなかった場合はNone
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param ports
+    # @return
+    #
+    # @endif
+    #
+    def reselectPort(self, ports):
+        for port in ports:
+            ret = port.reselect()
+            if ret:
+                if isinstance(port, OpenRTM_aist.CSPInPort):
+                    return True, None, port
+                elif isinstance(port, OpenRTM_aist.CSPEventPort.CSPEventPort):
+                    return True, None, port
+                elif isinstance(port, OpenRTM_aist.CSPOutPort):
+                    return True, port, None
+        return False, None, None
+
+    ##
+    # @if jp
+    #
     # @brief 読み込み可能なInPort、もしくは書き込み可能なOutPortを選択する
     # 読み込み可能なInPort、書き込み可能なOutPortが存在しない場合はタイムアウトまで待機する
     # 待機解除後、読み込み可能なInPort、もしくは書き込み可能なOutPortを再度選択する
@@ -179,15 +282,26 @@ class CSPManager(object):
     # @endif
     #
     def select(self, timeout):
-        ret, port = self.selectOutPort()
+        ports1, ports2 = self.getPorts()
+
+        ret, outport, inport = self.selectPort(ports2)
+
         if ret:
-            return ret, port, None
-        ret, port = self.selectInPort()
+            return ret, outport, inport
+
+        guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+
+        ret, outport, inport = self.reselectPort(ports2)
+
         if ret:
-            return ret, None, port
+            return ret, outport, inport
+
+        ret, outport, inport = self.selectPort(ports1)
+
+        if ret:
+            return ret, outport, inport
 
         if timeout >= 0:
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             self._ctrl._waiting = True
             self._ctrl._timeout = True
             self._ctrl._cond.wait(timeout)

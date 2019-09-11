@@ -78,6 +78,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         self._manager = manager
         if manager:
             manager.addOutPort(self)
+        self._syncmode = True
 
     ##
     # @if jp
@@ -144,10 +145,12 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         super(CSPOutPort, self).init(prop)
         num = 10
         ret, num = OpenRTM_aist.stringTo(
-            num, self._properties.getProperty(
-                "channel_timeout", "10"))
+            num, self._properties.getProperty("channel_timeout", "10"))
         if ret:
             self._channeltimeout = num
+
+        self._syncmode = OpenRTM_aist.toBool(
+            prop.getProperty("csp.sync_wait"), "YES", "NO", True)
 
         self._readable_listener = OpenRTM_aist.CSPOutPort.IsReadableListener(
             self._buffdata, self._ctrl, self._channeltimeout, self, self._manager)
@@ -250,9 +253,45 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     def dataWritable(self):
         guard = OpenRTM_aist.ScopedLock(self._connector_mutex)
         for con in self._connectors:
-            if con.isWritable():
+            if con.isWritable(False):
+                self._ctrl._searched_connectors = []
                 return True, con
+            else:
+                self._ctrl._searched_connectors.append(con)
+
         return False, None
+
+    ##
+    # @if jp
+    #
+    # @brief データの再送信確認を行う
+    #
+    # @param self
+    # @return ret, con
+    # ret：True(書き込み可能)、False(書き込み不可)
+    # con：書き込み可能なコネクタ。書き込み不可の場合はNone
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return ret, con
+    #
+    # @endif
+    #
+    def dataWritableRetry(self):
+        cons = self._ctrl._connectors[:]
+        for con in cons:
+            if con.isWritable(True):
+                self._ctrl._connectors = []
+                self._ctrl._searched_connectors = []
+                return True, con
+        self._ctrl._connectors = []
+        self._ctrl._searched_connectors = []
+        return False, None
+
     ##
     # @if jp
     #
@@ -273,14 +312,108 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
 
     def select(self):
         self._rtcout.RTC_TRACE("select()")
-        guard_con = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+        guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+
+        self._ctrl._connectors = []
+        self._ctrl._searched_connectors = []
+
+        if not self._syncmode:
+            del guard
+            guard = None
+
         if self._ctrl._waiting:
             return True
         if self._ctrl._reading:
             self._ctrl._cond.wait(self._channeltimeout)
-        del guard_con
+
+        if not self._syncmode:
+            del guard_con
+            guard_con = None
         ret, self._writableConnector = self.dataWritable()
         return ret
+
+    ##
+    # @if jp
+    #
+    # @brief 再検索リストのコネクタからデータ書き込み可能なコネクタを選択し、
+    # self._writableConnectorに格納する
+    #
+    #
+    # @param self
+    # @return True：書き込み可能、False：書き込み不可
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    #
+    def reselect(self):
+        self._rtcout.RTC_TRACE("reselect()")
+        guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+
+        if self._ctrl._waiting:
+            return True
+        if self._ctrl._reading:
+            self._ctrl._cond.wait(self._channeltimeout)
+
+        if not self._syncmode:
+            del guard
+
+        ret, self._writableConnector = self.dataWritableRetry()
+        return ret
+
+    ##
+    # @if jp
+    #
+    # @brief ロックモード、非ロックモードの設定
+    # データの送受信時は片方がコネクタ選択時にスレッドをロックするロックモード、
+    # もう片方がスレッドをロックしない非ロックモードに設定する必要がある。
+    # 非ロックモードの場合はデータ選択時にis_writable、is_readable関数が呼ばれた場合、
+    # 再検索するコネクタのリストに追加して後で再検索する。
+    #
+    #
+    # @param self
+    # @param mode True：ロックモード、False：非ロックモード
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param mode
+    #
+    # @endif
+    #
+    def setSyncMode(self, mode):
+        self._syncmode = mode
+
+    ##
+    # @if jp
+    #
+    # @brief ロックモード、非ロックモードの取得
+    #
+    #
+    # @param self
+    # @return True：ロックモード、False：非ロックモード
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    #
+    def getSyncMode(self):
+        return self._syncmode
 
     ##
     # @if jp
@@ -366,6 +499,15 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     # @endif
     #
     def write(self, value=None):
+        guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+
+        self._ctrl._connectors = []
+        self._ctrl._searched_connectors = []
+
+        if not self._syncmode:
+            del guard
+            guard = None
+
         if not value:
             value = self._value
         if self._OnWrite:
@@ -377,10 +519,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         if self._OnWriteConvert:
             value = self._OnWriteConvert(value)
 
-        guard_con = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-        waiting = self._ctrl._waiting
-        del guard_con
-        if not waiting:
+        if not self._ctrl._waiting:
             ret, con = self.dataWritable()
             if ret:
                 retcon = con.write(value)
@@ -390,7 +529,18 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
                     self._rtcout.RTC_ERROR("write error %d", (retcon))
                     return False
 
-        guard_con = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+        if not self._syncmode:
+            guard_con = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+
+            ret, con = self.dataWritableRetry()
+            if ret:
+                retcon = con.write(value)
+                if retcon == OpenRTM_aist.DataPortStatus.PORT_OK:
+                    return True
+                else:
+                    self._rtcout.RTC_ERROR("write error %d", (retcon))
+                    return False
+
         ret, cdr_data = self._connectors[0].serializeData(value)
         if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
             self.setData(cdr_data)
@@ -400,6 +550,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
                 return True
             self._ctrl._readable = True
             self._ctrl._cond.wait(self._channeltimeout)
+
             if self._ctrl._readable:
                 self._rtcout.RTC_ERROR("write timeout")
                 self._ctrl._readable = False
@@ -480,6 +631,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         #
         # @param self
         # @param con OutPortConnector
+        # @param retry True：再検索、False：通常の読み込み確認
         # @return True：読み込み可能、False：読み込み不可
         #
         #
@@ -490,13 +642,19 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         #
         # @param self
         # @param con
+        # @param retry
         # @return
         #
         # @endif
         #
 
-        def __call__(self, con):
+        def __call__(self, con, retry=False):
             guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+
+            if retry:
+                if con not in self._ctrl._searched_connectors:
+                    return False
+
             if self._manager:
                 if self._manager.notify(outport=self._port):
                     guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
@@ -508,6 +666,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
                 self._ctrl._cond.wait(self._channeltimeout)
             if not self._ctrl._readable:
                 self._ctrl._reading = False
+                self._ctrl._connectors.append(con)
                 return False
             else:
                 self._ctrl._reading = True
@@ -654,3 +813,5 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
             self._reading = False
             self._readable = False
             self._waiting = False
+            self._connectors = []
+            self._searched_connectors = []

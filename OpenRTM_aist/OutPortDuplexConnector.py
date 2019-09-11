@@ -158,6 +158,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # 戻り値は設定したConsumerオブジェクトに依存する
     #
     # @param self
+    # @param retry True：再検索、False：通常の書き込み確認
     # @return True：書き込み可能、False：書き込み不可
     #
     # @else
@@ -165,13 +166,14 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @brief
     #
     # @param self
+    # @param retry
     # @return
     #
     # @endif
     #
-    def isWritable(self):
+    def isWritable(self, retry=False):
         if self._consumer:
-            return self._consumer.isWritable()
+            return self._consumer.isWritable(retry)
         return False
 
     ##
@@ -211,7 +213,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # 戻り値はリスナに依存する
     #
     # @param self
-    # @param data 読み込んだデータを格納する変数
+    # @param retry True：再検索、False：通常の読み込み確認
     # @return True：読み込み可能、False：読み込み不可
     #
     # @else
@@ -219,14 +221,14 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @brief
     #
     # @param self
-    # @param data
+    # @param retry
     # @return
     #
     # @endif
     #
-    def isReadable(self):
+    def isReadable(self, retry=False):
         if self._isReadableCallback:
-            return self._isReadableCallback(self)
+            return self._isReadableCallback(self, retry)
         return False
 
     ##
@@ -387,8 +389,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     def onConnect(self):
         if self._listeners and self._profile:
             self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_CONNECT].notify(
-                self._profile)
+                OpenRTM_aist.ConnectorListenerType.ON_CONNECT].notify(self._profile)
         return
 
     ##
@@ -402,8 +403,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     def onDisconnect(self):
         if self._listeners and self._profile:
             self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT].notify(
-                self._profile)
+                OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT].notify(self._profile)
         return
 
     ##
@@ -447,8 +447,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
             return self.UNKNOWN_ERROR, cdr_data
         elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
             self._rtcout.RTC_ERROR(
-                "write(): serializer %s is not support.",
-                self._marshaling_type)
+                "write(): serializer %s is not support.", self._marshaling_type)
             return self.UNKNOWN_ERROR, cdr_data
         return self.PORT_OK, cdr_data
 
