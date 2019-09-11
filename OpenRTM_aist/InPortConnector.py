@@ -261,15 +261,16 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @if jp
     # @brief データを読み込める状態かを判定
     # @param self
+    # @param retry True：再確認、False：通常の読み込み確認
     # @return True：読み込み可能
     # @else
     # @brief
     # @param self
-    # @return
+    # @param retry
     # @return
     # @endif
 
-    def isReadable(self):
+    def isReadable(self, retry):
         return False
 
     ##

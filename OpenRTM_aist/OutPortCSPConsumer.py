@@ -147,6 +147,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
         self._rtcout.RTC_PARANOID("get()")
 
         try:
+            data = None
             outportcsp = self._ptr()
             ret, cdr_data = outportcsp.get()
 

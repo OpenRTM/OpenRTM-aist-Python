@@ -421,7 +421,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         if self._thebuffer.empty():
             for con in self._connectors:
                 ret, value = self.getDataBufferMode(con, False)
-                if ret == CSPEventPort.SUCCESSFUL_GET_DATA:
+                if ret == CSPInPort.SUCCESSFUL_GET_DATA:
                     self._ctrl._connectors = []
                     self._ctrl._searched_connectors = []
                     return True, value
@@ -649,9 +649,9 @@ class CSPInPort(OpenRTM_aist.InPortBase):
             guard = None
 
         if not self._bufferzeromode:
-            ret, value = self.dataPullBufferMode(False)
+            ret, value = self.dataPullBufferMode()
         else:
-            ret, value = self.dataPullZeroMode(False)
+            ret, value = self.dataPullZeroMode()
         if not self._syncmode:
             guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
         if ret:

@@ -14,6 +14,7 @@
 #     All rights reserved.
 
 import OpenRTM_aist
+import OpenRTM_aist.CSPEventPort
 import copy
 import threading
 
@@ -58,7 +59,7 @@ class CSPManager(object):
     def __init__(self):
         self._outports = []
         self._inports = []
-        self._ctrl = OpenRTM_aist.CSPManager.CSPThreadCtrl()
+        self._ctrl = CSPManager.CSPThreadCtrl()
         self._writableOutPort = None
         self._readableInPort = None
 
@@ -215,11 +216,9 @@ class CSPManager(object):
         for port in ports:
             ret = port.select()
             if ret:
-                if isinstance(port, OpenRTM_aist.CSPInPort):
+                if port in self._inports:
                     return True, None, port
-                elif isinstance(port, OpenRTM_aist.CSPEventPort.CSPEventPort):
-                    return True, None, port
-                elif isinstance(port, OpenRTM_aist.CSPOutPort):
+                elif port in self._outports:
                     return True, port, None
         return False, None, None
 

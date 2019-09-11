@@ -56,8 +56,9 @@ class CSPMachine(OpenRTM_aist.StaticFSM.Machine):
     #
     # @endif
     #
-    def __init__(self, TOP, comp):
+    def __init__(self, TOP, comp, cspmgr):
         OpenRTM_aist.StaticFSM.Machine.__init__(self, TOP, comp)
+        self._manager = cspmgr
         #self._ctrl = OpenRTM_aist.CSPManager.CSPThreadCtrl()
 
     ##

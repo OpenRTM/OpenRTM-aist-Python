@@ -201,13 +201,15 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
     # @if jp
     # @brief データを書き込める状態かを判定
     # @param self
+    # @param retry True：再確認、False：通常の書き込み確認
     # @return True：書き込み可能
     # @else
     # @brief
     # @param self
+    # @param retry
     # @return
     # @endif
-    def isWritable(self):
+    def isWritable(self, retry):
         return False
 
     #
