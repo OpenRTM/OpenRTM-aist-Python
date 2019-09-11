@@ -1174,7 +1174,7 @@ class ConfigAdmin:
         print("Use addConfigurationSetNameListener instead.")
         self._listeners.configsetname_[
             OpenRTM_aist.ConfigurationSetNameListenerType.ON_UPDATE_CONFIG_SET].addListener(
-            cb, False)
+            cb)
         return
 
     ##
@@ -1203,7 +1203,7 @@ class ConfigAdmin:
         print("Use addConfigurationParamListener instead.")
         self._listeners.configparam_[
             OpenRTM_aist.ConfigurationParamListenerType.ON_UPDATE_CONFIG_PARAM].addListener(
-            cb, False)
+            cb)
         return
 
     ##
@@ -1232,7 +1232,7 @@ class ConfigAdmin:
         print("Use addConfigurationSetListener instead.")
         self._listeners.configset_[
             OpenRTM_aist.ConfigurationSetListenerType.ON_SET_CONFIG_SET].addListener(
-            cb, False)
+            cb)
         return
 
     ##
@@ -1261,7 +1261,7 @@ class ConfigAdmin:
         print("Use addConfigurationSetListener instead.")
         self._listeners.configset_[
             OpenRTM_aist.ConfigurationSetListenerType.ON_ADD_CONFIG_SET].addListener(
-            cb, False)
+            cb)
         return
 
     ##
@@ -1290,7 +1290,7 @@ class ConfigAdmin:
         print("Use addConfigurationSetNameListener instead.")
         self._listeners.configsetname_[
             OpenRTM_aist.ConfigurationSetNameListenerType.ON_REMOVE_CONFIG_SET].addListener(
-            cb, False)
+            cb)
         return
 
     ##
@@ -1319,7 +1319,7 @@ class ConfigAdmin:
         print("Use addConfigurationSetNameListener instead.")
         self._listeners.configsetname_[
             OpenRTM_aist.ConfigurationSetNameListenerType.ON_ACTIVATE_CONFIG_SET].addListener(
-            cb, False)
+            cb)
         return
 
     #
