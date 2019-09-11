@@ -533,9 +533,8 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     def updateExportedPortsList(self):
         plist = self._rtobj.getProperties().getProperty("conf.default.exported_ports")
         if plist:
-            p = [plist]
-            OpenRTM_aist.eraseBlank(p)
-            self._expPorts = p[0].split(",")
+            p = OpenRTM_aist.eraseBlank(plist)
+            self._expPorts = p.split(",")
 
         return
 
