@@ -22,7 +22,7 @@ import OpenRTM_aist.StringUtil
 
 display_spec = ["implementation_id", "Display",
                 "type_name", "Display",
-                "description", "Console input component",
+                "description", "Display component for Microwave example",
                 "version", "1.0",
                 "vendor", "Nobuhiko Miyamoto",
                 "category", "example",

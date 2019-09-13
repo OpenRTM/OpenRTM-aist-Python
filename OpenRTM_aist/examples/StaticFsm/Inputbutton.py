@@ -22,7 +22,7 @@ import OpenRTM_aist.StringUtil
 
 inputbutton_spec = ["implementation_id", "Inputbutton",
                     "type_name", "Inputbutton",
-                    "description", "Console input component",
+                    "description", "InputButton component for Microwave example",
                     "version", "1.0",
                     "vendor", "Nobuhiko Miyamoto",
                     "category", "example",
