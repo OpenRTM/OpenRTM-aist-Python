@@ -39,15 +39,13 @@ module CSP
   interface InPortCsp
   {
     RTC::PortStatus put(in RTC::OctetSeq data);
-    boolean is_writable();
-    void notify();
+    boolean is_writable(in boolean retry);
   };
   
   interface OutPortCsp
   {
     RTC::PortStatus get(out RTC::OctetSeq data);
-    boolean is_readable();
-    void notify();
+    boolean is_readable(in boolean retry);
   };
 };
 

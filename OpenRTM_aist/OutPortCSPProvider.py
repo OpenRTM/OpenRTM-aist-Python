@@ -171,6 +171,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @brief データ読み込み可能かを確認
     #
     # @param self
+    # @param retry True：再検索、False：通常の読み込み確認
     # @return True：読み込み可能、False：読み込み不可
     #
     #
@@ -178,19 +179,17 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @brief
     #
     # @param self
+    # @param retry
     # @return
     #
     # @endif
     #
 
-    def is_readable(self):
+    def is_readable(self, retry):
         self._rtcout.RTC_PARANOID("is_readable()")
         if self._connector:
-            return self._connector.isReadable()
+            return self._connector.isReadable(retry)
         return False
-
-    def notify(self):
-        pass
 
     def onBufferRead(self, data):
         if self._listeners and self._profile:

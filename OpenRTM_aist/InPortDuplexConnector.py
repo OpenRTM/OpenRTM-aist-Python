@@ -175,26 +175,25 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
         else:
             ret, _data = self.deserializeData(cdr)
             if ret == self.PORT_OK:
-                if isinstance(data, list):
-                    data = _data
                 self.onBufferRead(cdr)
-            return ret, data
+            return ret, _data
 
     #
     # @if jp
-    # @brief データを書き込める状態かを判定
+    # @brief データが読み込める状態かを判定
     # @param self
-    # @return True：書き込み可能
+    # @param retry True：再検索、False：通常の読み込み確認
+    # @return True：読み込み可能
     # @else
     # @brief
     # @param self
-    # @return
+    # @param retry
     # @return
     # @endif
 
-    def isReadable(self):
+    def isReadable(self, retry=False):
         if self._consumer:
-            return self._consumer.isReadable()
+            return self._consumer.isReadable(retry)
         return False
 
     ##
@@ -338,15 +337,17 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @if jp
     # @brief データを書き込める状態かを判定
     # @param self
+    # @param retry True：再検索、False：通常の書き込み確認
     # @return True：書き込み可能
     # @else
     # @brief
     # @param self
+    # @param retry
     # @return
     # @endif
-    def isWritable(self):
+    def isWritable(self, retry=False):
         if self._isWritableCallback:
-            return self._isWritableCallback(self)
+            return self._isWritableCallback(self, retry)
         return False
 
     #
@@ -385,8 +386,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     def onConnect(self):
         if self._listeners and self._profile:
             self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_CONNECT].notify(
-                self._profile)
+                OpenRTM_aist.ConnectorListenerType.ON_CONNECT].notify(self._profile)
         return
 
     ##
@@ -399,8 +399,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     def onDisconnect(self):
         if self._listeners and self._profile:
             self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT].notify(
-                self._profile)
+                OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT].notify(self._profile)
         return
 
     ##
@@ -416,22 +415,19 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     def onBufferRead(self, data):
         if self._listeners and self._profile:
             self._listeners.connectorData_[
-                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ].notify(
-                self._profile, data)
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ].notify(self._profile, data)
         return
 
     def onBufferEmpty(self, data):
         if self._listeners and self._profile:
             self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY].notify(
-                self._profile)
+                OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY].notify(self._profile)
         return
 
     def onBufferReadTimeout(self, data):
         if self._listeners and self._profile:
             self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT].notify(
-                self._profile)
+                OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT].notify(self._profile)
         return
 
     ##

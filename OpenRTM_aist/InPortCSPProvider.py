@@ -171,6 +171,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @brief データ書き込み可能かを確認
     #
     # @param self
+    # @param retry True：再検索、False：通常の書き込み確認
     # @return True：書き込み可能、False：書き込み不可
     #
     #
@@ -178,19 +179,17 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @brief
     #
     # @param self
+    # @param retry
     # @return
     #
     # @endif
     #
 
-    def is_writable(self):
+    def is_writable(self, retry):
         self._rtcout.RTC_PARANOID("is_writable()")
         if self._connector:
-            return self._connector.isWritable()
+            return self._connector.isWritable(retry)
         return False
-
-    def notify(self):
-        pass
 
     def onBufferWrite(self, data):
         if self._listeners is not None and self._profile is not None:
