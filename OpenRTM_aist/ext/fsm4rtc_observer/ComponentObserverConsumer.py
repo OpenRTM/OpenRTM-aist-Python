@@ -899,7 +899,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
             self._fsmaction.postOnFsmExitListener = None
 
         if self._fsmaction.postOnFsmStateChangeListener:
-            self._rtobj.removePostFsmActionListener(fsmactionlistenertype_.POST_ON_EXIT,
+            self._rtobj.removePostFsmActionListener(fsmactionlistenertype_.POST_ON_STATE_CHANGE,
                                                     self._fsmaction.postOnFsmStateChangeListener)
             self._fsmaction.postOnFsmStateChangeListener = None
 
