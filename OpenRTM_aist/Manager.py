@@ -1487,6 +1487,10 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.shutdownManagerServant()")
         if self._mgrservant:
             self._mgrservant.exit()
+            try:
+                self._poa.deactivate_object(self._poa.servant_to_id(self._mgrservant))
+            except BaseException:
+                print(OpenRTM_aist.Logger.print_exception())
             self._mgrservant = None
         return
 
