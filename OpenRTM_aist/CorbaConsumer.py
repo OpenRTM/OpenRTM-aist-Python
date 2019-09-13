@@ -8,7 +8,7 @@
 # @brief CORBA Consumer class
 # @date $Date: 2007/09/20 $
 # @author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
-# 
+#
 # Copyright (C) 2006-2008
 #     Noriaki Ando
 #     Task-intelligence Research Group,
@@ -35,131 +35,130 @@ import OpenRTM_aist
 # @class ConsumerBase
 # @brief Placeholder base class to hold remote object reference.
 # @endif
+
+
 class CorbaConsumerBase:
-  """
-  """
+    """
+    """
 
+    ##
+    # @if jp
+    #
+    # @brief コンストラクタ
+    #
+    # @param self
+    # @param consumer コピー元のCorbaConsumerBaseオブジェクト
+    #
+    # @else
+    #
+    # @brief Consructor
+    #
+    # @param self
+    #
+    # @endif
+    def __init__(self, consumer=None):
+        if consumer:
+            self._objref = consumer._objref
+        else:
+            self._objref = CORBA.Object._nil
 
+    ##
+    # @if jp
+    #
+    # @brief 代入演算子
+    #
+    # @param self
+    # @param consumer 代入元
+    #
+    # @return 代入結果
+    #
+    # @else
+    #
+    # @brief Assignment operator
+    #
+    # @param self
+    # @param consumer Copy source.
+    #
+    # @endif
 
-  ##
-  # @if jp
-  #
-  # @brief コンストラクタ
-  # 
-  # @param self 
-  # @param consumer コピー元のCorbaConsumerBaseオブジェクト
-  #
-  # @else
-  #
-  # @brief Consructor
-  #
-  # @param self 
-  #
-  # @endif
-  def __init__(self, consumer=None):
-    if consumer:
-      self._objref = consumer._objref
-    else:
-      self._objref = CORBA.Object._nil
+    def equal(self, consumer):
+        self._objref = consumer._objref
+        return self
 
+    ##
+    # @if jp
+    #
+    # @brief CORBAオブジェクトをセットする
+    #
+    # 与えられたオブジェクトリファレンスは、ConsumerBase オブジェクト内に
+    # CORBA::Object_var 型として保持される。
+    #
+    # @param self
+    # @param obj CORBA オブジェクトのリファレンス
+    #
+    # @return obj が nil リファレンスの場合 false を返す。
+    #
+    # @else
+    #
+    # @brief Set CORBA Object
+    #
+    # The given CORBA Object is held as CORBA::Object_var type
+    #
+    # @param self
+    # @param obj Object reference of CORBA object
+    #
+    # @return If obj is nil reference, it returns false.
+    #
+    # @endif
 
-  ##
-  # @if jp
-  # 
-  # @brief 代入演算子
-  # 
-  # @param self 
-  # @param consumer 代入元
-  # 
-  # @return 代入結果
-  # 
-  # @else
-  # 
-  # @brief Assignment operator
-  # 
-  # @param self 
-  # @param consumer Copy source.
-  # 
-  # @endif
-  def equal(self, consumer):
-    self._objref = consumer._objref
-    return self
+    def setObject(self, obj):
+        if CORBA.is_nil(obj):
+            return False
 
+        self._objref = obj
+        return True
 
-  ##
-  # @if jp
-  #
-  # @brief CORBAオブジェクトをセットする
-  #
-  # 与えられたオブジェクトリファレンスは、ConsumerBase オブジェクト内に
-  # CORBA::Object_var 型として保持される。 
-  #
-  # @param self
-  # @param obj CORBA オブジェクトのリファレンス
-  #
-  # @return obj が nil リファレンスの場合 false を返す。
-  #
-  # @else
-  #
-  # @brief Set CORBA Object
-  #
-  # The given CORBA Object is held as CORBA::Object_var type
-  #
-  # @param self
-  # @param obj Object reference of CORBA object
-  #
-  # @return If obj is nil reference, it returns false.
-  #
-  # @endif
-  def setObject(self, obj):
-    if CORBA.is_nil(obj):
-      return False
+    ##
+    # @if jp
+    #
+    # @brief CORBAオブジェクトを取得する
+    #
+    # ConsumerBase オブジェクト内に CORBA::Object_var 型として保持されている
+    # オブジェクトリファレンスを取得する。
+    #
+    # @param self
+    #
+    # @return obj CORBA オブジェクトのリファレンス
+    #
+    # @else
+    #
+    # @brief Get CORBA Object
+    #
+    # @param self
+    #
+    # @return Object reference of CORBA object
+    #
+    # @endif
 
-    self._objref = obj
-    return True
+    def getObject(self):
+        return self._objref
 
+    ##
+    # @if jp
+    #
+    # @brief CORBAオブジェクトの設定をクリアする
+    #
+    # 設定されている CORBA オブジェクトをクリアする。
+    # CORBAオブジェクトそのものに対しては何も操作しない。
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @endif
 
-  ##
-  # @if jp
-  #
-  # @brief CORBAオブジェクトを取得する
-  #
-  # ConsumerBase オブジェクト内に CORBA::Object_var 型として保持されている
-  # オブジェクトリファレンスを取得する。 
-  #
-  # @param self
-  #
-  # @return obj CORBA オブジェクトのリファレンス
-  #
-  # @else
-  #
-  # @brief Get CORBA Object
-  #
-  # @param self
-  #
-  # @return Object reference of CORBA object
-  #
-  # @endif
-  def getObject(self):
-    return self._objref
-
-
-  ##
-  # @if jp
-  #
-  # @brief CORBAオブジェクトの設定をクリアする
-  #
-  # 設定されている CORBA オブジェクトをクリアする。
-  # CORBAオブジェクトそのものに対しては何も操作しない。
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @endif
-  def releaseObject(self):
-    self._objref = CORBA.Object._nil
-
+    def releaseObject(self):
+        self._objref = CORBA.Object._nil
 
 
 ##
@@ -167,7 +166,7 @@ class CorbaConsumerBase:
 #
 # @class CorbaConsumer
 # @brief オブジェクトリファレンスを保持するプレースホルダクラス
-# 
+#
 # 引数で与えられた型のCORBAオブジェクトを保持する。
 # オブジェクトがセットされたときに、与えられた型で narrow されるので、
 # _ptr() で取得するリファレンスは、narrow 済みのリファレンスである。
@@ -186,172 +185,165 @@ class CorbaConsumerBase:
 #
 # @endif
 class CorbaConsumer(CorbaConsumerBase):
-  """
-  """
+    """
+    """
 
+    ##
+    # @if jp
+    #
+    # @brief コンストラクタ
+    #
+    # @param self
+    # @param interfaceType このホルダが保持するオブジェクトの型
+    #                      (デフォルト値;None)
+    # @param consumer このホルダが保持するオブジェクト(デフォルト値;None)
+    #
+    # @else
+    #
+    # @brief Consructor
+    #
+    # @endif
+    def __init__(self, interfaceType=None, consumer=None):
+        if interfaceType:
+            self._interfaceType = interfaceType
+        else:
+            self._interfaceType = None
 
+        if consumer:
+            CorbaConsumerBase.__init__(self, consumer)
+            self._var = consumer._var
+        else:
+            CorbaConsumerBase.__init__(self)
+            self._var = None
 
-  ##
-  # @if jp
-  #
-  # @brief コンストラクタ
-  #
-  # @param self
-  # @param interfaceType このホルダが保持するオブジェクトの型
-  #                      (デフォルト値;None)
-  # @param consumer このホルダが保持するオブジェクト(デフォルト値;None)
-  #
-  # @else
-  #
-  # @brief Consructor
-  #
-  # @endif
-  def __init__(self, interfaceType=None, consumer=None):
-    if interfaceType:
-      self._interfaceType = interfaceType
-    else:
-      self._interfaceType = None
+        self._sev = None
 
-    if consumer:
-      CorbaConsumerBase.__init__(self, consumer)
-      self._var = consumer._var
-    else:
-      CorbaConsumerBase.__init__(self)
-      self._var = None
+    ##
+    # @if jp
+    #
+    # @brief 代入演算子
+    #
+    # @param self
+    # @param consumer 代入元
+    #
+    # @return 代入結果
+    #
+    # @else
+    #
+    # @brief Assignment operator
+    #
+    # @param self
+    # @param consumer Copy source.
+    #
+    # @endif
 
-    self._sev = None
+    def equal(self, consumer):
+        self._var = consumer._var
 
+    def __del__(self):
+        pass
+        # self.releaseObject()
 
-  ##
-  # @if jp
-  # 
-  # @brief 代入演算子
-  # 
-  # @param self 
-  # @param consumer 代入元
-  # 
-  # @return 代入結果
-  # 
-  # @else
-  # 
-  # @brief Assignment operator
-  # 
-  # @param self 
-  # @param consumer Copy source.
-  # 
-  # @endif
-  def equal(self, consumer):
-    self._var = consumer._var
+    ##
+    # @if jp
+    # @brief オブジェクトをセットする
+    #
+    # ConsumerBase のオーバーライド。CORBA::Object_var にオブジェクトをセット
+    # するとともに、パラメータの型で narrow したオブジェクトを保持する。
+    #
+    # @param self
+    # @param obj CORBA Objecct
+    #
+    # @return オブジェクト設定結果
+    #         設定対象オブジェクトが null の場合は false が返ってくる
+    #
+    # @else
+    # @brief Set Object
+    #
+    # Override function of ConsumerBase. This operation set an Object to
+    # CORBA:Object_var in the class, and this object is narrowed to
+    # given parameter and stored in.
+    #
+    # @param self
+    # @param obj CORBA Objecct
+    #
+    # @endif
 
+    def setObject(self, obj):
+        if not CorbaConsumerBase.setObject(self, obj):
+            self.releaseObject()
+            return False
 
-  def __del__(self):
-    pass
-    #self.releaseObject()
+        if self._interfaceType:
 
-    
+            self._var = obj._narrow(self._interfaceType)
+            if self._var is None:
+                self.releaseObject()
+                return False
 
+        else:
+            self._var = self._objref
 
-  ##
-  # @if jp
-  # @brief オブジェクトをセットする
-  #
-  # ConsumerBase のオーバーライド。CORBA::Object_var にオブジェクトをセット
-  # するとともに、パラメータの型で narrow したオブジェクトを保持する。
-  #
-  # @param self
-  # @param obj CORBA Objecct
-  #
-  # @return オブジェクト設定結果
-  #         設定対象オブジェクトが null の場合は false が返ってくる
-  # 
-  # @else
-  # @brief Set Object
-  #
-  # Override function of ConsumerBase. This operation set an Object to 
-  # CORBA:Object_var in the class, and this object is narrowed to
-  # given parameter and stored in.
-  #
-  # @param self
-  # @param obj CORBA Objecct
-  #
-  # @endif
-  def setObject(self, obj):
-    if not CorbaConsumerBase.setObject(self, obj):
-      self.releaseObject()
-      return False
-    
-    if self._interfaceType:
-      
-      self._var = obj._narrow(self._interfaceType)
-      if self._var is None:
-        self.releaseObject()
-        return False
-      
-    else:
-      self._var = self._objref
-    
-    
-    return True
-    #if not CORBA.is_nil(self._var):
-    #  return True
+        return True
+        # if not CORBA.is_nil(self._var):
+        #  return True
 
-    #self.releaseObject()
-    #return False
+        # self.releaseObject()
+        # return False
 
+    ##
+    # @if jp
+    # @brief ObjectType 型のオブジェクトのリファレンスを取得
+    #
+    # ObjectType に narrow済みのオブジェクトのリファレンスを取得する。
+    # オブジェクトリファレンスを使用するには、setObject() でセット済みで
+    # なければならない。
+    # オブジェクトがセットされていなければ　nil オブジェクトリファレンスが
+    # 返される。
+    #
+    # @param self
+    #
+    # @return ObjectType に narrow 済みのオブジェクトのリファレンス
+    #
+    # @else
+    # @brief Get Object reference narrowed as ObjectType
+    #
+    # This operation returns object reference narrowed as ObjectType.
+    # To use the returned object reference, reference have to be set by
+    # setObject().
+    # If object is not set, this operation returns nil object reference.
+    #
+    # @return The object reference narrowed as ObjectType
+    #
+    # @endif
 
-  ##
-  # @if jp
-  # @brief ObjectType 型のオブジェクトのリファレンスを取得
-  #
-  # ObjectType に narrow済みのオブジェクトのリファレンスを取得する。
-  # オブジェクトリファレンスを使用するには、setObject() でセット済みで
-  # なければならない。
-  # オブジェクトがセットされていなければ　nil オブジェクトリファレンスが
-  # 返される。
-  #
-  # @param self
-  #
-  # @return ObjectType に narrow 済みのオブジェクトのリファレンス
-  # 
-  # @else
-  # @brief Get Object reference narrowed as ObjectType
-  #
-  # This operation returns object reference narrowed as ObjectType.
-  # To use the returned object reference, reference have to be set by
-  # setObject().
-  # If object is not set, this operation returns nil object reference.
-  #
-  # @return The object reference narrowed as ObjectType
-  #
-  # @endif
-  def _ptr(self, get_ref=False):
-    if get_ref:
-      return self._var
-    if self._sev is not None:
-      return self._sev
-    try:
-      mgr = OpenRTM_aist.Manager.instance()
-      self._sev = mgr._poa.reference_to_servant(self._var)
-      return self._sev
-    except:
-      return self._var
+    def _ptr(self, get_ref=False):
+        if get_ref:
+            return self._var
+        if self._sev is not None:
+            return self._sev
+        try:
+            mgr = OpenRTM_aist.Manager.instance()
+            self._sev = mgr._poa.reference_to_servant(self._var)
+            return self._sev
+        except BaseException:
+            return self._var
 
+    ##
+    # @if jp
+    #
+    # @brief CORBAオブジェクトの設定をクリアする
+    #
+    # 設定されている CORBA オブジェクトをクリアする。
+    # CORBAオブジェクトそのものに対しては何も操作しない。
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @endif
 
-
-  ##
-  # @if jp
-  #
-  # @brief CORBAオブジェクトの設定をクリアする
-  #
-  # 設定されている CORBA オブジェクトをクリアする。
-  # CORBAオブジェクトそのものに対しては何も操作しない。
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @endif
-  def releaseObject(self):
-    CorbaConsumerBase.releaseObject(self)
-    self._var = CORBA.Object._nil
-    self._sev = None
+    def releaseObject(self):
+        CorbaConsumerBase.releaseObject(self)
+        self._var = CORBA.Object._nil
+        self._sev = None

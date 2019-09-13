@@ -9,7 +9,6 @@
 #
 
 
-
 import OpenRTM_aist
 
 
@@ -25,24 +24,26 @@ import OpenRTM_aist
 #
 # @endif
 class NumberingPolicyBase:
-  def __init__(self):
-    pass
-  def onCreate(self, obj):
-    pass
-  def onDelete(self, obj):
-    pass
+    def __init__(self):
+        pass
 
+    def onCreate(self, obj):
+        pass
+
+    def onDelete(self, obj):
+        pass
 
 
 numberingpolicyfactory = None
 
-class NumberingPolicyFactory(OpenRTM_aist.Factory):
-  def __init__(self):
-    OpenRTM_aist.Factory.__init__(self)
-  def instance():
-    global numberingpolicyfactory
-    if numberingpolicyfactory is None:
-      numberingpolicyfactory = NumberingPolicyFactory()
-    return numberingpolicyfactory
-  instance = staticmethod(instance)
 
+class NumberingPolicyFactory(OpenRTM_aist.Factory):
+    def __init__(self):
+        OpenRTM_aist.Factory.__init__(self)
+
+    def instance():
+        global numberingpolicyfactory
+        if numberingpolicyfactory is None:
+            numberingpolicyfactory = NumberingPolicyFactory()
+        return numberingpolicyfactory
+    instance = staticmethod(instance)

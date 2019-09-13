@@ -11,72 +11,74 @@ import RTC
 import OpenRTM_aist
 
 datain_spec = ["implementation_id", "DataIn",
-                   "type_name",         "DataIn",
-                   "description",       "Console output component",
-                   "version",           "1.0",
-                   "vendor",            "Shinji Kurihara",
-                   "category",          "example",
-                   "activity_type",     "DataFlowComponent",
-                   "max_instance",      "10",
-                   "language",          "Python",
-                   "lang_type",         "script",
-                   ""]
+               "type_name", "DataIn",
+               "description", "Console output component",
+               "version", "1.0",
+               "vendor", "Shinji Kurihara",
+               "category", "example",
+               "activity_type", "DataFlowComponent",
+               "max_instance", "10",
+               "language", "Python",
+               "lang_type", "script",
+               ""]
 
 
 class DataIn(OpenRTM_aist.DataFlowComponentBase):
-  def __init__(self, manager):
-    OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
-    return
+    def __init__(self, manager):
+        OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
+        return
 
-  def onInitialize(self):
-    self._data = RTC.TimedLong(RTC.Time(0,0),0)
-    self._cspmanager = OpenRTM_aist.CSPManager()
-    self._inport = OpenRTM_aist.CSPInPort("in", self._data, self._cspmanager)
-    # Set InPort buffer
-    self.addInPort("in", self._inport)
+    def onInitialize(self):
+        self._data = RTC.TimedLong(RTC.Time(0, 0), 0)
+        self._cspmanager = OpenRTM_aist.CSPManager()
+        self._inport = OpenRTM_aist.CSPInPort(
+            "in", self._data, self._cspmanager)
+        # Set InPort buffer
+        self.addInPort("in", self._inport)
 
+        return RTC.RTC_OK
 
-    return RTC.RTC_OK
-
-  def onExecute(self, ec_id):
-    ret, outport, inport = self._cspmanager.select(100)
-    if ret:
-      if inport:
-        inport.readData()
-        #self._rtcout.RTC_ERROR("dataread: %s", (str(inport.readData())))
-    return RTC.RTC_OK
+    def onExecute(self, ec_id):
+        ret, outport, inport = self._cspmanager.select(100)
+        if ret:
+            if inport:
+                inport.readData()
+                #self._rtcout.RTC_ERROR("dataread: %s", (str(inport.readData())))
+        return RTC.RTC_OK
 
 
 def DataInInit(manager):
-  profile = OpenRTM_aist.Properties(defaults_str=datain_spec)
-  manager.registerFactory(profile,
-                          DataIn,
-                          OpenRTM_aist.Delete)
+    profile = OpenRTM_aist.Properties(defaults_str=datain_spec)
+    manager.registerFactory(profile,
+                            DataIn,
+                            OpenRTM_aist.Delete)
+
 
 def MyModuleInit(manager):
-  DataInInit(manager)
+    DataInInit(manager)
 
-  # Create a component
-  comp = manager.createComponent("DataIn")
+    # Create a component
+    comp = manager.createComponent("DataIn")
 
 
 def main():
-  # Initialize manager
-  mgr = OpenRTM_aist.Manager.init(sys.argv)
+    # Initialize manager
+    mgr = OpenRTM_aist.Manager.init(sys.argv)
 
-  # Set module initialization proceduer
-  # This procedure will be invoked in activateManager() function.
-  mgr.setModuleInitProc(MyModuleInit)
+    # Set module initialization proceduer
+    # This procedure will be invoked in activateManager() function.
+    mgr.setModuleInitProc(MyModuleInit)
 
-  # Activate manager and register to naming service
-  mgr.activateManager()
+    # Activate manager and register to naming service
+    mgr.activateManager()
 
-  # run the manager in blocking mode
-  # runManager(False) is the default
-  mgr.runManager()
+    # run the manager in blocking mode
+    # runManager(False) is the default
+    mgr.runManager()
 
-  # If you want to run the manager in non-blocking mode, do like this
-  # mgr.runManager(True)
+    # If you want to run the manager in non-blocking mode, do like this
+    # mgr.runManager(True)
+
 
 if __name__ == "__main__":
-  main()
+    main()

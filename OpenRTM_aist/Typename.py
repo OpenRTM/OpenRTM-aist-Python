@@ -17,9 +17,6 @@
 #
 
 
-
-
-
-## const char* toTypename(value)
+# const char* toTypename(value)
 def toTypename(value):
-  return str(value._NP_RepositoryId)
+    return str(value._NP_RepositoryId)

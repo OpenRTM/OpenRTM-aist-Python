@@ -41,251 +41,253 @@ import RTC
 # @endif
 #
 class InPortConnector(OpenRTM_aist.ConnectorBase):
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  #
-  # InPortConnector(ConnectorInfo& info,
-  #                 CdrBufferBase* buffer);
-  def __init__(self, info, buffer):
-    self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortConnector")
-    self._profile = info
-    self._buffer = buffer
-    self._dataType = None
-    self._endian = True
-    
-
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  #
-  def __del__(self):
-    pass
-
-
-  ##
-  # @if jp
-  # @brief ConnectorInfo 取得
-  #
-  # Connector ConnectorInfo を取得する
-  #
-  # @else
-  # @brief Getting ConnectorInfo
-  #
-  # This operation returns ConnectorInfo
-  #
-  # @endif
-  #
-  # const ConnectorInfo& profile();
-  def profile(self):
-    self._rtcout.RTC_TRACE("profile()")
-    return self._profile
-
-
-  ##
-  # @if jp
-  # @brief Connector ID 取得
-  #
-  # Connector ID を取得する
-  #
-  # @else
-  # @brief Getting Connector ID
-  #
-  # This operation returns Connector ID
-  #
-  # @endif
-  #
-  # const char* id();
-  def id(self):
-    self._rtcout.RTC_TRACE("id() = %s", self.profile().id)
-    return self.profile().id
-
-
-  ##
-  # @if jp
-  # @brief Connector 名取得
-  #
-  # Connector 名を取得する
-  #
-  # @else
-  # @brief Getting Connector name
-  #
-  # This operation returns Connector name
-  #
-  # @endif
-  #
-  # const char* name();
-  def name(self):
-    self._rtcout.RTC_TRACE("name() = %s", self.profile().name)
-    return self.profile().name
-
-
-  ##
-  # @if jp
-  # @brief 接続解除関数
-  #
-  # Connector が保持している接続を解除する
-  #
-  # @else
-  # @brief Disconnect connection
-  #
-  # This operation disconnect this connection
-  #
-  # @endif
-  #
-  # virtual ReturnCode disconnect() = 0;
-  def disconnect(self):
-    pass
-
-  ##
-  # @if jp
-  # @brief Buffer を所得する
-  #
-  # Connector が保持している Buffer を返す
-  #
-  # @else
-  # @brief Getting Buffer
-  #
-  # This operation returns this connector's buffer
-  #
-  # @endif
-  #
-  # virtual CdrBufferBase* getBuffer();
-  def getBuffer(self):
-    return self._buffer
-
-  ##
-  # @if jp
-  # @brief read 関数
-  #
-  # Buffer からデータを InPort へ read する関数
-  #
-  # @else
-  # @brief 
-  #
-  # The read function to read data from buffer to InPort
-  #
-  # @endif
-  #
-  # virtual ReturnCode read(cdrMemoryStream& data) = 0;
-  def read(self, data=None):
-    pass
-
-  # void setConnectorInfo(ConnectorInfo profile);
-  def setConnectorInfo(self, profile):
-    self._profile = profile
-
-    if self._profile.properties.hasKey("serializer"):
-      endian = self._profile.properties.getProperty("serializer.cdr.endian")
-      if not endian:
-        self._rtcout.RTC_ERROR("InPortConnector.setConnectorInfo(): endian is not supported.")
-        return RTC.RTC_ERROR
-        
-      endian = OpenRTM_aist.split(endian, ",") # Maybe endian is ["little","big"]
-      endian = OpenRTM_aist.normalize(endian[0]) # Maybe self._endian is "little" or "big"
-
-      if endian == "little":
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    #
+    # InPortConnector(ConnectorInfo& info,
+    #                 CdrBufferBase* buffer);
+    def __init__(self, info, buffer):
+        self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortConnector")
+        self._profile = info
+        self._buffer = buffer
+        self._dataType = None
         self._endian = True
-      elif endian == "big":
-        self._endian = False
-      else:
-        self._endian = None
-            
-    else:
-      self._endian = True # little endian
 
-    return RTC.RTC_OK
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+    #
 
+    def __del__(self):
+        pass
 
+    ##
+    # @if jp
+    # @brief ConnectorInfo 取得
+    #
+    # Connector ConnectorInfo を取得する
+    #
+    # @else
+    # @brief Getting ConnectorInfo
+    #
+    # This operation returns ConnectorInfo
+    #
+    # @endif
+    #
+    # const ConnectorInfo& profile();
 
-  # template<class DataType>
-  # void setDataTyep(DataType data);
-  def setDataType(self, data):
-    self._dataType = data
+    def profile(self):
+        self._rtcout.RTC_TRACE("profile()")
+        return self._profile
 
+    ##
+    # @if jp
+    # @brief Connector ID 取得
+    #
+    # Connector ID を取得する
+    #
+    # @else
+    # @brief Getting Connector ID
+    #
+    # This operation returns Connector ID
+    #
+    # @endif
+    #
+    # const char* id();
 
-  def write(self, data):
-    pass
+    def id(self):
+        self._rtcout.RTC_TRACE("id() = %s", self.profile().id)
+        return self.profile().id
 
-  #
-  # @if jp
-  # @brief データ書き込み時のリスナ設定
-  # @param self
-  # @param listener リスナ
-  # @else
-  # @brief 
-  # @param self
-  # @param listener
-  # @endif
-  def setWriteListener(self, listener):
-    pass
+    ##
+    # @if jp
+    # @brief Connector 名取得
+    #
+    # Connector 名を取得する
+    #
+    # @else
+    # @brief Getting Connector name
+    #
+    # This operation returns Connector name
+    #
+    # @endif
+    #
+    # const char* name();
 
-  #
-  # @if jp
-  # @brief データ書き込み判定時のリスナ設定
-  # @param self
-  # @param listener リスナ
-  # @else
-  # @brief 
-  # @param self
-  # @param listener
-  # @endif
-  def setIsWritableListener(self, listener):
-    pass
+    def name(self):
+        self._rtcout.RTC_TRACE("name() = %s", self.profile().name)
+        return self.profile().name
 
-  #
-  # @if jp
-  # @brief データを書き込める状態かを判定
-  # @param self
-  # @return True：書き込み可能
-  # @else
-  # @brief 
-  # @param self
-  # @return 
-  # @endif
-  def isWritable(self):
-    return False
+    ##
+    # @if jp
+    # @brief 接続解除関数
+    #
+    # Connector が保持している接続を解除する
+    #
+    # @else
+    # @brief Disconnect connection
+    #
+    # This operation disconnect this connection
+    #
+    # @endif
+    #
+    # virtual ReturnCode disconnect() = 0;
 
+    def disconnect(self):
+        pass
 
-  #
-  # @if jp
-  # @brief データを読み込める状態かを判定
-  # @param self
-  # @return True：読み込み可能
-  # @else
-  # @brief 
-  # @param self
-  # @return 
-  # @return 
-  # @endif
-  def isReadable(self):
-    return False
+    ##
+    # @if jp
+    # @brief Buffer を所得する
+    #
+    # Connector が保持している Buffer を返す
+    #
+    # @else
+    # @brief Getting Buffer
+    #
+    # This operation returns this connector's buffer
+    #
+    # @endif
+    #
+    # virtual CdrBufferBase* getBuffer();
+    def getBuffer(self):
+        return self._buffer
 
-  ##
-  # @if jp
-  # @brief コンシューマの設定
-  # @else
-  # @brief set Consumer
-  # @endif
-  def setConsumer(self, consumer):
-    pass
+    ##
+    # @if jp
+    # @brief read 関数
+    #
+    # Buffer からデータを InPort へ read する関数
+    #
+    # @else
+    # @brief
+    #
+    # The read function to read data from buffer to InPort
+    #
+    # @endif
+    #
+    # virtual ReturnCode read(cdrMemoryStream& data) = 0;
+    def read(self, data=None):
+        pass
 
-  ##
-  # @if jp
-  # @brief コンシューマのインターフェースの登録を取り消す
-  # @param prop コネクタプロファイルのプロパティ
-  # @else
-  # @brief 
-  # @param prop
-  # @endif
-  def unsubscribeInterface(self, prop):
-    pass
+    # void setConnectorInfo(ConnectorInfo profile);
+    def setConnectorInfo(self, profile):
+        self._profile = profile
+
+        if self._profile.properties.hasKey("serializer"):
+            endian = self._profile.properties.getProperty(
+                "serializer.cdr.endian")
+            if not endian:
+                self._rtcout.RTC_ERROR(
+                    "InPortConnector.setConnectorInfo(): endian is not supported.")
+                return RTC.RTC_ERROR
+
+            # Maybe endian is ["little","big"]
+            endian = OpenRTM_aist.split(endian, ",")
+            # Maybe self._endian is "little" or "big"
+            endian = OpenRTM_aist.normalize(endian[0])
+
+            if endian == "little":
+                self._endian = True
+            elif endian == "big":
+                self._endian = False
+            else:
+                self._endian = None
+
+        else:
+            self._endian = True  # little endian
+
+        return RTC.RTC_OK
+
+    # template<class DataType>
+    # void setDataTyep(DataType data);
+
+    def setDataType(self, data):
+        self._dataType = data
+
+    def write(self, data):
+        pass
+
+    #
+    # @if jp
+    # @brief データ書き込み時のリスナ設定
+    # @param self
+    # @param listener リスナ
+    # @else
+    # @brief
+    # @param self
+    # @param listener
+    # @endif
+    def setWriteListener(self, listener):
+        pass
+
+    #
+    # @if jp
+    # @brief データ書き込み判定時のリスナ設定
+    # @param self
+    # @param listener リスナ
+    # @else
+    # @brief
+    # @param self
+    # @param listener
+    # @endif
+    def setIsWritableListener(self, listener):
+        pass
+
+    #
+    # @if jp
+    # @brief データを書き込める状態かを判定
+    # @param self
+    # @return True：書き込み可能
+    # @else
+    # @brief
+    # @param self
+    # @return
+    # @endif
+    def isWritable(self):
+        return False
+
+    #
+    # @if jp
+    # @brief データを読み込める状態かを判定
+    # @param self
+    # @return True：読み込み可能
+    # @else
+    # @brief
+    # @param self
+    # @return
+    # @return
+    # @endif
+
+    def isReadable(self):
+        return False
+
+    ##
+    # @if jp
+    # @brief コンシューマの設定
+    # @else
+    # @brief set Consumer
+    # @endif
+    def setConsumer(self, consumer):
+        pass
+
+    ##
+    # @if jp
+    # @brief コンシューマのインターフェースの登録を取り消す
+    # @param prop コネクタプロファイルのプロパティ
+    # @else
+    # @brief
+    # @param prop
+    # @endif
+    def unsubscribeInterface(self, prop):
+        pass

@@ -15,58 +15,88 @@
 #
 
 from __future__ import print_function
-import sys,os,platform
+import sys
+import os
+import platform
 import time
 import subprocess
 
-nsport="2809"
+nsport = "2809"
 sysinfo = platform.uname()
-hostname= sysinfo[1]
-plat=sys.platform
+hostname = sysinfo[1]
+plat = sys.platform
 
 if plat == "win32":
     #os.system("rd /S /Q SimpleService")
     #os.system("rd /S /Q SimpleService__POA")
     #os.system("omniidl.exe -bpython MyService.idl")
-    subprocess.call("start \"\" \"%RTM_ROOT%\\bin\\rtm-naming.bat\"", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.call(
+        "start \"\" \"%RTM_ROOT%\\bin\\rtm-naming.bat\"",
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
     time.sleep(5)
-    subprocess.call("start python MyServiceConsumer.py", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    subprocess.call("start python MyServiceProvider.py", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.call(
+        "start python MyServiceConsumer.py",
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    subprocess.call(
+        "start python MyServiceProvider.py",
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
     time.sleep(3)
     subprocess.call("python Connector.py", shell=True)
 
 else:
     #os.system('rm -rf SimpleService*')
     #os.system('omniidl -bpython MyService.idl')
-    p=subprocess.Popen("which xterm", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(
+        "which xterm",
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
     term, stderr = p.communicate()
     status = p.returncode
-    term = term.replace("\n","")
+    term = term.replace("\n", "")
     term += " -e"
     if status != 0:
-      p=subprocess.Popen("which kterm", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      term, stderr = p.communicate()
-      status = p.returncode
-      term = term.replace("\n","")
-      term += " -e"
+        p = subprocess.Popen(
+            "which kterm",
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        term, stderr = p.communicate()
+        status = p.returncode
+        term = term.replace("\n", "")
+        term += " -e"
 
     if status != 0:
-      p=subprocess.Popen("which uxterm", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      term, stderr = p.communicate()
-      status = p.returncode
-      term = term.replace("\n","")
-      term += " -e"
-      
-    if status != 0:
-      p=subprocess.Popen("which gnome-terminal", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      term, stderr = p.communicate()
-      status = p.returncode
-      term = term.replace("\n","")
-      term += " -x"
+        p = subprocess.Popen(
+            "which uxterm",
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        term, stderr = p.communicate()
+        status = p.returncode
+        term = term.replace("\n", "")
+        term += " -e"
 
     if status != 0:
-      print("No terminal program (kterm/xterm/gnome-terminal) exists.")
-      sys.exit(0)
+        p = subprocess.Popen(
+            "which gnome-terminal",
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        term, stderr = p.communicate()
+        status = p.returncode
+        term = term.replace("\n", "")
+        term += " -x"
+
+    if status != 0:
+        print("No terminal program (kterm/xterm/gnome-terminal) exists.")
+        sys.exit(0)
 
     """
     path = None
@@ -81,10 +111,22 @@ else:
     """
 
     cmd = 'rtm-naming&'
-    subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    cmd = '%s python MyServiceConsumer.py &'%term
-    subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    cmd = '%s python MyServiceProvider.py &'%term
-    subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.call(
+        cmd,
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    cmd = '%s python MyServiceConsumer.py &' % term
+    subprocess.call(
+        cmd,
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    cmd = '%s python MyServiceProvider.py &' % term
+    subprocess.call(
+        cmd,
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
     time.sleep(3)
     subprocess.call("python Connector.py", shell=True)

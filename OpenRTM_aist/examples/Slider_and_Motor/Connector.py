@@ -20,8 +20,8 @@ def main():
 
     # get NamingService
     naming = OpenRTM_aist.CorbaNaming(orb, "localhost")
-    
-    sl  = OpenRTM_aist.CorbaConsumer()
+
+    sl = OpenRTM_aist.CorbaConsumer()
     tkm = OpenRTM_aist.CorbaConsumer()
 
     # find TkMotorComp0 component
@@ -32,7 +32,6 @@ def main():
     pin = inobj.get_ports()
     pin[0].disconnect_all()
 
-
     # find SliderComp0 component
     sl.setObject(naming.resolve("SliderComp0.rtc"))
 
@@ -41,23 +40,22 @@ def main():
     pout = outobj.get_ports()
     pout[0].disconnect_all()
 
-
     # connect ports
-    conprof = RTC.ConnectorProfile("connector0", "", [pin[0],pout[0]], [])
+    conprof = RTC.ConnectorProfile("connector0", "", [pin[0], pout[0]], [])
     OpenRTM_aist.CORBA_SeqUtil.push_back(conprof.properties,
-                                    OpenRTM_aist.NVUtil.newNV("dataport.interface_type",
-                                                         "corba_cdr"))
+                                         OpenRTM_aist.NVUtil.newNV("dataport.interface_type",
+                                                                   "corba_cdr"))
 
     OpenRTM_aist.CORBA_SeqUtil.push_back(conprof.properties,
-                                    OpenRTM_aist.NVUtil.newNV("dataport.dataflow_type",
-                                                         "push"))
+                                         OpenRTM_aist.NVUtil.newNV("dataport.dataflow_type",
+                                                                   "push"))
 
     OpenRTM_aist.CORBA_SeqUtil.push_back(conprof.properties,
-                                    OpenRTM_aist.NVUtil.newNV("dataport.subscription_type",
-                                                         subs_type))
+                                         OpenRTM_aist.NVUtil.newNV("dataport.subscription_type",
+                                                                   subs_type))
 
     ret = pin[0].connect(conprof)
-    
+
     # activate TkMotorComp0
     eclistin = inobj.get_owned_contexts()
     eclistin[0].activate_component(inobj)
@@ -67,6 +65,5 @@ def main():
     eclistout[0].activate_component(outobj)
 
 
-
 if __name__ == "__main__":
-	main()
+    main()

@@ -17,23 +17,16 @@ import OpenRTM_aist
 
 
 class Timestamp(OpenRTM_aist.ConnectorDataListenerT):
-  def __init__(self, ts_type):
-    self._ts_type = ts_type
-  def __del__(self):
-    pass
-  def __call__(self, info, data):
-    if info.properties.getProperty("timestamp_policy") != self._ts_type:
-      return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
-    tm = OpenRTM_aist.Time().gettimeofday()
-    data.tm.sec = tm.sec()
-    data.tm.nsec = tm.usec() * 1000
-    return OpenRTM_aist.ConnectorListenerStatus.DATA_CHANGED
-    
+    def __init__(self, ts_type):
+        self._ts_type = ts_type
 
+    def __del__(self):
+        pass
 
-
-
-
-
-
-
+    def __call__(self, info, data):
+        if info.properties.getProperty("timestamp_policy") != self._ts_type:
+            return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
+        tm = OpenRTM_aist.Time().gettimeofday()
+        data.tm.sec = tm.sec()
+        data.tm.nsec = tm.usec() * 1000
+        return OpenRTM_aist.ConnectorListenerStatus.DATA_CHANGED

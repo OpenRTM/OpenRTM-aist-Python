@@ -24,62 +24,57 @@ import OpenRTM_aist
 
 class Async_t(OpenRTM_aist.Task):
 
-  def __init__(self, obj, func, *args):
-    OpenRTM_aist.Task.__init__(self)
-    self._obj        = obj
-    self._func       = func
-    self._finished   = False
-    self._args       = args
-    self._mutex      = threading.RLock()
+    def __init__(self, obj, func, *args):
+        OpenRTM_aist.Task.__init__(self)
+        self._obj = obj
+        self._func = func
+        self._finished = False
+        self._args = args
+        self._mutex = threading.RLock()
 
-  def invoke(self):
-    self.activate()
+    def invoke(self):
+        self.activate()
 
+    def finished(self):
+        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        return self._finished
 
-  def finished(self):
-    guard = OpenRTM_aist.ScopedLock(self._mutex)
-    return self._finished
+    def svc(self):
+        if len(self._args) > 0:
+            self._func(self._obj, *self._args)
+        else:
+            self._func(self._obj)
 
-
-  def svc(self):
-    if len(self._args) > 0:
-      self._func(self._obj, *self._args)
-    else:
-      self._func(self._obj)
-
-    guard = OpenRTM_aist.ScopedLock(self._mutex)
-    self._finished = True
-    return 0
+        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        self._finished = True
+        return 0
 
 
 class Async_ref_t(OpenRTM_aist.Task):
 
-  def __init__(self, obj, func, *args):
-    OpenRTM_aist.Task.__init__(self)
-    self._obj        = obj
-    self._func       = func
-    self._args       = args
-    self._finished   = False
-    
+    def __init__(self, obj, func, *args):
+        OpenRTM_aist.Task.__init__(self)
+        self._obj = obj
+        self._func = func
+        self._args = args
+        self._finished = False
 
-  def invoke(self):
-    self.activate()
+    def invoke(self):
+        self.activate()
+
+    def finished(self):
+        return self._finished
+
+    def svc(self):
+        if len(self._args) > 0:
+            self._func(self._obj, *self._args)
+        else:
+            self._func(self._obj)
+
+        self._finished = True
+        return 0
 
 
-  def finished(self):
-    return self._finished
-  
-
-  def svc(self):
-    if len(self._args) > 0:
-      self._func(self._obj, *self._args)
-    else:
-      self._func(self._obj)
-
-    self._finished = True
-    return 0
-  
-  
 ##
 # @if jp
 # @brief 非同期メンバー関数呼び出しヘルパー関数
@@ -161,10 +156,10 @@ class Async_ref_t(OpenRTM_aist.Task):
 #
 # @endif
 #
-#def Async_tInvoker(func, auto_delete = False):
+# def Async_tInvoker(func, auto_delete = False):
 def Async_tInvoker(obj, func, *args):
-  return Async_t(obj, func, *args)
+    return Async_t(obj, func, *args)
 
 
 def Async_ref_tInvoker(obj, func, *args):
-  return Async_ref_t(obj, func, *args)
+    return Async_ref_t(obj, func, *args)

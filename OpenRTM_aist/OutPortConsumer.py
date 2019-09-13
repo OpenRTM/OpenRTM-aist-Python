@@ -36,70 +36,72 @@ import OpenRTM_aist
 # @class OutPortConsumer
 # @brief OutPortConsumer class
 # @endif
+
+
 class OutPortConsumer(OpenRTM_aist.DataPortStatus):
-  """
-  """
-  
-  def get(self, data):
-    return self.CONNECTION_LOST
-  def isReadable(self):
-    return True
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief Interface接続用Functor
-  # @else
-  # @brief Functor to subscribe the interface
-  # @endif
-  #
-  class subscribe:
-    # subscribe(const SDOPackage::NVList& prop)
-    def __init__(self, prop):
-      self._prop = prop
-      return
+    def get(self, data):
+        return self.CONNECTION_LOST
 
-    # void operator()(OutPortConsumer* consumer)
-    def __call__(self, consumer):
-      consumer.subscribeInterface(self._prop)
-      return
-    
-  ##
-  # @if jp
-  # @brief Interface接続解除用Functor
-  # @else
-  # @brief Functor to unsubscribe the interface
-  # @endif
-  #
-  class unsubscribe:
-    # unsubscribe(const SDOPackage::NVList& prop)
-    def __init__(self, prop):
-      self._prop = prop
-      return
+    def isReadable(self):
+        return True
 
-    # void operator()(OutPortConsumer* consumer)
-    def __call__(self, consumer):
-      consumer.unsubscribeInterface(self._prop)
-      return
+    ##
+    # @if jp
+    # @brief Interface接続用Functor
+    # @else
+    # @brief Functor to subscribe the interface
+    # @endif
+    #
+    class subscribe:
+        # subscribe(const SDOPackage::NVList& prop)
+        def __init__(self, prop):
+            self._prop = prop
+            return
+
+        # void operator()(OutPortConsumer* consumer)
+        def __call__(self, consumer):
+            consumer.subscribeInterface(self._prop)
+            return
+
+    ##
+    # @if jp
+    # @brief Interface接続解除用Functor
+    # @else
+    # @brief Functor to unsubscribe the interface
+    # @endif
+    #
+    class unsubscribe:
+        # unsubscribe(const SDOPackage::NVList& prop)
+        def __init__(self, prop):
+            self._prop = prop
+            return
+
+        # void operator()(OutPortConsumer* consumer)
+        def __call__(self, consumer):
+            consumer.unsubscribeInterface(self._prop)
+            return
 
 
 outportconsumerfactory = None
 
-class OutPortConsumerFactory(OpenRTM_aist.Factory,OutPortConsumer):
-  def __init__(self):
-    OpenRTM_aist.Factory.__init__(self)
-    pass
 
+class OutPortConsumerFactory(OpenRTM_aist.Factory, OutPortConsumer):
+    def __init__(self):
+        OpenRTM_aist.Factory.__init__(self)
+        pass
 
-  def __del__(self):
-    pass
+    def __del__(self):
+        pass
 
+    def instance():
+        global outportconsumerfactory
 
-  def instance():
-    global outportconsumerfactory
+        if outportconsumerfactory is None:
+            outportconsumerfactory = OutPortConsumerFactory()
 
-    if outportconsumerfactory is None:
-      outportconsumerfactory = OutPortConsumerFactory()
+        return outportconsumerfactory
 
-    return outportconsumerfactory
-
-  instance = staticmethod(instance)
+    instance = staticmethod(instance)

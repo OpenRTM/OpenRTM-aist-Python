@@ -46,14 +46,14 @@ if sys.version_info[0] == 3:
 #
 # @endif
 def isEscaped(_str, pos):
-  pos -= 1
-
-  i = 0
-  while pos >= 0 and _str[pos] == "\\":
-    i += 1
     pos -= 1
 
-  return i % 2 == 1
+    i = 0
+    while pos >= 0 and _str[pos] == "\\":
+        i += 1
+        pos -= 1
+
+    return i % 2 == 1
 
 
 ##
@@ -64,22 +64,22 @@ def isEscaped(_str, pos):
 #
 # @endif
 class escape_functor:
-  def __init__(self):
-    self._str = ""
+    def __init__(self):
+        self._str = ""
 
-  def __call__(self,c):
-    if   c == '\t':
-      self._str += "\\t"
-    elif c == '\n':
-      self._str += "\\n"
-    elif c == '\f':
-      self._str += "\\f"
-    elif c == '\r':
-      self._str += "\\r"
-    elif c == '\\':
-      self._str += "\\\\"
-    else:
-      self._str += c
+    def __call__(self, c):
+        if c == '\t':
+            self._str += "\\t"
+        elif c == '\n':
+            self._str += "\\n"
+        elif c == '\f':
+            self._str += "\\f"
+        elif c == '\r':
+            self._str += "\\r"
+        elif c == '\\':
+            self._str += "\\\\"
+        else:
+            self._str += c
 
 
 ##
@@ -90,35 +90,35 @@ class escape_functor:
 #
 # @endif
 class unescape_functor:
-  def __init__(self):
-    self.count = 0
-    self._str = ""
+    def __init__(self):
+        self.count = 0
+        self._str = ""
 
-  def __call__(self,c):
-    if c == "\\":
-      self.count += 1
-      if not (self.count % 2):
-        self._str += c
-    else:
-      if self.count > 0 and (self.count % 2):
-        self.count = 0
-        if c == 't':
-          self._str+='\t'
-        elif c == 'n':
-          self._str+='\n'
-        elif c == 'f':
-          self._str+='\f'
-        elif c == 'r':
-          self._str+='\r'
-        elif c == '\"':
-          self._str+='\"'
-        elif c == '\'':
-          self._str+='\''
+    def __call__(self, c):
+        if c == "\\":
+            self.count += 1
+            if not (self.count % 2):
+                self._str += c
         else:
-          self._str+=c
-      else:
-        self.count = 0
-        self._str+=c
+            if self.count > 0 and (self.count % 2):
+                self.count = 0
+                if c == 't':
+                    self._str += '\t'
+                elif c == 'n':
+                    self._str += '\n'
+                elif c == 'f':
+                    self._str += '\f'
+                elif c == 'r':
+                    self._str += '\r'
+                elif c == '\"':
+                    self._str += '\"'
+                elif c == '\'':
+                    self._str += '\''
+                else:
+                    self._str += c
+            else:
+                self.count = 0
+                self._str += c
 
 
 ##
@@ -129,12 +129,12 @@ class unescape_functor:
 #
 # @endif
 class unique_strvec:
-  def __init__(self):
-    self._str = []
+    def __init__(self):
+        self._str = []
 
-  def __call__(self,s):
-    if self._str.count(s) == 0:
-      return self._str.append(s)
+    def __call__(self, s):
+        if self._str.count(s) == 0:
+            return self._str.append(s)
 
 
 ##
@@ -144,43 +144,43 @@ class unique_strvec:
 #
 # @endif
 def for_each(_str, instance):
-  for i in _str:
-    instance(i)
+    for i in _str:
+        instance(i)
 
-  return instance
+    return instance
 
 
 ##
 # @if jp
 # @brief 文字列をエスケープする
-# 
+#
 # 次の文字をエスケープシーケンスに変換する。<br>
 # HT -> "\t" <br>
 # LF -> "\n" <br>
 # CR -> "\r" <br>
 # FF -> "\f" <br>
 # シングルクオート、ダブルクオートについてはとくに処理はしない。
-# 
+#
 # @else
-# 
+#
 # @brief Escape string
-# 
+#
 # The following characters are converted. <br>
 # HT -> "\t" <br>
 # LF -> "\n" <br>
 # CR -> "\r" <br>
 # FF -> "\f" <br>
 # Single quote and dobule quote are not processed.
-# 
+#
 # @endif
 def escape(_str):
-  return for_each(_str, escape_functor())._str
+    return for_each(_str, escape_functor())._str
 
 
 ##
 # @if jp
 # @brief 文字列のエスケープを戻す
-# 
+#
 # 次のエスケープシーケンスを文字に変換する。<br>
 # "\t" -> HT <br>
 # "\n" -> LF <br>
@@ -188,11 +188,11 @@ def escape(_str):
 # "\f" -> FF <br>
 # "\"" -> "  <br>
 # "\'" -> '  <br>
-# 
+#
 # @else
-# 
+#
 # @brief Unescape string
-# 
+#
 # The following characters are converted. <br>
 # "\t" -> HT <br>
 # "\n" -> LF <br>
@@ -202,7 +202,7 @@ def escape(_str):
 # "\"" -> "  <br>
 # @endif
 def unescape(_str):
-  return for_each(_str, unescape_functor())._str
+    return for_each(_str, unescape_functor())._str
 
 
 ##
@@ -230,14 +230,14 @@ def eraseBlank(_str):
     tmp_str = ""
     for s in l_str:
         if s:
-            tmp_str+=s.strip(" ")
+            tmp_str += s.strip(" ")
 
     tmp_str = tmp_str.strip('\t')
     l_str = tmp_str.split('\t')
     tmp_str = ""
     for s in l_str:
         if s:
-            tmp_str+=s.strip('\t')
+            tmp_str += s.strip('\t')
 
     _str = tmp_str
     return _str
@@ -256,8 +256,8 @@ def eraseBlank(_str):
 # @brief Erase the head blank characters of string
 # @endif
 def eraseHeadBlank(_str):
-  _str = _str.lstrip('\t ')
-  return _str
+    _str = _str.lstrip('\t ')
+    return _str
 
 ##
 # @if jp
@@ -271,14 +271,17 @@ def eraseHeadBlank(_str):
 # @else
 # @brief Erase the tail blank characters of string
 # @endif
-def eraseTailBlank(_str):
-  #_str = _str.rstrip('\t ')
-  if _str == "":
-    return _str
 
-  while (_str[-1] == " " or _str[-1] == '\t') and not isEscaped(_str, len(_str) - 1):
-    _str = _str[:-1]
-  return _str
+
+def eraseTailBlank(_str):
+    #_str = _str.rstrip('\t ')
+    if _str == "":
+        return _str
+
+    while (_str[-1] == " " or _str[-1] ==
+           '\t') and not isEscaped(_str, len(_str) - 1):
+        _str = _str[:-1]
+    return _str
 
 #
 # @if jp
@@ -287,9 +290,11 @@ def eraseTailBlank(_str):
 # @brief Erase the head/tail blank and replace upper case to lower case
 # @endif
 #
+
+
 def normalize(_str):
-  _str = _str.strip().lower()
-  return _str
+    _str = _str.strip().lower()
+    return _str
 
 
 ##
@@ -307,13 +312,13 @@ def normalize(_str):
 # @brief Replace string
 # @endif
 def replaceString(_str, _from, _to):
-  return _str.replace(_from, _to)
+    return _str.replace(_from, _to)
 
 
 ##
 # @if jp
 # @brief 文字列を分割文字で分割する
-# 
+#
 # 設定された文字列を与えられたデリミタで分割する。
 #
 # @param input 分割対象文字列
@@ -325,30 +330,30 @@ def replaceString(_str, _from, _to):
 # @brief Split string by delimiter
 # @endif
 def split(input, delimiter):
-  if not input:
-    return []
+    if not input:
+        return []
 
-  del_result = input.split(delimiter)
+    del_result = input.split(delimiter)
 
-  len_ = len(del_result)
+    len_ = len(del_result)
 
-  result = []
-  for i in range(len_):
-    if del_result[i] == "" or del_result[i] == " ":
-      continue
-      
-    str_ = del_result[i]
-    str_ = eraseHeadBlank(str_)
-    str_ = eraseTailBlank(str_)
-    result.append(str_)
-    
-  return result
+    result = []
+    for i in range(len_):
+        if del_result[i] == "" or del_result[i] == " ":
+            continue
+
+        str_ = del_result[i]
+        str_ = eraseHeadBlank(str_)
+        str_ = eraseTailBlank(str_)
+        result.append(str_)
+
+    return result
 
 
 ##
 # @if jp
 # @brief 与えられた文字列をbool値に変換する
-# 
+#
 # 指定された文字列を、true表現文字列、false表現文字列と比較し、その結果を
 # bool値として返す。
 # 比較の結果、true表現文字列、false表現文字列のどちらとも一致しない場合は、
@@ -362,24 +367,24 @@ def split(input, delimiter):
 # @brief Convert given string to bool value
 # @endif
 def toBool(_str, yes, no, default_value=None):
-  if default_value is None:
-    default_value = True
+    if default_value is None:
+        default_value = True
 
-  _str = _str.upper()
-  yes  = yes.upper()
-  no   = no.upper()
+    _str = _str.upper()
+    yes = yes.upper()
+    no = no.upper()
 
-  if _str.find(yes) != -1:
-    return True
-  elif (_str.find(no)) != -1:
-    return False
-  else:
-    return default_value
+    if _str.find(yes) != -1:
+        return True
+    elif (_str.find(no)) != -1:
+        return False
+    else:
+        return default_value
 
 ##
 # @if jp
 # @brief 文字列リスト中にある文字列が含まれるかどうか
-# 
+#
 # 第1引数にカンマ区切りのリストを、第2引数に探索対象文字列を指定し、
 # その文字列が第1引数の中に含まれるかを判断する。
 #
@@ -389,7 +394,7 @@ def toBool(_str, yes, no, default_value=None):
 #
 # @else
 # @brief Include if a string is included in string list
-# 
+#
 # if the second argument is included in the comma separated string
 # list of the first argument, This operation returns "true value".
 #
@@ -401,23 +406,24 @@ def toBool(_str, yes, no, default_value=None):
 #
 #  bool includes(const vstring& list, std::string value,
 #                bool ignore_case = true);
-def includes(_list, value, ignore_case = True):
-  if not (type(_list) == list or type(_list) == str):
+
+
+def includes(_list, value, ignore_case=True):
+    if not (isinstance(_list, list) or isinstance(_list, str)):
+        return False
+
+    if isinstance(_list, str):
+        _list = _list.split(",")
+
+    tmp_list = _list
+    if ignore_case:
+        value = value.lower()
+        tmp_list = list(map((lambda x: x.lower()), _list))
+
+    if tmp_list.count(value) > 0:
+        return True
+
     return False
-
-  if type(_list) == str:
-    _list = _list.split(",")
-
-  tmp_list = _list
-  if ignore_case:
-    value = value.lower()
-    tmp_list = list(map((lambda x: x.lower()),_list))
-    
-  if tmp_list.count(value) > 0:
-    return True
-
-  return False
-    
 
 
 ##
@@ -438,14 +444,15 @@ def includes(_list, value, ignore_case = True):
 # @brief Investigate whether the given string is absolute path or not
 # @endif
 def isAbsolutePath(str):
-  if str[0] == "/":
-    return True
-  if str[0].isalpha() and str[1] == ":" and (str[2] == "\\" or str[2] == "/"):
-    return True
-  if str[0] == "\\" and str[1] == "\\":
-    return True
+    if str[0] == "/":
+        return True
+    if str[0].isalpha() and str[1] == ":" and (
+            str[2] == "\\" or str[2] == "/"):
+        return True
+    if str[0] == "\\" and str[1] == "\\":
+        return True
 
-  return False
+    return False
 
 
 ##
@@ -464,15 +471,15 @@ def isAbsolutePath(str):
 # @brief Investigate whether the given string is URL or not
 # @endif
 def isURL(str):
-  pos = 0
-  if str == "":
+    pos = 0
+    if str == "":
+        return False
+
+    pos = str.find(":")
+    if pos != 0 and pos != -1 and str[pos + 1] == "/" and str[pos + 2] == "/":
+        return True
+
     return False
-
-  pos = str.find(":")
-  if pos != 0 and pos != -1 and str[pos+1] == "/" and str[pos+2] == "/":
-    return True
-
-  return False
 
 
 ##
@@ -489,9 +496,9 @@ def isURL(str):
 # @brief Convert the given object to st::string.
 # @endif
 def otos(n):
-  if type(n) == int or type(n) == str or type(n) == long or type(n) == float:
-    return str(n)
-
+    if isinstance(n, int) or isinstance(n, str) or isinstance(
+            n, long) or isinstance(n, float):
+        return str(n)
 
 
 ##
@@ -505,40 +512,39 @@ def otos(n):
 # @return リスト変換処理結果
 #
 # @else
-# 
+#
 # @endif
 def _stringToList(_type, _str):
-  list_ = split(_str,",")
-  len_ = len(list_)
+    list_ = split(_str, ",")
+    len_ = len(list_)
 
-  if len(_type) < len(list_):
-    sub = len(list_) - len(_type)
-    for i in range(sub):
-      _type.append(_type[0])
-  elif len(_type) > len(list_):
-    sub = len(_type) - len(list_)
-    for i in range(sub):
-      del _type[-1]
+    if len(_type) < len(list_):
+        sub = len(list_) - len(_type)
+        for i in range(sub):
+            _type.append(_type[0])
+    elif len(_type) > len(list_):
+        sub = len(_type) - len(list_)
+        for i in range(sub):
+            del _type[-1]
 
-  for i in range(len_):
-    list_[i] = eraseHeadBlank(list_[i])
-    list_[i] = eraseTailBlank(list_[i])
+    for i in range(len_):
+        list_[i] = eraseHeadBlank(list_[i])
+        list_[i] = eraseTailBlank(list_[i])
 
-  for i in range(len(list_)):
-    if type(_type[i]) == int:
-      _type[i] = int(list_[i])
-    elif type(_type[i]) == long:
-      _type[i] = long(list_[i])
-    elif type(_type[i]) == float:
-      _type[i] = float(list_[i])
-    elif type(_type[i]) == str:
-      _type[i] = str(list_[i])
-    
-      
-    else:
-      return False, _type
+    for i in range(len(list_)):
+        if isinstance(_type[i], int):
+            _type[i] = int(list_[i])
+        elif isinstance(_type[i], long):
+            _type[i] = long(list_[i])
+        elif isinstance(_type[i], float):
+            _type[i] = float(list_[i])
+        elif isinstance(_type[i], str):
+            _type[i] = str(list_[i])
 
-  return True, _type
+        else:
+            return False, _type
+
+    return True, _type
 
 
 ##
@@ -555,31 +561,31 @@ def _stringToList(_type, _str):
 # @brief Convert the given object to st::string.
 # @endif
 def stringTo(_type, _str):
-  if not _str:
-    return False, _type
+    if not _str:
+        return False, _type
 
-  try:
-    if type(_type) == int:
-      _type = int(_str)
-      return True, _type
-    elif type(_type) == long:
-      _type = long(_str)
-      return True, _type
-    elif type(_type) == float:
-      _type = float(_str)
-      return True, _type
-    elif type(_type) == list:
-      return _stringToList(_type, _str)
-    elif type(_type) == str:
-      _type = str(_str)
-      return True, _type
+    try:
+        if isinstance(_type, int):
+            _type = int(_str)
+            return True, _type
+        elif isinstance(_type, long):
+            _type = long(_str)
+            return True, _type
+        elif isinstance(_type, float):
+            _type = float(_str)
+            return True, _type
+        elif isinstance(_type, list):
+            return _stringToList(_type, _str)
+        elif isinstance(_type, str):
+            _type = str(_str)
+            return True, _type
 
-  #except ValueError:
-  #  return False, _type
-  except:
+    # except ValueError:
+    #  return False, _type
+    except BaseException:
+        return False, _type
+
     return False, _type
-  
-  return False, _type
 
 
 ##
@@ -596,7 +602,7 @@ def stringTo(_type, _str):
 #
 # @endif
 def unique_sv(sv):
-  return for_each(sv, unique_strvec())._str
+    return for_each(sv, unique_strvec())._str
 
 
 ##
@@ -625,12 +631,12 @@ def unique_sv(sv):
 #
 # @endif
 def flatten(sv, delimiter=", "):
-  if len(sv) == 0:
-    return ""
+    if len(sv) == 0:
+        return ""
 
-  _str = delimiter.join(sv)
+    _str = delimiter.join(sv)
 
-  return _str
+    return _str
 
 
 ##
@@ -649,9 +655,7 @@ def flatten(sv, delimiter=", "):
 #
 # @endif
 def toArgv(args):
-  return args
-
-
+    return args
 
 
 ##
@@ -689,13 +693,13 @@ def urlparam2map(_str):
     if qpos == -1:
         qpos = 0
     else:
-        qpos+=1
+        qpos += 1
     tmp = _str[qpos:].split("&")
     retmap = {}
     for v in tmp:
         pos = v.find("=")
         if pos != -1:
-            retmap[v[0:pos]] = v[pos+1:]
+            retmap[v[0:pos]] = v[pos + 1:]
         else:
             retmap[v] = ""
     return retmap
@@ -712,13 +716,15 @@ def urlparam2map(_str):
 #
 #
 # @else
-# @brief 
+# @brief
 #
 # @param _str
 #
-# @return 
+# @return
 #
 # @endif
+
+
 def replaceEnv(_str):
     tmp = _str.split("${")
     if len(tmp) < 2:
@@ -730,14 +736,13 @@ def replaceEnv(_str):
             if tmp2[0] in os.environ:
                 ret.append(os.environ[tmp2[0]])
             ret.append(tmp2[1])
-            
+
         else:
             ret.append(v)
     ret_str = ""
     for s in ret:
         ret_str = ret_str + s
     return ret_str
-    
 
 
 ##
@@ -751,20 +756,20 @@ def replaceEnv(_str):
 #
 #
 # @else
-# @brief 
+# @brief
 #
-# @param dir 
+# @param dir
 # @param filename
-# @param filelist 
+# @param filelist
 #
 #
 # @endif
 def findFile(dir, filename, filelist):
-    dirs = glob.glob(os.path.join(dir,"*"))
+    dirs = glob.glob(os.path.join(dir, "*"))
     for d in dirs:
         if os.path.isdir(d):
             findFile(d, filename, filelist)
-        files = glob.glob(os.path.join(dir,filename))
+        files = glob.glob(os.path.join(dir, filename))
         for f in files:
             if os.path.isfile(d):
                 filelist.append(f)
@@ -781,22 +786,22 @@ def findFile(dir, filename, filelist):
 #
 #
 # @else
-# @brief 
+# @brief
 #
-# @param dir 
-# @param ext 
-# @param filelist 
+# @param dir
+# @param ext
+# @param filelist
 #
 #
 # @endif
 def getFileList(dir, ext, filelist=None):
     if filelist is None:
         filelist = []
-    dirs = glob.glob(os.path.join(dir,"*"))
+    dirs = glob.glob(os.path.join(dir, "*"))
     for d in dirs:
         if os.path.isdir(d):
             filelist = getFileList(d, ext, filelist)
-    files = glob.glob(os.path.join(dir,"*."+ext))
+    files = glob.glob(os.path.join(dir, "*." + ext))
     for f in files:
         if os.path.isfile(f):
             filelist.append(f)

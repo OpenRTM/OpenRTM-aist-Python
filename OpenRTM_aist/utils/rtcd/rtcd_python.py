@@ -16,18 +16,21 @@
 #
 # $Id: $
 
-import sys,os
+import sys
+import os
 
 import OpenRTM_aist
 
+
 def main():
-  manager = OpenRTM_aist.Manager.init(sys.argv)
+    manager = OpenRTM_aist.Manager.init(sys.argv)
 
-  manager.activateManager()
+    manager.activateManager()
 
-  manager.runManager()
+    manager.runManager()
 
-  return
+    return
+
 
 if __name__ == "__main__":
-  main()
+    main()

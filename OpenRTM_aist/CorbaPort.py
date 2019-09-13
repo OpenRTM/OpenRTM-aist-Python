@@ -6,7 +6,7 @@
 #  \brief CorbaPort class
 #  \date  $Date: 2007/09/26 $
 #  \author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
-# 
+#
 #  Copyright (C) 2006-2008
 #      Noriaki Ando
 #      Task-intelligence Research Group,
@@ -19,10 +19,8 @@ from omniORB import CORBA
 from omniORB import any
 
 
-
 import OpenRTM_aist
 import RTC
-
 
 
 ##
@@ -100,7 +98,7 @@ import RTC
 # - インターフェース極性:           if_polarity
 # - インターフェース型名:           if_tname
 # - インターフェースインスタンス名: if_iname
-# 
+#
 # インターフェースの指定子を以下の文字列名称で指定するものとする。
 #
 # <rtc_iname>.port.<port_name>.<if_polarity>.<if_tname>.<if_iname>
@@ -128,11 +126,11 @@ import RTC
 # - if_iname    = hoge_interface1
 #
 # インターフェース指定子は、
-# 
+#
 # YourComp0.port.myservice.required.hoge_interface.hoge_inteface1
 #
 # のように記述することができる。
-# 
+#
 # なお、ここで動的生成インターフェースのインスタンスのための特殊なタ
 # イプのインスタンス名記述子
 #
@@ -154,7 +152,7 @@ import RTC
 # consumer1 ]---<  O----[ provider0
 # consumer2 ]---<
 # </pre>
-#  
+#
 # これに対し、コンシューマが要求するプロバイダインターフェース記述子
 # にインクリメンタル生成型インスタンス名記述子 "<type_name>+" が指定
 # された場合、記述子 "<type_name>+" の数だけプロバイダのインスタン
@@ -217,7 +215,7 @@ import RTC
 # MyComp0 の add0 (コンシューマ) と YourComp0 の add9 (プロバイダ)
 # をそれぞれ対にして接続させるものと仮定する。この場合、
 # ConnectorProfile は以下のように設定する。
-# 
+#
 # <pre>
 # ConnectorProfile:
 #   name: 任意のコネクタ名
@@ -229,7 +227,7 @@ import RTC
 # </pre>
 #
 # ただし、それぞれ
-# 
+#
 # <pre>
 # <add0> は MyComp0.port.mycomp_service.required.add.add0
 # <add9> は YourComp0.port.yourcomp_service.provided.add.add9
@@ -257,7 +255,7 @@ import RTC
 # 的生成インスタンス名記述子 "<type_name>*" を value に含むすべての
 # value 上のインターフェース指定子を、ここで生成したインターフェース
 # 指定子に置き換える。
-# 
+#
 # インクリメンタル生成型インスタンス名記述子"<type_name>+" が存在す
 # る場合、インスタンス名記述子の数だけプロバイダのインスタンスを生成
 # し、それぞれのインターフェース指定子をkey に、IOR文字列を value に
@@ -296,7 +294,7 @@ import RTC
 # なお、インターフェースの対応関係の厳密さを指定するオプションとして、
 # 以下のオプションを指定することができる。
 #
-# port.connection.strictness: strict, best_effort 
+# port.connection.strictness: strict, best_effort
 #
 # strict: すべてのコンシューマに指定した参照が存在し、かつナローイン
 #         グにも成功しコンシューマに適切にセットできた場合にのみ Port
@@ -369,7 +367,7 @@ import RTC
 # If REQUIRED interface name that is Consumer interface name is
 # "*", it shows that one Consumer interface is able to connect with
 # multiple Provider interfaces. (This feature is not implemented.)
-# 
+#
 # The following describes the rules that specify interface
 # connection between ports.
 #
@@ -407,7 +405,7 @@ import RTC
 # - if_tname    = hoge_interface
 # - if_iname    = hoge_interface1
 #
-# interface descriptor is as follows. 
+# interface descriptor is as follows.
 #
 # YourComp0.port.myservice.required.hoge_interface.hoge_inteface1
 #
@@ -429,7 +427,7 @@ import RTC
 # consumer1 ]---<  O----[ provider0
 # consumer2 ]---<
 # </pre>
-#  
+#
 # On the other hand, when incremental generated type instance name
 # descriptor "<type_name>+" is specified as the provider interface
 # descriptor whom consumers demand, provider's instances are
@@ -461,7 +459,7 @@ import RTC
 # Now the case where the service ports of two components are
 # connected is considered. When the service port of each component
 # is the following,
-# 
+#
 # - rtc_iname: MyComp0          <br>
 #   port_name: mycomp_service   <br>
 #   interfaces:
@@ -492,7 +490,7 @@ import RTC
 #           ~T~                               ~T~
 #            |                                 |
 # </pre>
-# 
+#
 #
 #
 # Assume that connection between echo0 (provider) of MyComp0
@@ -500,7 +498,7 @@ import RTC
 # (consumer) of MyComp0 and add0 (provider) of YourComp0 is
 # established.  In this case, ConnectorProfile is set up as
 # follows.
-# 
+#
 # <pre>
 # ConnectorProfile:
 #   name: any connector name
@@ -512,7 +510,7 @@ import RTC
 # </pre>
 #
 # Please note that <add0>, <add9>, <echo0> and <echo9> are the following.
-# 
+#
 # <pre>
 # <add0> is MyComp0.port.mycomp_service.required.add.add0
 # <add9> is YourComp0.port.yourcomp_service.provided.add.add9
@@ -524,7 +522,7 @@ import RTC
 # port carries out the following process respectively in the
 # virtual functions such as CorbaPort::publishInterfaces() and
 # CorbaPort::subscribeInerfaces().
-# 
+#
 # A provider sets its IOR string as a value and its interface
 # descriptor as a key in the ConnectorProfile::properties in a
 # publishInterfaces() function. Since this interface descriptor's
@@ -591,7 +589,7 @@ import RTC
 #
 # strict: The connection is established, if only all the specified
 #         consumers are set appropriate references and narrowed
-#         successfully.  
+#         successfully.
 #
 # best_effort: The connection is established without any errors,
 #         even if appropriate reference does not exist or reference
@@ -602,955 +600,962 @@ import RTC
 # @endif
 #
 class CorbaPort(OpenRTM_aist.PortBase):
-  """
-  """
-
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  # @param self
-  # @param name Port の名前
-  #
-  # @else
-  #
-  # @brief Constructor
-  #
-  # @param name The name of Port 
-  #
-  # @endif
-  def __init__(self, name):
-    OpenRTM_aist.PortBase.__init__(self, name)
-    self.addProperty("port.port_type", "CorbaPort")
-    self._properties = OpenRTM_aist.Properties()
-    self._providers = []
-    self._consumers = []
-    return
-
-
-  def __del__(self, PortBase=OpenRTM_aist.PortBase):
-    PortBase.__del__(self)
-
-
-  ##
-  # @if jp
-  # @brief プロパティの初期化
-  #
-  # OutPortのプロパティを初期化する。このポートへの接続数を指定する
-  # プロパティ "connection_limit" が含まれ、適切な数値が設定されてい
-  # る場合、最大接続数としてその数値が設定される。プロパティが設定さ
-  # れていない場合、もしくは適切な値が設定されていない場合には、最大
-  # 接続数は無制限となる。
-  #
-  # @param prop CorbaPort のプロパティ
-  #
-  # @else
-  #
-  # @brief Initializing properties
-  #
-  # This operation initializes outport's properties. If a property
-  # "connection_limit" is set and appropriate value is set to this
-  # property value, the number of maximum connection is set as this
-  # value. If the property does not exist or invalid value is set
-  # to this property, the maximum number of connection will be set
-  # unlimited.
-  #
-  # @param prop properties of the CorbaPort
-  #
-  # @endif
-  #
-  # void init(coil::Properties& prop);
-  def init(self, prop):
-    self._rtcout.RTC_TRACE("init()")
-
-    self._properties.mergeProperties(prop)
-    prop_list = []
-    OpenRTM_aist.NVUtil.copyFromProperties(prop_list, self._properties)
-    self._profile.properties.extend(prop_list)
-
-    num = -1
-    ret, num = OpenRTM_aist.stringTo(num, 
-                                 self._properties.getProperty("connection_limit","-1"))
-    if not ret:
-      self._rtcout.RTC_ERROR("invalid connection_limit value: %s", 
-                             self._properties.getProperty("connection_limit"))
-
-    self.setConnectionLimit(num)
-
-
-  ##
-  # @if jp
-  #
-  # @brief Provider を登録する
-  #
-  # この Port において提供したいサーバントをこの Port に対して登録す
-  # る。サーバントは、引数で与えられる instance_name, type_name を、
-  # サーバント自身のインスタンス名およびタイプ名として、サーバントに
-  # 関連付けられる。この関数により、サーバントは CorbaPort 内部に保
-  # 持されるとともに、PortInterfaceProfile にRTC::PROVIDED インター
-  # フェースとして登録される。
-  #
-  # @param instance_name サーバントのインスタンス名
-  # @param type_name サーバントのタイプ名
-  # @param provider CORBA サーバント
-  #
-  # @return 既に同名の instance_name が登録されていれば false を返す。
-  #
-  # @else
-  #
-  # @brief Register the provider
-  #
-  # This operation registers a servant, which is provided in this
-  # Port, to the Port. The servant is associated with
-  # "instance_name" and "type_name" as the instance name of the
-  # servant and as the type name of the servant. A given servant
-  # will be stored in the CorbaPort, and this is registered as
-  # RTC::PROVIDED interface into the PortInterfaceProfile.
-  #
-  # @param instance_name Instance name of servant
-  # @param type_name Type name of the servant
-  # @param provider CORBA servant
-  #
-  # @return Return false if the same name of instance_name is already 
-  #         registered.
-  #
-  # @endif
-  #
-  # bool registerProvider(const char* instance_name, const char* type_name,
-  #                       PortableServer::RefCountServantBase& provider);
-  def registerProvider(self, instance_name, type_name, provider):
-    self._rtcout.RTC_TRACE("registerProvider(instance=%s, type_name=%s)",
-                           (instance_name, type_name))
-
-    try:
-      self._providers.append(self.CorbaProviderHolder(type_name,
-                                                      instance_name,
-                                                      provider))
-    except:
-      self._rtcout.RTC_ERROR("appending provider interface failed")
-      self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
-      return False
-
-    
-    if not self.appendInterface(instance_name, type_name, RTC.PROVIDED):
-      return False
-
-    return True
-
-
-  ##
-  # @if jp
-  #
-  # @brief Consumer を登録する
-  #
-  # この Port が要求するサービスのプレースホルダであるコンシューマ
-  # (Consumer) を登録する。Consumer が関連付けられるサービスのインス
-  # タンス名およびタイプ名として、引数に instance_name, type_name お
-  # よび Consumer 自身を与えることにより、内部でこれらが関連付けられ
-  # る。Port 間の接続 (connect) 時 には、subscribeInterfaces() で述
-  # べられているルールに基づき、Provider Interface の参照が自動的に
-  # Consumer にセットされる。
-  #
-  # @param instance_name Consumer が要求するサービスのインスタンス名
-  # @param type_name Consumer が要求するサービスのタイプ名
-  # @param consumer CORBA サービスコンシューマ
-  #
-  # @return 既に同名の instance_name が登録されていれば false を返す。
-  #
-  # @else
-  #
-  # @brief Register the consumer
-  #
-  # This operation registers a consumer, which is a service
-  # placeholder this port requires. These are associated internally
-  # with specified instance_name, type_name and Consumer itself to
-  # the argument as service's instance name and its type name
-  # associated with Consumer.  The service Provider interface'
-  # references will be set automatically to the Consumer Interface
-  # object when connections are established, according to the rules
-  # that are described at the subscribeInterfaces() function's
-  # documentation.
-  #
-  # @param instance_name Instance name of the service Consumer requires
-  # @param type_name Type name of the service Consumer requires
-  # @param consumer CORBA service consumer
-  #
-  # @return False would be returned if the same instance_name was registered
-  #
-  # @endif
-  #
-  # bool registerConsumer(const char* instance_name, const char* type_name,
-  #                       CorbaConsumerBase& consumer);
-  def registerConsumer(self, instance_name, type_name, consumer):
-    self._rtcout.RTC_TRACE("registerConsumer()")
-
-    if not self.appendInterface(instance_name, type_name, RTC.REQUIRED):
-      return False
-    
-    self._consumers.append(self.CorbaConsumerHolder(type_name,
-                                                    instance_name,
-                                                    consumer,
-                                                    self))
-    return True
-
-
-  ##
-  # @if jp
-  #
-  # @brief Port の全てのインターフェースを activates する
-  #
-  # Port に登録されている全てのインターフェースを activate する。
-  #
-  # @else
-  #
-  # @brief Activate all Port interfaces
-  #
-  # This operation activate all interfaces that is registered in the
-  # ports.
-  #
-  # @endif
-  #
-  # void CorbaPort::activateInterfaces()
-  def activateInterfaces(self):
-    for provider in self._providers:
-      provider.activate()
-
-    return
-
-
-  ##
-  # @if jp
-  #
-  # @brief 全ての Port のインターフェースを deactivates する
-  #
-  # Port に登録されている全てのインターフェースを deactivate する。
-  #
-  # @else
-  #
-  # @brief Deactivate all Port interfaces
-  #
-  # This operation deactivate all interfaces that is registered in the
-  # ports.
-  #
-  # @endif
-  #
-  # void CorbaPort::deactivateInterfaces()
-  def deactivateInterfaces(self):
-    for provider in self._providers:
-      provider.deactivate()
-
-    return
-
-
-
-  ##
-  # @if jp
-  #
-  # @brief Provider Interface 情報を公開する
-  #
-  # この Port が所有する Provider インターフェースに関する情報を
-  # ConnectorProfile::properties に代入し他の Port に対して公開する。
-  # 今、RTCのインスタンス名等の情報が以下の通りであるとして、
-  #
-  # - RTCインスタンス名:              rtc_iname
-  # - ポート名:                       port_name
-  # - インターフェース極性:           if_polarity
-  # - インターフェース型名:           if_tname
-  # - インターフェースインスタンス名: if_iname
-  #
-  # NameValue 型の ConnectorProfile::properties の name と value として
-  # 以下のものが格納される。
-  #
-  # - name
-  #   <rtc_iname>.port.<port_name>.provided.<if_tname>.<if_iname>
-  # - value
-  #   Provider インターフェースの IOR 文字列 
-  # 
-  # なお、旧バージョンとの互換性のため以下の表記の NameValue も同時
-  # に格納されるが、将来のバージョンでは削除される可能性がある。
-  # 
-  # - name
-  #   port.<if_tname>.<if_iname>
-  # - value
-  #   Provider インターフェースの IOR 文字列
-  #
-  # これらの値は ConnectorProfile::properties に格納され、他のポートに対して
-  # 伝達される。他の Port でこのインターフェースを使用する Consumer が
-  # 存在すれば、ConnectorProfile からこのキーからオブジェクトリファレンスを
-  # 取得し何らかの形で使用される。
-  #
-  # @param connector_profile コネクタプロファイル
-  # @return ReturnCode_t 型のリターンコード
-  #
-  # @else
-  #
-  # @brief Publish information about interfaces
-  #
-  # This operation publishes Provider interfaces information, which
-  # is owned by this port, to the other Ports via
-  # ConnectorProfile::properties.
-  # Now it is assumed RTC instance name and other information is as follows,
-  #
-  # - RTC instance name:              rtc_iname
-  # - Port name:                      port_name
-  # - Interface polarity:             if_polarity
-  # - Interface type name:            if_tname
-  # - Interface instance name:        if_iname
-  #
-  # the following values are stored as the "name" and the "value"
-  # of the NameValue typee element in ConnectorProfile::properties.
-  #
-  # - name
-  #   <rtc_iname>.port.<port_name>.provided.<if_tname>.<if_iname>
-  # - value
-  #   IOR string value of interface reference
-  # 
-  # In addition, although the following NameValue values are also
-  # stored for the backward compatibility, this will be deleted in
-  # the future version.
-  #
-  # - name
-  #   port.<if_tname>.<if_iname>
-  # - value
-  #   IOR string value of interface reference
-  #
-  # These values are stored in the ConnectorProfile::properties and
-  # are propagated to the other Ports. If the Consumer interface
-  # exists that requires this Provider interface, it will retrieve
-  # reference from the ConnectorProfile and utilize it.
-  #
-  # @param connector_profile Connector profile
-  # @return The return code of ReturnCode_t type
-  #
-  # @endif
-  #
-  # virtual ReturnCode_t
-  #    publishInterfaces(ConnectorProfile& connector_profile);
-  def publishInterfaces(self, connector_profile):
-    self._rtcout.RTC_TRACE("publishInterfaces()")
-
-    returnvalue = self._publishInterfaces()
-
-    if returnvalue != RTC.RTC_OK:
-      return returnvalue
-
-    properties = []
-    for provider in self._providers:
-      #------------------------------------------------------------
-      # new version descriptor
-      # <comp_iname>.port.<port_name>.provided.<type_name>.<instance_name>
-      newdesc = self._profile.name[:len(self._ownerInstanceName)] + \
-          ".port" +  self._profile.name[len(self._ownerInstanceName):]
-      newdesc += ".provided." + provider.descriptor()
-
-      properties.append(OpenRTM_aist.NVUtil.newNV(newdesc, provider.ior()))
-
-      #------------------------------------------------------------
-      # old version descriptor
-      # port.<type_name>.<instance_name>
-      olddesc = "port." + provider.descriptor()
-      properties.append(OpenRTM_aist.NVUtil.newNV(olddesc, provider.ior()))
-
-    OpenRTM_aist.CORBA_SeqUtil.push_back_list(connector_profile.properties, properties)
-    
-    return RTC.RTC_OK
-
-
-  ##
-  # @if jp
-  #
-  # @brief Provider Interface 情報を取得する
-  #
-  # この Portが所有する Consumer Interface に適合する Provider
-  # Interface に関する情報をConnectorProfile::properties から抽出し
-  # Consumer Interface にオブジェクト参照をセットする。
-  #
-  # 今、RTC のインスタンス名や Consumer Interface 等の情報が以下のと
-  # おりであると仮定すると、
-  #
-  # - RTCインスタンス名:              rtc_iname
-  # - ポート名:                       port_name
-  # - インターフェース極性:           if_polarity
-  # - インターフェース型名:           if_tname
-  # - インターフェースインスタンス名: if_iname
-  #
-  # この Consumer Interface を表すインターフェース指定子は以下のよう
-  # に表される。
-  #
-  # <rtc_iname>.port.<port_name>.required.<if_tname>.<if_iname>
-  #
-  # この関数は、まず引数 ConnectorProfile::properties に上記インター
-  # フェース指定子をキーとして格納されている Provider Interface 指定
-  # 子を探し出す。さらに、その Provider Interface 指定子をキーとして
-  # 格納されている Provider Interface の参照を表す IOR 文字列を取得
-  # し、Consumer Interface にセットする。
-  #
-  # 今、仮に、Provider を prov(n), その参照をIOR(n) さらに Consumer
-  # をcons(n) のように記述し、これらすべてのインターフェースの型が同
-  # 一であり、ConnectorProfile に以下の値が設定されているとする。
-  #
-  # <pre>
-  # ConnectorProfile::properties =
-  # {
-  #   prov0: IOR0,
-  #   prov1: IOR1,
-  #   prov2: IOR2,
-  #   cons0: prov2,
-  #   cons1: prov1,
-  #   cons2: prov0
-  # }
-  # </pre>
-  #
-  # このとき、cons(0..2) にはそれぞれ、参照が以下のようにセットされる。
-  #
-  # <pre>
-  #   cons0 = IOR2
-  #   cons1 = IOR1
-  #   cons2 = IOR0
-  # </pre>
-  #
-  # なお、旧バージョンとの互換性のため、
-  # ConnectorProfile::properties に Consumer Interface をキーとした
-  # 値がセットされていない場合でも、次のルールが適用される。
-  #
-  # 今、仮に Consumer Interface が
-  #
-  # <pre>
-  #  PortInterfaceProfile
-  #  {
-  #    instance_name = "PA10_0";
-  #    type_name     = "Manipulator";
-  #    polarity      = REQUIRED;
-  #  }
-  # </pre>
-  #
-  # として登録されていれば、他の Port の
-  #
-  # <pre>
-  #  PortInterfaceProfile
-  #  {
-  #    instance_name = "PA10_0";
-  #    type_name     = "Manipulator";
-  #    polarity      = PROVIDED;
-  #  }
-  # </pre> 
-  #
-  # として登録されている Serivce Provider のオブジェクト参照を探し、
-  # Consumer にセットする。実際には、ConnectorProfile::properties に
-  #
-  # <pre>
-  # NameValue = { "port.Manipulator.PA10_0": <Object reference> }
-  # </pre>
-  #
-  # として登録されている NameValue を探し、そのオブジェクト参照を
-  # Consumer にセットする。
-  #
-  # @param connector_profile コネクタプロファイル
-  # @return ReturnCode_t 型のリターンコード
-  #
-  # @else
-  #
-  # @brief Subscribe to interface
-  #
-  # Retrieve information associated with Provider matches Consumer
-  # owned by this port and set the object reference to Consumer.
-  #
-  # Now, Consumer is registered as the following:
-  # <pre>
-  #  PortInterfaceProfile
-  #  {
-  #    instance_name = "PA10_0";
-  #    type_name     = "Manipulator";
-  #    polarity      = REQUIRED;
-  #  }
-  # </pre>
-  # Find the object reference of Serivce Provider that is registered as
-  # the following of other ports:
-  # <pre>
-  #  PortInterfaceProfile
-  #  {
-  #    instance_name = "PA10_0";
-  #    type_name     = "Manipulator";
-  #    polarity      = PROVIDED;
-  #  }
-  # </pre> 
-  # and set to Consumer.
-  # In fact, find NameValue that is registered as the following to 
-  # ConnectorProfile::properties:
-  # <pre>
-  # NameValue = { "port.Manipulator.PA10_0": <Object reference> }
-  # </pre>
-  # and set the object reference to Consumer.
-  #
-  # @param connector_profile Connector profile
-  #
-  # @return The return code of ReturnCode_t type
-  #
-  # @endif
-  #
-  # virtual ReturnCode_t
-  #   subscribeInterfaces(const ConnectorProfile& connector_profile);
-  def subscribeInterfaces(self, connector_profile):
-    self._rtcout.RTC_TRACE("subscribeInterfaces()")
-    nv = connector_profile.properties
-
-    strict = False # default is "best_effort"
-    index = OpenRTM_aist.NVUtil.find_index(nv, "port.connection.strictness")
-    if index >=  0:
-      strictness = str(any.from_any(nv[index].value, keep_structs=True))
-      if "best_effort" == strictness:
-        strict = False
-      elif "strict" == strictness:
-        strict = True
-
-      self._rtcout.RTC_DEBUG("Connetion strictness is: %s",strictness)
-
-    for consumer in self._consumers:
-      ret, ior = self.findProvider(nv, consumer)
-      if ret:
-        self.setObject(ior, consumer)
-        continue
-
-      ret, ior = self.findProviderOld(nv, consumer)
-      if ret:
-        self.setObject(ior, consumer)
-        continue
-
-      # never come here without error
-      # if strict connection option is set, error is returned.
-      if strict:
-        self._rtcout.RTC_ERROR("subscribeInterfaces() failed.")
-        return RTC.RTC_ERROR
-
-    self._rtcout.RTC_TRACE("subscribeInterfaces() successfully finished.")
-
-    return RTC.RTC_OK
-
-
-  ##
-  # @if jp
-  #
-  # @brief Interface への接続を解除する
-  #
-  # 与えられた ConnectorProfile に関連する Consumer にセットされた
-  # すべての Object を解放し接続を解除する。
-  #
-  # @param self
-  # @param connector_profile コネクタプロファイル
-  #
-  # @else
-  #
-  # @brief Unsubscribe interfaces
-  #
-  # Release all Objects that was set in Consumer associated with the given 
-  # ConnectorProfile.
-  # 
-  # @param connector_profile Connector profile
-  #
-  # @endif
-  #  virtual void
-  #    unsubscribeInterfaces(const ConnectorProfile& connector_profile);
-  def unsubscribeInterfaces(self, connector_profile):
-    self._rtcout.RTC_TRACE("unsubscribeInterfaces()")
-    nv = connector_profile.properties
-
-    for consumer in self._consumers:
-      ret, ior = self.findProvider(nv, consumer)
-      if ret:
-        self._rtcout.RTC_DEBUG("Correspoinding consumer found.")
-        self.releaseObject(ior, consumer)
-        continue
-
-      ret, ior = self.findProviderOld(nv, consumer)
-      if ret:
-        self._rtcout.RTC_DEBUG("Correspoinding consumer found.")
-        self.releaseObject(ior, consumer)
-        continue
-
-    return
-
-
-  ##
-  # @if jp
-  # @brief Consumer に合致する Provider を NVList の中から見つける
-  #
-  # NVList 中から CorbaConsumerHolder に保持されている Consumer に合
-  # 致するキーを持つ Provider を見つけ、IOR を抽出しナローイングして
-  # Consumer にセットする。対応するキーが存在しない、IOR が見つから
-  # ない、ナローイングに失敗した場合、false を返す。
-  #
-  # @param nv Provider が含まれている ConnectorProfile::properties の NVList
-  # @param cons Provider と対応する Consumer のホルダ
-  # 
-  # @retrun bool Consumer に対応する Provider が見つからない場合 false
-  #
-  # @else
-  # @brief Find out a provider corresponding to the consumer from NVList
-  #
-  # This function finds out a Provider with the key that is matched
-  # with Cosumer's name in the CorbaConsumerHolder, extracts IOR
-  # and performs narrowing into the Consumer and set it to the
-  # Consumer. False is returned when there is no corresponding key
-  # and IOR and the narrowing failed.
-  #  
-  # @param nv NVlist of ConnectorProfile::properties that includes Provider
-  # @param cons a Consumer holder to be matched with a Provider
-  # 
-  # @return bool false is returned if there is no provider for the consumer
-  #
-  # @endif
-  #
-  # virtual bool findProvider(const NVList& nv, 
-  #                           CorbaConsumerHolder& cons,
-  #                           std::string& iorstr);
-  def findProvider(self, nv, cons):
-    # new consumer interface descriptor
-    newdesc = self._profile.name[:len(self._ownerInstanceName)] + \
-        ".port" +  self._profile.name[len(self._ownerInstanceName):]
-    newdesc += ".required." + cons.descriptor()
-
-    # find a NameValue of the consumer
-    cons_index = OpenRTM_aist.NVUtil.find_index(nv, newdesc)
-    if cons_index < 0:
-      return False, ""
-
-    provider = str(any.from_any(nv[cons_index].value, keep_structs=True))
-    if not provider:
-      self._rtcout.RTC_WARN("Cannot extract Provider interface descriptor")
-      return False, ""
-
-    # find a NameValue of the provider
-    prov_index = OpenRTM_aist.NVUtil.find_index(nv, provider)
-    if prov_index < 0:
-      return False, ""
-
-    ior_ = str(any.from_any(nv[prov_index].value, keep_structs=True))
-    if not ior_:
-      self._rtcout.RTC_WARN("Cannot extract Provider IOR string")
-      return False, ior_
-
-    self._rtcout.RTC_TRACE("interface matched with new descriptor: %s", newdesc)
-
-    return True, ior_
-
-
-  ##
-  # @if jp
-  # @brief Consumer に合致する Provider を NVList の中から見つける
-  #
-  # この関数は、古いバージョンの互換性のための関数である。
-  #
-  # NVList 中から CorbaConsumerHolder に保持されている Consumer に合
-  # 致するキーを持つ Provider を見つける。対応するキーが存在しない、
-  # IOR が見つからない場合、false を返す
-  #  
-  # @param nv Provider が含まれている ConnectorProfile::properties の NVList
-  # @param cons Provider と対応する Consumer のホルダ
-  # @param iorstr 見つかったIOR文字列を格納する変数
-  # 
-  # @retrun bool Consumer に対応する Provider が見つからない場合 false
-  #
-  # @else
-  # @brief Find out a provider corresponding to the consumer from NVList
-  #
-  # This function is for the old version's compatibility.
-  #
-  # This function finds out a Provider with the key that is matched
-  # with Cosumer's name in the CorbaConsumerHolder and extracts
-  # IOR.  False is returned when there is no corresponding key and
-  # IOR.
-  #  
-  # @param nv NVlist of ConnectorProfile::properties that includes Provider
-  # @param cons a Consumer holder to be matched with a Provider
-  # @param iorstr variable which is set IOR string
-  # 
-  # @return bool false is returned if there is no provider for the consumer
-  #
-  # @endif
-  #
-  # virtual bool findProviderOld(const NVList&nv,
-  #                              CorbaConsumerHolder& cons,
-  #                              std::string& iorstr);
-  def findProviderOld(self, nv, cons):
-    # old consumer interface descriptor
-    olddesc = "port." + cons.descriptor()
-
-    # find a NameValue of the provider same as olddesc
-    index = OpenRTM_aist.NVUtil.find_index(nv, olddesc)
-    if index < 0:
-      return False, ""
-
-    ior_ = str(any.from_any(nv[index].value, keep_structs=True))
-    if not ior_:
-      self._rtcout.RTC_WARN("Cannot extract Provider IOR string")
-      return False, ior_
-
-    self._rtcout.RTC_TRACE("interface matched with old descriptor: %s", olddesc)
-
-    return True, ior_
-
-
-  ##
-  # @if jp
-  # @brief Consumer に IOR をセットする
-  #
-  # IOR をナローイングしてConsumer にセットする。ナローイングに失敗
-  # した場合、false を返す。ただし、IOR文字列が、nullまたはnilの場合、
-  # オブジェクトに何もセットせずに true を返す。
-  #
-  # @param ior セットする IOR 文字列
-  # @param cons Consumer のホルダ
-  # 
-  # @retrun bool Consumer へのナローイングに失敗した場合 false
-  #
-  # @else
-  # @brief Setting IOR to Consumer
-  #
-  # This function performs narrowing into the Consumer and set it to the
-  # Consumer. False is returned when the narrowing failed. But, if IOR
-  # string is "null" or "nil", this function returns true.
-  #  
-  # @param ior IOR string
-  # @param cons Consumer holder
-  # 
-  # @retrun bool false if narrowing failed.
-  #
-  # @endif
-  #
-  # bool setObject(const std::string& ior, CorbaConsumerHolder& cons);
-  def setObject(self, ior, cons):
-    # if ior string is "null" or "nil", ignore it.
-    if "null" == ior:
-      return True
-
-    if "nil"  == ior:
-      return True
-
-    # IOR should be started by "IOR:"
-    if "IOR:" != ior[:4]:
-      return False
-
-    # set IOR to the consumer
-    if not cons.setObject(ior):
-      self._rtcout.RTC_ERROR("Cannot narrow reference")
-      return False
-
-    self._rtcout.RTC_TRACE("setObject() done")
-    return True
-
-  ##
-  # @if jp
-  # @brief Consumer のオブジェクトをリリースする
-  #
-  # Consumer にセットされた参照をリリースする。ConsumerのIORが与えら
-  # れたIOR文字列と異なる場合、falseを返す。
-  #
-  # @param ior セットする IOR 文字列
-  # @param cons Consumer のホルダ
-  # 
-  # @retrun ConsumerのIORが与えられたIOR文字列と異なる場合、falseを返す。
-  #
-  # @else
-  # @brief Releasing Consumer Object
-  #
-  # This function releases object reference of Consumer. If the
-  # given IOR string is different from Consumer's IOR string, it
-  # returns false.
-  #  
-  # @param ior IOR string
-  # @param cons Consumer holder
-  # 
-  # @retrun bool False if IOR and Consumer's IOR are different
-  #
-  # @endif
-  #
-  # bool releaseObject(const std::string& ior, CorbaConsumerHolder& cons);
-  def releaseObject(self, ior, cons):
-    if ior == cons.getIor():
-      cons.releaseObject()
-      self._rtcout.RTC_DEBUG("Consumer %s released.", cons.descriptor())
-      return True
-
-    self._rtcout.RTC_WARN("IORs between Consumer and Connector are different.")
-    return False
-
-  ##
-  # @if jp
-  # @class CorbaProviderHolder
-  # @brief Provider の情報を格納する構造体
-  #
-  # CORBA Provider のホルダクラス
-  #
-  # @else
-  # @class CorbaProviderHolder
-  # @brief The structure to be stored Provider information.
-  #
-  # CORBA Provider holder class
-  #
-  # @endif
-  class CorbaProviderHolder:
-    # CorbaProviderHolder(const char* type_name,
-    #                     const char* instance_name,
-    #                     PortableServer::RefCountServantBase* servant)
-    def __init__(self, type_name, instance_name, servant):
-      self._typeName = type_name
-      self._instanceName = instance_name
-      self._servant = servant
-      _mgr = OpenRTM_aist.Manager.instance()
-      self._oid = _mgr.getPOA().servant_to_id(self._servant)
-
-      obj = _mgr.getPOA().id_to_reference(self._oid)
-      self._ior = _mgr.getORB().object_to_string(obj)
-      self.deactivate()
-      return
-
-    def __del__(self):
-      self.deactivate()
-      
-    # std::string instanceName() { return m_instanceName; }
-    def instanceName(self):
-      return self._instanceName
-
-    # std::string typeName() { return m_typeName; }
-    def typeName(self):
-      return self._typeName
-
-    # std::string ior() { return m_ior; }
-    def ior(self):
-      return self._ior
-
-    # std::string descriptor() { return m_typeName + "." + m_instanceName; }
-    def descriptor(self):
-      return self._typeName + "." + self._instanceName
-
-    # void activate()
-    def activate(self):
-      try:
-        OpenRTM_aist.Manager.instance().getPOA().activate_object_with_id(self._oid, self._servant)
-      except:
-        print(OpenRTM_aist.Logger.print_exception())
-      return
-
-    # void deactivate()
-    def deactivate(self):
-      try:
-        OpenRTM_aist.Manager.instance().getPOA().deactivate_object(self._oid)
-      except:
-        pass
-        #print(OpenRTM_aist.Logger.print_exception())
-      return
-    
-
-  ##
-  # @if jp
-  # @brief Consumer の情報を格納する構造体
-  # @else
-  # @brief The structure to be stored Consumer information.
-  # @endif
-  #
-  class CorbaConsumerHolder:
-    # CorbaConsumerHolder(const char* type_name,
-    #                     const char* instance_name,
-    #                     CorbaConsumerBase* consumer,
-    #                     string& owner)
-    def __init__(self, type_name, instance_name, consumer, owner):
-      self._typeName = type_name
-      self._instanceName = instance_name
-      self._consumer = consumer
-      self._owner = owner
-      self._ior = ""
-      return
-
-    # std::string instanceName() { return m_instanceName; }
-    def instanceName(self):
-      return self._instanceName
-
-    # std::string typeName() { return m_typeName; }
-    def typeName(self):
-      return self._typeName
-
-    # std::string descriptor() { return m_typeName + "." + m_instanceName; }
-    def descriptor(self):
-      return self._typeName + "." + self._instanceName
+    """
+    """
+
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # @param self
+    # @param name Port の名前
+    #
+    # @else
+    #
+    # @brief Constructor
+    #
+    # @param name The name of Port
+    #
+    # @endif
+    def __init__(self, name):
+        OpenRTM_aist.PortBase.__init__(self, name)
+        self.addProperty("port.port_type", "CorbaPort")
+        self._properties = OpenRTM_aist.Properties()
+        self._providers = []
+        self._consumers = []
+        return
+
+    def __del__(self, PortBase=OpenRTM_aist.PortBase):
+        PortBase.__del__(self)
+
+    ##
+    # @if jp
+    # @brief プロパティの初期化
+    #
+    # OutPortのプロパティを初期化する。このポートへの接続数を指定する
+    # プロパティ "connection_limit" が含まれ、適切な数値が設定されてい
+    # る場合、最大接続数としてその数値が設定される。プロパティが設定さ
+    # れていない場合、もしくは適切な値が設定されていない場合には、最大
+    # 接続数は無制限となる。
+    #
+    # @param prop CorbaPort のプロパティ
+    #
+    # @else
+    #
+    # @brief Initializing properties
+    #
+    # This operation initializes outport's properties. If a property
+    # "connection_limit" is set and appropriate value is set to this
+    # property value, the number of maximum connection is set as this
+    # value. If the property does not exist or invalid value is set
+    # to this property, the maximum number of connection will be set
+    # unlimited.
+    #
+    # @param prop properties of the CorbaPort
+    #
+    # @endif
+    #
+    # void init(coil::Properties& prop);
+
+    def init(self, prop):
+        self._rtcout.RTC_TRACE("init()")
+
+        self._properties.mergeProperties(prop)
+        prop_list = []
+        OpenRTM_aist.NVUtil.copyFromProperties(prop_list, self._properties)
+        self._profile.properties.extend(prop_list)
+
+        num = -1
+        ret, num = OpenRTM_aist.stringTo(num,
+                                         self._properties.getProperty("connection_limit", "-1"))
+        if not ret:
+            self._rtcout.RTC_ERROR("invalid connection_limit value: %s",
+                                   self._properties.getProperty("connection_limit"))
+
+        self.setConnectionLimit(num)
+
+    ##
+    # @if jp
+    #
+    # @brief Provider を登録する
+    #
+    # この Port において提供したいサーバントをこの Port に対して登録す
+    # る。サーバントは、引数で与えられる instance_name, type_name を、
+    # サーバント自身のインスタンス名およびタイプ名として、サーバントに
+    # 関連付けられる。この関数により、サーバントは CorbaPort 内部に保
+    # 持されるとともに、PortInterfaceProfile にRTC::PROVIDED インター
+    # フェースとして登録される。
+    #
+    # @param instance_name サーバントのインスタンス名
+    # @param type_name サーバントのタイプ名
+    # @param provider CORBA サーバント
+    #
+    # @return 既に同名の instance_name が登録されていれば false を返す。
+    #
+    # @else
+    #
+    # @brief Register the provider
+    #
+    # This operation registers a servant, which is provided in this
+    # Port, to the Port. The servant is associated with
+    # "instance_name" and "type_name" as the instance name of the
+    # servant and as the type name of the servant. A given servant
+    # will be stored in the CorbaPort, and this is registered as
+    # RTC::PROVIDED interface into the PortInterfaceProfile.
+    #
+    # @param instance_name Instance name of servant
+    # @param type_name Type name of the servant
+    # @param provider CORBA servant
+    #
+    # @return Return false if the same name of instance_name is already
+    #         registered.
+    #
+    # @endif
+    #
+    # bool registerProvider(const char* instance_name, const char* type_name,
+    #                       PortableServer::RefCountServantBase& provider);
+
+    def registerProvider(self, instance_name, type_name, provider):
+        self._rtcout.RTC_TRACE("registerProvider(instance=%s, type_name=%s)",
+                               (instance_name, type_name))
+
+        try:
+            self._providers.append(self.CorbaProviderHolder(type_name,
+                                                            instance_name,
+                                                            provider))
+        except BaseException:
+            self._rtcout.RTC_ERROR("appending provider interface failed")
+            self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+            return False
+
+        if not self.appendInterface(instance_name, type_name, RTC.PROVIDED):
+            return False
+
+        return True
+
+    ##
+    # @if jp
+    #
+    # @brief Consumer を登録する
+    #
+    # この Port が要求するサービスのプレースホルダであるコンシューマ
+    # (Consumer) を登録する。Consumer が関連付けられるサービスのインス
+    # タンス名およびタイプ名として、引数に instance_name, type_name お
+    # よび Consumer 自身を与えることにより、内部でこれらが関連付けられ
+    # る。Port 間の接続 (connect) 時 には、subscribeInterfaces() で述
+    # べられているルールに基づき、Provider Interface の参照が自動的に
+    # Consumer にセットされる。
+    #
+    # @param instance_name Consumer が要求するサービスのインスタンス名
+    # @param type_name Consumer が要求するサービスのタイプ名
+    # @param consumer CORBA サービスコンシューマ
+    #
+    # @return 既に同名の instance_name が登録されていれば false を返す。
+    #
+    # @else
+    #
+    # @brief Register the consumer
+    #
+    # This operation registers a consumer, which is a service
+    # placeholder this port requires. These are associated internally
+    # with specified instance_name, type_name and Consumer itself to
+    # the argument as service's instance name and its type name
+    # associated with Consumer.  The service Provider interface'
+    # references will be set automatically to the Consumer Interface
+    # object when connections are established, according to the rules
+    # that are described at the subscribeInterfaces() function's
+    # documentation.
+    #
+    # @param instance_name Instance name of the service Consumer requires
+    # @param type_name Type name of the service Consumer requires
+    # @param consumer CORBA service consumer
+    #
+    # @return False would be returned if the same instance_name was registered
+    #
+    # @endif
+    #
+    # bool registerConsumer(const char* instance_name, const char* type_name,
+    #                       CorbaConsumerBase& consumer);
+
+    def registerConsumer(self, instance_name, type_name, consumer):
+        self._rtcout.RTC_TRACE("registerConsumer()")
+
+        if not self.appendInterface(instance_name, type_name, RTC.REQUIRED):
+            return False
+
+        self._consumers.append(self.CorbaConsumerHolder(type_name,
+                                                        instance_name,
+                                                        consumer,
+                                                        self))
+        return True
+
+    ##
+    # @if jp
+    #
+    # @brief Port の全てのインターフェースを activates する
+    #
+    # Port に登録されている全てのインターフェースを activate する。
+    #
+    # @else
+    #
+    # @brief Activate all Port interfaces
+    #
+    # This operation activate all interfaces that is registered in the
+    # ports.
+    #
+    # @endif
+    #
+    # void CorbaPort::activateInterfaces()
+
+    def activateInterfaces(self):
+        for provider in self._providers:
+            provider.activate()
+
+        return
+
+    ##
+    # @if jp
+    #
+    # @brief 全ての Port のインターフェースを deactivates する
+    #
+    # Port に登録されている全てのインターフェースを deactivate する。
+    #
+    # @else
+    #
+    # @brief Deactivate all Port interfaces
+    #
+    # This operation deactivate all interfaces that is registered in the
+    # ports.
+    #
+    # @endif
+    #
+    # void CorbaPort::deactivateInterfaces()
+
+    def deactivateInterfaces(self):
+        for provider in self._providers:
+            provider.deactivate()
+
+        return
+
+    ##
+    # @if jp
+    #
+    # @brief Provider Interface 情報を公開する
+    #
+    # この Port が所有する Provider インターフェースに関する情報を
+    # ConnectorProfile::properties に代入し他の Port に対して公開する。
+    # 今、RTCのインスタンス名等の情報が以下の通りであるとして、
+    #
+    # - RTCインスタンス名:              rtc_iname
+    # - ポート名:                       port_name
+    # - インターフェース極性:           if_polarity
+    # - インターフェース型名:           if_tname
+    # - インターフェースインスタンス名: if_iname
+    #
+    # NameValue 型の ConnectorProfile::properties の name と value として
+    # 以下のものが格納される。
+    #
+    # - name
+    #   <rtc_iname>.port.<port_name>.provided.<if_tname>.<if_iname>
+    # - value
+    #   Provider インターフェースの IOR 文字列
+    #
+    # なお、旧バージョンとの互換性のため以下の表記の NameValue も同時
+    # に格納されるが、将来のバージョンでは削除される可能性がある。
+    #
+    # - name
+    #   port.<if_tname>.<if_iname>
+    # - value
+    #   Provider インターフェースの IOR 文字列
+    #
+    # これらの値は ConnectorProfile::properties に格納され、他のポートに対して
+    # 伝達される。他の Port でこのインターフェースを使用する Consumer が
+    # 存在すれば、ConnectorProfile からこのキーからオブジェクトリファレンスを
+    # 取得し何らかの形で使用される。
+    #
+    # @param connector_profile コネクタプロファイル
+    # @return ReturnCode_t 型のリターンコード
+    #
+    # @else
+    #
+    # @brief Publish information about interfaces
+    #
+    # This operation publishes Provider interfaces information, which
+    # is owned by this port, to the other Ports via
+    # ConnectorProfile::properties.
+    # Now it is assumed RTC instance name and other information is as follows,
+    #
+    # - RTC instance name:              rtc_iname
+    # - Port name:                      port_name
+    # - Interface polarity:             if_polarity
+    # - Interface type name:            if_tname
+    # - Interface instance name:        if_iname
+    #
+    # the following values are stored as the "name" and the "value"
+    # of the NameValue typee element in ConnectorProfile::properties.
+    #
+    # - name
+    #   <rtc_iname>.port.<port_name>.provided.<if_tname>.<if_iname>
+    # - value
+    #   IOR string value of interface reference
+    #
+    # In addition, although the following NameValue values are also
+    # stored for the backward compatibility, this will be deleted in
+    # the future version.
+    #
+    # - name
+    #   port.<if_tname>.<if_iname>
+    # - value
+    #   IOR string value of interface reference
+    #
+    # These values are stored in the ConnectorProfile::properties and
+    # are propagated to the other Ports. If the Consumer interface
+    # exists that requires this Provider interface, it will retrieve
+    # reference from the ConnectorProfile and utilize it.
+    #
+    # @param connector_profile Connector profile
+    # @return The return code of ReturnCode_t type
+    #
+    # @endif
+    #
+    # virtual ReturnCode_t
+    #    publishInterfaces(ConnectorProfile& connector_profile);
+
+    def publishInterfaces(self, connector_profile):
+        self._rtcout.RTC_TRACE("publishInterfaces()")
+
+        returnvalue = self._publishInterfaces()
+
+        if returnvalue != RTC.RTC_OK:
+            return returnvalue
+
+        properties = []
+        for provider in self._providers:
+            # ------------------------------------------------------------
+            # new version descriptor
+            # <comp_iname>.port.<port_name>.provided.<type_name>.<instance_name>
+            newdesc = self._profile.name[:len(self._ownerInstanceName)] + \
+                ".port" + self._profile.name[len(self._ownerInstanceName):]
+            newdesc += ".provided." + provider.descriptor()
+
+            properties.append(
+                OpenRTM_aist.NVUtil.newNV(
+                    newdesc, provider.ior()))
+
+            # ------------------------------------------------------------
+            # old version descriptor
+            # port.<type_name>.<instance_name>
+            olddesc = "port." + provider.descriptor()
+            properties.append(
+                OpenRTM_aist.NVUtil.newNV(
+                    olddesc, provider.ior()))
+
+        OpenRTM_aist.CORBA_SeqUtil.push_back_list(
+            connector_profile.properties, properties)
+
+        return RTC.RTC_OK
+
+    ##
+    # @if jp
+    #
+    # @brief Provider Interface 情報を取得する
+    #
+    # この Portが所有する Consumer Interface に適合する Provider
+    # Interface に関する情報をConnectorProfile::properties から抽出し
+    # Consumer Interface にオブジェクト参照をセットする。
+    #
+    # 今、RTC のインスタンス名や Consumer Interface 等の情報が以下のと
+    # おりであると仮定すると、
+    #
+    # - RTCインスタンス名:              rtc_iname
+    # - ポート名:                       port_name
+    # - インターフェース極性:           if_polarity
+    # - インターフェース型名:           if_tname
+    # - インターフェースインスタンス名: if_iname
+    #
+    # この Consumer Interface を表すインターフェース指定子は以下のよう
+    # に表される。
+    #
+    # <rtc_iname>.port.<port_name>.required.<if_tname>.<if_iname>
+    #
+    # この関数は、まず引数 ConnectorProfile::properties に上記インター
+    # フェース指定子をキーとして格納されている Provider Interface 指定
+    # 子を探し出す。さらに、その Provider Interface 指定子をキーとして
+    # 格納されている Provider Interface の参照を表す IOR 文字列を取得
+    # し、Consumer Interface にセットする。
+    #
+    # 今、仮に、Provider を prov(n), その参照をIOR(n) さらに Consumer
+    # をcons(n) のように記述し、これらすべてのインターフェースの型が同
+    # 一であり、ConnectorProfile に以下の値が設定されているとする。
+    #
+    # <pre>
+    # ConnectorProfile::properties =
+    # {
+    #   prov0: IOR0,
+    #   prov1: IOR1,
+    #   prov2: IOR2,
+    #   cons0: prov2,
+    #   cons1: prov1,
+    #   cons2: prov0
+    # }
+    # </pre>
+    #
+    # このとき、cons(0..2) にはそれぞれ、参照が以下のようにセットされる。
+    #
+    # <pre>
+    #   cons0 = IOR2
+    #   cons1 = IOR1
+    #   cons2 = IOR0
+    # </pre>
+    #
+    # なお、旧バージョンとの互換性のため、
+    # ConnectorProfile::properties に Consumer Interface をキーとした
+    # 値がセットされていない場合でも、次のルールが適用される。
+    #
+    # 今、仮に Consumer Interface が
+    #
+    # <pre>
+    #  PortInterfaceProfile
+    #  {
+    #    instance_name = "PA10_0";
+    #    type_name     = "Manipulator";
+    #    polarity      = REQUIRED;
+    #  }
+    # </pre>
+    #
+    # として登録されていれば、他の Port の
+    #
+    # <pre>
+    #  PortInterfaceProfile
+    #  {
+    #    instance_name = "PA10_0";
+    #    type_name     = "Manipulator";
+    #    polarity      = PROVIDED;
+    #  }
+    # </pre>
+    #
+    # として登録されている Serivce Provider のオブジェクト参照を探し、
+    # Consumer にセットする。実際には、ConnectorProfile::properties に
+    #
+    # <pre>
+    # NameValue = { "port.Manipulator.PA10_0": <Object reference> }
+    # </pre>
+    #
+    # として登録されている NameValue を探し、そのオブジェクト参照を
+    # Consumer にセットする。
+    #
+    # @param connector_profile コネクタプロファイル
+    # @return ReturnCode_t 型のリターンコード
+    #
+    # @else
+    #
+    # @brief Subscribe to interface
+    #
+    # Retrieve information associated with Provider matches Consumer
+    # owned by this port and set the object reference to Consumer.
+    #
+    # Now, Consumer is registered as the following:
+    # <pre>
+    #  PortInterfaceProfile
+    #  {
+    #    instance_name = "PA10_0";
+    #    type_name     = "Manipulator";
+    #    polarity      = REQUIRED;
+    #  }
+    # </pre>
+    # Find the object reference of Serivce Provider that is registered as
+    # the following of other ports:
+    # <pre>
+    #  PortInterfaceProfile
+    #  {
+    #    instance_name = "PA10_0";
+    #    type_name     = "Manipulator";
+    #    polarity      = PROVIDED;
+    #  }
+    # </pre>
+    # and set to Consumer.
+    # In fact, find NameValue that is registered as the following to
+    # ConnectorProfile::properties:
+    # <pre>
+    # NameValue = { "port.Manipulator.PA10_0": <Object reference> }
+    # </pre>
+    # and set the object reference to Consumer.
+    #
+    # @param connector_profile Connector profile
+    #
+    # @return The return code of ReturnCode_t type
+    #
+    # @endif
+    #
+    # virtual ReturnCode_t
+    #   subscribeInterfaces(const ConnectorProfile& connector_profile);
+
+    def subscribeInterfaces(self, connector_profile):
+        self._rtcout.RTC_TRACE("subscribeInterfaces()")
+        nv = connector_profile.properties
+
+        strict = False  # default is "best_effort"
+        index = OpenRTM_aist.NVUtil.find_index(
+            nv, "port.connection.strictness")
+        if index >= 0:
+            strictness = str(any.from_any(nv[index].value, keep_structs=True))
+            if "best_effort" == strictness:
+                strict = False
+            elif "strict" == strictness:
+                strict = True
+
+            self._rtcout.RTC_DEBUG("Connetion strictness is: %s", strictness)
+
+        for consumer in self._consumers:
+            ret, ior = self.findProvider(nv, consumer)
+            if ret:
+                self.setObject(ior, consumer)
+                continue
+
+            ret, ior = self.findProviderOld(nv, consumer)
+            if ret:
+                self.setObject(ior, consumer)
+                continue
+
+            # never come here without error
+            # if strict connection option is set, error is returned.
+            if strict:
+                self._rtcout.RTC_ERROR("subscribeInterfaces() failed.")
+                return RTC.RTC_ERROR
+
+        self._rtcout.RTC_TRACE("subscribeInterfaces() successfully finished.")
+
+        return RTC.RTC_OK
+
+    ##
+    # @if jp
+    #
+    # @brief Interface への接続を解除する
+    #
+    # 与えられた ConnectorProfile に関連する Consumer にセットされた
+    # すべての Object を解放し接続を解除する。
+    #
+    # @param self
+    # @param connector_profile コネクタプロファイル
+    #
+    # @else
+    #
+    # @brief Unsubscribe interfaces
+    #
+    # Release all Objects that was set in Consumer associated with the given
+    # ConnectorProfile.
+    #
+    # @param connector_profile Connector profile
+    #
+    # @endif
+    #  virtual void
+    #    unsubscribeInterfaces(const ConnectorProfile& connector_profile);
+
+    def unsubscribeInterfaces(self, connector_profile):
+        self._rtcout.RTC_TRACE("unsubscribeInterfaces()")
+        nv = connector_profile.properties
+
+        for consumer in self._consumers:
+            ret, ior = self.findProvider(nv, consumer)
+            if ret:
+                self._rtcout.RTC_DEBUG("Correspoinding consumer found.")
+                self.releaseObject(ior, consumer)
+                continue
+
+            ret, ior = self.findProviderOld(nv, consumer)
+            if ret:
+                self._rtcout.RTC_DEBUG("Correspoinding consumer found.")
+                self.releaseObject(ior, consumer)
+                continue
+
+        return
+
+    ##
+    # @if jp
+    # @brief Consumer に合致する Provider を NVList の中から見つける
+    #
+    # NVList 中から CorbaConsumerHolder に保持されている Consumer に合
+    # 致するキーを持つ Provider を見つけ、IOR を抽出しナローイングして
+    # Consumer にセットする。対応するキーが存在しない、IOR が見つから
+    # ない、ナローイングに失敗した場合、false を返す。
+    #
+    # @param nv Provider が含まれている ConnectorProfile::properties の NVList
+    # @param cons Provider と対応する Consumer のホルダ
+    #
+    # @retrun bool Consumer に対応する Provider が見つからない場合 false
+    #
+    # @else
+    # @brief Find out a provider corresponding to the consumer from NVList
+    #
+    # This function finds out a Provider with the key that is matched
+    # with Cosumer's name in the CorbaConsumerHolder, extracts IOR
+    # and performs narrowing into the Consumer and set it to the
+    # Consumer. False is returned when there is no corresponding key
+    # and IOR and the narrowing failed.
+    #
+    # @param nv NVlist of ConnectorProfile::properties that includes Provider
+    # @param cons a Consumer holder to be matched with a Provider
+    #
+    # @return bool false is returned if there is no provider for the consumer
+    #
+    # @endif
+    #
+    # virtual bool findProvider(const NVList& nv,
+    #                           CorbaConsumerHolder& cons,
+    #                           std::string& iorstr);
+
+    def findProvider(self, nv, cons):
+        # new consumer interface descriptor
+        newdesc = self._profile.name[:len(self._ownerInstanceName)] + \
+            ".port" + self._profile.name[len(self._ownerInstanceName):]
+        newdesc += ".required." + cons.descriptor()
+
+        # find a NameValue of the consumer
+        cons_index = OpenRTM_aist.NVUtil.find_index(nv, newdesc)
+        if cons_index < 0:
+            return False, ""
+
+        provider = str(any.from_any(nv[cons_index].value, keep_structs=True))
+        if not provider:
+            self._rtcout.RTC_WARN(
+                "Cannot extract Provider interface descriptor")
+            return False, ""
+
+        # find a NameValue of the provider
+        prov_index = OpenRTM_aist.NVUtil.find_index(nv, provider)
+        if prov_index < 0:
+            return False, ""
+
+        ior_ = str(any.from_any(nv[prov_index].value, keep_structs=True))
+        if not ior_:
+            self._rtcout.RTC_WARN("Cannot extract Provider IOR string")
+            return False, ior_
+
+        self._rtcout.RTC_TRACE(
+            "interface matched with new descriptor: %s", newdesc)
+
+        return True, ior_
+
+    ##
+    # @if jp
+    # @brief Consumer に合致する Provider を NVList の中から見つける
+    #
+    # この関数は、古いバージョンの互換性のための関数である。
+    #
+    # NVList 中から CorbaConsumerHolder に保持されている Consumer に合
+    # 致するキーを持つ Provider を見つける。対応するキーが存在しない、
+    # IOR が見つからない場合、false を返す
+    #
+    # @param nv Provider が含まれている ConnectorProfile::properties の NVList
+    # @param cons Provider と対応する Consumer のホルダ
+    # @param iorstr 見つかったIOR文字列を格納する変数
+    #
+    # @retrun bool Consumer に対応する Provider が見つからない場合 false
+    #
+    # @else
+    # @brief Find out a provider corresponding to the consumer from NVList
+    #
+    # This function is for the old version's compatibility.
+    #
+    # This function finds out a Provider with the key that is matched
+    # with Cosumer's name in the CorbaConsumerHolder and extracts
+    # IOR.  False is returned when there is no corresponding key and
+    # IOR.
+    #
+    # @param nv NVlist of ConnectorProfile::properties that includes Provider
+    # @param cons a Consumer holder to be matched with a Provider
+    # @param iorstr variable which is set IOR string
+    #
+    # @return bool false is returned if there is no provider for the consumer
+    #
+    # @endif
+    #
+    # virtual bool findProviderOld(const NVList&nv,
+    #                              CorbaConsumerHolder& cons,
+    #                              std::string& iorstr);
+
+    def findProviderOld(self, nv, cons):
+        # old consumer interface descriptor
+        olddesc = "port." + cons.descriptor()
+
+        # find a NameValue of the provider same as olddesc
+        index = OpenRTM_aist.NVUtil.find_index(nv, olddesc)
+        if index < 0:
+            return False, ""
+
+        ior_ = str(any.from_any(nv[index].value, keep_structs=True))
+        if not ior_:
+            self._rtcout.RTC_WARN("Cannot extract Provider IOR string")
+            return False, ior_
+
+        self._rtcout.RTC_TRACE(
+            "interface matched with old descriptor: %s", olddesc)
+
+        return True, ior_
 
     ##
     # @if jp
     # @brief Consumer に IOR をセットする
+    #
+    # IOR をナローイングしてConsumer にセットする。ナローイングに失敗
+    # した場合、false を返す。ただし、IOR文字列が、nullまたはnilの場合、
+    # オブジェクトに何もセットせずに true を返す。
+    #
+    # @param ior セットする IOR 文字列
+    # @param cons Consumer のホルダ
+    #
+    # @retrun bool Consumer へのナローイングに失敗した場合 false
+    #
     # @else
     # @brief Setting IOR to Consumer
-    #@endif
     #
-    # bool setObject(const char* ior)
-    def setObject(self, ior):
-      self._ior = ior
-      orb = OpenRTM_aist.Manager.instance().getORB()
-      obj = orb.string_to_object(ior)
-      if CORBA.is_nil(obj):
-        return False
+    # This function performs narrowing into the Consumer and set it to the
+    # Consumer. False is returned when the narrowing failed. But, if IOR
+    # string is "null" or "nil", this function returns true.
+    #
+    # @param ior IOR string
+    # @param cons Consumer holder
+    #
+    # @retrun bool false if narrowing failed.
+    #
+    # @endif
+    #
+    # bool setObject(const std::string& ior, CorbaConsumerHolder& cons);
 
-      return self._consumer.setObject(obj)
+    def setObject(self, ior, cons):
+        # if ior string is "null" or "nil", ignore it.
+        if "null" == ior:
+            return True
+
+        if "nil" == ior:
+            return True
+
+        # IOR should be started by "IOR:"
+        if "IOR:" != ior[:4]:
+            return False
+
+        # set IOR to the consumer
+        if not cons.setObject(ior):
+            self._rtcout.RTC_ERROR("Cannot narrow reference")
+            return False
+
+        self._rtcout.RTC_TRACE("setObject() done")
+        return True
 
     ##
     # @if jp
     # @brief Consumer のオブジェクトをリリースする
+    #
+    # Consumer にセットされた参照をリリースする。ConsumerのIORが与えら
+    # れたIOR文字列と異なる場合、falseを返す。
+    #
+    # @param ior セットする IOR 文字列
+    # @param cons Consumer のホルダ
+    #
+    # @retrun ConsumerのIORが与えられたIOR文字列と異なる場合、falseを返す。
+    #
     # @else
     # @brief Releasing Consumer Object
+    #
+    # This function releases object reference of Consumer. If the
+    # given IOR string is different from Consumer's IOR string, it
+    # returns false.
+    #
+    # @param ior IOR string
+    # @param cons Consumer holder
+    #
+    # @retrun bool False if IOR and Consumer's IOR are different
+    #
     # @endif
     #
-    # void releaseObject()
-    def releaseObject(self):
-      self._consumer.releaseObject()
-      return
+    # bool releaseObject(const std::string& ior, CorbaConsumerHolder& cons);
+    def releaseObject(self, ior, cons):
+        if ior == cons.getIor():
+            cons.releaseObject()
+            self._rtcout.RTC_DEBUG("Consumer %s released.", cons.descriptor())
+            return True
 
-    # const std::string& getIor()
-    def getIor(self):
-      return self._ior
+        self._rtcout.RTC_WARN(
+            "IORs between Consumer and Connector are different.")
+        return False
 
+    ##
+    # @if jp
+    # @class CorbaProviderHolder
+    # @brief Provider の情報を格納する構造体
+    #
+    # CORBA Provider のホルダクラス
+    #
+    # @else
+    # @class CorbaProviderHolder
+    # @brief The structure to be stored Provider information.
+    #
+    # CORBA Provider holder class
+    #
+    # @endif
+    class CorbaProviderHolder:
+        # CorbaProviderHolder(const char* type_name,
+        #                     const char* instance_name,
+        #                     PortableServer::RefCountServantBase* servant)
+        def __init__(self, type_name, instance_name, servant):
+            self._typeName = type_name
+            self._instanceName = instance_name
+            self._servant = servant
+            _mgr = OpenRTM_aist.Manager.instance()
+            self._oid = _mgr.getPOA().servant_to_id(self._servant)
 
-  ##
-  # @if jp
-  # @brief ConnectorProfile と Consuemr の比較をしオブジェクト参照を
-  #        セットするための Functor
-  # @else
-  # @brief Subscription mutching functor for Consumer
-  # @endif
-  class subscribe:
-    def __init__(self, cons):
-      self._cons = cons
-      self._len  = len(cons)
+            obj = _mgr.getPOA().id_to_reference(self._oid)
+            self._ior = _mgr.getORB().object_to_string(obj)
+            self.deactivate()
+            return
 
-    def __call__(self, nv):
-      for i in range(self._len):
-        name_ = nv.name
-        if self._cons[i].descriptor() == name_:
-          try:
-            obj = any.from_any(nv.value, keep_structs=True)
-            self._cons[i].setObject(obj)
-          except:
-            print(OpenRTM_aist.Logger.print_exception())
+        def __del__(self):
+            self.deactivate()
 
+        # std::string instanceName() { return m_instanceName; }
+        def instanceName(self):
+            return self._instanceName
 
+        # std::string typeName() { return m_typeName; }
+        def typeName(self):
+            return self._typeName
 
-  ##
-  # @if jp
-  # @brief Consumer のオブジェクトを解放するための Functor
-  # @else
-  # @brief Functor to release Consumer's object
-  # @endif
-  class unsubscribe:
-    def __init__(self, cons):
-      self._cons = cons
-      self._len  = len(cons)
+        # std::string ior() { return m_ior; }
+        def ior(self):
+            return self._ior
 
-    def __call__(self, nv):
-      for i in range(self._len):
-        name_ = nv.name
-        if self._cons[i].descriptor() == name_:
-          self._cons[i].releaseObject()
-          return
+        # std::string descriptor() { return m_typeName + "." + m_instanceName;
+        # }
+        def descriptor(self):
+            return self._typeName + "." + self._instanceName
 
-        # for 0.4.x
-        if "port."+self._cons[i].descriptor() == name_:
-          self._cons[i].releaseObject()
+        # void activate()
+        def activate(self):
+            try:
+                OpenRTM_aist.Manager.instance().getPOA(
+                ).activate_object_with_id(self._oid, self._servant)
+            except BaseException:
+                print(OpenRTM_aist.Logger.print_exception())
+            return
 
+        # void deactivate()
+        def deactivate(self):
+            try:
+                OpenRTM_aist.Manager.instance().getPOA().deactivate_object(self._oid)
+            except BaseException:
+                pass
+                # print(OpenRTM_aist.Logger.print_exception())
+            return
 
+    ##
+    # @if jp
+    # @brief Consumer の情報を格納する構造体
+    # @else
+    # @brief The structure to be stored Consumer information.
+    # @endif
+    #
+
+    class CorbaConsumerHolder:
+        # CorbaConsumerHolder(const char* type_name,
+        #                     const char* instance_name,
+        #                     CorbaConsumerBase* consumer,
+        #                     string& owner)
+        def __init__(self, type_name, instance_name, consumer, owner):
+            self._typeName = type_name
+            self._instanceName = instance_name
+            self._consumer = consumer
+            self._owner = owner
+            self._ior = ""
+            return
+
+        # std::string instanceName() { return m_instanceName; }
+        def instanceName(self):
+            return self._instanceName
+
+        # std::string typeName() { return m_typeName; }
+        def typeName(self):
+            return self._typeName
+
+        # std::string descriptor() { return m_typeName + "." + m_instanceName;
+        # }
+        def descriptor(self):
+            return self._typeName + "." + self._instanceName
+
+        ##
+        # @if jp
+        # @brief Consumer に IOR をセットする
+        # @else
+        # @brief Setting IOR to Consumer
+        # @endif
+        #
+        # bool setObject(const char* ior)
+        def setObject(self, ior):
+            self._ior = ior
+            orb = OpenRTM_aist.Manager.instance().getORB()
+            obj = orb.string_to_object(ior)
+            if CORBA.is_nil(obj):
+                return False
+
+            return self._consumer.setObject(obj)
+
+        ##
+        # @if jp
+        # @brief Consumer のオブジェクトをリリースする
+        # @else
+        # @brief Releasing Consumer Object
+        # @endif
+        #
+        # void releaseObject()
+        def releaseObject(self):
+            self._consumer.releaseObject()
+            return
+
+        # const std::string& getIor()
+        def getIor(self):
+            return self._ior
+
+    ##
+    # @if jp
+    # @brief ConnectorProfile と Consuemr の比較をしオブジェクト参照を
+    #        セットするための Functor
+    # @else
+    # @brief Subscription mutching functor for Consumer
+    # @endif
+
+    class subscribe:
+        def __init__(self, cons):
+            self._cons = cons
+            self._len = len(cons)
+
+        def __call__(self, nv):
+            for i in range(self._len):
+                name_ = nv.name
+                if self._cons[i].descriptor() == name_:
+                    try:
+                        obj = any.from_any(nv.value, keep_structs=True)
+                        self._cons[i].setObject(obj)
+                    except BaseException:
+                        print(OpenRTM_aist.Logger.print_exception())
+
+    ##
+    # @if jp
+    # @brief Consumer のオブジェクトを解放するための Functor
+    # @else
+    # @brief Functor to release Consumer's object
+    # @endif
+
+    class unsubscribe:
+        def __init__(self, cons):
+            self._cons = cons
+            self._len = len(cons)
+
+        def __call__(self, nv):
+            for i in range(self._len):
+                name_ = nv.name
+                if self._cons[i].descriptor() == name_:
+                    self._cons[i].releaseObject()
+                    return
+
+                # for 0.4.x
+                if "port." + self._cons[i].descriptor() == name_:
+                    self._cons[i].releaseObject()

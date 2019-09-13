@@ -35,28 +35,27 @@ else:
 # class A(Singleton):
 #   def __init__(self):
 #     pass
+
+
 class Singleton(object):
-  __lockObj = allocate_lock()
-  __instance = None
+    __lockObj = allocate_lock()
+    __instance = None
 
-  def __new__(self, *args, **kargs):
-    return self.instance(*args, **kargs)
+    def __new__(self, *args, **kargs):
+        return self.instance(*args, **kargs)
 
+    def __init__(self, *args, **kargs):
+        self.instance(*args, **kargs)
 
-  def __init__(self, *args, **kargs):
-    self.instance(*args, **kargs)
+    def instance(self, *args, **kargs):
+        self.__lockObj.acquire()
+        try:
+            if self.__instance is None:
+                self.__instance = object.__new__(self, *args, **kargs)
 
+        finally:
+            self.__lockObj.release()
 
-  def instance(self, *args, **kargs):
-    self.__lockObj.acquire()
-    try:
-      if self.__instance is None:
-        self.__instance = object.__new__(self, *args, **kargs)
+        return self.__instance
 
-    finally:
-      self.__lockObj.release()
-
-    return self.__instance
-
-  instance = classmethod(instance)
-
+    instance = classmethod(instance)

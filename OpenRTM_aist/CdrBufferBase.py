@@ -32,10 +32,9 @@ class CdrBufferFactory(OpenRTM_aist.Factory):
         OpenRTM_aist.Factory.__init__(self)
         pass
 
-    
     def instance():
         global cdrbufferfactory
-        
+
         if cdrbufferfactory is None:
             cdrbufferfactory = CdrBufferFactory()
 

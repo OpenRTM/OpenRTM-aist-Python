@@ -10,6 +10,7 @@ from omniORB import CORBA
 import RTC
 import OpenRTM_aist
 
+
 def usage():
     print("usage: ConnectorComp [options]")
     print(" python MyServiceProvider.py  ")
@@ -24,7 +25,7 @@ def main():
 
     # get NamingService
     naming = OpenRTM_aist.CorbaNaming(orb, "localhost")
-    
+
     consumer = OpenRTM_aist.CorbaConsumer()
     provider = OpenRTM_aist.CorbaConsumer()
 
@@ -36,7 +37,6 @@ def main():
     pcons = consobj.get_ports()
     pcons[0].disconnect_all()
 
-
     # find MyServiceProvider0 component
     provider.setObject(naming.resolve("MyServiceProvider0.rtc"))
 
@@ -45,12 +45,11 @@ def main():
     prov = provobj.get_ports()
     prov[0].disconnect_all()
 
-
     # connect ports
-    conprof = RTC.ConnectorProfile("connector0", "", [pcons[0],prov[0]], [])
+    conprof = RTC.ConnectorProfile("connector0", "", [pcons[0], prov[0]], [])
 
     ret = pcons[0].connect(conprof)
-    
+
     # activate ConsoleIn0
     eclistin = consobj.get_owned_contexts()
     eclistin[0].activate_component(consobj)
@@ -60,6 +59,5 @@ def main():
     eclistout[0].activate_component(provobj)
 
 
-
 if __name__ == "__main__":
-	main()
+    main()

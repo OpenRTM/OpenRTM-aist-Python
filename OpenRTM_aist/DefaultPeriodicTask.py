@@ -24,4 +24,3 @@ def DefaultPeriodicTaskInit():
     OpenRTM_aist.PeriodicTaskFactory.instance().addFactory("default",
                                                            OpenRTM_aist.PeriodicTask,
                                                            OpenRTM_aist.Delete)
-                                                    

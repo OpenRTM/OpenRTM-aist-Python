@@ -5,20 +5,20 @@
 #  @brief RTC profile generator
 #  @date $Date$
 #  @author Noriaki Ando <n-ando@aist.go.jp>
-# 
+#
 #  Copyright (C) 2008
 #      Task-intelligence Research Group,
 #      Intelligent Systems Research Institute,
 #      National Institute of
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
-# 
+#
 #  $Id$
 #
 
 import gen_base
 
-profile_yaml = """rtcProfile: 
+profile_yaml = """rtcProfile:
   version: "1.0"
   id: [id]
 
@@ -86,19 +86,19 @@ profile_yaml = """rtcProfile:
 
       reference: [basicInfo.rtcDoc::doc.reference]
 
-    "rtcExt::versionUpLog": 
+    "rtcExt::versionUpLog":
 [for log in basicInfo.rtcExt::versionUpLog]
       - [log]
 [endfor]
-  language: 
+  language:
 [if-any language.java]
-    java: 
-      library: 
+    java:
+      library:
 [for javalib in language.java.library]
         - [javalib]
 [endfor]
 [endif]
-  actions:  
+  actions:
     onInitialize:
       implemented: [actions.onInitialize.implemented]
 
@@ -219,7 +219,7 @@ profile_yaml = """rtcProfile:
 
         preCondition: [actions.onStateUpdate.rtcDoc::doc.preCondition]
 
-  dataPorts: 
+  dataPorts:
 [for dport in dataPorts]
     -
       portType: [dport.portType]
@@ -256,7 +256,7 @@ profile_yaml = """rtcProfile:
       "rtcExt::varname": [dport.rtcExt::varname]
 
 [endfor]
-  servicePorts: 
+  servicePorts:
 [for sport in servicePorts]
     -
       name: [sport.name]
@@ -268,7 +268,7 @@ profile_yaml = """rtcProfile:
 
       "rtcExt::position": [sport.rtcExt::position]
 
-      serviceInterface: 
+      serviceInterface:
 [for sif in sport.serviceInterface]
         -
           direction: [sif.direction]
@@ -300,10 +300,10 @@ profile_yaml = """rtcProfile:
 
 [endfor]
 [endfor]
-  configurationSet: 
-    configuration: 
+  configurationSet:
+    configuration:
 [for conf in configurationSet.configuration]
-      - 
+      -
         name: [conf.name]
 
         type: [conf.type]
@@ -326,7 +326,7 @@ profile_yaml = """rtcProfile:
           unit: [conf.rtcDoc::doc.unit]
 
 [endfor]
-  parameters: 
+  parameters:
 [if-any parameters]
 [for param in parameters]
     -

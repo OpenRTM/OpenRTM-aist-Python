@@ -17,66 +17,57 @@
 
 import threading
 
+
 class Task:
-  def __init__(self):
-    self._count = 0
-    self._thread = None
-    return
+    def __init__(self):
+        self._count = 0
+        self._thread = None
+        return
 
-    
-  def __del__(self):
-    self._count = 0
-    #if self._thread:
-    #  if self._thread.isAlive():
-    #    self._thread.join()
-    self._thread = None
-    return
+    def __del__(self):
+        self._count = 0
+        # if self._thread:
+        #  if self._thread.isAlive():
+        #    self._thread.join()
+        self._thread = None
+        return
 
+    def open(self, args=None):
+        return 0
 
-  def open(self, args = None):
-    return 0
+    def close(self, flags=0):
+        return 0
 
+    def svc(self):
+        return 0
 
-  def close(self, flags = 0):
-    return 0
+    def activate(self):
+        if self._count == 0:
+            self._thread = threading.Thread(target=self.svc_run)
+            self._count += 1
+            self._thread.start()
+        return
 
+    def wait(self):
+        if self._count > 0:
+            self._thread.join()
+        return
 
-  def svc(self):
-    return 0
+    def suspend(self):
+        return 0
 
+    def resume(self):
+        return 0
 
-  def activate(self):
-    if self._count == 0:
-      self._thread = threading.Thread(target=self.svc_run)
-      self._count += 1
-      self._thread.start()
-    return
+    def reset(self):
+        self._count = 0
+        return
 
+    def finalize(self):
+        self.reset()
+        return
 
-  def wait(self):
-    if self._count > 0:
-      self._thread.join()
-    return
-
-
-  def suspend(self):
-    return 0
-
-
-  def resume(self):
-    return 0
-
-
-  def reset(self):
-    self._count = 0
-    return
-
-
-  def finalize(self):
-    self.reset()
-    return
-
-  def svc_run(self):
-    self.svc()
-    self.finalize()
-    return
+    def svc_run(self):
+        self.svc()
+        self.finalize()
+        return

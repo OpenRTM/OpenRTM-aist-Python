@@ -21,151 +21,147 @@ import OpenRTM_aist
 import OpenRTM_aist.StringUtil
 
 display_spec = ["implementation_id", "Display",
-                  "type_name",         "Display",
-                  "description",       "Console input component",
-                  "version",           "1.0",
-                  "vendor",            "Nobuhiko Miyamoto",
-                  "category",          "example",
-                  "activity_type",     "DataFlowComponent",
-                  "max_instance",      "10",
-                  "language",          "Python",
-                  "lang_type",         "script",
-                  ""]
-
+                "type_name", "Display",
+                "description", "Console input component",
+                "version", "1.0",
+                "vendor", "Nobuhiko Miyamoto",
+                "category", "example",
+                "activity_type", "DataFlowComponent",
+                "max_instance", "10",
+                "language", "Python",
+                "lang_type", "script",
+                ""]
 
 
 class DataListener(OpenRTM_aist.ConnectorDataListenerT):
-  def __init__(self, name):
-    self._name = name
+    def __init__(self, name):
+        self._name = name
 
-  def __del__(self):
-    print("dtor of ", self._name)
+    def __del__(self):
+        print("dtor of ", self._name)
 
-  def __call__(self, info, cdrdata):
-    data = OpenRTM_aist.ConnectorDataListenerT.__call__(self, info, cdrdata, RTC.TimedLong(RTC.Time(0,0),0), OpenRTM_aist.PortType.InPortType)
-    print("------------------------------")
-    print("Listener:       ", self._name)
-    print("Profile::name:  ", info.name)
-    print("Profile::id:    ", info.id)
-    print("Data:           ", data.data)
-    print("------------------------------")
-    return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
+    def __call__(self, info, cdrdata):
+        data = OpenRTM_aist.ConnectorDataListenerT.__call__(
+            self, info, cdrdata, RTC.TimedLong(
+                RTC.Time(
+                    0, 0), 0), OpenRTM_aist.PortType.InPortType)
+        print("------------------------------")
+        print("Listener:       ", self._name)
+        print("Profile::name:  ", info.name)
+        print("Profile::id:    ", info.id)
+        print("Data:           ", data.data)
+        print("------------------------------")
+        return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
 
 
 class ConnListener(OpenRTM_aist.ConnectorListener):
-  def __init__(self, name):
-    self._name = name
+    def __init__(self, name):
+        self._name = name
 
-  def __del__(self):
-    print("dtor of ", self._name)
+    def __del__(self):
+        print("dtor of ", self._name)
 
-  def __call__(self, info):
-    print("------------------------------")
-    print("Listener:       ", self._name)
-    print("Profile::name:  ", info.name)
-    print("Profile::id:    ", info.id)
-    print("------------------------------")
-    return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
-
-
+    def __call__(self, info):
+        print("------------------------------")
+        print("Listener:       ", self._name)
+        print("Profile::name:  ", info.name)
+        print("Profile::id:    ", info.id)
+        print("------------------------------")
+        return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
 
 
 class Display(OpenRTM_aist.DataFlowComponentBase):
-  def __init__(self, manager):
-    OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
-    return
+    def __init__(self, manager):
+        OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
+        return
 
-  def onInitialize(self):
-    self._in = RTC.TimedLong(RTC.Time(0,0),0)
+    def onInitialize(self):
+        self._in = RTC.TimedLong(RTC.Time(0, 0), 0)
 
-    
-    self._inIn = OpenRTM_aist.InPort("in", self._in)
+        self._inIn = OpenRTM_aist.InPort("in", self._in)
 
-    # Set OutPort buffer
-    self.addInPort("in", self._inIn)
+        # Set OutPort buffer
+        self.addInPort("in", self._inIn)
 
+        self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE,
+                                            DataListener("ON_BUFFER_WRITE"))
 
-    self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE,
-                                          DataListener("ON_BUFFER_WRITE"))
+        self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL,
+                                            DataListener("ON_BUFFER_FULL"))
 
+        self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT,
+                                            DataListener("ON_BUFFER_WRITE_TIMEOUT"))
 
-    self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL, 
-                                          DataListener("ON_BUFFER_FULL"))
+        self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_OVERWRITE,
+                                            DataListener("ON_BUFFER_OVERWRITE"))
 
-    self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT, 
-                                          DataListener("ON_BUFFER_WRITE_TIMEOUT"))
+        self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ,
+                                            DataListener("ON_BUFFER_READ"))
 
-    self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_OVERWRITE, 
-                                          DataListener("ON_BUFFER_OVERWRITE"))
+        self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_SEND,
+                                            DataListener("ON_SEND"))
 
-    self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ, 
-                                          DataListener("ON_BUFFER_READ"))
+        self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED,
+                                            DataListener("ON_RECEIVED"))
 
-    self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_SEND, 
-                                          DataListener("ON_SEND"))
+        self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL,
+                                            DataListener("ON_RECEIVER_FULL"))
 
-    self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED,
-                                          DataListener("ON_RECEIVED"))
+        self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT,
+                                            DataListener("ON_RECEIVER_TIMEOUT"))
 
-    self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL, 
-                                          DataListener("ON_RECEIVER_FULL"))
+        self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR,
+                                            DataListener("ON_RECEIVER_ERROR"))
 
-    self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT, 
-                                          DataListener("ON_RECEIVER_TIMEOUT"))
+        self._inIn.addConnectorListener(OpenRTM_aist.ConnectorListenerType.ON_CONNECT,
+                                        ConnListener("ON_CONNECT"))
+        self._inIn.addConnectorListener(OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT,
+                                        ConnListener("ON_DISCONNECT"))
 
-    self._inIn.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR,
-                                          DataListener("ON_RECEIVER_ERROR"))
+        return RTC.RTC_OK
 
-    self._inIn.addConnectorListener(OpenRTM_aist.ConnectorListenerType.ON_CONNECT,
-                                      ConnListener("ON_CONNECT"))
-    self._inIn.addConnectorListener(OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT,
-                                      ConnListener("ON_DISCONNECT"))
+    def onExecute(self, ec_id):
+        if self._inIn.isNew():
+            data = self._inIn.read()
+            print("Received: ", data.data)
+            print("TimeStamp: ", data.tm.sec, "[s]")
+            print("TimeStamp: ", data.tm.nsec, "[ns]")
 
-
-    return RTC.RTC_OK
-
-        
-  def onExecute(self, ec_id):
-    if self._inIn.isNew():
-      data = self._inIn.read()
-      print("Received: ", data.data)
-      print("TimeStamp: ", data.tm.sec,"[s]")
-      print("TimeStamp: ", data.tm.nsec,"[ns]")
-
-    
-    return RTC.RTC_OK
+        return RTC.RTC_OK
 
 
 def DisplayInit(manager):
-  profile = OpenRTM_aist.Properties(defaults_str=display_spec)
-  manager.registerFactory(profile,
-                          Display,
-                          OpenRTM_aist.Delete)
+    profile = OpenRTM_aist.Properties(defaults_str=display_spec)
+    manager.registerFactory(profile,
+                            Display,
+                            OpenRTM_aist.Delete)
 
 
 def MyModuleInit(manager):
-  DisplayInit(manager)
+    DisplayInit(manager)
 
-  # Create a component
-  comp = manager.createComponent("Display")
+    # Create a component
+    comp = manager.createComponent("Display")
+
 
 def main():
-  # Initialize manager
-  mgr = OpenRTM_aist.Manager.init(sys.argv)
+    # Initialize manager
+    mgr = OpenRTM_aist.Manager.init(sys.argv)
 
-  # Set module initialization proceduer
-  # This procedure will be invoked in activateManager() function.
-  mgr.setModuleInitProc(MyModuleInit)
+    # Set module initialization proceduer
+    # This procedure will be invoked in activateManager() function.
+    mgr.setModuleInitProc(MyModuleInit)
 
-  # Activate manager and register to naming service
-  mgr.activateManager()
+    # Activate manager and register to naming service
+    mgr.activateManager()
 
-  # run the manager in blocking mode
-  # runManager(False) is the default
-  mgr.runManager()
+    # run the manager in blocking mode
+    # runManager(False) is the default
+    mgr.runManager()
 
-  # If you want to run the manager in non-blocking mode, do like this
-  # mgr.runManager(True)
+    # If you want to run the manager in non-blocking mode, do like this
+    # mgr.runManager(True)
+
 
 if __name__ == "__main__":
-  main()
+    main()

@@ -25,44 +25,46 @@ import OpenRTM_aist
 # @else
 # @brief Profile data structure of LocalService
 # @endif
+
+
 class LocalServiceProfile:
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    ##
-    # @if jp
-    # @brief LocalServiceのサービス名
-    # @else
-    # @brief The name of LocalService
-    # @endif
-    self.name = ""
+    def __init__(self):
+        ##
+        # @if jp
+        # @brief LocalServiceのサービス名
+        # @else
+        # @brief The name of LocalService
+        # @endif
+        self.name = ""
 
-    ##
-    # @if jp
-    # @brief LocalServiceの固有ID
-    # @else
-    # @brief The unique ID of LocalService
-    # @endif
-    self.uuid = ""
+        ##
+        # @if jp
+        # @brief LocalServiceの固有ID
+        # @else
+        # @brief The unique ID of LocalService
+        # @endif
+        self.uuid = ""
 
-    ##
-    # @if jp
-    # @brief LocalServiceのプロパティ
-    # @else
-    # @brief Properties of LocalService
-    # @endif
-    self.properties = None
+        ##
+        # @if jp
+        # @brief LocalServiceのプロパティ
+        # @else
+        # @brief Properties of LocalService
+        # @endif
+        self.properties = None
 
-    ##
-    # @if jp
-    # @brief LocalServiceのポインタ
-    # @else
-    # @brief The pointer to LocalService
-    # @endif
-    self.service = None
+        ##
+        # @if jp
+        # @brief LocalServiceのポインタ
+        # @else
+        # @brief The pointer to LocalService
+        # @endif
+        self.service = None
 
-    return
+        return
 
 ##
 # @if jp
@@ -163,108 +165,111 @@ class LocalServiceProfile:
 # @else
 #
 # @endif
+
+
 class LocalServiceBase:
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief LocalServiceクラスの初期化関数
-  #
-  # このオブジェクトの初期化を行う。LocalService を実装する場合、外
-  # 部からの設定情報は、このinit()関数により与えられる。
-  #
-  # @param profile 外部から与えられた LocalServiceProfile
-  # @return 与えられた LocalServiceProfile が不正の場合 false
-  #
-  # @else
-  # @brief Initialization function of the LocalService class
-  #
-  # @endif
-  # virtual bool
-  # init(const coil::Properties& props) = 0;
-  def init(self, props):
-    pass
+    ##
+    # @if jp
+    # @brief LocalServiceクラスの初期化関数
+    #
+    # このオブジェクトの初期化を行う。LocalService を実装する場合、外
+    # 部からの設定情報は、このinit()関数により与えられる。
+    #
+    # @param profile 外部から与えられた LocalServiceProfile
+    # @return 与えられた LocalServiceProfile が不正の場合 false
+    #
+    # @else
+    # @brief Initialization function of the LocalService class
+    #
+    # @endif
+    # virtual bool
+    # init(const coil::Properties& props) = 0;
+    def init(self, props):
+        pass
 
+    ##
+    # @if jp
+    # @brief LocalServiceクラスの再初期化関数
+    #
+    # TODO: ドキュメント作成
+    #
+    # @param profile 新たに与えられた LocalServiceProfile
+    # @return 不正な LocalServiceProfile が与えられた場合は false
+    #
+    # @else
+    # @brief Reinitialization function of the LocalService class
+    #
+    # TODO: Documentation
+    #
+    # @endif
+    # virtual bool
+    # reinit(const coil::Properties& props) = 0;
 
-  ##
-  # @if jp
-  # @brief LocalServiceクラスの再初期化関数
-  #
-  # TODO: ドキュメント作成
-  #
-  # @param profile 新たに与えられた LocalServiceProfile
-  # @return 不正な LocalServiceProfile が与えられた場合は false
-  #
-  # @else
-  # @brief Reinitialization function of the LocalService class
-  #
-  # TODO: Documentation
-  #
-  # @endif
-  # virtual bool
-  # reinit(const coil::Properties& props) = 0;
-  def reinit(self, props):
-    pass
-    
+    def reinit(self, props):
+        pass
 
-  ##
-  # @if jp
-  # @brief LocalServiceProfile を返す
-  #
-  # init()/reinit()で与えられた LocalServiceProfile は通常オブジェク
-  # ト内で保持される。この関数では保持されている ServiceProfile を返
-  # す。
-  #
-  # @return このオブジェクトが保持している LocalServiceProfile
-  #
-  # @else
-  # @brief Getting LocalServiceProfile
-  #
-  # TODO: Documentation
-  #
-  # @endif
-  # virtual const LocalServiceProfile&
-  # getProfile() const = 0;
-  def getProfile(self):
-    pass
-    
+    ##
+    # @if jp
+    # @brief LocalServiceProfile を返す
+    #
+    # init()/reinit()で与えられた LocalServiceProfile は通常オブジェク
+    # ト内で保持される。この関数では保持されている ServiceProfile を返
+    # す。
+    #
+    # @return このオブジェクトが保持している LocalServiceProfile
+    #
+    # @else
+    # @brief Getting LocalServiceProfile
+    #
+    # TODO: Documentation
+    #
+    # @endif
+    # virtual const LocalServiceProfile&
+    # getProfile() const = 0;
 
-  ##
-  # @if jp
-  # @brief 終了処理
-  #
-  # LocalService が終了する際に呼び出される終了処理用関数。当該オブ
-  # ジェクトが保持するリソースを解放するなどの処理を行う。
-  #
-  # @else
-  # @brief Finalization
-  #
-  # TODO: Documentation
-  #
-  # @endif
-  # virtual void
-  # finalize() = 0;
-  def finalize(self):
-    pass
+    def getProfile(self):
+        pass
+
+    ##
+    # @if jp
+    # @brief 終了処理
+    #
+    # LocalService が終了する際に呼び出される終了処理用関数。当該オブ
+    # ジェクトが保持するリソースを解放するなどの処理を行う。
+    #
+    # @else
+    # @brief Finalization
+    #
+    # TODO: Documentation
+    #
+    # @endif
+    # virtual void
+    # finalize() = 0;
+
+    def finalize(self):
+        pass
+
 
 localservicefactory = None
 
-class LocalServiceFactory(OpenRTM_aist.Factory,LocalServiceBase):
-  def __init__(self):
-    OpenRTM_aist.Factory.__init__(self)
-    return
 
-  def __del__(self):
-    pass
+class LocalServiceFactory(OpenRTM_aist.Factory, LocalServiceBase):
+    def __init__(self):
+        OpenRTM_aist.Factory.__init__(self)
+        return
 
-  def instance():
-    global localservicefactory
+    def __del__(self):
+        pass
 
-    if localservicefactory is None:
-      localservicefactory = LocalServiceFactory()
+    def instance():
+        global localservicefactory
 
-    return localservicefactory
+        if localservicefactory is None:
+            localservicefactory = LocalServiceFactory()
 
-  instance = staticmethod(instance)
+        return localservicefactory
 
+    instance = staticmethod(instance)

@@ -15,57 +15,87 @@
 #
 
 from __future__ import print_function
-import sys,os,platform
+import sys
+import os
+import platform
 import time
 import subprocess
 
-nsport="2809"
+nsport = "2809"
 sysinfo = platform.uname()
-hostname= sysinfo[1]
-plat=sys.platform
+hostname = sysinfo[1]
+plat = sys.platform
+
 
 def main():
-  if plat == "win32":
-    subprocess.call('start \"\" \"%RTM_ROOT%\\bin\\rtm-naming.bat\"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    time.sleep(5)
-    subprocess.call("start python ConsoleIn.py".split(" "), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    subprocess.call("start python Consoleout.py".split(" "), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    time.sleep(3)
-    subprocess.call("python Connector.py".split(" "), shell=True)
-    
-    
-  else:
-    p=subprocess.Popen("which xterm", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    term, stderr = p.communicate()
-    status = p.returncode
-    term = term.replace("\n","")
-    term += " -e"
-    if status != 0:
-      p=subprocess.Popen("which kterm", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      term, stderr = p.communicate()
-      status = p.returncode
-      term = term.replace("\n","")
-      term += " -e"
+    if plat == "win32":
+        subprocess.call(
+            'start \"\" \"%RTM_ROOT%\\bin\\rtm-naming.bat\"',
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        time.sleep(5)
+        subprocess.call(
+            "start python ConsoleIn.py".split(" "),
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        subprocess.call(
+            "start python Consoleout.py".split(" "),
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        time.sleep(3)
+        subprocess.call("python Connector.py".split(" "), shell=True)
 
-    if status != 0:
-      p=subprocess.Popen("which uxterm", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      term, stderr = p.communicate()
-      status = p.returncode
-      term = term.replace("\n","")
-      term += " -e"
-      
-    if status != 0:
-      p=subprocess.Popen("which gnome-terminal", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      term, stderr = p.communicate()
-      status = p.returncode
-      term = term.replace("\n","")
-      term += " -x"
+    else:
+        p = subprocess.Popen(
+            "which xterm",
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        term, stderr = p.communicate()
+        status = p.returncode
+        term = term.replace("\n", "")
+        term += " -e"
+        if status != 0:
+            p = subprocess.Popen(
+                "which kterm",
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
+            term, stderr = p.communicate()
+            status = p.returncode
+            term = term.replace("\n", "")
+            term += " -e"
 
-    if status != 0:
-      print("No terminal program (kterm/xterm/gnome-terminal) exists.")
-      sys.exit(0)
+        if status != 0:
+            p = subprocess.Popen(
+                "which uxterm",
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
+            term, stderr = p.communicate()
+            status = p.returncode
+            term = term.replace("\n", "")
+            term += " -e"
 
-    """
+        if status != 0:
+            p = subprocess.Popen(
+                "which gnome-terminal",
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
+            term, stderr = p.communicate()
+            status = p.returncode
+            term = term.replace("\n", "")
+            term += " -x"
+
+        if status != 0:
+            print("No terminal program (kterm/xterm/gnome-terminal) exists.")
+            sys.exit(0)
+
+        """
     path = None
     for p in sys.path:
       if os.path.exists(os.path.join(p,"OpenRTM_aist")):
@@ -76,17 +106,29 @@ def main():
       sys.exit(0)
     os.system('python %s/rtm-naming.py &'%path)
     """
-    cmd = 'rtm-naming&'
-    subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    cmd = '%s python ConsoleIn.py&'%term
-    subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    cmd = '%s python ConsoleOut.py&'%term
-    subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    time.sleep(3)
-    subprocess.call("python Connector.py", shell=True)
-    
+        cmd = 'rtm-naming&'
+        subprocess.call(
+            cmd,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        cmd = '%s python ConsoleIn.py&' % term
+        subprocess.call(
+            cmd,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        cmd = '%s python ConsoleOut.py&' % term
+        subprocess.call(
+            cmd,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        time.sleep(3)
+        subprocess.call("python Connector.py", shell=True)
 
-  return
+    return
+
 
 if __name__ == "__main__":
-  main()
+    main()

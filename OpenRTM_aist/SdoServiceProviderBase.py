@@ -15,7 +15,6 @@
 #     All rights reserved.
 
 
-
 import OpenRTM_aist
 import SDOPackage__POA
 
@@ -52,7 +51,7 @@ import SDOPackage__POA
 #    されるので、ここでリソースの解放など終了処理を行う。
 #
 # <pre>
-# 
+#
 #   [RTC]      [SDO service]               [Other]
 #     |              :                        |
 #     | instantiate  :                        |
@@ -85,7 +84,7 @@ import SDOPackage__POA
 # - finalize(): 終了処理。コンシューマがデタッチされる際に呼び出され
 #   る関数。関数内では終了処理を実装する。
 #
-# SdoServiceProviderのエントリポイントは通常、ファイル名の basename + "Init" 
+# SdoServiceProviderのエントリポイントは通常、ファイル名の basename + "Init"
 # にしておく。以下に、クラス名、ファイル
 # 名、エントリポイント関数名の推奨例を示す。
 #
@@ -105,120 +104,120 @@ import SDOPackage__POA
 #                        OpenRTM_aist.Delete)
 #     return
 # </pre>
-# 
+#
 # @else
 #
 # @endif
 #
 class SdoServiceProviderBase(SDOPackage__POA.SDOService):
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    pass
-  ##
-  # @if jp
-  # @brief 仮想デストラクタ
-  # @else
-  # @brief virtual destructor
-  # @endif
-  def __del__(self):
-    pass
+    def __init__(self):
+        pass
+    ##
+    # @if jp
+    # @brief 仮想デストラクタ
+    # @else
+    # @brief virtual destructor
+    # @endif
 
-  ##
-  # @if jp
-  # @brief コンシューマクラスの初期化関数
-  #
-  # このオブジェクトの初期化を行う。外部からSDOサービスが
-  # ServiceProfile とともにアタッチされると、SDOコンシューマがインス
-  # タンス化され、その直後に SDO サービスがアタッチされた RTC と与え
-  # られた ServiceProfile を引数としてこの関数が呼ばれる。
-  #
-  # 関数内では、ServiceProfile 内の SDO サービスリファレンスを
-  # CorbaProvider クラス等を利用しオブジェクト内に保持するとともに、
-  # properties から設定内容を読み込みサービス固有の設定等を行う。与
-  # えられたサービスのオブジェクトリファレンスが不正、あるいは
-  # properties の内容が不正、等の場合は戻り値に false を返す。
-  #
-  # @param rtobj このオブジェクトがインスタンス化された RTC
-  # @param profile 外部から与えられた SDO ServiceProfile
-  # @return 与えられた SDO Service や ServiceProfile が不正の場合 false
-  #
-  # @else
-  # @brief Initialization function of the consumer class
-  #
-  # @endif
-  # virtual bool init(RTObject_impl& rtobj,
-  #                   const SDOPackage::ServiceProfile& profile) = 0;
-  def init(self, rtobj, profile):
-    pass
+    def __del__(self):
+        pass
 
+    ##
+    # @if jp
+    # @brief コンシューマクラスの初期化関数
+    #
+    # このオブジェクトの初期化を行う。外部からSDOサービスが
+    # ServiceProfile とともにアタッチされると、SDOコンシューマがインス
+    # タンス化され、その直後に SDO サービスがアタッチされた RTC と与え
+    # られた ServiceProfile を引数としてこの関数が呼ばれる。
+    #
+    # 関数内では、ServiceProfile 内の SDO サービスリファレンスを
+    # CorbaProvider クラス等を利用しオブジェクト内に保持するとともに、
+    # properties から設定内容を読み込みサービス固有の設定等を行う。与
+    # えられたサービスのオブジェクトリファレンスが不正、あるいは
+    # properties の内容が不正、等の場合は戻り値に false を返す。
+    #
+    # @param rtobj このオブジェクトがインスタンス化された RTC
+    # @param profile 外部から与えられた SDO ServiceProfile
+    # @return 与えられた SDO Service や ServiceProfile が不正の場合 false
+    #
+    # @else
+    # @brief Initialization function of the consumer class
+    #
+    # @endif
+    # virtual bool init(RTObject_impl& rtobj,
+    #                   const SDOPackage::ServiceProfile& profile) = 0;
+    def init(self, rtobj, profile):
+        pass
 
-  ##
-  # @if jp
-  # @brief コンシューマクラスの再初期化関数
-  #
-  # このオブジェクトの再初期化を行う。ServiceProfile には id フィー
-  # ルドにセッション固有の UUID がセットされているが、同一の id の場
-  # 合、properties に設定された設定情報の変更や、service フィールド
-  # のサービスの参照の変更が行われる。その際に呼ばれるのがこの
-  # reinit() 関数である。実装では、service フィールドのオブジェクト
-  # リファレンスの同一性を確認し、異なっている場合保持しているリファ
-  # レンスを更新する必要がある。また properties には新たな設定が与え
-  # られている可能性があるので、内容を読み込み設定を更新する。
-  #
-  # @param profile 新たに与えられた SDO ServiceProfile
-  # @return 不正な ServiceProfile が与えられた場合は false
-  #
-  # @else
-  # @brief Reinitialization function of the consumer class
-  #
-  # @endif
-  # virtual bool reinit(const SDOPackage::ServiceProfile& profile) = 0;
-  def reinit(self, profile):
-    pass
+    ##
+    # @if jp
+    # @brief コンシューマクラスの再初期化関数
+    #
+    # このオブジェクトの再初期化を行う。ServiceProfile には id フィー
+    # ルドにセッション固有の UUID がセットされているが、同一の id の場
+    # 合、properties に設定された設定情報の変更や、service フィールド
+    # のサービスの参照の変更が行われる。その際に呼ばれるのがこの
+    # reinit() 関数である。実装では、service フィールドのオブジェクト
+    # リファレンスの同一性を確認し、異なっている場合保持しているリファ
+    # レンスを更新する必要がある。また properties には新たな設定が与え
+    # られている可能性があるので、内容を読み込み設定を更新する。
+    #
+    # @param profile 新たに与えられた SDO ServiceProfile
+    # @return 不正な ServiceProfile が与えられた場合は false
+    #
+    # @else
+    # @brief Reinitialization function of the consumer class
+    #
+    # @endif
+    # virtual bool reinit(const SDOPackage::ServiceProfile& profile) = 0;
 
+    def reinit(self, profile):
+        pass
 
-  ##
-  # @if jp
-  # @brief ServiceProfile を返す
-  #
-  # init()/reinit()で与えられた ServiceProfile は通常オブジェクト内
-  # で保持される。SDO Service 管理フレームワークは管理上このオブジェ
-  # クトに対応する ServiceProfile を必要とするので、この関数では保持
-  # されている ServiceProfile を返す。
-  # 
-  # @return このオブジェクトが保持している ServiceProfile
-  #
-  # @else
-  # @brief Getting ServiceProfile
-  # @endif
-  # virtual const SDOPackage::ServiceProfile& getProfile() const = 0;
-  def getProfile(self):
-    pass
+    ##
+    # @if jp
+    # @brief ServiceProfile を返す
+    #
+    # init()/reinit()で与えられた ServiceProfile は通常オブジェクト内
+    # で保持される。SDO Service 管理フレームワークは管理上このオブジェ
+    # クトに対応する ServiceProfile を必要とするので、この関数では保持
+    # されている ServiceProfile を返す。
+    #
+    # @return このオブジェクトが保持している ServiceProfile
+    #
+    # @else
+    # @brief Getting ServiceProfile
+    # @endif
+    # virtual const SDOPackage::ServiceProfile& getProfile() const = 0;
 
+    def getProfile(self):
+        pass
 
-  ##
-  # @if jp
-  # @brief 終了処理
-  #
-  # SDOサービスがでタッチされる際に呼び出される終了処理用関数。サー
-  # ビスのでタッチに際して、当該オブジェクトが保持するリソースを解放
-  # するなどの処理を行う。
-  #
-  # @else
-  # @brief Finalization
-  #
-  # @endif
-  # virtual void finalize() = 0;
-  def finalize(self):
-    poa  = OpenRTM_aist.Manager.instance().getPOA()
-    poa.deactivate_object(poa.servant_to_id(self))
-    
+    ##
+    # @if jp
+    # @brief 終了処理
+    #
+    # SDOサービスがでタッチされる際に呼び出される終了処理用関数。サー
+    # ビスのでタッチに際して、当該オブジェクトが保持するリソースを解放
+    # するなどの処理を行う。
+    #
+    # @else
+    # @brief Finalization
+    #
+    # @endif
+    # virtual void finalize() = 0;
+
+    def finalize(self):
+        poa = OpenRTM_aist.Manager.instance().getPOA()
+        poa.deactivate_object(poa.servant_to_id(self))
 
 
 sdoserviceproviderfactory = None
-  
+
 ##
 # @if jp
 # @brief SdoServiceProviderFactory の typedef
@@ -227,21 +226,22 @@ sdoserviceproviderfactory = None
 # @endif
 # typedef ::coil::GlobalFactory<
 # ::RTC::SdoServiceProviderBase > SdoServiceProviderFactory;
-class SdoServiceProviderFactory(OpenRTM_aist.Factory,SdoServiceProviderBase):
-  def __init__(self):
-    OpenRTM_aist.Factory.__init__(self)
-    return
 
-  def __del__(self):
-    pass
 
-  def instance():
-    global sdoserviceproviderfactory
+class SdoServiceProviderFactory(OpenRTM_aist.Factory, SdoServiceProviderBase):
+    def __init__(self):
+        OpenRTM_aist.Factory.__init__(self)
+        return
 
-    if sdoserviceproviderfactory is None:
-      sdoserviceproviderfactory = SdoServiceProviderFactory()
+    def __del__(self):
+        pass
 
-    return sdoserviceproviderfactory
+    def instance():
+        global sdoserviceproviderfactory
 
-  instance = staticmethod(instance)
+        if sdoserviceproviderfactory is None:
+            sdoserviceproviderfactory = SdoServiceProviderFactory()
 
+        return sdoserviceproviderfactory
+
+    instance = staticmethod(instance)

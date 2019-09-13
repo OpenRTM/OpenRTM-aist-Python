@@ -24,7 +24,6 @@ import ROSSerializer
 from ROSTopicManager import ROSTopicManager
 
 
-
 ##
 # @if jp
 # @class ManagerActionListener
@@ -33,48 +32,49 @@ from ROSTopicManager import ROSTopicManager
 #
 # @else
 # @class ManagerActionListener
-# @brief 
+# @brief
 #
 #
 # @endif
 class ManagerActionListener:
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @brief self
-  #
-  # @endif
-  def __init__(self):
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
+    def __init__(self):
+        pass
 
-  def preShutdown(self):
-    pass
-  ##
-  # @if jp
-  # @brief RTMマネージャ終了後にROSTopicManagerの終了処理を実行
-  #
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @brief self
-  #
-  # @endif
-  def postShutdown(self):
-    ROSTopicManager.shutdown_global()
+    def preShutdown(self):
+        pass
+    ##
+    # @if jp
+    # @brief RTMマネージャ終了後にROSTopicManagerの終了処理を実行
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
 
-  def preReinit(self):
-    pass
+    def postShutdown(self):
+        ROSTopicManager.shutdown_global()
 
-  def postReinit(self):
-    pass
+    def preReinit(self):
+        pass
+
+    def postReinit(self):
+        pass
 
 
 ##
@@ -83,15 +83,14 @@ class ManagerActionListener:
 #
 #
 # @else
-# @brief 
+# @brief
 #
 #
 # @endif
 #
 def ROSTransportInit(mgr):
-  ROSInPort.ROSInPortInit()
-  ROSOutPort.ROSOutPortInit()
-  ROSSerializer.ROSSerializerInit()
+    ROSInPort.ROSInPortInit()
+    ROSOutPort.ROSOutPortInit()
+    ROSSerializer.ROSSerializerInit()
 
-  mgr.addManagerActionListener(ManagerActionListener())
-
+    mgr.addManagerActionListener(ManagerActionListener())

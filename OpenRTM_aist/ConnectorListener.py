@@ -50,15 +50,15 @@ import threading
 # @endif
 #
 class ConnectorListenerStatus:
-  NO_CHANGE = 0
-  INFO_CHANGED = 1 << 0
-  DATA_CHANGED = 1 << 1
-  BOTH_CHANGED = INFO_CHANGED | DATA_CHANGED
+    NO_CHANGE = 0
+    INFO_CHANGED = 1 << 0
+    DATA_CHANGED = 1 << 1
+    BOTH_CHANGED = INFO_CHANGED | DATA_CHANGED
 
 
 class PortType:
-  OutPortType = 0
-  InPortType = 1
+    OutPortType = 0
+    InPortType = 1
 
 ##
 # @if jp
@@ -77,7 +77,7 @@ class PortType:
 #
 # @else
 # @brief The types of ConnectorDataListener
-# 
+#
 # - ON_BUFFER_WRITE:          At the time of buffer write
 # - ON_BUFFER_FULL:           At the time of buffer full
 # - ON_BUFFER_WRITE_TIMEOUT:  At the time of buffer write timeout
@@ -91,22 +91,23 @@ class PortType:
 #
 # @endif
 #
+
+
 class ConnectorDataListenerType:
-  def __init__(self):
-    pass
+    def __init__(self):
+        pass
 
-  ON_BUFFER_WRITE              = 0
-  ON_BUFFER_FULL               = 1
-  ON_BUFFER_WRITE_TIMEOUT      = 2
-  ON_BUFFER_OVERWRITE          = 3
-  ON_BUFFER_READ               = 4
-  ON_SEND                      = 5
-  ON_RECEIVED                  = 6
-  ON_RECEIVER_FULL             = 7
-  ON_RECEIVER_TIMEOUT          = 8
-  ON_RECEIVER_ERROR            = 9
-  CONNECTOR_DATA_LISTENER_NUM  = 10
-
+    ON_BUFFER_WRITE = 0
+    ON_BUFFER_FULL = 1
+    ON_BUFFER_WRITE_TIMEOUT = 2
+    ON_BUFFER_OVERWRITE = 3
+    ON_BUFFER_READ = 4
+    ON_SEND = 5
+    ON_RECEIVED = 6
+    ON_RECEIVER_FULL = 7
+    ON_RECEIVER_TIMEOUT = 8
+    ON_RECEIVER_ERROR = 9
+    CONNECTOR_DATA_LISTENER_NUM = 10
 
 
 ##
@@ -124,7 +125,7 @@ class ConnectorDataListenerType:
 # ンプティやバッファ読み込み時のタイムアウトなどデータが取得できない
 # 場合などにコールされるファンクタの引数に何もとらならい
 # ConnecotorListener がある。
-# 
+#
 # データポートには、接続時にデータの送受信方法についてデータフロー型、
 # サブスクリプション型等を設定することができる。
 # ConnectorDaataListener/ConnectorListener はともに、様々なイベント
@@ -132,7 +133,7 @@ class ConnectorDataListenerType:
 # およびサブスクリプション型の設定に応じて、利用可能なもの利用不可能
 # なものや、呼び出されるタイミングが異なる。
 # 以下に、インターフェースがCORBA CDR型の場合のコールバック一覧を示す。
-# 
+#
 # OutPort:
 #  -  Push型: Subscription Typeによりさらにイベントの種類が分かれる。
 #    - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
@@ -186,7 +187,7 @@ class ConnectorDataListenerType:
 #    - ON_SENDER_ERROR
 #    - ON_CONNECT
 #    - ON_DISCONNECT
-# 
+#
 #  InPort:
 #  - Push型:
 #      - ON_BUFFER_WRITE
@@ -213,59 +214,59 @@ class ConnectorDataListenerType:
 # @endif
 #
 class ConnectorDataListener:
-  """
-  """
+    """
+    """
 
-  def __del__(self):
-    pass
+    def __del__(self):
+        pass
 
-  # virtual ReturnCode operator()(const ConnectorInfo& info,
-  #                         const cdrMemoryStream& data) = 0;
-  def __call__(self, info, data):
-    pass
+    # virtual ReturnCode operator()(const ConnectorInfo& info,
+    #                         const cdrMemoryStream& data) = 0;
+    def __call__(self, info, data):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief ConnectorDataListenerType を文字列に変換
-  #
-  # ConnectorDataListenerType を文字列に変換する
-  #
-  # @param type 変換対象 ConnectorDataListenerType
-  #
-  # @return 文字列変換結果
-  #
-  # @else
-  #
-  # @brief Convert ConnectorDataListenerType into the string.
-  #
-  # Convert ConnectorDataListenerType into the string.
-  #
-  # @param type The target ConnectorDataListenerType for transformation
-  #
-  # @return Trnasformation result of string representation
-  #
-  # @endif
-  #
-  def toString(type):
-    typeString = ["ON_BUFFER_WRITE",
-                  "ON_BUFFER_FULL",
-                  "ON_BUFFER_WRITE_TIMEOUT",
-                  "ON_BUFFER_OVERWRITE",
-                  "ON_BUFFER_READ", 
-                  "ON_SEND", 
-                  "ON_RECEIVED",
-                  "ON_RECEIVER_FULL", 
-                  "ON_RECEIVER_TIMEOUT", 
-                  "ON_RECEIVER_ERROR",
-                  "CONNECTOR_DATA_LISTENER_NUM"]
+    ##
+    # @if jp
+    #
+    # @brief ConnectorDataListenerType を文字列に変換
+    #
+    # ConnectorDataListenerType を文字列に変換する
+    #
+    # @param type 変換対象 ConnectorDataListenerType
+    #
+    # @return 文字列変換結果
+    #
+    # @else
+    #
+    # @brief Convert ConnectorDataListenerType into the string.
+    #
+    # Convert ConnectorDataListenerType into the string.
+    #
+    # @param type The target ConnectorDataListenerType for transformation
+    #
+    # @return Trnasformation result of string representation
+    #
+    # @endif
+    #
+    def toString(type):
+        typeString = ["ON_BUFFER_WRITE",
+                      "ON_BUFFER_FULL",
+                      "ON_BUFFER_WRITE_TIMEOUT",
+                      "ON_BUFFER_OVERWRITE",
+                      "ON_BUFFER_READ",
+                      "ON_SEND",
+                      "ON_RECEIVED",
+                      "ON_RECEIVER_FULL",
+                      "ON_RECEIVER_TIMEOUT",
+                      "ON_RECEIVER_ERROR",
+                      "CONNECTOR_DATA_LISTENER_NUM"]
 
-    if type < ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM:
-      return typeString[type]
+        if type < ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM:
+            return typeString[type]
 
-    return ""
+        return ""
 
-  toString = staticmethod(toString)
+    toString = staticmethod(toString)
 
 
 ##
@@ -274,7 +275,7 @@ class ConnectorDataListener:
 #
 # データポートの Connector において発生する各種イベントに対するコー
 # ルバックを実現するリスナクラスの基底クラス。
-# 
+#
 # このクラスは、operator()() の第2引数に cdrMemoryStream 型ではなく、
 # 実際にデータポートで使用される変数型をテンプレート引数として
 # 渡すことができる。
@@ -293,78 +294,81 @@ class ConnectorDataListener:
 # @endif
 #
 class ConnectorDataListenerT(ConnectorDataListener):
-  """
-  """
+    """
+    """
 
-  def __del__(self):
-    pass
+    def __del__(self):
+        pass
 
+    ##
+    # @if jp
+    #
+    # @brief コールバックメソッド
+    #
+    # データをデータポートで使用される変数型に変換して ConnectorDataListenerT
+    # のコールバックメソッドを呼び出す。
+    #
+    # @param info ConnectorInfo
+    # @param cdrdata cdrMemoryStream型のデータ
+    # @param data 元のデータ型
+    # @param porttype ポートの種類
+    #
+    # @else
+    #
+    # @brief Callback method
+    #
+    # This method invokes the callback method of ConnectorDataListenerT.
+    # Data is converted into the variable type used in DataPort.
+    #
+    # @param info ConnectorInfo
+    # @param cdrdata Data of cdrMemoryStream type
+    # @param data
+    # @param porttype
+    #
+    # @endif
+    #
+    # virtual ReturnCode operator()(const ConnectorInfo& info,
+    #                         const cdrMemoryStream& cdrdata)
 
-  ##
-  # @if jp
-  #
-  # @brief コールバックメソッド
-  #
-  # データをデータポートで使用される変数型に変換して ConnectorDataListenerT
-  # のコールバックメソッドを呼び出す。
-  #
-  # @param info ConnectorInfo 
-  # @param cdrdata cdrMemoryStream型のデータ
-  # @param data 元のデータ型
-  # @param porttype ポートの種類
-  #
-  # @else
-  #
-  # @brief Callback method
-  #
-  # This method invokes the callback method of ConnectorDataListenerT. 
-  # Data is converted into the variable type used in DataPort.
-  #
-  # @param info ConnectorInfo 
-  # @param cdrdata Data of cdrMemoryStream type
-  # @param data 
-  # @param porttype 
-  #
-  # @endif
-  #
-  # virtual ReturnCode operator()(const ConnectorInfo& info,
-  #                         const cdrMemoryStream& cdrdata)
-  def __call__(self, info, cdrdata, data, porttype=PortType.OutPortType):
-    endian = info.properties.getProperty("serializer.cdr.endian","little")
-    if endian is not "little" and endian is not None:
-      endian = OpenRTM_aist.split(endian, ",") # Maybe endian is ["little","big"]
-      endian = OpenRTM_aist.normalize(endian[0]) # Maybe self._endian is "little" or "big"
+    def __call__(self, info, cdrdata, data, porttype=PortType.OutPortType):
+        endian = info.properties.getProperty("serializer.cdr.endian", "little")
+        if endian is not "little" and endian is not None:
+            # Maybe endian is ["little","big"]
+            endian = OpenRTM_aist.split(endian, ",")
+            # Maybe self._endian is "little" or "big"
+            endian = OpenRTM_aist.normalize(endian[0])
 
-    if endian == "little":
-      endian = True
-    elif endian == "big":
-      endian = False
-    else:
-      endian = True
+        if endian == "little":
+            endian = True
+        elif endian == "big":
+            endian = False
+        else:
+            endian = True
 
-    marshaling_type = info.properties.getProperty("marshaling_type", "corba")
-    if porttype == PortType.OutPortType:
-      marshaling_type = info.properties.getProperty("out.marshaling_type", marshaling_type)
-    elif porttype == PortType.InPortType:
-      marshaling_type = info.properties.getProperty("in.marshaling_type", marshaling_type)
-    marshaling_type = marshaling_type.strip()
+        marshaling_type = info.properties.getProperty(
+            "marshaling_type", "corba")
+        if porttype == PortType.OutPortType:
+            marshaling_type = info.properties.getProperty(
+                "out.marshaling_type", marshaling_type)
+        elif porttype == PortType.InPortType:
+            marshaling_type = info.properties.getProperty(
+                "in.marshaling_type", marshaling_type)
+        marshaling_type = marshaling_type.strip()
 
+        serializer = OpenRTM_aist.SerializerFactory.instance().createObject(marshaling_type)
 
-    serializer = OpenRTM_aist.SerializerFactory.instance().createObject(marshaling_type)
+        serializer.isLittleEndian(endian)
+        ret, _data = serializer.deserialize(cdrdata, data)
 
-    serializer.isLittleEndian(endian)
-    ret, _data = serializer.deserialize(cdrdata, data)
+        OpenRTM_aist.SerializerFactory.instance().deleteObject(serializer)
 
-    OpenRTM_aist.SerializerFactory.instance().deleteObject(serializer)
-
-    return _data
-
+        return _data
 
 
 ##
 # @if jp
 # @brief ConnectorListener のタイプ
-#  
+#
 # - ON_BUFFER_EMPTY:       バッファが空の場合
 # - ON_BUFFER_READTIMEOUT: バッファが空でタイムアウトした場合
 # - ON_SENDER_EMPTY:       OutPort側バッファが空
@@ -375,7 +379,7 @@ class ConnectorDataListenerT(ConnectorDataListener):
 #
 # @else
 # @brief The types of ConnectorListener
-# 
+#
 # - ON_BUFFER_EMPTY:       At the time of buffer empty
 # - ON_BUFFER_READTIMEOUT: At the time of buffer read timeout
 # - ON_BUFFER_EMPTY:       At the time of empty of OutPort
@@ -389,18 +393,17 @@ class ConnectorDataListenerT(ConnectorDataListener):
 # enum ConnectorListenerType
 class ConnectorListenerType:
 
-  def __init__(self):
-    pass
-  
-  ON_BUFFER_EMPTY        = 0
-  ON_BUFFER_READ_TIMEOUT = 1
-  ON_SENDER_EMPTY        = 2
-  ON_SENDER_TIMEOUT      = 3
-  ON_SENDER_ERROR        = 4
-  ON_CONNECT             = 5
-  ON_DISCONNECT          = 6
-  CONNECTOR_LISTENER_NUM = 7
+    def __init__(self):
+        pass
 
+    ON_BUFFER_EMPTY = 0
+    ON_BUFFER_READ_TIMEOUT = 1
+    ON_SENDER_EMPTY = 2
+    ON_SENDER_TIMEOUT = 3
+    ON_SENDER_ERROR = 4
+    ON_CONNECT = 5
+    ON_DISCONNECT = 6
+    CONNECTOR_LISTENER_NUM = 7
 
 
 ##
@@ -605,55 +608,55 @@ class ConnectorListenerType:
 # @endif
 #
 class ConnectorListener:
-  """
-  """
+    """
+    """
 
-  def __del__(self):
-    pass
+    def __del__(self):
+        pass
 
-  # virtual void operator()(const ConnectorInfo& info) = 0;
-  def __call__(self,  info):
-    pass
+    # virtual void operator()(const ConnectorInfo& info) = 0;
+    def __call__(self, info):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief ConnectorListenerType を文字列に変換
-  #
-  # ConnectorListenerType を文字列に変換する
-  #
-  # @param type 変換対象 ConnectorListenerType
-  #
-  # @return 文字列変換結果
-  #
-  # @else
-  #
-  # @brief Convert ConnectorListenerType into the string.
-  #
-  # Convert ConnectorListenerType into the string.
-  #
-  # @param type The target ConnectorListenerType for transformation
-  #
-  # @return Trnasformation result of string representation
-  #
-  # @endif
-  #
-  def toString(type):
-    typeString = ["ON_BUFFER_EMPTY",
-                  "ON_BUFFER_READ_TIMEOUT",
-                  "ON_SENDER_EMPTY", 
-                  "ON_SENDER_TIMEOUT", 
-                  "ON_SENDER_ERROR", 
-                  "ON_CONNECT",
-                  "ON_DISCONNECT",
-                  "CONNECTOR_LISTENER_NUM"]
+    ##
+    # @if jp
+    #
+    # @brief ConnectorListenerType を文字列に変換
+    #
+    # ConnectorListenerType を文字列に変換する
+    #
+    # @param type 変換対象 ConnectorListenerType
+    #
+    # @return 文字列変換結果
+    #
+    # @else
+    #
+    # @brief Convert ConnectorListenerType into the string.
+    #
+    # Convert ConnectorListenerType into the string.
+    #
+    # @param type The target ConnectorListenerType for transformation
+    #
+    # @return Trnasformation result of string representation
+    #
+    # @endif
+    #
+    def toString(type):
+        typeString = ["ON_BUFFER_EMPTY",
+                      "ON_BUFFER_READ_TIMEOUT",
+                      "ON_SENDER_EMPTY",
+                      "ON_SENDER_TIMEOUT",
+                      "ON_SENDER_ERROR",
+                      "ON_CONNECT",
+                      "ON_DISCONNECT",
+                      "CONNECTOR_LISTENER_NUM"]
 
-    if type < ConnectorListenerType.CONNECTOR_LISTENER_NUM:
-      return typeString[type]
+        if type < ConnectorListenerType.CONNECTOR_LISTENER_NUM:
+            return typeString[type]
 
-    return ""
+        return ""
 
-  toString = staticmethod(toString)
+    toString = staticmethod(toString)
 
 
 ##
@@ -670,115 +673,115 @@ class ConnectorListener:
 # @endif
 #
 class ConnectorDataListenerHolder:
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  #
-  def __init__(self):
-    self._listeners = []
-    self._mutex = threading.RLock()
-    return
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    #
+    def __init__(self):
+        self._listeners = []
+        self._mutex = threading.RLock()
+        return
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+    #
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  #
-  def __del__(self):
-    return
+    def __del__(self):
+        return
 
-    
-  ##
-  # @if jp
-  #
-  # @brief リスナーの追加
-  #
-  # リスナーを追加する。
-  #
-  # @param self
-  # @param listener 追加するリスナ
-  # @else
-  #
-  # @brief Add the listener.
-  #
-  # This method adds the listener. 
-  #
-  # @param self
-  # @param listener Added listener
-  # @endif
-  #
-  # void addListener(ConnectorDataListener* listener);
-  def addListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append(listener)
-    return
+    ##
+    # @if jp
+    #
+    # @brief リスナーの追加
+    #
+    # リスナーを追加する。
+    #
+    # @param self
+    # @param listener 追加するリスナ
+    # @else
+    #
+    # @brief Add the listener.
+    #
+    # This method adds the listener.
+    #
+    # @param self
+    # @param listener Added listener
+    # @endif
+    #
+    # void addListener(ConnectorDataListener* listener);
 
-    
-  ##
-  # @if jp
-  #
-  # @brief リスナーの削除
-  #
-  # リスナを削除する。
-  #
-  # @param self
-  # @param listener 削除するリスナ
-  # @else
-  #
-  # @brief Remove the listener. 
-  #
-  # This method removes the listener. 
-  #
-  # @param self
-  # @param listener Removed listener
-  # @endif
-  #
-  # void removeListener(ConnectorDataListener* listener);
-  def removeListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    for (i, _listener) in enumerate(self._listeners):
-      del self._listeners[i]
-      return
+    def addListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        self._listeners.append(listener)
+        return
 
-    
-  ##
-  # @if jp
-  #
-  # @brief リスナーへ通知する
-  #
-  # 登録されているリスナのコールバックメソッドを呼び出す。
-  #
-  # @param self
-  # @param info ConnectorInfo
-  # @param cdrdata データ
-  # @else
-  #
-  # @brief Notify listeners. 
-  #
-  # This calls the Callback method of the registered listener. 
-  #
-  # @param self
-  # @param info ConnectorInfo
-  # @param cdrdata Data
-  # @endif
-  #
-  # ReturnCode notify(const ConnectorInfo& info,
-  #             const cdrMemoryStream& cdrdata);
-  def notify(self, info, cdrdata):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    ret = ConnectorListenerStatus.NO_CHANGE
-    for listener in self._listeners:
-      ret = ret | listener(info, cdrdata)
-    return ret
+    ##
+    # @if jp
+    #
+    # @brief リスナーの削除
+    #
+    # リスナを削除する。
+    #
+    # @param self
+    # @param listener 削除するリスナ
+    # @else
+    #
+    # @brief Remove the listener.
+    #
+    # This method removes the listener.
+    #
+    # @param self
+    # @param listener Removed listener
+    # @endif
+    #
+    # void removeListener(ConnectorDataListener* listener);
+
+    def removeListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        for (i, _listener) in enumerate(self._listeners):
+            del self._listeners[i]
+            return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーへ通知する
+    #
+    # 登録されているリスナのコールバックメソッドを呼び出す。
+    #
+    # @param self
+    # @param info ConnectorInfo
+    # @param cdrdata データ
+    # @else
+    #
+    # @brief Notify listeners.
+    #
+    # This calls the Callback method of the registered listener.
+    #
+    # @param self
+    # @param info ConnectorInfo
+    # @param cdrdata Data
+    # @endif
+    #
+    # ReturnCode notify(const ConnectorInfo& info,
+    #             const cdrMemoryStream& cdrdata);
+
+    def notify(self, info, cdrdata):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        ret = ConnectorListenerStatus.NO_CHANGE
+        for listener in self._listeners:
+            ret = ret | listener(info, cdrdata)
+        return ret
 
 
 ##
@@ -795,119 +798,120 @@ class ConnectorDataListenerHolder:
 # @endif
 #
 class ConnectorListenerHolder:
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  #
-  def __init__(self):
-    self._listeners = []
-    self._mutex = threading.RLock()
-    return
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    #
+    def __init__(self):
+        self._listeners = []
+        self._mutex = threading.RLock()
+        return
 
-    
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  #
-  def __del__(self):
-    return
-        
-    
-  ##
-  # @if jp
-  #
-  # @brief リスナーの追加
-  #
-  # リスナーを追加する。
-  #
-  # @param self
-  # @param listener 追加するリスナ
-  # @else
-  #
-  # @brief Add the listener.
-  #
-  # This method adds the listener. 
-  #
-  # @param self
-  # @param listener Added listener
-  # @endif
-  #
-  # void addListener(ConnectorListener* listener);
-  def addListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append(listener)
-    return
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+    #
+
+    def __del__(self):
+        return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーの追加
+    #
+    # リスナーを追加する。
+    #
+    # @param self
+    # @param listener 追加するリスナ
+    # @else
+    #
+    # @brief Add the listener.
+    #
+    # This method adds the listener.
+    #
+    # @param self
+    # @param listener Added listener
+    # @endif
+    #
+    # void addListener(ConnectorListener* listener);
+
+    def addListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        self._listeners.append(listener)
+        return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーの削除
+    #
+    # リスナを削除する。
+    #
+    # @param self
+    # @param listener 削除するリスナ
+    # @else
+    #
+    # @brief Remove the listener.
+    #
+    # This method removes the listener.
+    #
+    # @param self
+    # @param listener Removed listener
+    # @endif
+    #
+    # void removeListener(ConnectorListener* listener);
+
+    def removeListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        for (i, _listener) in enumerate(self._listeners):
+            del self._listeners[i]
+            return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーへ通知する
+    #
+    # 登録されているリスナのコールバックメソッドを呼び出す。
+    #
+    # @param self
+    # @param info ConnectorInfo
+    # @return ReturnCode
+    # @else
+    #
+    # @brief Notify listeners.
+    #
+    # This calls the Callback method of the registered listener.
+    #
+    # @param self
+    # @param info ConnectorInfo
+    # @return ReturnCode
+    # @endif
+    #
+    # void notify(const ConnectorInfo& info);
+
+    def notify(self, info):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        ret = ConnectorListenerStatus.NO_CHANGE
+        for listener in self._listeners:
+            ret = ret | listener(info)
+        return ret
 
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーの削除
-  #
-  # リスナを削除する。
-  #
-  # @param self
-  # @param listener 削除するリスナ
-  # @else
-  #
-  # @brief Remove the listener. 
-  #
-  # This method removes the listener. 
-  #
-  # @param self
-  # @param listener Removed listener
-  # @endif
-  #
-  # void removeListener(ConnectorListener* listener);
-  def removeListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    for (i, _listener) in enumerate(self._listeners):
-      del self._listeners[i]
-      return
-
-
-  ##
-  # @if jp
-  #
-  # @brief リスナーへ通知する
-  #
-  # 登録されているリスナのコールバックメソッドを呼び出す。
-  #
-  # @param self
-  # @param info ConnectorInfo
-  # @return ReturnCode
-  # @else
-  #
-  # @brief Notify listeners. 
-  #
-  # This calls the Callback method of the registered listener. 
-  #
-  # @param self
-  # @param info ConnectorInfo
-  # @return ReturnCode
-  # @endif
-  #
-  # void notify(const ConnectorInfo& info);
-  def notify(self, info):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    ret = ConnectorListenerStatus.NO_CHANGE
-    for listener in self._listeners:
-      ret = ret | listener(info)
-    return ret
-
-
-  
 class ConnectorListeners:
-  def __init__(self):
-    self.connectorData_ = [ OpenRTM_aist.ConnectorDataListenerHolder() for i in range(OpenRTM_aist.ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM) ]
-    self.connector_     = [ OpenRTM_aist.ConnectorListenerHolder() for i in range(OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM) ]
-    return
+    def __init__(self):
+        self.connectorData_ = [OpenRTM_aist.ConnectorDataListenerHolder() for i in range(
+            OpenRTM_aist.ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM)]
+        self.connector_ = [OpenRTM_aist.ConnectorListenerHolder() for i in range(
+            OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM)]
+        return

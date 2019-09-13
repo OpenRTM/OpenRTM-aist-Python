@@ -20,22 +20,21 @@ import OpenRTM_aist
 
 periodictaskfactory = None
 
-class PeriodicTaskFactory(OpenRTM_aist.Factory,OpenRTM_aist.PeriodicTask):
-  def __init__(self):
-    OpenRTM_aist.Factory.__init__(self)
-    pass
 
+class PeriodicTaskFactory(OpenRTM_aist.Factory, OpenRTM_aist.PeriodicTask):
+    def __init__(self):
+        OpenRTM_aist.Factory.__init__(self)
+        pass
 
-  def __del__(self):
-    pass
+    def __del__(self):
+        pass
 
+    def instance():
+        global periodictaskfactory
 
-  def instance():
-    global periodictaskfactory
+        if periodictaskfactory is None:
+            periodictaskfactory = PeriodicTaskFactory()
 
-    if periodictaskfactory is None:
-      periodictaskfactory = PeriodicTaskFactory()
+        return periodictaskfactory
 
-    return periodictaskfactory
-
-  instance = staticmethod(instance)
+    instance = staticmethod(instance)

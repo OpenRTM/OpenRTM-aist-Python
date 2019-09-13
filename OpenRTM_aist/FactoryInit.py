@@ -18,6 +18,7 @@
 import OpenRTM_aist
 from OpenRTM_aist.ext.sdo.observer import ComponentObserverConsumer
 
+
 def FactoryInit():
     # Buffers
     OpenRTM_aist.CdrRingBufferInit()

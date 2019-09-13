@@ -34,7 +34,6 @@ else:
     from tkinter import *
 
 
-
 class ToggleItem:
     def __init__(self):
         self.active = True
@@ -66,7 +65,8 @@ class CanvasText(ToggleItem):
         self.draw_text(x, y, text)
 
     def draw(self):
-        if self.active == False: return
+        if self.active == False:
+            return
         self.delete()
         self.id = self.canvas.create_text(self.x, self.y, text=self.text,
                                           font=self.font)
@@ -84,8 +84,8 @@ class CanvasText(ToggleItem):
 class CanvasAxis(ToggleItem):
     def __init__(self, canvas, width, height):
         ToggleItem.__init__(self)
-        self.x0 = width/2
-        self.y0 = height/2
+        self.x0 = width / 2
+        self.y0 = height / 2
         self.width = width
         self.height = height
         self.canvas = canvas
@@ -94,22 +94,24 @@ class CanvasAxis(ToggleItem):
         self.draw()
 
     def draw(self):
-        if self.active == False: return
+        if self.active == False:
+            return
         self.delete()
-        self.id[0] = self.canvas.create_line(0, self.height/2, 
-                                             self.width, self.height/2)
+        self.id[0] = self.canvas.create_line(0, self.height / 2,
+                                             self.width, self.height / 2)
         self.id[1] = self.canvas.create_text(self.width - 10,
-                                             self.height/2 + 10,
+                                             self.height / 2 + 10,
                                              text="x", font=self.font)
-        self.id[2] = self.canvas.create_line(self.width/2, 0, 
-                                             self.width/2, self.height)
-        self.id[3] = self.canvas.create_text(self.width/2 + 10,
+        self.id[2] = self.canvas.create_line(self.width / 2, 0,
+                                             self.width / 2, self.height)
+        self.id[3] = self.canvas.create_text(self.width / 2 + 10,
                                              + 10, text="y", font=self.font)
         return
 
     def delete(self):
         for i in self.id:
             self.canvas.delete(i)
+
 
 class CanvasCircle(ToggleItem):
     def __init__(self, canvas, x, y, width, height, pitch):
@@ -124,7 +126,8 @@ class CanvasCircle(ToggleItem):
         self.draw()
 
     def draw(self):
-        if self.active == False: return
+        if self.active == False:
+            return
         self.delete()
         if self.pitch == 0:
             circnum = 0
@@ -145,7 +148,7 @@ class CanvasCircle(ToggleItem):
             else:
                 color = "#eeeeee"
             id = self.canvas.create_oval(x0, y0, x1, y1, fill=color,
-                                              outline="#ffffff")
+                                         outline="#ffffff")
             self.id.append(id)
         id = self.id
         id.reverse()
@@ -159,6 +162,7 @@ class CanvasCircle(ToggleItem):
     def set_pitch(self, pitch):
         self.pitch = pitch
         self.draw()
+
 
 class CanvasLine(ToggleItem):
     def __init__(self, canvas, x0, y0, x1, y1, color, width):
@@ -175,10 +179,12 @@ class CanvasLine(ToggleItem):
         self.draw()
 
     def draw(self):
-        if self.active == False: return
+        if self.active == False:
+            return
         self.delete()
         self.id = self.canvas.create_line(self.x0, self.y0, self.x1, self.y1,
                                           fill=self.color, width=self.width)
+
     def draw_line(self, x0, y0, x1, y1):
         self.x0 = x0
         self.y0 = y0
@@ -189,12 +195,13 @@ class CanvasLine(ToggleItem):
     def delete(self):
         self.canvas.delete(self.id)
 
+
 class Stick:
     def __init__(self, canvas, x, y, r, **key):
         self.canvas = canvas
         # Joystick ID
         self.key = key
-        self.id = self.canvas.create_oval(x-r, y-r, x+r, y+r, **key)
+        self.id = self.canvas.create_oval(x - r, y - r, x + r, y + r, **key)
         # ID of the line from center to joystick handle
         self.line = None
         # (x,y) text ID
@@ -235,7 +242,7 @@ class Stick:
         self.canvas.tag_bind(self.id, '<1>', self.drag_start)
         self.canvas.tag_bind(self.id, '<Button1-Motion>', self.dragging)
         self.canvas.tag_bind(self.id, '<Button1-ButtonRelease>', self.drag_end)
-        
+
     def drag_start(self, event):
         # Calculate offset on the clocked position
         x1 = event.x - self.offsetx
@@ -247,9 +254,9 @@ class Stick:
 #        self.draw_text()
 
         # Callback
-        if self.on_drag_start != None:
+        if self.on_drag_start is not None:
             self.on_drag_start((self.pos_x, self.pos_y), (self.r, self.th))
-        
+
     def dragging(self, event):
         # Moving length of drag
         x1 = event.x - self.offsetx
@@ -264,11 +271,11 @@ class Stick:
         self.x = x1 - self.coffx
         self.y = y1 - self.coffy
         self.pos_x = self.x
-        self.pos_y = -self.y 
+        self.pos_y = -self.y
         self.calc_pol(self.pos_x, self.pos_y)
 
         # Callback
-        if self.on_dragging != None:
+        if self.on_dragging is not None:
             self.on_dragging((self.pos_x, self.pos_y), (self.r, self.th))
 
     def drag_end(self, event):
@@ -284,7 +291,7 @@ class Stick:
         self.pos_y = 0
         self.calc_pol(self.pos_x, self.pos_y)
         # Callback
-        if self.on_drag_end != None:
+        if self.on_drag_end is not None:
             self.on_drag_end((self.pos_x, self.pos_y), (self.r, self.th))
 
     def calc_pol(self, x, y):
@@ -319,8 +326,8 @@ class TkJoystick(Frame):
 
         self.wd = 160
 
-        self.x0 = width/2
-        self.y0 = height/2
+        self.x0 = width / 2
+        self.y0 = height / 2
 
         self.xentry = ""
         self.yentry = ""
@@ -372,17 +379,16 @@ class TkJoystick(Frame):
         self.init()
         self.pack()
 
-
     def init(self):
-        self.canvas = Canvas(self, bg="white", \
-                                 width = self.width, height = self.height)
+        self.canvas = Canvas(self, bg="white",
+                             width=self.width, height=self.height)
         self.canvas.option_add('*font', 'system 9')
         self.canvas.pack(side=LEFT)
 
         # coaxial pattern
-        self.can_circle = CanvasCircle(self.canvas, 
-                                   self.x0, self.y0,
-                                   self.width, self.height, pitch=50)
+        self.can_circle = CanvasCircle(self.canvas,
+                                       self.x0, self.y0,
+                                       self.width, self.height, pitch=50)
 
         # axis
         self.can_axis = CanvasAxis(self.canvas, self.width, self.height)
@@ -396,19 +402,18 @@ class TkJoystick(Frame):
         text = 'r: %4.2f, th: NaN' % (0.0)
         self.can_poltext = CanvasText(self.canvas, text,
                                       self.poltext_x, self.poltext_y)
-                           
+
         self.can_vline = CanvasLine(self.canvas, self.x0, self.y0,
                                     self.x0, self.y0,
                                     self.vline_color, self.vline_width)
 
         # joystick circle
-        self.stick = Stick(self.canvas, self.width/2, self.height/2,
+        self.stick = Stick(self.canvas, self.width / 2, self.height / 2,
                            self.stick_r,
                            fill="#999999", width=1)
         self.stick.set_on_drag_start(self.on_pos_update)
         self.stick.set_on_dragging(self.on_pos_update)
         self.stick.set_on_drag_end(self.on_pos_update)
-
 
         # right side widgets
         self.frame = Frame(self, height=self.height, width=self.wd)
@@ -432,11 +437,11 @@ class TkJoystick(Frame):
         return f
 
     def on_scale(self, val):
-        v =  float(val)
+        v = float(val)
         if v == 0.0:
             pitch = 0
         else:
-            pitch = self.default_pitch/v
+            pitch = self.default_pitch / v
         self.can_circle.set_pitch(pitch)
 
     def create_checkbutton(self, frame):
@@ -444,10 +449,10 @@ class TkJoystick(Frame):
         dummy = Frame(f, width=self.wd)
         dummy.pack(side=TOP)
         vec = Checkbutton(f, text="Vector Line",
-                           onvalue="on", offvalue="off",
-                           justify=LEFT, anchor=W,
-                           variable=self.vline_check,
-                           command=self.can_vline.toggle)
+                          onvalue="on", offvalue="off",
+                          justify=LEFT, anchor=W,
+                          variable=self.vline_check,
+                          command=self.can_vline.toggle)
         axis = Checkbutton(f, text="Axis",
                            onvalue="on", offvalue="off",
                            justify=LEFT, anchor=W,
@@ -458,16 +463,16 @@ class TkJoystick(Frame):
                            justify=LEFT, anchor=W,
                            variable=self.circ_check,
                            command=self.can_circle.toggle)
-        xy   = Checkbutton(f, text="X-Y position", 
-                           onvalue="on", offvalue="off",
-                           justify=LEFT, anchor=W,
-                           variable=self.xy_check,
-                           command=self.can_xytext.toggle)
-        pol  = Checkbutton(f, text="Polar postion",
-                           onvalue="on", offvalue="off",
-                           justify=LEFT, anchor=W,
-                           variable=self.pol_check,
-                           command=self.can_poltext.toggle)
+        xy = Checkbutton(f, text="X-Y position",
+                         onvalue="on", offvalue="off",
+                         justify=LEFT, anchor=W,
+                         variable=self.xy_check,
+                         command=self.can_xytext.toggle)
+        pol = Checkbutton(f, text="Polar postion",
+                          onvalue="on", offvalue="off",
+                          justify=LEFT, anchor=W,
+                          variable=self.pol_check,
+                          command=self.can_poltext.toggle)
         for w in [vec, axis, circ, xy, pol]:
             w.pack(side=TOP, anchor=W, fill=X)
         return f
@@ -503,9 +508,9 @@ class TkJoystick(Frame):
 
     def reset_scale(self):
         self.scale_var.set(1.)
-        pitch = self.default_pitch/1.0
+        pitch = self.default_pitch / 1.0
         self.can_circle.set_pitch(pitch)
-        
+
     def get_pos(self):
         return self.pos_x, self.pos_y, self.pol_r, self.pol_th
 
@@ -518,8 +523,10 @@ class TkJoystick(Frame):
         xt = '%4d' % (self.pos_x)
         yt = '%4d' % (self.pos_y)
         rt = '%5.2f' % (self.pol_r)
-        if pol[1] > 360: tht = 'NaN'
-        else: tht = '%5.2f' % self.pol_th
+        if pol[1] > 360:
+            tht = 'NaN'
+        else:
+            tht = '%5.2f' % self.pol_th
 
         self.xentry.set(xt)
         self.yentry.set(yt)
@@ -538,19 +545,21 @@ class TkJoystick(Frame):
                                  self.x0 + pos[0],
                                  self.y0 - pos[1])
 
-        if self.on_update != None:
+        if self.on_update is not None:
             self.on_update((self.pos_x, self.pos_y),
                            (self.pol_r, self.pol_th))
 
     def set_on_update(self, func):
         self.on_update = func
 
-def test ():
+
+def test():
     m = TkJoystick()
 
-    while 1:
+    while True:
         m.update()
         print(m.get_pos())
 
 
-if  __name__ == '__main__': test()
+if __name__ == '__main__':
+    test()

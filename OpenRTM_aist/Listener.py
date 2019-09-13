@@ -15,7 +15,6 @@
 #     All rights reserved.
 
 
-
 ##
 # @if jp
 # @class ListenerBase
@@ -30,24 +29,23 @@
 # @brief ListenerBase class
 # @endif
 class ListenerBase:
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief コールバック処理(サブクラス実装用)
-  #
-  # コールバック処理用関数<BR>
-  # ※サブクラスでの実装参照用
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @endif
-  def invoke(self):
-    pass
-
+    ##
+    # @if jp
+    # @brief コールバック処理(サブクラス実装用)
+    #
+    # コールバック処理用関数<BR>
+    # ※サブクラスでの実装参照用
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @endif
+    def invoke(self):
+        pass
 
 
 ##
@@ -64,41 +62,40 @@ class ListenerBase:
 # @brief ListenerObject class
 # @endif
 class ListenerObject(ListenerBase):
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  # コンストラクタ
-  #
-  # @param self
-  # @param obj リスナーオブジェクト
-  # @param cbf コールバック用関数
-  #
-  # @else
-  #
-  # @endif
-  def __init__(self,obj,cbf):
-    self.obj = obj
-    self.cbf = cbf
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @param self
+    # @param obj リスナーオブジェクト
+    # @param cbf コールバック用関数
+    #
+    # @else
+    #
+    # @endif
+    def __init__(self, obj, cbf):
+        self.obj = obj
+        self.cbf = cbf
 
+    ##
+    # @if jp
+    # @brief コールバック用処理
+    #
+    # コールバック処理用関数
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @endif
 
-  ##
-  # @if jp
-  # @brief コールバック用処理
-  #
-  # コールバック処理用関数
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @endif
-  def invoke(self):
-    self.cbf(self.obj)
-
+    def invoke(self):
+        self.cbf(self.obj)
 
 
 ##
@@ -115,35 +112,35 @@ class ListenerObject(ListenerBase):
 # @brief ListenerFunc class
 # @endif
 class ListenerFunc(ListenerBase):
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  # コンストラクタ
-  #
-  # @param self
-  # @param cbf コールバック用関数
-  #
-  # @else
-  #
-  # @endif
-  def __init__(self,cbf):
-    self.cbf = cbf
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @param self
+    # @param cbf コールバック用関数
+    #
+    # @else
+    #
+    # @endif
+    def __init__(self, cbf):
+        self.cbf = cbf
 
+    ##
+    # @if jp
+    # @brief コールバック処理
+    #
+    # コールバック処理用関数
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @endif
 
-  ##
-  # @if jp
-  # @brief コールバック処理
-  #
-  # コールバック処理用関数
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @endif
-  def invoke(self):
-    self.cbf()
+    def invoke(self):
+        self.cbf()

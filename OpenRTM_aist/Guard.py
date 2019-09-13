@@ -30,37 +30,36 @@
 #
 # @endif
 class ScopedLock:
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  # コンストラクタ
-  #
-  # @param self
-  # @param mutex ロック用ミューテックス
-  #
-  # @else
-  #
-  # @endif
-  def __init__(self, mutex):
-    self.mutex = mutex
-    self.mutex.acquire()
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @param self
+    # @param mutex ロック用ミューテックス
+    #
+    # @else
+    #
+    # @endif
+    def __init__(self, mutex):
+        self.mutex = mutex
+        self.mutex.acquire()
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    #
+    # デストラクタ
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @endif
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  #
-  # デストラクタ
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @endif
-  def __del__(self):
-    self.mutex.release()
-
+    def __del__(self):
+        self.mutex.release()

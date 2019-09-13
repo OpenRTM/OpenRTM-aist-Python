@@ -78,18 +78,20 @@ import OpenRTM_aist.Guard
 #
 # @endif
 #
-class PreFsmActionListenerType:
-  """
-  """
 
-  def __init__(self):
-    pass
-  PRE_ON_INIT = 0
-  PRE_ON_ENTRY = 1
-  PRE_ON_DO = 2
-  PRE_ON_EXIT = 3
-  PRE_ON_STATE_CHANGE = 4
-  PRE_FSM_ACTION_LISTENER_NUM = 5
+
+class PreFsmActionListenerType:
+    """
+    """
+
+    def __init__(self):
+        pass
+    PRE_ON_INIT = 0
+    PRE_ON_ENTRY = 1
+    PRE_ON_DO = 2
+    PRE_ON_EXIT = 3
+    PRE_ON_STATE_CHANGE = 4
+    PRE_FSM_ACTION_LISTENER_NUM = 5
 
 
 ##
@@ -225,82 +227,81 @@ class PreFsmActionListenerType:
 # @endif
 #
 class PreFsmActionListener:
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  #
-  def __init__(self):
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    #
+    def __init__(self):
+        pass
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+    #
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  #
-  def __del__(self):
-    pass
+    def __del__(self):
+        pass
 
+    ##
+    # @if jp
+    #
+    # @brief 仮想コールバック関数
+    #
+    # PreFsmActionListener のコールバック関数
+    #
+    # @else
+    #
+    # @brief Virtual Callback function
+    #
+    # This is a the Callback function for PreFsmActionListener.
+    #
+    # @endif
+    # virtual void operator()(const char*) = 0;
 
-  ##
-  # @if jp
-  #
-  # @brief 仮想コールバック関数
-  #
-  # PreFsmActionListener のコールバック関数
-  #
-  # @else
-  #
-  # @brief Virtual Callback function
-  #
-  # This is a the Callback function for PreFsmActionListener.
-  #
-  # @endif
-  # virtual void operator()(const char*) = 0;
-  def __call__(self, state):
-    pass
+    def __call__(self, state):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief PreFsmActionListenerType を文字列に変換
-  #
-  # PreFsmActionListenerType を文字列に変換する
-  #
-  # @param type 変換対象 PreFsmActionListenerType
-  #
-  # @return 文字列変換結果
-  #
-  # @else
-  #
-  # @brief Convert PreFsmActionListenerType into the string.
-  #
-  # Convert PreFsmActionListenerType into the string.
-  #
-  # @param type The target PreFsmActionListenerType for transformation
-  #
-  # @return Trnasformation result of string representation
-  #
-  # @endif
-  #
-  def toString(type):
-    typeString = ["PRE_ON_INIT",
-                  "PRE_ON_ENTRY",
-                  "PRE_ON_DO",
-                  "PRE_ON_EXIT",
-                  "PRE_ON_STATE_CHANGE",
-                  "PRE_FSM_ACTION_LISTENER_NUM"]
-    if type < PreFsmActionListenerType.PRE_FSM_ACTION_LISTENER_NUM:
-      return typeString[type]
+    ##
+    # @if jp
+    #
+    # @brief PreFsmActionListenerType を文字列に変換
+    #
+    # PreFsmActionListenerType を文字列に変換する
+    #
+    # @param type 変換対象 PreFsmActionListenerType
+    #
+    # @return 文字列変換結果
+    #
+    # @else
+    #
+    # @brief Convert PreFsmActionListenerType into the string.
+    #
+    # Convert PreFsmActionListenerType into the string.
+    #
+    # @param type The target PreFsmActionListenerType for transformation
+    #
+    # @return Trnasformation result of string representation
+    #
+    # @endif
+    #
+    def toString(type):
+        typeString = ["PRE_ON_INIT",
+                      "PRE_ON_ENTRY",
+                      "PRE_ON_DO",
+                      "PRE_ON_EXIT",
+                      "PRE_ON_STATE_CHANGE",
+                      "PRE_FSM_ACTION_LISTENER_NUM"]
+        if type < PreFsmActionListenerType.PRE_FSM_ACTION_LISTENER_NUM:
+            return typeString[type]
 
-    return ""
-  toString = staticmethod(toString)
-    
+        return ""
+    toString = staticmethod(toString)
 
 
 ##
@@ -332,19 +333,17 @@ class PreFsmActionListener:
 # @endif
 #
 class PostFsmActionListenerType:
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    pass
-  POST_ON_INIT = 0
-  POST_ON_ENTRY = 1
-  POST_ON_DO = 2
-  POST_ON_EXIT = 3
-  POST_ON_STATE_CHANGE = 4
-  POST_FSM_ACTION_LISTENER_NUM = 5
-
-
+    def __init__(self):
+        pass
+    POST_ON_INIT = 0
+    POST_ON_ENTRY = 1
+    POST_ON_DO = 2
+    POST_ON_EXIT = 3
+    POST_ON_STATE_CHANGE = 4
+    POST_FSM_ACTION_LISTENER_NUM = 5
 
 
 ##
@@ -480,82 +479,81 @@ class PostFsmActionListenerType:
 # @endif
 #
 class PostFsmActionListener:
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  #
-  def __init__(self):
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    #
+    def __init__(self):
+        pass
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+    #
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  #
-  def __del__(self):
-    pass
+    def __del__(self):
+        pass
 
+    ##
+    # @if jp
+    #
+    # @brief 仮想コールバック関数
+    #
+    # PostFsmActionListener のコールバック関数
+    #
+    # @else
+    #
+    # @brief Virtual Callback function
+    #
+    # This is a the Callback function for PostFsmActionListener.
+    #
+    # @endif
+    # virtual void operator()(const char* state, ReturnCode_t ret) = 0;
 
-  ##
-  # @if jp
-  #
-  # @brief 仮想コールバック関数
-  #
-  # PostFsmActionListener のコールバック関数
-  #
-  # @else
-  #
-  # @brief Virtual Callback function
-  #
-  # This is a the Callback function for PostFsmActionListener.
-  #
-  # @endif
-  # virtual void operator()(const char* state, ReturnCode_t ret) = 0;
-  def __call__(self, state, ret):
-    pass
+    def __call__(self, state, ret):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief PostFsmActionListenerType を文字列に変換
-  #
-  # PostFsmActionListenerType を文字列に変換する
-  #
-  # @param type 変換対象 PostFsmActionListenerType
-  #
-  # @return 文字列変換結果
-  #
-  # @else
-  #
-  # @brief Convert PostFsmActionListenerType into the string.
-  #
-  # Convert PostFsmActionListenerType into the string.
-  #
-  # @param type The target PostFsmActionListenerType for transformation
-  #
-  # @return Trnasformation result of string representation
-  #
-  # @endif
-  #
-  def toString(type):
-    typeString = ["POST_ON_INIT",
-                  "POST_ON_ENTRY",
-                  "POST_ON_DO",
-                  "POST_ON_EXIT",
-                  "POST_ON_STATE_CHANGE",
-                  "POST_FSM_ACTION_LISTENER_NUM"]
-    if type < PostFsmActionListenerType.POST_FSM_ACTION_LISTENER_NUM:
-      return typeString[type]
+    ##
+    # @if jp
+    #
+    # @brief PostFsmActionListenerType を文字列に変換
+    #
+    # PostFsmActionListenerType を文字列に変換する
+    #
+    # @param type 変換対象 PostFsmActionListenerType
+    #
+    # @return 文字列変換結果
+    #
+    # @else
+    #
+    # @brief Convert PostFsmActionListenerType into the string.
+    #
+    # Convert PostFsmActionListenerType into the string.
+    #
+    # @param type The target PostFsmActionListenerType for transformation
+    #
+    # @return Trnasformation result of string representation
+    #
+    # @endif
+    #
+    def toString(type):
+        typeString = ["POST_ON_INIT",
+                      "POST_ON_ENTRY",
+                      "POST_ON_DO",
+                      "POST_ON_EXIT",
+                      "POST_ON_STATE_CHANGE",
+                      "POST_FSM_ACTION_LISTENER_NUM"]
+        if type < PostFsmActionListenerType.POST_FSM_ACTION_LISTENER_NUM:
+            return typeString[type]
 
-    return ""
-  toString = staticmethod(toString)
-
+        return ""
+    toString = staticmethod(toString)
 
 
 ##
@@ -586,21 +584,20 @@ class PostFsmActionListener:
 # @endif
 #
 class FsmProfileListenerType:
-  """
-  """
+    """
+    """
 
-  def __init__(self):
-    pass
-  SET_FSM_PROFILE = 0
-  GET_FSM_PROFILE = 1
-  ADD_FSM_STATE = 2
-  REMOVE_FSM_STATE = 3
-  ADD_FSM_TRANSITION = 4
-  REMOVE_FSM_TRANSITION = 5
-  BIND_FSM_EVENT = 6
-  UNBIND_FSM_EVENT = 7
-  FSM_PROFILE_LISTENER_NUM = 8
-
+    def __init__(self):
+        pass
+    SET_FSM_PROFILE = 0
+    GET_FSM_PROFILE = 1
+    ADD_FSM_STATE = 2
+    REMOVE_FSM_STATE = 3
+    ADD_FSM_TRANSITION = 4
+    REMOVE_FSM_TRANSITION = 5
+    BIND_FSM_EVENT = 6
+    UNBIND_FSM_EVENT = 7
+    FSM_PROFILE_LISTENER_NUM = 8
 
 
 ##
@@ -739,84 +736,83 @@ class FsmProfileListenerType:
 # @endif
 #
 class FsmProfileListener:
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  #
-  def __init__(self):
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    #
+    def __init__(self):
+        pass
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  #
-  def __del__(self):
-    pass
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+    #
+    def __del__(self):
+        pass
 
+    ##
+    # @if jp
+    #
+    # @brief 仮想コールバック関数
+    #
+    # FsmProfileListener のコールバック関数
+    #
+    # @else
+    #
+    # @brief Virtual Callback function
+    #
+    # This is a the Callback function for FsmProfileListener.
+    #
+    # @endif
+    # virtual void operator()(const ::RTC::FsmProfile& fsmprof) = 0;
 
-  ##
-  # @if jp
-  #
-  # @brief 仮想コールバック関数
-  #
-  # FsmProfileListener のコールバック関数
-  #
-  # @else
-  #
-  # @brief Virtual Callback function
-  #
-  # This is a the Callback function for FsmProfileListener.
-  #
-  # @endif
-  # virtual void operator()(const ::RTC::FsmProfile& fsmprof) = 0;
-  def __call__(self, fsmprof):
-    pass
+    def __call__(self, fsmprof):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief FsmProfileListenerType を文字列に変換
-  #
-  # FsmProfileListenerType を文字列に変換する
-  #
-  # @param type 変換対象 FsmProfileListenerType
-  #
-  # @return 文字列変換結果
-  #
-  # @else
-  #
-  # @brief Convert FsmProfileListenerType into the string.
-  #
-  # Convert FsmProfileListenerType into the string.
-  #
-  # @param type The target FsmProfileListenerType for transformation
-  #
-  # @return Trnasformation result of string representation
-  #
-  # @endif
-  #
-  def toString(type):
-    typeString = ["SET_FSM_PROFILE",
-                  "GET_FSM_PROFILE",
-                  "ADD_FSM_STATE",
-                  "REMOVE_FSM_STATE",
-                  "ADD_FSM_TRANSITION",
-                  "REMOVE_FSM_TRANSITION",
-                  "BIND_FSM_EVENT",
-                  "UNBIND_FSM_EVENT",
-                  "PRE_FSM_ACTION_LISTENER_NUM"]
-    if type < FsmProfileListenerType.FSM_PROFILE_LISTENER_NUM:
-      return typeString[type]
+    ##
+    # @if jp
+    #
+    # @brief FsmProfileListenerType を文字列に変換
+    #
+    # FsmProfileListenerType を文字列に変換する
+    #
+    # @param type 変換対象 FsmProfileListenerType
+    #
+    # @return 文字列変換結果
+    #
+    # @else
+    #
+    # @brief Convert FsmProfileListenerType into the string.
+    #
+    # Convert FsmProfileListenerType into the string.
+    #
+    # @param type The target FsmProfileListenerType for transformation
+    #
+    # @return Trnasformation result of string representation
+    #
+    # @endif
+    #
+    def toString(type):
+        typeString = ["SET_FSM_PROFILE",
+                      "GET_FSM_PROFILE",
+                      "ADD_FSM_STATE",
+                      "REMOVE_FSM_STATE",
+                      "ADD_FSM_TRANSITION",
+                      "REMOVE_FSM_TRANSITION",
+                      "BIND_FSM_EVENT",
+                      "UNBIND_FSM_EVENT",
+                      "PRE_FSM_ACTION_LISTENER_NUM"]
+        if type < FsmProfileListenerType.FSM_PROFILE_LISTENER_NUM:
+            return typeString[type]
 
-    return ""
-  toString = staticmethod(toString)
-
+        return ""
+    toString = staticmethod(toString)
 
 
 ##
@@ -835,14 +831,14 @@ class FsmProfileListener:
 # @endif
 #
 class FsmStructureListenerType:
-  """
-  """
-  
-  def __init__(self):
-    pass
-  SET_FSM_STRUCTURE = 0
-  GET_FSM_STRUCTURE = 1
-  FSM_STRUCTURE_LISTENER_NUM = 2
+    """
+    """
+
+    def __init__(self):
+        pass
+    SET_FSM_STRUCTURE = 0
+    GET_FSM_STRUCTURE = 1
+    FSM_STRUCTURE_LISTENER_NUM = 2
 
 
 ##
@@ -969,79 +965,79 @@ class FsmStructureListenerType:
 # @endif
 #
 class FsmStructureListener:
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  #
-  def __init__(self):
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    #
+    def __init__(self):
+        pass
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+    #
 
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  #
-  def __del__(self):
-    pass
+    def __del__(self):
+        pass
 
+    ##
+    # @if jp
+    #
+    # @brief 仮想コールバック関数
+    #
+    # FsmStructureListener のコールバック関数
+    #
+    # @else
+    #
+    # @brief Virtual Callback function
+    #
+    # This is a the Callback function for FsmStructureListener.
+    #
+    # @endif
+    # virtual void operator()(const ::RTC::FsmStructure& fsmprof) = 0;
 
-  ##
-  # @if jp
-  #
-  # @brief 仮想コールバック関数
-  #
-  # FsmStructureListener のコールバック関数
-  #
-  # @else
-  #
-  # @brief Virtual Callback function
-  #
-  # This is a the Callback function for FsmStructureListener.
-  #
-  # @endif
-  # virtual void operator()(const ::RTC::FsmStructure& fsmprof) = 0;
-  def __call__(self, pprof):
-    pass
+    def __call__(self, pprof):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief FsmStructureListenerType を文字列に変換
-  #
-  # FsmStructureListenerType を文字列に変換する
-  #
-  # @param type 変換対象 FsmStructureListenerType
-  #
-  # @return 文字列変換結果
-  #
-  # @else
-  #
-  # @brief Convert FsmStructureListenerType into the string.
-  #
-  # Convert FsmStructureListenerType into the string.
-  #
-  # @param type The target FsmStructureListenerType for transformation
-  #
-  # @return Trnasformation result of string representation
-  #
-  # @endif
-  #
-  def toString(type):
-    typeString = ["SET_FSM_STRUCTURE",
-                  "GET_FSM_STRUCTURE",
-                  "FSM_STRUCTURE_LISTENER_NUM"]
-    if type < FsmStructureListenerType.FSM_STRUCTURE_LISTENER_NUM:
-      return typeString[type]
+    ##
+    # @if jp
+    #
+    # @brief FsmStructureListenerType を文字列に変換
+    #
+    # FsmStructureListenerType を文字列に変換する
+    #
+    # @param type 変換対象 FsmStructureListenerType
+    #
+    # @return 文字列変換結果
+    #
+    # @else
+    #
+    # @brief Convert FsmStructureListenerType into the string.
+    #
+    # Convert FsmStructureListenerType into the string.
+    #
+    # @param type The target FsmStructureListenerType for transformation
+    #
+    # @return Trnasformation result of string representation
+    #
+    # @endif
+    #
+    def toString(type):
+        typeString = ["SET_FSM_STRUCTURE",
+                      "GET_FSM_STRUCTURE",
+                      "FSM_STRUCTURE_LISTENER_NUM"]
+        if type < FsmStructureListenerType.FSM_STRUCTURE_LISTENER_NUM:
+            return typeString[type]
 
-    return ""
-  toString = staticmethod(toString)
-  
+        return ""
+    toString = staticmethod(toString)
+
 
 ##
 # @if jp
@@ -1060,101 +1056,97 @@ class FsmStructureListener:
 # @endif
 #
 class PreFsmActionListenerHolder:
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  #
-  def __init__(self):
-    self._listeners = []
-    self._mutex = threading.RLock()
-  
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  #
-  def __del__(self):
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    #
+    def __init__(self):
+        self._listeners = []
+        self._mutex = threading.RLock()
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+    #
+    def __del__(self):
+        pass
 
+    ##
+    # @if jp
+    #
+    # @brief リスナーの追加
+    #
+    # リスナーを追加する。
+    #
+    # @param listener 追加するリスナ
+    # @else
+    #
+    # @brief Add the listener.
+    #
+    # This method adds the listener.
+    #
+    # @param listener Added listener
+    # @endif
+    #
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーの追加
-  #
-  # リスナーを追加する。
-  #
-  # @param listener 追加するリスナ
-  # @else
-  #
-  # @brief Add the listener.
-  #
-  # This method adds the listener. 
-  #
-  # @param listener Added listener
-  # @endif
-  #
-  def addListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append(listener)
+    def addListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        self._listeners.append(listener)
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーの削除
-  #
-  # リスナを削除する。
-  #
-  # @param listener 削除するリスナ
-  # @else
-  #
-  # @brief Remove the listener. 
-  #
-  # This method removes the listener. 
-  #
-  # @param listener Removed listener
-  # @endif
-  #
-  def removeListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    len_ = len(self._listeners)
-    for i in range(len_):
-      idx = (len_ - 1) - i
-      if self._listeners[idx] == listener:
-        del self._listeners[idx]
+    ##
+    # @if jp
+    #
+    # @brief リスナーの削除
+    #
+    # リスナを削除する。
+    #
+    # @param listener 削除するリスナ
+    # @else
+    #
+    # @brief Remove the listener.
+    #
+    # This method removes the listener.
+    #
+    # @param listener Removed listener
+    # @endif
+    #
+    def removeListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        len_ = len(self._listeners)
+        for i in range(len_):
+            idx = (len_ - 1) - i
+            if self._listeners[idx] == listener:
+                del self._listeners[idx]
+                return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーへ通知する
+    #
+    # 登録されているリスナのコールバックメソッドを呼び出す。
+    #
+    # @param info ConnectorInfo
+    # @else
+    #
+    # @brief Notify listeners.
+    #
+    # This calls the Callback method of the registered listener.
+    #
+    # @param info ConnectorInfo
+    # @endif
+    #
+    def notify(self, state):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        for listener in self._listeners:
+            listener(state)
         return
-
-  ##
-  # @if jp
-  #
-  # @brief リスナーへ通知する
-  #
-  # 登録されているリスナのコールバックメソッドを呼び出す。
-  #
-  # @param info ConnectorInfo
-  # @else
-  #
-  # @brief Notify listeners. 
-  #
-  # This calls the Callback method of the registered listener. 
-  #
-  # @param info ConnectorInfo
-  # @endif
-  #
-  def notify(self, state):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    for listener in self._listeners:
-      listener(state)
-    return
-
-
-
 
 
 ##
@@ -1174,96 +1166,96 @@ class PreFsmActionListenerHolder:
 # @endif
 #
 class PostFsmActionListenerHolder:
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  #
-  def __init__(self):
-    self._listeners = []
-    self._mutex = threading.RLock()
-  
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  #
-  def __del__(self):
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    #
+    def __init__(self):
+        self._listeners = []
+        self._mutex = threading.RLock()
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーの追加
-  #
-  # リスナーを追加する。
-  #
-  # @param listener 追加するリスナ
-  # @else
-  #
-  # @brief Add the listener.
-  #
-  # This method adds the listener. 
-  #
-  # @param listener Added listener
-  # @endif
-  #
-  def addListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append(listener)
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+    #
+    def __del__(self):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーの削除
-  #
-  # リスナを削除する。
-  #
-  # @param listener 削除するリスナ
-  # @else
-  #
-  # @brief Remove the listener. 
-  #
-  # This method removes the listener. 
-  #
-  # @param listener Removed listener
-  # @endif
-  #
-  def removeListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    len_ = len(self._listeners)
-    for i in range(len_):
-      idx = (len_ - 1) - i
-      if self._listeners[idx] == listener:
-        del self._listeners[idx]
+    ##
+    # @if jp
+    #
+    # @brief リスナーの追加
+    #
+    # リスナーを追加する。
+    #
+    # @param listener 追加するリスナ
+    # @else
+    #
+    # @brief Add the listener.
+    #
+    # This method adds the listener.
+    #
+    # @param listener Added listener
+    # @endif
+    #
+    def addListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        self._listeners.append(listener)
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーの削除
+    #
+    # リスナを削除する。
+    #
+    # @param listener 削除するリスナ
+    # @else
+    #
+    # @brief Remove the listener.
+    #
+    # This method removes the listener.
+    #
+    # @param listener Removed listener
+    # @endif
+    #
+    def removeListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        len_ = len(self._listeners)
+        for i in range(len_):
+            idx = (len_ - 1) - i
+            if self._listeners[idx] == listener:
+                del self._listeners[idx]
+                return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーへ通知する
+    #
+    # 登録されているリスナのコールバックメソッドを呼び出す。
+    #
+    # @param info ConnectorInfo
+    # @else
+    #
+    # @brief Notify listeners.
+    #
+    # This calls the Callback method of the registered listener.
+    #
+    # @param info ConnectorInfo
+    # @endif
+    #
+    def notify(self, state, ret):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        for listener in self._listeners:
+            listener(state, ret)
         return
-
-  ##
-  # @if jp
-  #
-  # @brief リスナーへ通知する
-  #
-  # 登録されているリスナのコールバックメソッドを呼び出す。
-  #
-  # @param info ConnectorInfo
-  # @else
-  #
-  # @brief Notify listeners. 
-  #
-  # This calls the Callback method of the registered listener. 
-  #
-  # @param info ConnectorInfo
-  # @endif
-  #
-  def notify(self, state, ret):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    for listener in self._listeners:
-      listener(state, ret)
-    return
 
 
 ##
@@ -1283,98 +1275,97 @@ class PostFsmActionListenerHolder:
 # @endif
 #
 class FsmProfileListenerHolder:
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  #
-  def __init__(self):
-    self._listeners = []
-    self._mutex = threading.RLock()
-  
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  #
-  def __del__(self):
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    #
+    def __init__(self):
+        self._listeners = []
+        self._mutex = threading.RLock()
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+    #
+    def __del__(self):
+        pass
 
+    ##
+    # @if jp
+    #
+    # @brief リスナーの追加
+    #
+    # リスナーを追加する。
+    #
+    # @param listener 追加するリスナ
+    # @else
+    #
+    # @brief Add the listener.
+    #
+    # This method adds the listener.
+    #
+    # @param listener Added listener
+    # @endif
+    #
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーの追加
-  #
-  # リスナーを追加する。
-  #
-  # @param listener 追加するリスナ
-  # @else
-  #
-  # @brief Add the listener.
-  #
-  # This method adds the listener. 
-  #
-  # @param listener Added listener
-  # @endif
-  #
-  def addListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append(listener)
+    def addListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        self._listeners.append(listener)
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーの削除
-  #
-  # リスナを削除する。
-  #
-  # @param listener 削除するリスナ
-  # @else
-  #
-  # @brief Remove the listener. 
-  #
-  # This method removes the listener. 
-  #
-  # @param listener Removed listener
-  # @endif
-  #
-  def removeListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    len_ = len(self._listeners)
-    for i in range(len_):
-      idx = (len_ - 1) - i
-      if self._listeners[idx] == listener:
-        del self._listeners[idx]
+    ##
+    # @if jp
+    #
+    # @brief リスナーの削除
+    #
+    # リスナを削除する。
+    #
+    # @param listener 削除するリスナ
+    # @else
+    #
+    # @brief Remove the listener.
+    #
+    # This method removes the listener.
+    #
+    # @param listener Removed listener
+    # @endif
+    #
+    def removeListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        len_ = len(self._listeners)
+        for i in range(len_):
+            idx = (len_ - 1) - i
+            if self._listeners[idx] == listener:
+                del self._listeners[idx]
+                return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーへ通知する
+    #
+    # 登録されているリスナのコールバックメソッドを呼び出す。
+    #
+    # @param info ConnectorInfo
+    # @else
+    #
+    # @brief Notify listeners.
+    #
+    # This calls the Callback method of the registered listener.
+    #
+    # @param info ConnectorInfo
+    # @endif
+    #
+    def notify(self, state):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        for listener in self._listeners:
+            listener(state)
         return
-
-  ##
-  # @if jp
-  #
-  # @brief リスナーへ通知する
-  #
-  # 登録されているリスナのコールバックメソッドを呼び出す。
-  #
-  # @param info ConnectorInfo
-  # @else
-  #
-  # @brief Notify listeners. 
-  #
-  # This calls the Callback method of the registered listener. 
-  #
-  # @param info ConnectorInfo
-  # @endif
-  #
-  def notify(self, state):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    for listener in self._listeners:
-      listener(state)
-    return
 
 ##
 # @if jp
@@ -1392,100 +1383,100 @@ class FsmProfileListenerHolder:
 #
 # @endif
 #
+
+
 class FsmStructureListenerHolder:
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  # @else
-  # @brief Constructor
-  # @endif
-  #
-  def __init__(self):
-    self._listeners = []
-    self._mutex = threading.RLock()
-  
-  ##
-  # @if jp
-  # @brief デストラクタ
-  # @else
-  # @brief Destructor
-  # @endif
-  #
-  def __del__(self):
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @else
+    # @brief Constructor
+    # @endif
+    #
+    def __init__(self):
+        self._listeners = []
+        self._mutex = threading.RLock()
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    # @else
+    # @brief Destructor
+    # @endif
+    #
+    def __del__(self):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーの追加
-  #
-  # リスナーを追加する。
-  #
-  # @param listener 追加するリスナ
-  # @else
-  #
-  # @brief Add the listener.
-  #
-  # This method adds the listener. 
-  #
-  # @param listener Added listener
-  # @endif
-  #
-  def addListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    self._listeners.append(listener)
+    ##
+    # @if jp
+    #
+    # @brief リスナーの追加
+    #
+    # リスナーを追加する。
+    #
+    # @param listener 追加するリスナ
+    # @else
+    #
+    # @brief Add the listener.
+    #
+    # This method adds the listener.
+    #
+    # @param listener Added listener
+    # @endif
+    #
 
-  ##
-  # @if jp
-  #
-  # @brief リスナーの削除
-  #
-  # リスナを削除する。
-  #
-  # @param listener 削除するリスナ
-  # @else
-  #
-  # @brief Remove the listener. 
-  #
-  # This method removes the listener. 
-  #
-  # @param listener Removed listener
-  # @endif
-  #
-  def removeListener(self, listener):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    len_ = len(self._listeners)
-    for i in range(len_):
-      idx = (len_ - 1) - i
-      if self._listeners[idx] == listener:
-        del self._listeners[idx]
+    def addListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        self._listeners.append(listener)
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーの削除
+    #
+    # リスナを削除する。
+    #
+    # @param listener 削除するリスナ
+    # @else
+    #
+    # @brief Remove the listener.
+    #
+    # This method removes the listener.
+    #
+    # @param listener Removed listener
+    # @endif
+    #
+    def removeListener(self, listener):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        len_ = len(self._listeners)
+        for i in range(len_):
+            idx = (len_ - 1) - i
+            if self._listeners[idx] == listener:
+                del self._listeners[idx]
+                return
+
+    ##
+    # @if jp
+    #
+    # @brief リスナーへ通知する
+    #
+    # 登録されているリスナのコールバックメソッドを呼び出す。
+    #
+    # @param info ConnectorInfo
+    # @else
+    #
+    # @brief Notify listeners.
+    #
+    # This calls the Callback method of the registered listener.
+    #
+    # @param info ConnectorInfo
+    # @endif
+    #
+    def notify(self, state):
+        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        for listener in self._listeners:
+            listener(state)
         return
-
-  ##
-  # @if jp
-  #
-  # @brief リスナーへ通知する
-  #
-  # 登録されているリスナのコールバックメソッドを呼び出す。
-  #
-  # @param info ConnectorInfo
-  # @else
-  #
-  # @brief Notify listeners. 
-  #
-  # This calls the Callback method of the registered listener. 
-  #
-  # @param info ConnectorInfo
-  # @endif
-  #
-  def notify(self, state):
-    guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-    for listener in self._listeners:
-      listener(state)
-    return
-
-
 
 
 ##
@@ -1501,53 +1492,52 @@ class FsmStructureListenerHolder:
 #
 # @endif
 class FsmActionListeners:
-  def __init__(self):
+    def __init__(self):
 
-    ##
-    # @if jp
-    # @brief PreFsmActionListenerType
-    # PreFsmActionListenerTypeリスナを格納
-    # @else
-    # @brief PreFsmActionListenerType listener array
-    # The PreFsmActionListenerType listener is stored. 
-    # @endif
-    self.preaction_num = PreFsmActionListenerType.PRE_FSM_ACTION_LISTENER_NUM
-    self.preaction_ = [PreFsmActionListenerHolder() 
-                for i in range(self.preaction_num)]
+        ##
+        # @if jp
+        # @brief PreFsmActionListenerType
+        # PreFsmActionListenerTypeリスナを格納
+        # @else
+        # @brief PreFsmActionListenerType listener array
+        # The PreFsmActionListenerType listener is stored.
+        # @endif
+        self.preaction_num = PreFsmActionListenerType.PRE_FSM_ACTION_LISTENER_NUM
+        self.preaction_ = [PreFsmActionListenerHolder()
+                           for i in range(self.preaction_num)]
 
-    ##
-    # @if jp
-    # @brief PostFsmActionTypeリスナ配列
-    # PostFsmActionTypeリスナを格納
-    # @else
-    # @brief PostFsmActionType listener array
-    # The PostFsmActionType listener is stored.
-    # @endif
-    self.postaction_num = PostFsmActionListenerType.POST_FSM_ACTION_LISTENER_NUM
-    self.postaction_ = [PostFsmActionListenerHolder()
-                 for i in range(self.postaction_num)]
+        ##
+        # @if jp
+        # @brief PostFsmActionTypeリスナ配列
+        # PostFsmActionTypeリスナを格納
+        # @else
+        # @brief PostFsmActionType listener array
+        # The PostFsmActionType listener is stored.
+        # @endif
+        self.postaction_num = PostFsmActionListenerType.POST_FSM_ACTION_LISTENER_NUM
+        self.postaction_ = [PostFsmActionListenerHolder()
+                            for i in range(self.postaction_num)]
 
-    ##
-    # @if jp
-    # @brief FsmProfileType
-    # FsmProfileTypeリスナを格納
-    # @else
-    # @brief FsmProfileType listener array
-    # The FsmProfileType listener is stored.
-    # @endif
-    self.profile_num = FsmProfileListenerType.FSM_PROFILE_LISTENER_NUM
-    self.profile_ = [FsmProfileListenerHolder()
-                 for i in range(self.profile_num)]
-  
-    ##
-    # @if jp
-    # @brief FsmStructureTypeリスナ配列
-    # FsmStructureTypeリスナを格納
-    # @else
-    # @brief FsmStructureTypelistener array
-    # The FsmStructureType listener is stored.
-    # @endif
-    self.structure_num = FsmStructureListenerType.FSM_STRUCTURE_LISTENER_NUM
-    self.structure_ = [FsmStructureListenerHolder()
-               for i in range(self.structure_num)]
+        ##
+        # @if jp
+        # @brief FsmProfileType
+        # FsmProfileTypeリスナを格納
+        # @else
+        # @brief FsmProfileType listener array
+        # The FsmProfileType listener is stored.
+        # @endif
+        self.profile_num = FsmProfileListenerType.FSM_PROFILE_LISTENER_NUM
+        self.profile_ = [FsmProfileListenerHolder()
+                         for i in range(self.profile_num)]
 
+        ##
+        # @if jp
+        # @brief FsmStructureTypeリスナ配列
+        # FsmStructureTypeリスナを格納
+        # @else
+        # @brief FsmStructureTypelistener array
+        # The FsmStructureType listener is stored.
+        # @endif
+        self.structure_num = FsmStructureListenerType.FSM_STRUCTURE_LISTENER_NUM
+        self.structure_ = [FsmStructureListenerHolder()
+                           for i in range(self.structure_num)]

@@ -6,7 +6,7 @@
 # @brief ExecutionContext Factory class
 # @date $Date: 2007/04/13 16:06:22 $
 # @author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
-# 
+#
 # Copyright (C) 2007-2008
 #     Task-intelligence Research Group,
 #     Intelligent Systems Research Institute,
@@ -15,14 +15,11 @@
 #     All rights reserved.
 
 
-
-
-
 ##
 # @if jp
 #
 # @brief ExecutionContext破棄用関数
-# 
+#
 # ExecutionContextのインスタンスを破棄するための関数。
 #
 # \param ec 破棄対象ExecutionContextのインスタンス
@@ -31,14 +28,14 @@
 #
 # @endif
 def ECDelete(ec):
-  del ec
+    del ec
 
 
 ##
 # @if jp
 # @class ECFactoryBase
 # @brief ECFactoryBase 抽象クラス
-# 
+#
 # ExecutionContext生成用Factoryの抽象クラス。
 # 各ExecutionContextを生成するための具象Factoryクラスは、
 # 以下の関数の実装を提供しなければならない。
@@ -53,73 +50,72 @@ def ECDelete(ec):
 # @else
 #
 # @endif
-class ECFactoryBase :
-  """
-  """
+class ECFactoryBase:
+    """
+    """
 
-  ##
-  # @if jp
-  #
-  # @brief 生成対象ExecutionContext名称取得用関数(サブクラス実装用)
-  # 
-  # 生成対象ExecutionContextの名称を取得するための関数。<BR>
-  # この関数は具象サブクラスで実装する必要がある。
-  #
-  # @param self
-  #
-  # @return 生成対象ExecutionContext名称
-  # 
-  # @else
-  # 
-  # This method should be implemented in subclasses
-  #
-  # @endif
-  def name(self):
-    pass
+    ##
+    # @if jp
+    #
+    # @brief 生成対象ExecutionContext名称取得用関数(サブクラス実装用)
+    #
+    # 生成対象ExecutionContextの名称を取得するための関数。<BR>
+    # この関数は具象サブクラスで実装する必要がある。
+    #
+    # @param self
+    #
+    # @return 生成対象ExecutionContext名称
+    #
+    # @else
+    #
+    # This method should be implemented in subclasses
+    #
+    # @endif
+    def name(self):
+        pass
 
+    ##
+    # @if jp
+    #
+    # @brief ExecutionContext生成用関数(サブクラス実装用)
+    #
+    # ExecutionContextのインスタンスを生成するための関数。<BR>
+    # この関数は具象サブクラスで実装する必要がある。
+    #
+    # @param self
+    #
+    # @return 生成したExecutionContextインスタンス
+    #
+    # @else
+    #
+    # @endif
 
-  ##
-  # @if jp
-  #
-  # @brief ExecutionContext生成用関数(サブクラス実装用)
-  # 
-  # ExecutionContextのインスタンスを生成するための関数。<BR>
-  # この関数は具象サブクラスで実装する必要がある。
-  #
-  # @param self
-  #
-  # @return 生成したExecutionContextインスタンス
-  # 
-  # @else
-  #
-  # @endif
-  def create(self):
-    pass
+    def create(self):
+        pass
 
-  ##
-  # @if jp
-  #
-  # @brief ExecutionContext破棄用関数(サブクラス実装用)
-  # 
-  # ExecutionContextのインスタンスを破棄するための関数。<BR>
-  # この関数は具象サブクラスで実装する必要がある。
-  #
-  # @param self
-  # @param comp 破棄対象のExecutionContextインスタンス
-  # 
-  # @else
-  #
-  # @endif
-  def destroy(self, ec):
-    pass
-
+    ##
+    # @if jp
+    #
+    # @brief ExecutionContext破棄用関数(サブクラス実装用)
+    #
+    # ExecutionContextのインスタンスを破棄するための関数。<BR>
+    # この関数は具象サブクラスで実装する必要がある。
+    #
+    # @param self
+    # @param comp 破棄対象のExecutionContextインスタンス
+    #
+    # @else
+    #
+    # @endif
+    def destroy(self, ec):
+        pass
 
 
 ##
 # @if jp
 # @class ECFactoryPython
 # @brief ECFactoryPython クラス
-# 
+#
 # Python言語用ExecutionContextインスタンスを生成するFactoryクラス。
 #
 # @since 0.4.1
@@ -128,79 +124,78 @@ class ECFactoryBase :
 #
 # @endif
 class ECFactoryPython(ECFactoryBase):
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  #
-  # @brief コンストラクタ
-  # 
-  # コンストラクタ
-  #
-  # @param self
-  # @param name 生成対象ExecutionContext名称
-  # @param new_func ExecutionContext生成用関数
-  # @param delete_func ExecutionContext破棄用関数
-  # 
-  # @else
-  #
-  # @endif
-  def __init__(self, name, new_func, delete_func):
-    self._name   = name
-    self._New    = new_func
-    self._Delete = delete_func
-    
-    return
+    ##
+    # @if jp
+    #
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @param self
+    # @param name 生成対象ExecutionContext名称
+    # @param new_func ExecutionContext生成用関数
+    # @param delete_func ExecutionContext破棄用関数
+    #
+    # @else
+    #
+    # @endif
+    def __init__(self, name, new_func, delete_func):
+        self._name = name
+        self._New = new_func
+        self._Delete = delete_func
 
+        return
 
-  ##
-  # @if jp
-  #
-  # @brief 生成対象ExecutionContext名称を取得
-  # 
-  # 生成対象のExecutionContext名称を取得する。
-  #
-  # @param self
-  #
-  # @return 生成対象ExecutionContext名称
-  # 
-  # @else
-  #
-  # @endif
-  def name(self):
-    return self._name
+    ##
+    # @if jp
+    #
+    # @brief 生成対象ExecutionContext名称を取得
+    #
+    # 生成対象のExecutionContext名称を取得する。
+    #
+    # @param self
+    #
+    # @return 生成対象ExecutionContext名称
+    #
+    # @else
+    #
+    # @endif
 
-  ##
-  # @if jp
-  #
-  # @brief 生成対象ExecutionContextインスタンスを生成
-  # 
-  # 生成対象のExecutionContextクラスのインスタンスを生成する。
-  #
-  # @param self
-  #
-  # @return 生成したExecutionContextインスタンス
-  # 
-  # @else
-  #
-  # @endif
-  def create(self):
-    return self._New()
+    def name(self):
+        return self._name
 
-  ##
-  # @if jp
-  #
-  # @brief 対象ExecutionContextインスタンスを破棄
-  # 
-  # 対象ExecutionContextクラスのインスタンスを破棄する。
-  #
-  # @param self
-  # @param ec 破棄対象ExecutionContextインスタンス
-  # 
-  # @else
-  #
-  # @endif
-  def destroy(self, ec):
-    self._Delete(ec)
-    
+    ##
+    # @if jp
+    #
+    # @brief 生成対象ExecutionContextインスタンスを生成
+    #
+    # 生成対象のExecutionContextクラスのインスタンスを生成する。
+    #
+    # @param self
+    #
+    # @return 生成したExecutionContextインスタンス
+    #
+    # @else
+    #
+    # @endif
+    def create(self):
+        return self._New()
+
+    ##
+    # @if jp
+    #
+    # @brief 対象ExecutionContextインスタンスを破棄
+    #
+    # 対象ExecutionContextクラスのインスタンスを破棄する。
+    #
+    # @param self
+    # @param ec 破棄対象ExecutionContextインスタンス
+    #
+    # @else
+    #
+    # @endif
+    def destroy(self, ec):
+        self._Delete(ec)

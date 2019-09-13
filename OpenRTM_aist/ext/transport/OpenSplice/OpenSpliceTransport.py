@@ -32,49 +32,49 @@ from OpenSpliceTopicManager import OpenSpliceTopicManager
 #
 # @else
 # @class ManagerActionListener
-# @brief 
+# @brief
 #
 #
 # @endif
 class ManagerActionListener:
-  ##
-  # @if jp
-  # @brief コンストラクタ
-  #
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @brief self
-  #
-  # @endif
-  def __init__(self):
-    pass
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
+    def __init__(self):
+        pass
 
-  def preShutdown(self):
-    pass
-  ##
-  # @if jp
-  # @brief RTMマネージャ終了後にOpenSpliceTopicManagerの終了処理を実行
-  #
-  #
-  # @param self
-  #
-  # @else
-  #
-  # @brief self
-  #
-  # @endif
-  def postShutdown(self):
-    OpenSpliceTopicManager.shutdown_global()
+    def preShutdown(self):
+        pass
+    ##
+    # @if jp
+    # @brief RTMマネージャ終了後にOpenSpliceTopicManagerの終了処理を実行
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
 
-  def preReinit(self):
-    pass
+    def postShutdown(self):
+        OpenSpliceTopicManager.shutdown_global()
 
-  def postReinit(self):
-    pass
+    def preReinit(self):
+        pass
 
+    def postReinit(self):
+        pass
 
 
 ##
@@ -83,15 +83,14 @@ class ManagerActionListener:
 #
 #
 # @else
-# @brief 
+# @brief
 #
 #
 # @endif
 #
 def OpenSpliceTransportInit(mgr):
-  OpenSpliceInPort.OpenSpliceInPortInit()
-  OpenSpliceOutPort.OpenSpliceOutPortInit()
-  OpenSpliceSerializer.OpenSpliceSerializerInit()
+    OpenSpliceInPort.OpenSpliceInPortInit()
+    OpenSpliceOutPort.OpenSpliceOutPortInit()
+    OpenSpliceSerializer.OpenSpliceSerializerInit()
 
-  mgr.addManagerActionListener(ManagerActionListener())
-
+    mgr.addManagerActionListener(ManagerActionListener())

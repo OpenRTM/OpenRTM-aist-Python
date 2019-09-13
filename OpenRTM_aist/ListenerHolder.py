@@ -54,7 +54,7 @@ import OpenRTM_aist
 #   // コールバック関数1: 関数呼び出し演算子によるコールバック関数
 #   // いわゆるファンクタのようにコールバック関数を定義する例。
 #   virtual void operator()(std::string strarg) = 0; // 純粋仮想関数
-#   
+#
 #   // コールバックの関数シグニチャが多様である場合、このように単な
 #   // るメンバ関数として定義することも可能。
 #   virtual void onEvent0(const char* arg0) = 0;
@@ -109,7 +109,7 @@ import OpenRTM_aist
 # たがって、リスナオブジェクトへアクセスする場合にはfirstを使用する。
 # マルチスレッド環境で利用することが想定される場合は、Guard
 # guard(m_mutex) によるロックを忘れずに行うこと。
-# 
+#
 # @section ListenerHolder実装クラスの利用
 # 実装されたMyListenerHolderImplは一例として以下のように利用する。
 #
@@ -120,7 +120,7 @@ import OpenRTM_aist
 # // 登録、自動クリーンモードで登録、
 # // オブジェクトの削除はHolderクラスに任せる
 # m_holder.addListener(new MyListener0(), true); // MyListener0の
-# 
+#
 # // コールバックを呼び出す
 # m_holder.operator()(strarg);
 # m_holder.onEvent0("HogeHoge);
@@ -133,70 +133,70 @@ import OpenRTM_aist
 # @endif
 #
 class ListenerHolder:
-  """
-  """
+    """
+    """
 
-  ##
-  # @if jp
-  # @brief ListenerHolderクラスコンストラクタ
-  # @else
-  # @brief ListenerHolder class ctor 
-  # @endif
-  def __init__(self):
-    self.listener_mutex = threading.RLock()
-    self.listeners = []
-    return
-
-
-  ##
-  # @if jp
-  # @brief ListenerHolderデストラクタ
-  # @else
-  # @brief ListenerHolder class dtor 
-  # @endif
-  def __del__(self):
-    pass
-  
-  ##
-  # @if jp
-  # @brief リスナを追加する
-  # @else
-  # @brief add listener object
-  # @endif
-  # virtual void addListener(ListenerClass* listener)
-  def addListener(self, listener):
-    guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
-    self.listeners.append(listener)
-    del guard
-    return
-    
-  ##
-  # @if jp
-  # @brief リスナを削除する
-  # @else
-  # @brief remove listener object
-  # @endif
-  # virtual void removeListener(ListenerClass* listener)
-  def removeListener(self, listener):
-    guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
-    for (i, listener_) in enumerate(self.listeners):
-      if self.listeners[i] == listener:
-        del self.listeners[i]
+    ##
+    # @if jp
+    # @brief ListenerHolderクラスコンストラクタ
+    # @else
+    # @brief ListenerHolder class ctor
+    # @endif
+    def __init__(self):
+        self.listener_mutex = threading.RLock()
+        self.listeners = []
         return
-    return
 
-  def LISTENERHOLDER_CALLBACK(self, func, *args):
-    guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
-    for listener in self.listeners:
-      func_ = getattr(listener,func,None)
-      if len(args) == 1:
-        ret = func_(args[0])
-        args = (ret,)
-      else:
-        ret = func_(*args)
-        if ret is not None:
-          args = ret
-    if len(args) == 1:
-      return args[0]
-    else:
-      return args
+    ##
+    # @if jp
+    # @brief ListenerHolderデストラクタ
+    # @else
+    # @brief ListenerHolder class dtor
+    # @endif
+
+    def __del__(self):
+        pass
+
+    ##
+    # @if jp
+    # @brief リスナを追加する
+    # @else
+    # @brief add listener object
+    # @endif
+    # virtual void addListener(ListenerClass* listener)
+    def addListener(self, listener):
+        guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
+        self.listeners.append(listener)
+        del guard
+        return
+
+    ##
+    # @if jp
+    # @brief リスナを削除する
+    # @else
+    # @brief remove listener object
+    # @endif
+    # virtual void removeListener(ListenerClass* listener)
+    def removeListener(self, listener):
+        guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
+        for (i, listener_) in enumerate(self.listeners):
+            if self.listeners[i] == listener:
+                del self.listeners[i]
+                return
+        return
+
+    def LISTENERHOLDER_CALLBACK(self, func, *args):
+        guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
+        for listener in self.listeners:
+            func_ = getattr(listener, func, None)
+            if len(args) == 1:
+                ret = func_(args[0])
+                args = (ret,)
+            else:
+                ret = func_(*args)
+                if ret is not None:
+                    args = ret
+        if len(args) == 1:
+            return args[0]
+        else:
+            return args
