@@ -103,7 +103,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
         self._profile.properties.mergeProperties(profile)
 
         manager_ = OpenRTM_aist.Manager.instance()
-        manager_.addNamingActionListener(NamingAction(self), True)
+        manager_.addNamingActionListener(NamingAction(self))
         return True
 
     ##
