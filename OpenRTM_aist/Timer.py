@@ -20,6 +20,145 @@ import threading
 
 import OpenRTM_aist
 
+##
+# @if jp
+# @class DelayedFunction
+# @brief 実行遅延関数呼び出し
+#
+# @since 2.0.0
+#
+# @else
+#
+# @class DelayedFunction
+# @brief Delayed function call
+#
+# @since 2.0.0
+#
+# @endif
+
+
+class DelayedFunction(object):
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @param fn: 実行する関数または関数オブジェクト
+    # @param delay: 実行までの遅延時間
+    #
+    # @else
+    # @brief Constructor
+    # @param fn: Function or functional object
+    # @return delay: the delay until function call
+    #
+    # @endif
+    def __init__(self, function, delay):
+        self._fn = function
+        self._remains = delay
+    ##
+    # @if jp
+    # @brief 1回の時間経過
+    # @param interval: 経過した時間
+    # @return bool true:  期限が来た
+    #              false: 期限が来ていない
+    #
+    # interval 分だけ期限を減算し、期限切れの場合に関数を実行する。
+    #
+    # @else
+    # @brief Tick
+    # @param interval: Tick interval
+    # @return bool true:  The function is expired and executed.
+    #              false: The function is unexpired.
+    # @endif
+
+    def tick(self, interval):
+        self._remains -= interval
+        if self._remains.toDouble() <= 0.0:
+            self._fn()
+        return False
+
+##
+# @if jp
+# @class PeriodicFunction
+# @brief 周期関数呼び出し
+#
+# @since 2.0.0
+#
+# @else
+#
+# @class PeriodicFunction
+# @brief Periodic function call
+#
+# @since 2.0.0
+#
+# @endif
+
+
+class PeriodicFunction(object):
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    # @param fn 実行する関数または関数オブジェクト
+    # @param period 実行間隔
+    #
+    # @else
+    # @brief Constructor
+    # @param fn Function or functional object
+    # @param period
+    #
+    #
+    # @endif
+    def __init__(self, function, period):
+        self._fn = function
+        self._remains = OpenRTM_aist.TimeValue(0, 0)
+        self._period = period
+        self._lock = threading.RLock()
+        self._isRemoved = False
+    ##
+    # @if jp
+    # @brief 1回の時間経過
+    # @param interval: 経過した時間
+    # @return bool true 固定
+    #
+    # interval 分だけ期限を減算し、期限切れの場合に関数を実行する。
+    # 関数が実行されると周期が再設定される。
+    #
+    # @else
+    # @brief Tick
+    # @param interval: Tick interval
+    # @return bool true only
+    # @endif
+
+    def tick(self, interval):
+        guard = OpenRTM_aist.ScopedLock(self._lock)
+        if self._isRemoved:
+            return True
+        self._remains -= interval
+        if self._remains.toDouble() <= 0.0:
+            self._fn()
+            self._remains = self._period
+        return False
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @param self
+    # @param interval タイマ起動周期
+    #
+    # @else
+    #
+    # @brief Constructor
+    #
+    # Constructor
+    #
+    # @param self
+    # @param interval The interval of timer
+    #
+    # @endif
+
+    def stop(self):
+        guard = OpenRTM_aist.ScopedLock(self._lock)
+        self._isRemoved = True
 
 ##
 # @if jp
@@ -41,6 +180,8 @@ import OpenRTM_aist
 # @since 0.4.0
 #
 # @endif
+
+
 class Timer:
     """
     """
@@ -60,16 +201,14 @@ class Timer:
     #
     # Constructor
     #
+    # @param self
     # @param interval The interval of timer
     #
     # @endif
-    def __init__(self, interval):
-        self._interval = interval
-        self._running = False
-        self._runningMutex = threading.RLock()
+
+    def __init__(self):
+        self._lock = threading.RLock()
         self._tasks = []
-        self._taskMutex = threading.RLock()
-        self._thread = threading.Thread(target=self.run)
         return
 
     ##
@@ -78,289 +217,155 @@ class Timer:
     #
     # デストラクタ
     #
+    # @param self
+    #
     # @else
     # @brief Destructor
     #
     # Destructor
     #
+    # @param self
+    #
     # @endif
     #
     def __del__(self):
-        self._running = False
-
-        self.join()
-
-        self._thread = None
-
-    def join(self):
-        try:
-            self._thread.join()
-            #self._thread = threading.Thread(target=self.run)
-        except BaseException:
-            pass
-
-        return
+        pass
 
     ##
     # @if jp
-    # @brief Timer 用のスレッド実行関数
+    # @brief 1回の時間経過
+    # @param interval: 経過した時間
+    # @return bool true 固定
     #
-    # Timer 用のスレッド実行関数。
-    # 登録されたリスナーのコールバック関数を呼び出す。
-    #
-    # @return 実行結果
-    #
-    # @else
-    # @brief Thread execution function for Timer
-    #
-    # Thread execution function for Timer.
-    # Invoke the callback function of registered listener.
-    #
-    # @return Execution result
-    #
-    # @endif
-    def run(self):
-        while self._running:
-            self.invoke()
-            if self._interval.tv_sec != 0:
-                time.sleep(self._interval.tv_sec)
-            elif self._interval.tv_usec:
-                time.sleep(self._interval.tv_usec / 1000000.0)
-        return 0
-
-    ##
-    # @if jp
-    # @brief Timer タスク開始
-    #
-    # Timer 用新規スレッドを生成し、処理を開始する。
-    #
-    # @param self
-    #
-    # @brief Start Timer task
-    #
-    # Create a new theread for Timer and start processing.
+    # interval 分だけ期限を減算し、期限切れの場合に関数を実行する。
+    # 関数が実行されると周期が再設定される。
     #
     # @else
+    # @brief Tick
+    # @param interval: Tick interval
+    # @return bool true only
     #
     # @endif
-
-    def start(self):
-        guard = OpenRTM_aist.ScopedLock(self._runningMutex)
-        if not self._running:
-            self._running = True
-            self._thread.start()
-        return
-
-    ##
-    # @if jp
-    # @brief Timer タスク停止
-    #
-    # @param self
-    #
-    # Timer タスクを停止する。
-    #
-    # @else
-    #
-    # @brief Stop Timer task
-    #
-    # Stop Timer task.
-    #
-    # @endif
-
-    def stop(self):
-        guard = OpenRTM_aist.ScopedLock(self._runningMutex)
-        if self._running:
-            self._running = False
-            self.join()
-        return
-
-    ##
-    # @if jp
-    # @brief Timer タスク実行
-    #
-    # @param self
-    #
-    # 登録された各リスナの起動待ち時間からタイマ起動周期を減算する。
-    # 起動待ち時間がゼロとなったリスナが存在する場合は、
-    # コールバック関数を呼び出す。
-    #
-    # @else
-    #
-    # @brief Invoke Timer task
-    #
-    # Subtract the interval of timer from the waiting time for invocation
-    # of each registered listener.
-    # If the listener whose waiting time reached 0 exists, invoke the
-    # callback function.
-    #
-    # @endif
-
-    def invoke(self):
-        guard = OpenRTM_aist.ScopedLock(self._taskMutex)
-        for i in range(len(self._tasks)):
-            self._tasks[i].remains = self._tasks[i].remains - self._interval
-            if self._tasks[i].remains.sign() <= 0.0:
-                self._tasks[i].remains = self._tasks[i].period
-                self._tasks[i].listener.invoke()
+    def tick(self, interval):
+        guard = OpenRTM_aist.ScopedLock(self._lock)
+        tasks = self._tasks[:]
         del guard
-        return
+        for task in tasks:
+            if task.tick(interval):
+                guard = OpenRTM_aist.ScopedLock(self._lock)
+                self._tasks.remove(task)
+                del guard
+
+##
+# @if jp
+# @class DelayedTimer
+# @brief 実行遅延関数呼び出し用のタイマー
+# @since 2.0.0
+# @else
+# @class DelayedTimer
+# @brief Timer of delayed function call
+# @since 2.0.0
+# @endif
+#
+
+
+class DelayedTimer(Timer):
 
     ##
     # @if jp
-    # @brief リスナー登録
+    # @brief コンストラクタ
     #
-    # 本 Timer から起動するコールバック関数用のリスナーを起動周期を指定して
-    # 登録する。
-    # 同一リスナーが既に登録済みの場合は、リスナーの起動周期を指定した値に
-    # 更新する。
+    # コンストラクタ
     #
     # @param self
-    # @param listener 登録対象リスナー
-    # @param tm リスナー起動周期
-    #
-    # @return 登録リスナー
     #
     # @else
     #
-    # @brief Register listener
+    # @brief Constructor
     #
-    # Register the listener of callback function invoked from this Timer by
-    # specifying the interval.
-    # If the same listener has already been regiseterd, the value specified
-    # the invocation interval of listener will be updated.
-    #
-    #
-    # @param listener Listener for the registration
-    # @param tm The invocation interval of listener
-    #
-    # @return ID of the registerd listener
-    #
-    # @endif
-    # ListenerId registerListener(ListenerBase* listener, TimeValue tm);
-    def registerListener(self, listener, tm):
-        guard = OpenRTM_aist.ScopedLock(self._taskMutex)
-        for i in range(len(self._tasks)):
-            if self._tasks[i].listener == listener:
-                self._tasks[i].period = tm
-                self._tasks[i].remains = tm
-                return listener
-        self._tasks.append(self.Task(listener, tm))
-        return listener
-
-    ##
-    # @if jp
-    # @brief リスナー登録
-    #
-    # コールバック対象オブジェクト、コールバック対象メソッドおよび起動周期を
-    # 指定してリスナーを登録する。
+    # Constructor
     #
     # @param self
-    # @param obj コールバック対象オブジェクト
-    # @param cbf コールバック対象メソッド
-    # @param tm リスナー起動周期
-    #
-    # @return 登録リスナー
-    #
-    # @else
-    #
-    # @brief Register listener
-    #
-    # Register listener by specifying the object for callback, the method
-    # for callback and the invocation interval.
-    #
-    # @param obj Target object for callback
-    # @param cbf Target method for callback
-    # @param tm The invocation interval of listener
-    #
-    # @return ID of the registerd listener
-    #
     #
     # @endif
-    #  template <class ListenerClass>
-    #  ListenerId registerListenerObj(ListenerClass* obj,
-    #                                 void (ListenerClass::*cbf)(),
-    #                                 TimeValue tm)
-
-    def registerListenerObj(self, obj, cbf, tm):
-        return self.registerListener(OpenRTM_aist.ListenerObject(obj, cbf), tm)
+    def __init__(self):
+        super(DelayedTimer, self).__init__()
 
     ##
     # @if jp
-    # @brief リスナー登録
-    #
-    # コールバック対象メソッドと起動周期を指定してリスナーを登録する。
+    # @brief 非同期処理を登録する
     #
     # @param self
-    # @param cbf コールバック対象メソッド
-    # @param tm リスナー起動周期
-    #
-    # @return 登録リスナー
+    # @param fn 登録関数
+    # @return 関数オブジェクト
     #
     # @else
     #
-    # @brief Register listener
-    #
-    # Register listener by specifying the method for callback and the
-    # invocation interval.
-    #
-    # @param cbf Target method for callback
-    # @param tm The invocation interval of listener
-    #
-    # @return ID of the registerd listener
-    #
-    # @endif
-    # ListenerId registerListenerFunc(void (*cbf)(), TimeValue tm)
-
-    def registerListenerFunc(self, cbf, tm):
-        return self.registerListener(OpenRTM_aist.ListenerFunc(cbf), tm)
-
-    ##
-    # @if jp
-    # @brief リスナー登録解除
-    #
-    # 指定したIDのリスナーの登録を解除する。
-    # 指定したIDのリスナーが未登録の場合、false を返す。
+    # @brief Add an async function into list.
     #
     # @param self
-    # @param id 登録解除対象リスナーID
+    # @param fn 登録関数
+    # @return 関数オブジェクト
     #
-    # @return 登録解除結果
+    # @endif
+    def emplace(self, fn, *args):
+        guard = OpenRTM_aist.ScopedLock(self._lock)
+        funcobj = DelayedFunction(fn, *args)
+        self._tasks.append(funcobj)
+        return funcobj
+
+##
+# @if jp
+# @class PeriodicTimer
+# @brief 周期関数呼び出し用タイマー
+# @since 2.0.0
+# @else
+# @class PeriodicTimer
+# @brief Timer of periodic function call
+# @endif
+#
+
+
+class PeriodicTimer(Timer):
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @param self
     #
     # @else
     #
-    # @brief Unregister listener
+    # @brief Constructor
     #
-    # Unregister the listener specified by ID.
-    # If the listener specified by ID is not registerd, false will be returned.
+    # Constructor
     #
-    # @param id ID of the unregisterd listener
-    #
-    # @return Unregistration result
+    # @param self
     #
     # @endif
-    # bool unregisterListener(ListenerId id);
-
-    def unregisterListener(self, id):
-        guard = OpenRTM_aist.ScopedLock(self._taskMutex)
-        len_ = len(self._tasks)
-        for i in range(len_):
-            idx = (len_ - 1) - i
-            if self._tasks[idx].listener == id:
-                del self._tasks[idx]
-                return True
-        return False
+    def __init__(self):
+        super(PeriodicTimer, self).__init__()
 
     ##
     # @if jp
-    # @class Task
-    # @brief タスク管理用クラス
+    # @brief 非同期処理を登録する
+    #
+    # @param self
+    # @param fn 登録関数
+    # @return 関数オブジェクト
+    #
     # @else
     #
+    # @brief Add an async function into list.
+    #
+    # @param self
+    # @param fn 登録関数
+    # @return 関数オブジェクト
+    #
     # @endif
-
-    class Task:
-        def __init__(self, lb, tm):
-            self.listener = lb
-            self.period = tm
-            self.remains = tm
-            return
+    def emplace(self, fn, *args):
+        guard = OpenRTM_aist.ScopedLock(self._lock)
+        funcobj = PeriodicFunction(fn, *args)
+        self._tasks.append(funcobj)
+        return funcobj

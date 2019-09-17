@@ -96,30 +96,7 @@ def handler(signum, frame):
         alarm.start()
 
 
-##
-# @if jp
-# @brief マネージャ終了スレッド生成
-#
-#
-#
-#
-# @else
-#
-# @endif
-class terminate_Task(OpenRTM_aist.Task):
-    ##
-    # @brief コンストラクタ
-    # @param self
-    # @param mgr マネージャ
-    # @param sleep_time 待機時間
-    def __init__(self, mgr, sleep_time):
-        OpenRTM_aist.Task.__init__(self)
-        self._mgr = mgr
-        self._sleep_time = sleep_time
 
-    def svc(self):
-        time.sleep(self._sleep_time)
-        self._mgr.terminate()
 
 ##
 # @if jp
@@ -155,15 +132,14 @@ class Manager:
     # @endif
     def __init__(self, _manager=None):
         self._initProc = None
-        self._runner = None
-        self._terminator = None
-        self._shutdown_thread = None
         self._compManager = OpenRTM_aist.ObjectManager(self.InstanceName)
         self._factory = OpenRTM_aist.ObjectManager(self.FactoryPredicate)
         self._ecfactory = OpenRTM_aist.ObjectManager(self.ECFactoryPredicate)
         self._terminate = self.Term()
         self._ecs = []
-        self._timer = None
+        self._scheduler = OpenRTM_aist.PeriodicTimer()
+        self._invoker = OpenRTM_aist.DelayedTimer()
+        self._needsTimer = False
         self._orb = None
         self._poa = None
         self._poaManager = None
@@ -172,6 +148,9 @@ class Manager:
         signal.signal(signal.SIGINT, handler)
         self._rtcout = None
         self._mgrservant = None
+        self._isRunning = False
+        self._threadMain = None
+        self._threadOrb = None
 
         return
 
@@ -303,15 +282,14 @@ class Manager:
     # @endif
 
     def terminate(self):
-        if self._terminator:
-            self._terminator.terminate()
+        self._isRunning = False
 
     ##
     # @if jp
     # @brief マネージャ・シャットダウン
     #
     # マネージャの終了処理を実行する。
-    # ORB終了後、同期を取って終了する。
+    # ORB、タイマースレッドの終了後、同期を取って終了する。
     #
     # @param self
     #
@@ -321,49 +299,8 @@ class Manager:
 
     def shutdown(self):
         self._rtcout.RTC_TRACE("Manager.shutdown()")
-        self._listeners.manager_.preShutdown()
-        self.shutdownTimer()
-        self.shutdownComponents()
-        self.shutdownManagerServant()
-        self.shutdownNaming()
-        self.shutdownORB()
-        self.shutdownManager()
-
-        if self._runner:
-            self._runner.wait()
-        else:
-            self.join()
-
-        self._listeners.manager_.postShutdown()
-        self.shutdownLogger()
-        global manager
-        if manager:
-            manager = None
-
-    ##
-    # @if jp
-    # @brief マネージャ終了処理の待ち合わせ
-    #
-    # 同期を取るため、マネージャ終了処理の待ち合わせを行う。
-    #
-    # @param self
-    #
-    # @else
-    #
-    # @endif
-
-    def join(self):
-        self._rtcout.RTC_TRACE("Manager.wait()")
-        guard = OpenRTM_aist.ScopedLock(self._terminate.mutex)
-        self._terminate.waiting += 1
-        del guard
-        while True:
-            guard = OpenRTM_aist.ScopedLock(self._terminate.mutex)
-            # if self._terminate.waiting > 1:
-            if self._terminate.waiting > 0:
-                break
-            del guard
-            time.sleep(0.001)
+        self.terminate()
+        self.join()
 
     ##
     # @if jp
@@ -509,26 +446,82 @@ class Manager:
     #
     # @endif
 
-    def runManager(self, no_block=None):
-        if no_block is None:
-            no_block = False
-
+    def runManager(self, no_block=False):
+        self._rtcout.RTC_TRACE("Manager::runManager()")
+        self._isRunning = True
+        
         if no_block:
-            self._rtcout.RTC_TRACE("Manager.runManager(): non-blocking mode")
-            self._runner = self.OrbRunner(self._orb)
+            self._threadMain = threading.Thread(target=self.main)
+            self._threadMain.start()
         else:
-            self._rtcout.RTC_TRACE("Manager.runManager(): blocking mode")
-            try:
-                self._orb.run()
-                self._rtcout.RTC_TRACE(
-                    "Manager.runManager(): ORB was terminated")
-                self.join()
-            except BaseException:
-                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
-            if self._shutdown_thread:
-                self._shutdown_thread.wait()
+            self.main()
 
         return
+
+    ##
+    # @if jp
+    #
+    # @brief メインスレッドのメイン関数
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief The main function of the Manager main thread.
+    #
+    # @param self
+    #
+    # @endif
+    def main(self):
+        self._rtcout.RTC_TRACE("Manager::main()")
+        self._threadOrb = threading.Thread(target=self._orb.run)
+        self._threadOrb.start()
+
+        period = OpenRTM_aist.TimeValue(0, 100000)
+        if self._config.findNode("timer.tick"):
+            tick = float(self._config.getProperty(
+                    "timer.tick"))
+            if tick:
+                period.set_time(tick)
+
+        delay = OpenRTM_aist.TimeValue(0, 500000)
+        if self._config.findNode("manager.termination_waittime"):
+            tick = float(self._config.getProperty(
+                "manager.termination_waittime"))
+            if tick:
+                delay.set_time(tick)
+
+        now = OpenRTM_aist.Time().getTime()
+        while self._isRunning:
+            prev = now
+            now = OpenRTM_aist.Time().getTime()
+            self._scheduler.tick(now - prev)
+            self._invoker.tick(now - prev)
+            time.sleep(period.toDouble())
+
+        time.sleep(delay.toDouble())
+        self.shutdownManager()
+
+    ##
+    # @if jp
+    #
+    # @brief マネージャ終了処理の待ち合わせ
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief Wait for Manager's termination
+    #
+    # @param self
+    #
+    # @endif
+    def join(self):
+        global manager
+        if self._threadMain:
+            self._threadMain.join()
+        manager = None
+        
 
     ##
     # @if jp
@@ -1216,7 +1209,7 @@ class Manager:
                                         "YES", "NO", False):
                 comps = self.getComponents()
                 if len(comps) == 0:
-                    self.createShutdownThread()
+                    self.terminate()
 
         return
 
@@ -1416,44 +1409,29 @@ class Manager:
         self._config.setProperty("logger.file_name", self.formatString(self._config.getProperty("logger.file_name"),
                                                                        self._config))
         self._module = OpenRTM_aist.ModuleManager(self._config)
-        self._terminator = self.Terminator(self)
         guard = OpenRTM_aist.ScopedLock(self._terminate.mutex)
         self._terminate.waiting = 0
         del guard
 
-        if OpenRTM_aist.toBool(self._config.getProperty(
-                "timer.enable"), "YES", "NO", True):
-            tm = OpenRTM_aist.TimeValue(0, 100000)
-            tick = self._config.getProperty("timer.tick")
-            if tick != "":
-                tm = tm.set_time(float(tick))
-                if self._timer:
-                    self._timer.stop()
-                    self._timer.join()
-                self._timer = OpenRTM_aist.Timer(tm)
-                self._timer.start()
+        self._needsTimer = OpenRTM_aist.toBool(self._config.getProperty(
+                "timer.enable"), "YES", "NO", True)
+
 
         if OpenRTM_aist.toBool(self._config.getProperty("manager.shutdown_auto"),
-                               "YES", "NO", True) and \
-            not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
-                                    "YES", "NO", False):
+                                   "YES", "NO", True) and \
+                not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
+                                        "YES", "NO", False) and \
+                self._needsTimer:
             tm = OpenRTM_aist.TimeValue(10, 0)
             if self._config.findNode("manager.auto_shutdown_duration"):
                 duration = float(self._config.getProperty(
                     "manager.auto_shutdown_duration"))
                 if duration:
                     tm.set_time(duration)
+            self.addTask(self.shutdownOnNoRtcs, tm)
 
-            if self._timer:
-                self._timer.registerListenerObj(self,
-                                                OpenRTM_aist.Manager.shutdownOnNoRtcs,
-                                                tm)
-
-        if self._timer:
-            tm = OpenRTM_aist.TimeValue(1, 0)
-            self._timer.registerListenerObj(self,
-                                            OpenRTM_aist.Manager.cleanupComponents,
-                                            tm)
+        if self._needsTimer:
+            self.addTask(self.cleanupComponents, OpenRTM_aist.TimeValue(1, 0))
 
         lmpm_ = [s.strip() for s in self._config.getProperty(
             "manager.preload.modules").split(",")]
@@ -1504,6 +1482,18 @@ class Manager:
     # @endif
     def shutdownManager(self):
         self._rtcout.RTC_TRACE("Manager.shutdownManager()")
+        self._listeners.manager_.preShutdown()
+        self.shutdownComponents()
+        self.shutdownManagerServant()
+        self.shutdownNaming()
+        self.shutdownORB()
+
+        self._threadOrb.join()
+        self._listeners.manager_.postShutdown()
+        self.shutdownLogger()
+        global manager
+        if manager:
+            manager = None
 
         return
 
@@ -1533,7 +1523,7 @@ class Manager:
             comps = self.getComponents()
 
             if len(comps) == 0:
-                self.createShutdownThread()
+                self.terminate()
 
         return
 
@@ -2001,15 +1991,13 @@ class Manager:
                 self._namingManager.registerNameServer(meth, name)
 
         if OpenRTM_aist.toBool(self._config.getProperty(
-                "naming.update.enable"), "YES", "NO", True):
+                "naming.update.enable"), "YES", "NO", True) and self._needsTimer:
             tm = OpenRTM_aist.TimeValue(10, 0)
             intr = self._config.getProperty("naming.update.interval")
             if intr != "":
                 tm = OpenRTM_aist.TimeValue(intr)
 
-            if self._timer:
-                self._timer.registerListenerObj(
-                    self._namingManager, OpenRTM_aist.NamingManager.update, tm)
+            self.addTask(self._namingManager.update, tm)
 
         return True
 
@@ -2341,19 +2329,18 @@ class Manager:
                     mgr_name, self._mgrservant)
 
         if OpenRTM_aist.toBool(self._config.getProperty("corba.update_master_manager.enable"),
-                               "YES", "NO", True) and \
-            not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
-                                    "YES", "NO", False):
+                                   "YES", "NO", True) and \
+                not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
+                                        "YES", "NO", False) and \
+                self._needsTimer:
             tm = OpenRTM_aist.TimeValue(10, 0)
             if self._config.findNode("corba.update_master_manager.interval"):
                 duration = float(self._config.getProperty(
                     "corba.update_master_manager.interval"))
                 if duration:
                     tm.set_time(duration)
-                if self._timer:
-                    self._timer.registerListenerObj(self._mgrservant,
-                                                    OpenRTM_aist.ManagerServant.updateMasterManager,
-                                                    tm)
+
+            self.addTask(self._mgrservant.updateMasterManager, tm)
 
         otherref = None
 
@@ -3362,26 +3349,83 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.getNaming()")
         return self._namingManager
 
+
     ##
     # @if jp
-    # @brief マネージャ終了スレッド生成
+    # @brief 周期実行タスクの登録
     #
     #
-    # @param self
-    # @param sleep_time 待機時間
-    # @return task
+    # 周期的に実行する関数や関数オブジェクトを Manager のタイマーに登録する。
+    # removePeriodTask() が実行されるまで処理が継続される｡本関数に登録する処理
+    # の中で sleep などの長時間ブロッキングは推奨されない。また周期タスクの中で
+    # 本関数を呼び出してはならない。
+    #
+    # @param fn: 周期実行する関数または関数オブジェクト
+    # @param period: 周期実行の実行間隔
+    # @return id: removeTask() で実行解除するための ID
     # @else
     #
-    # @brief
-    # @param self
-    # @param sleep_time
-    # @return task
+    # @brief Add a task to the Manager timer.
+    #
+    # This operation add a function or functional object to Manger's
+    # timer. It run until removeTask(). DO NOT block (Ex. sleep)
+    # in the registerd function.
+    #
+    # @param fn: The Function run periodically.
+    # @param period: Period of fn execution.
+    # @return id: ID for removetask().
     # @endif
-    def createShutdownThread(self, sleep_time=0):
-        self._rtcout.RTC_TRACE("Manager.createShutdownThread()")
-        self._shutdown_thread = terminate_Task(self, sleep_time)
-        self._shutdown_thread.activate()
-        return self._shutdown_thread
+    #
+    def addTask(self, fn, period):
+        #self._rtcout.RTC_TRACE("Manager::addTask()")
+        return self._scheduler.emplace(fn, period)
+
+    ##
+    # @if jp
+    # @brief Manger のメインスレッドで処理を実行
+    #
+    # Manger のメインスレッドで指定された処理を実行する。長時間のブロッ
+    # キングを行う関数の登録は推奨しない。
+    #
+    # @param fn: 関数または関数オブジェクト
+    # @param delay: 起動するまでの遅延時間
+    #
+    # @else
+    #
+    # @brief Run a function on the Manager main thread.
+    #
+    # The specified function run on the Manager main thread.  DO NOT block
+    # the thread in the function.
+    #
+    # @param fn: The Function run on the Manager main thread.
+    # @ param delay: The delay time for the function execution.
+    #
+    # @endif
+    #
+    def invoke(self, fn, delay):
+        #self._rtcout.RTC_TRACE("Manager::invoke()")
+        return self._invoker.emplace(fn, delay)
+
+    ##
+    # @if jp
+    # @brief 周期実行タスクの削除
+    #
+    # タイマーに登録されている周期タスクを削除する。
+    #
+    # @param id: 削除対象のタスクを示す ID
+    #
+    # @else
+    #
+    # @brief Remove the task from the Manager timer.
+    #
+    # This operation remove the specify function.
+    #
+    # @param id: Task ID
+    #
+    # @endif
+    #
+    def removeTask(self, task):
+        task.stop()
 
     # ============================================================
     # コンポーネントマネージャ
@@ -3637,56 +3681,6 @@ class Manager:
         def close(self, flags):
             return 0
 
-    # ------------------------------------------------------------
-    # Manager Terminator
-    # ------------------------------------------------------------
-    ##
-    # @if jp
-    # @class Terminator
-    # @brief Terminator クラス
-    #
-    # ORB 終了用ヘルパークラス。
-    #
-    # @since 0.4.0
-    #
-    # @else
-    #
-    # @endif
-
-    class Terminator:
-        """
-        """
-
-        ##
-        # @if jp
-        # @brief コンストラクタ
-        #
-        # コンストラクタ
-        #
-        # @param self
-        # @param manager マネージャ・オブジェクト
-        #
-        # @else
-        # @brief Constructor
-        #
-        # @endif
-        def __init__(self, manager):
-            self._manager = manager
-
-        ##
-        # @if jp
-        # @brief 終了処理
-        #
-        # ORB，マネージャ終了処理を開始する。
-        #
-        # @param self
-        #
-        # @else
-        #
-        # @endif
-
-        def terminate(self):
-            self._manager.shutdown()
 
     ##
     # @if jp
