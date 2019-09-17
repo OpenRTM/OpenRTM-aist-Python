@@ -857,7 +857,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     # @endif
     #
 
-    class DataPortAction(OpenRTM_aist.ConnectorDataListenerT):
+    class DataPortAction(OpenRTM_aist.ConnectorDataListener):
         """
         """
 
@@ -876,7 +876,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
                 self._last = curr
                 self._coc.updateStatus(OpenRTM.PORT_PROFILE, self._msg)
 
-            return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
+            return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE, cdrdata
 
     ##
     # @if jp

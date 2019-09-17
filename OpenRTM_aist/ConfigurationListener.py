@@ -21,7 +21,7 @@
 # - ON_UPDATE_CONFIG_PARAM,
 #
 # @else
-# @brief The types of ConnectorDataListener
+# @brief The types of ConfigurationParamListenerType
 #
 # - ON_UPDATE_CONFIG_PARAM,
 #

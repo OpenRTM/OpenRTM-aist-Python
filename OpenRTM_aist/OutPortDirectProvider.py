@@ -119,19 +119,19 @@ class OutPortDirectProvider(OpenRTM_aist.OutPortProvider):
 
     def onBufferRead(self, data):
         if self._listeners and self._profile:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ].notify(
                 self._profile, data)
-        return
+        return data
 
     # inline void onSend(const cdrMemoryStream& data)
 
     def onSend(self, data):
         if self._listeners and self._profile:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(
                 self._profile, data)
-        return
+        return data
 
     # inline void onBufferEmpty()
 

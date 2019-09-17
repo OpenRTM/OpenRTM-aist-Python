@@ -315,10 +315,10 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # inline void onBufferRead(const cdrMemoryStream& data)
     def onBufferRead(self, data):
         if self._listeners and self._profile:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -332,10 +332,10 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # inline void onSend(const cdrMemoryStream& data)
     def onSend(self, data):
         if self._listeners and self._profile:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -424,8 +424,8 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 
     def convertReturn(self, status, data):
         if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
-            self.onBufferRead(data)
-            self.onSend(data)
+            data = self.onBufferRead(data)
+            data = self.onSend(data)
             return (OpenRTM.PORT_OK, data)
 
         elif status == OpenRTM_aist.BufferStatus.BUFFER_ERROR:

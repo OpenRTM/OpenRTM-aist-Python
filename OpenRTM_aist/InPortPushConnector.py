@@ -232,11 +232,11 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
             return self.PORT_OK, cdr
 
         if ret == OpenRTM_aist.BufferStatus.BUFFER_EMPTY:
-            self.onBufferEmpty(cdr)
+            cdr = self.onBufferEmpty(cdr)
             return self.BUFFER_EMPTY, cdr
 
         elif ret == OpenRTM_aist.BufferStatus.TIMEOUT:
-            self.onBufferReadTimeout(cdr)
+            cdr = self.onBufferReadTimeout(cdr)
             return self.BUFFER_TIMEOUT, cdr
 
         elif ret == OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET:
@@ -288,12 +288,12 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
         if ret != self.PORT_OK:
             return ret, data
         else:
+            cdr = self.onBufferRead(cdr)
             self._serializer.isLittleEndian(self._endian)
             ser_ret, _data = self._serializer.deserialize(cdr, self._dataType)
 
             if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
                 data = _data
-                self.onBufferRead(cdr)
                 return self.PORT_OK, data
             elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
                 self._rtcout.RTC_ERROR("unknown endian from connector")
@@ -502,10 +502,10 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
     def onBufferRead(self, data):
         if self._listeners and self._profile:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ].notify(
                 self._profile, data)
-        return
+        return data
 
     def onBufferEmpty(self, data):
         if self._listeners and self._profile:

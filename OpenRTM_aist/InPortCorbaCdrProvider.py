@@ -178,7 +178,7 @@ class InPortCorbaCdrProvider(OpenRTM_aist.InPortProvider,
 
             self._rtcout.RTC_PARANOID("received data size: %d", len(data))
 
-            self.onReceived(data)
+            data = self.onReceived(data)
 
             ret = self._connector.write(data)
 
@@ -198,7 +198,7 @@ class InPortCorbaCdrProvider(OpenRTM_aist.InPortProvider,
             return OpenRTM.PORT_ERROR
 
         elif status == OpenRTM_aist.BufferStatus.BUFFER_FULL:
-            self.onBufferFull(data)
+            data = self.onBufferFull(data)
             self.onReceiverFull(data)
             return OpenRTM.BUFFER_FULL
 
@@ -210,7 +210,7 @@ class InPortCorbaCdrProvider(OpenRTM_aist.InPortProvider,
             return OpenRTM.PORT_ERROR
 
         elif status == OpenRTM_aist.BufferStatus.TIMEOUT:
-            self.onBufferWriteTimeout(data)
+            data = self.onBufferWriteTimeout(data)
             self.onReceiverTimeout(data)
             return OpenRTM.BUFFER_TIMEOUT
 
@@ -225,63 +225,63 @@ class InPortCorbaCdrProvider(OpenRTM_aist.InPortProvider,
 
     def onBufferWrite(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE].notify(
                 self._profile, data)
-        return
+        return data
 
     # inline void onBufferFull(const cdrMemoryStream& data)
 
     def onBufferFull(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL].notify(
                 self._profile, data)
-        return
+        return data
 
     # inline void onBufferWriteTimeout(const cdrMemoryStream& data)
 
     def onBufferWriteTimeout(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT].notify(
                 self._profile, data)
-        return
+        return data
 
     # inline void onBufferWriteOverwrite(const cdrMemoryStream& data)
     def onBufferWriteOverwrite(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_OVERWRITE].notify(
                 self._profile, data)
-        return
+        return data
 
     # inline void onReceived(const cdrMemoryStream& data)
 
     def onReceived(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED].notify(
                 self._profile, data)
-        return
+        return data
 
     # inline void onReceiverFull(const cdrMemoryStream& data)
 
     def onReceiverFull(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL].notify(
                 self._profile, data)
-        return
+        return data
 
     # inline void onReceiverTimeout(const cdrMemoryStream& data)
 
     def onReceiverTimeout(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT].notify(
                 self._profile, data)
-        return
+        return data
 
     # inline void onReceiverError(const cdrMemoryStream& data)
 
@@ -290,7 +290,7 @@ class InPortCorbaCdrProvider(OpenRTM_aist.InPortProvider,
             self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR].notify(
                 self._profile, data)
-        return
+        return data
 
 
 def InPortCorbaCdrProviderInit():

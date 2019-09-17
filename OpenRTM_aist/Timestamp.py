@@ -25,8 +25,8 @@ class Timestamp(OpenRTM_aist.ConnectorDataListenerT):
 
     def __call__(self, info, data):
         if info.properties.getProperty("timestamp_policy") != self._ts_type:
-            return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
+            return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE, data
         tm = OpenRTM_aist.Time().gettimeofday()
         data.tm.sec = tm.sec()
         data.tm.nsec = tm.usec() * 1000
-        return OpenRTM_aist.ConnectorListenerStatus.DATA_CHANGED
+        return OpenRTM_aist.ConnectorListenerStatus.DATA_CHANGED, data

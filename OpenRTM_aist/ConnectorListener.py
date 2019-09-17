@@ -358,11 +358,11 @@ class ConnectorDataListenerT(ConnectorDataListener):
         serializer = OpenRTM_aist.SerializerFactory.instance().createObject(marshaling_type)
 
         serializer.isLittleEndian(endian)
-        ret, _data = serializer.deserialize(cdrdata, data)
+        ret, data = serializer.deserialize(cdrdata, data)
 
         OpenRTM_aist.SerializerFactory.instance().deleteObject(serializer)
 
-        return _data
+        return data
 
 
 ##
@@ -686,6 +686,8 @@ class ConnectorDataListenerHolder:
     def __init__(self):
         self._listeners = []
         self._mutex = threading.RLock()
+        self._data = None
+        self._portType = PortType.OutPortType
         return
 
     ##
@@ -779,10 +781,76 @@ class ConnectorDataListenerHolder:
     def notify(self, info, cdrdata):
         guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         ret = ConnectorListenerStatus.NO_CHANGE
-        for listener in self._listeners:
-            ret = ret | listener(info, cdrdata)
-        return ret
 
+        endian = info.properties.getProperty(
+            "serializer.cdr.endian", "little")
+        if endian is not "little" and endian is not None:
+            # Maybe endian is ["little","big"]
+            endian = OpenRTM_aist.split(endian, ",")
+            # Maybe self._endian is "little" or "big"
+            endian = OpenRTM_aist.normalize(endian[0])
+
+        if endian == "little":
+            endian = True
+        elif endian == "big":
+            endian = False
+        else:
+            endian = True
+
+        marshaling_type = info.properties.getProperty(
+            "marshaling_type", "corba")
+        if self._portType == PortType.OutPortType:
+            marshaling_type = info.properties.getProperty(
+                "out.marshaling_type", marshaling_type)
+        elif self._portType == PortType.InPortType:
+            marshaling_type = info.properties.getProperty(
+                "in.marshaling_type", marshaling_type)
+        marshaling_type = marshaling_type.strip()
+
+        serializer = OpenRTM_aist.SerializerFactory.instance().createObject(marshaling_type)
+
+        serializer.isLittleEndian(endian)
+        data = self._data
+
+        if data:
+            deserialize_ret, _data = serializer.deserialize(
+                cdrdata, self._data)
+            if deserialize_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
+                data = _data
+            else:
+                return
+
+        for listener in self._listeners:
+            if issubclass(type(listener), ConnectorDataListenerT):
+                if data:
+                    if deserialize_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
+                        listener_ret, _data = listener(info, data)
+                        if listener_ret == ConnectorListenerStatus.DATA_CHANGED or listener_ret == ConnectorListenerStatus.BOTH_CHANGED:
+                            data = _data
+                            serializer.isLittleEndian(endian)
+                            serialize_ret, _cdrdata = serializer.serialize(
+                                data)
+                            if deserialize_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
+                                cdrdata = _cdrdata
+                        ret = ret | listener_ret
+            else:
+                listener_ret, _cdrdata = listener(info, cdrdata)
+                if listener_ret == ConnectorListenerStatus.DATA_CHANGED or listener_ret == ConnectorListenerStatus.BOTH_CHANGED:
+                    cdrdata = _cdrdata
+                    serializer.isLittleEndian(endian)
+                    deserialize_ret, _data = serializer.deserialize(
+                        cdrdata, data)
+                    if deserialize_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
+                        data = _data
+                ret = ret | listener_ret
+        OpenRTM_aist.SerializerFactory.instance().deleteObject(serializer)
+        return ret, cdrdata
+
+    def setDataType(self, dataType):
+        self._data = dataType
+
+    def setPortType(self, portType):
+        self._portType = portType
 
 ##
 # @if jp
@@ -797,6 +865,8 @@ class ConnectorDataListenerHolder:
 #
 # @endif
 #
+
+
 class ConnectorListenerHolder:
     """
     """
@@ -915,3 +985,11 @@ class ConnectorListeners:
         self.connector_ = [OpenRTM_aist.ConnectorListenerHolder() for i in range(
             OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM)]
         return
+
+    def setDataType(self, dataType):
+        for holder in self.connectorData_:
+            holder.setDataType(dataType)
+
+    def setPortType(self, porttype):
+        for holder in self.connectorData_:
+            holder.setPortType(porttype)

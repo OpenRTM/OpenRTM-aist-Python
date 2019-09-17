@@ -34,7 +34,7 @@
 # - PRE_ON_RATE_CHANGED:  onRateChanged 直前
 #
 # @else
-# @brief The types of ConnectorDataListener
+# @brief The types of PreComponentActionListenerType
 #
 # @endif
 class PreComponentActionListenerType:
@@ -202,7 +202,7 @@ class PreComponentActionListener:
 # - POST_ON_RATE_CHANGED:
 #
 # @else
-# @brief The types of ConnectorDataListener
+# @brief The types of PostComponentActionListenerType
 #
 # @endif
 class PostComponentActionListenerType:

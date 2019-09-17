@@ -632,7 +632,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
                 _, cdr = self._buffer.get()
                 self.onBufferRead(cdr)
 
-                self.onSend(cdr)
+                cdr = self.onSend(cdr)
                 ret = self._consumer.put(cdr)
 
                 if ret != self.PORT_OK:
@@ -640,7 +640,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
                         "%s = consumer.put()",
                         OpenRTM_aist.DataPortStatus.toString(ret))
                     return self.invokeListener(ret, cdr)
-                self.onReceived(cdr)
+                cdr = self.onReceived(cdr)
 
                 self._buffer.advanceRptr()
 
@@ -661,7 +661,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
             _, cdr = self._buffer.get()
             self.onBufferRead(cdr)
 
-            self.onSend(cdr)
+            cdr = self.onSend(cdr)
             ret = self._consumer.put(cdr)
 
             if ret != self.PORT_OK:
@@ -669,7 +669,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
                     "%s = consumer.put()",
                     OpenRTM_aist.DataPortStatus.toString(ret))
                 return self.invokeListener(ret, cdr)
-            self.onReceived(cdr)
+            cdr = self.onReceived(cdr)
 
             self._buffer.advanceRptr()
 
@@ -697,7 +697,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
                 _, cdr = self._buffer.get()
                 self.onBufferRead(cdr)
 
-                self.onSend(cdr)
+                cdr = self.onSend(cdr)
                 ret = self._consumer.put(cdr)
                 if ret != self.PORT_OK:
                     self._buffer.advanceRptr(-postskip)
@@ -706,7 +706,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
                         OpenRTM_aist.DataPortStatus.toString(ret))
                     return self.invokeListener(ret, cdr)
 
-                self.onReceived(cdr)
+                cdr = self.onReceived(cdr)
                 postskip = self._skipn + 1
 
             self._buffer.advanceRptr(self._buffer.readable())
@@ -741,7 +741,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
             _, cdr = self._buffer.get()
             self.onBufferRead(cdr)
 
-            self.onSend(cdr)
+            cdr = self.onSend(cdr)
             ret = self._consumer.put(cdr)
 
             if ret != self.PORT_OK:
@@ -750,7 +750,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
                     OpenRTM_aist.DataPortStatus.toString(ret))
                 return self.invokeListener(ret, cdr)
 
-            self.onReceived(cdr)
+            cdr = self.onReceived(cdr)
             self._buffer.advanceRptr()
 
             return self.PORT_OK
@@ -912,10 +912,10 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # inline void onBufferWrite(const cdrMemoryStream& data)
     def onBufferWrite(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -929,10 +929,10 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # inline void onBufferFull(const cdrMemoryStream& data)
     def onBufferFull(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -946,10 +946,10 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # inline void onBufferWriteTimeout(const cdrMemoryStream& data)
     def onBufferWriteTimeout(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -963,10 +963,10 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # inline void onBufferWriteOverwrite(const cdrMemoryStream& data)
     def onBufferWriteOverwrite(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_OVERWRITE].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -980,10 +980,10 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # inline void onBufferRead(const cdrMemoryStream& data)
     def onBufferRead(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -997,10 +997,10 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # inline void onSend(const cdrMemoryStream& data)
     def onSend(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -1014,10 +1014,10 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # inline void onReceived(const cdrMemoryStream& data)
     def onReceived(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -1031,10 +1031,10 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # inline void onReceiverFull(const cdrMemoryStream& data)
     def onReceiverFull(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -1048,10 +1048,10 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # inline void onReceiverTimeout(const cdrMemoryStream& data)
     def onReceiverTimeout(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -1065,10 +1065,10 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # inline void onReceiverError(const cdrMemoryStream& data)
     def onReceiverError(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp

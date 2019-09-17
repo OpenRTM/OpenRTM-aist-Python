@@ -64,7 +64,7 @@ import OpenRTM_aist.Guard
 # - PRE_ON_STATE_CHANGE:  状態遷移直前
 #
 # @else
-# @brief The types of ConnectorDataListener
+# @brief The types of PreFsmActionListenerType
 #
 # PreFsmActionListener has the following hook points. If these
 # listeners are actually called or not called are depends on FSM
@@ -318,7 +318,7 @@ class PreFsmActionListener:
 # - POST_ON_STATE_CHANGE:  状態遷移直後
 #
 # @else
-# @brief The types of ConnectorDataListener
+# @brief The types of PostFsmActionListenerType
 #
 # PreFsmActionListener has the following hook points. If these
 # listeners are actually called or not called are depends on FSM
