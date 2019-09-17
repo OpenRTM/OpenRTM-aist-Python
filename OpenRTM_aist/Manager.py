@@ -22,7 +22,7 @@ import os
 import sys
 import time
 from omniORB import CORBA, PortableServer
-#from types import IntType, ListType
+# from types import IntType, ListType
 
 
 import OpenRTM_aist
@@ -135,7 +135,6 @@ class Manager:
         self._compManager = OpenRTM_aist.ObjectManager(self.InstanceName)
         self._factory = OpenRTM_aist.ObjectManager(self.FactoryPredicate)
         self._ecfactory = OpenRTM_aist.ObjectManager(self.ECFactoryPredicate)
-        self._terminate = self.Term()
         self._ecs = []
         self._scheduler = OpenRTM_aist.PeriodicTimer()
         self._invoker = OpenRTM_aist.DelayedTimer()
@@ -474,7 +473,16 @@ class Manager:
     # @endif
     def main(self):
         self._rtcout.RTC_TRACE("Manager::main()")
-        self._threadOrb = threading.Thread(target=self._orb.run)
+
+        def orbrun():
+            try:
+                self._orb.run()
+            except BaseException:
+                print(OpenRTM_aist.Logger.print_exception())
+                self.terminate()
+            return
+
+        self._threadOrb = threading.Thread(target=orbrun)
         self._threadOrb.start()
 
         period = OpenRTM_aist.TimeValue(0, 100000)
@@ -1409,9 +1417,6 @@ class Manager:
         self._config.setProperty("logger.file_name", self.formatString(self._config.getProperty("logger.file_name"),
                                                                        self._config))
         self._module = OpenRTM_aist.ModuleManager(self._config)
-        guard = OpenRTM_aist.ScopedLock(self._terminate.mutex)
-        self._terminate.waiting = 0
-        del guard
 
         self._needsTimer = OpenRTM_aist.toBool(self._config.getProperty(
                 "timer.enable"), "YES", "NO", True)
@@ -1662,7 +1667,7 @@ class Manager:
     # @endif
 
     def initLogger(self):
-        #self._rtcout = OpenRTM_aist.LogStream()
+        # self._rtcout = OpenRTM_aist.LogStream()
         self._rtcout = self.getLogbuf()
         if not OpenRTM_aist.toBool(self._config.getProperty(
                 "logger.enable"), "YES", "NO", True):
@@ -1980,12 +1985,12 @@ class Manager:
                 "naming.enable"), "YES", "NO", True):
             return True
 
-        #meths = OpenRTM_aist.split(self._config.getProperty("naming.type"),",")
+        # meths = OpenRTM_aist.split(self._config.getProperty("naming.type"),",")
         meths = [s.strip()
                  for s in self._config.getProperty("naming.type").split(",")]
 
         for meth in meths:
-            #names = OpenRTM_aist.split(self._config.getProperty(meth+".nameservers"), ",")
+            # names = OpenRTM_aist.split(self._config.getProperty(meth+".nameservers"), ",")
             names = [
                 s.strip() for s in self._config.getProperty(
                     meth + ".nameservers").split(",")]
@@ -2506,7 +2511,7 @@ class Manager:
             self._rtcout.RTC_ERROR("Invalid RTC id format.")
             return False
 
-        #prof = ["RTC", "vendor", "category", "implementation_id", "language", "version"]
+        # prof = ["RTC", "vendor", "category", "implementation_id", "language", "version"]
 
         if id[0] != prof[0]:
             self._rtcout.RTC_ERROR("Invalid id type.")
@@ -3588,121 +3593,8 @@ class Manager:
 
             return True
 
-    # ------------------------------------------------------------
-    # ORB runner
-    # ------------------------------------------------------------
-    ##
-    # @if jp
-    # @class OrbRunner
-    # @brief OrbRunner クラス
-    #
-    # ORB 実行用ヘルパークラス。
-    #
-    # @since 0.4.0
-    #
-    # @else
-    # @class OrbRunner
-    # @brief OrbRunner class
-    # @endif
-
-    class OrbRunner:
-        """
-        """
-
-        ##
-        # @if jp
-        # @brief コンストラクタ
-        #
-        # コンストラクタ
-        #
-        # @param self
-        # @param orb ORB
-        #
-        # @else
-        # @brief Constructor
-        #
-        # @endif
-        def __init__(self, orb):
-            self._orb = orb
-            self._th = threading.Thread(target=self.run)
-            self._th.start()
-
-        def __del__(self):
-            pass
-            # self._th.join()
-            #self._th = None
-            # return
-
-        ##
-        # @if jp
-        # @brief ORB 実行処理
-        #
-        # ORB 実行
-        #
-        # @param self
-        #
-        # @else
-        #
-        # @endif
-
-        def run(self):
-            try:
-                self._orb.run()
-                # Manager.instance().shutdown()
-            except BaseException:
-                print(OpenRTM_aist.Logger.print_exception())
-            return
-
-        ##
-        # @if jp
-        # @brief ORB wait処理
-        #
-        # ORB wait
-        #
-        # @param self
-        #
-        # @else
-        #
-        # @endif
-
-        def wait(self):
-            return
-
-        ##
-        # @if jp
-        # @brief ORB 終了処理(未実装)
-        #
-        # ORB 終了処理
-        #
-        # @param self
-        # @param flags 終了処理フラグ
-        #
-        # @return 終了処理結果
-        #
-        # @else
-        #
-        # @endif
-        def close(self, flags):
-            return 0
 
 
-    ##
-    # @if jp
-    # @class Term
-    # @brief Term クラス
-    #
-    # 終了用ヘルパークラス。
-    #
-    # @since 0.4.0
-    #
-    # @else
-    #
-    # @endif
-
-    class Term:
-        def __init__(self):
-            self.waiting = 0
-            self.mutex = threading.RLock()
 
     class Finalized:
         def __init__(self):

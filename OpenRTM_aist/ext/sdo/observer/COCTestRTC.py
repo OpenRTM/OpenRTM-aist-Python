@@ -27,15 +27,14 @@ class DataListener(OpenRTM_aist.ConnectorDataListenerT):
     def __del__(self):
         print("dtor of ", self._name)
 
-    def __call__(self, info, cdrdata):
-        data = OpenRTM_aist.ConnectorDataListenerT.__call__(
-            self, info, cdrdata, RTC.TimedLong(RTC.Time(0, 0), 0))
+    def __call__(self, info, data):
         print("------------------------------")
         print("Listener:       ", self._name)
         print("Profile::name:  ", info.name)
         print("Profile::id:    ", info.id)
         print("Data:           ", data.data)
         print("------------------------------")
+        return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE, data
 
 
 class ConnListener(OpenRTM_aist.ConnectorListener):
@@ -51,6 +50,7 @@ class ConnListener(OpenRTM_aist.ConnectorListener):
         print("Profile::name:  ", info.name)
         print("Profile::id:    ", info.id)
         print("------------------------------")
+        return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
 
 
 class COCTestRTC(OpenRTM_aist.DataFlowComponentBase):
