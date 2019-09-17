@@ -37,6 +37,7 @@ class DataListener(OpenRTM_aist.ConnectorDataListenerT):
         print("Profile::id:    ", info.id)
         print("Data:           ", data.data)
         print("------------------------------")
+        return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE, data
 
 
 class ConnListener(OpenRTM_aist.ConnectorListener):
