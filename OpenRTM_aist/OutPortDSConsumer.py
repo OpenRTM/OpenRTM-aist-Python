@@ -203,13 +203,13 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
             if ret == RTC.PORT_OK:
                 self._rtcout.RTC_DEBUG("get() successful")
                 data = cdr_data
-                self.onReceived(data)
-                self.onBufferWrite(data)
+                data = self.onReceived(data)
+                data = self.onBufferWrite(data)
 
                 if self._buffer.full():
                     self._rtcout.RTC_INFO("InPort buffer is full.")
-                    self.onBufferFull(data)
-                    self.onReceiverFull(data)
+                    data = self.onBufferFull(data)
+                    data = self.onReceiverFull(data)
 
                 self._buffer.put(data)
                 self._buffer.advanceWptr()
@@ -375,41 +375,41 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
 
     def onBufferWrite(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE].notify(
                 self._profile, data)
 
-        return
+        return data
 
     # inline void onBufferFull(const cdrMemoryStream& data)
 
     def onBufferFull(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL].notify(
                 self._profile, data)
 
-        return
+        return data
 
     # inline void onReceived(const cdrMemoryStream& data)
 
     def onReceived(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED].notify(
                 self._profile, data)
 
-        return
+        return data
 
     # inline void onReceiverFull(const cdrMemoryStream& data)
 
     def onReceiverFull(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL].notify(
                 self._profile, data)
 
-        return
+        return data
 
     ##
     # @brief Connector listener functions

@@ -21,6 +21,7 @@ from omniORB import any
 
 import OpenRTM_aist
 import threading
+import copy
 
 
 ##
@@ -100,6 +101,8 @@ class OutPort(OpenRTM_aist.OutPortBase):
         #self._OnUnderflow    = None
         #self._OnConnect      = None
         #self._OnDisconnect   = None
+        self._listeners.setDataType(copy.deepcopy(value))
+        self._listeners.setPortType(OpenRTM_aist.PortType.OutPortType)
         self.addConnectorDataListener(
             OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE,
             OpenRTM_aist.Timestamp("on_write"))

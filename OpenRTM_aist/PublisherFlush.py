@@ -283,30 +283,30 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
             self._rtcout.RTC_DEBUG("write(): connection lost.")
             return self._retcode
 
-        self.onSend(data)
+        data = self.onSend(data)
 
         self._retcode = self._consumer.put(data)
 
         if self._retcode == self.PORT_OK:
-            self.onReceived(data)
+            data = self.onReceived(data)
             return self._retcode
         elif self._retcode == self.PORT_ERROR:
-            self.onReceiverError(data)
+            data = self.onReceiverError(data)
             return self._retcode
         elif self._retcode == self.SEND_FULL:
-            self.onReceiverFull(data)
+            data = self.onReceiverFull(data)
             return self._retcode
         elif self._retcode == self.SEND_TIMEOUT:
-            self.onReceiverTimeout(data)
+            data = self.onReceiverTimeout(data)
             return self._retcode
         elif self._retcode == self.CONNECTION_LOST:
-            self.onReceiverTimeout(data)
+            data = self.onReceiverTimeout(data)
             return self._retcode
         elif self._retcode == self.UNKNOWN_ERROR:
-            self.onReceiverError(data)
+            data = self.onReceiverError(data)
             return self._retcode
         else:
-            self.onReceiverError(data)
+            data = self.onReceiverError(data)
             return self._retcode
 
     ##
@@ -422,10 +422,10 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
     # inline void onSend(const cdrMemoryStream& data)
     def onSend(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -439,10 +439,10 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
     # inline void onReceived(const cdrMemoryStream& data)
     def onReceived(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -456,10 +456,10 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
     # inline void onReceiverFull(const cdrMemoryStream& data)
     def onReceiverFull(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -473,10 +473,10 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
     # inline void onReceiverTimeout(const cdrMemoryStream& data)
     def onReceiverTimeout(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT].notify(
                 self._profile, data)
-        return
+        return data
 
     ##
     # @if jp
@@ -490,10 +490,10 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
     # inline void onReceiverError(const cdrMemoryStream& data)
     def onReceiverError(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
+            _, data = self._listeners.connectorData_[
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR].notify(
                 self._profile, data)
-        return
+        return data
 
 
 def PublisherFlushInit():

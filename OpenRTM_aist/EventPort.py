@@ -240,13 +240,13 @@ class EventBinder0(OpenRTM_aist.ConnectorDataListener):
     # @endif
     #
 
-    def __call__(self, info, data):
+    def __call__(self, info, cdrdata):
         if info.properties.getProperty(
                 "fsm_event_name") == self._eventName or info.name == self._eventName:
             self._buffer.write(Event0(self))
 
-            return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
-        return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
+            return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE, cdrdata
+        return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE, cdrdata
 
     ##
     # @if jp
@@ -291,7 +291,7 @@ class EventBinder0(OpenRTM_aist.ConnectorDataListener):
 #
 # @endif
 #
-class EventBinder1(OpenRTM_aist.ConnectorDataListenerT):
+class EventBinder1(OpenRTM_aist.ConnectorDataListener):
     ##
     # @if jp
     #
@@ -364,14 +364,14 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListenerT):
     #
     # @endif
     #
-    def __call__(self, info, data):
+    def __call__(self, info, cdrdata):
         data_ = OpenRTM_aist.ConnectorDataListenerT.__call__(
-            self, info, data, self._data_type, OpenRTM_aist.PortType.InPortType)
+            self, info, cdrdata, self._data_type, OpenRTM_aist.PortType.InPortType)
         if info.properties.getProperty(
                 "fsm_event_name") == self._eventName or info.name == self._eventName:
             self._buffer.write(Event1(self, data_))
-            return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
-        return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
+            return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE, cdrdata
+        return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE, cdrdata
 
     ##
     # @if jp

@@ -94,6 +94,9 @@ class InPort(OpenRTM_aist.InPortBase):
         self._directNewData = False
         self._valueMutex = threading.RLock()
 
+        self._listeners.setDataType(copy.deepcopy(value))
+        self._listeners.setPortType(OpenRTM_aist.PortType.InPortType)
+
         self.addConnectorDataListener(
             OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED,
             OpenRTM_aist.Timestamp("on_received"))
