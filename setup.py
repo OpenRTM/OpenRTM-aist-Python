@@ -185,6 +185,10 @@ openrtm_core_packages = [
   "OpenRTM_aist.RTM_IDL.device_interfaces",
   "OpenRTM_aist.RTM_IDL._GlobalIDL",
   "OpenRTM_aist.RTM_IDL._GlobalIDL__POA",
+  "OpenRTM_aist.RTM_IDL.Img",
+  "OpenRTM_aist.RTM_IDL.Img__POA",
+  "OpenRTM_aist.RTM_IDL.JARA_ARM",
+  "OpenRTM_aist.RTM_IDL.JARA_ARM__POA",
   ]
 openrtm_ext_packages = [
   "OpenRTM_aist.ext",
