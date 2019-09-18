@@ -54,16 +54,15 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
 
         self._interval = OpenRTM_aist.TimeValue(0, 100000)
         self._heartbeat = False
-        self._hblistenerid = None
+        self._hbtaskid = None
 
         self._inportInterval = OpenRTM_aist.TimeValue(1, 0)
         self._outportInterval = OpenRTM_aist.TimeValue(1, 0)
 
-        # このタイマーはいずれグローバルなタイマにおきかえる
-        self._timer = OpenRTM_aist.Timer(self._interval)
         self._mutex = threading.RLock()
         self._recievedactions = []
         self._sendactions = []
+
         return
 
     ##
@@ -155,7 +154,6 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
         self.unsetExecutionContextListeners()
         self.unsetConfigurationListeners()
         self.unsetHeartbeat()
-        del self._timer
         return
 
     ##
@@ -327,6 +325,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     # void setHeartbeat(coil::Properties& prop);
 
     def setHeartbeat(self, prop):
+        self.unsetHeartbeat()
         if OpenRTM_aist.toBool(prop.getProperty(
                 "heartbeat.enable"), "YES", "NO", False):
             interval_ = prop.getProperty("heartbeat.interval")
@@ -336,16 +335,8 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
                 tmp_ = float(interval_)
                 tm_.set_time(tmp_)
 
-            self._hblistenerid = self._timer.registerListenerObj(self,
-                                                                 ComponentObserverConsumer.heartbeat,
-                                                                 tm_)
-            if not self._heartbeat:
-                self._timer.start()
-                self._heartbeat = True
-
-        else:
-            if self._heartbeat and self._hblistenerid:
-                self.unsetHeartbeat()
+            self._heartbeat = True
+            self._hbtaskid = OpenRTM_aist.Manager.instance().addTask(self.heartbeat, tm_)
 
         return
 
@@ -359,11 +350,9 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     # void unsetHeartbeat();
 
     def unsetHeartbeat(self):
-        if self._hblistenerid:
-            self._timer.unregisterListener(self._hblistenerid)
-            self._hblistenerid = None
-        self._heartbeat = False
-        self._timer.stop()
+        if self._heartbeat:
+            OpenRTM_aist.Manager.instance().removeTask(self._hbtaskid)
+            self._heartbeat = False
         return
 
     # ============================================================

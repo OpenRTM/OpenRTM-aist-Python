@@ -1071,7 +1071,7 @@ class ManagerServant(RTM__POA.Manager):
             s = self._mgr.getConfig().getProperty("manager.termination_waittime")
             ret, wait_time = OpenRTM_aist.stringTo(wait_time, s)
 
-        self._mgr.createShutdownThread(wait_time)
+        self._mgr.terminate()
 
         return RTC.RTC_OK
 
