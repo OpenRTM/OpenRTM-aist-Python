@@ -76,6 +76,7 @@ class ExecutionContextWorker:
     self._mutex = threading.RLock()
     self._addedMutex = threading.RLock()
     self._removedMutex = threading.RLock()
+    self._stateMutex = threading.RLock()
     return
 
 
@@ -299,6 +300,7 @@ class ExecutionContextWorker:
       return RTC.BAD_PARAMETER
 
     self._rtcout.RTC_DEBUG("Component found in the EC.")
+    guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
     if not obj_.isCurrentState(RTC.INACTIVE_STATE):
       del guard
       self._rtcout.RTC_ERROR("State of the RTC is not INACTIVE_STATE.")
@@ -308,6 +310,7 @@ class ExecutionContextWorker:
     obj_.goTo(RTC.ACTIVE_STATE)
     rtobj[0] = obj_
     del guard
+    del guard_state
     self._rtcout.RTC_DEBUG("activateComponent() done.")
     return RTC.RTC_OK
 
@@ -361,6 +364,7 @@ class ExecutionContextWorker:
       self._rtcout.RTC_ERROR("Given RTC is not participant of this EC.")
       return RTC.BAD_PARAMETER
 
+    guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
     if not rtobj[0].isCurrentState(RTC.ACTIVE_STATE):
       del guard
       self._rtcout.RTC_ERROR("State of the RTC is not ACTIVE_STATE.")
@@ -368,6 +372,7 @@ class ExecutionContextWorker:
 
     rtobj[0].goTo(RTC.INACTIVE_STATE)
     del guard
+    del guard_state
     return RTC.RTC_OK
 
 
@@ -420,6 +425,7 @@ class ExecutionContextWorker:
       self._rtcout.RTC_ERROR("Given RTC is not participant of this EC.")
       return RTC.BAD_PARAMETER
 
+    guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
     if not rtobj[0].isCurrentState(RTC.ERROR_STATE):
       del guard
       self._rtcout.RTC_ERROR("State of the RTC is not ERROR_STATE.")
@@ -427,6 +433,7 @@ class ExecutionContextWorker:
 
     rtobj[0].goTo(RTC.INACTIVE_STATE)
     del guard
+    del guard_state
     return RTC.RTC_OK
 
 
@@ -651,9 +658,11 @@ class ExecutionContextWorker:
   def isAllCurrentState(self, state):
     guard = OpenRTM_aist.ScopedLock(self._mutex)
     for comp in self._comps:
+      guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
       if not comp.isCurrentState(state):
         del guard
         return False
+      del guard_state
 
     del guard
     return True
@@ -663,9 +672,11 @@ class ExecutionContextWorker:
   def isAllNextState(self, state):
     guard = OpenRTM_aist.ScopedLock(self._mutex)
     for comp in self._comps:
+      guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
       if not comp.isNextState(state):
         del guard
         return False
+      del guard_state
 
     del guard
     return True
@@ -675,9 +686,11 @@ class ExecutionContextWorker:
   def isOneOfCurrentState(self, state):
     guard = OpenRTM_aist.ScopedLock(self._mutex)
     for comp in self._comps:
+      guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
       if comp.isCurrentState(state):
         del guard
         return True
+      del guard_state
     
     del guard
     return False
@@ -687,9 +700,11 @@ class ExecutionContextWorker:
   def isOneOfNextState(self, state):
     guard = OpenRTM_aist.ScopedLock(self._mutex)
     for comp in self._comps:
+      guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
       if comp.isNextState(state):
         del guard
         return True
+      del guard_state
 
     del guard
     return False
@@ -702,13 +717,19 @@ class ExecutionContextWorker:
     len_ = len(self._comps)
     
     for i in range(len_):
+      guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
       self._comps[i].workerPreDo()
+      del guard_state
 
     for i in range(len_):
+      guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
       self._comps[i].workerDo()
+      del guard_state
 
     for i in range(len_):
+      guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
       self._comps[i].workerPostDo()
+      del guard_state
 
     self.updateComponentList()
     return
@@ -719,7 +740,9 @@ class ExecutionContextWorker:
     self._rtcout.RTC_PARANOID("invokeWorkerPreDo()")
     # m_comps never changes its size here
     for comp in self._comps:
+      guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
       comp.workerPreDo()
+      del guard_state
     return
 
   # void invokeWorkerDo();
@@ -727,7 +750,9 @@ class ExecutionContextWorker:
     self._rtcout.RTC_PARANOID("invokeWorkerDo()")
     # m_comps never changes its size here
     for comp in self._comps:
+      guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
       comp.workerDo()
+      del guard_state
     return
 
   # void invokeWorkerPostDo();
@@ -735,7 +760,9 @@ class ExecutionContextWorker:
     self._rtcout.RTC_PARANOID("invokeWorkerPostDo()")
     # m_comps never changes its size here
     for comp in self._comps:
+      guard_state = OpenRTM_aist.ScopedLock(self._stateMutex)
       comp.workerPostDo()
+      del guard_state
     # m_comps might be changed here
     self.updateComponentList()
     return
