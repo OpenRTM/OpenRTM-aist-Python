@@ -181,7 +181,7 @@ class PeriodicFunction(object):
 #
 # @endif
 
-
+# TODO: The "object" class inheritance must be removed in Python3
 class Timer(object):
     """
     """
