@@ -213,7 +213,7 @@ class ConnectorDataListenerType:
 #
 # @endif
 #
-class ConnectorDataListener:
+class ConnectorDataListener(object):
     """
     """
 
