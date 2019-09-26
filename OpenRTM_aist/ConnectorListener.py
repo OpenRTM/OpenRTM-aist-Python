@@ -213,6 +213,7 @@ class ConnectorDataListenerType:
 #
 # @endif
 #
+# TODO: The "obbject" class inheritance must be removed in Python3
 class ConnectorDataListener(object):
     """
     """
