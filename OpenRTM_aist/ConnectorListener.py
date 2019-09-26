@@ -818,7 +818,7 @@ class ConnectorDataListenerHolder:
             if deserialize_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
                 data = _data
             else:
-                return
+                return ret, cdrdata
 
         for listener in self._listeners:
             if issubclass(type(listener), ConnectorDataListenerT):
