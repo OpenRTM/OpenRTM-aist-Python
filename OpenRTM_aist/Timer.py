@@ -182,7 +182,7 @@ class PeriodicFunction(object):
 # @endif
 
 
-class Timer:
+class Timer(object):
     """
     """
 
