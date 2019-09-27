@@ -104,7 +104,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def start(self):
-        self._node = rosgraph.xmlrpc.XmlRpcNode(9000, self)
+        self._node = rosgraph.xmlrpc.XmlRpcNode(self._port, self)
         self._node.start()
         self._server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

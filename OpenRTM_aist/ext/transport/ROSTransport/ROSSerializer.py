@@ -88,7 +88,7 @@ def ros_serialize(msg):
     buf.write(struct.pack('<I', size))
     buf.seek(end)
     bdata = buf.getvalue()
-    buf.truncate(0)
+    
     return bdata
 
 
