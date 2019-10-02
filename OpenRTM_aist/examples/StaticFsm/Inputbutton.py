@@ -77,7 +77,7 @@ class Inputbutton(OpenRTM_aist.DataFlowComponentBase):
         #print(">> ",end="")
         cmds = sys.stdin.readline()
         cmds = cmds.split(" ")
-        OpenRTM_aist.StringUtil.eraseBlank(cmds)
+        cmds[0] = OpenRTM_aist.StringUtil.eraseBlank(cmds[0])
         cmds[0] = cmds[0].replace("\n", "")
         cmds[0] = cmds[0].replace("\r", "")
         print("[command]: ", cmds[0])
@@ -96,13 +96,13 @@ class Inputbutton(OpenRTM_aist.DataFlowComponentBase):
             self._close.data = 0
             self._closeOut.write()
         elif cmds[0] == "minute":
-            min = [0]
-            if len(cmds) < 2 or not OpenRTM_aist.StringUtil.stringTo(
-                    min, cmds[1]):
+            min = 0
+            ret, min = OpenRTM_aist.StringUtil.stringTo(min, cmds[1])
+            if len(cmds) < 2 or not ret:
                 print("minute command needs an integer arg.")
                 return RTC.RTC_OK
 
-            self._minute.data = min[0]
+            self._minute.data = min
             self._minuteOut.write()
         elif cmds[0] == "start":
             self._start.data = 0
