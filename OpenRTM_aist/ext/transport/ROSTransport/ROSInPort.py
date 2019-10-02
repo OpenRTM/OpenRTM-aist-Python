@@ -308,11 +308,13 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             else:
                 _, dest_addr, dest_port = result
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
                 sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
                 sock.setsockopt(socket.SOL_TCP, socket.TCP_KEEPCNT, 9)
                 sock.setsockopt(socket.SOL_TCP, socket.TCP_KEEPIDLE, 60)
                 sock.setsockopt(socket.SOL_TCP, socket.TCP_KEEPINTVL, 10)
-                sock.settimeout(1)
+                sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                sock.settimeout(60.0)
                 sock.connect((dest_addr, dest_port))
 
                 fileno = sock.fileno()
@@ -435,7 +437,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             self._rtcout.RTC_PARANOID("ROSInPort.put()")
             if not self._connector:
                 self.onReceiverError(data)
-                return OpenRTM.PORT_ERROR
+                return
 
             self._rtcout.RTC_PARANOID("received data size: %d", len(data))
 
@@ -677,15 +679,51 @@ class SubListener:
     # @endif
     #
     def recieve(self):
+        buff_size = 65536
+        start = 0
+        size = -1
+        if sys.version_info[0] == 3:
+            b = BytesIO()
+        else:
+            b = StringIO()
+        self._sock.setblocking(True)
         while not self._shutdown:
             try:
-                self._sock.setblocking(1)
-                message_size = self._sock.recv(4)
-                if message_size:
-                    if len(message_size) == 4:
-                        (size,) = struct.unpack('<I', message_size)
-                        data = self._sock.recv(size)
-                        self._sub.put(message_size + data)
+                btell = b.tell()
+                pos = start
+                left = btell - pos
+                if left > 4:
+                    b.seek(pos)
+                    if size < 0 and btell >= 4:
+                        (size,) = struct.unpack('<I', b.read(4))
+                        start += 4
+                        pos = start
+                    if size > 0:
+                        if left >= size:
+                            start = 0
+                            b.seek(start)
+                            data = b.read(size+4)
+                            self._sub.put(data)
+                            b.seek(start)
+                            pos += size
+                            size = -1
+                        if btell == pos:
+                            b.seek(start)
+                            b.truncate(start)
+                        elif pos != start:
+                            b.seek(pos)
+                            leftovers = b.read(btell-pos)
+                            b.truncate(start + len(leftovers))
+                            b.seek(start)
+                            b.write(leftovers)
+                        else:
+                            b.seek(btell)
+                if b.tell() <= size+4:
+                    d = self._sock.recv(buff_size)
+                    if d:
+                        b.write(d)
+                    else:
+                        raise BaseException
             except BaseException:
                 self._sub.deleteSocket(self._uri)
                 return
