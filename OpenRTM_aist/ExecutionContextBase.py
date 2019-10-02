@@ -441,6 +441,9 @@ class ExecutionContextBase:
     # virtual void exit();
     def exit(self):
         self._rtcout.RTC_TRACE("exit()")
+        ret_ = self._worker.removeComponent(self._profile.getOwner())
+        if ret_ != RTC.RTC_OK:
+            self._rtcout.RTC_ERROR("Error: ECWorker removeComponent() faild.")
         self._profile.exit()
         self._worker.exit()
 
