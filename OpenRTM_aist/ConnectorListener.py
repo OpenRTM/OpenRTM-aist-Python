@@ -752,8 +752,9 @@ class ConnectorDataListenerHolder:
     def removeListener(self, listener):
         guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for (i, _listener) in enumerate(self._listeners):
-            del self._listeners[i]
-            return
+            if self._listeners[i] == listener:
+                del self._listeners[i]
+                return
 
     ##
     # @if jp
@@ -945,8 +946,9 @@ class ConnectorListenerHolder:
     def removeListener(self, listener):
         guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for (i, _listener) in enumerate(self._listeners):
-            del self._listeners[i]
-            return
+            if self._listeners[i] == listener:
+                del self._listeners[i]
+                return
 
     ##
     # @if jp
