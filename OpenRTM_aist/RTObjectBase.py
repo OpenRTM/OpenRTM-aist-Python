@@ -3510,7 +3510,7 @@ class RTObjectBase:
                 return
 
         listener = Noname(memfunc)
-        self._actionListeners.preaction_[listener_type].addListener(listener)
+        self._actionListeners.addPreActionListener(listener_type, listener)
         return listener
 
     ##
@@ -3537,8 +3537,7 @@ class RTObjectBase:
     #                                  PreComponentActionListener* listener);
 
     def removePreComponentActionListener(self, listener_type, listener):
-        self._actionListeners.preaction_[
-            listener_type].removeListener(listener)
+        self._actionListeners.removePreActionListener(listener_type, listener)
         return
 
     ##
@@ -3629,7 +3628,7 @@ class RTObjectBase:
                 return
 
         listener = Noname(memfunc)
-        self._actionListeners.postaction_[listener_type].addListener(listener)
+        self._actionListeners.addPostActionListener(listener_type, listener)
         return listener
 
     ##
@@ -3656,8 +3655,7 @@ class RTObjectBase:
     #                                   PostComponentActionListener* listener);
 
     def removePostComponentActionListener(self, listener_type, listener):
-        self._actionListeners.postaction_[
-            listener_type].removeListener(listener)
+        self._actionListeners.removePostActionListener(listener_type, listener)
         return
 
     ##
@@ -3729,7 +3727,7 @@ class RTObjectBase:
 
         listener = Noname(memfunc)
 
-        self._actionListeners.portaction_[listener_type].addListener(listener)
+        self._actionListeners.addPortActionListener(listener_type, listener)
         return listener
 
     ##
@@ -3755,8 +3753,7 @@ class RTObjectBase:
     #                          PortActionListener* listener);
 
     def removePortActionListener(self, listener_type, listener):
-        self._actionListeners.portaction_[
-            listener_type].removeListener(listener)
+        self._actionListeners.removePortActionListener(listener_type, listener)
         return
 
     ##
@@ -3827,7 +3824,7 @@ class RTObjectBase:
                 return
 
         listener = Noname(memfunc)
-        self._actionListeners.ecaction_[listener_type].addListener(listener)
+        self._actionListeners.addECActionListener(listener_type, listener)
         return listener
 
     ##
@@ -3854,7 +3851,7 @@ class RTObjectBase:
     #                                      ECActionListener* listener);
 
     def removeExecutionContextActionListener(self, listener_type, listener):
-        self._actionListeners.ecaction_[listener_type].removeListener(listener)
+        self._actionListeners.removeECActionListener(listener_type, listener)
         return
 
     ##
@@ -3927,8 +3924,7 @@ class RTObjectBase:
                 return
 
         listener = Noname(memfunc)
-        self._portconnListeners.portconnect_[
-            listener_type].addListener(listener)
+        self._portconnListeners.addListener(listener_type, listener)
         return listener
 
     ##
@@ -3955,8 +3951,7 @@ class RTObjectBase:
     #                           PortConnectListener* listener);
 
     def removePortConnectListener(self, listener_type, listener):
-        self._portconnListeners.portconnect_[
-            listener_type].removeListener(listener)
+        self._portconnListeners.removeListener(listener_type, listener)
         return
 
     ##
@@ -4034,8 +4029,7 @@ class RTObjectBase:
                 return
 
         listener = Noname(memfunc)
-        self._portconnListeners.portconnret_[
-            listener_type].addListener(listener)
+        self._portconnListeners.addRetListener(listener_type, listener)
         return listener
 
     ##
@@ -4062,8 +4056,7 @@ class RTObjectBase:
     #                              PortConnectRetListener* listener);
 
     def removePortConnectRetListener(self, listener_type, listener):
-        self._portconnListeners.portconnret_[
-            listener_type].removeListener(listener)
+        self._portconnListeners.removeRetListener(listener_type, listener)
         return
 
     ##
@@ -4393,8 +4386,7 @@ class RTObjectBase:
                 return
 
         listener = Noname(memfunc)
-        self._fsmActionListeners.preaction_[
-            listener_type].addListener(listener)
+        self._fsmActionListeners.addPreActionListener(listener_type, listener)
         return listener
 
     ##
@@ -4417,8 +4409,7 @@ class RTObjectBase:
     # @endif
     #
     def removePreFsmActionListener(self, listener_type, listener):
-        self._fsmActionListeners.preaction_[
-            listener_type].removeListener(listener)
+        self._fsmActionListeners.removePreActionListener(listener_type, listener)
         return
 
     ##
@@ -4504,8 +4495,7 @@ class RTObjectBase:
                 return
 
         listener = Noname(memfunc)
-        self._fsmActionListeners.postaction_[
-            listener_type].addListener(listener)
+        self._fsmActionListeners.addPostActionListener(listener_type, listener)
         return listener
 
     ##
@@ -4529,8 +4519,7 @@ class RTObjectBase:
     #
 
     def removePostFsmActionListener(self, listener_type, listener):
-        self._fsmActionListeners.postaction_[
-            listener_type].removeListener(listener)
+        self._fsmActionListeners.removePostActionListener(listener_type, listener)
         return
 
     ##
@@ -4612,7 +4601,7 @@ class RTObjectBase:
                 return
 
         listener = Noname(memfunc)
-        self._fsmActionListeners.profile_[listener_type].addListener(listener)
+        self._fsmActionListeners.addProfileListener(listener_type, listener)
         return listener
 
     ##
@@ -4636,8 +4625,7 @@ class RTObjectBase:
     #
 
     def removeFsmProfileListener(self, listener_type, listener):
-        self._fsmActionListeners.profile_[
-            listener_type].removeListener(listener)
+        self._fsmActionListeners.removeProfileListener(listener_type, listener)
         return
 
     ##
@@ -4772,253 +4760,215 @@ class RTObjectBase:
 
     # inline void preOnInitialize(UniqueId ec_id)
     def preOnInitialize(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_INITIALIZE].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_INITIALIZE, ec_id)
         return
 
     # inline void preOnFinalize(UniqueId ec_id)
     def preOnFinalize(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_FINALIZE].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_FINALIZE, ec_id)
         return
 
     # inline void preOnStartup(UniqueId ec_id)
     def preOnStartup(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_STARTUP].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_STARTUP, ec_id)
         return
 
     # inline void preOnShutdown(UniqueId ec_id)
     def preOnShutdown(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_SHUTDOWN].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_SHUTDOWN, ec_id)
         return
 
     # inline void preOnActivated(UniqueId ec_id)
     def preOnActivated(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_ACTIVATED].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_ACTIVATED, ec_id)
         return
 
     # inline void preOnDeactivated(UniqueId ec_id)
     def preOnDeactivated(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_DEACTIVATED].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_DEACTIVATED, ec_id)
         return
 
     # inline void preOnAborting(UniqueId ec_id)
     def preOnAborting(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_ABORTING].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_ABORTING, ec_id)
         return
 
     # inline void preOnError(UniqueId ec_id)
     def preOnError(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_ERROR].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_ERROR, ec_id)
         return
 
     # inline void preOnReset(UniqueId ec_id)
     def preOnReset(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_RESET].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_RESET, ec_id)
         return
 
     # inline void preOnExecute(UniqueId ec_id)
     def preOnExecute(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_EXECUTE].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_EXECUTE, ec_id)
         return
 
     # inline void preOnStateUpdate(UniqueId ec_id)
     def preOnStateUpdate(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_STATE_UPDATE].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_STATE_UPDATE, ec_id)
         return
 
     # inline void preOnRateChanged(UniqueId ec_id)
 
     def preOnRateChanged(self, ec_id):
-        self._actionListeners.preaction_[
-            OpenRTM_aist.PreComponentActionListenerType.PRE_ON_RATE_CHANGED].notify(ec_id)
+        self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_RATE_CHANGED, ec_id)
         return
 
     # inline void postOnInitialize(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnInitialize(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_INITIALIZE].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_INITIALIZE, ec_id, ret)
         return
 
     # inline void postOnFinalize(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnFinalize(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_FINALIZE].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_FINALIZE, ec_id, ret)
         return
 
     # inline void postOnStartup(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnStartup(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_STARTUP].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_STARTUP, ec_id, ret)
         return
 
     # inline void postOnShutdown(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnShutdown(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_SHUTDOWN].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_SHUTDOWN, ec_id, ret)
         return
 
     # inline void postOnActivated(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnActivated(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_ACTIVATED].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_ACTIVATED, ec_id, ret)
         return
 
     # inline void postOnDeactivated(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnDeactivated(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_DEACTIVATED].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_DEACTIVATED, ec_id, ret)
         return
 
     # inline void postOnAborting(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnAborting(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_ABORTING].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_ABORTING, ec_id, ret)
         return
 
     # inline void postOnError(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnError(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_ERROR].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_ERROR, ec_id, ret)
         return
 
     # inline void postOnReset(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnReset(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_RESET].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_RESET, ec_id, ret)
         return
 
     # inline void postOnExecute(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnExecute(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_EXECUTE].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_EXECUTE, ec_id, ret)
         return
 
     # inline void postOnStateUpdate(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnStateUpdate(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_STATE_UPDATE].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_STATE_UPDATE, ec_id, ret)
         return
 
     # inline void postOnRateChanged(UniqueId ec_id, ReturnCode_t ret)
 
     def postOnRateChanged(self, ec_id, ret):
-        self._actionListeners.postaction_[
-            OpenRTM_aist.PostComponentActionListenerType.POST_ON_RATE_CHANGED].notify(
-            ec_id, ret)
+        self._actionListeners.notifyPostAction(
+            OpenRTM_aist.PostComponentActionListenerType.POST_ON_RATE_CHANGED, ec_id, ret)
         return
 
     # inline void onAddPort(const PortProfile& pprof)
 
     def onAddPort(self, pprof):
-        self._actionListeners.portaction_[
-            OpenRTM_aist.PortActionListenerType.ADD_PORT].notify(pprof)
+        self._actionListeners.notifyPortAction(OpenRTM_aist.PortActionListenerType.ADD_PORT, pprof)
         return
 
     # inline void onRemovePort(const PortProfile& pprof)
 
     def onRemovePort(self, pprof):
-        self._actionListeners.portaction_[
-            OpenRTM_aist.PortActionListenerType.REMOVE_PORT].notify(pprof)
+        self._actionListeners.notifyPortAction(OpenRTM_aist.PortActionListenerType.REMOVE_PORT, pprof)
         return
 
     # inline void onAttachExecutionContext(UniqueId ec_id)
 
     def onAttachExecutionContext(self, ec_id):
-        self._actionListeners.ecaction_[
-            OpenRTM_aist.ExecutionContextActionListenerType.EC_ATTACHED].notify(ec_id)
+        self._actionListeners.notifyECAction(OpenRTM_aist.ExecutionContextActionListenerType.EC_ATTACHED, ec_id)
         return
 
     # inline void onDetachExecutionContext(UniqueId ec_id)
 
     def onDetachExecutionContext(self, ec_id):
-        self._actionListeners.ecaction_[
-            OpenRTM_aist.ExecutionContextActionListenerType.EC_DETACHED].notify(ec_id)
+        self._actionListeners.notifyECAction(OpenRTM_aist.ExecutionContextActionListenerType.EC_DETACHED, ec_id)
         return
 
     def preOnFsmInit(self, state):
-        self._fsmActionListeners.preaction_[
-            OpenRTM_aist.PreFsmActionListenerType.PRE_ON_INIT].notify(state)
+        self._fsmActionListeners.notifyPreAction(OpenRTM_aist.PreFsmActionListenerType.PRE_ON_INIT, state)
         return
 
     def preOnFsmEntry(self, state):
-        self._fsmActionListeners.preaction_[
-            OpenRTM_aist.PreFsmActionListenerType.PRE_ON_ENTRY].notify(state)
+        self._fsmActionListeners.notifyPreAction(OpenRTM_aist.PreFsmActionListenerType.PRE_ON_ENTRY, state)
         return
 
     def preOnFsmDo(self, state):
-        self._fsmActionListeners.preaction_[
-            OpenRTM_aist.PreFsmActionListenerType.PRE_ON_DO].notify(state)
+        self._fsmActionListeners.notifyPreAction(OpenRTM_aist.PreFsmActionListenerType.PRE_ON_DO, state)
         return
 
     def preOnFsmExit(self, state):
-        self._fsmActionListeners.preaction_[
-            OpenRTM_aist.PreFsmActionListenerType.PRE_ON_EXIT].notify(state)
+        self._fsmActionListeners.notifyPreAction(OpenRTM_aist.PreFsmActionListenerType.PRE_ON_EXIT, state)
         return
 
     def preOnFsmStateChange(self, state):
-        self._fsmActionListeners.preaction_[
-            OpenRTM_aist.PreFsmActionListenerType.PRE_ON_STATE_CHANGE].notify(state)
+        self._fsmActionListeners.notifyPreAction(OpenRTM_aist.PreFsmActionListenerType.PRE_ON_STATE_CHANGE, state)
         return
 
     def postOnFsmInit(self, state, ret):
-        self._fsmActionListeners.postaction_[
-            OpenRTM_aist.PostFsmActionListenerType.POST_ON_INIT].notify(
-            state, ret)
+        self._fsmActionListeners.notifyPostAction(
+            OpenRTM_aist.PostFsmActionListenerType.POST_ON_INIT, state, ret)
         return
 
     def postOnFsmEntry(self, state, ret):
-        self._fsmActionListeners.postaction_[
-            OpenRTM_aist.PostFsmActionListenerType.POST_ON_ENTRY].notify(
-            state, ret)
+        self._fsmActionListeners.notifyPostAction(
+            OpenRTM_aist.PostFsmActionListenerType.POST_ON_ENTRY, state, ret)
         return
 
     def postOnFsmDo(self, state, ret):
-        self._fsmActionListeners.postaction_[
-            OpenRTM_aist.PostFsmActionListenerType.POST_ON_DO].notify(state, ret)
+        self._fsmActionListeners.notifyPostAction(OpenRTM_aist.PostFsmActionListenerType.POST_ON_DO, state, ret)
         return
 
     def postOnFsmExit(self, state, ret):
-        self._fsmActionListeners.postaction_[
-            OpenRTM_aist.PostFsmActionListenerType.POST_ON_EXIT].notify(
-            state, ret)
+        self._fsmActionListeners.notifyPostAction(
+            OpenRTM_aist.PostFsmActionListenerType.POST_ON_EXIT, state, ret)
         return
 
     def postOnFsmStateChange(self, state, ret):
-        self._fsmActionListeners.postaction_[
-            OpenRTM_aist.PostFsmActionListenerType.POST_ON_STATE_CHANGE].notify(
-            state, ret)
+        self._fsmActionListeners.notifyPostAction(
+            OpenRTM_aist.PostFsmActionListenerType.POST_ON_STATE_CHANGE, state, ret)
         return
 
     # ReturnCode_t getInheritedECOptions(coil::Properties& default_opts);

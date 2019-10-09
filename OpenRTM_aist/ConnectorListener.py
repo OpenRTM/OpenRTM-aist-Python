@@ -996,3 +996,37 @@ class ConnectorListeners:
     def setPortType(self, porttype):
         for holder in self.connectorData_:
             holder.setPortType(porttype)
+
+    def notifyData(self, ltype, info, cdrdata):
+        if ltype < len(self.connectorData_):
+            return self.connectorData_[ltype].notify(info, cdrdata)
+        return ConnectorListenerStatus.NO_CHANGE, None
+
+    def notify(self, ltype, info):
+        if ltype < len(self.connector_):
+            return self.connector_[ltype].notify(info)
+        return ConnectorListenerStatus.NO_CHANGE
+
+    def addListener(self, ltype, listener):
+        if ltype < len(self.connector_):
+            self.connector_[ltype].addListener(listener)
+            return True
+        return False
+
+    def addDataListener(self, ltype, listener):
+        if ltype < len(self.connectorData_):
+            self.connectorData_[ltype].addListener(listener)
+            return True
+        return False
+
+    def removeListener(self, ltype, listener):
+        if ltype < len(self.connector_):
+            self.connector_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def removeDataListener(self, ltype, listener):
+        if ltype < len(self.connectorData_):
+            self.connectorData_[ltype].removeListener(listener)
+            return True
+        return False

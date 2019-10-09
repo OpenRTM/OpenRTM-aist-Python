@@ -1091,3 +1091,67 @@ class ComponentActionListeners:
         self.ecaction_num = ExecutionContextActionListenerType.EC_ACTION_LISTENER_NUM
         self.ecaction_ = [ExecutionContextActionListenerHolder()
                           for i in range(self.ecaction_num)]
+
+    def addPreActionListener(self, ltype, listener):
+        if ltype < len(self.preaction_):
+            self.preaction_[ltype].addListener(listener)
+            return True
+        return False
+
+    def addPostActionListener(self, ltype, listener):
+        if ltype < len(self.postaction_):
+            self.postaction_[ltype].addListener(listener)
+            return True
+        return False
+
+    def addPortActionListener(self, ltype, listener):
+        if ltype < len(self.portaction_):
+            self.portaction_[ltype].addListener(listener)
+            return True
+        return False
+
+    def addECActionListener(self, ltype, listener):
+        if ltype < len(self.ecaction_):
+            self.ecaction_[ltype].addListener(listener)
+            return True
+        return False
+
+    def removePreActionListener(self, ltype, listener):
+        if ltype < len(self.preaction_):
+            self.preaction_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def removePostActionListener(self, ltype, listener):
+        if ltype < len(self.postaction_):
+            self.postaction_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def removePortActionListener(self, ltype, listener):
+        if ltype < len(self.portaction_):
+            self.portaction_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def removeECActionListener(self, ltype, listener):
+        if ltype < len(self.ecaction_):
+            self.ecaction_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def notifyPreAction(self, ltype, ec_id):
+        if ltype < len(self.preaction_):
+            self.preaction_[ltype].notify(ec_id)
+
+    def notifyPostAction(self, ltype, ec_id, ret):
+        if ltype < len(self.postaction_):
+            self.postaction_[ltype].notify(ec_id, ret)
+
+    def notifyPortAction(self, ltype, pprofile):
+        if ltype < len(self.portaction_):
+            self.portaction_[ltype].notify(pprofile)
+
+    def notifyECAction(self, ltype, ec_id):
+        if ltype < len(self.ecaction_):
+            self.ecaction_[ltype].notify(ec_id)

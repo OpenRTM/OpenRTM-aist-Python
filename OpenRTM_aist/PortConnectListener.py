@@ -610,3 +610,35 @@ class PortConnectListeners:
         self.portconnret_num = PortConnectRetListenerType.PORT_CONNECT_RET_LISTENER_NUM
         self.portconnret_ = [PortConnectRetListenerHolder()
                              for i in range(self.portconnret_num)]
+
+    def addListener(self, ltype, listener):
+        if ltype < len(self.portconnect_):
+            self.portconnect_[ltype].addListener(listener)
+            return True
+        return False
+
+    def removeListener(self, ltype, listener):
+        if ltype < len(self.portconnect_):
+            self.portconnect_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def addRetListener(self, ltype, listener):
+        if ltype < len(self.portconnret_):
+            self.portconnret_[ltype].addListener(listener)
+            return True
+        return False
+
+    def removeRetListener(self, ltype, listener):
+        if ltype < len(self.portconnret_):
+            self.portconnret_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def notify(self, ltype, portname, profile):
+        if ltype < len(self.portconnect_):
+            self.portconnect_[ltype].notify(portname, profile)
+
+    def notifyRet(self, ltype, portname, profile, ret):
+        if ltype < len(self.portconnret_):
+            self.portconnret_[ltype].notify(portname, profile, ret)

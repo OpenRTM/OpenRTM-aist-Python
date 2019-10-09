@@ -1541,3 +1541,68 @@ class FsmActionListeners:
         self.structure_num = FsmStructureListenerType.FSM_STRUCTURE_LISTENER_NUM
         self.structure_ = [FsmStructureListenerHolder()
                            for i in range(self.structure_num)]
+
+
+    def addPreActionListener(self, ltype, listener):
+        if ltype < len(self.preaction_):
+            self.preaction_[ltype].addListener(listener)
+            return True
+        return False
+
+    def addPostActionListener(self, ltype, listener):
+        if ltype < len(self.postaction_):
+            self.postaction_[ltype].addListener(listener)
+            return True
+        return False
+
+    def addProfileListener(self, ltype, listener):
+        if ltype < len(self.profile_):
+            self.profile_[ltype].addListener(listener)
+            return True
+        return False
+
+    def addStructureListener(self, ltype, listener):
+        if ltype < len(self.structure_):
+            self.structure_[ltype].addListener(listener)
+            return True
+        return False
+
+    def removePreActionListener(self, ltype, listener):
+        if ltype < len(self.preaction_):
+            self.preaction_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def removePostActionListener(self, ltype, listener):
+        if ltype < len(self.postaction_):
+            self.postaction_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def removeProfileListener(self, ltype, listener):
+        if ltype < len(self.profile_):
+            self.profile_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def removeStructureListener(self, ltype, listener):
+        if ltype < len(self.structure_):
+            self.structure_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def notifyPreAction(self, ltype, ec_id):
+        if ltype < len(self.preaction_):
+            self.preaction_[ltype].notify(ec_id)
+
+    def notifyPostAction(self, ltype, ec_id, ret):
+        if ltype < len(self.postaction_):
+            self.postaction_[ltype].notify(ec_id, ret)
+
+    def notifyProfile(self, ltype, pprofile):
+        if ltype < len(self.profile_):
+            self.profile_[ltype].notify(pprofile)
+
+    def notifyStructure(self, ltype, ec_id):
+        if ltype < len(self.structure_):
+            self.structure_[ltype].notify(ec_id)

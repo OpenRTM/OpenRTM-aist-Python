@@ -772,3 +772,51 @@ class ConfigurationListeners:
         self.configsetname_num = ConfigurationSetNameListenerType.CONFIG_SET_NAME_LISTENER_NUM
         self.configsetname_ = [ConfigurationSetNameListenerHolder()
                                for i in range(self.configsetname_num)]
+
+    def addConfigParamListener(self, ltype, listener):
+        if ltype < len(self.configparam_):
+            self.configparam_[ltype].addListener(listener)
+            return True
+        return False
+
+    def addConfigurationSetListener(self, ltype, listener):
+        if ltype < len(self.configset_):
+            self.configset_[ltype].addListener(listener)
+            return True
+        return False
+
+    def addConfigurationSetNameListener(self, ltype, listener):
+        if ltype < len(self.configsetname_):
+            self.configsetname_[ltype].addListener(listener)
+            return True
+        return False
+
+    def removeConfigParamListener(self, ltype, listener):
+        if ltype < len(self.configparam_):
+            self.configparam_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def removeConfigurationSetListener(self, ltype, listener):
+        if ltype < len(self.configset_):
+            self.configset_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def removeConfigurationSetNameListener(self, ltype, listener):
+        if ltype < len(self.configsetname_):
+            self.configsetname_[ltype].removeListener(listener)
+            return True
+        return False
+
+    def notifyConfigParam(self, ltype, config_set_name, config_param_name):
+        if ltype < len(self.configparam_):
+            self.configparam_[ltype].notify(config_set_name, config_param_name)
+
+    def notifyConfigurationSet(self, ltype, config_set):
+        if ltype < len(self.configset_):
+            self.configset_[ltype].notify(config_set)
+
+    def notifyConfigurationSetName(self, ltype, config_set_name):
+        if ltype < len(self.configsetname_):
+            self.configsetname_[ltype].notify(config_set_name)

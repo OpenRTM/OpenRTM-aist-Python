@@ -225,71 +225,63 @@ class InPortCorbaCdrProvider(OpenRTM_aist.InPortProvider,
 
     def onBufferWrite(self, data):
         if self._listeners is not None and self._profile is not None:
-            _, data = self._listeners.connectorData_[
-                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE].notify(
-                self._profile, data)
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE, self._profile, data)
         return data
 
     # inline void onBufferFull(const cdrMemoryStream& data)
 
     def onBufferFull(self, data):
         if self._listeners is not None and self._profile is not None:
-            _, data = self._listeners.connectorData_[
-                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL].notify(
-                self._profile, data)
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL, self._profile, data)
         return data
 
     # inline void onBufferWriteTimeout(const cdrMemoryStream& data)
 
     def onBufferWriteTimeout(self, data):
         if self._listeners is not None and self._profile is not None:
-            _, data = self._listeners.connectorData_[
-                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT].notify(
-                self._profile, data)
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT, self._profile, data)
         return data
 
     # inline void onBufferWriteOverwrite(const cdrMemoryStream& data)
     def onBufferWriteOverwrite(self, data):
         if self._listeners is not None and self._profile is not None:
-            _, data = self._listeners.connectorData_[
-                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_OVERWRITE].notify(
-                self._profile, data)
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_OVERWRITE, self._profile, data)
         return data
 
     # inline void onReceived(const cdrMemoryStream& data)
 
     def onReceived(self, data):
         if self._listeners is not None and self._profile is not None:
-            _, data = self._listeners.connectorData_[
-                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED].notify(
-                self._profile, data)
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED, self._profile, data)
         return data
 
     # inline void onReceiverFull(const cdrMemoryStream& data)
 
     def onReceiverFull(self, data):
         if self._listeners is not None and self._profile is not None:
-            _, data = self._listeners.connectorData_[
-                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL].notify(
-                self._profile, data)
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL, self._profile, data)
         return data
 
     # inline void onReceiverTimeout(const cdrMemoryStream& data)
 
     def onReceiverTimeout(self, data):
         if self._listeners is not None and self._profile is not None:
-            _, data = self._listeners.connectorData_[
-                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT].notify(
-                self._profile, data)
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT, self._profile, data)
         return data
 
     # inline void onReceiverError(const cdrMemoryStream& data)
 
     def onReceiverError(self, data):
         if self._listeners is not None and self._profile is not None:
-            self._listeners.connectorData_[
-                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR].notify(
-                self._profile, data)
+            self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR, self._profile, data)
         return data
 
 
