@@ -1492,6 +1492,18 @@ class FsmStructureListenerHolder:
 #
 # @endif
 class FsmActionListeners:
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    #
+    # @endif
     def __init__(self):
 
         ##
@@ -1542,67 +1554,288 @@ class FsmActionListeners:
         self.structure_ = [FsmStructureListenerHolder()
                            for i in range(self.structure_num)]
 
-
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のPreFsmActionListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def addPreActionListener(self, ltype, listener):
         if ltype < len(self.preaction_):
             self.preaction_[ltype].addListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のPostFsmActionListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def addPostActionListener(self, ltype, listener):
         if ltype < len(self.postaction_):
             self.postaction_[ltype].addListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のFsmProfileListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def addProfileListener(self, ltype, listener):
         if ltype < len(self.profile_):
             self.profile_[ltype].addListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のFsmStructureListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def addStructureListener(self, ltype, listener):
         if ltype < len(self.structure_):
             self.structure_[ltype].addListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のPreFsmActionListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def removePreActionListener(self, ltype, listener):
         if ltype < len(self.preaction_):
             self.preaction_[ltype].removeListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のPostFsmActionListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def removePostActionListener(self, ltype, listener):
         if ltype < len(self.postaction_):
             self.postaction_[ltype].removeListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のFsmProfileListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def removeProfileListener(self, ltype, listener):
         if ltype < len(self.profile_):
             self.profile_[ltype].removeListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のFsmStructureListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def removeStructureListener(self, ltype, listener):
         if ltype < len(self.structure_):
             self.structure_[ltype].removeListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のPreFsmActionListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param ec_id 実行コンテキストのID
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param ec_id
+    #
+    # @endif
     def notifyPreAction(self, ltype, ec_id):
         if ltype < len(self.preaction_):
             self.preaction_[ltype].notify(ec_id)
 
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のPostFsmActionListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param ec_id 実行コンテキストのID
+    # @param ret リターンコード
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param ec_id
+    # @param ret 
+    #
+    # @endif
     def notifyPostAction(self, ltype, ec_id, ret):
         if ltype < len(self.postaction_):
             self.postaction_[ltype].notify(ec_id, ret)
 
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のFsmStructureListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param pprofile ポートプロファイル
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param pprofile
+    #
+    # @endif
     def notifyProfile(self, ltype, pprofile):
         if ltype < len(self.profile_):
             self.profile_[ltype].notify(pprofile)
 
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のFsmStructureListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param ec_id 実行コンテキストのID
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param ec_id
+    #
+    # @endif
     def notifyStructure(self, ltype, ec_id):
         if ltype < len(self.structure_):
             self.structure_[ltype].notify(ec_id)

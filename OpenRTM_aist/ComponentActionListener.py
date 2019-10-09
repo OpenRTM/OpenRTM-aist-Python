@@ -1041,6 +1041,18 @@ class ExecutionContextActionListenerHolder:
 class ComponentActionListeners:
     """
     """
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    #
+    # @endif
 
     def __init__(self):
 
@@ -1092,66 +1104,288 @@ class ComponentActionListeners:
         self.ecaction_ = [ExecutionContextActionListenerHolder()
                           for i in range(self.ecaction_num)]
 
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のPreComponentActionListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def addPreActionListener(self, ltype, listener):
         if ltype < len(self.preaction_):
             self.preaction_[ltype].addListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のPostComponentActionListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def addPostActionListener(self, ltype, listener):
         if ltype < len(self.postaction_):
             self.postaction_[ltype].addListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のPortActionListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def addPortActionListener(self, ltype, listener):
         if ltype < len(self.portaction_):
             self.portaction_[ltype].addListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のExecutionContextActionListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def addECActionListener(self, ltype, listener):
         if ltype < len(self.ecaction_):
             self.ecaction_[ltype].addListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のPreComponentActionListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def removePreActionListener(self, ltype, listener):
         if ltype < len(self.preaction_):
             self.preaction_[ltype].removeListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のPostComponentActionListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def removePostActionListener(self, ltype, listener):
         if ltype < len(self.postaction_):
             self.postaction_[ltype].removeListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のPortActionListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def removePortActionListener(self, ltype, listener):
         if ltype < len(self.portaction_):
             self.portaction_[ltype].removeListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のExecutionContextActionListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def removeECActionListener(self, ltype, listener):
         if ltype < len(self.ecaction_):
             self.ecaction_[ltype].removeListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のPreComponentActionListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param ec_id 実行コンテキストのID
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param ec_id
+    #
+    # @endif
     def notifyPreAction(self, ltype, ec_id):
         if ltype < len(self.preaction_):
             self.preaction_[ltype].notify(ec_id)
 
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のPostComponentActionListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param ec_id 実行コンテキストのID
+    # @param ret リターンコード
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param ec_id
+    # @param ret
+    #
+    # @endif
     def notifyPostAction(self, ltype, ec_id, ret):
         if ltype < len(self.postaction_):
             self.postaction_[ltype].notify(ec_id, ret)
 
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のPortActionListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param pprofile ポートプロファイル
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param pprofile
+    #
+    # @endif
     def notifyPortAction(self, ltype, pprofile):
         if ltype < len(self.portaction_):
             self.portaction_[ltype].notify(pprofile)
 
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のExecutionContextActionListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param ec_id 実行コンテキストのID
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param ec_id
+    #
+    # @endif
     def notifyECAction(self, ltype, ec_id):
         if ltype < len(self.ecaction_):
             self.ecaction_[ltype].notify(ec_id)

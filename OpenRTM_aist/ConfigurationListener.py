@@ -735,7 +735,18 @@ class ConfigurationSetNameListenerHolder:
 class ConfigurationListeners:
     """
     """
-
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    #
+    # @endif
     def __init__(self):
         ##
         # @if jp
@@ -773,50 +784,220 @@ class ConfigurationListeners:
         self.configsetname_ = [ConfigurationSetNameListenerHolder()
                                for i in range(self.configsetname_num)]
 
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のConfigurationParamListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def addConfigParamListener(self, ltype, listener):
         if ltype < len(self.configparam_):
             self.configparam_[ltype].addListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のConfigurationSetListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def addConfigurationSetListener(self, ltype, listener):
         if ltype < len(self.configset_):
             self.configset_[ltype].addListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のConfigurationSetNameListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def addConfigurationSetNameListener(self, ltype, listener):
         if ltype < len(self.configsetname_):
             self.configsetname_[ltype].addListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のConfigParamListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def removeConfigParamListener(self, ltype, listener):
         if ltype < len(self.configparam_):
             self.configparam_[ltype].removeListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のConfigurationSetListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def removeConfigurationSetListener(self, ltype, listener):
         if ltype < len(self.configset_):
             self.configset_[ltype].removeListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のConfigurationSetNameListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
     def removeConfigurationSetNameListener(self, ltype, listener):
         if ltype < len(self.configsetname_):
             self.configsetname_[ltype].removeListener(listener)
             return True
         return False
 
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のConfigurationParamListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param config_set_name コンフィギュレーションセット名
+    # @param config_param_name コンフィギュレーションパラメータ名
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param config_set_name
+    # @param config_param_name
+    # @return
+    #
+    # @endif
     def notifyConfigParam(self, ltype, config_set_name, config_param_name):
         if ltype < len(self.configparam_):
             self.configparam_[ltype].notify(config_set_name, config_param_name)
 
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のConfigurationSetListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param config_set コンフィギュレーションセット
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param config_set
+    # @return
+    #
+    # @endif
     def notifyConfigurationSet(self, ltype, config_set):
         if ltype < len(self.configset_):
             self.configset_[ltype].notify(config_set)
 
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のConfigurationSetNameListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param config_set_name コンフィギュレーションセット名
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param config_set_name
+    # @return
+    #
+    # @endif
     def notifyConfigurationSetName(self, ltype, config_set_name):
         if ltype < len(self.configsetname_):
             self.configsetname_[ltype].notify(config_set_name)
