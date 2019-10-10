@@ -44,6 +44,9 @@ class RTObjectStateMachine:
     self._fsmVar  = None
     self._modeVar = None
     self._rtObjPtr = None
+    self._activation = False
+    self._deactivation = False
+    self._reset = False
 
     # Setting Action callback objects
     self.setComponentAction(comp)
@@ -284,6 +287,7 @@ class RTObjectStateMachine:
   # Workers
   # void workerPreDo(void);
   def workerPreDo(self):
+    self.updateState()
     return self._sm.worker_pre()
 
   # void workerDo(void);
@@ -331,3 +335,39 @@ class RTObjectStateMachine:
     if not CORBA.is_nil(self._modeVar):
       self._mode = True
     return
+
+
+  def activate(self):
+    if self.isCurrentState(RTC.INACTIVE_STATE):
+      self._activation = True
+      return True
+    return False
+
+  def deactivate(self):
+    if self.isCurrentState(RTC.ACTIVE_STATE):
+      self._deactivation = True
+      return True
+    return False
+
+  def reset(self):
+    if self.isCurrentState(RTC.ERROR_STATE):
+      self._reset = True
+      return True
+    return False
+
+  def updateState(self):
+    if self._activation:
+      if self.isCurrentState(RTC.INACTIVE_STATE) and not self.isNextState(RTC.ERROR_STATE):
+        self._sm.goTo(RTC.ACTIVE_STATE)
+      self._activation = False
+
+    if self._deactivation:
+      if self.isCurrentState(RTC.ACTIVE_STATE) and not self.isNextState(RTC.ERROR_STATE):
+        self._sm.goTo(RTC.INACTIVE_STATE)
+      self._deactivation = False
+
+    if self._reset:
+      if self.isCurrentState(RTC.ERROR_STATE):
+        self._sm.goTo(RTC.INACTIVE_STATE)
+      self._reset = False
+
