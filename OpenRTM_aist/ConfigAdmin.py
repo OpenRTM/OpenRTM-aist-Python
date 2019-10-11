@@ -459,8 +459,8 @@ class ConfigAdmin:
 
         if self.isExist(param_name):
             return False
-
-        if not trans(var, def_val):
+        ret, var[0] = trans(var[0], def_val)
+        if not ret:
             return False
         conf_ = Config(param_name, var, def_val, trans)
         self._params.append(conf_)
