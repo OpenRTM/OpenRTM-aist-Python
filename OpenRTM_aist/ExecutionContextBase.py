@@ -773,6 +773,10 @@ class ExecutionContextBase:
       self._rtcout.RTC_ERROR("Unknown error: Invalid state transition.")
       return RTC.RTC_ERROR
 
+    if rtobj.isCurrentState(RTC.ERROR_STATE):
+      self._rtcout.RTC_ERROR("State of the RTC transitioned to ERROR_STATE.")
+      return RTC.PRECONDITION_NOT_MET
+
     self._rtcout.RTC_DEBUG("Current state is %s", self.getStateString(rtobj.getState()))
     ret_ = self.onActivated(rtobj, count_) # Template method
     if ret_ != RTC.RTC_OK:
@@ -850,6 +854,10 @@ class ExecutionContextBase:
     if rtobj.isCurrentState(RTC.ACTIVE_STATE):
       self._rtcout.RTC_ERROR("Unknown error: Invalid state transition.")
       return RTC.RTC_ERROR
+
+    if rtobj.isCurrentState(RTC.ERROR_STATE):
+      self._rtcout.RTC_ERROR("State of the RTC transitioned to ERROR_STATE.")
+      return RTC.PRECONDITION_NOT_MET
 
     self._rtcout.RTC_DEBUG("Current state is %s", self.getStateString(rtobj.getState()))
     ret_ = self.onDeactivated(rtobj, count_)
