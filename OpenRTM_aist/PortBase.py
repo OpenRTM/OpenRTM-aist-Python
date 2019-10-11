@@ -2318,8 +2318,7 @@ class PortBase(RTC__POA.PortService):
     def onNotifyConnect(self, portname, profile):
         if self._portconnListeners is not None:
             type = OpenRTM_aist.PortConnectListenerType.ON_NOTIFY_CONNECT
-            self._portconnListeners.portconnect_[
-                type].notify(portname, profile)
+            self._portconnListeners.notify(type, portname, profile)
         return
 
     # inline void onNotifyDisconnect(const char* portname,
@@ -2328,8 +2327,7 @@ class PortBase(RTC__POA.PortService):
     def onNotifyDisconnect(self, portname, profile):
         if self._portconnListeners is not None:
             type = OpenRTM_aist.PortConnectListenerType.ON_NOTIFY_DISCONNECT
-            self._portconnListeners.portconnect_[
-                type].notify(portname, profile)
+            self._portconnListeners.notify(type, portname, profile)
         return
 
     # inline void onUnsubscribeInterfaces(const char* portname,
@@ -2338,8 +2336,7 @@ class PortBase(RTC__POA.PortService):
     def onUnsubscribeInterfaces(self, portname, profile):
         if self._portconnListeners is not None:
             type = OpenRTM_aist.PortConnectListenerType.ON_UNSUBSCRIBE_INTERFACES
-            self._portconnListeners.portconnect_[
-                type].notify(portname, profile)
+            self._portconnListeners.notify(type, portname, profile)
         return
 
     # inline void onPublishInterfaces(const char* portname,
@@ -2349,8 +2346,7 @@ class PortBase(RTC__POA.PortService):
     def onPublishInterfaces(self, portname, profile, ret):
         if self._portconnListeners is not None:
             type = OpenRTM_aist.PortConnectRetListenerType.ON_PUBLISH_INTERFACES
-            self._portconnListeners.portconnret_[
-                type].notify(portname, profile, ret)
+            self._portconnListeners.notifyRet(type, portname, profile, ret)
         return
 
     # inline void onConnectNextport(const char* portname,
@@ -2360,8 +2356,7 @@ class PortBase(RTC__POA.PortService):
     def onConnectNextport(self, portname, profile, ret):
         if self._portconnListeners is not None:
             type = OpenRTM_aist.PortConnectRetListenerType.ON_CONNECT_NEXTPORT
-            self._portconnListeners.portconnret_[
-                type].notify(portname, profile, ret)
+            self._portconnListeners.notifyRet(type, portname, profile, ret)
         return
 
     # inline void onSubscribeInterfaces(const char* portname,
@@ -2371,8 +2366,7 @@ class PortBase(RTC__POA.PortService):
     def onSubscribeInterfaces(self, portname, profile, ret):
         if self._portconnListeners is not None:
             type = OpenRTM_aist.PortConnectRetListenerType.ON_SUBSCRIBE_INTERFACES
-            self._portconnListeners.portconnret_[
-                type].notify(portname, profile, ret)
+            self._portconnListeners.notifyRet(type, portname, profile, ret)
         return
 
     # inline void onConnected(const char* portname,
@@ -2382,8 +2376,7 @@ class PortBase(RTC__POA.PortService):
     def onConnected(self, portname, profile, ret):
         if self._portconnListeners is not None:
             type = OpenRTM_aist.PortConnectRetListenerType.ON_CONNECTED
-            self._portconnListeners.portconnret_[
-                type].notify(portname, profile, ret)
+            self._portconnListeners.notifyRet(type, portname, profile, ret)
         return
 
     # inline void onDisconnectNextport(const char* portname,
@@ -2393,8 +2386,7 @@ class PortBase(RTC__POA.PortService):
     def onDisconnectNextport(self, portname, profile, ret):
         if self._portconnListeners is not None:
             type = OpenRTM_aist.PortConnectRetListenerType.ON_DISCONNECT_NEXT
-            self._portconnListeners.portconnret_[
-                type].notify(portname, profile, ret)
+            self._portconnListeners.notifyRet(type, portname, profile, ret)
         return
 
     # inline void onDisconnected(const char* portname,
@@ -2404,8 +2396,7 @@ class PortBase(RTC__POA.PortService):
     def onDisconnected(self, portname, profile, ret):
         if self._portconnListeners is not None:
             type = OpenRTM_aist.PortConnectRetListenerType.ON_DISCONNECTED
-            self._portconnListeners.portconnret_[
-                type].notify(portname, profile, ret)
+            self._portconnListeners.notifyRet(type, portname, profile, ret)
         return
 
     # ============================================================

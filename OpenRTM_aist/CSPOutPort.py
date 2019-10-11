@@ -317,18 +317,15 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         self._ctrl._connectors = []
         self._ctrl._searched_connectors = []
 
-        if not self._syncmode:
-            del guard
-            guard = None
-
         if self._ctrl._waiting:
             return True
         if self._ctrl._reading:
             self._ctrl._cond.wait(self._channeltimeout)
 
         if not self._syncmode:
-            del guard_con
-            guard_con = None
+            del guard
+            guard = None
+
         ret, self._writableConnector = self.dataWritable()
         return ret
 

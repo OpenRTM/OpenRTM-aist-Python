@@ -391,9 +391,8 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
 
     def onConnect(self):
         if self._listeners and self._profile:
-            self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_CONNECT].notify(
-                self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_CONNECT, self._profile)
         return
 
     ##
@@ -406,9 +405,8 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
 
     def onDisconnect(self):
         if self._listeners and self._profile:
-            self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT].notify(
-                self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT, self._profile)
         return
 
     ##

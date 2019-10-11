@@ -315,9 +315,8 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # inline void onBufferRead(const cdrMemoryStream& data)
     def onBufferRead(self, data):
         if self._listeners and self._profile:
-            _, data = self._listeners.connectorData_[
-                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ].notify(
-                self._profile, data)
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ, self._profile, data)
         return data
 
     ##
@@ -332,9 +331,8 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # inline void onSend(const cdrMemoryStream& data)
     def onSend(self, data):
         if self._listeners and self._profile:
-            _, data = self._listeners.connectorData_[
-                OpenRTM_aist.ConnectorDataListenerType.ON_SEND].notify(
-                self._profile, data)
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_SEND, self._profile, data)
         return data
 
     ##
@@ -347,9 +345,8 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # inline void onBufferEmpty()
     def onBufferEmpty(self):
         if self._listeners and self._profile:
-            self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY].notify(
-                self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
         return
 
     ##
@@ -362,9 +359,8 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # inline void onBufferReadTimeout()
     def onBufferReadTimeout(self):
         if self._listeners and self._profile:
-            self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT].notify(
-                self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
         return
 
     ##
@@ -377,9 +373,8 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # inline void onSenderEmpty()
     def onSenderEmpty(self):
         if self._listeners and self._profile:
-            self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY].notify(
-                self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
         return
 
     ##
@@ -392,9 +387,8 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # inline void onSenderTimeout()
     def onSenderTimeout(self):
         if self._listeners and self._profile:
-            self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT].notify(
-                self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
         return
 
     ##
@@ -407,9 +401,8 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # inline void onSenderError()
     def onSenderError(self):
         if self._listeners and self._profile:
-            self._listeners.connector_[
-                OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR].notify(
-                self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
         return
 
     ##

@@ -982,17 +982,215 @@ class ConnectorListenerHolder:
 
 
 class ConnectorListeners:
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    #
+    # @endif
     def __init__(self):
         self.connectorData_ = [OpenRTM_aist.ConnectorDataListenerHolder() for i in range(
             OpenRTM_aist.ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM)]
         self.connector_ = [OpenRTM_aist.ConnectorListenerHolder() for i in range(
             OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM)]
         return
+    ##
+    # @if jp
+    # @brief データ型の設定
+    #
+    # OutPort、InPortで初期化する際にデータ型を指定すると、
+    # ConnectorDataListenerTを継承したリスナでコールバック関数に
+    # 指定データ型にデシリアライズしたデータを入力する。
+    # データ型を指定しない場合はコールバック関数で明示的にデシリアライズする必要がある。
+    #
+    # @param self
+    # @param dataType データ型
+    #
+    # @else
+    #
+    # @param self
+    # @param dataType
+    #
+    # @endif
 
     def setDataType(self, dataType):
         for holder in self.connectorData_:
             holder.setDataType(dataType)
 
+    ##
+    # @if jp
+    # @brief ポート型の指定
+    #
+    # OutPortの場合はPortType.OutPortType、InPortの場合はPortType.InPortTypeを指定する
+    #
+    # @param self
+    # @param porttype ポート型
+    #
+    # @else
+    #
+    # @param self
+    # @param porttype
+    #
+    # @endif
     def setPortType(self, porttype):
         for holder in self.connectorData_:
             holder.setPortType(porttype)
+
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のConnectorListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
+    def addListener(self, ltype, listener):
+        if ltype < len(self.connector_):
+            self.connector_[ltype].addListener(listener)
+            return True
+        return False
+
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のConnectorDataListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
+    def addDataListener(self, ltype, listener):
+        if ltype < len(self.connectorData_):
+            self.connectorData_[ltype].addListener(listener)
+            return True
+        return False
+
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のConnectorListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
+    def removeListener(self, ltype, listener):
+        if ltype < len(self.connector_):
+            self.connector_[ltype].removeListener(listener)
+            return True
+        return False
+
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のConnectorDataListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
+    def removeDataListener(self, ltype, listener):
+        if ltype < len(self.connectorData_):
+            self.connectorData_[ltype].removeListener(listener)
+            return True
+        return False
+
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のConnectorDataListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param info ConnectorInfo
+    # @param cdrdata バイト列のデータ
+    # @return ret, data
+    # ret：ConnectorListenerStatus
+    # data：バイト列のデータ。リスナで変更する場合がある。
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param info
+    # @param cdrdata
+    # @return
+    #
+    # @endif
+    def notifyData(self, ltype, info, cdrdata):
+        if ltype < len(self.connectorData_):
+            return self.connectorData_[ltype].notify(info, cdrdata)
+        return ConnectorListenerStatus.NO_CHANGE, None
+
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のConnectorListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param info ConnectorInfo
+    # @return ret：ConnectorListenerStatus
+    #
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param info
+    # @return
+    #
+    # @endif
+    def notify(self, ltype, info):
+        if ltype < len(self.connector_):
+            return self.connector_[ltype].notify(info)
+        return ConnectorListenerStatus.NO_CHANGE

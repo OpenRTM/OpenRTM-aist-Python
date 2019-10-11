@@ -734,8 +734,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     def addConnectorDataListener(self, listener_type, listener):
         self._rtcout.RTC_TRACE("addConnectorDataListener()")
 
-        if listener_type < OpenRTM_aist.ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM:
-            self._listeners.connectorData_[listener_type].addListener(listener)
+        if self._listeners.addDataListener(listener_type, listener):
             return
 
         self._rtcout.RTC_ERROR(
@@ -767,9 +766,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     def removeConnectorDataListener(self, listener_type, listener):
         self._rtcout.RTC_TRACE("removeConnectorDataListener()")
 
-        if listener_type < OpenRTM_aist.ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM:
-            self._listeners.connectorData_[
-                listener_type].removeListener(listener)
+        if self._listeners.removeDataListener(listener_type, listener):
             return
 
         self._rtcout.RTC_ERROR(
@@ -833,7 +830,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
         self._rtcout.RTC_TRACE("addConnectorListener()")
 
         if listener_type < OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM:
-            self._listeners.connector_[listener_type].addListener(listener)
+            self._listeners.addListener(listener_type, listener)
             return
 
         self._rtcout.RTC_ERROR(
@@ -866,7 +863,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
         self._rtcout.RTC_TRACE("removeConnectorListener()")
 
         if listener_type < OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM:
-            self._listeners.connector_[listener_type].removeListener(listener)
+            self._listeners.removeListener(listener_type, listener)
             return
 
         self._rtcout.RTC_ERROR(

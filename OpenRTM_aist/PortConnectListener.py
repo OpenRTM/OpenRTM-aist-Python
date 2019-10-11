@@ -610,3 +610,151 @@ class PortConnectListeners:
         self.portconnret_num = PortConnectRetListenerType.PORT_CONNECT_RET_LISTENER_NUM
         self.portconnret_ = [PortConnectRetListenerHolder()
                              for i in range(self.portconnret_num)]
+
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のPortConnectListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
+    def addListener(self, ltype, listener):
+        if ltype < len(self.portconnect_):
+            self.portconnect_[ltype].addListener(listener)
+            return True
+        return False
+
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のPortConnectListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
+    def removeListener(self, ltype, listener):
+        if ltype < len(self.portconnect_):
+            self.portconnect_[ltype].removeListener(listener)
+            return True
+        return False
+
+    ##
+    # @if jp
+    # @brief リスナーの追加
+    #
+    # 指定の種類のPortConnectRetListenerを追加する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 追加するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
+    def addRetListener(self, ltype, listener):
+        if ltype < len(self.portconnret_):
+            self.portconnret_[ltype].addListener(listener)
+            return True
+        return False
+
+    ##
+    # @if jp
+    # @brief リスナーの削除
+    #
+    # 指定の種類のPortConnectRetListenerを削除する。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param listener 削除するリスナ
+    # @return False：指定の種類のリスナが存在しない
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param listener
+    # @return
+    #
+    # @endif
+    def removeRetListener(self, ltype, listener):
+        if ltype < len(self.portconnret_):
+            self.portconnret_[ltype].removeListener(listener)
+            return True
+        return False
+
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のPortConnectListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param portname ポート名
+    # @param profile ConnectorProfile
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param portname
+    # @param profile
+    #
+    # @endif
+    def notify(self, ltype, portname, profile):
+        if ltype < len(self.portconnect_):
+            self.portconnect_[ltype].notify(portname, profile)
+
+    ##
+    # @if jp
+    # @brief リスナーへ通知する
+    #
+    # 指定の種類のPortConnectRetListenerのコールバック関数を呼び出す。
+    #
+    # @param self
+    # @param ltype リスナの種類
+    # @param portname ポート名
+    # @param profile ConnectorProfile
+    # @param ret リターンコード
+    #
+    # @else
+    #
+    # @param self
+    # @param ltype
+    # @param portname
+    # @param profile
+    # @param ret
+    #
+    # @endif
+    def notifyRet(self, ltype, portname, profile, ret):
+        if ltype < len(self.portconnret_):
+            self.portconnret_[ltype].notify(portname, profile, ret)

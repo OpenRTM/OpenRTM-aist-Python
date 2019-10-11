@@ -798,10 +798,9 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
     def addConnectorDataListener(self, listener_type, listener):
         self._rtcout.RTC_TRACE("addConnectorDataListener()")
-        if listener_type < OpenRTM_aist.ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM:
+        if self._listeners.addDataListener(listener_type, listener):
             self._rtcout.RTC_TRACE("addConnectorDataListener(%s)",
                                    OpenRTM_aist.ConnectorDataListener.toString(listener_type))
-            self._listeners.connectorData_[listener_type].addListener(listener)
             return
 
         self._rtcout.RTC_ERROR(
@@ -833,11 +832,9 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     def removeConnectorDataListener(self, listener_type, listener):
         self._rtcout.RTC_TRACE("removeConnectorDataListener()")
 
-        if listener_type < OpenRTM_aist.ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM:
+        if self._listeners.removeDataListener(listener_type, listener):
             self._rtcout.RTC_TRACE("removeConnectorDataListener(%s)",
                                    OpenRTM_aist.ConnectorDataListener.toString(listener_type))
-            self._listeners.connectorData_[
-                listener_type].removeListener(listener)
             return
 
         self._rtcout.RTC_ERROR(
@@ -900,10 +897,9 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     def addConnectorListener(self, callback_type, listener):
         self._rtcout.RTC_TRACE("addConnectorListener()")
 
-        if callback_type < OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM:
+        if self._listeners.addListener(callback_type, listener):
             self._rtcout.RTC_TRACE("addConnectorListener(%s)",
                                    OpenRTM_aist.ConnectorListener.toString(callback_type))
-            self._listeners.connector_[callback_type].addListener(listener)
             return
         self._rtcout.RTC_ERROR("addConnectorListener(): Unknown Listener Type")
         return
@@ -933,10 +929,9 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     def removeConnectorListener(self, callback_type, listener):
         self._rtcout.RTC_TRACE("removeConnectorListener()")
 
-        if callback_type < OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM:
+        if self._listeners.removeListener(callback_type, listener):
             self._rtcout.RTC_TRACE("removeConnectorListener(%s)",
                                    OpenRTM_aist.ConnectorListener.toString(callback_type))
-            self._listeners.connector_[callback_type].removeListener(listener)
             return
         self._rtcout.RTC_ERROR(
             "removeConnectorListener(): Unknown Listener Type")
