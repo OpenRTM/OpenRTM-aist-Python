@@ -71,9 +71,10 @@ class DelayedFunction(object):
 
     def tick(self, interval):
         self._remains -= interval
-        if self._remains.toDouble() <= 0.0:
+        is_expired = (self._remains.toDouble() <= 0.0)
+        if is_expired:
             self._fn()
-        return False
+        return is_expired
 
 ##
 # @if jp
@@ -116,7 +117,7 @@ class PeriodicFunction(object):
     # @if jp
     # @brief 1回の時間経過
     # @param interval: 経過した時間
-    # @return bool true 固定
+    # @return 停止中の場合は実行せずにTrueを返す
     #
     # interval 分だけ期限を減算し、期限切れの場合に関数を実行する。
     # 関数が実行されると周期が再設定される。
@@ -124,7 +125,7 @@ class PeriodicFunction(object):
     # @else
     # @brief Tick
     # @param interval: Tick interval
-    # @return bool true only
+    # @return
     # @endif
 
     def tick(self, interval):
@@ -138,21 +139,17 @@ class PeriodicFunction(object):
         return False
     ##
     # @if jp
-    # @brief コンストラクタ
+    # @brief 周期実行を停止する
     #
-    # コンストラクタ
     #
     # @param self
-    # @param interval タイマ起動周期
     #
     # @else
     #
-    # @brief Constructor
+    # @brief Stop to execute function
     #
-    # Constructor
     #
     # @param self
-    # @param interval The interval of timer
     #
     # @endif
 
