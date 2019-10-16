@@ -1067,9 +1067,11 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
             # create InPortPullConnector
             connector = self.createConnector(cprof, prop, consumer_=consumer)
-            connector.setDataType(self._value)
+            
             if not connector:
                 return RTC.RTC_ERROR
+
+            connector.setDataType(self._value)
 
             ret = connector.setConnectorInfo(profile)
 
