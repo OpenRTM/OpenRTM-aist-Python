@@ -240,6 +240,9 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
         if ret == self.PORT_OK:
             if data is None:
                 self._rtcout.RTC_ERROR("argument is invalid")
+
+            if self._serializer is None:
+                self._rtcout.RTC_ERROR("serializer creation failure.")
                 return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
 
             self._serializer.isLittleEndian(self._endian)

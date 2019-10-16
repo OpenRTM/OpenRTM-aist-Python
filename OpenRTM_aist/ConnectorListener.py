@@ -811,6 +811,9 @@ class ConnectorDataListenerHolder:
 
         serializer = OpenRTM_aist.SerializerFactory.instance().createObject(marshaling_type)
 
+        if serializer is None:
+            return ret, cdrdata
+
         serializer.isLittleEndian(endian)
         data = self._data
 

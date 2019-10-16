@@ -266,6 +266,10 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
             self._rtcout.RTC_TRACE("callback called in direct mode.")
             return self.PORT_OK
         # data -> (conversion) -> CDR stream
+        if self._serializer is None:
+            self._rtcout.RTC_ERROR("serializer creation failure.")
+            return self.UNKNOWN_ERROR
+
         self._serializer.isLittleEndian(self._endian)
         ser_ret, cdr_data = self._serializer.serialize(data)
         if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:

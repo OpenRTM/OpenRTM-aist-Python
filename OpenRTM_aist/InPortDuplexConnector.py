@@ -444,6 +444,10 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @return
     # @endif
     def deserializeData(self, cdr):
+        if self._serializer is None:
+            self._rtcout.RTC_ERROR("serializer creation failure.")
+            return self.PRECONDITION_NOT_MET, None
+
         self._serializer.isLittleEndian(self._endian)
         ser_ret, data = self._serializer.deserialize(cdr, self._dataType)
 

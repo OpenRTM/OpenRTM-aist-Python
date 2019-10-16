@@ -289,6 +289,9 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
             return ret, data
         else:
             cdr = self.onBufferRead(cdr)
+            if self._serializer is None:
+                self._rtcout.RTC_ERROR("serializer creation failure.")
+                return self.PRECONDITION_NOT_MET, data
             self._serializer.isLittleEndian(self._endian)
             ser_ret, _data = self._serializer.deserialize(cdr, self._dataType)
 
