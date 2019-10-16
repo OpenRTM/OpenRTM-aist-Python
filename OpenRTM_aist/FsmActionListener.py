@@ -290,15 +290,15 @@ class PreFsmActionListener:
     #
     # @endif
     #
-    def toString(type):
+    def toString(status):
         typeString = ["PRE_ON_INIT",
                       "PRE_ON_ENTRY",
                       "PRE_ON_DO",
                       "PRE_ON_EXIT",
                       "PRE_ON_STATE_CHANGE",
                       "PRE_FSM_ACTION_LISTENER_NUM"]
-        if type < PreFsmActionListenerType.PRE_FSM_ACTION_LISTENER_NUM:
-            return typeString[type]
+        if status < len(typeString):
+            return typeString[status]
 
         return ""
     toString = staticmethod(toString)
@@ -542,15 +542,15 @@ class PostFsmActionListener:
     #
     # @endif
     #
-    def toString(type):
+    def toString(status):
         typeString = ["POST_ON_INIT",
                       "POST_ON_ENTRY",
                       "POST_ON_DO",
                       "POST_ON_EXIT",
                       "POST_ON_STATE_CHANGE",
                       "POST_FSM_ACTION_LISTENER_NUM"]
-        if type < PostFsmActionListenerType.POST_FSM_ACTION_LISTENER_NUM:
-            return typeString[type]
+        if status < len(typeString):
+            return typeString[status]
 
         return ""
     toString = staticmethod(toString)
@@ -798,7 +798,7 @@ class FsmProfileListener:
     #
     # @endif
     #
-    def toString(type):
+    def toString(status):
         typeString = ["SET_FSM_PROFILE",
                       "GET_FSM_PROFILE",
                       "ADD_FSM_STATE",
@@ -808,8 +808,8 @@ class FsmProfileListener:
                       "BIND_FSM_EVENT",
                       "UNBIND_FSM_EVENT",
                       "PRE_FSM_ACTION_LISTENER_NUM"]
-        if type < FsmProfileListenerType.FSM_PROFILE_LISTENER_NUM:
-            return typeString[type]
+        if status < len(typeString):
+            return typeString[status]
 
         return ""
     toString = staticmethod(toString)
@@ -1028,12 +1028,12 @@ class FsmStructureListener:
     #
     # @endif
     #
-    def toString(type):
+    def toString(status):
         typeString = ["SET_FSM_STRUCTURE",
                       "GET_FSM_STRUCTURE",
                       "FSM_STRUCTURE_LISTENER_NUM"]
-        if type < FsmStructureListenerType.FSM_STRUCTURE_LISTENER_NUM:
-            return typeString[type]
+        if status < FsmStructureListenerType.FSM_STRUCTURE_LISTENER_NUM:
+            return typeString[status]
 
         return ""
     toString = staticmethod(toString)

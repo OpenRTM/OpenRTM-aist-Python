@@ -134,7 +134,7 @@ class PreComponentActionListener:
     #
     # @endif
     # static const char* toString(PreComponentActionListenerType type)
-    def toString(type):
+    def toString(status):
         typeString = ["PRE_ON_INITIALIZE",
                       "PRE_ON_FINALIZE",
                       "PRE_ON_STARTUP",
@@ -148,8 +148,8 @@ class PreComponentActionListener:
                       "PRE_ON_STATE_UPDATE",
                       "PRE_ON_RATE_CHANGED",
                       "PRE_COMPONENT_ACTION_LISTENER_NUM"]
-        if type < PreComponentActionListenerType.PRE_COMPONENT_ACTION_LISTENER_NUM:
-            return typeString[type]
+        if status < len(typeString):
+            return typeString[status]
 
         return ""
     toString = staticmethod(toString)

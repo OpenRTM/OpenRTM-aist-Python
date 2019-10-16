@@ -249,7 +249,7 @@ class ConnectorDataListener(object):
     #
     # @endif
     #
-    def toString(type):
+    def toString(status):
         typeString = ["ON_BUFFER_WRITE",
                       "ON_BUFFER_FULL",
                       "ON_BUFFER_WRITE_TIMEOUT",
@@ -262,8 +262,8 @@ class ConnectorDataListener(object):
                       "ON_RECEIVER_ERROR",
                       "CONNECTOR_DATA_LISTENER_NUM"]
 
-        if type < ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM:
-            return typeString[type]
+        if status < len(typeString):
+            return typeString[status]
 
         return ""
 
@@ -642,7 +642,7 @@ class ConnectorListener:
     #
     # @endif
     #
-    def toString(type):
+    def toString(status):
         typeString = ["ON_BUFFER_EMPTY",
                       "ON_BUFFER_READ_TIMEOUT",
                       "ON_SENDER_EMPTY",
@@ -652,8 +652,8 @@ class ConnectorListener:
                       "ON_DISCONNECT",
                       "CONNECTOR_LISTENER_NUM"]
 
-        if type < ConnectorListenerType.CONNECTOR_LISTENER_NUM:
-            return typeString[type]
+        if status < len(typeString):
+            return typeString[status]
 
         return ""
 
