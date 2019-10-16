@@ -280,8 +280,12 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     def read(self, data=None):
         self._rtcout.RTC_TRACE("read()")
 
-        if not self._dataType:
-            return self.PRECONDITION_NOT_MET, data
+        datatype = self._dataType
+        if datatype is None:
+            if data is None:
+                self._rtcout.RTC_ERROR("invalid data type")
+                return self.PRECONDITION_NOT_MET, data
+            datatype = data
 
         ret, cdr = self.readBuff()
 
@@ -290,7 +294,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
         else:
             cdr = self.onBufferRead(cdr)
             self._serializer.isLittleEndian(self._endian)
-            ser_ret, _data = self._serializer.deserialize(cdr, self._dataType)
+            ser_ret, _data = self._serializer.deserialize(cdr, datatype)
 
             if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
                 data = _data
