@@ -811,19 +811,14 @@ class ConnectorDataListenerHolder:
 
         serializer = OpenRTM_aist.SerializerFactory.instance().createObject(marshaling_type)
 
-        if serializer is None:
-            return ret, cdrdata
-
-        serializer.isLittleEndian(endian)
         data = self._data
-
-        if data:
-            deserialize_ret, _data = serializer.deserialize(
-                cdrdata, self._data)
-            if deserialize_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
-                data = _data
-            else:
-                return ret, cdrdata
+        if serializer is not None:
+            serializer.isLittleEndian(endian)
+            if data:
+                deserialize_ret, _data = serializer.deserialize(
+                    cdrdata, self._data)
+                if deserialize_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
+                    data = _data
 
         for listener in self._listeners:
             if issubclass(type(listener), ConnectorDataListenerT):
@@ -842,13 +837,15 @@ class ConnectorDataListenerHolder:
                 listener_ret, _cdrdata = listener(info, cdrdata)
                 if listener_ret == ConnectorListenerStatus.DATA_CHANGED or listener_ret == ConnectorListenerStatus.BOTH_CHANGED:
                     cdrdata = _cdrdata
-                    serializer.isLittleEndian(endian)
-                    deserialize_ret, _data = serializer.deserialize(
-                        cdrdata, data)
-                    if deserialize_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
-                        data = _data
+                    if serializer is not None:
+                        serializer.isLittleEndian(endian)
+                        deserialize_ret, _data = serializer.deserialize(
+                            cdrdata, data)
+                        if deserialize_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
+                            data = _data
                 ret = ret | listener_ret
-        OpenRTM_aist.SerializerFactory.instance().deleteObject(serializer)
+        if serializer is not None:
+            OpenRTM_aist.SerializerFactory.instance().deleteObject(serializer)
         return ret, cdrdata
 
     def setDataType(self, dataType):
