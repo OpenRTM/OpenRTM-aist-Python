@@ -295,8 +295,7 @@ class PreFsmActionListener:
                       "PRE_ON_ENTRY",
                       "PRE_ON_DO",
                       "PRE_ON_EXIT",
-                      "PRE_ON_STATE_CHANGE",
-                      "PRE_FSM_ACTION_LISTENER_NUM"]
+                      "PRE_ON_STATE_CHANGE"]
         if status < len(typeString):
             return typeString[status]
 
@@ -547,8 +546,7 @@ class PostFsmActionListener:
                       "POST_ON_ENTRY",
                       "POST_ON_DO",
                       "POST_ON_EXIT",
-                      "POST_ON_STATE_CHANGE",
-                      "POST_FSM_ACTION_LISTENER_NUM"]
+                      "POST_ON_STATE_CHANGE"]
         if status < len(typeString):
             return typeString[status]
 
@@ -806,8 +804,7 @@ class FsmProfileListener:
                       "ADD_FSM_TRANSITION",
                       "REMOVE_FSM_TRANSITION",
                       "BIND_FSM_EVENT",
-                      "UNBIND_FSM_EVENT",
-                      "PRE_FSM_ACTION_LISTENER_NUM"]
+                      "UNBIND_FSM_EVENT"]
         if status < len(typeString):
             return typeString[status]
 
@@ -1030,9 +1027,8 @@ class FsmStructureListener:
     #
     def toString(status):
         typeString = ["SET_FSM_STRUCTURE",
-                      "GET_FSM_STRUCTURE",
-                      "FSM_STRUCTURE_LISTENER_NUM"]
-        if status < FsmStructureListenerType.FSM_STRUCTURE_LISTENER_NUM:
+                      "GET_FSM_STRUCTURE"]
+        if status < len(typeString):
             return typeString[status]
 
         return ""

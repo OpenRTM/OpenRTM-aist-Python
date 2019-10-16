@@ -259,8 +259,7 @@ class ConnectorDataListener(object):
                       "ON_RECEIVED",
                       "ON_RECEIVER_FULL",
                       "ON_RECEIVER_TIMEOUT",
-                      "ON_RECEIVER_ERROR",
-                      "CONNECTOR_DATA_LISTENER_NUM"]
+                      "ON_RECEIVER_ERROR"]
 
         if status < len(typeString):
             return typeString[status]
@@ -649,8 +648,7 @@ class ConnectorListener:
                       "ON_SENDER_TIMEOUT",
                       "ON_SENDER_ERROR",
                       "ON_CONNECT",
-                      "ON_DISCONNECT",
-                      "CONNECTOR_LISTENER_NUM"]
+                      "ON_DISCONNECT"]
 
         if status < len(typeString):
             return typeString[status]

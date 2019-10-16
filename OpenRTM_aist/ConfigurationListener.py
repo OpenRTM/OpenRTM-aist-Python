@@ -89,12 +89,11 @@ class ConfigurationParamListener:
     #
     # @endif
     # static const char* toString(ConfigurationParamListenerType type)
-    def toString(type):
-        typeString = ["ON_UPDATE_CONFIG_PARAM",
-                      "CONFIG_PARAM_LISTENER_NUM"]
+    def toString(status):
+        typeString = ["ON_UPDATE_CONFIG_PARAM"]
 
-        if type < ConfigurationParamListenerType.CONFIG_PARAM_LISTENER_NUM:
-            return typeString[type]
+        if status < len(typeString):
+            return typeString[status]
 
         return ""
 
@@ -212,12 +211,11 @@ class ConfigurationSetListener:
     # @endif
     # static const char* toString(ConfigurationSetListenerType type)
 
-    def toString(type):
+    def toString(status):
         typeString = ["ON_SET_CONFIG_SET",
-                      "ON_ADD_CONFIG_SET",
-                      "CONFIG_SET_LISTENER_NUM"]
-        if type < ConfigurationSetListenerType.CONFIG_SET_LISTENER_NUM:
-            return typeString[type]
+                      "ON_ADD_CONFIG_SET"]
+        if status < len(typeString):
+            return typeString[status]
 
         return ""
 
@@ -330,13 +328,12 @@ class ConfigurationSetNameListener:
     # @endif
     # static const char* toString(ConfigurationSetNameListenerType type)
 
-    def toString(type):
+    def toString(status):
         typeString = ["ON_UPDATE_CONFIG_SET",
                       "ON_REMOVE_CONFIG_SET",
-                      "ON_ACTIVATE_CONFIG_SET",
-                      "CONFIG_SET_NAME_LISTENER_NUM"]
-        if type < ConfigurationSetNameListenerType.CONFIG_SET_NAME_LISTENER_NUM:
-            return typeString[type]
+                      "ON_ACTIVATE_CONFIG_SET"]
+        if status < len(typeString):
+            return typeString[status]
 
         return ""
 

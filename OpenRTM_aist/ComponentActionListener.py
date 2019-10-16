@@ -146,8 +146,7 @@ class PreComponentActionListener:
                       "PRE_ON_RESET",
                       "PRE_ON_EXECUTE",
                       "PRE_ON_STATE_UPDATE",
-                      "PRE_ON_RATE_CHANGED",
-                      "PRE_COMPONENT_ACTION_LISTENER_NUM"]
+                      "PRE_ON_RATE_CHANGED"]
         if status < len(typeString):
             return typeString[status]
 
@@ -302,7 +301,7 @@ class PostComponentActionListener:
     #
     # @endif
     # static const char* toString(PostComponentActionListenerType type)
-    def toString(type):
+    def toString(status):
         typeString = ["POST_ON_INITIALIZE",
                       "POST_ON_FINALIZE",
                       "POST_ON_STARTUP",
@@ -314,10 +313,9 @@ class PostComponentActionListener:
                       "POST_ON_RESET",
                       "POST_ON_EXECUTE",
                       "POST_ON_STATE_UPDATE",
-                      "POST_ON_RATE_CHANGED",
-                      "POST_COMPONENT_ACTION_LISTENER_NUM"]
-        if type < PostComponentActionListenerType.POST_COMPONENT_ACTION_LISTENER_NUM:
-            return typeString[type]
+                      "POST_ON_RATE_CHANGED"]
+        if status < len(typeString):
+            return typeString[status]
         return ""
 
     toString = staticmethod(toString)
@@ -424,12 +422,11 @@ class PortActionListener:
     #
     # @endif
     # static const char* toString(PortActionListenerType type)
-    def toString(type):
+    def toString(status):
         typeString = ["ADD_PORT",
-                      "REMOVE_PORT",
-                      "PORT_ACTION_LISTENER_NUM"]
-        if type < PortActionListenerType.PORT_ACTION_LISTENER_NUM:
-            return typeString[type]
+                      "REMOVE_PORT"]
+        if status < len(typeString):
+            return typeString[status]
         return ""
 
     toString = staticmethod(toString)
@@ -538,12 +535,11 @@ class ExecutionContextActionListener:
     # @endif
     # static const char* toString(ExecutionContextActionListenerType type)
 
-    def toString(type):
+    def toString(status):
         typeString = ["ATTACH_EC",
-                      "DETACH_EC",
-                      "EC_ACTION_LISTENER_NUM"]
-        if type < ExecutionContextActionListenerType.EC_ACTION_LISTENER_NUM:
-            return typeString[type]
+                      "DETACH_EC"]
+        if status < len(typeString):
+            return typeString[status]
         return ""
 
     toString = staticmethod(toString)

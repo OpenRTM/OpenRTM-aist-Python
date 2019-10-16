@@ -192,5 +192,6 @@ class DataPortStatus:
                       "UNKNOWN_ERROR"]
         if status < len(typeString):
             return typeString[status]
+        return ""
 
     toString = staticmethod(toString)
