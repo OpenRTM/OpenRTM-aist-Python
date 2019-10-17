@@ -434,6 +434,9 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @endif
 
     def serializeData(self, data):
+        if self._serializer is None:
+            self._rtcout.RTC_ERROR("serializer creation failure.")
+            return self.UNKNOWN_ERROR, cdr_data
         self._serializer.isLittleEndian(self._endian)
         ser_ret, cdr_data = self._serializer.serialize(data)
         if ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
