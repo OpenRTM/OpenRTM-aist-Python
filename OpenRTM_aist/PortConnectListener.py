@@ -78,7 +78,8 @@ class PortConnectListenerType:
     ON_NOTIFY_CONNECT = 0
     ON_NOTIFY_DISCONNECT = 1
     ON_UNSUBSCRIBE_INTERFACES = 2
-    PORT_CONNECT_LISTENER_NUM = 3
+    ON_UPDATE_CONFIG_PARAM = 3
+    PORT_CONNECT_LISTENER_NUM = 4
 
     def __init__(self):
         pass
@@ -138,15 +139,14 @@ class PortConnectListener:
     #
     # @endif
     # static const char* toString(PortConnectListenerType type);
-    def toString(type):
+    def toString(status):
         typeString = ["ON_NOTIFY_CONNECT",
                       "ON_NOTIFY_DISCONNECT",
                       "ON_UNSUBSCRIBE_INTERFACES",
-                      "ON_UPDATE_CONFIG_PARAM",
-                      ""]
+                      "ON_UPDATE_CONFIG_PARAM"]
 
-        if type < PortConnectListenerType.PORT_CONNECT_LISTENER_NUM:
-            return typeString[type]
+        if status < len(typeString):
+            return typeString[status]
 
         return ""
 
@@ -280,17 +280,16 @@ class PortConnectRetListener:
     # @endif
     # static const char* toString(PortConnectRetListenerType type);
 
-    def toString(type):
+    def toString(status):
         typeString = ["ON_PUBLISH_INTERFACES",
                       "ON_CONNECT_NEXTPORT",
                       "ON_SUBSCRIBE_INTERFACES",
                       "ON_CONNECTED",
                       "ON_DISCONNECT_NEXT",
-                      "ON_DISCONNECTED",
-                      ""]
+                      "ON_DISCONNECTED"]
 
-        if type < PortConnectRetListenerType.PORT_CONNECT_RET_LISTENER_NUM:
-            return typeString[type]
+        if status < len(typeString):
+            return typeString[status]
 
         return ""
     toString = staticmethod(toString)

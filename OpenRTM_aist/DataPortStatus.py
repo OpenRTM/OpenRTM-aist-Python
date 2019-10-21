@@ -176,20 +176,22 @@ class DataPortStatus:
     # @endif
     #
     def toString(status):
-        str = ["PORT_OK",
-               "PORT_ERROR",
-               "BUFFER_ERROR",
-               "BUFFER_FULL",
-               "BUFFER_EMPTY",
-               "BUFFER_TIMEOUT",
-               "SEND_FULL",
-               "SEND_TIMEOUT",
-               "RECV_EMPTY",
-               "RECV_TIMEOUT",
-               "INVALID_ARGS",
-               "PRECONDITION_NOT_MET",
-               "CONNECTION_LOST",
-               "UNKNOWN_ERROR"]
-        return str[status]
+        typeString = ["PORT_OK",
+                      "PORT_ERROR",
+                      "BUFFER_ERROR",
+                      "BUFFER_FULL",
+                      "BUFFER_EMPTY",
+                      "BUFFER_TIMEOUT",
+                      "SEND_FULL",
+                      "SEND_TIMEOUT",
+                      "RECV_EMPTY",
+                      "RECV_TIMEOUT",
+                      "INVALID_ARGS",
+                      "PRECONDITION_NOT_MET",
+                      "CONNECTION_LOST",
+                      "UNKNOWN_ERROR"]
+        if status < len(typeString):
+            return typeString[status]
+        return ""
 
     toString = staticmethod(toString)
