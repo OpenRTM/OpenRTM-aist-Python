@@ -251,12 +251,13 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     # バッファからデータを読み出す。正常に読み出せた場合、戻り値は
     # PORT_OK となり、data に読み出されたデータが格納される。それ以外
     # の場合には、エラー値として BUFFER_EMPTY, TIMEOUT,
-    # PRECONDITION_NOT_MET, PORT_ERROR が返される。
+    # PRECONDITION_NOT_MET, UNKNOWN_ERROR, PORT_ERROR が返される。
     #
     # @return PORT_OK              正常終了
     #         BUFFER_EMPTY         バッファは空である
     #         TIMEOUT              タイムアウトした
     #         PRECONDITION_NOT_MET 事前条件を満たさない
+    #         UNKNOWN_ERROR        不明のエラー
     #         PORT_ERROR           その他のエラー
     #
     # @else
@@ -265,13 +266,14 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     #
     # This function reads data from the buffer. If data is read
     # properly, this function will return PORT_OK return code. Except
-    # normal return, BUFFER_EMPTY, TIMEOUT, PRECONDITION_NOT_MET and
-    # PORT_ERROR will be returned as error codes.
+    # normal return, BUFFER_EMPTY, TIMEOUT, PRECONDITION_NOT_MET,
+    # UNKNOWN_ERROR and PORT_ERROR will be returned as error codes.
     #
     # @return PORT_OK              Normal return
     #         BUFFER_EMPTY         Buffer empty
     #         TIMEOUT              Timeout
     #         PRECONDITION_NOT_MET Preconditin not met
+    #         UNKNOWN_ERROR        Unknown errot
     #         PORT_ERROR           Other error
     #
     # @endif
@@ -293,6 +295,9 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
             return ret, data
         else:
             cdr = self.onBufferRead(cdr)
+            if self._serializer is None:
+                self._rtcout.RTC_ERROR("serializer creation failure.")
+                return self.UNKNOWN_ERROR, data
             self._serializer.isLittleEndian(self._endian)
             ser_ret, _data = self._serializer.deserialize(cdr, datatype)
 
@@ -301,13 +306,13 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
                 return self.PORT_OK, data
             elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN:
                 self._rtcout.RTC_ERROR("unknown endian from connector")
-                return self.PRECONDITION_NOT_MET, data
+                return self.UNKNOWN_ERROR, data
             elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR:
                 self._rtcout.RTC_ERROR("unknown error")
-                return self.PRECONDITION_NOT_MET, data
+                return self.UNKNOWN_ERROR, data
             elif ser_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOTFOUND:
                 self._rtcout.RTC_ERROR("unknown serializer from connector")
-                return self.PRECONDITION_NOT_MET, data
+                return self.UNKNOWN_ERROR, data
 
         return self.PORT_ERROR, data
 
