@@ -93,106 +93,88 @@ class ROS2MessageInfoBase(object):
 
 ##
 # @if jp
-# @brief メッセージの情報格納オブジェクト生成関数
+# @class ROS2MessageInfo
+# @brief メッセージの情報格納クラス
 #
-# @param data_class ROS2データ型
-# @return メッセージの情報格納オブジェクト
 #
 # @else
+# @class ROS2MessageInfo
 # @brief
 #
-# @param data_class
-# @return
 #
 # @endif
-#
-def ros2_message_info(datatype):
+class ROS2MessageInfo(ROS2MessageInfoBase):
+    """
+    """
     ##
     # @if jp
-    # @class ROS2MessageInfo
-    # @brief メッセージの情報格納クラス
+    # @brief コンストラクタ
     #
+    # コンストラクタ
+    #
+    # @param self
     #
     # @else
-    # @class ROS2MessageInfo
+    # @brief Constructor
+    #
+    # @param self
+    #
+    # @endif
+
+    def __init__(self, datatype):
+        super(ROS2MessageInfo, self).__init__()
+        self._datatype = datatype
+    ##
+    # @if jp
+    # @brief デストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
+
+    def __del__(self):
+        pass
+    ##
+    # @if jp
+    # @brief メッセージの型名を取得
+    #
+    # @param self
+    # @return 型名
+    #
+    # @else
     # @brief
     #
     #
+    # @param self
+    # @return
+    #
     # @endif
-    class ROS2MessageInfo(ROS2MessageInfoBase):
-        """
-        """
+    #
 
-        ##
-        # @if jp
-        # @brief コンストラクタ
-        #
-        # コンストラクタ
-        #
-        # @param self
-        #
-        # @else
-        # @brief Constructor
-        #
-        # @param self
-        #
-        # @endif
-        def __init__(self):
-            super(ROS2MessageInfo, self).__init__()
-
-        ##
-        # @if jp
-        # @brief デストラクタ
-        #
-        #
-        # @param self
-        #
-        # @else
-        #
-        # @brief self
-        #
-        # @endif
-
-        def __del__(self):
-            pass
-
-        ##
-        # @if jp
-        # @brief メッセージの型名を取得
-        #
-        # @param self
-        # @return 型名
-        #
-        # @else
-        # @brief
-        #
-        #
-        # @param self
-        # @return
-        #
-        # @endif
-        #
-        def datatype(self):
-            return datatype
-
-    return ROS2MessageInfo
+    def datatype(self):
+        return self._datatype
 
 
-ros2messageinfofactory = None
+ros2messageinfolist = None
 
 
 ##
 # @if jp
-# @class ROS2MessageInfoFactory
+# @class ROS2MessageInfoList
 # @brief ROS2メッセージ情報格納オブジェクト生成ファクトリ
 #
 # @else
-# @class ROS2MessageInfoFactory
+# @class ROS2MessageInfoList
 # @brief
 #
 #
 # @endif
-class ROS2MessageInfoFactory(OpenRTM_aist.Factory, ROS2MessageInfoBase):
+class ROS2MessageInfoList:
     ##
     # @if jp
     # @brief コンストラクタ
@@ -208,7 +190,7 @@ class ROS2MessageInfoFactory(OpenRTM_aist.Factory, ROS2MessageInfoBase):
     #
     # @endif
     def __init__(self):
-        OpenRTM_aist.Factory.__init__(self)
+        self._data = {}
 
     ##
     # @if jp
@@ -246,11 +228,74 @@ class ROS2MessageInfoFactory(OpenRTM_aist.Factory, ROS2MessageInfoBase):
     # @endif
     #
     def instance():
-        global ros2messageinfofactory
+        global ros2messageinfolist
 
-        if ros2messageinfofactory is None:
-            ros2messageinfofactory = ROS2MessageInfoFactory()
+        if ros2messageinfolist is None:
+            ros2messageinfolist = ROS2MessageInfoList()
 
-        return ros2messageinfofactory
+        return ros2messageinfolist
 
     instance = staticmethod(instance)
+
+    ##
+    # @if jp
+    # @brief ROS2MessageInfoの追加
+    #
+    # @param self
+    # @param id 名前
+    # @param info ROS2MessageInfo
+    #
+    # @else
+    # @brief
+    #
+    # @param self
+    # @param id
+    # @param info
+    #
+    # @endif
+    #
+    def addInfo(id, info):
+        self._data[id] = info
+
+    ##
+    # @if jp
+    # @brief ROS2MessageInfoの削除
+    #
+    # @param self
+    # @param id 名前
+    # @return 削除に成功した場合はTrue
+    #
+    # @else
+    # @brief
+    #
+    # @param self
+    # @param id
+    # @return
+    #
+    # @endif
+    #
+    def removeInfo(self, id):
+        if id in self._data:
+            del self._data[id]
+            return True
+        return False
+
+    ##
+    # @if jp
+    # @brief 指定名のROS2MessageInfoの取得
+    #
+    # @param id 名前
+    # @return ROS2MessageInfo
+    #
+    # @else
+    # @brief
+    #
+    # @param id
+    # @return
+    #
+    # @endif
+    #
+    def getInfo(self, id):
+        if id in self._data:
+            return self._data[id]
+        return None

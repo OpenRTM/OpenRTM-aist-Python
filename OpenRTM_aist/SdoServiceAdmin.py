@@ -360,7 +360,6 @@ class SdoServiceAdmin:
             if strid == str(self._providers[idx].getProfile().id):
                 self._providers[idx].finalize()
                 factory = OpenRTM_aist.SdoServiceProviderFactory.instance()
-                factory.deleteObject(self._providers[idx])
                 del self._providers[idx]
                 self._rtcout.RTC_INFO(
                     "SDO service provider has been deleted: %s", id)
@@ -430,7 +429,6 @@ class SdoServiceAdmin:
                 "properties: %s",
                 OpenRTM_aist.NVUtil.toString(
                     sProfile.properties))
-            factory.deleteObject(consumer)
             self._rtcout.RTC_INFO(
                 "SDO consumer was deleted by initialization failure")
             return False
@@ -467,7 +465,6 @@ class SdoServiceAdmin:
                 cons.finalize()
                 del self._consumers[idx]
                 factory = OpenRTM_aist.SdoServiceConsumerFactory.instance()
-                factory.deleteObject(cons)
                 self._rtcout.RTC_INFO("SDO service has been deleted: %s", id)
                 return True
 

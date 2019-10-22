@@ -131,7 +131,6 @@ class LocalServiceAdmin:
     def finalize(self):
         for svc_ in self._services:
             svc_.finalize()
-            self._factory.deleteObject(svc_)
         self._services = []
 
         return
@@ -279,7 +278,6 @@ class LocalServiceAdmin:
         for (i, svc_) in enumerate(self._services):
             if name == svc_.getProfile().name:
                 svc_.finalize()
-                self._factory.deleteObject(svc_)
                 del self._services[i]
                 self._rtcout.RTC_INFO(
                     "SDO service  has been deleted: %s", name)

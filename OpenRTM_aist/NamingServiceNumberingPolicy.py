@@ -121,5 +121,4 @@ class NamingServiceNumberingPolicy(OpenRTM_aist.NumberingPolicy):
 
 def NamingServiceNumberingPolicyInit():
     OpenRTM_aist.NumberingPolicyFactory.instance().addFactory("ns_unique",
-                                                              OpenRTM_aist.NamingServiceNumberingPolicy,
-                                                              OpenRTM_aist.Delete)
+                                                              OpenRTM_aist.NamingServiceNumberingPolicy)

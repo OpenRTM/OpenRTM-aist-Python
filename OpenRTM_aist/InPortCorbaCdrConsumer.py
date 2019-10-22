@@ -456,5 +456,4 @@ class InPortCorbaCdrConsumer(
 def InPortCorbaCdrConsumerInit():
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("corba_cdr",
-                       OpenRTM_aist.InPortCorbaCdrConsumer,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.InPortCorbaCdrConsumer)

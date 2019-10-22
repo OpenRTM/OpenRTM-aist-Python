@@ -190,7 +190,6 @@ class OpenSpliceTopicManager(object):
         if datainfo:
             datatype = datainfo.datatype()
             idlfile = datainfo.idlFile()
-            factory.deleteObject(datainfo)
             self._info[datatype] = ddsutil.get_dds_classes_from_idl(idlfile,
                                                                     datatype)
             return self._info[datatype]

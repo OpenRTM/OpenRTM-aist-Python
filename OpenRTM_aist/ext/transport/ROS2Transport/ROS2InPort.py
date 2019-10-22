@@ -153,12 +153,10 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
         self._rtcout.RTC_VERBOSE("message type: %s", self._messageType)
         self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
 
-        factory = ROS2MessageInfo.ROS2MessageInfoFactory.instance()
-        info = factory.createObject(self._messageType)
+        factory = ROS2MessageInfo.ROS2MessageInfoList.instance()
+        info = factory.getInfo(self._messageType)
 
         info_type = info.datatype()
-
-        factory.deleteObject(info)
 
         self._subscriber = self._topicmgr.createSubscriber(
             info_type, self._topic, self.ros2_callback)
@@ -355,5 +353,4 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 def ROS2InPortInit():
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("ros2",
-                       ROS2InPort,
-                       OpenRTM_aist.Delete)
+                       ROS2InPort)

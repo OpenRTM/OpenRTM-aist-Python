@@ -402,5 +402,4 @@ class FluentBit(OpenRTM_aist.LogstreamBase):
 
 def FluentBitInit(mgr):
     OpenRTM_aist.LogstreamFactory.instance().addFactory("fluentd",
-                                                        FluentBit,
-                                                        OpenRTM_aist.Delete)
+                                                        FluentBit)

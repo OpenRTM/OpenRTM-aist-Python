@@ -200,7 +200,6 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
         if info:
             datatype = info.datatype()
             idlFile = info.idlFile()
-            factory.deleteObject(info)
             try:
                 gen_info = ddsutil.get_dds_classes_from_idl(idlFile, datatype)
                 osdata = gen_info.topic_data_class(
@@ -266,8 +265,7 @@ def addDataType(datatype, idlfile):
     data_name = data_name.replace("/", "::")
     OpenSpliceMessageInfo.OpenSpliceMessageInfoFactory.instance().addFactory(name,
                                                                              OpenSpliceMessageInfo.opensplice_message_info(
-                                                                                 data_name, idlfile),
-                                                                             OpenRTM_aist.Delete)
+                                                                                 data_name, idlfile))
 
 
 ##
@@ -283,8 +281,7 @@ def addDataType(datatype, idlfile):
 #
 def OpenSpliceSerializerInit():
     OpenRTM_aist.SerializerFactory.instance().addFactory("opensplice",
-                                                         OpenSpliceSerializer,
-                                                         OpenRTM_aist.Delete)
+                                                         OpenSpliceSerializer)
 
     OpenRTM_dir = OpenRTM_aist.__path__[0]
 

@@ -123,12 +123,10 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
         self._rtcout.RTC_VERBOSE("message type: %s", self._messageType)
         self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
 
-        factory = ROS2MessageInfo.ROS2MessageInfoFactory.instance()
-        info = factory.createObject(self._messageType)
+        factory = ROS2MessageInfo.ROS2MessageInfoList.instance()
+        info = factory.getInfo(self._messageType)
 
         info_type = info.datatype()
-
-        factory.deleteObject(info)
 
         self._publisher = self._topicmgr.createPublisher(
             info_type, self._topic)
@@ -270,5 +268,4 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 def ROS2OutPortInit():
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("ros2",
-                       ROS2OutPort,
-                       OpenRTM_aist.Delete)
+                       ROS2OutPort)

@@ -291,19 +291,16 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
         self.onDisconnect()
         # delete provider
         if self._provider:
-            OpenRTM_aist.OutPortProviderFactory.instance().deleteObject(self._provider)
             self._provider.exit()
         self._provider = None
 
         if self._serializer:
             self._rtcout.RTC_DEBUG("delete serializer")
-            OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
         self._serializer = None
 
         if self._consumer:
             self._rtcout.RTC_DEBUG("delete consumer")
             cfactory = OpenRTM_aist.InPortConsumerFactory.instance()
-            cfactory.deleteObject(self._consumer)
 
         self._consumer = None
 

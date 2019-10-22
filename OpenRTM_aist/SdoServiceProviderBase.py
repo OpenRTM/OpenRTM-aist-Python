@@ -100,8 +100,7 @@ import SDOPackage__POA
 #   def MySdoServiceProviderInit(mgr=None):
 #     factory = OpenRTM_aist.SdoServiceProviderFactory.instance()
 #     factory.addFactory(OpenRTM.MySdoService._NP_RepositoryId,
-#                        MySdoServiceProvider,
-#                        OpenRTM_aist.Delete)
+#                        MySdoServiceProvider)
 #     return
 # </pre>
 #

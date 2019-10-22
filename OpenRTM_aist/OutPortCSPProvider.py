@@ -268,5 +268,4 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
 def OutPortCSPProviderInit():
     factory = OpenRTM_aist.OutPortProviderFactory.instance()
     factory.addFactory("csp_channel",
-                       OpenRTM_aist.OutPortCSPProvider,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.OutPortCSPProvider)

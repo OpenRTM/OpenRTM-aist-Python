@@ -159,7 +159,6 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
                 connector.disconnect()
 
         if self._thebuffer is not None:
-            OpenRTM_aist.CdrBufferFactory.instance().deleteObject(self._thebuffer)
             if not self._singlebuffer:
                 self._rtcout.RTC_ERROR(
                     "Although singlebuffer flag is true, the buffer != 0")
@@ -1279,7 +1278,6 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
             if not provider.publishInterface(cprof.properties):
                 self._rtcout.RTC_ERROR(
                     "publishing interface information error")
-                OpenRTM_aist.InPortProviderFactory.instance().deleteObject(provider)
                 return None
             return provider
 
@@ -1323,7 +1321,6 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
             if not consumer.subscribeInterface(cprof.properties):
                 self._rtcout.RTC_ERROR("interface subscription failed.")
-                OpenRTM_aist.OutPortConsumerFactory.instance().deleteObject(consumer)
                 return None
             return consumer
 

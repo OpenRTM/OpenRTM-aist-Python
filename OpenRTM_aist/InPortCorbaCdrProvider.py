@@ -288,5 +288,4 @@ class InPortCorbaCdrProvider(OpenRTM_aist.InPortProvider,
 def InPortCorbaCdrProviderInit():
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("corba_cdr",
-                       OpenRTM_aist.InPortCorbaCdrProvider,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.InPortCorbaCdrProvider)

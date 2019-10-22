@@ -235,12 +235,10 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             self._callerid = str(OpenRTM_aist.uuid1())
         self._callerid = "/" + self._callerid
 
-        factory = ROSMessageInfo.ROSMessageInfoFactory.instance()
-        info = factory.createObject(self._messageType)
+        factory = ROSMessageInfo.ROSMessageInfoList.instance()
+        info = factory.getInfo(self._messageType)
         if info:
             info_type = info.datatype()
-
-            factory.deleteObject(info)
         else:
             self._rtcout.RTC_ERROR("can not found %s", self._messageType)
             return
@@ -337,13 +335,12 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
                             self._rtcout.RTC_ERROR("ValueError")
                             return
 
-                factory = ROSMessageInfo.ROSMessageInfoFactory.instance()
-                info = factory.createObject(self._messageType)
+                factory = ROSMessageInfo.ROSMessageInfoList.instance()
+                info = factory.getInfo(self._messageType)
                 if(info):
                     info_type = info.datatype()
                     info_md5sum = info.md5sum()
                     info_message_definition = info.message_definition()
-                    factory.deleteObject(info)
                 else:
                     self._rtcout.RTC_ERROR(
                         "Can not found %s", self._messageType)
@@ -735,5 +732,4 @@ class SubListener:
 def ROSInPortInit():
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("ros",
-                       ROSInPort,
-                       OpenRTM_aist.Delete)
+                       ROSInPort)

@@ -301,17 +301,12 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
         self.onDisconnect()
         # delete provider
         if self._provider:
-            OpenRTM_aist.OutPortProviderFactory.instance().deleteObject(self._provider)
             self._provider.exit()
         self._provider = None
 
         # delete buffer
-        if self._buffer:
-            OpenRTM_aist.CdrBufferFactory.instance().deleteObject(self._buffer)
         self._buffer = None
 
-        if self._serializer:
-            OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
         self._serializer = None
 
         return self.PORT_OK

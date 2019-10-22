@@ -451,5 +451,4 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
 def OutPortDSProviderInit():
     factory = OpenRTM_aist.OutPortProviderFactory.instance()
     factory.addFactory("data_service",
-                       OpenRTM_aist.OutPortDSProvider,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.OutPortDSProvider)

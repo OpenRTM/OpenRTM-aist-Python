@@ -206,8 +206,6 @@ class ProcessUniquePolicy(NumberingPolicy):
 
 def ProcessUniquePolicyInit():
     OpenRTM_aist.NumberingPolicyFactory.instance().addFactory("default",
-                                                              OpenRTM_aist.ProcessUniquePolicy,
-                                                              OpenRTM_aist.Delete)
+                                                              OpenRTM_aist.ProcessUniquePolicy)
     OpenRTM_aist.NumberingPolicyFactory.instance().addFactory("process_unique",
-                                                              OpenRTM_aist.ProcessUniquePolicy,
-                                                              OpenRTM_aist.Delete)
+                                                              OpenRTM_aist.ProcessUniquePolicy)

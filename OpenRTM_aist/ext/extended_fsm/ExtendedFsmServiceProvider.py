@@ -296,6 +296,5 @@ class ExtendedFsmServiceProvider(
 def ExtendedFsmServiceProviderInit(mgr=None):
     factory = OpenRTM_aist.SdoServiceProviderFactory.instance()
     factory.addFactory(RTC.ExtendedFsmService._NP_RepositoryId,
-                       ExtendedFsmServiceProvider,
-                       OpenRTM_aist.Delete)
+                       ExtendedFsmServiceProvider)
     return

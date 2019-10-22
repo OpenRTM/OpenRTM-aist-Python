@@ -452,5 +452,4 @@ class InPortDSConsumer(OpenRTM_aist.InPortConsumer,
 def InPortDSConsumerInit():
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("data_service",
-                       OpenRTM_aist.InPortDSConsumer,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.InPortDSConsumer)

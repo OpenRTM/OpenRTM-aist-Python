@@ -25,8 +25,6 @@ import OpenRTM_aist
 #
 # factory.addFactory(toRepositoryId<IDL Type>(),
 #                   Creator< SdoServiceConsumerBase,
-#                            your_sdo_service_consumer_subclass>,
-#                   Destructor< SdoServiceConsumerBase,
 #                            your_sdo_service_consumer_subclass>);
 #
 # @else

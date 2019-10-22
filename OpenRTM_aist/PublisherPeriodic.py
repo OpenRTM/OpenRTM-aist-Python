@@ -99,13 +99,23 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     def __del__(self):
         self._rtcout.RTC_TRACE("~PublisherPeriodic()")
+
+    ##
+    # @if jp
+    # @brief 終了処理
+    #
+    # @param self
+    #
+    # @else
+    # @brief 
+    # @endif
+    def exit(self):
+        self._rtcout.RTC_TRACE("exit()")
         if self._task:
             self._task.resume()
             self._task.finalize()
             self._rtcout.RTC_PARANOID("task finalized.")
 
-            OpenRTM_aist.PeriodicTaskFactory.instance().deleteObject(self._task)
-            del self._task
             self._rtcout.RTC_PARANOID("task deleted.")
 
         # "consumer" should be deleted in the Connector
@@ -1127,5 +1137,4 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
 
 def PublisherPeriodicInit():
     OpenRTM_aist.PublisherFactory.instance().addFactory("periodic",
-                                                        OpenRTM_aist.PublisherPeriodic,
-                                                        OpenRTM_aist.Delete)
+                                                        OpenRTM_aist.PublisherPeriodic)

@@ -267,5 +267,4 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
 def OpenSpliceOutPortInit():
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("opensplice",
-                       OpenSpliceOutPort,
-                       OpenRTM_aist.Delete)
+                       OpenSpliceOutPort)

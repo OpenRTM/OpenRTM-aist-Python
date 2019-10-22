@@ -390,5 +390,4 @@ class SubListener(dds.Listener):
 def OpenSpliceInPortInit():
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("opensplice",
-                       OpenSpliceInPort,
-                       OpenRTM_aist.Delete)
+                       OpenSpliceInPort)

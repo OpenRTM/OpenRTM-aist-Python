@@ -212,20 +212,6 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
     ##
     # @if jp
-    # @brief Provider を削除するための Functor
-    # @else
-    # @brief Functor to delete Providers
-    # @endif
-    #
-    class provider_cleanup:
-        def __init__(self):
-            self._factory = OpenRTM_aist.OutPortProviderFactory.instance()
-
-        def __call__(self, p):
-            self._factory.deleteObject(p)
-
-    ##
-    # @if jp
     # @brief Connector を削除するための Functor
     # @else
     # @brief Functor to delete Connectors
@@ -1296,7 +1282,6 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
             if not provider.publishInterface(cprof.properties):
                 self._rtcout.RTC_ERROR(
                     "publishing interface information error")
-                OpenRTM_aist.OutPortProviderFactory.instance().deleteObject(provider)
                 return None
 
             return provider
@@ -1338,7 +1323,6 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
             if not consumer.subscribeInterface(cprof.properties):
                 self._rtcout.RTC_ERROR("interface subscription failed.")
-                OpenRTM_aist.InPortConsumerFactory.instance().deleteObject(consumer)
                 return 0
 
             return consumer
