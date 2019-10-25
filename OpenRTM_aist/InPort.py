@@ -358,22 +358,21 @@ class InPort(OpenRTM_aist.InPortBase):
             return self._value
 
         _val = copy.deepcopy(self._value)
-        cdr = _val
 
         if name is None:
-            ret, cdr = self._connectors[0].read(cdr)
+            ret, _val = self._connectors[0].read(_val)
         else:
             ret = OpenRTM_aist.DataPortStatus.PRECONDITION_NOT_MET
             for con in self._connectors:
                 if con.name() == name:
-                    ret, cdr = con.read(cdr)
+                    ret, _val = con.read(_val)
             if ret == OpenRTM_aist.DataPortStatus.PRECONDITION_NOT_MET:
                 self._rtcout.RTC_DEBUG("not found %s", name)
                 return self._value
 
         if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
             self._rtcout.RTC_DEBUG("data read succeeded")
-            self._value = cdr
+            self._value = _val
 
             if self._OnReadConvert is not None:
                 self._value = self._OnReadConvert(self._value)
