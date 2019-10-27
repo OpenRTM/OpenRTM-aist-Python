@@ -210,5 +210,4 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
 def OutPortCSPConsumerInit():
     factory = OpenRTM_aist.OutPortConsumerFactory.instance()
     factory.addFactory("csp_channel",
-                       OpenRTM_aist.OutPortCSPConsumer,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.OutPortCSPConsumer)

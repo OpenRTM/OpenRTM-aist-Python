@@ -273,5 +273,4 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
 def InPortCSPProviderInit():
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("csp_channel",
-                       OpenRTM_aist.InPortCSPProvider,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.InPortCSPProvider)

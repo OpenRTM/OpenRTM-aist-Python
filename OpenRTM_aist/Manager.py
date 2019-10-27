@@ -150,6 +150,7 @@ class Manager:
         self._isRunning = False
         self._threadMain = None
         self._threadOrb = None
+        self._eclist = []
 
         return
 
@@ -784,8 +785,7 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.registerECFactory(%s)", name)
         # try:
         ret = OpenRTM_aist.ExecutionContextFactory.instance().addFactory(name,
-                                                                         new_func,
-                                                                         delete_func)
+                                                                         new_func)
         if ret == OpenRTM_aist.Factory.FACTORY_OK:
             return True
         # except:
@@ -1569,7 +1569,6 @@ class Manager:
             return
 
         if not logstream.init(logprop):
-            logstream = OpenRTM_aist.LogstreamFactory.instance().deleteObject(logstream)
             return
 
         self._rtcout.addLogger(logstream)
@@ -1643,7 +1642,6 @@ class Manager:
             if not logstream.init(l):
                 self._rtcout.RTC_WARN("Logstream %s init failed." % lstype)
 
-                factory.deleteObject(logstream)
                 self._rtcout.RTC_WARN("Logstream %s deleted." % lstype)
                 continue
 
@@ -3369,9 +3367,11 @@ class Manager:
     # の中で sleep などの長時間ブロッキングは推奨されない。また周期タスクの中で
     # 本関数を呼び出してはならない。
     #
-    # @param fn: 周期実行する関数または関数オブジェクト
-    # @param period: 周期実行の実行間隔
-    # @return id: removeTask() で実行解除するための ID
+    # @param self
+    # @param fn 周期実行する関数または関数オブジェクト
+    # @param period 周期実行の実行間隔
+    # @return id removeTask() で実行解除するための ID
+    # @return PeriodicFunction
     # @else
     #
     # @brief Add a task to the Manager timer.
@@ -3380,9 +3380,11 @@ class Manager:
     # timer. It run until removeTask(). DO NOT block (Ex. sleep)
     # in the registerd function.
     #
-    # @param fn: The Function run periodically.
-    # @param period: Period of fn execution.
-    # @return id: ID for removetask().
+    # @param self
+    # @param fn The Function run periodically.
+    # @param period Period of fn execution.
+    # @return id ID for removetask().
+    # @return PeriodicFunction
     # @endif
     #
     def addTask(self, fn, period):
@@ -3396,8 +3398,10 @@ class Manager:
     # Manger のメインスレッドで指定された処理を実行する。長時間のブロッ
     # キングを行う関数の登録は推奨しない。
     #
-    # @param fn: 関数または関数オブジェクト
-    # @param delay: 起動するまでの遅延時間
+    # @param self
+    # @param fn 関数または関数オブジェクト
+    # @param delay 起動するまでの遅延時間
+    # @return DelayedFunction
     #
     # @else
     #
@@ -3406,8 +3410,10 @@ class Manager:
     # The specified function run on the Manager main thread.  DO NOT block
     # the thread in the function.
     #
-    # @param fn: The Function run on the Manager main thread.
-    # @ param delay: The delay time for the function execution.
+    # @param self
+    # @param fn The Function run on the Manager main thread.
+    # @param delay The delay time for the function execution.
+    # @return DelayedFunction
     #
     # @endif
     #
@@ -3421,7 +3427,8 @@ class Manager:
     #
     # タイマーに登録されている周期タスクを削除する。
     #
-    # @param id: 削除対象のタスクを示す ID
+    # @param self
+    # @param id 削除対象のタスクを示す ID
     #
     # @else
     #
@@ -3429,12 +3436,88 @@ class Manager:
     #
     # This operation remove the specify function.
     #
-    # @param id: Task ID
+    # @param self
+    # @param id Task ID
     #
     # @endif
     #
     def removeTask(self, task):
         task.stop()
+
+    ##
+    # @if jp
+    # @brief リストに実行コンテキストのインスタンスを追加
+    #
+    # Managerが管理するRTCが生成したECはリストに追加する必要がある
+    #
+    # @param self
+    # @param ec 実行コンテキスト
+    # @return 既に追加済みの場合はFalseを返す
+    #
+    # @else
+    #
+    # @brief 
+    #
+    #
+    # @param self
+    # @param ec Execution context
+    # @return
+    #
+    # @endif
+    #
+    def addExecutionContext(self, ec):
+        if ec in self._eclist:
+            return False
+        self._eclist.append(ec)
+        return True
+
+    ##
+    # @if jp
+    # @brief リストから実行コンテキストを削除
+    #
+    #
+    # @param self
+    # @param ec 実行コンテキスト
+    # @return 指定のECがリストに存在しない場合はFalseを返す
+    #
+    # @else
+    #
+    # @brief 
+    #
+    #
+    # @param self
+    # @param ec Execution context
+    # @return 
+    #
+    # @endif
+    #
+    def removeExecutionContext(self, ec):
+        if ec in self._eclist:
+            self._eclist.remove(ec)
+            return True
+        return False
+
+    ##
+    # @if jp
+    # @brief 実行コンテキストをリストを取得する
+    #
+    #
+    # @param self
+    # @return 実行コンテキストのリスト
+    #
+    # @else
+    #
+    # @brief 
+    #
+    #
+    # @param self
+    # @return 
+    #
+    # @endif
+    #
+    def createdExecutionContexts(self):
+        return self._eclist
+
 
     # ============================================================
     # コンポーネントマネージャ

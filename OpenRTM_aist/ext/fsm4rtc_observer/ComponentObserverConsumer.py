@@ -1315,6 +1315,5 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
 def ComponentObserverConsumerInit(mgr=None):
     factory = OpenRTM_aist.SdoServiceConsumerFactory.instance()
     factory.addFactory(RTC.ComponentObserver._NP_RepositoryId,
-                       ComponentObserverConsumer,
-                       OpenRTM_aist.Delete)
+                       ComponentObserverConsumer)
     return

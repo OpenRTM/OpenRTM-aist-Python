@@ -251,7 +251,7 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
             if self._serializer is None:
                 self._rtcout.RTC_ERROR("serializer creation failure.")
                 return self.UNKNOWN_ERROR, data
-            
+
             self._serializer.isLittleEndian(self._endian)
             ser_ret, data = self._serializer.deserialize(cdr_data, datatype)
 
@@ -285,13 +285,8 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     def disconnect(self):
         self._rtcout.RTC_TRACE("disconnect()")
         self.onDisconnect()
-        # delete consumer
-        if self._consumer:
-            OpenRTM_aist.OutPortConsumerFactory.instance().deleteObject(self._consumer)
-        self._consumer = None
 
-        if self._serializer:
-            OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
+        self._consumer = None
         self._serializer = None
 
         return self.PORT_OK

@@ -450,5 +450,4 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
 def OutPortCorbaCdrProviderInit():
     factory = OpenRTM_aist.OutPortProviderFactory.instance()
     factory.addFactory("corba_cdr",
-                       OpenRTM_aist.OutPortCorbaCdrProvider,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.OutPortCorbaCdrProvider)

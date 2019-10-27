@@ -175,7 +175,6 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
         else:
             cdr = self.onBufferRead(cdr)
             ret, _data = self.deserializeData(cdr)
-                
             return ret, _data
 
     #
@@ -223,14 +222,11 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
         # delete consumer
         if self._provider:
             cfactory = OpenRTM_aist.InPortProviderFactory.instance()
-            cfactory.deleteObject(self._provider)
 
             self._provider.exit()
 
         self._provider = None
 
-        if self._consumer:
-            OpenRTM_aist.OutPortConsumerFactory.instance().deleteObject(self._consumer)
         self._consumer = None
 
         return self.PORT_OK

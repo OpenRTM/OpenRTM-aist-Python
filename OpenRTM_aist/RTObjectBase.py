@@ -5008,12 +5008,12 @@ class RTObjectBase:
         # Component specific multiple EC option available
         if not self._properties.findNode("execution_contexts"):
             self._rtcout.RTC_DEBUG("No component specific EC specified.")
-            return RTC.RTC_ERROR
+            return RTC.RTC_ERROR, ec_args
 
         args_ = self._properties.getProperty("execution_contexts")
         ecs_tmp_ = [s.strip() for s in args_.split(",")]
         if not ecs_tmp_[0]:
-            return RTC.RTC_ERROR
+            return RTC.RTC_ERROR, ec_args
         self._rtcout.RTC_DEBUG("Component specific e EC option available,")
         self._rtcout.RTC_DEBUG("%s", args_)
 
@@ -5024,7 +5024,7 @@ class RTObjectBase:
                 self._rtcout.RTC_INFO(
                     "EC none. EC will not be bound to the RTC.")
                 ec_args = []
-                return RTC.RTC_OK
+                return RTC.RTC_OK, ec_args
 
             type_and_name_ = [s.strip() for s in ec_tmp.split("(")]
             if len(type_and_name_) > 2:
@@ -5068,7 +5068,7 @@ class RTObjectBase:
             self._rtcout.RTC_DEBUG("New EC properties stored:")
             self._rtcout.RTC_DEBUG(p_)
 
-        return RTC.RTC_OK
+        return RTC.RTC_OK, ec_args
 
     ##
     # @brief getting global EC options from rtc.conf
@@ -5083,13 +5083,13 @@ class RTObjectBase:
         prop_ = self._properties.findNode("exec_cxt.periodic")
         if not prop_:
             self._rtcout.RTC_WARN("No global EC options found.")
-            return RTC.RTC_ERROR
+            return RTC.RTC_ERROR, global_ec_props
 
         self._rtcout.RTC_DEBUG("Global EC options are specified.")
         self._rtcout.RTC_DEBUG(prop_)
         self.getInheritedECOptions(global_ec_props)
         global_ec_props.mergeProperties(prop_)
-        return RTC.RTC_OK
+        return RTC.RTC_OK, global_ec_props
 
     ##
     # @brief getting EC options
@@ -5100,20 +5100,21 @@ class RTObjectBase:
     def getContextOptions(self, ec_args):
         self._rtcout.RTC_DEBUG("getContextOptions()")
         global_props_ = OpenRTM_aist.Properties()
-        ret_global_ = self.getGlobalContextOptions(global_props_)
-        ret_private_ = self.getPrivateContextOptions(ec_args)
+        ret_global_, global_props_ = self.getGlobalContextOptions(
+            global_props_)
+        ret_private_, ec_args = self.getPrivateContextOptions(ec_args)
 
         # private(X), global(X) -> error
         # private(O), global(O) -> private
         # private(X), global(O) -> global
         # private(O), global(X) -> private
         if ret_global_ != RTC.RTC_OK and ret_private_ != RTC.RTC_OK:
-            return RTC.RTC_ERROR
+            return RTC.RTC_ERROR, ec_args
 
         if ret_global_ == RTC.RTC_OK and ret_private_ != RTC.RTC_OK:
             ec_args.append(global_props_)
 
-        return RTC.RTC_OK
+        return RTC.RTC_OK, ec_args
 
     ##
     # @brief fiding existing EC from the factory
@@ -5121,15 +5122,15 @@ class RTObjectBase:
     # ReturnCode_t findExistingEC(coil::Properties& ec_arg,
     #                             RTC::ExecutionContextBase*& ec);
 
-    def findExistingEC(self, ec_arg, ec):
-        eclist_ = OpenRTM_aist.ExecutionContextFactory.instance().createdObjects()
-        for ec_ in eclist_:
-            if ec_.getProperties().getProperty("type") == ec_arg.getProperty("type") and \
-                    ec_.getProperties().getProperty("name") == ec_arg.getProperty("name"):
-                ec[0] = ec_
-                return RTC.RTC_OK
+    def findExistingEC(self, ec_arg):
+        if self._manager:
+            eclist_ = self._manager.createdExecutionContexts()
+            for e_ in eclist_:
+                if ec.getProperties().getProperty("type") == ec_arg.getProperty("type") and \
+                        ec.getProperties().getProperty("name") == ec_arg.getProperty("name"):
+                    return RTC.RTC_OK, ec
 
-        return RTC.RTC_ERROR
+        return RTC.RTC_ERROR, None
 
     ##
     # @brief creating, initializing and binding context
@@ -5143,8 +5144,8 @@ class RTObjectBase:
         for ec_arg_ in ec_args:
             ec_type_ = ec_arg_.getProperty("type")
             ec_name_ = ec_arg_.getProperty("name")
-            ec_ = [None]
-            if ec_name_ and self.findExistingEC(ec_arg_, ec_) == RTC.RTC_OK:
+            ret, ec = self.findExistingEC(ec_arg_)
+            if ec_name_ and ret == RTC.RTC_OK:
                 # if EC's name exists, find existing EC in the factory.
                 self._rtcout.RTC_DEBUG("EC: type=%s, name=%s already exists.",
                                        (ec_type_, ec_name_))
@@ -5155,10 +5156,10 @@ class RTObjectBase:
                     self._rtcout.RTC_DEBUG("Available ECs: %s",
                                            OpenRTM_aist.flatten(avail_ec_))
                     continue
-                ec_[0] = OpenRTM_aist.ExecutionContextFactory.instance(
+                ec = OpenRTM_aist.ExecutionContextFactory.instance(
                 ).createObject(ec_type_)
 
-            if not ec_[0]:
+            if not ec:
                 # EC factory available but creation failed. Resource full?
                 self._rtcout.RTC_ERROR("EC (%s) creation failed.", ec_type_)
                 self._rtcout.RTC_DEBUG("Available EC list: %s",
@@ -5166,11 +5167,14 @@ class RTObjectBase:
                 ret_ = RTC.RTC_ERROR
                 continue
 
+            if self._manager:
+                self._manager.addExecutionContext(ec)
+
             self._rtcout.RTC_DEBUG("EC (%s) created.", ec_type_)
 
-            ec_[0].init(ec_arg_)
-            self._eclist.append(ec_[0])
-            ec_[0].bindComponent(self)
+            ec.init(ec_arg_)
+            self._eclist.append(ec)
+            ec.bindComponent(self)
 
         if len(self._eclist) == 0:
             default_prop = OpenRTM_aist.Properties()
@@ -5214,17 +5218,20 @@ class RTObjectBase:
                     self._rtcout.RTC_PARANOID("Option %s exists.", opt_)
                     default_opts.setProperty(opt_, p_.getProperty(opt_))
 
-            ec_[0] = OpenRTM_aist.ExecutionContextFactory.instance(
+            ec = OpenRTM_aist.ExecutionContextFactory.instance(
             ).createObject(ec_type_)
-            # if not ec_[0]:
-            #  self._rtcout.RTC_ERROR("EC (%s) creation failed.", ec_type_)
-            #  self._rtcout.RTC_DEBUG("Available EC list: %s",
-            #                         OpenRTM_aist.flatten(avail_ec_))
-            #  return RTC.RTC_ERROR
+            if not ec:
+                self._rtcout.RTC_ERROR("EC (%s) creation failed.", ec_type_)
+                self._rtcout.RTC_DEBUG("Available EC list: %s",
+                                        OpenRTM_aist.flatten(avail_ec_))
+                return RTC.RTC_ERROR
 
-            ec_[0].init(default_opts)
-            self._eclist.append(ec_[0])
-            ec_[0].bindComponent(self)
+            if self._manager:
+                self._manager.addExecutionContext(ec)
+
+            ec.init(default_opts)
+            self._eclist.append(ec)
+            ec.bindComponent(self)
 
         return ret_
 

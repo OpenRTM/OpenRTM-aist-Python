@@ -187,14 +187,12 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     # @if jp
     # @brief デストラクタ
     #
-    # disconnect() が呼ばれ、consumer, publisher, buffer が解体・削除される。
+    #
     #
     # @else
     #
     # @brief Destructor
     #
-    # This operation calls disconnect(), which destructs and deletes
-    # the consumer, the publisher and the buffer.
     #
     # @endif
     #
@@ -310,8 +308,8 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
         # delete publisher
         if self._publisher:
             self._rtcout.RTC_DEBUG("delete publisher")
+            self._publisher.exit()
             pfactory = OpenRTM_aist.PublisherFactory.instance()
-            pfactory.deleteObject(self._publisher)
 
         self._publisher = None
 
@@ -319,7 +317,6 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
         if self._consumer:
             self._rtcout.RTC_DEBUG("delete consumer")
             cfactory = OpenRTM_aist.InPortConsumerFactory.instance()
-            cfactory.deleteObject(self._consumer)
 
         self._consumer = None
 
@@ -327,13 +324,11 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
         if self._buffer:
             self._rtcout.RTC_DEBUG("delete buffer")
             bfactory = OpenRTM_aist.CdrBufferFactory.instance()
-            bfactory.deleteObject(self._buffer)
 
         self._buffer = None
 
         if self._serializer:
             self._rtcout.RTC_DEBUG("delete serializer")
-            OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
         self._serializer = None
 
         self._rtcout.RTC_TRACE("disconnect() done")

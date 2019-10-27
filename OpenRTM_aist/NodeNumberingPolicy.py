@@ -123,5 +123,4 @@ class NodeNumberingPolicy(OpenRTM_aist.NumberingPolicy):
 
 def NodeNumberingPolicyInit():
     OpenRTM_aist.NumberingPolicyFactory.instance().addFactory("node_unique",
-                                                              OpenRTM_aist.NodeNumberingPolicy,
-                                                              OpenRTM_aist.Delete)
+                                                              OpenRTM_aist.NodeNumberingPolicy)

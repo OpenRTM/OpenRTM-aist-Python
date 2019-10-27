@@ -233,14 +233,13 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         self._rtcout.RTC_VERBOSE("MD5sum:%s", md5sum)
         self._rtcout.RTC_VERBOSE("Type:%s", type_name)
 
-        factory = ROSMessageInfo.ROSMessageInfoFactory.instance()
-        info = factory.createObject(self._messageType)
+        factory = ROSMessageInfo.ROSMessageInfoList.instance()
+        info = factory.getInfo(self._messageType)
 
         if info:
             info_type = info.datatype()
             info_md5sum = info.md5sum()
             info_message_definition = info.message_definition()
-            factory.deleteObject(info)
         else:
             self._rtcout.RTC_ERROR("can not found %s", self._messageType)
             return
@@ -508,5 +507,4 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 def ROSOutPortInit():
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("ros",
-                       ROSOutPort,
-                       OpenRTM_aist.Delete)
+                       ROSOutPort)

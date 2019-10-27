@@ -469,6 +469,5 @@ def FileNameserviceInit(manager):
     global service_name
     factory_ = OpenRTM_aist.LocalServiceFactory.instance()
     factory_.addFactory(service_name,
-                        FileNameservice,
-                        OpenRTM_aist.Delete)
+                        FileNameservice)
     return

@@ -326,5 +326,4 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
 
 def LogstreamFileInit():
     OpenRTM_aist.LogstreamFactory.instance().addFactory("file",
-                                                        OpenRTM_aist.LogstreamFile,
-                                                        OpenRTM_aist.Delete)
+                                                        OpenRTM_aist.LogstreamFile)

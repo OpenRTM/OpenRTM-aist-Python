@@ -525,5 +525,4 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 # @endif
 def ExtTrigExecutionContextInit(manager):
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("ExtTrigExecutionContext",
-                                                               OpenRTM_aist.ExtTrigExecutionContext,
-                                                               OpenRTM_aist.ECDelete)
+                                                               OpenRTM_aist.ExtTrigExecutionContext)

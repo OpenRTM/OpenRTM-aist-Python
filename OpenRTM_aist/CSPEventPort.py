@@ -117,8 +117,6 @@ class CSPEventPort(OpenRTM_aist.InPortBase):
 
     def __del__(self):
         super(CSPEventPort, self).__del__()
-        if self._eventbuffer is not None:
-            OpenRTM_aist.CdrBufferFactory.instance().deleteObject(self._eventbuffer)
 
     ##
     # @if jp

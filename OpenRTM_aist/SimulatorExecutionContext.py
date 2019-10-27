@@ -198,6 +198,5 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
 #
 def SimulatorExecutionContextInit(manager):
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("SimulatorExecutionContext",
-                                                               OpenRTM_aist.SimulatorExecutionContext,
-                                                               OpenRTM_aist.ECDelete)
+                                                               OpenRTM_aist.SimulatorExecutionContext)
     return

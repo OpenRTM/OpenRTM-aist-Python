@@ -826,6 +826,5 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
 def PeriodicExecutionContextInit(manager):
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("PeriodicExecutionContext",
-                                                               OpenRTM_aist.PeriodicExecutionContext,
-                                                               OpenRTM_aist.ECDelete)
+                                                               OpenRTM_aist.PeriodicExecutionContext)
     return

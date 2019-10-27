@@ -247,5 +247,4 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider,
 def InPortSHMProviderInit():
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("shared_memory",
-                       OpenRTM_aist.InPortSHMProvider,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.InPortSHMProvider)

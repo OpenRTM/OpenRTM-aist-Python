@@ -95,11 +95,22 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # @endif
     def __del__(self):
         self._rtcout.RTC_TRACE("~PublisherNew()")
+
+    ##
+    # @if jp
+    # @brief 終了処理
+    #
+    # @param self
+    #
+    # @else
+    # @brief
+    # @endif
+    def exit(self):
+        self._rtcout.RTC_TRACE("exit()")
         if self._task:
             self._task.resume()
             self._task.finalize()
 
-            OpenRTM_aist.PeriodicTaskFactory.instance().deleteObject(self._task)
             #del self._task
             self._rtcout.RTC_PARANOID("task deleted.")
 
@@ -108,6 +119,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
         # "buffer"   should be deleted in the Connector
         self._buffer = 0
         return
+
 
     ##
     # @if jp
@@ -1079,8 +1091,6 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
 def PublisherNewInit():
     OpenRTM_aist.PublisherFactory.instance().addFactory("new",
-                                                        OpenRTM_aist.PublisherNew,
-                                                        OpenRTM_aist.Delete)
+                                                        OpenRTM_aist.PublisherNew)
     OpenRTM_aist.PublisherFactory.instance().addFactory("nonblock",
-                                                        OpenRTM_aist.PublisherNew,
-                                                        OpenRTM_aist.Delete)
+                                                        OpenRTM_aist.PublisherNew)

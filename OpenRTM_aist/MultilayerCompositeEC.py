@@ -394,8 +394,6 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
             self._task.resume()
             self._task.finalize()
 
-            OpenRTM_aist.PeriodicTaskFactory.instance().deleteObject(self._task)
-
     ##
     # @if jp
     # @brief RTC実行スレッド作成
@@ -619,6 +617,5 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 # @endif
 def MultilayerCompositeECInit(manager):
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("MultilayerCompositeEC",
-                                                               OpenRTM_aist.MultilayerCompositeEC,
-                                                               OpenRTM_aist.ECDelete)
+                                                               OpenRTM_aist.MultilayerCompositeEC)
     return

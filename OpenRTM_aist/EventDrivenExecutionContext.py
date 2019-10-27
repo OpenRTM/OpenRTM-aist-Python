@@ -68,6 +68,5 @@ class EventDrivenExecutionContext(OpenRTM_aist.PeriodicExecutionContext):
 # @endif
 def EventDrivenExecutionContextInit(manager):
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("EventDrivenExecutionContext",
-                                                               OpenRTM_aist.EventDrivenExecutionContext,
-                                                               OpenRTM_aist.ECDelete)
+                                                               OpenRTM_aist.EventDrivenExecutionContext)
     return

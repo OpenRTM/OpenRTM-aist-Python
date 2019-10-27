@@ -201,5 +201,4 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
 def InPortSHMConsumerInit():
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("shared_memory",
-                       OpenRTM_aist.InPortSHMConsumer,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.InPortSHMConsumer)

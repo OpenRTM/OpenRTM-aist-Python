@@ -229,12 +229,10 @@ def ros2_basic_data(message_type):
 def ROS2BasicDataInit(message_type, name):
     OpenRTM_aist.SerializerFactory.instance().addFactory(name,
                                                          ros2_basic_data(
-                                                             message_type),
-                                                         OpenRTM_aist.Delete)
-    ROS2MessageInfo.ROS2MessageInfoFactory.instance().addFactory(name,
-                                                                 ROS2MessageInfo.ros2_message_info(
-                                                                     message_type),
-                                                                 OpenRTM_aist.Delete)
+                                                             message_type))
+    ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo(name,
+                                                                 ROS2MessageInfo.ROS2MessageInfo(
+                                                                     message_type))
 
 
 ##
@@ -378,12 +376,10 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
 #
 def ROS2Point3DInit():
     OpenRTM_aist.SerializerFactory.instance().addFactory("ros2:geometry_msgs/PointStamped",
-                                                         ROS2Point3DData,
-                                                         OpenRTM_aist.Delete)
-    ROS2MessageInfo.ROS2MessageInfoFactory.instance().addFactory("ros2:geometry_msgs/PointStamped",
-                                                                 ROS2MessageInfo.ros2_message_info(
-                                                                     PointStamped),
-                                                                 OpenRTM_aist.Delete)
+                                                         ROS2Point3DData)
+    ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:geometry_msgs/PointStamped",
+                                                                 ROS2MessageInfo.ROS2MessageInfo(
+                                                                     PointStamped))
 
 
 ##
@@ -529,12 +525,10 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
 #
 def ROS2QuaternionInit():
     OpenRTM_aist.SerializerFactory.instance().addFactory("ros2:geometry_msgs/QuaternionStamped",
-                                                         ROS2QuaternionData,
-                                                         OpenRTM_aist.Delete)
-    ROS2MessageInfo.ROS2MessageInfoFactory.instance().addFactory("ros2:geometry_msgs/QuaternionStamped",
-                                                                 ROS2MessageInfo.ros2_message_info(
-                                                                     QuaternionStamped),
-                                                                 OpenRTM_aist.Delete)
+                                                         ROS2QuaternionData)
+    ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:geometry_msgs/QuaternionStamped",
+                                                                 ROS2MessageInfo.ROS2MessageInfo(
+                                                                     QuaternionStamped))
 
 
 ##
@@ -678,12 +672,10 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
 #
 def ROS2Vector3DInit():
     OpenRTM_aist.SerializerFactory.instance().addFactory("ros2:geometry_msgs/Vector3Stamped",
-                                                         ROS2Vector3DData,
-                                                         OpenRTM_aist.Delete)
-    ROS2MessageInfo.ROS2MessageInfoFactory.instance().addFactory("ros2:geometry_msgs/Vector3Stamped",
-                                                                 ROS2MessageInfo.ros2_message_info(
-                                                                     Vector3Stamped),
-                                                                 OpenRTM_aist.Delete)
+                                                         ROS2Vector3DData)
+    ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:geometry_msgs/Vector3Stamped",
+                                                                 ROS2MessageInfo.ROS2MessageInfo(
+                                                                     Vector3Stamped))
 
 
 ##
@@ -833,12 +825,10 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
 #
 def ROS2CameraImageInit():
     OpenRTM_aist.SerializerFactory.instance().addFactory("ros2:sensor_msgs/Image",
-                                                         ROS2CameraImageData,
-                                                         OpenRTM_aist.Delete)
-    ROS2MessageInfo.ROS2MessageInfoFactory.instance().addFactory("ros2:sensor_msgs/Image",
-                                                                 ROS2MessageInfo.ros2_message_info(
-                                                                     Image),
-                                                                 OpenRTM_aist.Delete)
+                                                         ROS2CameraImageData)
+    ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:sensor_msgs/Image",
+                                                                 ROS2MessageInfo.ROS2MessageInfo(
+                                                                     Image))
 
 
 ##

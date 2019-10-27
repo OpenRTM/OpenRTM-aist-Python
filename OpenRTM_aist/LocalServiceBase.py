@@ -155,8 +155,6 @@ class LocalServiceProfile:
 #       = RTC::LocalServiceFactory::instance();
 #     factory.addFactory(::RTC::MyLocalSerivce::name,
 #                        ::coil::Creator< ::RTC::LocalServiceBase,
-#                        ::RTC::MyLocalService>,
-#                        ::coil::Destructor< ::RTC::LocalServiceBase,
 #                        ::RTC::MyLocalService>);
 #   }
 # };

@@ -360,8 +360,6 @@ class ConnectorDataListenerT(ConnectorDataListener):
         serializer.isLittleEndian(endian)
         ret, data = serializer.deserialize(cdrdata, data)
 
-        OpenRTM_aist.SerializerFactory.instance().deleteObject(serializer)
-
         return data
 
 
@@ -842,8 +840,6 @@ class ConnectorDataListenerHolder:
                         if deserialize_ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
                             data = _data
                 ret = ret | listener_ret
-        if serializer is not None:
-            OpenRTM_aist.SerializerFactory.instance().deleteObject(serializer)
         return ret, cdrdata
 
     def setDataType(self, dataType):

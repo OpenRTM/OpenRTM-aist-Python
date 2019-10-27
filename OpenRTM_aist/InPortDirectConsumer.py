@@ -195,5 +195,4 @@ class InPortDirectConsumer(OpenRTM_aist.InPortConsumer):
 def InPortDirectConsumerInit():
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("direct",
-                       OpenRTM_aist.InPortDirectConsumer,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.InPortDirectConsumer)

@@ -474,6 +474,7 @@ class ModuleManager:
         # for new
         comp_spec_name = classname + "_spec"
 
+
         try:
             code = "UTF-8-SIG"
             import chardet

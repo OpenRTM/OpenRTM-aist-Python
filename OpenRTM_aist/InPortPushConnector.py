@@ -286,7 +286,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
         if datatype is None:
             if data is None:
                 self._rtcout.RTC_ERROR("invalid data type")
-                return self.PRECONDITION_NOT_MET, data
+                return self.UNKNOWN_ERROR, data
             datatype = data
 
         ret, cdr = self.readBuff()
@@ -343,7 +343,6 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
         # delete consumer
         if self._provider:
             cfactory = OpenRTM_aist.InPortProviderFactory.instance()
-            cfactory.deleteObject(self._provider)
 
             self._provider.exit()
 
@@ -352,12 +351,9 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
         # delete buffer
         if self._buffer and self._deleteBuffer == True:
             bfactory = OpenRTM_aist.CdrBufferFactory.instance()
-            bfactory.deleteObject(self._buffer)
 
         self._buffer = None
 
-        if self._serializer:
-            OpenRTM_aist.SerializerFactory.instance().deleteObject(self._serializer)
         self._serializer = None
 
         return self.PORT_OK

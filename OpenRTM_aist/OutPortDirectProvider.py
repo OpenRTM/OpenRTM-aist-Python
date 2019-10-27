@@ -175,5 +175,4 @@ class OutPortDirectProvider(OpenRTM_aist.OutPortProvider):
 def OutPortDirectProviderInit():
     factory = OpenRTM_aist.OutPortProviderFactory.instance()
     factory.addFactory("direct",
-                       OpenRTM_aist.OutPortDirectProvider,
-                       OpenRTM_aist.Delete)
+                       OpenRTM_aist.OutPortDirectProvider)

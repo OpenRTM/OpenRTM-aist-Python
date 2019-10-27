@@ -242,7 +242,6 @@ class CorbaConsumer(CorbaConsumerBase):
 
     def __del__(self):
         pass
-        # self.releaseObject()
 
     ##
     # @if jp
