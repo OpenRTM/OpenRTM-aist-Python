@@ -748,7 +748,7 @@ class CorbaNaming:
     def destroyRecursive(self, context):
         cont = True
         bl = []
-        bi = 0
+        bi = None
         bl, bi = context.list(self._blLength)
         while cont:
             for i in range(len(bl)):

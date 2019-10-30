@@ -60,7 +60,7 @@ class PeriodicTask(OpenRTM_aist.Task):
         OpenRTM_aist.Task.__init__(self)
         self._period = OpenRTM_aist.TimeValue(0.0)
         self._nowait = False
-        self._func = 0
+        self._func = None
         self._deleteInDtor = True
         self._alive = self.alive_t(False)
         self._suspend = self.suspend_t(False)

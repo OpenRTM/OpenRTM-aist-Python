@@ -340,7 +340,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
 
         if not consumer:
             self._rtcout.RTC_ERROR(
-                "setConsumer(consumer = 0): invalid argument.")
+                "setConsumer(consumer = None): invalid argument.")
             return self.INVALID_ARGS
 
         self._consumer = consumer
@@ -377,7 +377,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
         self._rtcout.RTC_TRACE("setBuffer()")
 
         if not buffer:
-            self._rtcout.RTC_ERROR("setBuffer(buffer == 0): invalid argument")
+            self._rtcout.RTC_ERROR("setBuffer(buffer == None): invalid argument")
             return self.INVALID_ARGS
 
         self._buffer = buffer
@@ -424,7 +424,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
 
         if not listeners:
             self._rtcout.RTC_ERROR(
-                "setListeners(listeners == 0): invalid argument")
+                "setListeners(listeners == None): invalid argument")
             return self.INVALID_ARGS
 
         self._profile = info
