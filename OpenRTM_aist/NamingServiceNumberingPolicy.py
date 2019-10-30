@@ -113,7 +113,7 @@ class NamingServiceNumberingPolicy(OpenRTM_aist.NumberingPolicy):
         rtc_name += name
         rtcs = self._mgr.getNaming().string_to_component(rtc_name)
 
-        if len(rtcs) > 0:
+        if rtcs:
             return True
         else:
             return False

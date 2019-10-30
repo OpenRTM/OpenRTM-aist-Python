@@ -1525,15 +1525,14 @@ class CorbaPort(OpenRTM_aist.PortBase):
     class subscribe:
         def __init__(self, cons):
             self._cons = cons
-            self._len = len(cons)
 
         def __call__(self, nv):
-            for i in range(self._len):
+            for con in self._cons:
                 name_ = nv.name
-                if self._cons[i].descriptor() == name_:
+                if con.descriptor() == name_:
                     try:
                         obj = any.from_any(nv.value, keep_structs=True)
-                        self._cons[i].setObject(obj)
+                        con.setObject(obj)
                     except BaseException:
                         print(OpenRTM_aist.Logger.print_exception())
 
@@ -1547,15 +1546,14 @@ class CorbaPort(OpenRTM_aist.PortBase):
     class unsubscribe:
         def __init__(self, cons):
             self._cons = cons
-            self._len = len(cons)
 
         def __call__(self, nv):
-            for i in range(self._len):
+            for con in self._cons:
                 name_ = nv.name
-                if self._cons[i].descriptor() == name_:
-                    self._cons[i].releaseObject()
+                if con.descriptor() == name_:
+                    con.releaseObject()
                     return
 
                 # for 0.4.x
-                if "port." + self._cons[i].descriptor() == name_:
-                    self._cons[i].releaseObject()
+                if "port." + con.descriptor() == name_:
+                    con.releaseObject()

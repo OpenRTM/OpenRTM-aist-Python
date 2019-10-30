@@ -269,23 +269,23 @@ class ManagerServant(RTM__POA.Manager):
 
     def exit(self):
         guard_master = OpenRTM_aist.ScopedLock(self._masterMutex)
-        for i in range(len(self._masters)):
+        for master in self._masters:
             try:
-                if CORBA.is_nil(self._masters[i]):
+                if CORBA.is_nil(master):
                     continue
-                self._masters[i].remove_slave_manager(self._objref)
+                master.remove_slave_manager(self._objref)
             except BaseException:
-                self._masters[i] = RTM.Manager._nil
+                pass
         self._masters = []
 
         guard_slave = OpenRTM_aist.ScopedLock(self._slaveMutex)
-        for i in range(len(self._slaves)):
+        for slave in self._slaves:
             try:
-                if CORBA.is_nil(self._slaves[i]):
+                if CORBA.is_nil(slave):
                     continue
-                self._slaves[i].remove_master_manager(self._objref)
+                slave.remove_master_manager(self._objref)
             except BaseException:
-                self._slaves[i] = RTM.Manager._nil
+                pass
         self._slaves = []
 
         del guard_slave
@@ -1047,23 +1047,23 @@ class ManagerServant(RTM__POA.Manager):
 
     def shutdown(self):
         guard_master = OpenRTM_aist.ScopedLock(self._masterMutex)
-        for i in range(len(self._masters)):
+        for master in self._masters:
             try:
-                if CORBA.is_nil(self._masters[i]):
+                if CORBA.is_nil(master):
                     continue
-                self._masters[i].remove_slave_manager(self._objref)
+                master.remove_slave_manager(self._objref)
             except BaseException:
-                self._masters[i] = RTM.Manager._nil
+                pass
         self._masters = []
 
         guard_slave = OpenRTM_aist.ScopedLock(self._slaveMutex)
-        for i in range(len(self._slaves)):
+        for slaves in self._slaves:
             try:
-                if CORBA.is_nil(self._slaves[i]):
+                if CORBA.is_nil(slaves):
                     continue
-                self._slaves[i].remove_master_manager(self._objref)
+                slaves.remove_master_manager(self._objref)
             except BaseException:
-                self._slaves[i] = RTM.Manager._nil
+                pass
         self._slaves = []
 
         wait_time = 1.0
@@ -1617,7 +1617,7 @@ class ManagerServant(RTM__POA.Manager):
     def updateMasterManager(self):
         if not self._isMaster and self._objref:
             guard = OpenRTM_aist.ScopedLock(self._masterMutex)
-            if len(self._masters) > 0:
+            if self._masters:
                 for master in self._masters[:]:
                     try:
                         if master._non_existent():
@@ -1629,7 +1629,7 @@ class ManagerServant(RTM__POA.Manager):
                         self._masters.remove(master)
             del guard
 
-            if len(self._masters) == 0:
+            if not self._masters:
                 try:
                     config = self._mgr.getConfig()
                     owner = self.findManager(

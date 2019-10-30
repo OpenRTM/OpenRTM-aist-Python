@@ -631,7 +631,7 @@ def unique_sv(sv):
 #
 # @endif
 def flatten(sv, delimiter=", "):
-    if len(sv) == 0:
+    if not sv:
         return ""
 
     _str = delimiter.join(sv)

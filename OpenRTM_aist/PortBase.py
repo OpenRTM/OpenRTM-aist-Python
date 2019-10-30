@@ -864,12 +864,11 @@ class PortBase(RTC__POA.PortService):
             prof = self._profile.connector_profiles[index]
         del guard
 
-        if len(prof.ports) < 1:
+        if not prof.ports:
             self._rtcout.RTC_FATAL("ConnectorProfile has empty port list.")
             return RTC.PRECONDITION_NOT_MET
 
-        for i in range(len(prof.ports)):
-            p = prof.ports[i]
+        for p in prof.ports:
             try:
                 return p.notify_disconnect(connector_id)
             except BaseException:
@@ -1044,8 +1043,8 @@ class PortBase(RTC__POA.PortService):
 
         # disconnect all connections
         # Call disconnect() for each ConnectorProfile.
-        for i in range(len_):
-            tmpret = self.disconnect(plist[i].connector_id)
+        for p in plist:
+            tmpret = self.disconnect(p.connector_id)
             if tmpret != RTC.RTC_OK:
                 retcode = tmpret
 

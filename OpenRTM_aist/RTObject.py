@@ -597,7 +597,7 @@ class RTObject_impl:
 
         # Return RTC::PRECONDITION_NOT_MET,
         # When the component is registered in ExecutionContext.
-        if len(self._ecOther) != 0:
+        if self._ecOther:
             self._ecOther = []
 
         ret = self.on_finalize()
@@ -3438,7 +3438,6 @@ class RTObject_impl:
 
     def finalizeContexts(self):
         self._rtcout.RTC_TRACE("finalizeContexts()")
-        len_ = len(self._eclist)
         for ec in self._eclist:
             ec.stop()
             rtcs = ec.getComponentList()
@@ -5241,7 +5240,7 @@ class RTObject_impl:
             self._eclist.append(ec)
             ec.bindComponent(self)
 
-        if len(self._eclist) == 0:
+        if not self._eclist:
             default_prop = OpenRTM_aist.Properties()
             default_prop.setDefaults(OpenRTM_aist.default_config)
 
@@ -5432,7 +5431,7 @@ class RTObject_impl:
     ec.bindComponent(self)
 
     # at least one EC must be attached
-    if len(self._ecMine) == 0:
+    if not self._ecMine:
       return RTC.PRECONDITION_NOT_MET
 
     ret = self.on_initialize()

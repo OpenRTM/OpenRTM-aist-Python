@@ -147,7 +147,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
         self._rtcout.RTC_TRACE("svc()")
         count_ = 0
 
-        if len(self._cpu) > 0:
+        if self._cpu:
             ret = OpenRTM_aist.setThreadAffinity(self._cpu)
             if ret == False:
                 self._rtcout.RTC_ERROR("CPU affinity mask setting failed")

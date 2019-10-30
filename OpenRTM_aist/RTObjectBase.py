@@ -594,7 +594,7 @@ class RTObjectBase:
 
         # Return RTC::PRECONDITION_NOT_MET,
         # When the component is registered in ExecutionContext.
-        if len(self._ecOther) != 0:
+        if self._ecOther:
             # for ec in self._ecOther:
             # if not CORBA.is_nil(ec):
               # return RTC.PRECONDITION_NOT_MET
@@ -5176,7 +5176,7 @@ class RTObjectBase:
             self._eclist.append(ec)
             ec.bindComponent(self)
 
-        if len(self._eclist) == 0:
+        if not self._eclist:
             default_prop = OpenRTM_aist.Properties()
             default_prop.setDefaults(OpenRTM_aist.default_config)
 
@@ -5350,7 +5350,7 @@ class RTObjectBase:
     ec.bindComponent(self)
 
     # at least one EC must be attached
-    if len(self._ecMine) == 0:
+    if not self._ecMine:
       return RTC.PRECONDITION_NOT_MET
 
     ret = self.on_initialize()

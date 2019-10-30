@@ -40,7 +40,7 @@ class Async_t(OpenRTM_aist.Task):
         return self._finished
 
     def svc(self):
-        if len(self._args) > 0:
+        if self._args:
             self._func(self._obj, *self._args)
         else:
             self._func(self._obj)
@@ -66,7 +66,7 @@ class Async_ref_t(OpenRTM_aist.Task):
         return self._finished
 
     def svc(self):
-        if len(self._args) > 0:
+        if self._args:
             self._func(self._obj, *self._args)
         else:
             self._func(self._obj)

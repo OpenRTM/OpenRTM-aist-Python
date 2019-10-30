@@ -108,7 +108,7 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
     def init(self, prop):
         self._rtcout.RTC_PARANOID("init()")
 
-        if len(prop.propertyNames()) == 0:
+        if not prop.propertyNames():
             self._rtcout.RTC_DEBUG("Property is empty.")
             return
 

@@ -493,7 +493,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
     def addRTCToTask(self, task, rtobj):
         #comp = self._worker.findComponent(rtobj)
         orglist = rtobj.get_owned_organizations()
-        if len(orglist) == 0:
+        if not orglist:
             task.addComponent(rtobj)
 
         for org in orglist:

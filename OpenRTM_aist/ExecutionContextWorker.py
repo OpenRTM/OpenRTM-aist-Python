@@ -700,17 +700,15 @@ class ExecutionContextWorker:
 
     def invokeWorker(self):
         self._rtcout.RTC_PARANOID("invokeWorker()")
-        # m_comps never changes its size here
-        len_ = len(self._comps)
 
-        for i in range(len_):
-            self._comps[i].workerPreDo()
+        for comp in self._comps:
+            comp.workerPreDo()
 
-        for i in range(len_):
-            self._comps[i].workerDo()
+        for comp in self._comps:
+            comp.workerDo()
 
-        for i in range(len_):
-            self._comps[i].workerPostDo()
+        for comp in self._comps:
+            comp.workerPostDo()
 
         self.updateComponentList()
         return

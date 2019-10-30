@@ -192,8 +192,8 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
         self._rtcout.RTC_TRACE(" nsinfo = %s",
                                OpenRTM_aist.flatten(ns_info))
 
-        for i in range(len(path)):
-            filepath_ = self.getFname(path[i])
+        for p in path:
+            filepath_ = self.getFname(p)
             directory_ = os.path.dirname(filepath_)
             self._rtcout.RTC_DEBUG("file path: %s", filepath_)
             self._rtcout.RTC_DEBUG("directory: %s", directory_)
@@ -234,8 +234,8 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     def onUnregisterNameservice(self, path):
         self._rtcout.RTC_TRACE("onUnregisterNameservice(%s)",
                                OpenRTM_aist.flatten(path))
-        for i in range(len(path)):
-            filepath_ = self.getFname(path[i])
+        for p in path:
+            filepath_ = self.getFname(p)
             if not os.path.exists(filepath_):
                 self._rtcout.RTC_ERROR("No such file: %s", filepath_)
                 continue

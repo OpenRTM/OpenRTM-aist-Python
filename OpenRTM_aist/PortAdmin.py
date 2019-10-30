@@ -438,7 +438,6 @@ class PortAdmin:
         self.deactivatePorts()
         ports = self._portServants.getObjects()
         len_ = len(ports)
-        for i in range(len_):
-            idx = (len_ - 1) - i
-            ports[idx].exit()
-            self.removePort(ports[idx])
+        for port in ports[::-1]:
+            port.exit()
+            self.removePort(port)
