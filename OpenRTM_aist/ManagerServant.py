@@ -379,9 +379,9 @@ class ManagerServant(RTM__POA.Manager):
         prof = self._mgr.getLoadableModules()
         cprof = [RTM.ModuleProfile([]) for i in prof]
 
-        for i in range(len(prof)):
+        for i, p in enumerate(prof):
             OpenRTM_aist.NVUtil.copyFromProperties(
-                cprof[i].properties, prof[i])
+                cprof[i].properties, p)
 
         return cprof
 
@@ -409,9 +409,9 @@ class ManagerServant(RTM__POA.Manager):
         prof = self._mgr.getLoadedModules()
         cprof = [RTM.ModuleProfile([]) for i in prof]
 
-        for i in range(len(prof)):
+        for i, p in enumerate(prof):
             OpenRTM_aist.NVUtil.copyFromProperties(
-                cprof[i].properties, prof[i])
+                cprof[i].properties, p)
 
         if self._isMaster:
             guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
@@ -453,9 +453,9 @@ class ManagerServant(RTM__POA.Manager):
         prof = self._mgr.getFactoryProfiles()
         cprof = [RTM.ModuleProfile([]) for i in prof]
 
-        for i in range(len(prof)):
+        for i, p in enumerate(prof):
             OpenRTM_aist.NVUtil.copyFromProperties(
-                cprof[i].properties, prof[i])
+                cprof[i].properties, p)
 
         if self._isMaster:
             guard = OpenRTM_aist.ScopedLock(self._slaveMutex)

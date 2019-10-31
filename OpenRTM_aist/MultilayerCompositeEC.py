@@ -573,8 +573,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
                 self._rtcout.RTC_PARANOID("Execution: %f [s]", exctm_)
                 self._rtcout.RTC_PARANOID("Sleep:     %f [s]", slptm_)
 
-                for i in range(len(self._tasklist)):
-                    task = self._tasklist[i]
+                for i, task in enumerate(self._tasklist):
                     stat = task.getExecStat()
                     self._rtcout.RTC_PARANOID(
                         "MAX(%d):   %f [s]", (i, stat._max_interval))

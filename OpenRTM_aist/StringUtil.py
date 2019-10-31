@@ -335,14 +335,12 @@ def split(input, delimiter):
 
     del_result = input.split(delimiter)
 
-    len_ = len(del_result)
-
     result = []
-    for i in range(len_):
-        if del_result[i] == "" or del_result[i] == " ":
+    for i, dl in enumerate(del_result):
+        if dl == "" or dl == " ":
             continue
 
-        str_ = del_result[i]
+        str_ = dl
         str_ = eraseHeadBlank(str_)
         str_ = eraseTailBlank(str_)
         result.append(str_)
@@ -531,15 +529,15 @@ def _stringToList(_type, _str):
         list_[i] = eraseHeadBlank(list_[i])
         list_[i] = eraseTailBlank(list_[i])
 
-    for i in range(len(list_)):
+    for i, l in enumerate(list_):
         if isinstance(_type[i], int):
-            _type[i] = int(list_[i])
+            _type[i] = int(l)
         elif isinstance(_type[i], long):
-            _type[i] = long(list_[i])
+            _type[i] = long(l)
         elif isinstance(_type[i], float):
-            _type[i] = float(list_[i])
+            _type[i] = float(l)
         elif isinstance(_type[i], str):
-            _type[i] = str(list_[i])
+            _type[i] = str(l)
 
         else:
             return False, _type

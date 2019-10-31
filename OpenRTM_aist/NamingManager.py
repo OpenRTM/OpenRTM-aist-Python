@@ -738,29 +738,29 @@ class NamingManager:
         guard = OpenRTM_aist.ScopedLock(self._namesMutex)
         rebind = OpenRTM_aist.toBool(self._manager.getConfig().getProperty("naming.update.rebind"),
                                      "YES", "NO", False)
-        for i in range(len(self._names)):
-            if self._names[i].ns is None:
+        for i, name in enumerate(self._names):
+            if name.ns is None:
                 self._rtcout.RTC_DEBUG("Retrying connection to %s/%s",
-                                       (self._names[i].method,
-                                        self._names[i].nsname))
-                self.retryConnection(self._names[i])
+                                       (name.method,
+                                        name.nsname))
+                self.retryConnection(name)
 
             else:
                 try:
                     if rebind:
-                        self.bindCompsTo(self._names[i].ns)
-                    if not self._names[i].ns.isAlive():
+                        self.bindCompsTo(name.ns)
+                    if not name.ns.isAlive():
                         self._rtcout.RTC_INFO("Name server: %s (%s) disappeared.",
-                                              (self._names[i].nsname,
-                                               self._names[i].method))
-                        del self._names[i].ns
-                        self._names[i].ns = None
+                                              (name.nsname,
+                                               name.method))
+                        del name.ns
+                        name.ns = None
                 except BaseException:
                     self._rtcout.RTC_INFO("Name server: %s (%s) disappeared.",
-                                          (self._names[i].nsname,
-                                           self._names[i].method))
-                    del self._names[i].ns
-                    self._names[i].ns = None
+                                          (name.nsname,
+                                           name.method))
+                    del name.ns
+                    name.ns = None
 
         return
 

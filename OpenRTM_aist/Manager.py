@@ -899,12 +899,12 @@ class Manager:
             exported_ports = OpenRTM_aist.split(comp_prop.getProperty("exported_ports"),
                                                 ",")
             exported_ports_str = ""
-            for i in range(len(exported_ports)):
-                keyval = OpenRTM_aist.split(exported_ports[i], ".")
+            for i,exported_port in enumerate(exported_ports):
+                keyval = OpenRTM_aist.split(exported_port, ".")
                 if len(keyval) > 2:
                     exported_ports_str += (keyval[0] + "." + keyval[-1])
                 else:
-                    exported_ports_str += exported_ports[i]
+                    exported_ports_str += exported_port
 
                 if i != (len(exported_ports) - 1):
                     exported_ports_str += ","
@@ -1729,11 +1729,11 @@ class Manager:
         try:
             tmp_args = self.createORBOptions().split("\"")
             args = []
-            for i in range(len(tmp_args)):
+            for i, tmp_arg in enumerate(tmp_args):
                 if i % 2 == 0:
-                    args.extend(tmp_args[i].strip().split(" "))
+                    args.extend(tmp_arg.strip().split(" "))
                 else:
-                    args.append(tmp_args[i])
+                    args.append(tmp_arg)
 
             args.insert(0, "manager")
             argv = OpenRTM_aist.toArgv(args)
@@ -1860,9 +1860,9 @@ class Manager:
         corba = self._config.getProperty("corba.id")
         self._rtcout.RTC_DEBUG("corba.id: %s", corba)
 
-        for i in range(len(endpoints)):
-            if endpoints[i]:
-                endpoint = endpoints[i]
+        for i, e in enumerate(endpoints):
+            if e:
+                endpoint = e
             else:
                 continue
 

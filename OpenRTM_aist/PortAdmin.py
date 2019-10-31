@@ -437,7 +437,6 @@ class PortAdmin:
     def finalizePorts(self):
         self.deactivatePorts()
         ports = self._portServants.getObjects()
-        len_ = len(ports)
         for port in ports[::-1]:
             port.exit()
             self.removePort(port)

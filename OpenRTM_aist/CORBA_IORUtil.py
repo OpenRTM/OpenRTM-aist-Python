@@ -253,8 +253,8 @@ def toString(ior):
     result[10] = "0"
     result[11] = "0"
 
-    for i in range(len(data)):
-        d = ord(data[i])
+    for i,datai in enumerate(data):
+        d = ord(datai)
         j = 12 + i * 2
         v = (d & 0xf0)
         v = v >> 4

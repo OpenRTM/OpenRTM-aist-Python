@@ -76,12 +76,12 @@ class ModuleManager:
         self._properties = prop
 
         self._configPath = prop.getProperty(CONFIG_PATH).split(",")
-        for i in range(len(self._configPath)):
+        for i, cp in enumerate(self._configPath):
             self._configPath[i] = OpenRTM_aist.eraseHeadBlank(
-                self._configPath[i])
+                cp)
         self._loadPath = prop.getProperty(MOD_LOADPTH, "./").split(",")
-        for i in range(len(self._loadPath)):
-            self._loadPath[i] = OpenRTM_aist.eraseHeadBlank(self._loadPath[i])
+        for i, lp in enumerate(self._loadPath):
+            self._loadPath[i] = OpenRTM_aist.eraseHeadBlank(lp)
 
         self._absoluteAllowed = OpenRTM_aist.toBool(prop.getProperty(ALLOW_ABSPATH),
                                                     "yes", "no", False)
