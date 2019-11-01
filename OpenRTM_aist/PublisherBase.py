@@ -75,6 +75,9 @@ class PublisherBase(OpenRTM_aist.DataPortStatus):
     def init(self, prop):
         pass
 
+    def exit(self):
+        pass
+
     # virtual ReturnCode setConsumer(InPortConsumer* consumer) = 0;
     def setConsumer(self, consumer):
         pass
