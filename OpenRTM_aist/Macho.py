@@ -226,7 +226,7 @@ class Link(_StateSpecification):
 
     def history(machine, StateID):
         instance = machine.getInstance(StateID)
-        history = 0
+        history = None
         if instance:
             history = instance.history()
         if history:

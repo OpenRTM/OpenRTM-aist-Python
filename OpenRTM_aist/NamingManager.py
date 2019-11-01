@@ -673,7 +673,7 @@ class NamingManager:
                     self._names[i].ns.bindObject(name, rtobj)
                 except BaseException:
                     del self._names[i].ns
-                    self._names[i].ns = 0
+                    self._names[i].ns = None
 
         self.registerCompName(name, rtobj)
 
@@ -686,7 +686,7 @@ class NamingManager:
                     self._names[i].ns.bindObject(name, mgr)
                 except BaseException:
                     del self._names[i].ns
-                    self._names[i].ns = 0
+                    self._names[i].ns = None
 
         self.registerMgrName(name, mgr)
 
@@ -716,7 +716,7 @@ class NamingManager:
                     self._names[i].ns.bindPortObject(name, port)
                 except BaseException:
                     del self._names[i].ns
-                    self._names[i].ns = 0
+                    self._names[i].ns = None
         self.registerPortName(name, port)
 
     ##
@@ -1042,7 +1042,7 @@ class NamingManager:
 
     def retryConnection(self, ns):
         # recreate NamingObj
-        nsobj = 0
+        nsobj = None
         try:
             nsobj = self.createNamingObj(ns.method, ns.nsname)
             if nsobj is not None:  # if succeed
@@ -1060,7 +1060,7 @@ class NamingManager:
                                    (ns.method, ns.nsname))
             if nsobj is not None:
                 del ns.ns
-                ns.ns = 0
+                ns.ns = None
 
         return
 

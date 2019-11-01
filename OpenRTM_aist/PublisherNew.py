@@ -115,9 +115,9 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
             self._rtcout.RTC_PARANOID("task deleted.")
 
         # "consumer" should be deleted in the Connector
-        self._consumer = 0
+        self._consumer = None
         # "buffer"   should be deleted in the Connector
-        self._buffer = 0
+        self._buffer = None
         return
 
 
@@ -311,7 +311,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
         if not consumer:
             self._rtcout.RTC_ERROR(
-                "setConsumer(consumer = 0): invalid argument.")
+                "setConsumer(consumer = None): invalid argument.")
             return self.INVALID_ARGS
 
         self._consumer = consumer
@@ -347,7 +347,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
         self._rtcout.RTC_TRACE("setBuffer()")
 
         if not buffer:
-            self._rtcout.RTC_ERROR("setBuffer(buffer == 0): invalid argument")
+            self._rtcout.RTC_ERROR("setBuffer(buffer == None): invalid argument")
             return self.INVALID_ARGS
 
         self._buffer = buffer
@@ -393,7 +393,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
 
         if not listeners:
             self._rtcout.RTC_ERROR(
-                "setListeners(listeners == 0): invalid argument")
+                "setListeners(listeners == None): invalid argument")
             return self.INVALID_ARGS
 
         self._profile = info
