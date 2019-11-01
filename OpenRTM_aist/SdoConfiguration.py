@@ -718,8 +718,8 @@ class Configuration_impl(SDOPackage__POA.Configuration):
             config_sets = [
                 SDOPackage.ConfigurationSet(
                     "", "", []) for i in range(len_)]
-            for i in range(len_):
-                toConfigurationSet(config_sets[i], cf[i])
+            for i, c in enumerate(cf):
+                toConfigurationSet(config_sets[i], c)
 
             return config_sets
 
@@ -848,12 +848,12 @@ class Configuration_impl(SDOPackage__POA.Configuration):
             if conf.findNode("exported_ports"):
                 exported_ports = conf.getProperty("exported_ports").split(",")
                 exported_ports_str = ""
-                for i in range(len(exported_ports)):
-                    keyval = exported_ports[i].split(".")
+                for i, exported_port in enumerate(exported_ports):
+                    keyval = exported_port.split(".")
                     if len(keyval) > 2:
                         exported_ports_str += keyval[0] + "." + keyval[-1]
                     else:
-                        exported_ports_str += exported_ports[i]
+                        exported_ports_str += exported_port
 
                     if i != (len(exported_ports) - 1):
                         exported_ports_str += ","

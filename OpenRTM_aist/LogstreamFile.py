@@ -123,7 +123,7 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
         for f in files:
             self.addHandler(f)
 
-        if len(self.handlers) == 0:
+        if not self.handlers:
             return False
 
         return True

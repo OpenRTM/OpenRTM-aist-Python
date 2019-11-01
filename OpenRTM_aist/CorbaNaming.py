@@ -751,16 +751,16 @@ class CorbaNaming:
         bi = None
         bl, bi = context.list(self._blLength)
         while cont:
-            for i in range(len(bl)):
-                if bl[i].binding_type == CosNaming.ncontext:
-                    obj = context.resolve(bl[i].binding_name)
+            for bli in bl:
+                if bli.binding_type == CosNaming.ncontext:
+                    obj = context.resolve(bli.binding_name)
                     next_context = obj._narrow(CosNaming.NamingContext)
 
                     self.destroyRecursive(next_context)
-                    context.unbind(bl[i].binding_name)
+                    context.unbind(bli.binding_name)
                     next_context.destroy()
-                elif bl[i].binding_type == CosNaming.nobject:
-                    context.unbind(bl[i].binding_name)
+                elif bli.binding_type == CosNaming.nobject:
+                    context.unbind(bli.binding_name)
 
             if CORBA.is_nil(bi):
                 cont = False
@@ -832,7 +832,7 @@ class CorbaNaming:
     # @endif
 
     def toString(self, name_list):
-        if len(name_list) == 0:
+        if not name_list:
             raise CosNaming.NamingContext.InvalidName
 
         slen = self.getNameLength(name_list)
@@ -1121,16 +1121,16 @@ class CorbaNaming:
     # @endif
 
     def nameToString(self, name_list, string_name, slen):
-        for i in range(len(name_list)):
-            for id_ in name_list[i].id:
+        for n in name_list:
+            for id_ in n.id:
                 if id_ == "/" or id_ == "." or id_ == "\\":
                     string_name += "\\"
                 string_name += id_
 
-            if name_list[i].id == "" or name_list[i].kind != "":
+            if n.id == "" or n.kind != "":
                 string_name += "."
 
-            for kind_ in name_list[i].kind:
+            for kind_ in n.kind:
                 if kind_ == "/" or kind_ == "." or kind_ == "\\":
                     string_name += "\\"
                 string_name += kind_
@@ -1159,15 +1159,15 @@ class CorbaNaming:
     def getNameLength(self, name_list):
         slen = 0
 
-        for i in range(len(name_list)):
-            for id_ in name_list[i].id:
+        for n in name_list:
+            for id_ in n.id:
                 if id_ == "/" or id_ == "." or id_ == "\\":
                     slen += 1
                 slen += 1
-            if name_list[i].id == "" or name_list[i].kind == "":
+            if n.id == "" or n.kind == "":
                 slen += 1
 
-            for kind_ in name_list[i].kind:
+            for kind_ in n.kind:
                 if kind_ == "/" or kind_ == "." or kind_ == "\\":
                     slen += 1
                 slen += 1
@@ -1268,12 +1268,10 @@ class CorbaNaming:
         kind = string_kind
         tmp_bl = self.listBinding(string_name)
         bl = []
-        #tmp_len = len(tmp_bl)
-        #list_len = 0
+
         for b in tmp_bl:
             if b.binding_type == CosNaming.nobject:
-                last_index = len(b.binding_name) - 1
-                tmp = b.binding_name[last_index].kind
+                tmp = b.binding_name[-1].kind
                 if kind != tmp:
                     continue
                 bl.append(b)

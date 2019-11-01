@@ -30,8 +30,8 @@ def SSLTransportInit(manager):
     corba_args += " -ORBendPoint giop:ssl::"
     if not OpenRTM_aist.toBool(prop.getProperty(
             "manager.is_master"), "YES", "NO", True):
-        if len(prop.getProperty("corba.endpoints")) == 0:
-            if len(prop.getProperty("corba.endpoint")) == 0:
+        if not prop.getProperty("corba.endpoints"):
+            if not prop.getProperty("corba.endpoint"):
                 if str(prop.getProperty("corba.args")).find(
                         "-ORBendPoint") == -1:
                     corba_args += " -ORBendPoint giop:tcp::"

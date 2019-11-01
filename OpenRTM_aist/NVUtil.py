@@ -83,14 +83,13 @@ def newNV(name, value):
 # prop);
 def copyFromProperties(nv, prop):
     keys = prop.propertyNames()
-    keys_len = len(keys)
     nv_len = len(nv)
     if nv_len > 0:
         for i in range(nv_len):
             del nv[-1]
 
-    for i in range(keys_len):
-        nv.append(newNV(keys[i], prop.getProperty(keys[i])))
+    for key in keys:
+        nv.append(newNV(key, prop.getProperty(key)))
 
 
 ##
@@ -306,7 +305,7 @@ def isStringValue(nv, name, value):
 # @endif
 def toString(nv, name=None):
     if not name:
-        str_ = [""]
+        str_ = ""
         return dump_to_stream(str_, nv)
 
     str_value = ""
@@ -380,8 +379,8 @@ def appendStringValue(nv, name, value):
 #
 # @endif
 def append(dest, src):
-    for i in range(len(src)):
-        OpenRTM_aist.CORBA_SeqUtil.push_back(dest, src[i])
+    for s in src:
+        OpenRTM_aist.CORBA_SeqUtil.push_back(dest, s)
 
 
 ##
@@ -392,14 +391,14 @@ def append(dest, src):
 # @endif
 # std::ostream& dump_to_stream(std::ostream& out, const SDOPackage::NVList& nv)
 def dump_to_stream(out, nv):
-    for i in range(len(nv)):
-        val = any.from_any(nv[i].value, keep_structs=True)
+    for n in nv:
+        val = any.from_any(n.value, keep_structs=True)
         if isinstance(val, str):
-            out[0] += (nv[i].name + ": " + str(nv[i].value) + "\n")
+            out += (n.name + ": " + str(n.value) + "\n")
         else:
-            out[0] += (nv[i].name + ": not a string value \n")
+            out += (n.name + ": not a string value \n")
 
-    return out[0]
+    return out
 
 
 ##
@@ -417,5 +416,5 @@ def dump_to_stream(out, nv):
 #
 # @endif
 def dump(nv):
-    out = [""]
+    out = ""
     print(dump_to_stream(out, nv))

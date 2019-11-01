@@ -47,9 +47,8 @@ import OpenRTM_aist
 
 
 def for_each(seq, f):
-    len_ = len(seq)
-    for i in range(len_):
-        f(seq[i])
+    for s in seq:
+        f(s)
     return f
 
 
@@ -85,8 +84,8 @@ def for_each(seq, f):
 # @endif
 def find(seq, f):
     len_ = len(seq)
-    for i in range(len_):
-        if f(seq[i]):
+    for i,s in enumerate(seq):
+        if f(s):
             return i
     return -1
 
@@ -213,7 +212,7 @@ def front(seq):
 #
 # @endif
 def back(seq):
-    if len(seq) > 0:
+    if seq:
         return seq[-1]
 
 

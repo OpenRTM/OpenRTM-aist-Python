@@ -1289,7 +1289,7 @@ def get_port_by_url(port_name):
 
     rtcs = nm.string_to_component(port_name.rstrip("." + p[-1]))
 
-    if len(rtcs) < 1:
+    if not rtcs:
         return RTC.PortService._nil
     pn = port_name.split("/")
 

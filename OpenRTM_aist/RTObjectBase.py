@@ -594,7 +594,7 @@ class RTObjectBase:
 
         # Return RTC::PRECONDITION_NOT_MET,
         # When the component is registered in ExecutionContext.
-        if len(self._ecOther) != 0:
+        if self._ecOther:
             # for ec in self._ecOther:
             # if not CORBA.is_nil(ec):
               # return RTC.PRECONDITION_NOT_MET
@@ -1023,8 +1023,8 @@ class RTObjectBase:
             return -1
 
         # if m_ecOther has nil element, insert attached ec to there.
-        for i in range(len(self._ecOther)):
-            if CORBA.is_nil(self._ecOther[i]):
+        for i, ec in enumerate(self._ecOther):
+            if CORBA.is_nil(ec):
                 self._ecOther[i] = ecs
                 ec_id = i + ECOTHER_OFFSET
                 self.onAttachExecutionContext(ec_id)
@@ -1051,8 +1051,8 @@ class RTObjectBase:
             return -1
 
         # if m_ecMine has nil element, insert attached ec to there.
-        for i in range(len(self._ecMine)):
-            if CORBA.is_nil(self._ecMine[i]):
+        for i, ec in enumerate(self._ecMine):
+            if CORBA.is_nil(ec):
                 self._ecMine[i] = ecs
                 self.onAttachExecutionContext(i)
                 return i
@@ -5176,7 +5176,7 @@ class RTObjectBase:
             self._eclist.append(ec)
             ec.bindComponent(self)
 
-        if len(self._eclist) == 0:
+        if not self._eclist:
             default_prop = OpenRTM_aist.Properties()
             default_prop.setDefaults(OpenRTM_aist.default_config)
 
@@ -5350,7 +5350,7 @@ class RTObjectBase:
     ec.bindComponent(self)
 
     # at least one EC must be attached
-    if len(self._ecMine) == 0:
+    if not self._ecMine:
       return RTC.PRECONDITION_NOT_MET
 
     ret = self.on_initialize()
@@ -5359,9 +5359,9 @@ class RTObjectBase:
       return ret
 
     # -- entering alive state --
-    for i in range(len(self._ecMine)):
+    for i, ec in enumerate(self._ecMine):
       self._rtcout.RTC_DEBUG("EC[%d] starting.", i)
-      self._ecMine[i].start()
+      ec.start()
 
     # ret must be RTC_OK
     return ret

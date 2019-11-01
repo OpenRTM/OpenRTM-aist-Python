@@ -145,7 +145,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     def __del__(self, PortBase=OpenRTM_aist.PortBase):
         self._rtcout.RTC_TRACE("InPortBase destructor")
 
-        if len(self._connectors) != 0:
+        if self._connectors:
             self._rtcout.RTC_ERROR(
                 "connector.size should be 0 in InPortBase's dtor.")
             # guard = OpenRTM_aist.ScopedLock(self._connector_mutex)

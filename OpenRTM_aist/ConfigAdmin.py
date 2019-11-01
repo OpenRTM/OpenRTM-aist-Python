@@ -508,9 +508,9 @@ class ConfigAdmin:
 
         # configsets
         leaf = self._configsets.getLeaf()
-        for i in range(len(leaf)):
-            if leaf[i].hasKey(param_name):
-                leaf[i].removeNode(param_name)
+        for l in leaf:
+            if l.hasKey(param_name):
+                l.removeNode(param_name)
 
         return True
 
@@ -624,12 +624,12 @@ class ConfigAdmin:
                 return
             self._changedParam = []
             prop = self._configsets.getNode(config_set)
-            for i in range(len(self._params)):
-                if prop.hasKey(self._params[i].name):
+            for param in self._params:
+                if prop.hasKey(param.name):
                     # self._changedParam is updated here
-                    self._params[i].update(
+                    param.update(
                         prop.getProperty(
-                            self._params[i].name))
+                            param.name))
             self.onUpdate(config_set)
 
         # update(const char* config_set, const char* config_param)

@@ -154,7 +154,7 @@ class InPort(OpenRTM_aist.InPortBase):
             return True
         del guard
 
-        if len(self._connectors) == 0:
+        if not self._connectors:
             self._rtcout.RTC_DEBUG("no connectors")
             return False
 
@@ -186,7 +186,7 @@ class InPort(OpenRTM_aist.InPortBase):
                     self._rtcout.RTC_DEBUG(
                         "isNew() = True, connector name: %s, readable data: %d", (names, r))
                     names.append(con.name())
-            if len(names) > 0:
+            if names:
                 return True
             else:
                 self._rtcout.RTC_DEBUG("isNew() = False, no readable data")
@@ -224,7 +224,7 @@ class InPort(OpenRTM_aist.InPortBase):
         self._rtcout.RTC_TRACE("isEmpty()")
         if self._directNewData == True:
             return False
-        if len(self._connectors) == 0:
+        if not self._connectors:
             self._rtcout.RTC_DEBUG("no connectors")
             return True
 
@@ -253,7 +253,7 @@ class InPort(OpenRTM_aist.InPortBase):
                     self._rtcout.RTC_DEBUG(
                         "isEmpty() = True, connector name: %s", (names))
                     names.append(con.name())
-            if len(names) > 0:
+            if names:
                 return True
         else:
             self._rtcout.RTC_DEBUG("isEmpty() = False, no readable data")

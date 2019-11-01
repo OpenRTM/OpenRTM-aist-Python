@@ -376,7 +376,7 @@ class Manager:
         lsvc_ = [s.strip() for s in self._config.getProperty(
             "manager.local_service.modules").split(",")]
         for svc_ in lsvc_:
-            if len(svc_) == 0:
+            if not svc_:
                 continue
             basename_ = svc_.split(".")[0] + "Init"
             try:
@@ -389,16 +389,16 @@ class Manager:
         mods = [s.strip() for s in self._config.getProperty(
             "manager.modules.preload").split(",")]
 
-        for i in range(len(mods)):
-            if mods[i] is None or mods[i] == "":
+        for m in mods:
+            if m is None or m == "":
                 continue
-            mods[i] = mods[i].strip()
+            m = m.strip()
 
-            basename = os.path.basename(mods[i]).split(".")[0]
+            basename = os.path.basename(m).split(".")[0]
             basename += "Init"
 
             try:
-                self._module.load(mods[i], basename)
+                self._module.load(m, basename)
             except BaseException:
                 self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
                 self.__try_direct_load(basename)
@@ -899,12 +899,12 @@ class Manager:
             exported_ports = OpenRTM_aist.split(comp_prop.getProperty("exported_ports"),
                                                 ",")
             exported_ports_str = ""
-            for i in range(len(exported_ports)):
-                keyval = OpenRTM_aist.split(exported_ports[i], ".")
+            for i,exported_port in enumerate(exported_ports):
+                keyval = OpenRTM_aist.split(exported_port, ".")
                 if len(keyval) > 2:
                     exported_ports_str += (keyval[0] + "." + keyval[-1])
                 else:
-                    exported_ports_str += exported_ports[i]
+                    exported_ports_str += exported_port
 
                 if i != (len(exported_ports) - 1):
                     exported_ports_str += ","
@@ -996,12 +996,11 @@ class Manager:
 
         comp = factory.create(self)
 
-        for i in range(len(inherit_prop)):
-            if self._config.findNode(inherit_prop[i]):
+        for i in inherit_prop:
+            if self._config.findNode(i):
                 prop.setProperty(
-                    inherit_prop[i],
-                    self._config.getProperty(
-                        inherit_prop[i]))
+                    i,
+                    self._config.getProperty(i))
 
         if comp is None:
             self._rtcout.RTC_ERROR("createComponent: RTC creation failed: %s",
@@ -1216,7 +1215,7 @@ class Manager:
                 not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
                                         "YES", "NO", False):
                 comps = self.getComponents()
-                if len(comps) == 0:
+                if not comps:
                     self.terminate()
 
         return
@@ -1441,7 +1440,7 @@ class Manager:
         lmpm_ = [s.strip() for s in self._config.getProperty(
             "manager.preload.modules").split(",")]
         for mpm_ in lmpm_:
-            if len(mpm_) == 0:
+            if not mpm_:
                 continue
             basename_ = mpm_.split(".")[0] + "Init"
             try:
@@ -1531,7 +1530,7 @@ class Manager:
 
             comps = self.getComponents()
 
-            if len(comps) == 0:
+            if not comps:
                 self.terminate()
 
         return
@@ -1598,7 +1597,7 @@ class Manager:
         lmod_ = [s.strip()
                  for s in self._config.getProperty("logger.plugins").split(",")]
         for mod_ in lmod_:
-            if len(mod_) == 0:
+            if not mod_:
                 continue
             basename_ = mod_.split(".")[0] + "Init"
             try:
@@ -1730,11 +1729,11 @@ class Manager:
         try:
             tmp_args = self.createORBOptions().split("\"")
             args = []
-            for i in range(len(tmp_args)):
+            for i, tmp_arg in enumerate(tmp_args):
                 if i % 2 == 0:
-                    args.extend(tmp_args[i].strip().split(" "))
+                    args.extend(tmp_arg.strip().split(" "))
                 else:
-                    args.append(tmp_args[i])
+                    args.append(tmp_arg)
 
             args.insert(0, "manager")
             argv = OpenRTM_aist.toArgv(args)
@@ -1861,9 +1860,9 @@ class Manager:
         corba = self._config.getProperty("corba.id")
         self._rtcout.RTC_DEBUG("corba.id: %s", corba)
 
-        for i in range(len(endpoints)):
-            if endpoints[i]:
-                endpoint = endpoints[i]
+        for i, e in enumerate(endpoints):
+            if e:
+                endpoint = e
             else:
                 continue
 
@@ -2098,7 +2097,7 @@ class Manager:
                 except BaseException:
                     pass
 
-            if len(cpu_num) == 0:
+            if not cpu_num:
                 return
 
             ret = OpenRTM_aist.setProcessAffinity(cpu_num)
@@ -2287,12 +2286,12 @@ class Manager:
         ipv6_count = 0
         for e in endpoints:
             if ipv4 and re.match(re_ipv4, e.host):
-                if len(ipv4_list) == 0 or ipv4_list.count(ipv4_count):
+                if not ipv4_list or ipv4_list.count(ipv4_count):
                     epstr += e.host + ":" + str(e.port) + ", "
                     epstr_ipv4 += e.host + ":" + str(e.port) + ", "
                 ipv4_count += 1
             if ipv6 and re.match(re_ipv6, e.host):
-                if len(ipv6_list) == 0 or ipv6_list.count(ipv6_count):
+                if not ipv6_list or ipv6_list.count(ipv6_count):
                     epstr += e.host + ":" + str(e.port) + ", "
                     epstr_ipv6 += e.host + ":" + str(e.port) + ", "
                 ipv6_count += 1
@@ -2522,8 +2521,8 @@ class Manager:
 
         if len(id_and_conf) == 2:
             conf = [s.strip() for s in id_and_conf[1].split("&")]
-            for i in range(len(conf)):
-                keyval = [s.strip() for s in conf[i].split("=")]
+            for c in conf:
+                keyval = [s.strip() for s in c.split("=")]
                 if len(keyval) > 1:
                     comp_conf.setProperty(keyval[0], keyval[1])
                     self._rtcout.RTC_TRACE(
@@ -2550,8 +2549,8 @@ class Manager:
 
         if len(id_and_conf) == 2:
             conf = [s.strip() for s in id_and_conf[1].split("&")]
-            for i in range(len(conf)):
-                k = [s.strip() for s in conf[i].split("=")]
+            for c in conf:
+                k = [s.strip() for s in c.split("=")]
                 ec_conf.setProperty(k[0], k[1])
                 self._rtcout.RTC_TRACE("EC property %s: %s", (k[0], k[1]))
 
@@ -3132,7 +3131,7 @@ class Manager:
 
         for c in connectors:
             c = c.strip()
-            if len(c) == 0:
+            if not c:
                 continue
             port0_str = c.split("?")[0]
             param = OpenRTM_aist.urlparam2map(c)
@@ -3178,7 +3177,7 @@ class Manager:
             else:
                 rtcs = self._namingManager.string_to_component(comp0_name)
 
-                if len(rtcs) == 0:
+                if not rtcs:
                     self._rtcout.RTC_ERROR("%s not found." % comp0_name)
                     continue
                 comp0_ref = rtcs[0]
@@ -3191,7 +3190,7 @@ class Manager:
                 self._rtcout.RTC_DEBUG("port %s found: " % port0_str)
                 continue
 
-            if len(ports) == 0:
+            if not ports:
                 prop = OpenRTM_aist.Properties()
 
                 for k, v in configs.items():
@@ -3219,7 +3218,7 @@ class Manager:
                 else:
                     rtcs = self._namingManager.string_to_component(comp_name)
 
-                    if len(rtcs) == 0:
+                    if not rtcs:
                         self._rtcout.RTC_ERROR("%s not found." % comp_name)
                         continue
                     comp_ref = rtcs[0]
@@ -3273,7 +3272,7 @@ class Manager:
                     comp_ref = comp.getObjRef()
                 else:
                     rtcs = self._namingManager.string_to_component(c)
-                    if len(rtcs) == 0:
+                    if not rtcs:
                         self._rtcout.RTC_ERROR("%s not found." % c)
                         continue
                     comp_ref = rtcs[0]
@@ -3299,11 +3298,11 @@ class Manager:
     def initPreCreation(self):
         comps = [s.strip() for s in self._config.getProperty(
             "manager.components.precreate").split(",")]
-        for i in range(len(comps)):
-            if comps[i] is None or comps[i] == "":
+        for comp in comps:
+            if comp is None or comp == "":
                 continue
 
-            self.createComponent(comps[i])
+            self.createComponent(comp)
 
     ##
     # @if jp

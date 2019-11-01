@@ -1246,10 +1246,10 @@ class Properties:
     # @endif
 
     def _propertyNames(self, names, curr_name, curr):
-        if len(curr.leaf) > 0:
-            for i in range(len(curr.leaf)):
-                next_name = curr_name + "." + curr.leaf[i].name
-                self._propertyNames(names, next_name, curr.leaf[i])
+        if curr.leaf:
+            for l in curr.leaf:
+                next_name = curr_name + "." + l.name
+                self._propertyNames(names, next_name, l)
         else:
             names.append(curr_name)
 
@@ -1271,13 +1271,13 @@ class Properties:
     # @endif
 
     def _store(self, out, curr_name, curr):
-        if len(curr.leaf) > 0:
-            for i in range(len(curr.leaf)):
+        if curr.leaf:
+            for l in curr.leaf:
                 if curr_name == "":
-                    next_name = curr.leaf[i].name
+                    next_name = l.name
                 else:
-                    next_name = curr_name + "." + curr.leaf[i].name
-                self._store(out, next_name, curr.leaf[i])
+                    next_name = curr_name + "." + l.name
+                self._store(out, next_name, l)
 
         else:
             val = curr.value
@@ -1346,8 +1346,8 @@ class Properties:
             # out.write("\n")
             out[0] += "\n"
 
-        for i in range(len(curr.leaf)):
-            self._dump(out, curr.leaf[i], index + 1)
+        for l in curr.leaf:
+            self._dump(out, l, index + 1)
 
         return out[0]
 

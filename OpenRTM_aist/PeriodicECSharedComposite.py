@@ -366,7 +366,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     def addParticipantToEC(self, member):
         if CORBA.is_nil(self._ec) or self._ec is None:
             ecs = self._rtobj.get_owned_contexts()
-            if len(ecs) > 0:
+            if ecs:
                 self._ec = ecs[0]
             else:
                 return
@@ -380,7 +380,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
         # set ec to target RTC
 
         orglist = rtobj.get_owned_organizations()
-        if len(orglist) == 0:
+        if not orglist:
             self._ec.add_component(rtobj)
 
         #orglist = member._rtobj.get_organizations()
@@ -405,7 +405,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     def removeParticipantFromEC(self, member):
         if CORBA.is_nil(self._ec) or self._ec is None:
             ecs = self._rtobj.get_owned_contexts()
-            if len(ecs) > 0:
+            if ecs:
                 self._ec = ecs[0]
             else:
                 self._rtcout.RTC_FATAL("no owned EC")
@@ -456,7 +456,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
 
     def addPort(self, member, portlist):
         self._rtcout.RTC_TRACE("addPort(%s)", OpenRTM_aist.flatten(portlist))
-        if len(portlist) == 0:
+        if not portlist:
             return
 
         #comp_name = member._profile.instance_name
@@ -494,7 +494,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
 
     def removePort(self, member, portlist):
         self._rtcout.RTC_DEBUG("removePort()")
-        if len(portlist) == 0:
+        if not portlist:
             return
 
         #comp_name = member._profile.instance_name
@@ -852,7 +852,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
         ecs = self.get_owned_contexts()
 
         orglist = rtobj.get_owned_organizations()
-        if len(orglist) == 0:
+        if not orglist:
             ecs[0].activate_component(rtobj)
 
         for org in orglist:
@@ -923,7 +923,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
         ecs = self.get_owned_contexts()
 
         orglist = rtobj.get_owned_organizations()
-        if len(orglist) == 0:
+        if not orglist:
             ecs[0].deactivate_component(rtobj)
 
         for org in orglist:
@@ -998,7 +998,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
         ecs = self.get_owned_contexts()
 
         orglist = rtobj.get_owned_organizations()
-        if len(orglist) == 0:
+        if not orglist:
             ecs[0].reset_component(rtobj)
 
         for org in orglist:

@@ -76,12 +76,12 @@ class ModuleManager:
         self._properties = prop
 
         self._configPath = prop.getProperty(CONFIG_PATH).split(",")
-        for i in range(len(self._configPath)):
+        for i, cp in enumerate(self._configPath):
             self._configPath[i] = OpenRTM_aist.eraseHeadBlank(
-                self._configPath[i])
+                cp)
         self._loadPath = prop.getProperty(MOD_LOADPTH, "./").split(",")
-        for i in range(len(self._loadPath)):
-            self._loadPath[i] = OpenRTM_aist.eraseHeadBlank(self._loadPath[i])
+        for i, lp in enumerate(self._loadPath):
+            self._loadPath[i] = OpenRTM_aist.eraseHeadBlank(lp)
 
         self._absoluteAllowed = OpenRTM_aist.toBool(prop.getProperty(ALLOW_ABSPATH),
                                                     "yes", "no", False)
@@ -497,17 +497,17 @@ class ModuleManager:
         profs = []
 
         exists = False
-        for i in range(len(oldp)):
-            if oldp[i].getProperty("implementation_id") == newp.getProperty("implementation_id") and \
-                    oldp[i].getProperty("type_name") == newp.getProperty("type_name") and \
-                    oldp[i].getProperty("description") == newp.getProperty("description") and \
-                    oldp[i].getProperty("version") == newp.getProperty("version"):
+        for o in oldp:
+            if o.getProperty("implementation_id") == newp.getProperty("implementation_id") and \
+                    o.getProperty("type_name") == newp.getProperty("type_name") and \
+                    o.getProperty("description") == newp.getProperty("description") and \
+                    o.getProperty("version") == newp.getProperty("version"):
                 exists = True
         if not exists:
             profs.append(newp)
 
         # loaded component profile have to be one
-        if len(profs) == 0:
+        if not profs:
             return OpenRTM_aist.Properties()
 
         # if len(profs) > 1:
@@ -849,7 +849,7 @@ class ModuleManager:
             filelist = []
             OpenRTM_aist.findFile(path, file_name, filelist)
 
-            if len(filelist) > 0:
+            if filelist:
                 return filelist[0]
         return ""
 

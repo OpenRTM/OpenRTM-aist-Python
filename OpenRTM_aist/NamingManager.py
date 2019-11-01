@@ -555,7 +555,7 @@ class NamingOnManager(NamingBase):
                 mgr = mgr_sev.getObjRef()
             else:
                 masters = mgr_sev.get_master_managers()
-                if len(masters) > 0:
+                if masters:
                     mgr = masters[0]
                 else:
                     mgr = mgr_sev.getObjRef()
@@ -667,26 +667,26 @@ class NamingManager:
     def bindObject(self, name, rtobj):
         self._rtcout.RTC_TRACE("NamingManager::bindObject(%s)", name)
         guard = OpenRTM_aist.ScopedLock(self._namesMutex)
-        for i in range(len(self._names)):
-            if self._names[i].ns:
+        for n in self._names:
+            if n.ns:
                 try:
-                    self._names[i].ns.bindObject(name, rtobj)
+                    n.ns.bindObject(name, rtobj)
                 except BaseException:
-                    del self._names[i].ns
-                    self._names[i].ns = None
+                    del n.ns
+                    n.ns = None
 
         self.registerCompName(name, rtobj)
 
     def bindManagerObject(self, name, mgr):
         self._rtcout.RTC_TRACE("NamingManager::bindManagerObject(%s)", name)
         guard = OpenRTM_aist.ScopedLock(self._namesMutex)
-        for i in range(len(self._names)):
-            if self._names[i].ns:
+        for n in self._names:
+            if n.ns:
                 try:
-                    self._names[i].ns.bindObject(name, mgr)
+                    n.ns.bindObject(name, mgr)
                 except BaseException:
-                    del self._names[i].ns
-                    self._names[i].ns = None
+                    del n.ns
+                    n.ns = None
 
         self.registerMgrName(name, mgr)
 
@@ -710,13 +710,13 @@ class NamingManager:
     def bindPortObject(self, name, port):
         self._rtcout.RTC_TRACE("NamingManager::bindPortObject(%s)", name)
         guard = OpenRTM_aist.ScopedLock(self._namesMutex)
-        for i in range(len(self._names)):
-            if self._names[i].ns:
+        for n in self._names:
+            if n.ns:
                 try:
-                    self._names[i].ns.bindPortObject(name, port)
+                    n.ns.bindPortObject(name, port)
                 except BaseException:
-                    del self._names[i].ns
-                    self._names[i].ns = None
+                    del n.ns
+                    n.ns = None
         self.registerPortName(name, port)
 
     ##
@@ -738,29 +738,29 @@ class NamingManager:
         guard = OpenRTM_aist.ScopedLock(self._namesMutex)
         rebind = OpenRTM_aist.toBool(self._manager.getConfig().getProperty("naming.update.rebind"),
                                      "YES", "NO", False)
-        for i in range(len(self._names)):
-            if self._names[i].ns is None:
+        for i, name in enumerate(self._names):
+            if name.ns is None:
                 self._rtcout.RTC_DEBUG("Retrying connection to %s/%s",
-                                       (self._names[i].method,
-                                        self._names[i].nsname))
-                self.retryConnection(self._names[i])
+                                       (name.method,
+                                        name.nsname))
+                self.retryConnection(name)
 
             else:
                 try:
                     if rebind:
-                        self.bindCompsTo(self._names[i].ns)
-                    if not self._names[i].ns.isAlive():
+                        self.bindCompsTo(name.ns)
+                    if not name.ns.isAlive():
                         self._rtcout.RTC_INFO("Name server: %s (%s) disappeared.",
-                                              (self._names[i].nsname,
-                                               self._names[i].method))
-                        del self._names[i].ns
-                        self._names[i].ns = None
+                                              (name.nsname,
+                                               name.method))
+                        del name.ns
+                        name.ns = None
                 except BaseException:
                     self._rtcout.RTC_INFO("Name server: %s (%s) disappeared.",
-                                          (self._names[i].nsname,
-                                           self._names[i].method))
-                    del self._names[i].ns
-                    self._names[i].ns = None
+                                          (name.nsname,
+                                           name.method))
+                    del name.ns
+                    name.ns = None
 
         return
 
@@ -781,9 +781,9 @@ class NamingManager:
     def unbindObject(self, name):
         self._rtcout.RTC_TRACE("NamingManager::unbindObject(%s)", name)
         guard = OpenRTM_aist.ScopedLock(self._namesMutex)
-        for i in range(len(self._names)):
-            if self._names[i].ns:
-                self._names[i].ns.unbindObject(name)
+        for n in self._names:
+            if n.ns:
+                n.ns.unbindObject(name)
         self.unregisterCompName(name)
         self.unregisterMgrName(name)
         self.unregisterPortName(name)
@@ -807,23 +807,19 @@ class NamingManager:
                 self._compNames))
 
         guard = OpenRTM_aist.ScopedLock(self._compNamesMutex)
-        len_ = len(self._compNames)
 
-        for i in range(len_):
-            idx = (len_ - 1) - i
-            self.unbindObject(self._compNames[idx].name)
+        for comp in self._compNames[::-1]:
+            self.unbindObject(comp.name)
 
         guard = OpenRTM_aist.ScopedLock(self._mgrNamesMutex)
-        len_ = len(self._mgrNames)
-        for i in range(len_):
-            idx = (len_ - 1) - i
-            self.unbindObject(self._mgrNames[idx].name)
+
+        for mgr in self._mgrNames[::-1]:
+            self.unbindObject(mgr.name)
 
         guard = OpenRTM_aist.ScopedLock(self._portNamesMutex)
-        len_ = len(self._portNames)
-        for i in range(len_):
-            idx = (len_ - 1) - i
-            self.unbindObject(self._portNames[idx].name)
+
+        for port in self._portNames[::-1]:
+            self.unbindObject(port.name)
 
     ##
     # @if jp
@@ -843,8 +839,8 @@ class NamingManager:
     def getObjects(self):
         comps = []
         guard = OpenRTM_aist.ScopedLock(self._compNamesMutex)
-        for i in range(len(self._compNames)):
-            comps.append(self._compNames[i].rtobj)
+        for comp in self._compNames:
+            comps.append(comp.rtobj)
         return comps
 
     ##
@@ -902,8 +898,8 @@ class NamingManager:
     # @endif
 
     def bindCompsTo(self, ns):
-        for i in range(len(self._compNames)):
-            ns.bindObject(self._compNames[i].name, self._compNames[i].rtobj)
+        for comp in self._compNames:
+            ns.bindObject(comp.name, comp.rtobj)
 
     ##
     # @if jp
@@ -921,18 +917,18 @@ class NamingManager:
     # @endif
 
     def registerCompName(self, name, rtobj):
-        for i in range(len(self._compNames)):
-            if self._compNames[i].name == name:
-                self._compNames[i].rtobj = rtobj
+        for c in self._compNames:
+            if c.name == name:
+                c.rtobj = rtobj
                 return
 
         self._compNames.append(self.Comps(name, rtobj))
         return
 
     def registerMgrName(self, name, mgr):
-        for i in range(len(self._mgrNames)):
-            if self._mgrNames[i].name == name:
-                self._mgrNames[i].mgr = mgr
+        for m in self._mgrNames:
+            if m.name == name:
+                m.mgr = mgr
                 return
 
         self._mgrNames.append(self.Mgr(name, mgr))
@@ -955,9 +951,9 @@ class NamingManager:
     #
     # @endif
     def registerPortName(self, name, port):
-        for i in range(len(self._portNames)):
-            if self._portNames[i].name == name:
-                self._portNames[i].port = port
+        for p in self._portNames:
+            if p.name == name:
+                p.port = port
                 return
 
         self._portNames.append(self.Port(name, port))
@@ -1106,7 +1102,7 @@ class NamingManager:
         for n in self._names:
             if n.ns:
                 comps = n.ns.string_to_component(name)
-                if len(comps) > 0:
+                if comps:
                     return comps
         return []
 

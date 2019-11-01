@@ -184,27 +184,27 @@ class SdoServiceAdmin:
 
         # If types include '[Aa][Ll][Ll]', all types enabled in this RTC
         activeProviderTypes = []
-        for i in range(len(enabledProviderTypes)):
-            tmp = enabledProviderTypes[i].lower()
+        for enabledProviderType in enabledProviderTypes:
+            tmp = enabledProviderType.lower()
             if tmp == "all":
                 activeProviderTypes = availableProviderTypes
                 self._rtcout.RTC_DEBUG(
                     "sdo.service.provider.enabled_services: ALL")
                 break
 
-            for j in range(len(availableProviderTypes)):
-                if availableProviderTypes[j] == enabledProviderTypes[i]:
-                    activeProviderTypes.append(availableProviderTypes[j])
+            for availableProviderType in availableProviderTypes:
+                if availableProviderType == enabledProviderType:
+                    activeProviderTypes.append(availableProviderType)
 
         factory = OpenRTM_aist.SdoServiceProviderFactory.instance()
-        for i in range(len(activeProviderTypes)):
-            svc = factory.createObject(activeProviderTypes[i])
-            propkey = self.ifrToKey(activeProviderTypes[i])
+        for activeProviderType in activeProviderTypes:
+            svc = factory.createObject(activeProviderType)
+            propkey = self.ifrToKey(activeProviderType)
             properties = []
             OpenRTM_aist.NVUtil.copyFromProperties(properties,
                                                    prop.getNode(str(propkey)))
-            prof = SDOPackage.ServiceProfile(str(activeProviderTypes[i]),
-                                             str(activeProviderTypes[i]),
+            prof = SDOPackage.ServiceProfile(str(activeProviderType),
+                                             str(activeProviderType),
                                              properties,
                                              svc._this())
 
@@ -278,8 +278,8 @@ class SdoServiceAdmin:
     def getServiceProviderProfiles(self):
         prof = []
         guard = OpenRTM_aist.ScopedLock(self._provider_mutex)
-        for i in range(len(self._providers)):
-            prof.append(self._providers[i].getProfile())
+        for provider in self._providers:
+            prof.append(provider.getProfile())
         return prof
 
     ##
@@ -295,9 +295,9 @@ class SdoServiceAdmin:
     def getServiceProviderProfile(self, id):
         idstr = id
         guard = OpenRTM_aist.ScopedLock(self._provider_mutex)
-        for i in range(len(self._providers)):
-            if idstr == str(self._providers[i].getProfile().id):
-                return self._providers[i].getProfile()
+        for provider in self._providers:
+            if idstr == str(provider.getProfile().id):
+                return provider.getProfile()
 
         raise SDOPackage.InvalidParameter("")
 
@@ -331,8 +331,8 @@ class SdoServiceAdmin:
                                prof.interface_type)
         guard = OpenRTM_aist.ScopedLock(self._provider_mutex)
         id = prof.id
-        for i in range(len(self._providers)):
-            if id == str(self._providers[i].getProfile().id):
+        for p in self._providers:
+            if id == str(p.getProfile().id):
                 self._rtcout.RTC_ERROR("SDO service(id=%s, ifr=%s) already exists",
                                        (str(prof.id), str(prof.interface_type)))
                 return False
@@ -402,12 +402,12 @@ class SdoServiceAdmin:
         # re-initialization
         guard = OpenRTM_aist.ScopedLock(self._consumer_mutex)
         id = str(sProfile.id)
-        for i in range(len(self._consumers)):
-            if id == str(self._consumers[i].getProfile().id):
+        for consumer in self._consumers:
+            if id == str(consumer.getProfile().id):
                 self._rtcout.RTC_INFO("Existing consumer is reinitilized.")
                 self._rtcout.RTC_DEBUG("Propeteis are: %s",
                                        OpenRTM_aist.NVUtil.toString(sProfile.properties))
-                return self._consumers[i].reinit(sProfile)
+                return consumer.reinit(sProfile)
         del guard
 
         # new pofile
@@ -485,8 +485,8 @@ class SdoServiceAdmin:
         if self._allConsumerEnabled:
             return True
 
-        for i in range(len(self._consumerTypes)):
-            if self._consumerTypes[i] == str(sProfile.interface_type):
+        for consumerType in self._consumerTypes:
+            if consumerType == str(sProfile.interface_type):
                 self._rtcout.RTC_DEBUG("%s is supported SDO service.",
                                        str(sProfile.interface_type))
                 return True
@@ -507,8 +507,8 @@ class SdoServiceAdmin:
     def isExistingConsumerType(self, sProfile):
         factory = OpenRTM_aist.SdoServiceConsumerFactory.instance()
         consumerTypes = factory.getIdentifiers()
-        for i in range(len(consumerTypes)):
-            if consumerTypes[i] == str(sProfile.interface_type):
+        for consumerType in consumerTypes:
+            if consumerType == str(sProfile.interface_type):
                 self._rtcout.RTC_DEBUG(
                     "%s exists in the SDO service factory.", str(
                         sProfile.interface_type))
