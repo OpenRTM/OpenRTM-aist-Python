@@ -104,7 +104,7 @@ class ROS2TopicManager(object):
 
         def spin():
             while True:
-                rclpy.spin(self._node)
+                rclpy.spin_once(self._node, timeout_sec=0.01)
         self._thread = threading.Thread(target=spin)
         self._thread.daemon = True
         self._thread.start()

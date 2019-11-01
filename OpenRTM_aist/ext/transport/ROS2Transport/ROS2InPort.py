@@ -279,7 +279,7 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
     def onBufferWrite(self, data):
         if self._listeners is not None and self._profile is not None:
-            _, data = self._listeners..notifyData(
+            _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE, self._profile, data)
         return data
 
