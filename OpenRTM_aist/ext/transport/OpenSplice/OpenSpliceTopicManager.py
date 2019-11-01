@@ -185,8 +185,7 @@ class OpenSpliceTopicManager(object):
         guard = OpenRTM_aist.ScopedLock(mutex)
         if datatype in self._info:
             return self._info[datatype]
-        factory = OpenSpliceMessageInfo.OpenSpliceMessageInfoFactory.instance()
-        datainfo = factory.createObject(datatype)
+        datainfo = OpenSpliceMessageInfo.OpenSpliceMessageInfoList.instance().getInfo(datatype)
         if datainfo:
             datatype = datainfo.datatype()
             idlfile = datainfo.idlFile()
