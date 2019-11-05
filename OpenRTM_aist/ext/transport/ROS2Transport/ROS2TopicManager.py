@@ -61,6 +61,7 @@ class ROS2TopicManager(object):
     # @endif
     def __init__(self):
         self._thread = None
+        self._loop = True
 
         #mgr = OpenRTM_aist.Manager.instance()
         # mgr.addManagerActionListener(ManagerActionListener(self))
@@ -103,7 +104,7 @@ class ROS2TopicManager(object):
         self._node = Node("openrtm")
 
         def spin():
-            while True:
+            while self._loop:
                 rclpy.spin_once(self._node, timeout_sec=0.01)
         self._thread = threading.Thread(target=spin)
         self._thread.daemon = True
@@ -125,6 +126,7 @@ class ROS2TopicManager(object):
 
     def shutdown(self):
         if self._node:
+            self._loop = False
             self._node.destroy_node()
             # rclpy.try_shutdown()
             # if self._thread:
