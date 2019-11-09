@@ -195,8 +195,7 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
     # @endif
 
     def serialize(self, data):
-        factory = OpenSpliceMessageInfo.OpenSpliceMessageInfoFactory.instance()
-        info = factory.createObject(data._NP_RepositoryId)
+        info = OpenSpliceMessageInfo.OpenSpliceMessageInfoList.instance().getInfo(data._NP_RepositoryId)
         if info:
             datatype = info.datatype()
             idlFile = info.idlFile()
@@ -263,9 +262,9 @@ def addDataType(datatype, idlfile):
     name = datatype._NP_RepositoryId
     data_name = name.split(":")[1]
     data_name = data_name.replace("/", "::")
-    OpenSpliceMessageInfo.OpenSpliceMessageInfoFactory.instance().addFactory(name,
-                                                                             OpenSpliceMessageInfo.opensplice_message_info(
-                                                                                 data_name, idlfile))
+    OpenSpliceMessageInfo.OpenSpliceMessageInfoList.instance().addInfo(name,
+                                                            OpenSpliceMessageInfo.OpenSpliceMessageInfo(
+                                                            data_name, idlfile))
 
 
 ##

@@ -112,126 +112,108 @@ class OpenSpliceMessageInfoBase(object):
 
 ##
 # @if jp
-# @brief メッセージの情報格納オブジェクト生成関数
+# @class OpenSpliceMessageInfo
+# @brief メッセージの情報格納クラス
 #
-# @param data_class OpenSpliceデータ型
-# @return メッセージの情報格納オブジェクト
 #
 # @else
+# @class OpenSpliceMessageInfo
 # @brief
 #
-# @param data_class
-# @return
 #
 # @endif
-#
-def opensplice_message_info(datatype, idlfile):
+class OpenSpliceMessageInfo(OpenSpliceMessageInfoBase):
+    """
+    """
     ##
     # @if jp
-    # @class OpenSpliceMessageInfo
-    # @brief メッセージの情報格納クラス
+    # @brief コンストラクタ
     #
+    # コンストラクタ
+    #
+    # @param self
     #
     # @else
-    # @class OpenSpliceMessageInfo
+    # @brief Constructor
+    #
+    # @param self
+    #
+    # @endif
+
+    def __init__(self, datatype, idlfile):
+        super(OpenSpliceMessageInfo, self).__init__()
+        self._datatype = datatype
+        self._idlfile = idlfile
+    ##
+    # @if jp
+    # @brief デストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
+
+    def __del__(self):
+        pass
+    ##
+    # @if jp
+    # @brief メッセージの型名を取得
+    #
+    # @param self
+    # @return 型名
+    #
+    # @else
     # @brief
     #
     #
+    # @param self
+    # @return
+    #
     # @endif
-    class OpenSpliceMessageInfo(OpenSpliceMessageInfoBase):
-        """
-        """
+    #
 
-        ##
-        # @if jp
-        # @brief コンストラクタ
-        #
-        # コンストラクタ
-        #
-        # @param self
-        #
-        # @else
-        # @brief Constructor
-        #
-        # @param self
-        #
-        # @endif
-        def __init__(self):
-            super(OpenSpliceMessageInfo, self).__init__()
+    def datatype(self):
+        return self._datatype
+    ##
+    # @if jp
+    # @brief IDLファイルのパスを取得
+    #
+    # @param self
+    # @return IDLファイルのパス
+    #
+    # @else
+    # @brief
+    #
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    #
 
-        ##
-        # @if jp
-        # @brief デストラクタ
-        #
-        #
-        # @param self
-        #
-        # @else
-        #
-        # @brief self
-        #
-        # @endif
-
-        def __del__(self):
-            pass
-
-        ##
-        # @if jp
-        # @brief メッセージの型名を取得
-        #
-        # @param self
-        # @return 型名
-        #
-        # @else
-        # @brief
-        #
-        #
-        # @param self
-        # @return
-        #
-        # @endif
-        #
-        def datatype(self):
-            return datatype
-
-        ##
-        # @if jp
-        # @brief IDLファイルのパスを取得
-        #
-        # @param self
-        # @return IDLファイルのパス
-        #
-        # @else
-        # @brief
-        #
-        #
-        # @param self
-        # @return
-        #
-        # @endif
-        #
-        def idlFile(self):
-            return idlfile
-
-    return OpenSpliceMessageInfo
+    def idlFile(self):
+        return self._idlfile
 
 
-opensplicemessageinfofactory = None
+opensplicemessageinfolist = None
 
 
 ##
 # @if jp
-# @class OpenSpliceMessageInfoFactory
-# @brief OpenSpliceメッセージ情報格納オブジェクト生成ファクトリ
+# @class OpenSpliceMessageInfoList
+# @brief OpenSpliceメッセージ情報を格納するリスト
 #
 # @else
-# @class OpenSpliceMessageInfoFactory
+# @class OpenSpliceMessageInfoList
 # @brief
 #
 #
 # @endif
-class OpenSpliceMessageInfoFactory(
-        OpenRTM_aist.Factory, OpenSpliceMessageInfoBase):
+class OpenSpliceMessageInfoList:
     ##
     # @if jp
     # @brief コンストラクタ
@@ -247,7 +229,7 @@ class OpenSpliceMessageInfoFactory(
     #
     # @endif
     def __init__(self):
-        OpenRTM_aist.Factory.__init__(self)
+        self._data = {}
 
     ##
     # @if jp
@@ -285,11 +267,74 @@ class OpenSpliceMessageInfoFactory(
     # @endif
     #
     def instance():
-        global opensplicemessageinfofactory
+        global opensplicemessageinfolist
 
-        if opensplicemessageinfofactory is None:
-            opensplicemessageinfofactory = OpenSpliceMessageInfoFactory()
+        if opensplicemessageinfolist is None:
+            opensplicemessageinfolist = OpenSpliceMessageInfoList()
 
-        return opensplicemessageinfofactory
+        return opensplicemessageinfolist
 
     instance = staticmethod(instance)
+
+    ##
+    # @if jp
+    # @brief ROS2MessageInfoの追加
+    #
+    # @param self
+    # @param id 名前
+    # @param info ROS2MessageInfo
+    #
+    # @else
+    # @brief
+    #
+    # @param self
+    # @param id
+    # @param info
+    #
+    # @endif
+    #
+    def addInfo(self, id, info):
+        self._data[id] = info
+
+    ##
+    # @if jp
+    # @brief ROS2MessageInfoの削除
+    #
+    # @param self
+    # @param id 名前
+    # @return 削除に成功した場合はTrue
+    #
+    # @else
+    # @brief
+    #
+    # @param self
+    # @param id
+    # @return
+    #
+    # @endif
+    #
+    def removeInfo(self, id):
+        if id in self._data:
+            del self._data[id]
+            return True
+        return False
+
+    ##
+    # @if jp
+    # @brief 指定名のROS2MessageInfoの取得
+    #
+    # @param id 名前
+    # @return ROS2MessageInfo
+    #
+    # @else
+    # @brief
+    #
+    # @param id
+    # @return
+    #
+    # @endif
+    #
+    def getInfo(self, id):
+        if id in self._data:
+            return self._data[id]
+        return None
