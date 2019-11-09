@@ -254,7 +254,7 @@ class ROS2MessageInfoList:
     #
     # @endif
     #
-    def addInfo(id, info):
+    def addInfo(self, id, info):
         self._data[id] = info
 
     ##
