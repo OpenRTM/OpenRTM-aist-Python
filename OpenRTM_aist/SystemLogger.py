@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 ##
@@ -329,7 +329,7 @@ class LogStream:
                     print("RTC_LOG : argument error")
                     return
             for log in self._loggerObj:
-                log.log(messages, LV, self._logger_name)
+                log.log(str(messages), LV, self._logger_name)
 
             self.release()
 
@@ -366,7 +366,7 @@ class LogStream:
                     return
 
             for log in self._loggerObj:
-                log.log(messages, Logger.FATAL, self._logger_name)
+                log.log(str(messages), Logger.FATAL, self._logger_name)
 
             self.release()
 
@@ -403,7 +403,7 @@ class LogStream:
                     return
 
             for log in self._loggerObj:
-                log.log(messages, Logger.ERROR, self._logger_name)
+                log.log(str(messages), Logger.ERROR, self._logger_name)
 
             self.release()
 
@@ -444,7 +444,7 @@ class LogStream:
                     return
 
             for log in self._loggerObj:
-                log.log(messages, Logger.WARN, self._logger_name)
+                log.log(str(messages), Logger.WARN, self._logger_name)
 
             self.release()
 
@@ -485,7 +485,7 @@ class LogStream:
                     return
 
             for log in self._loggerObj:
-                log.log(messages, Logger.INFO, self._logger_name)
+                log.log(str(messages), Logger.INFO, self._logger_name)
 
             self.release()
 
@@ -526,7 +526,7 @@ class LogStream:
                     return
 
             for log in self._loggerObj:
-                log.log(messages, Logger.DEBUG, self._logger_name)
+                log.log(str(messages), Logger.DEBUG, self._logger_name)
 
             self.release()
 
@@ -568,7 +568,7 @@ class LogStream:
                     return
 
             for log in self._loggerObj:
-                log.log(messages, Logger.TRACE, self._logger_name)
+                log.log(str(messages), Logger.TRACE, self._logger_name)
 
             self.release()
 
@@ -610,7 +610,7 @@ class LogStream:
                     return
 
             for log in self._loggerObj:
-                log.log(messages, Logger.VERBOSE, self._logger_name)
+                log.log(str(messages), Logger.VERBOSE, self._logger_name)
 
             self.release()
 
@@ -652,7 +652,7 @@ class LogStream:
                     return
 
             for log in self._loggerObj:
-                log.log(messages, Logger.PARANOID, self._logger_name)
+                log.log(str(messages), Logger.PARANOID, self._logger_name)
 
             self.release()
 
