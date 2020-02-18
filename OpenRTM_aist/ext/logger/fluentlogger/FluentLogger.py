@@ -169,6 +169,8 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
                     "time": "%(asctime)s",
                     "name": "%(name)s",
                     "level": "%(levelname)s",
+                    "pid": "%(process)d",
+                    "host": "%(hostname)s"
                 }
                 formatter = fluent.handler.FluentRecordFormatter(fmt=fmt)
                 #formatter = logging.Formatter('{Time:%(asctime)s,Name:%(name)s,LEVEL:%(levelname)s,MESSAGE:%(message)s}')
