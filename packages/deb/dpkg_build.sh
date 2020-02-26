@@ -107,7 +107,7 @@ check_distribution()
 
 get_version_info()
 {
-    VERSION=`../../setup.py --version`
+    VERSION=`python3 ../../setup.py --version`
     SHORT_VERSION=`echo $VERSION | sed 's/\.[0-9]*$//'`
     BUILD_ROOT="buildroot"
     PKG_NAME="OpenRTM-aist-Python-${VERSION}"
@@ -116,8 +116,8 @@ get_version_info()
 create_source_package()
 {
   cd ../../
-  ./setup.py build
-  ./setup.py sdist
+  python3 setup.py build
+  python3 setup.py sdist
   cd -
 }
 
@@ -131,10 +131,11 @@ create_files()
 {
   eval `dpkg-architecture`
   ARCH=$DEB_HOST_ARCH
+  PKG_VERSION=`dpkg-parsechangelog | sed -n 's/^Version: //p'`
 cat << EOF >> debian/files
-openrtm-aist-python_1.1.0-1_$ARCH.deb main extra
-openrtm-aist-python-example_1.1.0-1_$ARCH.deb main extra
-openrtm-aist-python-doc_1.1.0-1_all.deb main extra
+openrtm-aist-python3_${PKG_VERSION}_${ARCH}.deb main extra
+openrtm-aist-python3-example_${PKG_VERSION}_${ARCH}.deb main extra
+openrtm-aist-python3-doc_${PKG_VERSION}_all.deb main extra
 EOF
 }
 

@@ -18,7 +18,7 @@ configure-stamp:
 
 
 build: build-stamp
-	python setup.py build
+	python3 setup.py build
 
 build-stamp: configure-stamp  
 	dh_testdir
@@ -28,7 +28,7 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp configure-stamp
-	python setup.py clean
+	python3 setup.py clean
 
 	dh_clean 
 
@@ -39,13 +39,13 @@ install: build
 	dh_installdirs
 
 	# installing core
-	python setup.py install_core --prefix=$(CURDIR)/debian/openrtm-aist-python/usr --install-layout=deb
+	python3 setup.py install_core --prefix=$(CURDIR)/debian/openrtm-aist-python3/usr --install-layout=deb
 	# installing examples
-	(mkdir $(CURDIR)/debian/openrtm-aist-python-example/usr/)
-	python setup.py install_example --install-dir=$(CURDIR)/debian/openrtm-aist-python-example/usr/
+	(mkdir $(CURDIR)/debian/openrtm-aist-python3-example/usr/)
+	python3 setup.py install_example --install-dir=$(CURDIR)/debian/openrtm-aist-python3-example/usr/
 	# installing examples
-	(mkdir $(CURDIR)/debian/openrtm-aist-python-doc/usr/)
-	python setup.py install_doc --install-dir=$(CURDIR)/debian/openrtm-aist-python-doc/usr/
+	(mkdir $(CURDIR)/debian/openrtm-aist-python3-doc/usr/)
+	python3 setup.py install_doc --install-dir=$(CURDIR)/debian/openrtm-aist-python3-doc/usr/
 	dh_install -s
 
 # Build architecture-independent files here.
