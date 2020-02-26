@@ -433,7 +433,8 @@ class LRFrange(ScaledObject):
     def range_to_pos(self, data):
         pos = []
         pre_d = 0
-
+	scale_adj=100.0  # change from 1 dot/m to 100 dot/m (dot/cm)
+	scale_threshold=0.01 # change threshold value from m unit to cm unit
         tfilter = self.tfilter_check.get()
         sfilter = self.sfilter_check.get()
         thresh = self.threshold_check.get()
@@ -447,7 +448,7 @@ class LRFrange(ScaledObject):
         # Spacial Filter
         for (n, d) in enumerate(data):
             # Threshold
-            if thresh and d < self.threshold:
+            if thresh and d < self.threshold * scale_threshold:
                 d = 10000  # pre_d
 
             if sfilter:
@@ -460,8 +461,8 @@ class LRFrange(ScaledObject):
             #deg = (n + self.offset_step) * self.angle_per_step + self.beg_angle
             #th = deg * math.pi / 180
             th = (n + self.offset_step) * self.angle_per_step + self.beg_angle
-            x = d * math.cos(th)
-            y = d * math.sin(th)
+            x = d * math.cos(th) * scale_adj
+            y = d * math.sin(th) * scale_adj
             pos.append(self.translate(x, y, 0, 0, 0))
         self.pre_data = data
         return pos
