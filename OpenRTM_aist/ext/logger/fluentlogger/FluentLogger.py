@@ -165,10 +165,14 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
                     port = 24224
 
                 fhdlr = fluent.handler.FluentHandler(tag, host=host, port=port)
+                fhdlr.addFilter(ManagerNameFilter())
                 fmt = {
                     "time": "%(asctime)s",
                     "name": "%(name)s",
                     "level": "%(levelname)s",
+                    "pid": "%(process)d",
+                    "host": "%(hostname)s",
+                    "manager": "%(manager)s"
                 }
                 formatter = fluent.handler.FluentRecordFormatter(fmt=fmt)
                 #formatter = logging.Formatter('{Time:%(asctime)s,Name:%(name)s,LEVEL:%(levelname)s,MESSAGE:%(message)s}')
@@ -319,6 +323,60 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
             return logging.getLogger("fluent." + name)
         else:
             return self.logger
+
+##
+# @if jp
+# @class ManagerNameFilter
+#
+# @brief ManagerNameFilter クラス
+#
+# ログのフォーマットの"manager"キーにマネージャ名を設定する
+#
+# @else
+# @class ManagerNameFilter
+#
+# @brief ManagerNameFilter class
+#
+#
+#
+# @endif
+#
+
+
+class ManagerNameFilter(logging.Filter):
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @else
+    # @brief Constructor
+    #
+    # Constructor
+    #
+    # @endif
+    #
+    def __init__(self):
+        logging.Filter.__init__(self)
+        conf = OpenRTM_aist.Manager.instance().getConfig()
+        self._managername = conf.getProperty("manager.instance_name")
+    ##
+    # @if jp
+    # @brief フィルタリングしてメッセージにマネージャ名を追加する
+    #
+    #
+    # @else
+    # @brief
+    #
+    #
+    #
+    # @endif
+    #
+
+    def filter(self, record):
+        record.manager = self._managername
+        return True
 
 
 def FluentLoggerInit(mgr):
