@@ -433,8 +433,8 @@ class LRFrange(ScaledObject):
     def range_to_pos(self, data):
         pos = []
         pre_d = 0
-	scale_adj=100.0  # change from 1 dot/m to 100 dot/m (dot/cm)
-	scale_threshold=0.01 # change threshold value from m unit to cm unit
+	scale_adj = 100.0  # change from 1 dot/m to 100 dot/m (dot/cm)
+	scale_threshold = 0.01 # change threshold value from m unit to cm unit
         tfilter = self.tfilter_check.get()
         sfilter = self.sfilter_check.get()
         thresh = self.threshold_check.get()
