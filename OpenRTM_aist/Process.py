@@ -84,8 +84,11 @@ def fork():
 # @brief fork process
 # @endif
 #
-# int fork()
+# string popen(string command)
 def popen(command):
   args = shlex.split(command," ")
   sp = subprocess.Popen(args, stdout=subprocess.PIPE)
-  return sp.communicate()[0]
+  if sys.version_info[0] == 2:
+    return sp.communicate()[0]
+  else:
+    return sp.communicate()[0].decode("utf-8")
