@@ -87,7 +87,7 @@ def fork():
 # @brief fork process
 # @endif
 #
-# int fork()
+# string popen(string command)
 
 
 def popen(command):
