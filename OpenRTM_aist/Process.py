@@ -87,10 +87,10 @@ def fork():
 # @brief fork process
 # @endif
 #
-# int fork()
+# string popen(string command)
 
 
 def popen(command):
     args = shlex.split(command, " ")
     sp = subprocess.Popen(args, stdout=subprocess.PIPE)
-    return sp.communicate()[0]
+    return sp.communicate()[0].decode("utf-8")
