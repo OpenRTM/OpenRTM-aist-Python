@@ -1,5 +1,6 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- Python -*-
+# -*- coding: utf-8 -*-
 
 ##
 # @file rtcprof.py
@@ -61,9 +62,17 @@ def main():
   # for new
   comp_spec_name = classname+"_spec"
 
-  with open(str(fullname)) as f:
-    if f.read().find(comp_spec_name) == -1:
-      return
+  try:
+    code = "UTF-8-SIG"
+    import chardet
+    import codecs
+    with open(str(fullname), mode='rb') as f:
+      code = chardet.detect(f.read())["encoding"]
+    with codecs.open(str(fullname), "r", encoding=code) as f:
+      if f.read().find(comp_spec_name) == -1:
+        return
+  except:
+    pass
   try:
     imp_file = __import__(basename.split(".")[0])
   except:
