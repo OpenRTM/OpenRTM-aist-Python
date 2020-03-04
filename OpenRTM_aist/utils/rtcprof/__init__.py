@@ -1,1 +1,1 @@
-from rtcprof import *
+from rtcprof.rtcprof import *

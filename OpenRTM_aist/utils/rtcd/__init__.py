@@ -1,1 +1,1 @@
-from rtcd import *
+from rtcd.rtcd import *
