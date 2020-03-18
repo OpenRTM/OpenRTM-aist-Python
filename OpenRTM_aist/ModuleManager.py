@@ -101,7 +101,15 @@ class ModuleManager:
     if not self._rtcout:
       self._rtcout = self._mgr.getLogbuf("ModuleManager")
     self._modprofs = []
-    self._loadfailmods = []
+    self._loadfailmods = {}
+    langs = self._properties.getProperty(
+      "manager.supported_languages").split(",")
+    for lang in langs:
+      lang = lang.strip()
+      self._loadfailmods[lang] = []
+
+    self._managerLanguage = self._properties.getProperty(
+      "manager.language")
 
   ##
   # @if jp
@@ -565,7 +573,7 @@ class ModuleManager:
         OpenRTM_aist.getFileList(path,suffix,tmp)
         
         #tmp = glob.glob(path + os.sep + '*.' + suffix)
-        if lang == "Python":
+        if lang == self._managerLanguage:
           for f in tmp:
             if f.find("__init__.py") != -1:
               tmp.remove(f)
@@ -576,7 +584,7 @@ class ModuleManager:
       for f in flist:
         f = f.replace("\\","/")
         f = f.replace("//","/")
-        self.addNewFile(f, modules)
+        self.addNewFile(f, modules, lang)
     modules = list(set(modules))
 
 
@@ -595,18 +603,13 @@ class ModuleManager:
   # @else
   # @brief Adding file path not existing cache
   # @endif
-  def addNewFile(self, fpath, modules):
+  def addNewFile(self, fpath, modules, lang):
     exists = False
     for modprof in self._modprofs:
       if modprof.getProperty("module_file_path") == fpath:
-        exists = True
         self._rtcout.RTC_DEBUG("Module %s already exists in cache.",fpath)
-        break
-    for loadfailmod in self._loadfailmods:
-      if loadfailmod == fpath:
-        exists = True
-        break
-    if not exists:
+        return
+    if not (fpath in self._loadfailmods[lang]):
       self._rtcout.RTC_DEBUG("New module: %s",fpath)
       modules.append(fpath)
 
@@ -634,7 +637,7 @@ class ModuleManager:
     
 
     for mod_ in modules:
-      if lang == "Python":
+      if lang == self._managerLanguage:
         prop = self.__getRtcProfile(mod_)
         if prop:
           prop.setProperty("module_file_name",os.path.basename(mod_))
@@ -671,12 +674,12 @@ class ModuleManager:
             prop.setProperty("module_file_path", mod_)
             modprops.append(prop)
           else:
-            self._loadfailmods.append(mod_)
+            self._loadfailmods[lang].append(mod_)
               
           
         except:
           self._rtcout.RTC_ERROR("popen faild")
-          self._loadfailmods.append(mod_)
+          self._loadfailmods[lang].append(mod_)
 
 
   ##
@@ -848,7 +851,7 @@ class ModuleManager:
   def findFile(self, fname, load_path):
     file_name = fname
     for path in load_path:
-      suffix = self._properties.getProperty("manager.modules.Python.suffixes")
+      suffix = self._properties.getProperty("manager.modules."+self._managerLanguage+".suffixes")
       if fname.find("."+suffix) == -1:
         f = str(path) + os.sep + str(file_name)+"."+suffix
       else:
@@ -881,7 +884,7 @@ class ModuleManager:
   # @endif
   def fileExist(self, filename):
     fname = filename
-    suffix = self._properties.getProperty("manager.modules.Python.suffixes")
+    suffix = self._properties.getProperty("manager.modules."+self._managerLanguage+".suffixes")
     if fname.find("."+suffix) == -1:
       fname = str(filename)+"."+suffix
 
