@@ -18,14 +18,26 @@
 
 import OpenRTM_aist
 import os
+import sys
 
 
 if os.name == "nt":
     cpp_suffixes = "dll"
+    supported_languages = "C++, Python, Java"
 elif os.name == "posix":
     cpp_suffixes = "so"
+    supported_languages = "C++, Python, Python3, Java"
 else:
     cpp_suffixes = "dylib"
+    supported_languages = "C++, Python, Python3, Java"
+
+if os.name == "nt":
+    lang = "Python"
+else:
+    if sys.version_info[0] == 2:
+        lang = "Python"
+    else:
+        lang = "Python3"
 
 ##
 # @if jp
@@ -87,7 +99,7 @@ default_config =["config.version",                   OpenRTM_aist.openrtm_versio
                  "manager.name",                     "manager",
                  "manager.command",                  "rtcd",
                  "manager.nameservers",               "default",
-                 "manager.language",                 "Python",
+                 "manager.language",                 lang,
                  "manager.components.naming_policy", "process_unique",
                  "manager.modules.C++.manager_cmd", "rtcd",
                  "manager.modules.Python.manager_cmd", "rtcd_python",
@@ -96,7 +108,7 @@ default_config =["config.version",                   OpenRTM_aist.openrtm_versio
                  "manager.local_service.enabled_services","ALL",
                  "sdo.service.provider.enabled_services",  "ALL",
                  "sdo.service.consumer.enabled_services",  "ALL",
-                 "manager.supported_languages",  "C++, Python, Java",
+                 "manager.supported_languages", supported_languages,
                  "manager.modules.C++.profile_cmd",  "rtcprof",
                  "manager.modules.Python.profile_cmd",  "rtcprof_python",
                  "manager.modules.Java.profile_cmd",  "rtcprof_java",
@@ -105,5 +117,13 @@ default_config =["config.version",                   OpenRTM_aist.openrtm_versio
                  "manager.modules.Java.suffixes",  "class",
                  "manager.modules.C++.load_paths",  "",
                  "manager.modules.Python.load_paths",  "",
-                 "manager.modules.Java.load_paths",  "",
-                 ""]
+                 "manager.modules.Java.load_paths",  ""]
+
+
+if os.name != "nt":
+    python3_config = [
+        "manager.modules.Python3.manager_cmd", "rtcd_python3",
+        "manager.modules.Python3.profile_cmd", "rtcprof_python3",
+        "manager.modules.Python3.suffixes", "py",
+        "manager.modules.Python3.load_paths", ""]
+    default_config.extend(python3_config)
