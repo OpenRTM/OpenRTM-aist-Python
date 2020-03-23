@@ -81,7 +81,7 @@
 #==============================
 pkg_major_version = "1"
 pkg_minor_version = "2"
-pkg_revision_num  = "1"
+pkg_revision_num  = "2"
 
 #============================================================
 # MODIFICATION IS ALLOWED IF IT IS NEED TO MODIFY.

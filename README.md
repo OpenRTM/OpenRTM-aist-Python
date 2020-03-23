@@ -1,4 +1,4 @@
-This is a release of OpenRTM-aist-Python-1.2.1, dual-license open source RT-Middleware.
+This is a release of OpenRTM-aist-Python-1.2.2, dual-license open source RT-Middleware.
 
 Carefully read the following files before you configure, build, install  
 OpenRTM and develop RT-Components.
