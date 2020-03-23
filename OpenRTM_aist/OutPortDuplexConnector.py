@@ -86,7 +86,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
         self._readCallback = None
 
         self._marshaling_type = info.properties.getProperty(
-            "marshaling_type", "corba")
+            "marshaling_type", "cdr")
         self._marshaling_type = info.properties.getProperty(
             "out.marshaling_type", self._marshaling_type)
         self._marshaling_type = self._marshaling_type.strip()

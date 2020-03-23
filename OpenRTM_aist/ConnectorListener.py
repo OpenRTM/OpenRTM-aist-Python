@@ -346,7 +346,7 @@ class ConnectorDataListenerT(ConnectorDataListener):
             endian = True
 
         marshaling_type = info.properties.getProperty(
-            "marshaling_type", "corba")
+            "marshaling_type", "cdr")
         if porttype == PortType.OutPortType:
             marshaling_type = info.properties.getProperty(
                 "out.marshaling_type", marshaling_type)
@@ -796,7 +796,7 @@ class ConnectorDataListenerHolder:
             endian = True
 
         marshaling_type = info.properties.getProperty(
-            "marshaling_type", "corba")
+            "marshaling_type", "cdr")
         if self._portType == PortType.OutPortType:
             marshaling_type = info.properties.getProperty(
                 "out.marshaling_type", marshaling_type)
