@@ -522,9 +522,8 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
 
     def setDataType(self, data):
         OpenRTM_aist.InPortConnector.setDataType(self, data)
-        if data is not None:
-            self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(
-                self._marshaling_type, data)
+        self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(
+            self._marshaling_type, data)
 
     class WorkerThreadCtrl:
         def __init__(self):

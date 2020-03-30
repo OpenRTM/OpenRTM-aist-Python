@@ -22,12 +22,14 @@ import OpenRTM_aist
 
 ##
 # @if jp
-# @class
+# @class ByteDataStreamBase
 #
+# @brief シリアライザの基底クラス
 #
 # @else
-# @brief
+# @class ByteDataStreamBase
 #
+# @brief
 #
 # @endif
 class ByteDataStreamBase:
@@ -126,24 +128,124 @@ class ByteDataStreamBase:
 
 
 serializerfactories = None
+globalserializerfactories = None
+
+##
+# @if jp
+# @class SerializerFactory
+#
+# @brief シリアライザを生成するファクトリ
+#
+# @else
+# @class SerializerFactory
+#
+# @brief
+#
+# @endif
 
 
 class SerializerFactory(OpenRTM_aist.Factory, ByteDataStreamBase):
+
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @param self
+    #
+    # @else
+    # @brief Constructor
+    #
+    # @param self
+    #
+    # @endif
     def __init__(self):
         OpenRTM_aist.Factory.__init__(self)
         pass
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
     def __del__(self):
         pass
+
+##
+# @if jp
+# @class SerializerFactories
+#
+# @brief シリアライザ生成ファクトリの一覧を操作するクラス
+#
+# @else
+# @class SerializerFactories
+#
+# @brief
+#
+# @endif
 
 
 class SerializerFactories:
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @param self
+    #
+    # @else
+    # @brief Constructor
+    #
+    # @param self
+    #
+    # @endif
     def __init__(self):
         self._factories = {}
 
+    ##
+    # @if jp
+    # @brief デストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
     def __del__(self):
         pass
 
+    ##
+    # @if jp
+    # @brief シリアライザの登録(データ型ごと)
+    #
+    # @param self
+    # @param marshalingtype シリアライザの種類(文字列)
+    # @param serializer シリアライザを定義したクラス
+    # @param datatype 対象のデータ型のインスタンス、もしくはクラス
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    # @param marshalingtype
+    # @param serializer
+    # @param datatype
+    #
+    # @endif
     def addSerializer(self, marshalingtype, serializer, datatype):
         mtype = OpenRTM_aist.toTypename(datatype)
         if not (mtype in self._factories):
@@ -151,55 +253,143 @@ class SerializerFactories:
         self._factories[mtype].addFactory(marshalingtype,
                                           serializer)
 
+    ##
+    # @if jp
+    # @brief シリアライザの登録(グローバル)
+    # 基本的にシリアライザはデータ型ごとに追加するが、
+    # CORBA CDR形式のシリアライザのように全てのデータ型で共通の
+    # 処理を行う場合はグローバルにシリアライザを登録できる。
+    # 特定のデータ型から特定のROSメッセージ型への変換が必要などという
+    # 場合はデータ型ごとの登録が必要である。
+    #
+    #
+    #
+    # @param self
+    # @param marshalingtype シリアライザの種類(文字列)
+    # @param serializer シリアライザを定義したクラス
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    # @param marshalingtype
+    # @param serializer
+    #
+    # @endif
     def addSerializerGlobal(self, marshalingtype, serializer):
-        mtype = "ALL"
-        if not (mtype in self._factories):
-            self._factories[mtype] = SerializerFactory()
-        self._factories[mtype].addFactory(marshalingtype,
-                                          serializer)
+        globalserializerfactories.addFactory(marshalingtype,
+                                             serializer)
+    ##
+    # @if jp
+    # @brief シリアライザの登録解除(データ型ごと)
+    #
+    # @param self
+    # @param marshalingtype シリアライザの種類(文字列)
+    # @param datatype 対象のデータ型のインスタンス、もしくはクラス
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    # @param marshalingtype
+    # @param datatype
+    #
+    # @endif
 
     def removeSerializer(self, marshalingtype, datatype):
         mtype = OpenRTM_aist.toTypename(datatype)
         if mtype in self._factories:
             self._factories[mtype].removeFactory(marshalingtype)
 
+    ##
+    # @if jp
+    # @brief シリアライザの登録解除(グローバル)
+    #
+    # @param self
+    # @param marshalingtype シリアライザの種類(文字列)
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    # @param marshalingtype
+    #
+    # @endif
     def removeSerializerGlobal(self, marshalingtype):
-        mtype = "ALL"
-        if mtype in self._factories:
-            self._factories[mtype].removeFactory(marshalingtype)
+        globalserializerfactories.removeFactory(marshalingtype)
 
+    ##
+    # @if jp
+    # @brief シリアライザの生成
+    #
+    # @param self
+    # @param marshalingtype シリアライザの種類(文字列)
+    # @param datatype 対象のデータ型のインスタンス、もしくはクラス
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    # @param marshalingtype
+    # @param datatype
+    #
+    # @endif
     def createSerializer(self, marshalingtype, datatype):
-        mtype = OpenRTM_aist.toTypename(datatype)
-        if mtype in self._factories:
-            obj = self._factories[mtype].createObject(marshalingtype)
-            if obj is not None:
-                return obj
-        mtype = "ALL"
-        if mtype in self._factories:
-            obj = self._factories[mtype].createObject(marshalingtype)
-            if obj is not None:
-                return obj
+        if datatype is not None:
+            mtype = OpenRTM_aist.toTypename(datatype)
+            if mtype in self._factories:
+                obj = self._factories[mtype].createObject(marshalingtype)
+                if obj is not None:
+                    return obj
+        obj = globalserializerfactories.createObject(marshalingtype)
+        if obj is not None:
+            return obj
         return None
 
+    ##
+    # @if jp
+    # @brief 使用可能なシリアライザ一覧の取得
+    #
+    # @param self
+    # @param datatype 対象のデータ型のインスタンス、もしくはクラス
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    # @param datatype
+    #
+    # @endif
     def getSerializerList(self, datatype):
-        available_types = []
-        mtype = OpenRTM_aist.toTypename(datatype)
-        if mtype in self._factories:
-            factory = self._factories[mtype]
-            available_types.extend(factory.getIdentifiers())
+        if datatype is not None:
+            available_types = []
+            mtype = OpenRTM_aist.toTypename(datatype)
+            if mtype in self._factories:
+                factory = self._factories[mtype]
+                available_types.extend(factory.getIdentifiers())
 
-        mtype = "ALL"
-        if mtype in self._factories:
-            factory = self._factories[mtype]
-            available_types.extend(factory.getIdentifiers())
+        available_types.extend(globalserializerfactories.getIdentifiers())
 
         return available_types
 
     def instance():
         global serializerfactories
+        global globalserializerfactories
 
         if serializerfactories is None:
             serializerfactories = SerializerFactories()
+        if globalserializerfactories is None:
+            globalserializerfactories = SerializerFactory()
 
         return serializerfactories
 

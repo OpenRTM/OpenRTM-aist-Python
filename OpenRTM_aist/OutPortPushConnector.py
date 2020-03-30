@@ -519,5 +519,4 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
 
     def setDataType(self, data):
         OpenRTM_aist.OutPortConnector.setDataType(self, data)
-        if data is not None:
-            self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(self._marshaling_type, data)
+        self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(self._marshaling_type, data)

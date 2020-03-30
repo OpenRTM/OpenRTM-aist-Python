@@ -25,12 +25,14 @@ from omniORB import any
 
 ##
 # @if jp
-# @class
+# @class CORBA_CdrMemoryStream
 #
+# @brief CORBAのCDR形式シリアライザ、デシリアライザを定義
 #
 # @else
-# @brief
+# @class CORBA_CdrMemoryStream
 #
+# @brief
 #
 # @endif
 
@@ -181,4 +183,5 @@ class CORBA_CdrMemoryStream(OpenRTM_aist.ByteDataStreamBase):
 
 
 def CORBA_CdrMemoryStreamInit():
-    OpenRTM_aist.SerializerFactories.instance().addSerializerGlobal("cdr", CORBA_CdrMemoryStream)
+    OpenRTM_aist.SerializerFactories.instance().addSerializerGlobal("cdr",
+                                                                    CORBA_CdrMemoryStream)
