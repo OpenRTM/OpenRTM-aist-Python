@@ -125,7 +125,7 @@ class ByteDataStreamBase:
         return ByteDataStreamBase.SERIALIZE_NOTFOUND, data_type
 
 
-serializerfactory = None
+serializerfactories = None
 
 
 class SerializerFactory(OpenRTM_aist.Factory, ByteDataStreamBase):
@@ -136,12 +136,71 @@ class SerializerFactory(OpenRTM_aist.Factory, ByteDataStreamBase):
     def __del__(self):
         pass
 
+
+class SerializerFactories:
+    def __init__(self):
+        self._factories = {}
+
+    def __del__(self):
+        pass
+
+    def addSerializer(self, marshalingtype, serializer, datatype):
+        mtype = OpenRTM_aist.toTypename(datatype)
+        if not (mtype in self._factories):
+            self._factories[mtype] = SerializerFactory()
+        self._factories[mtype].addFactory(marshalingtype,
+                                          serializer)
+
+    def addSerializerGlobal(self, marshalingtype, serializer):
+        mtype = "ALL"
+        if not (mtype in self._factories):
+            self._factories[mtype] = SerializerFactory()
+        self._factories[mtype].addFactory(marshalingtype,
+                                          serializer)
+
+    def removeSerializer(self, marshalingtype, datatype):
+        mtype = OpenRTM_aist.toTypename(datatype)
+        if mtype in self._factories:
+            self._factories[mtype].removeFactory(marshalingtype)
+
+    def removeSerializerGlobal(self, marshalingtype):
+        mtype = "ALL"
+        if mtype in self._factories:
+            self._factories[mtype].removeFactory(marshalingtype)
+
+    def createSerializer(self, marshalingtype, datatype):
+        mtype = OpenRTM_aist.toTypename(datatype)
+        if mtype in self._factories:
+            obj = self._factories[mtype].createObject(marshalingtype)
+            if obj is not None:
+                return obj
+        mtype = "ALL"
+        if mtype in self._factories:
+            obj = self._factories[mtype].createObject(marshalingtype)
+            if obj is not None:
+                return obj
+        return None
+
+    def getSerializerList(self, datatype):
+        available_types = []
+        mtype = OpenRTM_aist.toTypename(datatype)
+        if mtype in self._factories:
+            factory = self._factories[mtype]
+            available_types.extend(factory.getIdentifiers())
+
+        mtype = "ALL"
+        if mtype in self._factories:
+            factory = self._factories[mtype]
+            available_types.extend(factory.getIdentifiers())
+
+        return available_types
+
     def instance():
-        global serializerfactory
+        global serializerfactories
 
-        if serializerfactory is None:
-            serializerfactory = SerializerFactory()
+        if serializerfactories is None:
+            serializerfactories = SerializerFactories()
 
-        return serializerfactory
+        return serializerfactories
 
     instance = staticmethod(instance)

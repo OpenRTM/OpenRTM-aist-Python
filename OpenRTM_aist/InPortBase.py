@@ -105,26 +105,6 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
         self.addProperty("dataport.data_type", data_type)
         self._properties.setProperty("data_type", data_type)
 
-        factory = OpenRTM_aist.SerializerFactory.instance()
-        serializer_list = factory.getIdentifiers()
-        ds = data_type.split(":")
-        marshaling_types = []
-        if len(ds) == 3:
-            data_name = ds[1]
-            for s in serializer_list:
-                s = s.lstrip()
-                v = s.split(":")
-                if len(v) == 3:
-                    if v[2] == data_name:
-                        marshaling_types.append(s)
-                else:
-                    marshaling_types.append(s)
-
-        marshaling_types = OpenRTM_aist.flatten(marshaling_types)
-        marshaling_types = marshaling_types.lstrip()
-        self._rtcout.RTC_DEBUG("available marshaling_types: %s", marshaling_types)
-        self.addProperty("dataport.marshaling_types", marshaling_types)
-
         self.addProperty("dataport.subscription_type", "Any")
         self._value = None
         self._listeners = OpenRTM_aist.ConnectorListeners()

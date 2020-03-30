@@ -91,8 +91,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
             "out.marshaling_type", self._marshaling_type)
         self._marshaling_type = self._marshaling_type.strip()
 
-        self._serializer = OpenRTM_aist.SerializerFactory.instance(
-        ).createObject(self._marshaling_type)
+        self._serializer = None
 
         self.onConnect()
 
@@ -460,6 +459,12 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     def unsubscribeInterface(self, prop):
         if self._consumer:
             self._consumer.unsubscribeInterface(prop)
+
+
+    def setDataType(self, data):
+        OpenRTM_aist.OutPortConnector.setDataType(self, data)
+        if data is not None:
+            self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(self._marshaling_type, data)
 
 
 ##

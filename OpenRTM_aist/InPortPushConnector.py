@@ -154,8 +154,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
             "in.marshaling_type", self._marshaling_type)
         self._marshaling_type = self._marshaling_type.strip()
 
-        self._serializer = OpenRTM_aist.SerializerFactory.instance(
-        ).createObject(self._marshaling_type)
+        self._serializer = None
 
         return
 
@@ -520,6 +519,12 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
         return
+
+    def setDataType(self, data):
+        OpenRTM_aist.InPortConnector.setDataType(self, data)
+        if data is not None:
+            self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(
+                self._marshaling_type, data)
 
     class WorkerThreadCtrl:
         def __init__(self):
