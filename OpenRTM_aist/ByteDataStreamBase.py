@@ -342,7 +342,7 @@ class SerializerFactories:
     # @param datatype
     #
     # @endif
-    def createSerializer(self, marshalingtype, datatype):
+    def createSerializer(self, marshalingtype, datatype=None):
         if datatype is not None:
             mtype = OpenRTM_aist.toTypename(datatype)
             if mtype in self._factories:
