@@ -80,9 +80,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
         self._writeCallback = None
 
         self._marshaling_type = info.properties.getProperty(
-            "marshaling_type", "corba")
-        self._marshaling_type = info.properties.getProperty(
-            "in.marshaling_type", self._marshaling_type)
+            "marshaling_type", "cdr")
         self._marshaling_type = self._marshaling_type.strip()
 
         self._serializer = None

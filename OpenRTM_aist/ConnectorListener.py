@@ -346,13 +346,13 @@ class ConnectorDataListenerT(ConnectorDataListener):
             endian = True
 
         marshaling_type = info.properties.getProperty(
-            "marshaling_type", "corba")
+            "marshaling_type", "cdr")
         if porttype == PortType.OutPortType:
             marshaling_type = info.properties.getProperty(
-                "out.marshaling_type", marshaling_type)
+                "outport.marshaling_type", marshaling_type)
         elif porttype == PortType.InPortType:
             marshaling_type = info.properties.getProperty(
-                "in.marshaling_type", marshaling_type)
+                "inport.marshaling_type", marshaling_type)
         marshaling_type = marshaling_type.strip()
 
         serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(marshaling_type, data)
@@ -797,13 +797,13 @@ class ConnectorDataListenerHolder:
             endian = True
 
         marshaling_type = info.properties.getProperty(
-            "marshaling_type", "corba")
+            "marshaling_type", "cdr")
         if self._portType == PortType.OutPortType:
             marshaling_type = info.properties.getProperty(
-                "out.marshaling_type", marshaling_type)
+                "outport.marshaling_type", marshaling_type)
         elif self._portType == PortType.InPortType:
             marshaling_type = info.properties.getProperty(
-                "in.marshaling_type", marshaling_type)
+                "inport.marshaling_type", marshaling_type)
         marshaling_type = marshaling_type.strip()
 
         serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(marshaling_type, self._data)

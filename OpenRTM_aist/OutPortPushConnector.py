@@ -172,9 +172,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
         self._publisher.setListener(self._profile, self._listeners)
 
         self._marshaling_type = info.properties.getProperty(
-            "marshaling_type", "corba")
-        self._marshaling_type = info.properties.getProperty(
-            "out.marshaling_type", self._marshaling_type)
+            "marshaling_type", "cdr")
         self._marshaling_type = self._marshaling_type.strip()
 
         self._serializer = None
