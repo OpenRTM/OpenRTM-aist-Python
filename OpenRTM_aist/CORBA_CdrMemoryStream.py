@@ -181,5 +181,5 @@ class CORBA_CdrMemoryStream(OpenRTM_aist.ByteDataStreamBase):
 
 
 def CORBA_CdrMemoryStreamInit():
-    OpenRTM_aist.SerializerFactory.instance().addFactory("corba",
+    OpenRTM_aist.SerializerFactory.instance().addFactory("cdr",
                                                          OpenRTM_aist.CORBA_CdrMemoryStream)
