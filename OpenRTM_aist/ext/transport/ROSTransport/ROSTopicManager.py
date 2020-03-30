@@ -325,8 +325,12 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @endif
     def shutdown(self):
         self._shutdownflag = True
-        self._server_sock.shutdown(socket.SHUT_RDWR)
-        self._server_sock.close()
+        try:
+            self._server_sock.shutdown(socket.SHUT_RDWR)
+            self._server_sock.close()
+        except BaseException:
+            pass
+
         self._thread.join()
         self._node.shutdown(True)
 

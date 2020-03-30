@@ -223,7 +223,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
             self._rtcout.RTC_DEBUG("read ROS handshake exception")
             return
         except BaseException:
-            print(traceback.format_exc())
+            self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
 
         topic_name = header['topic']
         md5sum = header['md5sum']
@@ -283,7 +283,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         try:
             write_ros_handshake_header(client_sock, fields)
         except rosgraph.network.ROSHandshakeException:
-            self._rtcout.RTC_DEBUG("write ROS handshake exception")
+            self._rtcout.RTC_ERROR("write ROS handshake exception")
             return
         if poller:
             poller.unregister(fileno)
