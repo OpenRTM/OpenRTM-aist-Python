@@ -60,6 +60,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
         self._profile = info
         self._endian = True
         self._directMode = False
+        self._dataType = None
         return
 
     ##
@@ -272,3 +273,9 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
     # @endif
     def unsubscribeInterface(self, prop):
         pass
+
+    # template<class DataType>
+    # void setDataTyep(DataType data);
+
+    def setDataType(self, data):
+        self._dataType = data
