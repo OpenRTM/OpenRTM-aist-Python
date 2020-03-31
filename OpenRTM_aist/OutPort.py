@@ -101,6 +101,11 @@ class OutPort(OpenRTM_aist.OutPortBase):
         #self._OnUnderflow    = None
         #self._OnConnect      = None
         #self._OnDisconnect   = None
+
+        marshaling_types = OpenRTM_aist.SerializerFactories.instance().getSerializerList(value)
+        marshaling_types = OpenRTM_aist.flatten(marshaling_types).lstrip()
+        self.addProperty("dataport.marshaling_types", marshaling_types)
+
         self._listeners.setDataType(copy.deepcopy(value))
         self._listeners.setPortType(OpenRTM_aist.PortType.OutPortType)
         self.addConnectorDataListener(
