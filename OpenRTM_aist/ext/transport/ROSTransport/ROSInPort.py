@@ -91,7 +91,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
         self._topic = "chatter"
         self._callerid = ""
-        self._messageType = "ROSFloat32"
+        self._messageType = "ros:std_msgs/Float32"
         self._roscorehost = "localhost"
         self._roscoreport = "11311"
 
@@ -218,7 +218,8 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             self._rtcout.RTC_VERBOSE("Subscriber already exists.")
             return
 
-        self._messageType = prop.getProperty("marshaling_type", "ROSFloat32")
+        self._messageType = prop.getProperty(
+            "marshaling_type", "ros:std_msgs/Float32")
         self._topic = prop.getProperty("ros.topic", "chatter")
         self._topic = "/" + self._topic
         self._roscorehost = prop.getProperty("ros.roscore.host", "localhost")

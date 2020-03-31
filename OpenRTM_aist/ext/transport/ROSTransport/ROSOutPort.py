@@ -71,7 +71,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("ROSOutPort")
         self._properties = None
         self._callerid = ""
-        self._messageType = "ROSFloat32"
+        self._messageType = "ros:std_msgs/Float32"
         self._topic = "chatter"
         self._roscorehost = "localhost"
         self._roscoreport = "11311"
@@ -138,7 +138,8 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
         self._properties = prop
 
-        self._messageType = prop.getProperty("marshaling_type", "ROSFloat32")
+        self._messageType = prop.getProperty(
+            "marshaling_type", "ros:std_msgs/Float32")
         self._topic = prop.getProperty("ros.topic", "chatter")
         self._topic = "/" + self._topic
         self._roscorehost = prop.getProperty("ros.roscore.host", "localhost")
