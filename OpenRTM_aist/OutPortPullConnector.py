@@ -156,8 +156,7 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
             "marshaling_type", "cdr")
         self._marshaling_type = self._marshaling_type.strip()
 
-        self._serializer = OpenRTM_aist.SerializerFactory.instance(
-        ).createObject(self._marshaling_type)
+        self._serializer = None
 
         return
 
@@ -415,6 +414,10 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
     # void onDisconnect()
     def setDirectMode(self):
         self._directMode = True
+
+    def setDataType(self, data):
+        OpenRTM_aist.OutPortConnector.setDataType(self, data)
+        self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(self._marshaling_type, data)
 
     class WorkerThreadCtrl:
         def __init__(self):

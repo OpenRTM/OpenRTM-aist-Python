@@ -18,6 +18,7 @@
 #
 
 import OpenRTM_aist
+import RTC
 
 try:
     from cStringIO import StringIO
@@ -88,7 +89,7 @@ def ros_serialize(msg):
     buf.write(struct.pack('<I', size))
     buf.seek(end)
     bdata = buf.getvalue()
-    
+
     return bdata
 
 
@@ -294,12 +295,22 @@ def ros_basic_data(message_type):
 
 
 def ROSBasicDataInit(message_type, name):
-    OpenRTM_aist.SerializerFactory.instance().addFactory(name,
-                                                         ros_basic_data(
-                                                             message_type))
+    datatypes = [RTC.TimedState, RTC.TimedShort, RTC.TimedLong,
+                 RTC.TimedUShort, RTC.TimedULong, RTC.TimedFloat,
+                 RTC.TimedDouble, RTC.TimedChar, RTC.TimedWChar,
+                 RTC.TimedBoolean, RTC.TimedOctet, RTC.TimedString,
+                 RTC.TimedWString, RTC.TimedShortSeq, RTC.TimedLongSeq,
+                 RTC.TimedUShortSeq, RTC.TimedULongSeq, RTC.TimedFloatSeq,
+                 RTC.TimedDoubleSeq, RTC.TimedCharSeq, RTC.TimedWCharSeq,
+                 RTC.TimedBooleanSeq, RTC.TimedOctetSeq, RTC.TimedStringSeq,
+                 RTC.TimedWStringSeq]
+    for datatype in datatypes:
+        OpenRTM_aist.SerializerFactories.instance().addSerializer(name,
+                                                                  ros_basic_data(
+                                                                      message_type), datatype)
     ROSMessageInfo.ROSMessageInfoList.instance().addInfo(name,
-                                                               ROSMessageInfo.ROSMessageInfo(
-                                                                   message_type))
+                                                         ROSMessageInfo.ROSMessageInfo(
+                                                             message_type))
 
 
 ##
@@ -446,11 +457,11 @@ class ROSPoint3DData(OpenRTM_aist.ByteDataStreamBase):
 # @endif
 #
 def ROSPoint3DInit():
-    OpenRTM_aist.SerializerFactory.instance().addFactory("ros:geometry_msgs/PointStamped",
-                                                         ROSPoint3DData)
+    OpenRTM_aist.SerializerFactories.instance().addSerializer("ros:geometry_msgs/PointStamped",
+                                                              ROSPoint3DData, RTC.TimedPoint3D)
     ROSMessageInfo.ROSMessageInfoList.instance().addInfo("ros:geometry_msgs/PointStamped",
-                                                               ROSMessageInfo.ROSMessageInfo(
-                                                                   PointStamped))
+                                                         ROSMessageInfo.ROSMessageInfo(
+                                                             PointStamped))
 
 
 ##
@@ -599,11 +610,11 @@ class ROSQuaternionData(OpenRTM_aist.ByteDataStreamBase):
 # @endif
 #
 def ROSQuaternionInit():
-    OpenRTM_aist.SerializerFactory.instance().addFactory("ros:geometry_msgs/QuaternionStamped",
-                                                         ROSQuaternionData)
+    OpenRTM_aist.SerializerFactories.instance().addSerializer("ros:geometry_msgs/QuaternionStamped",
+                                                              ROSQuaternionData, RTC.TimedQuaternion)
     ROSMessageInfo.ROSMessageInfoList.instance().addInfo("ros:geometry_msgs/QuaternionStamped",
-                                                               ROSMessageInfo.ROSMessageInfo(
-                                                                   QuaternionStamped))
+                                                         ROSMessageInfo.ROSMessageInfo(
+                                                             QuaternionStamped))
 
 
 ##
@@ -750,11 +761,11 @@ class ROSVector3DData(OpenRTM_aist.ByteDataStreamBase):
 # @endif
 #
 def ROSVector3DInit():
-    OpenRTM_aist.SerializerFactory.instance().addFactory("ros:geometry_msgs/Vector3Stamped",
-                                                         ROSVector3DData)
+    OpenRTM_aist.SerializerFactories.instance().addSerializer("ros:geometry_msgs/Vector3Stamped",
+                                                              ROSVector3DData, RTC.TimedVector3D)
     ROSMessageInfo.ROSMessageInfoList.instance().addInfo("ros:geometry_msgs/Vector3Stamped",
-                                                               ROSMessageInfo.ROSMessageInfo(
-                                                                   Vector3Stamped))
+                                                         ROSMessageInfo.ROSMessageInfo(
+                                                             Vector3Stamped))
 
 
 ##
@@ -908,11 +919,11 @@ class ROSCameraImageData(OpenRTM_aist.ByteDataStreamBase):
 # @endif
 #
 def ROSCameraImageInit():
-    OpenRTM_aist.SerializerFactory.instance().addFactory("ros:sensor_msgs/Image",
-                                                         ROSCameraImageData)
+    OpenRTM_aist.SerializerFactories.instance().addSerializer("ros:sensor_msgs/Image",
+                                                              ROSCameraImageData, RTC.CameraImage)
     ROSMessageInfo.ROSMessageInfoList.instance().addInfo("ros:sensor_msgs/Image",
-                                                               ROSMessageInfo.ROSMessageInfo(
-                                                                   Image))
+                                                         ROSMessageInfo.ROSMessageInfo(
+                                                             Image))
 
 
 ##

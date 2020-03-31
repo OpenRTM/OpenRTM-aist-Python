@@ -262,6 +262,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
         self._rtcout.RTC_DEBUG("available subscription_type: %s", pubs)
         self.addProperty("dataport.subscription_type", pubs)
         self.addProperty("dataport.io_mode", pubs)
+        self._value = None
 
         self._properties = OpenRTM_aist.Properties()
         self._name = name
@@ -272,26 +273,6 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
         self._connector_mutex = threading.RLock()
 
         self._properties.setProperty("data_type", data_type)
-
-        factory = OpenRTM_aist.SerializerFactory.instance()
-        serializer_list = factory.getIdentifiers()
-        ds = data_type.split(":")
-        marshaling_types = []
-        if len(ds) == 3:
-            data_name = ds[1]
-            for s in serializer_list:
-                s = s.lstrip()
-                v = s.split(":")
-                if len(v) == 3:
-                    if v[2] == data_name:
-                        marshaling_types.append(s)
-                else:
-                    marshaling_types.append(s)
-
-        marshaling_types = OpenRTM_aist.flatten(marshaling_types)
-        marshaling_types = marshaling_types.lstrip()
-        self._rtcout.RTC_DEBUG("available marshaling_types: %s", marshaling_types)
-        self.addProperty("dataport.marshaling_types", marshaling_types)
 
         self._listeners = OpenRTM_aist.ConnectorListeners()
         return
@@ -994,6 +975,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
             if not connector:
                 self._rtcout.RTC_ERROR("PullConnector creation failed.")
                 return RTC.RTC_ERROR
+            connector.setDataType(self._value)
 
             # connector set
             provider.setConnector(connector)
@@ -1014,6 +996,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
             if not connector:
                 self._rtcout.RTC_ERROR("DuplexConnector creation failed.")
                 return RTC.RTC_ERROR
+            connector.setDataType(self._value)
 
             # connector set
             provider.setConnector(connector)
@@ -1079,6 +1062,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
             connector = self.createConnector(cprof, prop, consumer_=consumer)
             if not connector:
                 return RTC.RTC_ERROR
+            connector.setDataType(self._value)
 
             ret = connector.setConnectorInfo(profile)
 
@@ -1117,6 +1101,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
             if not connector:
                 return RTC.RTC_ERROR
 
+            connector.setDataType(self._value)
             connector.setConsumer(consumer)
             ret = connector.setConnectorInfo(profile)
 

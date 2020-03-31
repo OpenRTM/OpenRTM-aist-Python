@@ -355,11 +355,12 @@ class ConnectorDataListenerT(ConnectorDataListener):
                 "inport.marshaling_type", marshaling_type)
         marshaling_type = marshaling_type.strip()
 
-        serializer = OpenRTM_aist.SerializerFactory.instance().createObject(marshaling_type)
+        serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(marshaling_type, data)
+        if serializer is not None:
+            serializer.isLittleEndian(endian)
+            ret, data = serializer.deserialize(cdrdata, data)
 
-        serializer.isLittleEndian(endian)
-        ret, data = serializer.deserialize(cdrdata, data)
-
+            return data
         return data
 
 
@@ -805,7 +806,7 @@ class ConnectorDataListenerHolder:
                 "inport.marshaling_type", marshaling_type)
         marshaling_type = marshaling_type.strip()
 
-        serializer = OpenRTM_aist.SerializerFactory.instance().createObject(marshaling_type)
+        serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(marshaling_type, self._data)
 
         data = self._data
         if serializer is not None:

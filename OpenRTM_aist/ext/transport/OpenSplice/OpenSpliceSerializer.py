@@ -195,7 +195,8 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
     # @endif
 
     def serialize(self, data):
-        info = OpenSpliceMessageInfo.OpenSpliceMessageInfoList.instance().getInfo(data._NP_RepositoryId)
+        info = OpenSpliceMessageInfo.OpenSpliceMessageInfoList.instance().getInfo(
+            data._NP_RepositoryId)
         if info:
             datatype = info.datatype()
             idlFile = info.idlFile()
@@ -263,8 +264,8 @@ def addDataType(datatype, idlfile):
     data_name = name.split(":")[1]
     data_name = data_name.replace("/", "::")
     OpenSpliceMessageInfo.OpenSpliceMessageInfoList.instance().addInfo(name,
-                                                            OpenSpliceMessageInfo.OpenSpliceMessageInfo(
-                                                            data_name, idlfile))
+                                                                       OpenSpliceMessageInfo.OpenSpliceMessageInfo(
+                                                                           data_name, idlfile))
 
 
 ##
@@ -279,8 +280,8 @@ def addDataType(datatype, idlfile):
 # @endif
 #
 def OpenSpliceSerializerInit():
-    OpenRTM_aist.SerializerFactory.instance().addFactory("opensplice",
-                                                         OpenSpliceSerializer)
+    OpenRTM_aist.SerializerFactories.instance().addSerializerGlobal("opensplice",
+                                                                    OpenSpliceSerializer)
 
     OpenRTM_dir = OpenRTM_aist.__path__[0]
 
@@ -340,6 +341,7 @@ def OpenSpliceSerializerInit():
     addDataType(RTC.TimedCovariance3D, extendeddatatypes)
     addDataType(RTC.TimedSpeedHeading3D, extendeddatatypes)
     addDataType(RTC.TimedOAP, extendeddatatypes)
+    addDataType(RTC.TimedQuaternion, extendeddatatypes)
     addDataType(RTC.ActArrayActuatorPos, interfacedataTypes)
     addDataType(RTC.ActArrayActuatorSpeed, interfacedataTypes)
     addDataType(RTC.ActArrayActuatorCurrent, interfacedataTypes)

@@ -145,8 +145,7 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
             "marshaling_type", "cdr")
         self._marshaling_type = self._marshaling_type.strip()
 
-        self._serializer = OpenRTM_aist.SerializerFactory.instance(
-        ).createObject(self._marshaling_type)
+        self._serializer = None
 
         return
 
@@ -411,3 +410,8 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     def unsubscribeInterface(self, prop):
         if self._consumer:
             self._consumer.unsubscribeInterface(prop)
+
+
+    def setDataType(self, data):
+        OpenRTM_aist.InPortConnector.setDataType(self, data)
+        self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(self._marshaling_type, data)
