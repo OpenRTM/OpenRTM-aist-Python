@@ -154,18 +154,20 @@ def ros2_basic_data(message_type):
         def serialize(self, data):
             msg = message_type()
             field_type = msg.get_fields_and_field_types()["data"]
-            if field_type == "int8" or field_type == "int16" or field_type == "int32" or field_type == "int64":
+            if field_type == "int" or field_type == "int8" or field_type == "int16" or field_type == "int32" or field_type == "int64":
                 msg.data = int(data.data)
-            elif field_type == "uint8" or field_type == "uint16" or field_type == "uint32" or field_type == "uint64":
+            elif field_type == "uint" or field_type == "uint8" or field_type == "uint16" or field_type == "uint32" or field_type == "uint64":
                 msg.data = int(data.data)
-            elif field_type == "float32" or field_type == "float64":
+            elif field_type == "float" or field_type == "double" or field_type == "float32" or field_type == "float64":
                 msg.data = float(data.data)
-            elif field_type == "int8[]" or field_type == "int16[]" or field_type == "int32[]" or field_type == "int64[]":
+            elif field_type == "sequence<int8>" or field_type == "sequence<int16>" or field_type == "sequence<int32>" or field_type == "sequence<int64>" or field_type == "int8[]" or field_type == "int16[]" or field_type == "int32[]" or field_type == "int64[]":
                 msg.data = list(map(int, data.data))
-            elif field_type == "uint8[]" or field_type == "uint16[]" or field_type == "uint32[]" or field_type == "uint64[]":
+            elif field_type == "sequence<uint8>" or field_type == "sequence<uint16>" or field_type == "sequence<uint32>" or field_type == "sequence<uint64>" or field_type == "uint8[]" or field_type == "uint16[]" or field_type == "uint32[]" or field_type == "uint64[]":
                 msg.data = list(map(int, data.data))
-            elif field_type == "float32[]" or field_type == "float64[]":
+            elif field_type == "sequence<float>" or field_type == "sequence<double>" or field_type == "float32[]" or field_type == "float64[]":
                 msg.data = list(map(float, data.data))
+            elif field_type == "string":
+                msg.data = str(data.data)
             else:
                 msg.data = data.data
 
@@ -201,6 +203,10 @@ def ros2_basic_data(message_type):
                     data_type.data = list(bdata.data)
                 elif isinstance(data_type.data, tuple):
                     data_type.data = tuple(bdata.data)
+                elif isinstance(data_type.data, int):
+                    data_type.data = int(bdata.data)
+                elif isinstance(data_type.data, float):
+                    data_type.data = float(bdata.data)
                 else:
                     data_type.data = bdata.data
                 return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, data_type
