@@ -21,6 +21,7 @@ import OpenRTM_aist
 import omniORB
 
 import struct
+import array
 import ROS2MessageInfo
 import RTC
 import rclpy
@@ -196,9 +197,15 @@ def ros2_basic_data(message_type):
         def deserialize(self, bdata, data_type):
             try:
                 if isinstance(data_type.data, bytes):
-                    data_type.data = bytes(bdata.data)
+                    if isinstance(bdata.data, array.array):
+                        data_type.data = bdata.data.tobytes()
+                    else:
+                        data_type.data = bytes(bdata.data)
                 elif isinstance(data_type.data, str):
-                    data_type.data = str(bdata.data)
+                    if isinstance(bdata.data, array.array):
+                        data_type.data = bdata.data.tostring()
+                    else:
+                        data_type.data = str(bdata.data)
                 elif isinstance(data_type.data, list):
                     data_type.data = list(bdata.data)
                 elif isinstance(data_type.data, tuple):
@@ -822,7 +829,7 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
             data_type.height = bdata.height
             data_type.width = bdata.width
             data_type.format = bdata.encoding
-            data_type.pixels = bdata.data
+            data_type.pixels = bdata.data.tobytes()
             return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, data_type
         except BaseException:
             return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, data_type
