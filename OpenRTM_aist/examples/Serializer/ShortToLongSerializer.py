@@ -9,18 +9,18 @@ import RTC
 import OpenRTM_aist
 
 
-class ShortToDoubleSerializer(OpenRTM_aist.CORBA_CdrMemoryStream):
+class ShortToLongSerializer(OpenRTM_aist.CORBA_CdrMemoryStream):
     def __init__(self):
         OpenRTM_aist.CORBA_CdrMemoryStream.__init__(self)
         return
 
     def serialize(self, data):
-        tmp_data = RTC.TimedDouble(data.tm, float(data.data))
+        tmp_data = RTC.TimedLong(data.tm, data.data)
         ret, cdr = OpenRTM_aist.CORBA_CdrMemoryStream.serialize(
             self, tmp_data)
         return ret, cdr
 
 
-def ShortToDoubleSerializerInit(mgr):
+def ShortToLongSerializerInit(mgr):
     OpenRTM_aist.SerializerFactories.instance().addSerializer(
-        "cdr:RTC/TimedDouble:RTC/TimedShort", ShortToDoubleSerializer, RTC.TimedShort)  # addSerializer関数の第1引数で登録名を設定。独自シリアライザを利用するときはこの名前を使用する。
+        "cdr:RTC/TimedLong:RTC/TimedShort", ShortToLongSerializer, RTC.TimedShort)  # addSerializer関数の第1引数で登録名を設定。独自シリアライザを利用するときはこの名前を使用する。
