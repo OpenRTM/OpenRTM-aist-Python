@@ -2426,11 +2426,10 @@ class PortBase(RTC__POA.PortService):
 
         enabledSerializerTypes = [s.strip()
                                   for s in serializertypes.split(",")]
-        if enabledSerializerTypes and enabledSerializerTypes[0]:
-            if marshaling_type not in enabledSerializerTypes:
-                self._rtcout.RTC_ERROR(
-                    marshaling_type+" is illegal marshaling type.")
-                return False
+        if marshaling_type not in enabledSerializerTypes:
+            self._rtcout.RTC_ERROR(
+                marshaling_type+" is illegal marshaling type.")
+            return False
         return True
 
     # ============================================================
