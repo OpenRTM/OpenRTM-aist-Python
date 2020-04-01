@@ -14,6 +14,12 @@ class LongToDoubleDeserializer(OpenRTM_aist.CORBA_CdrMemoryStream):
         OpenRTM_aist.CORBA_CdrMemoryStream.__init__(self)
         return
 
+    def serialize(self, data):
+        tmp_data = RTC.TimedLong(data.tm, data.data)
+        ret, cdr = OpenRTM_aist.CORBA_CdrMemoryStream.serialize(
+            self, tmp_data)
+        return ret, cdr
+
     def deserialize(self, cdr, data_type):
         ret, tmp_data = OpenRTM_aist.CORBA_CdrMemoryStream.deserialize(
             self, cdr, RTC.TimedLong)

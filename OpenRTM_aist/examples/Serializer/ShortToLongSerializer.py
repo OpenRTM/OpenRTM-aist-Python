@@ -20,6 +20,12 @@ class ShortToLongSerializer(OpenRTM_aist.CORBA_CdrMemoryStream):
             self, tmp_data)
         return ret, cdr
 
+    def deserialize(self, cdr, data_type):
+        ret, tmp_data = OpenRTM_aist.CORBA_CdrMemoryStream.deserialize(
+            self, cdr, RTC.TimedLong)
+        data = RTC.TimedShort(tmp_data.tm, int(tmp_data.data))
+        return ret, data
+
 
 def ShortToLongSerializerInit(mgr):
     OpenRTM_aist.SerializerFactories.instance().addSerializer(
