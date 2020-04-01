@@ -951,6 +951,9 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     """
         prop.mergeProperties(conn_prop.getNode("dataport.outport"))
 
+        if not self.isExistingMarshalingType(prop):
+            return RTC.RTC_ERROR
+
         #
         # ここで, ConnectorProfile からの properties がマージされたため、
         # prop["dataflow_type"]: データフロータイプ
@@ -1035,6 +1038,9 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     #          << cprof[dataport.outport.buffer.write.full_policy]
     """
         prop.mergeProperties(conn_prop.getNode("dataport.outport"))
+
+        if not self.isExistingMarshalingType(prop):
+            return RTC.RTC_ERROR
 
         #
         # ここで, ConnectorProfile からの properties がマージされたため、
