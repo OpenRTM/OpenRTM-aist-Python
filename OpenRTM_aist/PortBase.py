@@ -2418,6 +2418,7 @@ class PortBase(RTC__POA.PortService):
     def isExistingMarshalingType(self, con_prop):
         marshaling_type = con_prop.getProperty(
             "marshaling_type", "cdr")
+        marshaling_type = marshaling_type.strip()
         prop = OpenRTM_aist.Properties()
         OpenRTM_aist.NVUtil.copyToProperties(prop, self._profile.properties)
 
