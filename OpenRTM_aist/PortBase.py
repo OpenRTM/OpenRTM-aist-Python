@@ -2398,6 +2398,40 @@ class PortBase(RTC__POA.PortService):
             self._portconnListeners.notifyRet(type, portname, profile, ret)
         return
 
+    ##
+    # @if jp
+    #
+    # @brief 指定のシリアライザが利用可能かを判定する
+    # @param self
+    # @param con_prop プロパティ
+    # @return True：利用可能、False：利用不可
+    #
+    # @else
+    #
+    # @brief
+    # @param self
+    # @param con_prop
+    # @return
+    #
+    # @endif
+    # void updateConnectors()
+    def isExistingMarshalingType(self, con_prop):
+        marshaling_type = con_prop.getProperty(
+            "marshaling_type", "cdr")
+        marshaling_type = marshaling_type.strip()
+        prop = OpenRTM_aist.Properties()
+        OpenRTM_aist.NVUtil.copyToProperties(prop, self._profile.properties)
+
+        serializertypes = prop.getProperty("dataport.marshaling_types")
+
+        enabledSerializerTypes = [s.strip()
+                                  for s in serializertypes.split(",")]
+        if marshaling_type not in enabledSerializerTypes:
+            self._rtcout.RTC_ERROR(
+                marshaling_type+" is illegal marshaling type.")
+            return False
+        return True
+
     # ============================================================
     # Functor
     # ============================================================

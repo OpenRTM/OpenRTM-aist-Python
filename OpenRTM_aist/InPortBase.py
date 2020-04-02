@@ -898,6 +898,9 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
         # marge ConnectorProfile for buffer property.
         prop.mergeProperties(conn_prop.getNode("dataport.inport"))
 
+        if not self.isExistingMarshalingType(prop):
+            return RTC.RTC_ERROR
+
         #
         # ここで, ConnectorProfile からの properties がマージされたため、
         # prop["dataflow_type"]: データフロータイプ
@@ -1004,6 +1007,9 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
                              )  # marge ConnectorProfile
         # marge ConnectorProfile for buffer property.
         prop.mergeProperties(conn_prop.getNode("dataport.inport"))
+
+        if not self.isExistingMarshalingType(prop):
+            return RTC.RTC_ERROR
 
         #
         # ここで, ConnectorProfile からの properties がマージされたため、
