@@ -15,10 +15,10 @@
 #     All rights reserved.
 
 import sys
-import rtcd
+import rtcd_python
 
 def main():
-  rtcd.main()
+  rtcd_python.main()
   return
 
 if __name__ == "__main__":
