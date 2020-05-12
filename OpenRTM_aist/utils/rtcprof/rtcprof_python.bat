@@ -5,4 +5,4 @@ rem     Intelligent Systems Research Institute,
 rem     National Institute of
 rem         Advanced Industrial Science and Technology (AIST), Japan
 rem     All rights reserved.
-%~dp0\python.exe %~dp0\rtcprof.py %*
+%~dp0\python.exe %~dp0\rtcprof_python.py %*
