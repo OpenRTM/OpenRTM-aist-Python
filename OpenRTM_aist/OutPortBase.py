@@ -408,7 +408,7 @@ class OutPortBase(OpenRTM_aist.PortBase,OpenRTM_aist.DataPortStatus):
       
         
     if OpenRTM_aist.NVUtil.find_index(connector_profile.properties,
-                                      "dataport.serializer.cdr.endian") is -1:
+                                      "dataport.serializer.cdr.endian") == -1:
       self._rtcout.RTC_TRACE("ConnectorProfile dataport.serializer.cdr.endian set.")
       connector_profile.properties.append(OpenRTM_aist.NVUtil.newNV("dataport.serializer.cdr.endian","little,big"))
 

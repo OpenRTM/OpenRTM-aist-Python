@@ -1712,7 +1712,7 @@ class ConfigAdmin:
       return
 
     def __call__(self, conf):
-      if conf is None or conf is 0:
+      if conf is None or conf == 0:
         return False
 
       return self._name == conf.name

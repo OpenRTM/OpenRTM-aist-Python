@@ -288,7 +288,7 @@ class ConnectorDataListenerT(ConnectorDataListener):
   #                         const cdrMemoryStream& cdrdata)
   def __call__(self, info, cdrdata, data):
     endian = info.properties.getProperty("serializer.cdr.endian","little")
-    if endian is not "little" and endian is not None:
+    if endian != "little" and endian is not None:
       endian = OpenRTM_aist.split(endian, ",") # Maybe endian is ["little","big"]
       endian = OpenRTM_aist.normalize(endian) # Maybe self._endian is "little" or "big"
 
