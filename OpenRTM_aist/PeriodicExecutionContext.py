@@ -153,7 +153,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
       t2_ = OpenRTM_aist.Time()
 
-      if not self._nowait and exectime_.toDouble() > 0.0 and sleeptime_.toDouble() > 0.0:
+      if not self._nowait and exectime_.toDouble() >= 0.0 and sleeptime_.toDouble() > 0.0:
         if count_ > 1000:
           self._rtcout.RTC_PARANOID("sleeping...")
         time.sleep(sleeptime_.toDouble())
