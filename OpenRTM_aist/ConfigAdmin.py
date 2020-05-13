@@ -1547,7 +1547,8 @@ class ConfigAdmin:
     # void onUpdate(const char* config_set);
 
     def onUpdate(self, config_set):
-        self._listeners.notifyConfigurationSetName(OpenRTM_aist.ConfigurationSetNameListenerType.ON_UPDATE_CONFIG_SET, config_set)
+        self._listeners.notifyConfigurationSetName(
+            OpenRTM_aist.ConfigurationSetNameListenerType.ON_UPDATE_CONFIG_SET, config_set)
         return
 
     ##
@@ -1578,7 +1579,7 @@ class ConfigAdmin:
     def onUpdateParam(self, config_param, config_value):
         self._changedParam.append(config_param)
         self._listeners.notifyConfigParam(OpenRTM_aist.ConfigurationParamListenerType.ON_UPDATE_CONFIG_PARAM, config_param,
-                                                                                                                config_value)
+                                          config_value)
         return
 
     ##
@@ -1605,7 +1606,8 @@ class ConfigAdmin:
     # void onSetConfigurationSet(const coil::Properties& config_set);
 
     def onSetConfigurationSet(self, config_set):
-        self._listeners.notifyConfigurationSet(OpenRTM_aist.ConfigurationSetListenerType.ON_SET_CONFIG_SET, config_set)
+        self._listeners.notifyConfigurationSet(
+            OpenRTM_aist.ConfigurationSetListenerType.ON_SET_CONFIG_SET, config_set)
         return
 
     ##
@@ -1632,7 +1634,8 @@ class ConfigAdmin:
     # void onAddConfigurationSet(const coil::Properties& config_set);
 
     def onAddConfigurationSet(self, config_set):
-        self._listeners.notifyConfigurationSet(OpenRTM_aist.ConfigurationSetListenerType.ON_ADD_CONFIG_SET, config_set)
+        self._listeners.notifyConfigurationSet(
+            OpenRTM_aist.ConfigurationSetListenerType.ON_ADD_CONFIG_SET, config_set)
         return
 
     ##
@@ -1659,7 +1662,8 @@ class ConfigAdmin:
     # void onRemoveConfigurationSet(const char* config_id);
 
     def onRemoveConfigurationSet(self, config_id):
-        self._listeners.notifyConfigurationSetName(OpenRTM_aist.ConfigurationSetNameListenerType.ON_REMOVE_CONFIG_SET, config_id)
+        self._listeners.notifyConfigurationSetName(
+            OpenRTM_aist.ConfigurationSetNameListenerType.ON_REMOVE_CONFIG_SET, config_id)
         return
 
     ##
@@ -1686,7 +1690,8 @@ class ConfigAdmin:
     # void onActivateSet(const char* config_id);
 
     def onActivateSet(self, config_id):
-        self._listeners.notifyConfigurationSetName(OpenRTM_aist.ConfigurationSetNameListenerType.ON_ACTIVATE_CONFIG_SET, config_id)
+        self._listeners.notifyConfigurationSetName(
+            OpenRTM_aist.ConfigurationSetNameListenerType.ON_ACTIVATE_CONFIG_SET, config_id)
         return
 
     class find_conf:
@@ -1695,7 +1700,7 @@ class ConfigAdmin:
             return
 
         def __call__(self, conf):
-            if conf is None or conf is 0:
+            if conf is None:
                 return False
 
             return self._name == conf.name
