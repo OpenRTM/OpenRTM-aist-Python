@@ -234,7 +234,7 @@ baseidl_path  = os.path.normpath(current_dir + "/" + baseidl_dir)
 #
 pkg_scripts_unix  = ['OpenRTM_aist/utils/rtcd/rtcd_python3',
                      'OpenRTM_aist/utils/rtcprof/rtcprof_python3']
-pkg_scripts_win32 = ['OpenRTM_aist/utils/rtcd/rtcd.py',
+pkg_scripts_win32 = ['OpenRTM_aist/utils/rtcd/rtcd_python.py',
 #                     'OpenRTM_aist/utils/rtcd/rtcd_python.exe',
                      'OpenRTM_aist/utils/rtcd/rtcd_python.bat',
                      'OpenRTM_aist/utils/rtcprof/rtcprof_python.py',
@@ -624,11 +624,6 @@ class build_py(_build_py):
   """
   description = "Copying pure python modules into build directory."
   def run(self):
-    # Preparering rtcprof_python.py for Windows
-    if os_is() == "win32":
-      rtcprof_dir = os.path.join("OpenRTM_aist", "utils", "rtcprof/")
-      self.copy_file(os.path.join(rtcprof_dir, "rtcprof.py"),
-                     os.path.join(rtcprof_dir, "rtcprof_python.py"))
     _build_py.run(self)
     # copying OpenRTM-aist.pth file
     self.copy_file(os.path.join(".", "OpenRTM-aist.pth"), self.build_lib,
