@@ -30,9 +30,9 @@ DEFAULT_PERIOD = 0.000001
 ##
 # @if jp
 # @class PeriodicExecutionContext
-# @brief PeriodicExecutionContext ���饹
+# @brief PeriodicExecutionContext クラス
 #
-# Periodic Sampled Data Processing(�����¹���)ExecutionContext���饹��
+# Periodic Sampled Data Processing(周期実行用)ExecutionContextクラス。
 #
 # @since 0.4.0
 #
@@ -48,10 +48,10 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
-  # ���󥹥ȥ饯��
-  # ���ꤵ�줿�ͤ�ץ��ե���������ꤹ�롣
+  # コンストラクタ
+  # 設定された値をプロファイルに設定する。
   #
   # @else
   # @brief Constructor
@@ -105,10 +105,10 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ����ݡ��ͥ�ȤΥ����ƥ��ӥƥ�����åɴؿ�
+  # @brief コンポーネントのアクティビティスレッド関数
   #
-  # ����ݡ��ͥ�Ȥ����������ƥ��ӥƥ�����åɤμ¹Դؿ���
-  # ACE_Task �����ӥ����饹�᥽�åɤΥ����С��饤�ɡ�
+  # コンポーネントの内部アクティビティスレッドの実行関数。
+  # ACE_Task サービスクラスメソッドのオーバーライド。
   #
   # @else
   #
@@ -143,22 +143,20 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
       t1_ = OpenRTM_aist.Time()
 
       period_ = self.getPeriod()
+      exectime_ = (t1_ - t0_).getTime()
+      sleeptime_ = period_ - exectime_
 
       if count_ > 1000:
-        exctm_ = (t1_ - t0_).getTime().toDouble()
-        slptm_ = period_.toDouble() - exctm_
         self._rtcout.RTC_PARANOID("Period:    %f [s]", period_.toDouble())
-        self._rtcout.RTC_PARANOID("Execution: %f [s]", exctm_)
-        self._rtcout.RTC_PARANOID("Sleep:     %f [s]", slptm_)
-
+        self._rtcout.RTC_PARANOID("Execution: %f [s]", exectime_.toDouble())
+        self._rtcout.RTC_PARANOID("Sleep:     %f [s]", sleeptime_.toDouble())
 
       t2_ = OpenRTM_aist.Time()
 
-      if not self._nowait and period_.toDouble() > ((t1_ - t0_).getTime().toDouble()):
+      if not self._nowait and exectime_.toDouble() >= 0.0 and sleeptime_.toDouble() > 0.0:
         if count_ > 1000:
           self._rtcout.RTC_PARANOID("sleeping...")
-        slptm_ = period_.toDouble() - (t1_ - t0_).getTime().toDouble()
-        time.sleep(slptm_)
+        time.sleep(sleeptime_.toDouble())
 
       if count_ > 1000:
         t3_ = OpenRTM_aist.Time()
@@ -172,7 +170,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext�ѥ����ƥ��ӥƥ�����åɤ���������
+  # @brief ExecutionContext用アクティビティスレッドを生成する
   # @else
   # @brief Generate internal activity thread for ExecutionContext
   # @endif
@@ -186,16 +184,16 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext �ѤΥ���åɼ¹Դؿ�
+  # @brief ExecutionContext 用のスレッド実行関数
   #
-  # ExecutionContext �ѤΥ���åɽ�λ���˸ƤФ�롣
-  # ����ݡ��ͥ�ȥ��֥������Ȥ��󥢥��ƥ��ֲ����ޥ͡�����ؤ����Τ�Ԥ���
-  # ����� ACE_Task �����ӥ����饹�᥽�åɤΥ����С��饤�ɡ�
+  # ExecutionContext 用のスレッド終了時に呼ばれる。
+  # コンポーネントオブジェクトの非アクティブ化、マネージャへの通知を行う。
+  # これは ACE_Task サービスクラスメソッドのオーバーライド。
   #
   # @param self
-  # @param flags ��λ�����ե饰
+  # @param flags 終了処理フラグ
   #
-  # @return ��λ�������
+  # @return 終了処理結果
   #
   # @else
   #
@@ -213,16 +211,16 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext �¹Ծ��ֳ�ǧ�ؿ�
+  # @brief ExecutionContext 実行状態確認関数
   #
-  # �������� ExecutionContext �� Runnning ���֤ξ��� true ���֤���
-  # Executioncontext �� Running �δ֡����� Executioncontext �˻��ä��Ƥ���
-  # ���ƤΥ����ƥ���RT����ݡ��ͥ�Ȥ��� ExecutionContext �μ¹Լ���˱�����
-  # �¹Ԥ���롣
+  # この操作は ExecutionContext が Runnning 状態の場合に true を返す。
+  # Executioncontext が Running の間、当該 Executioncontext に参加している
+  # 全てのアクティブRTコンポーネントが、 ExecutionContext の実行種類に応じて
+  # 実行される。
   #
   # @param self
   #
-  # @return ���ֳ�ǧ�ؿ�(ư����:true�������:false)
+  # @return 状態確認関数(動作中:true、停止中:false)
   #
   # @else
   #
@@ -230,7 +228,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
   #
   # This operation shall return true if the context is in the Running state.
   # While the context is Running, all Active RTCs participating
-  # in the context shall be executed according to the context��s execution
+  # in the context shall be executed according to the context’s execution
   # kind.
   #
   # @endif
@@ -241,18 +239,18 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext �μ¹Ԥ򳫻�
+  # @brief ExecutionContext の実行を開始
   #
-  # ExecutionContext �μ¹Ծ��֤� Runnning �Ȥ��뤿��Υꥯ�����Ȥ�ȯ�Ԥ��롣
-  # ExecutionContext �ξ��֤����ܤ���� ComponentAction::on_startup ��
-  # �ƤӽФ���롣
-  # ���ä��Ƥ���RT����ݡ��ͥ�Ȥ�������������ޤ� ExecutionContext �򳫻�
-  # ���뤳�ȤϤǤ��ʤ���
-  # ExecutionContext ��ʣ���󳫻�/��ߤ򷫤��֤����Ȥ��Ǥ��롣
+  # ExecutionContext の実行状態を Runnning とするためのリクエストを発行する。
+  # ExecutionContext の状態が遷移すると ComponentAction::on_startup が
+  # 呼び出される。
+  # 参加しているRTコンポーネントが、初期化されるまで ExecutionContext を開始
+  # することはできない。
+  # ExecutionContext は複数回開始/停止を繰り返すことができる。
   #
   # @param self
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -272,17 +270,17 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext �μ¹Ԥ����
+  # @brief ExecutionContext の実行を停止
   #
-  # ExecutionContext �ξ��֤� Stopped �Ȥ��뤿��Υꥯ�����Ȥ�ȯ�Ԥ��롣
-  # ���ܤ�ȯ���������ϡ� ComponentAction::on_shutdown ���ƤӽФ���롣
-  # ���ä��Ƥ���RT����ݡ��ͥ�Ȥ���λ�������� ExecutionContext ����ߤ���
-  # ɬ�פ����롣
-  # ExecutionContext ��ʣ���󳫻�/��ߤ򷫤��֤����Ȥ��Ǥ��롣
+  # ExecutionContext の状態を Stopped とするためのリクエストを発行する。
+  # 遷移が発生した場合は、 ComponentAction::on_shutdown が呼び出される。
+  # 参加しているRTコンポーネントが終了する前に ExecutionContext を停止する
+  # 必要がある。
+  # ExecutionContext は複数回開始/停止を繰り返すことができる。
   #
   # @param self
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -302,13 +300,13 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext �μ¹Լ���(Hz)���������
+  # @brief ExecutionContext の実行周期(Hz)を取得する
   #
-  # Active ���֤ˤ�RT����ݡ��ͥ�Ȥ��¹Ԥ�������(ñ��:Hz)��������롣
+  # Active 状態にてRTコンポーネントが実行される周期(単位:Hz)を取得する。
   #
   # @param self
   #
-  # @return ��������(ñ��:Hz)
+  # @return 処理周期(単位:Hz)
   #
   # @else
   #
@@ -324,22 +322,22 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContext �μ¹Լ���(Hz)�����ꤹ��
+  # @brief ExecutionContext の実行周期(Hz)を設定する
   #
-  # Active ���֤ˤ�RT����ݡ��ͥ�Ȥ��¹Ԥ�������(ñ��:Hz)�����ꤹ�롣
-  # �¹Լ������ѹ��ϡ� DataFlowComponentAction �� on_rate_changed �ˤ�ä�
-  # ��RT����ݡ��ͥ�Ȥ���ã����롣
+  # Active 状態にてRTコンポーネントが実行される周期(単位:Hz)を設定する。
+  # 実行周期の変更は、 DataFlowComponentAction の on_rate_changed によって
+  # 各RTコンポーネントに伝達される。
   #
   # @param self
-  # @param rate ��������(ñ��:Hz)
+  # @param rate 処理周期(単位:Hz)
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
   # @brief Set ExecutionRate
   #
-  # This operation shall set the rate (in hertz) at which this context��s 
+  # This operation shall set the rate (in hertz) at which this context’s 
   # Active participating RTCs are being called.
   # If the execution kind of the context is PERIODIC, a rate change shall
   # result in the invocation of on_rate_changed on any RTCs realizing
@@ -353,26 +351,26 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ򥢥��ƥ��ֲ�����
+  # @brief RTコンポーネントをアクティブ化する
   #
-  # Inactive ���֤ˤ���RT����ݡ��ͥ�Ȥ�Active �����ܤ����������ƥ��ֲ����롣
-  # �������ƤФ줿��̡� on_activate ���ƤӽФ���롣
-  # ���ꤷ��RT����ݡ��ͥ�Ȥ����üԥꥹ�Ȥ˴ޤޤ�ʤ����ϡ� BAD_PARAMETER 
-  # ���֤���롣
-  # ���ꤷ��RT����ݡ��ͥ�Ȥξ��֤� Inactive �ʳ��ξ��ϡ�
-  #  PRECONDITION_NOT_MET ���֤���롣
+  # Inactive 状態にあるRTコンポーネントをActive に遷移させ、アクティブ化する。
+  # この操作が呼ばれた結果、 on_activate が呼び出される。
+  # 指定したRTコンポーネントが参加者リストに含まれない場合は、 BAD_PARAMETER 
+  # が返される。
+  # 指定したRTコンポーネントの状態が Inactive 以外の場合は、
+  #  PRECONDITION_NOT_MET が返される。
   #
   # @param self
-  # @param comp �����ƥ��ֲ��о�RT����ݡ��ͥ��
+  # @param comp アクティブ化対象RTコンポーネント
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
   # @brief Activate a RT-component
   #
   # The given participant RTC is Inactive and is therefore not being invoked
-  # according to the execution context��s execution kind. This operation
+  # according to the execution context’s execution kind. This operation
   # shall cause the RTC to transition to the Active state such that it may
   # subsequently be invoked in this execution context.
   # The callback on_activate shall be called as a result of calling this
@@ -386,20 +384,20 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ��󥢥��ƥ��ֲ�����
+  # @brief RTコンポーネントを非アクティブ化する
   #
-  # Inactive ���֤ˤ���RT����ݡ��ͥ�Ȥ��󥢥��ƥ��ֲ�����
-  # Inactive �����ܤ����롣
-  # �������ƤФ줿��̡� on_deactivate ���ƤӽФ���롣
-  # ���ꤷ��RT����ݡ��ͥ�Ȥ����üԥꥹ�Ȥ˴ޤޤ�ʤ����ϡ� BAD_PARAMETER 
-  # ���֤���롣
-  # ���ꤷ��RT����ݡ��ͥ�Ȥξ��֤� Active �ʳ��ξ��ϡ�
-  # PRECONDITION_NOT_MET ���֤���롣
+  # Inactive 状態にあるRTコンポーネントを非アクティブ化し、
+  # Inactive に遷移させる。
+  # この操作が呼ばれた結果、 on_deactivate が呼び出される。
+  # 指定したRTコンポーネントが参加者リストに含まれない場合は、 BAD_PARAMETER 
+  # が返される。
+  # 指定したRTコンポーネントの状態が Active 以外の場合は、
+  # PRECONDITION_NOT_MET が返される。
   #
   # @param self
-  # @param comp �󥢥��ƥ��ֲ��о�RT����ݡ��ͥ��
+  # @param comp 非アクティブ化対象RTコンポーネント
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -419,19 +417,19 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ�ꥻ�åȤ���
+  # @brief RTコンポーネントをリセットする
   #
-  # Error ���֤�RT����ݡ��ͥ�Ȥ��������ߤ롣
-  # �������ƤФ줿��̡� on_reset ���ƤӽФ���롣
-  # ���ꤷ��RT����ݡ��ͥ�Ȥ����üԥꥹ�Ȥ˴ޤޤ�ʤ����ϡ� BAD_PARAMETER
-  # ���֤���롣
-  # ���ꤷ��RT����ݡ��ͥ�Ȥξ��֤� Error �ʳ��ξ��ϡ� PRECONDITION_NOT_MET
-  # ���֤���롣
+  # Error 状態のRTコンポーネントの復帰を試みる。
+  # この操作が呼ばれた結果、 on_reset が呼び出される。
+  # 指定したRTコンポーネントが参加者リストに含まれない場合は、 BAD_PARAMETER
+  # が返される。
+  # 指定したRTコンポーネントの状態が Error 以外の場合は、 PRECONDITION_NOT_MET
+  # が返される。
   #
   # @param self
-  # @param comp �ꥻ�å��о�RT����ݡ��ͥ��
+  # @param comp リセット対象RTコンポーネント
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -451,16 +449,16 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥξ��֤��������
+  # @brief RTコンポーネントの状態を取得する
   #
-  # ���ꤷ��RT����ݡ��ͥ�Ȥξ���(LifeCycleState)��������롣
-  # ���ꤷ��RT����ݡ��ͥ�Ȥ����üԥꥹ�Ȥ˴ޤޤ�ʤ����ϡ� CREATED_STATE 
-  # ���֤���롣
+  # 指定したRTコンポーネントの状態(LifeCycleState)を取得する。
+  # 指定したRTコンポーネントが参加者リストに含まれない場合は、 CREATED_STATE 
+  # が返される。
   #
   # @param self
-  # @param comp ���ּ����о�RT����ݡ��ͥ��
+  # @param comp 状態取得対象RTコンポーネント
   #
-  # @return ���ߤξ���(LifeCycleState)
+  # @return 現在の状態(LifeCycleState)
   #
   # @else
   #
@@ -476,9 +474,9 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionKind ���������
+  # @brief ExecutionKind を取得する
   #
-  # �� ExecutionContext �� ExecutionKind ���������
+  # 本 ExecutionContext の ExecutionKind を取得する
   #
   # @param self
   #
@@ -497,19 +495,19 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ��ɲä���
+  # @brief RTコンポーネントを追加する
   #
-  # ���ꤷ��RT����ݡ��ͥ�Ȥ򻲲üԥꥹ�Ȥ��ɲä��롣
-  # �ɲä��줿RT����ݡ��ͥ�Ȥ� attach_context ���ƤФ졢Inactive ���֤�����
-  # ���롣
-  # ���ꤵ�줿RT����ݡ��ͥ�Ȥ�null�ξ��ϡ�BAD_PARAMETER ���֤���롣
-  # ���ꤵ�줿RT����ݡ��ͥ�Ȥ� DataFlowComponent �ʳ��ξ��ϡ�
-  # BAD_PARAMETER ���֤���롣
+  # 指定したRTコンポーネントを参加者リストに追加する。
+  # 追加されたRTコンポーネントは attach_context が呼ばれ、Inactive 状態に遷移
+  # する。
+  # 指定されたRTコンポーネントがnullの場合は、BAD_PARAMETER が返される。
+  # 指定されたRTコンポーネントが DataFlowComponent 以外の場合は、
+  # BAD_PARAMETER が返される。
   #
   # @param self
-  # @param comp �ɲ��о�RT����ݡ��ͥ��
+  # @param comp 追加対象RTコンポーネント
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -527,17 +525,17 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief RT����ݡ��ͥ�Ȥ򻲲üԥꥹ�Ȥ���������
+  # @brief RTコンポーネントを参加者リストから削除する
   #
-  # ���ꤷ��RT����ݡ��ͥ�Ȥ򻲲üԥꥹ�Ȥ��������롣
-  # ������줿RT����ݡ��ͥ�Ȥ� detach_context ���ƤФ�롣
-  # ���ꤵ�줿RT����ݡ��ͥ�Ȥ����üԥꥹ�Ȥ���Ͽ����Ƥ��ʤ����ϡ�
-  # BAD_PARAMETER ���֤���롣
+  # 指定したRTコンポーネントを参加者リストから削除する。
+  # 削除されたRTコンポーネントは detach_context が呼ばれる。
+  # 指定されたRTコンポーネントが参加者リストに登録されていない場合は、
+  # BAD_PARAMETER が返される。
   #
   # @param self
-  # @param comp ����о�RT����ݡ��ͥ��
+  # @param comp 削除対象RTコンポーネント
   #
-  # @return ReturnCode_t ���Υ꥿���󥳡���
+  # @return ReturnCode_t 型のリターンコード
   #
   # @else
   #
@@ -555,9 +553,9 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
   ##
   # @if jp
-  # @brief ExecutionContextProfile ���������
+  # @brief ExecutionContextProfile を取得する
   #
-  # �� ExecutionContext �Υץ��ե������������롣
+  # 本 ExecutionContext のプロファイルを取得する。
   #
   # @param self
   #
@@ -567,7 +565,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
   #
   # @brief Get the ExecutionContextProfile
   #
-  # This operation provides a profile ��descriptor�� for the execution 
+  # This operation provides a profile “descriptor” for the execution 
   # context.
   #
   # @endif
@@ -771,7 +769,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
   ##
   # @if jp
   # @class WorkerThreadCtrl
-  # @brief worker �Ѿ����ѿ����饹
+  # @brief worker 用状態変数クラス
   #
   # @else
   # @class WorkerThreadCtrl
@@ -781,9 +779,9 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     
     ##
     # @if jp
-    # @brief ���󥹥ȥ饯��
+    # @brief コンストラクタ
     #
-    # ���󥹥ȥ饯��
+    # コンストラクタ
     #
     # @param self
     #
@@ -797,11 +795,11 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
 ##
 # @if jp
-# @brief ExecutionContext ����������
+# @brief ExecutionContext を初期化する
 #
-# ExecutionContext ��ư�ѥե����ȥ����Ͽ���롣
+# ExecutionContext 起動用ファクトリを登録する。
 #
-# @param manager �ޥ͡����㥪�֥�������
+# @param manager マネージャオブジェクト
 #
 # @else
 #
