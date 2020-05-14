@@ -151,7 +151,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
             ret = OpenRTM_aist.setThreadAffinity(self._cpu)
             if ret == False:
                 self._rtcout.RTC_ERROR("CPU affinity mask setting failed")
-
+                
         while self.threadRunning():
             OpenRTM_aist.ExecutionContextBase.invokeWorkerPreDo(self)
             # Thread will stopped when all RTCs are INACTIVE.
@@ -168,27 +168,24 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
             t1_ = OpenRTM_aist.Time()
 
             period_ = self.getPeriod()
+            exectime_ = (t1_ - t0_).getTime()
+            sleeptime_ = period_ - exectime_
 
             if count_ > 1000:
-                exctm_ = (t1_ - t0_).getTime().toDouble()
-                slptm_ = period_.toDouble() - exctm_
-                self._rtcout.RTC_PARANOID(
-                    "Period:    %f [s]", period_.toDouble())
-                self._rtcout.RTC_PARANOID("Execution: %f [s]", exctm_)
-                self._rtcout.RTC_PARANOID("Sleep:     %f [s]", slptm_)
+                self._rtcout.RTC_PARANOID("Period:    %f [s]", period_.toDouble())
+                self._rtcout.RTC_PARANOID("Execution: %f [s]", exectime_.toDouble())
+                self._rtcout.RTC_PARANOID("Sleep:     %f [s]", sleeptime_.toDouble())
 
             t2_ = OpenRTM_aist.Time()
 
-            if not self._nowait and period_.toDouble() > ((t1_ - t0_).getTime().toDouble()):
+            if not self._nowait and exectime_.toDouble() >= 0.0 and sleeptime_.toDouble() > 0.0:
                 if count_ > 1000:
                     self._rtcout.RTC_PARANOID("sleeping...")
-                slptm_ = period_.toDouble() - (t1_ - t0_).getTime().toDouble()
-                time.sleep(slptm_)
+                time.sleep(sleeptime_.toDouble())
 
             if count_ > 1000:
                 t3_ = OpenRTM_aist.Time()
-                self._rtcout.RTC_PARANOID(
-                    "Slept:     %f [s]", (t3_ - t2_).getTime().toDouble())
+                self._rtcout.RTC_PARANOID("Slept:     %f [s]", (t3_ - t2_).getTime().toDouble())
                 count_ = 0
             count_ += 1
 
