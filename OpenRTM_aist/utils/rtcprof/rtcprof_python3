@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- Python -*-
 # -*- coding: euc-jp -*-
 
 ##
-# @file rtcd_python
-# @brief RT component server daemon
+# @file rtcprof_python
+# @brief RT-Component profile dump command
 # @date $Date: $
 # @author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
 #
@@ -15,10 +15,10 @@
 #     All rights reserved.
 
 import sys
-import rtcd.rtcd_python
+import rtcprof.rtcprof_python
 
 def main():
-  rtcd.rtcd_python.main()
+  rtcprof.rtcprof_python.main()
   return
 
 if __name__ == "__main__":
