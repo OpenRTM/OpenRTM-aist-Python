@@ -1682,9 +1682,11 @@ class Manager:
                                                 "enable", "disable", False))
 
     self._rtcout.RTC_INFO("%s", self._config.getProperty("openrtm.version"))
-    self._rtcout.RTC_INFO("Copyright (C) 2003-2010")
-    self._rtcout.RTC_INFO("  Noriaki Ando")
-    self._rtcout.RTC_INFO("  Intelligent Systems Research Institute, AIST")
+    self._rtcout.RTC_INFO("Copyright (C) 2003-2020, Noriaki Ando and OpenRTM development team,")
+    self._rtcout.RTC_INFO("  Intelligent Systems Research Institute, AIST,")
+    self._rtcout.RTC_INFO("Copyright (C) 2020, Noriaki Ando and OpenRTM development team,")
+    self._rtcout.RTC_INFO("  Industrial Cyber-Physical Research Center, AIST,")
+    self._rtcout.RTC_INFO("  All right reserved.")
     self._rtcout.RTC_INFO("Manager starting.")
     self._rtcout.RTC_INFO("Starting local logging.")
 
