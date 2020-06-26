@@ -15,10 +15,10 @@
 #     All rights reserved.
 
 import sys
-import rtcprof_python
+import rtcprof.rtcprof_python
 
 def main():
-  rtcprof_python.main()
+  rtcprof.rtcprof_python.main()
   return
 
 if __name__ == "__main__":
