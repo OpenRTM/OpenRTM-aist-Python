@@ -634,6 +634,7 @@ class ModuleManager:
                     prop.setProperty(
                         "module_file_name", os.path.basename(mod_))
                     prop.setProperty("module_file_path", mod_)
+                    prop.setProperty("language", lang)
                     modprops.append(prop)
             else:
                 prop = OpenRTM_aist.Properties()
@@ -661,6 +662,7 @@ class ModuleManager:
                         prop.setProperty(
                             "module_file_name", os.path.basename(mod_))
                         prop.setProperty("module_file_path", mod_)
+                        prop.setProperty("language", lang)
                         modprops.append(prop)
                     else:
                         self._loadfailmods[lang].append(mod_)
