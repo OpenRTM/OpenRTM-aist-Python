@@ -1383,8 +1383,8 @@ class ManagerServant(RTM__POA.Manager):
       rtcd_cmd = config.getProperty("manager.modules."+comp_param.language()+".manager_cmd")
       
       if not rtcd_cmd:
-        rtcd_cmd = "rtcd_python"
-      #rtcd_cmd = "rtcd_python.bat"
+        lang = config.getProperty("manager.language")
+        rtcd_cmd = config.getProperty("manager.modules."+lang+".manager_cmd")
 
       load_path = config.getProperty("manager.modules.load_path")
       load_path_language = config.getProperty("manager.modules."+comp_param.language()+".load_paths")
@@ -1551,7 +1551,8 @@ class ManagerServant(RTM__POA.Manager):
       config = copy.deepcopy(self._mgr.getConfig())
       rtcd_cmd = config.getProperty("manager.modules."+comp_param.language()+".manager_cmd")
       if not rtcd_cmd:
-        rtcd_cmd = "rtcd_python"
+        lang = config.getProperty("manager.language")
+        rtcd_cmd = config.getProperty("manager.modules."+lang+".manager_cmd")
 
       load_path = config.getProperty("manager.modules.load_path")
       load_path_language = config.getProperty("manager.modules."+comp_param.language()+".load_path")
