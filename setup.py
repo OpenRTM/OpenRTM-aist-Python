@@ -294,7 +294,7 @@ example_path = os.path.normpath(current_dir + "/" + example_dir)
 #
 document_dir = "OpenRTM_aist/docs"
 target_doc_dir = "share/openrtm-" + pkg_shortver + "/doc/python"
-document_match_regex = r".*\.(css|gif|png|html||hhc|hhk|hhp)$"
+document_match_regex = r".*\.(css|gif|png|html||hhc|hhk|hhp|js)$"
 document_path = os.path.normpath(current_dir + "/" + document_dir)
 
 
