@@ -500,8 +500,8 @@ class LRFrange(ScaledObject):
 #
 # ------------------------------------------------------------
 class TkLRFViewer(Frame):
-    def __init__(self, master=None, width=480, height=480):
-        Frame.__init__(self, master)
+    def __init__(self, main=None, width=480, height=480):
+        Frame.__init__(self, main)
 
         # canvas properties
         self.width = width
@@ -702,7 +702,7 @@ class test_data_creator(threading.Thread):
 
 def main():
     m = TkLRFViewer(Tk())
-    m.master.title("Laser Range Finder Viewer")
+    m.main.title("Laser Range Finder Viewer")
 
     mgr = OpenRTM_aist.Manager.init(sys.argv)
     mgr.activateManager()

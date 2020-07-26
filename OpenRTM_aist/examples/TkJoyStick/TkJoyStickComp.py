@@ -105,7 +105,7 @@ class TkJoyStick(OpenRTM_aist.DataFlowComponentBase):
 
 def main():
     tkJoyCanvas = tkjoystick.TkJoystick()
-    tkJoyCanvas.master.title("TkJoystick")
+    tkJoyCanvas.main.title("TkJoystick")
     mgr = OpenRTM_aist.Manager.init(sys.argv)
     mgr.activateManager()
 
