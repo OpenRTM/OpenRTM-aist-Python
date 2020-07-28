@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
@@ -29,63 +29,41 @@ plat = sys.platform
 
 def main():
     if plat == "win32":
-        subprocess.call(
-            'start \"\" \"%RTM_ROOT%\\bin\\rtm-naming.bat\"',
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+        subprocess.call('cd \"%RTM_ROOT%\\bin\\\" & start \"\" rtm-naming.bat',
+                        shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         time.sleep(5)
-        subprocess.call(
-            "start python ConsoleIn.py".split(" "),
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        subprocess.call(
-            "start python Consoleout.py".split(" "),
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        time.sleep(3)
+        subprocess.call("start python ConsoleIn.py".split(
+            " "), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.call("start python Consoleout.py".split(
+            " "), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         subprocess.call("python Connector.py".split(" "), shell=True)
 
     else:
-        p = subprocess.Popen(
-            "which xterm",
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+        p = subprocess.Popen("which xterm", shell=True,
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         term, stderr = p.communicate()
         status = p.returncode
         term = term.replace("\n", "")
         term += " -e"
         if status != 0:
-            p = subprocess.Popen(
-                "which kterm",
-                shell=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
+            p = subprocess.Popen("which kterm", shell=True,
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             term, stderr = p.communicate()
             status = p.returncode
             term = term.replace("\n", "")
             term += " -e"
 
         if status != 0:
-            p = subprocess.Popen(
-                "which uxterm",
-                shell=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
+            p = subprocess.Popen("which uxterm", shell=True,
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             term, stderr = p.communicate()
             status = p.returncode
             term = term.replace("\n", "")
             term += " -e"
 
         if status != 0:
-            p = subprocess.Popen(
-                "which gnome-terminal",
-                shell=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
+            p = subprocess.Popen("which gnome-terminal", shell=True,
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             term, stderr = p.communicate()
             status = p.returncode
             term = term.replace("\n", "")
@@ -107,23 +85,14 @@ def main():
     os.system('python %s/rtm-naming.py &'%path)
     """
         cmd = 'rtm-naming&'
-        subprocess.call(
-            cmd,
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+        subprocess.call(cmd, shell=True, stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE)
         cmd = '%s python ConsoleIn.py&' % term
-        subprocess.call(
-            cmd,
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+        subprocess.call(cmd, shell=True, stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE)
         cmd = '%s python ConsoleOut.py&' % term
-        subprocess.call(
-            cmd,
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+        subprocess.call(cmd, shell=True, stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE)
         time.sleep(3)
         subprocess.call("python Connector.py", shell=True)
 

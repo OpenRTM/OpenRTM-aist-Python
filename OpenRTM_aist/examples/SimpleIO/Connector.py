@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
@@ -10,6 +10,8 @@ from optparse import OptionParser, OptionError
 
 import RTC
 import OpenRTM_aist
+
+import time
 
 
 def usage():
@@ -42,19 +44,29 @@ def main():
     conout = OpenRTM_aist.CorbaConsumer()
 
     # find ConsoleIn0 component
-    conin.setObject(naming.resolve("ConsoleIn0.rtc"))
+    for _ in range(100):
+        try:
+            conin.setObject(naming.resolve("ConsoleIn0.rtc"))
+            # get ports
+            inobj = conin.getObject()._narrow(RTC.RTObject)
+            pin = inobj.get_ports()
+            break
+        except:
+            time.sleep(0.1)
 
-    # get ports
-    inobj = conin.getObject()._narrow(RTC.RTObject)
-    pin = inobj.get_ports()
     pin[0].disconnect_all()
 
     # find ConsoleOut0 component
-    conout.setObject(naming.resolve("ConsoleOut0.rtc"))
+    for _ in range(100):
+        try:
+            conout.setObject(naming.resolve("ConsoleOut0.rtc"))
+            # get ports
+            outobj = conout.getObject()._narrow(RTC.RTObject)
+            pout = outobj.get_ports()
+            break
+        except:
+            time.sleep(0.1)
 
-    # get ports
-    outobj = conout.getObject()._narrow(RTC.RTObject)
-    pout = outobj.get_ports()
     pout[0].disconnect_all()
 
     # subscription type
@@ -124,6 +136,7 @@ def main():
                                                                        skip_count))
 
     ret, conprof = pin[0].connect(conprof)
+    print(ret)
 
     # activate ConsoleIn0
     eclistin = inobj.get_owned_contexts()

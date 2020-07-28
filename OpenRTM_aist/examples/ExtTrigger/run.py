@@ -28,7 +28,7 @@ plat = sys.platform
 
 if plat == "win32":
     subprocess.call(
-        "start \"\" \"%RTM_ROOT%\\bin\\rtm-naming.bat\"",
+        'cd \"%RTM_ROOT%\\bin\\\" & start \"\" rtm-naming.bat',
         shell=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
@@ -43,7 +43,6 @@ if plat == "win32":
         shell=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    time.sleep(3)
     subprocess.call("python Connector.py", shell=True)
 
 else:
