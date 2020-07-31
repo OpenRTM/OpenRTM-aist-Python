@@ -8,6 +8,7 @@ from omniORB import CORBA
 
 import RTC
 import OpenRTM_aist
+import time
 
 
 def main():

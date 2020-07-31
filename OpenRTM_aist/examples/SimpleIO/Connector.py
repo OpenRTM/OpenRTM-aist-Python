@@ -10,6 +10,7 @@ from optparse import OptionParser, OptionError
 
 import RTC
 import OpenRTM_aist
+import time
 
 def usage():
   print("usage: ConnectorComp [options]")
