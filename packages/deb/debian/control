@@ -8,7 +8,7 @@ Homepage: http://www.openrtm.org
 
 Package: openrtm-aist-python3
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, omniorb-nameserver
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-omniorb, omniorb-nameserver
 Description: OpenRTM-aist, RT-Middleware distributed by AIST
  OpenRTM-aist is a reference implementation of RTC (Robotic Technology
  Component Version 1.1, formal/12-09-01) specification which is OMG
