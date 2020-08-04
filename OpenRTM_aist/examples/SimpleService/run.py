@@ -58,6 +58,7 @@ else:
         stderr=subprocess.PIPE)
     term, stderr = p.communicate()
     status = p.returncode
+    term = term.decode('utf-8')
     term = term.replace("\n", "")
     term += " -e"
     if status != 0:
@@ -68,6 +69,7 @@ else:
             stderr=subprocess.PIPE)
         term, stderr = p.communicate()
         status = p.returncode
+        term = term.decode('utf-8')
         term = term.replace("\n", "")
         term += " -e"
 
@@ -79,6 +81,7 @@ else:
             stderr=subprocess.PIPE)
         term, stderr = p.communicate()
         status = p.returncode
+        term = term.decode('utf-8')
         term = term.replace("\n", "")
         term += " -e"
 
@@ -90,6 +93,7 @@ else:
             stderr=subprocess.PIPE)
         term, stderr = p.communicate()
         status = p.returncode
+        term = term.decode('utf-8')
         term = term.replace("\n", "")
         term += " -x"
 

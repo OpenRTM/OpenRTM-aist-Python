@@ -43,6 +43,7 @@ def main():
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         term, stderr = p.communicate()
         status = p.returncode
+        term = term.decode('utf-8')
         term = term.replace("\n", "")
         term += " -e"
         if status != 0:
@@ -50,6 +51,7 @@ def main():
                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             term, stderr = p.communicate()
             status = p.returncode
+            term = term.decode('utf-8')
             term = term.replace("\n", "")
             term += " -e"
 
@@ -58,6 +60,7 @@ def main():
                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             term, stderr = p.communicate()
             status = p.returncode
+            term = term.decode('utf-8')
             term = term.replace("\n", "")
             term += " -e"
 
@@ -66,6 +69,7 @@ def main():
                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             term, stderr = p.communicate()
             status = p.returncode
+            term = term.decode('utf-8')
             term = term.replace("\n", "")
             term += " -x"
 
