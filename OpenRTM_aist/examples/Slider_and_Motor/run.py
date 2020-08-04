@@ -35,12 +35,16 @@ else:
     p=subprocess.Popen("which xterm", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     term, stderr = p.communicate()
     status = p.returncode
+    if type(term) is not str:
+      term = term.decode('utf-8')
     term = term.replace("\n","")
     term += " -e"
     if status != 0:
       p=subprocess.Popen("which kterm", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       term, stderr = p.communicate()
       status = p.returncode
+      if type(term) is not str:
+        term = term.decode('utf-8')
       term = term.replace("\n","")
       term += " -e"
 
@@ -48,6 +52,8 @@ else:
       p=subprocess.Popen("which uxterm", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       term, stderr = p.communicate()
       status = p.returncode
+      if type(term) is not str:
+        term = term.decode('utf-8')
       term = term.replace("\n","")
       term += " -e"
       
@@ -55,6 +61,8 @@ else:
       p=subprocess.Popen("which gnome-terminal", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       term, stderr = p.communicate()
       status = p.returncode
+      if type(term) is not str:
+        term = term.decode('utf-8')
       term = term.replace("\n","")
       term += " -x"
 
