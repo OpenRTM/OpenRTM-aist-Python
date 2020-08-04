@@ -25,11 +25,10 @@ hostname= sysinfo[1]
 plat=sys.platform
 
 if plat == "win32":
-    subprocess.call("start \"\" \"%RTM_ROOT%\\bin\\rtm-naming.bat\"", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.call("cd \"%RTM_ROOT%\\bin\\\" & start \"\" rtm-naming.bat", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     time.sleep(5)
     subprocess.call("start python ConsoleIn.py", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     subprocess.call("start python Consoleout.py", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    time.sleep(3)
     subprocess.call("python Connector.py", shell=True)
 
 else:

@@ -41,20 +41,31 @@ def main():
   conout = OpenRTM_aist.CorbaConsumer()
 
   # find ConsoleIn0 component
-  conin.setObject(naming.resolve("ConsoleIn0.rtc"))
+  for _ in range(100):
+    try:
+      conin.setObject(naming.resolve("ConsoleIn0.rtc"))
 
-  # get ports
-  inobj = conin.getObject()._narrow(RTC.RTObject)
-  pin = inobj.get_ports()
-  pin[0].disconnect_all()
+      # get ports
+      inobj = conin.getObject()._narrow(RTC.RTObject)
+      pin = inobj.get_ports()
+      pin[0].disconnect_all()
+      break
+    except:
+      time.sleep(0.1)
 
 
   # find ConsoleOut0 component
-  conout.setObject(naming.resolve("ConsoleOut0.rtc"))
+  for _ in range(100):
+    try:
+      conout.setObject(naming.resolve("ConsoleOut0.rtc"))
 
-  # get ports
-  outobj = conout.getObject()._narrow(RTC.RTObject)
-  pout = outobj.get_ports()
+      # get ports
+      outobj = conout.getObject()._narrow(RTC.RTObject)
+      pout = outobj.get_ports()
+      break
+    except:
+      time.sleep(0.1)
+
   pout[0].disconnect_all()
 
 

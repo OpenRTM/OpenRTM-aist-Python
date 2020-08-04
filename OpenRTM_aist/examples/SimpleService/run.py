@@ -28,11 +28,10 @@ if plat == "win32":
     #os.system("rd /S /Q SimpleService")
     #os.system("rd /S /Q SimpleService__POA")
     #os.system("omniidl.exe -bpython MyService.idl")
-    subprocess.call("start \"\" \"%RTM_ROOT%\\bin\\rtm-naming.bat\"", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.call("cd \"%RTM_ROOT%\\bin\\\" & start \"\" rtm-naming.bat", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     time.sleep(5)
     subprocess.call("start python MyServiceConsumer.py", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     subprocess.call("start python MyServiceProvider.py", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    time.sleep(3)
     subprocess.call("python Connector.py", shell=True)
 
 else:
