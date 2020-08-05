@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
@@ -81,16 +81,15 @@ def main():
     if path is None:
       print("rtm-naming directory not exist.")
       sys.exit(0)
-    os.system('python %s/rtm-naming.py &'%path)
+    os.system('python3 %s/rtm-naming.py &'%path)
     """
     cmd = 'rtm-naming&'
     subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    cmd = '%s python ConsoleIn.py&'%term
+    cmd = '%s python3 ConsoleIn.py&'%term
     subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    cmd = '%s python ConsoleOut.py&'%term
+    cmd = '%s python3 ConsoleOut.py&'%term
     subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    time.sleep(3)
-    subprocess.call("python Connector.py", shell=True)
+    subprocess.call("python3 Connector.py", shell=True)
     
 
   return

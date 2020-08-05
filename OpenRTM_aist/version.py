@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: euc-jp -*-
 
 openrtm_name    = "OpenRTM-aist-1.2.2"
