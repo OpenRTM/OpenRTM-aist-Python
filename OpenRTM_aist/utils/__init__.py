@@ -1,1 +1,1 @@
-﻿# Empty file
+# Empty file
