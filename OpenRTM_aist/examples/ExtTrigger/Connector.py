@@ -10,6 +10,7 @@ from omniORB import CORBA
 import RTC
 import OpenRTM
 import OpenRTM_aist
+import time
 
 
 def main():
@@ -30,11 +31,18 @@ def main():
   ec1 = OpenRTM_aist.CorbaConsumer(interfaceType=OpenRTM.ExtTrigExecutionContextService)
 
   # find ConsoleIn0 component
-  conin.setObject(naming.resolve("ConsoleIn0.rtc"))
+  for _ in range(100):
+    try:
+      conin.setObject(naming.resolve("ConsoleIn0.rtc"))
 
-  # get ports
-  inobj = conin.getObject()._narrow(RTC.RTObject)
-  pin = inobj.get_ports()
+      # get ports
+      inobj = conin.getObject()._narrow(RTC.RTObject)
+      pin = inobj.get_ports()
+      break
+    except:
+      time.sleep(0.1)
+
+
   pin[0].disconnect_all()
 
   # activate ConsoleIn0
@@ -44,11 +52,17 @@ def main():
 
 
   # find ConsoleOut0 component
-  conout.setObject(naming.resolve("ConsoleOut0.rtc"))
+  for _ in range(100):
+    try:
+      conout.setObject(naming.resolve("ConsoleOut0.rtc"))
 
-  # get ports
-  outobj = conout.getObject()._narrow(RTC.RTObject)
-  pout = outobj.get_ports()
+      # get ports
+      outobj = conout.getObject()._narrow(RTC.RTObject)
+      pout = outobj.get_ports()
+      break
+    except:
+      time.sleep(0.1)
+
   pout[0].disconnect_all()
   
   # activate ConsoleOut0

@@ -8,6 +8,7 @@ from omniORB import CORBA
 
 import RTC
 import OpenRTM_aist
+import time
 
 
 def main():
@@ -25,20 +26,33 @@ def main():
     tkm = OpenRTM_aist.CorbaConsumer()
 
     # find TkMotorComp0 component
-    tkm.setObject(naming.resolve("TkMotorComp0.rtc"))
+    for _ in range(100):
+      try:
+        tkm.setObject(naming.resolve("TkMotorComp0.rtc"))
 
-    # get ports
-    inobj = tkm.getObject()._narrow(RTC.RTObject)
-    pin = inobj.get_ports()
+        # get ports
+        inobj = tkm.getObject()._narrow(RTC.RTObject)
+        pin = inobj.get_ports()
+        break
+      except:
+        time.sleep(0.1)
+
+
     pin[0].disconnect_all()
 
 
     # find SliderComp0 component
-    sl.setObject(naming.resolve("SliderComp0.rtc"))
+    for _ in range(100):
+      try:
+        sl.setObject(naming.resolve("SliderComp0.rtc"))
 
-    # get ports
-    outobj = sl.getObject()._narrow(RTC.RTObject)
-    pout = outobj.get_ports()
+        # get ports
+        outobj = sl.getObject()._narrow(RTC.RTObject)
+        pout = outobj.get_ports()
+        break
+      except:
+        time.sleep(0.1)
+
     pout[0].disconnect_all()
 
 

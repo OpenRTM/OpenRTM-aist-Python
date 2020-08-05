@@ -9,6 +9,7 @@ from omniORB import CORBA
 
 import RTC
 import OpenRTM_aist
+import time
 
 def usage():
     print("usage: ConnectorComp [options]")
@@ -29,20 +30,31 @@ def main():
     provider = OpenRTM_aist.CorbaConsumer()
 
     # find MyServiceConsumer0 component
-    consumer.setObject(naming.resolve("MyServiceConsumer0.rtc"))
+    for _ in range(100):
+      try:
+        consumer.setObject(naming.resolve("MyServiceConsumer0.rtc"))
 
-    # get ports
-    consobj = consumer.getObject()._narrow(RTC.RTObject)
-    pcons = consobj.get_ports()
+        # get ports
+        consobj = consumer.getObject()._narrow(RTC.RTObject)
+        pcons = consobj.get_ports()
+        break
+      except:
+        time.sleep(0.1)
+
     pcons[0].disconnect_all()
 
-
     # find MyServiceProvider0 component
-    provider.setObject(naming.resolve("MyServiceProvider0.rtc"))
+    for _ in range(100):
+      try:
+        provider.setObject(naming.resolve("MyServiceProvider0.rtc"))
 
-    # get ports
-    provobj = provider.getObject()._narrow(RTC.RTObject)
-    prov = provobj.get_ports()
+        # get ports
+        provobj = provider.getObject()._narrow(RTC.RTObject)
+        prov = provobj.get_ports()
+        break
+      except:
+        time.sleep(0.1)
+
     prov[0].disconnect_all()
 
 
