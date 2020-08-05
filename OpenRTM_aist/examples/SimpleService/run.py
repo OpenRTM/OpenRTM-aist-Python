@@ -77,14 +77,13 @@ else:
     if path is None:
         print("rtm-naming directory not exist.")
         sys.exit(0)
-    os.system('python %s/rtm-naming.py &'%path)
+    os.system('python3 %s/rtm-naming.py &'%path)
     """
 
     cmd = 'rtm-naming&'
     subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    cmd = '%s python MyServiceConsumer.py &'%term
+    cmd = '%s python3 MyServiceConsumer.py &'%term
     subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    cmd = '%s python MyServiceProvider.py &'%term
+    cmd = '%s python3 MyServiceProvider.py &'%term
     subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    time.sleep(3)
-    subprocess.call("python Connector.py", shell=True)
+    subprocess.call("python3 Connector.py", shell=True)
