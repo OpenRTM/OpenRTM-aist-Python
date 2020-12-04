@@ -1426,7 +1426,7 @@ class Manager:
                 not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
                                         "YES", "NO", False) and \
                 self._needsTimer:
-            tm = OpenRTM_aist.TimeValue(10, 0)
+            tm = OpenRTM_aist.TimeValue(20, 0)
             if self._config.findNode("manager.auto_shutdown_duration"):
                 duration = float(self._config.getProperty(
                     "manager.auto_shutdown_duration"))
