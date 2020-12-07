@@ -109,7 +109,7 @@ class PeriodicFunction(object):
     # @endif
     def __init__(self, function, period):
         self._fn = function
-        self._remains = OpenRTM_aist.TimeValue(0, 0)
+        self._remains = period
         self._period = period
         self._lock = threading.RLock()
         self._isRemoved = False
