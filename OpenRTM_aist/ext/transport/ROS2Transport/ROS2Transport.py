@@ -36,7 +36,7 @@ from ROS2TopicManager import ROS2TopicManager
 #
 #
 # @endif
-class ManagerActionListener:
+class ManagerActionListener(OpenRTM_aist.ManagerActionListener):
     ##
     # @if jp
     # @brief コンストラクタ
