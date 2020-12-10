@@ -36,7 +36,7 @@ from ROSTopicManager import ROSTopicManager
 #
 #
 # @endif
-class ManagerActionListener:
+class ManagerActionListener(OpenRTM_aist.ManagerActionListener):
     ##
     # @if jp
     # @brief コンストラクタ
