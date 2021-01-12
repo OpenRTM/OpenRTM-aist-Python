@@ -24,7 +24,7 @@ try:
     import xmlrpclib
 except BaseException:
     import xmlrpc.client as xmlrpclib
-from rosgraph.network import read_ros_handshake_header, write_ros_handshake_header
+from rosgraph.network import write_ros_handshake_header
 import rosgraph.network
 try:
     from cStringIO import StringIO
@@ -34,6 +34,7 @@ import socket
 import select
 import time
 import sys
+import threading
 
 
 ##
@@ -75,8 +76,9 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         self._topic = "chatter"
         self._roscorehost = "localhost"
         self._roscoreport = "11311"
-        self._tcp_connecters = {}
-        self._subnum = 0
+        self._tcp_connecters = []
+        self._con_mutex = threading.RLock()
+        self._message_data_sent = 0
 
     ##
     # @if jp
@@ -162,11 +164,16 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
         self._client = xmlrpclib.ServerProxy(
             'http://' + self._roscorehost + ":" + self._roscoreport)
+        messageType = "std_msgs/Float32"
+        messageTypeList = self._messageType.split(":")
+        if len(messageType) >= 2:
+            messageType = messageTypeList[1]
+
         try:
             self._client.registerPublisher(
                 self._callerid,
                 self._topic,
-                'std_msgs/Float32',
+                messageType,
                 self._topicmgr.getURI())
         except xmlrpclib.Fault as err:
             self._rtcout.RTC_ERROR("XML-RPC ERROR: %s", err.faultString)
@@ -207,28 +214,18 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     #
     # @endif
     #
-    def connect(self, client_sock, addr):
+    def connect(self, client_sock, header):
         self._rtcout.RTC_PARANOID("connect()")
-        if addr in self._tcp_connecters:
-            self._rtcout.RTC_DEBUG("%s already exist", addr)
-            return
-
-        try:
-            if sys.version_info[0] == 3:
-                header = read_ros_handshake_header(
-                    client_sock, BytesIO(), 65536)
-            else:
-                header = read_ros_handshake_header(
-                    client_sock, StringIO(), 65536)
-        except rosgraph.network.ROSHandshakeException:
-            self._rtcout.RTC_DEBUG("read ROS handshake exception")
-            return
-        except BaseException:
-            self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
 
         topic_name = header['topic']
         md5sum = header['md5sum']
         type_name = header['type']
+        caller_id = header['callerid']
+
+        if self._topic != topic_name:
+            self._rtcout.RTC_INFO(
+                "Topic name is not match(%s:%s)", (topic_name, self._topic))
+            return
 
         self._rtcout.RTC_VERBOSE("Topic:%s", topic_name)
         self._rtcout.RTC_VERBOSE("MD5sum:%s", md5sum)
@@ -247,33 +244,13 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
         if info_type != type_name:
             self._rtcout.RTC_WARN(
-                "topic name in not match(%s:%s)", (info_type, type_name))
+                "type name in not match(%s:%s)", (info_type, type_name))
             return
         if info_md5sum != md5sum:
             self._rtcout.RTC_WARN(
                 "MD5sum in not match(%s:%s)", (info_md5sum, md5sum))
             return
 
-        fileno = client_sock.fileno()
-        poller = None
-        if hasattr(select, 'poll'):
-            ready = False
-            poller = select.poll()
-            poller.register(fileno, select.POLLOUT)
-            while not ready:
-                events = poller.poll()
-                for _, flag in events:
-                    if flag & select.POLLOUT:
-                        ready = True
-        else:
-            ready = None
-            while not ready:
-                try:
-                    _, ready, _ = select.select([], [fileno], [])
-                except ValueError:
-                    self._rtcout.RTC_ERROR("ValueError")
-                    return
-        client_sock.setblocking(1)
         fields = {'topic': topic_name,
                   'message_definition': info_message_definition,
                   'tcp_nodelay': '0',
@@ -282,18 +259,19 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
                   'callerid': self._callerid}
 
         try:
-            write_ros_handshake_header(client_sock, fields)
+            stat_bytes = write_ros_handshake_header(client_sock, fields)
         except rosgraph.network.ROSHandshakeException:
             self._rtcout.RTC_ERROR("write ROS handshake exception")
             return
-        if poller:
-            poller.unregister(fileno)
 
-        self._tcp_connecters[addr] = {
-            "socket": client_sock,
-            "id": self._subnum,
-            "node": header['callerid']}
-        self._subnum += 1
+        self._topicmgr = ROSTopicManager.instance()
+        sub = self._topicmgr.getSubscriberLink(client_sock)
+        if sub is not None:
+            guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+            sub.setTopic(topic_name)
+            sub.setCallerID(caller_id)
+            sub.setStatBytes(stat_bytes)
+            self._tcp_connecters.append(sub)
 
     ##
     # @if jp
@@ -333,15 +311,18 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         self._rtcout.RTC_PARANOID("put()")
 
         ret = self.PORT_OK
-        for k, connector in self._tcp_connecters.items():
+        self._message_data_sent += len(data)
+        guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+        for connector in self._tcp_connecters[:]:
             try:
-                connector["socket"].sendall(data)
+                connector.sendall(data)
             except BaseException:
                 self._rtcout.RTC_ERROR("send error")
+                self._topicmgr.removeSubscriberLink(connector.getConnection())
                 # connector.shutdown(socket.SHUT_RDWR)
-                connector["socket"].close()
+
                 ret = self.CONNECTION_LOST
-                del self._tcp_connecters[k]
+                self._tcp_connecters.remove(connector)
         return ret
 
     ##
@@ -429,11 +410,11 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
             self._rtcout.RTC_VERBOSE("remove publisher")
             self._topicmgr.removePublisher(self)
 
-        for k, connector in self._tcp_connecters.items():
+        guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+        for connector in self._tcp_connecters:
             try:
                 self._rtcout.RTC_VERBOSE("connection close")
-                connector["socket"].shutdown(socket.SHUT_RDWR)
-                connector["socket"].close()
+                self._topicmgr.removeSubscriberLink(connector.getConnection())
             except BaseException:
                 self._rtcout.RTC_ERROR("socket shutdown error")
 
@@ -456,6 +437,26 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
     ##
     # @if jp
+    # @brief 送信データの統計情報の取得
+    #
+    # @return データ
+    #
+    # @else
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    #
+    def getStats(self):
+        self._rtcout.RTC_VERBOSE("getStats")
+        stats = []
+        for connector in self._tcp_connecters:
+            stats.append(connector.getStats())
+        return [self._topic, self._message_data_sent, stats]
+
+    ##
+    # @if jp
     # @brief メッセージ型の取得
     #
     # @return メッセージ型
@@ -471,26 +472,6 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         self._rtcout.RTC_VERBOSE("datatype")
         return self._messageType
 
-    ##
-    # @if jp
-    # @brief コネクタの情報取得
-    #
-    # @return コネクタの情報のリスト
-    #
-    # @else
-    # @brief
-    #
-    # @return
-    #
-    # @endif
-    #
-    def getInfo(self):
-        self._rtcout.RTC_VERBOSE("getInfo")
-        cons = []
-        for k, connector in self._tcp_connecters.items():
-            cons.append([connector["id"], connector["node"],
-                         "i", "TCPROS", self._topic, True, ""])
-        return cons
 
 ##
 # @if jp

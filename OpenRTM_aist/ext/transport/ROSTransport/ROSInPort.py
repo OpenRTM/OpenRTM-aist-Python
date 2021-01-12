@@ -29,6 +29,7 @@ except BaseException:
 
 from rosgraph.network import read_ros_handshake_header, write_ros_handshake_header
 from ROSTopicManager import ROSTopicManager
+from ROSTopicManager import PublisherLink
 import ROSMessageInfo
 import struct
 import sys
@@ -95,10 +96,11 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
         self._roscorehost = "localhost"
         self._roscoreport = "11311"
 
-        self._tcp_connecters = {}
-        self._pubnum = 0
+        self._tcp_connecters = []
+        self._con_mutex = threading.RLock()
 
         self._mutex = threading.RLock()
+        self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("ROSInPort")
 
     ##
     # @if jp
@@ -150,13 +152,11 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             self._rtcout.RTC_VERBOSE("remove subscriber")
             self._topicmgr.removeSubscriber(self)
 
-        for k, connector in self._tcp_connecters.items():
+        guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+        for connector in self._tcp_connecters:
             try:
                 self._rtcout.RTC_VERBOSE("connection close")
-                connector["socket"].shutdown(socket.SHUT_RDWR)
-                connector["socket"].close()
-                connector["listener"].shutdown()
-                connector["thread"].join()
+                self._topicmgr.removePublisherLink(connector)
             except BaseException:
                 self._rtcout.RTC_ERROR("socket shutdown error")
 
@@ -175,15 +175,13 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
     #
     # @endif
     #
-    def deleteSocket(self, uri):
-        if uri in self._tcp_connecters:
+    def deleteSocket(self, sock):
+        guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+        for con in self._tcp_connecters[:]:
             try:
-                self._rtcout.RTC_VERBOSE("close socket")
-                self._tcp_connecters[uri].shutdown(socket.SHUT_RDWR)
-                self._tcp_connecters[uri]["socket"].close()
-                self._tcp_connecters[uri]["listener"].shutdown()
-                self._tcp_connecters[uri]["thread"].join()
-                del self._tcp_connecters[uri]
+                if con.getConnection() == sock:
+                    self._rtcout.RTC_VERBOSE("close socket")
+                self._tcp_connecters.remove(con)
             except BaseException:
                 self._rtcout.RTC_ERROR("close socket error")
 
@@ -280,14 +278,21 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
     #
     def connect(self, caller_id, topic, publishers):
         self._rtcout.RTC_VERBOSE("connect()")
+
         if topic != self._topic:
-            self._rtcout.RTC_WARN(
+            self._rtcout.RTC_INFO(
                 "Topic name is not match(%s:%s)", (topic, self._topic))
             return
 
         for uri in publishers:
-            if uri in self._tcp_connecters:
+            pub = PublisherLink(caller_id=caller_id,
+                                topic=topic, xmlrpc_uri=uri)
+
+            guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+            if pub in self._tcp_connecters:
                 continue
+            del guard_con
+
             self._rtcout.RTC_PARANOID(
                 "connectTCP(%s, %s, %s)", (caller_id, topic, uri))
             try:
@@ -336,6 +341,17 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
                             self._rtcout.RTC_ERROR("ValueError")
                             return
 
+                self._topicmgr = ROSTopicManager.instance()
+                listener = SubListener(self, sock)
+                task = threading.Thread(target=listener.recieve, args=())
+                self._topicmgr.addPublisherLink(
+                    sock, caller_id, topic, uri, listener, task)
+                pub = self._topicmgr.getPublisherLink(sock)
+                if pub is not None:
+                    guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+                    self._tcp_connecters.append(pub)
+                    del guard_con
+
                 factory = ROSMessageInfo.ROSMessageInfoList.instance()
                 info = factory.getInfo(self._messageType)
                 if(info):
@@ -371,18 +387,9 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
                     self._rtcout.RTC_ERROR("read ROS handshake header")
                     continue
 
-                listener = SubListener(self, sock, uri)
-
                 self._rtcout.RTC_VERBOSE("Subscriber Listener thread start")
-                task = threading.Thread(target=listener.recieve, args=())
-                task.start()
 
-                self._tcp_connecters[uri] = {
-                    "socket": sock,
-                    "listener": listener,
-                    "thread": task,
-                    "id": self._pubnum}
-                self._pubnum += 1
+                task.start()
 
     # virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
 
@@ -563,6 +570,26 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
     ##
     # @if jp
+    # @brief 受信データの統計情報の取得
+    #
+    # @return データ
+    #
+    # @else
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    #
+    def getStats(self):
+        self._rtcout.RTC_VERBOSE("getStats")
+        stats = []
+        for connector in self._tcp_connecters:
+            stats.append(connector.getStats())
+        return [self._topic, stats]
+
+    ##
+    # @if jp
     # @brief メッセージ型の取得
     #
     # @return メッセージ型
@@ -578,26 +605,6 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
         self._rtcout.RTC_VERBOSE("datatype")
         return self._messageType
 
-    ##
-    # @if jp
-    # @brief コネクタの情報取得
-    #
-    # @return コネクタの情報のリスト
-    #
-    # @else
-    # @brief
-    #
-    # @return
-    #
-    # @endif
-    #
-    def getInfo(self):
-        self._rtcout.RTC_VERBOSE("getInfo")
-        cons = []
-        for k, connector in self._tcp_connecters.items():
-            cons.append([connector["id"], k, "i",
-                         "TCPROS", self._topic, True, ""])
-        return cons
 
 ##
 # @if jp
@@ -633,11 +640,49 @@ class SubListener:
     #
     # @endif
     #
-    def __init__(self, sub, sock, uri):
+    def __init__(self, sub, sock):
         self._sub = sub
         self._sock = sock
-        self._uri = uri
         self._shutdown = False
+        self._stat_bytes = 0
+        self._stat_num_msg = 0
+
+    ##
+    # @if jp
+    # @brief 受信データ量(bytes)を取得する
+    #
+    # @param self
+    # @retuen 受信データ量
+    #
+    # @else
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    #
+    def getStatBytes(self):
+        return self._stat_bytes
+
+    ##
+    # @if jp
+    # @brief 受信回数を取得する
+    #
+    # @param self
+    # @retuen 受信回数
+    #
+    # @else
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    #
+    def getStatNumMsg(self):
+        return self._stat_num_msg
+
     ##
     # @if jp
     # @brief 終了処理開始
@@ -712,10 +757,12 @@ class SubListener:
                     d = self._sock.recv(buff_size)
                     if d:
                         b.write(d)
+                        self._stat_bytes += len(d)
+                        self._stat_num_msg += 1
                     else:
                         raise BaseException
             except BaseException:
-                self._sub.deleteSocket(self._uri)
+                self._sub.deleteSocket(self._sock)
                 return
 
 
