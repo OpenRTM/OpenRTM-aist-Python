@@ -33,6 +33,8 @@ from ROSTopicManager import PublisherLink
 import ROSMessageInfo
 import struct
 import sys
+import os
+import time
 
 try:
     from cStringIO import StringIO
@@ -91,7 +93,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
         self._client = None
 
         self._topic = "chatter"
-        self._callerid = ""
+        self._callerid = "/rtcomp"
         self._messageType = "ros:std_msgs/Float32"
         self._roscorehost = "localhost"
         self._roscoreport = "11311"
@@ -229,10 +231,12 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             (self._roscorehost,
              self._roscoreport))
 
-        self._callerid = prop.getProperty("ros.node.name")
-        if not self._callerid:
-            self._callerid = str(OpenRTM_aist.uuid1())
-        self._callerid = "/" + self._callerid
+        self._callerid = "/" + prop.getProperty("ros.node.name", "rtcomp")
+
+        if OpenRTM_aist.toBool(prop.getProperty(
+                "ros.node.anonymous"), "YES", "NO", False):
+            self._callerid = self._callerid + "_" + \
+                str(os.getpid()) + "_" + str(int(time.time()*1000))
 
         factory = ROSMessageInfo.ROSMessageInfoList.instance()
         info = factory.getInfo(self._messageType)
@@ -564,9 +568,9 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
     #
     # @endif
     #
-    def getName(self):
-        self._rtcout.RTC_VERBOSE("getName")
-        return self._callerid
+    def getTopic(self):
+        self._rtcout.RTC_VERBOSE("getTopic")
+        return self._topic
 
     ##
     # @if jp

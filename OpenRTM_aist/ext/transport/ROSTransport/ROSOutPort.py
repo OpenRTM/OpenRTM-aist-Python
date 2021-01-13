@@ -35,6 +35,8 @@ import select
 import time
 import sys
 import threading
+import os
+import time
 
 
 ##
@@ -71,7 +73,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         OpenRTM_aist.InPortConsumer.__init__(self)
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("ROSOutPort")
         self._properties = None
-        self._callerid = ""
+        self._callerid = "/rtcomp"
         self._messageType = "ros:std_msgs/Float32"
         self._topic = "chatter"
         self._roscorehost = "localhost"
@@ -153,10 +155,11 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
             (self._roscorehost,
              self._roscoreport))
 
-        self._callerid = prop.getProperty("ros.node.name")
-        if not self._callerid:
-            self._callerid = str(OpenRTM_aist.uuid1())
-        self._callerid = "/" + self._callerid
+        self._callerid = "/" + prop.getProperty("ros.node.name", "rtcomp")
+        if OpenRTM_aist.toBool(prop.getProperty(
+                "ros.node.anonymous"), "YES", "NO", False):
+            self._callerid = self._callerid + "_" + \
+                str(os.getpid()) + "_" + str(int(time.time()*1000))
 
         self._rtcout.RTC_VERBOSE("caller id: %s", self._callerid)
 
@@ -420,23 +423,6 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
     ##
     # @if jp
-    # @brief ノード名の取得
-    #
-    # @return ノード名
-    #
-    # @else
-    # @brief
-    #
-    # @return
-    #
-    # @endif
-    #
-    def getName(self):
-        self._rtcout.RTC_VERBOSE("getName")
-        return self._callerid
-
-    ##
-    # @if jp
     # @brief 送信データの統計情報の取得
     #
     # @return データ
@@ -448,6 +434,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     #
     # @endif
     #
+
     def getStats(self):
         self._rtcout.RTC_VERBOSE("getStats")
         stats = []

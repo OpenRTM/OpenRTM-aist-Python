@@ -24,6 +24,7 @@ import time
 import socket
 import select
 import sys
+import os
 
 try:
     from cStringIO import StringIO
@@ -326,6 +327,30 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
     ##
     # @if jp
+    # @brief getPidコールバック関数
+    #
+    # @param self
+    # @param caller_id 呼び出しID
+    # @return ret, msg, value
+    # ret：リターンコード(1：問題なし)
+    # msg：メッセージ
+    # value：値
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param caller_id
+    # @return
+    #
+    # @endif
+
+    def getPid(self, caller_id):
+        return 1, "", os.getpid()
+
+    ##
+    # @if jp
     # @brief TCPソケット受信時の処理関数
     #
     # @param self
@@ -468,7 +493,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
         subs = []
         guard_sub = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
         for subscriber in self._subscribers:
-            sub = [subscriber.getName(), subscriber.datatype()]
+            sub = [subscriber.getTopic(), subscriber.datatype()]
             subs.append(sub)
 
         return 1, "subscriptions", subs
@@ -497,7 +522,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
         pubs = []
         guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
         for publisher in self._publishers:
-            pub = [publisher.getName(), publisher.datatype()]
+            pub = [publisher.getTopic(), publisher.datatype()]
             pubs.append(pub)
 
         return 1, "publications", pubs
@@ -1396,6 +1421,7 @@ class SubscriberLink:
     # @endif
     def setStatBytes(self, stat_bytes):
         self._stat_bytes = stat_bytes
+        self._stat_num_msg = 1
 
     ##
     # @if jp
