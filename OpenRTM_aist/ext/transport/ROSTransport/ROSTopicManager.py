@@ -19,8 +19,12 @@
 import OpenRTM_aist
 import threading
 import rosgraph.xmlrpc
+from rosgraph.network import read_ros_handshake_header
 import time
 import socket
+import select
+import sys
+import os
 
 try:
     from cStringIO import StringIO
@@ -69,11 +73,18 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
         self._server_sock = None
         self._publishers = []
         self._subscribers = []
+        self._pub_mutex = threading.RLock()
+        self._sub_mutex = threading.RLock()
         self._addr = ""
         self._port = 0
         self._shutdownflag = False
         self._thread = None
-        self._old_uris = []
+        self._tcp_pub_connecters = []
+        self._tcp_sub_connecters = []
+        self._publink_mutex = threading.RLock()
+        self._sublink_mutex = threading.RLock()
+        self._subnum = 0
+        self._pubnum = 0
 
     ##
     # @if jp
@@ -132,7 +143,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def addPublisher(self, publisher):
-        if not self.existPublisher(publisher):
+        guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
+        if self._publishers.count(publisher) == 0:
             self._publishers.append(publisher)
 
     ##
@@ -151,7 +163,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def addSubscriber(self, subscriber):
-        if not self.existSubscriber(subscriber):
+        guard_sub = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
+        if self._subscribers.count(subscriber) == 0:
             self._subscribers.append(subscriber)
 
     ##
@@ -174,6 +187,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
     def removePublisher(self, publisher):
         try:
+            guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
             self._publishers.remove(publisher)
             return True
         except ValueError:
@@ -198,6 +212,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @endif
     def removeSubscriber(self, subscriber):
         try:
+            guard_sub = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
             self._subscribers.remove(subscriber)
             return True
         except ValueError:
@@ -221,6 +236,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def existPublisher(self, publisher):
+        guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
         if self._publishers.count(publisher) > 0:
             return True
         else:
@@ -244,6 +260,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def existSubscriber(self, subscriber):
+        guard_sub = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
         if self._subscribers.count(subscriber) > 0:
             return True
         else:
@@ -274,18 +291,63 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def publisherUpdate(self, caller_id, topic, publishers):
-        lost_uris = []
-        for uri in self._old_uris:
-            if not (uri in publishers):
-                lost_uris.append(uri)
+        new_con = []
+        old_con = []
+        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+        for con in self._tcp_pub_connecters:
+            if con.getCallerID() == caller_id and con.getTopic() == topic:
+                old_con.append(con)
+        del guard_pl
 
-        for subscriber in self._subscribers:
-            subscriber.connect(caller_id, topic, publishers)
-            for lost_uri in lost_uris:
-                subscriber.deleteSocket(lost_uri)
-        self._old_uris = publishers[:]
+        for uri in publishers:
+            already_connected = False
+            guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+            for con in self._tcp_pub_connecters:
+                if con.getCallerID() == caller_id and con.getTopic() == topic and con.getURI() == uri:
+                    already_connected = True
+            del guard_pl
+
+            if not already_connected:
+                guard_sub = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
+                for sub in self._subscribers:
+                    sub.connect(caller_id, topic, [uri])
+                del guard_sub
+            pub = PublisherLink(caller_id=caller_id,
+                                topic=topic, xmlrpc_uri=uri)
+            new_con.append(pub)
+
+        for old_ in old_con:
+            if old_ not in new_con:
+                old_.exit()
+                guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+                self._tcp_pub_connecters.remove(old_)
+                del guard_pl
 
         return 1, "", 0
+
+    ##
+    # @if jp
+    # @brief getPidコールバック関数
+    #
+    # @param self
+    # @param caller_id 呼び出しID
+    # @return ret, msg, value
+    # ret：リターンコード(1：問題なし)
+    # msg：メッセージ
+    # value：値
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param caller_id
+    # @return
+    #
+    # @endif
+
+    def getPid(self, caller_id):
+        return 1, "", os.getpid()
 
     ##
     # @if jp
@@ -303,12 +365,49 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     def run(self):
         while not self._shutdownflag:
             try:
-                (client_sock, client_addr) = self._server_sock.accept()
-                addr = client_addr[0] + ":" + str(client_addr[1])
+                (client_sock, _) = self._server_sock.accept()
+                self.addSubscriberLink(client_sock)
+
+                if sys.version_info[0] == 3:
+                    header = read_ros_handshake_header(
+                        client_sock, BytesIO(), 65536)
+                else:
+                    header = read_ros_handshake_header(
+                        client_sock, StringIO(), 65536)
+
+                fileno = client_sock.fileno()
+                poller = None
+                if hasattr(select, 'poll'):
+                    ready = False
+                    poller = select.poll()
+                    poller.register(fileno, select.POLLOUT)
+                    while not ready:
+                        events = poller.poll()
+                        for _, flag in events:
+                            if flag & select.POLLOUT:
+                                ready = True
+                else:
+                    ready = None
+                    while not ready:
+                        try:
+                            _, ready, _ = select.select([], [fileno], [])
+                        except ValueError:
+                            print("ValueError")
+                            return
+                client_sock.setblocking(1)
+
+                guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
                 for publisher in self._publishers:
-                    publisher.connect(client_sock, addr)
+                    publisher.connect(client_sock, header)
+                del guard_pub
+
+                if poller:
+                    poller.unregister(fileno)
+
+            except rosgraph.network.ROSHandshakeException:
+                print("read ROS handshake exception")
             except BaseException:
-                pass
+                print(OpenRTM_aist.Logger.print_exception())
 
     ##
     # @if jp
@@ -392,8 +491,9 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @endif
     def getSubscriptions(self, caller_id):
         subs = []
+        guard_sub = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
         for subscriber in self._subscribers:
-            sub = [subscriber.getName(), subscriber.datatype()]
+            sub = [subscriber.getTopic(), subscriber.datatype()]
             subs.append(sub)
 
         return 1, "subscriptions", subs
@@ -420,11 +520,12 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @endif
     def getPublications(self, caller_id):
         pubs = []
+        guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
         for publisher in self._publishers:
-            pub = [publisher.getName(), publisher.datatype()]
+            pub = [publisher.getTopic(), publisher.datatype()]
             pubs.append(pub)
 
-        return 1, "subscriptions", pubs
+        return 1, "publications", pubs
 
     ##
     # @if jp
@@ -444,7 +545,19 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def getBusStats(self, caller_id):
-        return 1, "", []
+        pubStats = []
+        guard_p = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
+        for pub in self._publishers:
+            pubStats.append(pub.getStats())
+        del guard_p
+        subStats = []
+        guard_s = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
+        for sub in self._subscribers:
+            subStats.append(sub.getStats())
+        del guard_s
+        srvStats = []
+        stats = [pubStats, subStats, srvStats]
+        return 1, "", stats
 
     ##
     # @if jp
@@ -468,10 +581,15 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @endif
     def getBusInfo(self, caller_id):
         info = []
-        for subscriber in self._subscribers:
-            info.extend(subscriber.getInfo())
-        for publisher in self._publishers:
-            info.extend(publisher.getInfo())
+        guard_sl = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
+        for con in self._tcp_sub_connecters:
+            info.append(con.getInfo())
+        del guard_sl
+
+        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+        for con in self._tcp_pub_connecters:
+            info.append(con.getInfo())
+        del guard_pl
 
         return 1, "bus info", info
 
@@ -513,6 +631,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def hasPublisher(self, topic):
+        guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
         for publisher in self._publishers:
             if publisher.getTopic() == topic:
                 return True
@@ -542,6 +661,232 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
     ##
     # @if jp
+    # @brief PublisherLinkの一覧を取得
+    #
+    # @param self
+    # @return PublisherLinkの一覧
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    def getPublisherLinkList(self):
+        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+        return self._tcp_pub_connecters
+
+    ##
+    # @if jp
+    # @brief SubscriberLinkの一覧を取得
+    #
+    # @param self
+    # @return SubscriberLinkの一覧
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    def getSubscriberLinkList(self):
+        guard_sl = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
+        return self._tcp_sub_connecters
+
+    ##
+    # @if jp
+    # @brief 指定のソケットオブジェクト、呼び出しID、トピック名、URI、
+    # 受信処理用関数オブジェクト、受信処理用スレッドオブジェクトからSubscriberLinkオブジェクトを追加する
+    #
+    # @param self
+    # @param connection ソケットオブジェクト
+    # @param caller_id 呼び出しID
+    # @param topic トピック名
+    # @param xmlrpc_uri 接続先のURI
+    # @param listener 受信処理用関数オブジェクト
+    # @param task 受信処理用スレッドオブジェクト
+    # @return True：追加成功
+    #
+    # @else
+    #
+    # @brief
+    #
+    #
+    # @param self
+    # @param connection
+    # @param caller_id
+    # @param topic
+    # @param xmlrpc_uri
+    # @param listener
+    # @param task
+    # @return
+    #
+    # @endif
+    def addPublisherLink(self, connection, caller_id, topic, xmlrpc_uri, listener, task):
+        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+        self._tcp_pub_connecters.append(PublisherLink(
+            connection, self._pubnum, caller_id, topic, xmlrpc_uri, listener, task))
+        self._pubnum += 1
+        return True
+
+    ##
+    # @if jp
+    # @brief 指定のソケットオブジェクトからPublisherLinkオブジェクトを削除する
+    #
+    # @param self
+    # @param connection ソケットオブジェクト
+    # @return True：削除成功
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param connection
+    # @return
+    #
+    # @endif
+    def removePublisherLink(self, connection):
+        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+        for con in self._tcp_pub_connecters[:]:
+            if con.getConnection() == connection:
+                con.exit()
+                self._tcp_pub_connecters.remove(con)
+                return True
+        return False
+
+    ##
+    # @if jp
+    # @brief 指定の呼び出しID、トピック名、URIのPublisherLinkが存在するかを確認
+    #
+    # @param self
+    # @param caller_id 呼び出しID
+    # @param topic トピック名
+    # @param xmlrpc_uri 接続先のURI
+    # @return True：存在する
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param caller_id
+    # @param topic
+    # @param xmlrpc_uri
+    # @return
+    #
+    # @endif
+    def existPublisherLink(self, caller_id, topic, xmlrpc_uri):
+        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+        for con in self._tcp_pub_connecters:
+            if con.getCallerID() == caller_id and con.getTopic() == topic and con.getURI() == xmlrpc_uri:
+                return True
+        return False
+
+    ##
+    # @if jp
+    # @brief 指定のソケットオブジェクトからSubscriberLinkオブジェクトを追加する
+    #
+    # @param self
+    # @param connection ソケットオブジェクト
+    # @return True：追加成功
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param connection
+    # @return
+    #
+    # @endif
+    def addSubscriberLink(self, connection):
+        guard_sl = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
+        self._tcp_sub_connecters.append(
+            SubscriberLink(connection, self._subnum))
+        self._subnum += 1
+        return True
+
+    ##
+    # @if jp
+    # @brief 指定のソケットオブジェクトからSubscriberLinkオブジェクトを削除する
+    #
+    # @param self
+    # @param connection ソケットオブジェクト
+    # @return True：削除成功
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param connection
+    # @return
+    #
+    # @endif
+    def removeSubscriberLink(self, connection):
+        guard_sl = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
+        for con in self._tcp_sub_connecters[:]:
+            if con.getConnection() == connection:
+                con.exit()
+                self._tcp_sub_connecters.remove(con)
+                return True
+        return False
+
+    ##
+    # @if jp
+    # @brief 指定のソケットオブジェクトからPublisherLinkオブジェクトを取得する
+    #
+    # @param self
+    # @param connection ソケットオブジェクト
+    # @return PublisherLinkオブジェクト
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param connection
+    # @return
+    #
+    # @endif
+    def getPublisherLink(self, connection):
+        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+        for con in self._tcp_pub_connecters:
+            if con.getConnection() == connection:
+                return con
+        return None
+
+    ##
+    # @if jp
+    # @brief 指定のソケットオブジェクトからSubscriberLinkオブジェクトを取得する
+    #
+    # @param self
+    # @param connection ソケットオブジェクト
+    # @return SubscriberLinkオブジェクト
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param connection
+    # @return
+    #
+    # @endif
+    def getSubscriberLink(self, connection):
+        guard_sl = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
+        for con in self._tcp_sub_connecters:
+            if con.getConnection() == connection:
+                return con
+        return None
+
+    ##
+    # @if jp
     # @brief インスタンス取得
     #
     # @return インスタンス
@@ -557,7 +902,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
         global manager
         global mutex
 
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        guard = OpenRTM_aist.Guard.ScopedLock(mutex)
         if manager is None:
             manager = ROSTopicManager()
             manager.start()
@@ -582,10 +927,575 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
         global manager
         global mutex
 
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        guard = OpenRTM_aist.Guard.ScopedLock(mutex)
         if manager is not None:
             manager.shutdown()
 
         manager = None
 
     shutdown_global = staticmethod(shutdown_global)
+
+
+##
+# @if jp
+# @class PublisherLink
+# @brief Publisherとの接続情報を管理するクラス
+# InPort側で保持する
+#
+# @else
+# @class PublisherLink
+# @brief
+#
+#
+# @endif
+class PublisherLink:
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @param self
+    # @param conn ソケットオブジェクト
+    # @param num 接続ID
+    # @param caller_id 呼び出しID
+    # @param topic トピック名
+    # @param xmlrpc_uri 接続先のURI
+    # @param listener 受信処理用コールバック関数オブジェクト
+    # @param task 受信処理用スレッドオブジェクト
+    #
+    # @else
+    # @brief Constructor
+    #
+    # @param self
+    # @param conn
+    # @param num
+    # @param caller_id
+    # @param topic
+    # @param xmlrpc_uri
+    # @param listener
+    # @param task
+    #
+    # @endif
+    def __init__(self, conn=None, num=0, caller_id="", topic="", xmlrpc_uri="", listener=None, task=None):
+        self._conn = conn
+        self._num = num
+        self._caller_id = caller_id
+        self._topic = topic
+        self._xmlrpc_uri = xmlrpc_uri
+        self._listener = listener
+        self._task = task
+        self._done = False
+
+    ##
+    # @if jp
+    # @brief デストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
+    def __del__(self):
+        pass
+
+    ##
+    # @if jp
+    # @brief ソケットオブジェクトを取得
+    #
+    #
+    # @param self
+    # @return ソケットオブジェクト
+    #
+    # @else
+    #
+    # @brief self
+    # @return
+    #
+    # @endif
+    def getConnection(self):
+        return self._conn
+
+    ##
+    # @if jp
+    # @brief ソケットオブジェクトを設定
+    #
+    #
+    # @param self
+    # @param conn ソケットオブジェクト
+    #
+    # @else
+    #
+    # @brief self
+    # @param conn
+    #
+    # @endif
+    def setConnection(self, conn):
+        self._conn = conn
+
+    ##
+    # @if jp
+    # @brief 接続IDの取得
+    #
+    #
+    # @param self
+    # @return 接続ID
+    #
+    # @else
+    #
+    # @brief self
+    # @return
+    #
+    # @endif
+    def getNum(self):
+        return self._num
+
+    ##
+    # @if jp
+    # @brief 呼び出しIDの取得
+    #
+    #
+    # @param self
+    # @return 呼び出しID
+    #
+    # @else
+    #
+    # @brief self
+    # @return
+    #
+    # @endif
+    def getCallerID(self):
+        return self._caller_id
+
+    ##
+    # @if jp
+    # @brief トピック名を取得
+    #
+    #
+    # @param self
+    # @return トピック名
+    #
+    # @else
+    #
+    # @brief self
+    # @return
+    #
+    # @endif
+    def getTopic(self):
+        return self._topic
+
+    ##
+    # @if jp
+    # @brief 接続先のURIを取得
+    #
+    #
+    # @param self
+    # @return URI
+    #
+    # @else
+    #
+    # @brief self
+    # @return URI
+    #
+    # @endif
+    def getURI(self):
+        return self._xmlrpc_uri
+
+    ##
+    # @if jp
+    # @brief 終了処理
+    # ソケット通信を切断する
+    # 受信処理用スレッドを終了する
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
+
+    def exit(self):
+        self._conn.shutdown(socket.SHUT_RDWR)
+        self._conn.close()
+        self._listener.shutdown()
+        self._task.join()
+        self._done = True
+
+    ##
+    # @if jp
+    # @brief コネクタの情報取得(getBusInfo用)
+    #
+    # @return コネクタの情報
+    #
+    # @else
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    #
+    def getInfo(self):
+        ret = [self.getNum(), self.getURI(), "i",
+               "TCPROS", self.getTopic(), True, self.getTransportInfo()]
+        return ret
+
+    ##
+    # @if jp
+    # @brief コネクタの情報取得(getBusInfo用)
+    #
+    # @return コネクタの情報
+    #
+    # @else
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    #
+
+    def getTransportInfo(self):
+        _, localport = self._conn.getsockname()
+        clientaddress, clientport = self._conn.getpeername()
+        ret = "TCPROS connection on port " + \
+            str(localport) + " to [" + clientaddress + ":" + \
+            str(clientport) + " on socket " + str(self._conn.fileno()) + "]"
+        return ret
+
+    ##
+    # @if jp
+    # @brief コネクタの統計データ取得(getBusStats用)
+    #
+    # @return コネクタの統計データ
+    #
+    # @else
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    #
+
+    def getStats(self):
+        stat_bytes = self._listener.getStatBytes()
+        stat_num_msg = self._listener.getStatNumMsg()
+        ret = [self._num, stat_bytes, stat_num_msg, -1, self._done]
+        return ret
+
+    ##
+    # @if jp
+    # @brief 等価比較演算子
+    # 呼び出しID、トピック名、URIが一致した場合にTrueを返す
+    #
+    # @param self
+    # @param other 比較対象
+    # @return　True：一致
+    #
+    # @else
+    #
+    # @brief self
+    # @param other
+    # @return
+    #
+    # @endif
+
+    def __eq__(self, other):
+        if self._caller_id == other._caller_id and self._topic == other._topic and self._xmlrpc_uri == other._xmlrpc_uri:
+            return True
+        else:
+            return False
+
+##
+# @if jp
+# @class SubscriberLink
+# @brief Subscriberとの接続情報を管理するクラス
+# OutPort側で保持する
+#
+# @else
+# @class SubscriberLink
+# @brief
+#
+#
+# @endif
+
+
+class SubscriberLink:
+    ##
+    # @if jp
+    # @brief コンストラクタ
+    #
+    # コンストラクタ
+    #
+    # @param self
+    # @param conn ソケットオブジェクト
+    # @param num 接続ID
+    # @param topic トピック名
+    # @param caller_id 呼び出しID
+    #
+    # @else
+    # @brief Constructor
+    #
+    # @param self
+    # @param conn
+    # @param num
+    # @param topic
+    # @param caller_id
+    #
+    # @endif
+    def __init__(self, conn=None, num=0, topic="", caller_id=""):
+        self._conn = conn
+        self._num = num
+        self._topic = topic
+        self._caller_id = caller_id
+        self._stat_bytes = 0
+        self._stat_num_msg = 0
+        self._done = False
+
+    ##
+    # @if jp
+    # @brief デストラクタ
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
+    def __del__(self):
+        pass
+
+    ##
+    # @if jp
+    # @brief ソケットオブジェクトを取得する
+    #
+    #
+    # @param self
+    # @return ソケットオブジェクト
+    #
+    # @else
+    #
+    # @brief self
+    # @return
+    #
+    # @endif
+    def getConnection(self):
+        return self._conn
+
+    ##
+    # @if jp
+    # @brief ソケットオブジェクトを設定する
+    #
+    #
+    # @param self
+    # @param conn ソケットオブジェクト
+    #
+    # @else
+    #
+    # @brief self
+    # @param conn
+    #
+    # @endif
+    def setConnection(self, conn):
+        self._conn = conn
+
+    ##
+    # @if jp
+    # @brief 接続IDの取得
+    #
+    #
+    # @param self
+    # @return 接続ID
+    #
+    # @else
+    #
+    # @brief self
+    # @return
+    #
+    # @endif
+    def getNum(self):
+        return self._num
+
+    ##
+    # @if jp
+    # @brief 終了処理
+    # ソケット通信を切断する。
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @brief self
+    #
+    # @endif
+    def exit(self):
+        self._conn.shutdown(socket.SHUT_RDWR)
+        self._conn.close()
+        self._done = True
+
+    ##
+    # @if jp
+    # @brief トピック名を設定する
+    #
+    #
+    # @param self
+    # @param topic トピック名
+    #
+    # @else
+    #
+    # @brief self
+    # @param topic
+    #
+    # @endif
+    def setTopic(self, topic):
+        self._topic = topic
+
+    ##
+    # @if jp
+    # @brief トピック名を取得する
+    #
+    #
+    # @param self
+    # @return トピック名
+    #
+    # @else
+    #
+    # @brief self
+    # @return
+    #
+    # @endif
+    def getTopic(self):
+        return self._topic
+
+    ##
+    # @if jp
+    # @brief 呼び出しIDを設定する
+    #
+    #
+    # @param self
+    # @param caller_id 呼び出しID
+    #
+    # @else
+    #
+    # @brief self
+    # @param caller_id
+    #
+    # @endif
+    def setCallerID(self, caller_id):
+        self._caller_id = caller_id
+
+    ##
+    # @if jp
+    # @brief 呼び出しIDを取得する
+    #
+    #
+    # @param self
+    # @return 呼び出しID
+    #
+    # @else
+    #
+    # @brief self
+    # @return
+    #
+    # @endif
+    def getCallerID(self):
+        return self._caller_id
+
+    ##
+    # @if jp
+    # @brief 過去に送信したデータ量(byte)を設定する
+    #
+    #
+    # @param self
+    # @param stat_bytes データ量
+    #
+    # @else
+    #
+    # @brief self
+    # @param stat_bytes
+    #
+    # @endif
+    def setStatBytes(self, stat_bytes):
+        self._stat_bytes = stat_bytes
+        self._stat_num_msg = 1
+
+    ##
+    # @if jp
+    # @brief コネクタの情報取得(getBusInfo用)
+    #
+    # @return コネクタの情報
+    #
+    # @else
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    #
+
+    def getInfo(self):
+        ret = [self.getNum(), self.getCallerID(), "o",
+               "TCPROS", self.getTopic(), True, self.getTransportInfo()]
+        return ret
+
+    ##
+    # @if jp
+    # @brief コネクタの情報取得(getBusInfo用)
+    #
+    # @return コネクタの情報
+    #
+    # @else
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    #
+    def getTransportInfo(self):
+        _, localport = self._conn.getsockname()
+        clientaddress, clientport = self._conn.getpeername()
+        ret = "TCPROS connection on port " + \
+            str(localport) + " to [" + clientaddress + ":" + \
+            str(clientport) + " on socket " + str(self._conn.fileno()) + "]"
+        return ret
+
+    ##
+    # @if jp
+    # @brief データ送信
+    #
+    # @param data データ
+    #
+    # @else
+    # @brief
+    #
+    # @param data
+    #
+    # @endif
+    #
+
+    def sendall(self, data):
+        self._conn.sendall(data)
+        self._stat_bytes += len(data)
+        self._stat_num_msg += 1
+
+    ##
+    # @if jp
+    # @brief コネクタの統計データ取得(getBusStats用)
+    #
+    # @return コネクタの統計データ
+    #
+    # @else
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    #
+
+    def getStats(self):
+        ret = [self._num, self._stat_bytes, self._stat_num_msg, self._done]
+        return ret
