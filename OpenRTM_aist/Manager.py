@@ -1729,13 +1729,7 @@ class Manager:
     def initORB(self):
         self._rtcout.RTC_TRACE("Manager.initORB()")
         try:
-            tmp_args = self.createORBOptions().split("\"")
-            args = []
-            for i, tmp_arg in enumerate(tmp_args):
-                if i % 2 == 0:
-                    args.extend(tmp_arg.strip().split(" "))
-                else:
-                    args.append(tmp_arg)
+            args = OpenRTM_aist.parseArgs(self.createORBOptions())
 
             args.insert(0, "manager")
             argv = OpenRTM_aist.toArgv(args)

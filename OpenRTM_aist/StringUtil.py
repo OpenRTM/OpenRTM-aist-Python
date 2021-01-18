@@ -804,3 +804,90 @@ def getFileList(dir, ext, filelist=None):
         if os.path.isfile(f):
             filelist.append(f)
     return filelist
+
+
+##
+# @if jp
+# @brief 文字列を引数として解釈する
+#
+# @param args 文字列
+# @return 引数リスト
+#
+#
+#
+# @else
+# @brief Parse string as argument list
+#
+# @param args
+# @return
+#
+#
+# @endif
+def parseArgs(args):
+    inArg = False
+    inEscape = False
+    inDquote = False
+    inSquote = False
+
+    ret = []
+    anArg = ""
+
+    for i in range(0, len(args)):
+        if args[i] == " " or args[i] == "\t":
+            if inEscape or inDquote or inSquote:
+                anArg += args[i]
+                continue
+            if not inArg:
+                continue
+            if inArg:
+                ret.append(anArg)
+                anArg = ""
+                inArg = False
+                continue
+        inArg = True
+
+        if args[i] == "\\":
+            if inEscape:
+                anArg += args[i]
+            inEscape = not inEscape
+            continue
+
+        if args[i] == "\"":
+            if inEscape:
+                inEscape = False
+                if inSquote:
+                    anArg += "\\"
+                anArg += args[i]
+                continue
+
+            if inSquote:
+                anArg += args[i]
+                continue
+
+            inDquote = not inDquote
+            continue
+
+        if args[i] == "\'":
+            if inEscape:
+                inEscape = False
+                if inSquote:
+                    anArg += "\\"
+                anArg += args[i]
+                continue
+
+            if inDquote:
+                anArg += args[i]
+                continue
+
+            inSquote = not inSquote
+            continue
+
+        if inEscape:
+            inEscape = False
+            if inDquote or inSquote:
+                anArg += "\\"
+
+        anArg += args[i]
+
+    ret.append(anArg)
+    return ret
