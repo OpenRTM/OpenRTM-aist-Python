@@ -387,6 +387,7 @@ class ConfigAdmin:
         self._newConfig = []
         self._listeners = OpenRTM_aist.ConfigurationListeners()
         self._changedParam = []
+        self._configsets.createNode(self._activeId)
 
     ##
     # @if jp
