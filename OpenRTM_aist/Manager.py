@@ -2570,6 +2570,8 @@ class Manager:
     # prop);
 
     def configureComponent(self, comp, prop):
+        comp.setProperties(prop)
+
         category = comp.getCategory()
         type_name = comp.getTypeName()
         inst_name = comp.getInstanceName()
@@ -2644,7 +2646,6 @@ class Manager:
                     config_fname.append(
                         self._config.getProperty("config_file"))
 
-        comp.setProperties(prop)
         type_prop.mergeProperties(name_prop)
         type_prop.setProperty(
             "config_file", OpenRTM_aist.flatten(
