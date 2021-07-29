@@ -2,13 +2,13 @@ Source: openrtm-aist-python
 Section: main
 Priority: extra
 Maintainer: Noriaki Ando <n-ando@aist.go.jp>
-Build-Depends: debhelper, python, python-omniorb
+Build-Depends: debhelper, python3-all-dev, python3-omniorb
 Standards-Version: 3.8.4
 Homepage: http://www.openrtm.org
 
-Package: openrtm-aist-python
+Package: openrtm-aist-python3
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, omniorb-nameserver
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-omniorb, omniorb-nameserver
 Description: OpenRTM-aist, RT-Middleware distributed by AIST
  OpenRTM-aist is a reference implementation of RTC (Robotic Technology
  Component Version 1.1, formal/12-09-01) specification which is OMG
@@ -20,13 +20,13 @@ Description: OpenRTM-aist, RT-Middleware distributed by AIST
  National Institute of Advanced Industrial Science and Technology
  (AIST), Japan. Please see http://www.openrtm.org/ for more detail.
 
-Package: openrtm-aist-python-example
+Package: openrtm-aist-python3-example
 Architecture: any
-Depends: openrtm-aist-python
+Depends: openrtm-aist-python3
 Description: OpenRTM-aist-Python examples
  Example components and sources of OpenRTM-aist.
 
-Package: openrtm-aist-python-doc
+Package: openrtm-aist-python3-doc
 Architecture: all
 Description: Documentation for openrtm-aist-python
  Class reference manual of OpenRTM-aist.
