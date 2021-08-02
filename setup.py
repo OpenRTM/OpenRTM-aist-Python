@@ -208,7 +208,7 @@ openrtm_ext_packages = [
     "OpenRTM_aist.ext.sdo.observer",
     "OpenRTM_aist.ext.ssl",
     "OpenRTM_aist.ext.logger",
-    "OpenRTM_aist.ext.logger.fluentbit_stream",
+    "OpenRTM_aist.ext.logger.fluentlogger",
     "OpenRTM_aist.ext.transport",
     "OpenRTM_aist.ext.transport.ROSTransport",
     "OpenRTM_aist.ext.transport.ROS2Transport",
@@ -257,8 +257,8 @@ baseidl_path = os.path.normpath(current_dir + "/" + baseidl_dir)
 #
 # scripts settings
 #
-pkg_scripts_unix = ['OpenRTM_aist/utils/rtcd/rtcd_python',
-                    'OpenRTM_aist/utils/rtcprof/rtcprof_python']
+pkg_scripts_unix = ['OpenRTM_aist/utils/rtcd/rtcd_python3',
+                    'OpenRTM_aist/utils/rtcprof/rtcprof_python3']
 pkg_scripts_win32 = ['OpenRTM_aist/utils/rtcd/rtcd_python.py',
                      #                     'OpenRTM_aist/utils/rtcd/rtcd_python.exe',
                      'OpenRTM_aist/utils/rtcd/rtcd_python.bat',
@@ -286,14 +286,14 @@ ext_match_regex_win32 = r".*\.(py|conf|bat|xml|idl)$"
 # examples
 #
 example_dir = "OpenRTM_aist/examples"
-target_example_dir = "share/openrtm-" + pkg_shortver + "/components/python"
+target_example_dir = "share/openrtm-" + pkg_shortver + "/components/python3"
 example_match_regex = r".*\.(py|conf|sh|xml|idl)$"
 example_path = os.path.normpath(current_dir + "/" + example_dir)
 #
 # documents
 #
 document_dir = "OpenRTM_aist/docs"
-target_doc_dir = "share/openrtm-" + pkg_shortver + "/doc/python"
+target_doc_dir = "share/openrtm-" + pkg_shortver + "/doc/python3"
 document_match_regex = r".*\.(css|gif|png|html||hhc|hhk|hhp|js)$"
 document_path = os.path.normpath(current_dir + "/" + document_dir)
 
@@ -1014,6 +1014,7 @@ class install_core_lib(_install_lib):
                                    ('optimize', 'optimize'),
                                    ('skip_build', 'skip_build'),
                                    )
+        _install_lib.finalize_options(self)
 
 
 # sub-command "install_core_script" which is called from install_core
@@ -1027,6 +1028,7 @@ class install_core_scripts(_install_scripts):
                                    ('force', 'force'),
                                    ('skip_build', 'skip_build'),
                                    )
+        _install_scripts.finalize_options(self)
 
 
 # sub-command "install_core_egg_info" which is called from install_core
