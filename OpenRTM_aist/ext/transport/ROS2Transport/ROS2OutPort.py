@@ -129,8 +129,21 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 
         info_type = info.datatype()
 
+        qos = ROS2TopicManager.get_qosprofile(prop.getNode("ros2.publisher.qos"))
+
+        self._rtcout.RTC_VERBOSE("history policy: %s", qos.history)
+        self._rtcout.RTC_VERBOSE("depth: %d", qos.depth)
+        self._rtcout.RTC_VERBOSE("reliability policy: %s", qos.reliability)
+        self._rtcout.RTC_VERBOSE("durability policy: %s", qos.durability)
+        self._rtcout.RTC_VERBOSE("lifespan: %d [nsec]", qos.lifespan.nanoseconds)
+        self._rtcout.RTC_VERBOSE("deadline: %d [nsec]", qos.deadline.nanoseconds)
+        self._rtcout.RTC_VERBOSE("liveliness policy: %s", qos.liveliness)
+        self._rtcout.RTC_VERBOSE("liveliness lease duration: %d [nsec]", qos.liveliness_lease_duration.nanoseconds)
+        self._rtcout.RTC_VERBOSE("avoid ros namespace conventions: %s", qos.avoid_ros_namespace_conventions)
+
+        
         self._publisher = self._topicmgr.createPublisher(
-            info_type, self._topic)
+            info_type, self._topic, qos)
 
     ##
     # @if jp

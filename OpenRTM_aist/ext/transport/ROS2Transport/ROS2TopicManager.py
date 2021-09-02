@@ -21,6 +21,13 @@ import OpenRTM_aist
 import ROS2MessageInfo
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile
+from rclpy.qos import HistoryPolicy
+from rclpy.qos import Duration
+from rclpy.qos import ReliabilityPolicy
+from rclpy.qos import DurabilityPolicy
+from rclpy.qos import LivelinessPolicy
+from rclpy.qos import HistoryPolicy
 import threading
 
 
@@ -139,6 +146,7 @@ class ROS2TopicManager(object):
     # @param self
     # @param msgtype メッセージ型
     # @param topic トピック名
+    # @param qos QoSProfile
     # @return Publisherオブジェクト
     #
     # @else
@@ -148,15 +156,18 @@ class ROS2TopicManager(object):
     # @param self
     # @param msgtype
     # @param topic
+    # @param qos 
     # @return
     #
     # @endif
 
-    def createPublisher(self, msgtype, topic):
+    def createPublisher(self, msgtype, topic, qos=None):
         global mutex
+        if qos is None:
+            qos = QoSProfile(depth=10)
         guard = OpenRTM_aist.ScopedLock(mutex)
         if self._node:
-            return self._node.create_publisher(msgtype, topic)
+            return self._node.create_publisher(msgtype, topic, qos)
         return None
 
     ##
@@ -167,6 +178,7 @@ class ROS2TopicManager(object):
     # @param msgtype メッセージ型
     # @param topic トピック名
     # @param listener コールバック関数
+    # @param qos QoSProfile
     # @return Subscriberオブジェクト
     #
     # @else
@@ -177,14 +189,17 @@ class ROS2TopicManager(object):
     # @param msgtype
     # @param topic
     # @param listener
+    # @param qos 
     # @return
     #
     # @endif
-    def createSubscriber(self, msgtype, topic, listener):
+    def createSubscriber(self, msgtype, topic, listener, qos=None):
         global mutex
+        if qos is None:
+            qos = QoSProfile(depth=10)
         guard = OpenRTM_aist.ScopedLock(mutex)
         if self._node:
-            return self._node.create_subscription(msgtype, topic, listener)
+            return self._node.create_subscription(msgtype, topic, listener, qos)
         return None
 
     def deletePublisher(self, pub):
@@ -243,3 +258,106 @@ class ROS2TopicManager(object):
         manager = None
 
     shutdown_global = staticmethod(shutdown_global)
+
+
+    ##
+    # @if jp
+    # @brief プロパティからQoSProfileを設定する
+    # @param prop プロパティ
+    # @return QoSProfile
+    #
+    # @else
+    #
+    # @brief
+    # @param prop
+    # @return QoSProfile
+    #
+    # @endif
+    def get_qosprofile(prop):
+        history = HistoryPolicy.KEEP_LAST
+        history_type = prop.getProperty("history", "KEEP_LAST")
+        
+        if history_type == "SYSTEM_DEFAULT":
+            history = HistoryPolicy.SYSTEM_DEFAULT
+        elif history_type == "KEEP_ALL":
+            history = HistoryPolicy.KEEP_ALL
+        else:
+            history = HistoryPolicy.KEEP_LAST
+
+        
+        depth = 10
+        depth_value_str = prop.getProperty("depth", "10")
+        try:
+            depth = int(depth_value_str)
+        except ValueError:
+            pass
+
+        reliability = ReliabilityPolicy.RELIABLE
+        reliability_type = prop.getProperty("reliability", "RELIABLE")
+        if reliability_type == "SYSTEM_DEFAULT":
+            reliability = ReliabilityPolicy.SYSTEM_DEFAULT
+        elif reliability_type == "BEST_EFFORT":
+            reliability = ReliabilityPolicy.BEST_EFFORT
+        else:
+            reliability = ReliabilityPolicy.RELIABLE
+
+        durability = DurabilityPolicy.VOLATILE
+        durability_type = prop.getProperty("durability", "VOLATILE")
+        if durability_type == "SYSTEM_DEFAULT":
+            durability = DurabilityPolicy.SYSTEM_DEFAULT
+        elif durability_type == "TRANSIENT_LOCAL":
+            durability = DurabilityPolicy.TRANSIENT_LOCAL
+        else:
+            durability = DurabilityPolicy.VOLATILE
+        
+        lifespan = Duration(seconds=0, nanoseconds=0)
+        lifespan_value_str = prop.getProperty("lifespan", "0")
+        try:
+            lifespan_value = int(lifespan_value_str)
+            lifespan = Duration(nanoseconds=lifespan_value)
+        except ValueError:
+            pass
+
+        deadline = Duration(seconds=0, nanoseconds=0)
+        deadline_value_str = prop.getProperty("deadline", "0")
+        try:
+            deadline_value = int(deadline_value_str)
+            deadline = Duration(nanoseconds=deadline_value)
+        except ValueError:
+            pass
+
+        liveliness = LivelinessPolicy.SYSTEM_DEFAULT
+        liveliness_type = prop.getProperty("liveliness", "SYSTEM_DEFAULT")
+        if liveliness_type == "AUTOMATIC":
+            liveliness = LivelinessPolicy.AUTOMATIC
+        elif liveliness_type == "MANUAL_BY_NODE":
+            liveliness = LivelinessPolicy.MANUAL_BY_NODE
+        elif liveliness_type == "MANUAL_BY_TOPIC":
+            liveliness = LivelinessPolicy.MANUAL_BY_TOPIC
+        else:
+            liveliness = LivelinessPolicy.SYSTEM_DEFAULT
+
+        liveliness_lease_duration = Duration(seconds=0, nanoseconds=0)
+        liveliness_lease_duration_value_str = prop.getProperty("liveliness_lease_duration", "0")
+        try:
+            liveliness_lease_duration_value = int(liveliness_lease_duration_value_str)
+            liveliness_lease_duration = Duration(nanoseconds=liveliness_lease_duration_value)
+        except ValueError:
+            pass
+
+        avoid_ros_namespace_conventions = False
+        if OpenRTM_aist.toBool(prop.getProperty(
+            "avoid_ros_namespace_conventions"), "YES", "NO", False):
+            avoid_ros_namespace_conventions = True
+        else:
+            avoid_ros_namespace_conventions = False
+            
+
+        qos = QoSProfile(history=history, depth=depth, reliability=reliability, durability=durability, 
+                        lifespan=lifespan, deadline=deadline, liveliness=liveliness,
+                        liveliness_lease_duration=liveliness_lease_duration, 
+                        avoid_ros_namespace_conventions=avoid_ros_namespace_conventions)
+
+        return qos
+
+    get_qosprofile = staticmethod(get_qosprofile)
