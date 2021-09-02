@@ -29,7 +29,7 @@ import os
 try:
     from cStringIO import StringIO
 except ImportError:
-    from io import StringIO
+    from io import BytesIO
 
 
 manager = None

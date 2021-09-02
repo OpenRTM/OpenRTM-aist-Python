@@ -159,8 +159,21 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
         info_type = info.datatype()
 
+        qos = ROS2TopicManager.get_qosprofile(prop.getNode("ros2.subscriber.qos"))
+
+        self._rtcout.RTC_VERBOSE("history policy: %s", qos.history)
+        self._rtcout.RTC_VERBOSE("depth: %d", qos.depth)
+        self._rtcout.RTC_VERBOSE("reliability policy: %s", qos.reliability)
+        self._rtcout.RTC_VERBOSE("durability policy: %s", qos.durability)
+        self._rtcout.RTC_VERBOSE("lifespan: %d [nsec]", qos.lifespan.nanoseconds)
+        self._rtcout.RTC_VERBOSE("deadline: %d [nsec]", qos.deadline.nanoseconds)
+        self._rtcout.RTC_VERBOSE("liveliness policy: %s", qos.liveliness)
+        self._rtcout.RTC_VERBOSE("liveliness lease duration: %d [nsec]", qos.liveliness_lease_duration.nanoseconds)
+        self._rtcout.RTC_VERBOSE("avoid ros namespace conventions: %s", qos.avoid_ros_namespace_conventions)
+
+
         self._subscriber = self._topicmgr.createSubscriber(
-            info_type, self._topic, self.ros2_callback)
+            info_type, self._topic, self.ros2_callback, qos)
 
     # virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
 
