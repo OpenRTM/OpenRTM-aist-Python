@@ -22,12 +22,7 @@ import ROS2MessageInfo
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile
-from rclpy.qos import HistoryPolicy
-from rclpy.qos import Duration
-from rclpy.qos import ReliabilityPolicy
-from rclpy.qos import DurabilityPolicy
-from rclpy.qos import LivelinessPolicy
-from rclpy.qos import HistoryPolicy
+
 import threading
 
 
@@ -274,6 +269,32 @@ class ROS2TopicManager(object):
     #
     # @endif
     def get_qosprofile(prop):
+
+        if hasattr(rclpy.qos, "HistoryPolicy"):
+            HistoryPolicy = rclpy.qos.HistoryPolicy
+        else:
+            HistoryPolicy = rclpy.qos.QoSHistoryPolicy
+
+        if hasattr(rclpy.qos, "Duration"):
+            Duration = rclpy.qos.Duration
+        else:
+            Duration = rclpy.qos.QoSDuration
+
+        if hasattr(rclpy.qos, "ReliabilityPolicy"):
+            ReliabilityPolicy = rclpy.qos.ReliabilityPolicy
+        else:
+            ReliabilityPolicy = rclpy.qos.QoSReliabilityPolicy
+
+        if hasattr(rclpy.qos, "DurabilityPolicy"):
+            DurabilityPolicy = rclpy.qos.DurabilityPolicy
+        else:
+            DurabilityPolicy = rclpy.qos.QoSDurabilityPolicy
+
+        if hasattr(rclpy.qos, "LivelinessPolicy"):
+            LivelinessPolicy = rclpy.qos.LivelinessPolicy
+        else:
+            LivelinessPolicy = rclpy.qos.QoSLivelinessPolicy
+
         history = HistoryPolicy.KEEP_LAST
         history_type = prop.getProperty("history", "KEEP_LAST")
         
