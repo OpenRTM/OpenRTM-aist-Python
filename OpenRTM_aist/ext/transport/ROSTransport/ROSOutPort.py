@@ -54,7 +54,9 @@ import time
 class ROSOutPort(OpenRTM_aist.InPortConsumer):
     """
     """
-
+    ROS_MASTER_URI = "ROS_MASTER_URI"
+    ROS_DEFAULT_MASTER_ADDRESS = "localhost"
+    ROS_DEFAULT_MASTER_PORT = "11311"
     ##
     # @if jp
     # @brief コンストラクタ
@@ -69,6 +71,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     # @param self
     #
     # @endif
+
     def __init__(self):
         OpenRTM_aist.InPortConsumer.__init__(self)
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("ROSOutPort")
@@ -76,8 +79,8 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         self._callerid = "/rtcomp"
         self._messageType = "ros:std_msgs/Float32"
         self._topic = "chatter"
-        self._roscorehost = "localhost"
-        self._roscoreport = "11311"
+        self._roscorehost = ""
+        self._roscoreport = ""
         self._tcp_connecters = []
         self._con_mutex = threading.RLock()
         self._message_data_sent = 0
@@ -146,8 +149,29 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
             "marshaling_type", "ros:std_msgs/Float32")
         self._topic = prop.getProperty("ros.topic", "chatter")
         self._topic = "/" + self._topic
-        self._roscorehost = prop.getProperty("ros.roscore.host", "localhost")
-        self._roscoreport = prop.getProperty("ros.roscore.port", "11311")
+        self._roscorehost = prop.getProperty("ros.roscore.host")
+        self._roscoreport = prop.getProperty("ros.roscore.port")
+
+        if not self._roscorehost and not self._roscoreport:
+            self._rtcout.RTC_VERBOSE(
+                "Get the IP address and port number of ros master from environment variable %s.",
+                ROSOutPort.ROS_MASTER_URI)
+            env = os.getenv(ROSOutPort.ROS_MASTER_URI)
+            if env:
+                self._rtcout.RTC_VERBOSE(
+                    "$%s: %s", (ROSOutPort.ROS_MASTER_URI, env))
+                env = env.replace("http://", "")
+                env = env.replace("https://", "")
+                envsplit = env.split(":")
+                self._roscorehost = envsplit[0]
+                if len(envsplit) >= 2:
+                    self._roscoreport = envsplit[1]
+
+        if not self._roscorehost:
+            self._roscorehost = ROSOutPort.ROS_DEFAULT_MASTER_ADDRESS
+
+        if not self._roscoreport:
+            self._roscoreport = ROSOutPort.ROS_DEFAULT_MASTER_PORT
 
         self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
         self._rtcout.RTC_VERBOSE(

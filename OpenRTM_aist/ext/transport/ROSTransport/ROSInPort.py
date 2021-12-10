@@ -57,6 +57,9 @@ except ImportError:
 class ROSInPort(OpenRTM_aist.InPortProvider):
     """
     """
+    ROS_MASTER_URI = "ROS_MASTER_URI"
+    ROS_DEFAULT_MASTER_ADDRESS = "localhost"
+    ROS_DEFAULT_MASTER_PORT = "11311"
 
     ##
     # @if jp
@@ -95,8 +98,8 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
         self._topic = "chatter"
         self._callerid = "/rtcomp"
         self._messageType = "ros:std_msgs/Float32"
-        self._roscorehost = "localhost"
-        self._roscoreport = "11311"
+        self._roscorehost = ""
+        self._roscoreport = ""
 
         self._tcp_connecters = []
         self._con_mutex = threading.RLock()
@@ -222,8 +225,29 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             "marshaling_type", "ros:std_msgs/Float32")
         self._topic = prop.getProperty("ros.topic", "chatter")
         self._topic = "/" + self._topic
-        self._roscorehost = prop.getProperty("ros.roscore.host", "localhost")
-        self._roscoreport = prop.getProperty("ros.roscore.port", "11311")
+        self._roscorehost = prop.getProperty("ros.roscore.host")
+        self._roscoreport = prop.getProperty("ros.roscore.port")
+
+        if not self._roscorehost and not self._roscoreport:
+            self._rtcout.RTC_VERBOSE(
+                "Get the IP address and port number of ros master from environment variable %s.",
+                ROSInPort.ROS_MASTER_URI)
+            env = os.getenv(ROSInPort.ROS_MASTER_URI)
+            if env:
+                self._rtcout.RTC_VERBOSE("$%s: %s", (ROSInPort.ROS_MASTER_URI, env))
+                env = env.replace("http://","")
+                env = env.replace("https://","")
+                envsplit = env.split(":")
+                self._roscorehost = envsplit[0]
+                if len(envsplit) >= 2:
+                    self._roscoreport = envsplit[1]
+
+        if not self._roscorehost:
+            self._roscorehost = ROSInPort.ROS_DEFAULT_MASTER_ADDRESS
+
+        if not self._roscoreport:
+            self._roscoreport = ROSInPort.ROS_DEFAULT_MASTER_PORT
+
 
         self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
         self._rtcout.RTC_VERBOSE(
