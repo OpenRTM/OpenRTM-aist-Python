@@ -1612,6 +1612,12 @@ class CorbaURI:
             uri = uri.replace("giop::", "corbaloc:iiop:")
         elif uri.find("iiop://") == 0:
             uri = uri.replace("iiop://", "corbaloc:iiop:")
+        elif uri.find("diop://") == 0:
+            uri = uri.replace("diop://", "corbaloc:diop:")
+        elif uri.find("uiop://") == 0:
+            uri = uri.replace("uiop://", "corbaloc:uiop:")
+        elif uri.find("shmiop://") == 0:
+            uri = uri.replace("shmiop://", "corbaloc:shmiop:")
         elif uri.find("inet:") == 0:
             uri = uri.replace("inet:", "corbaloc:iiop:")
 

@@ -1803,6 +1803,12 @@ class Manager:
             return True
         elif "iiop://" in endpoint:
             return True
+        elif "diop://" in endpoint:
+            return True
+        elif "uiop://" in endpoint:
+            return True
+        elif "shmiop://" in endpoint:
+            return True
         elif "inet:" in endpoint:
             return True
         return False
