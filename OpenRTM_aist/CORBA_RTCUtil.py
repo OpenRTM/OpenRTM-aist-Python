@@ -1711,7 +1711,7 @@ class CorbaURI:
     #
     # @endif
     def getHost(self):
-        return self._protocol
+        return self._host
 
     ##
     # @if jp
@@ -1730,7 +1730,7 @@ class CorbaURI:
     #
     # @endif
     def getPort(self):
-        return self._protocol
+        return self._port
 
     ##
     # @if jp
