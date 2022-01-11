@@ -1697,6 +1697,44 @@ class CorbaURI:
     ##
     # @if jp
     #
+    # @brief  ホスト名を取得する
+    #
+    # @param self
+    # @return ホスト名
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    def getHost(self):
+        return self._protocol
+
+    ##
+    # @if jp
+    #
+    # @brief  ポート番号を取得する
+    #
+    # @param self
+    # @return ポート番号
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    def getPort(self):
+        return self._protocol
+
+    ##
+    # @if jp
+    #
     # @brief  初期化時にCORBAオブジェクト参照用URLを指定した場合はfalse、
     # ホスト名、ポート番号のみを指定した場合はtrueを返す。
     #
