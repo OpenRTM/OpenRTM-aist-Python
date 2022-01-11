@@ -19,6 +19,7 @@ import threading
 
 
 import OpenRTM_aist
+import OpenRTM_aist.CORBA_RTCUtil
 from omniORB import CORBA
 import RTM
 import RTC
@@ -561,11 +562,9 @@ class NamingOnManager(NamingBase):
                     mgr = mgr_sev.getObjRef()
             return mgr
         try:
-            mgrloc = "corbaloc:iiop:"
             prop = self._mgr.getConfig()
             manager_name = prop.getProperty("manager.name")
-            mgrloc += name
-            mgrloc += "/" + manager_name
+            mgrloc = OpenRTM_aist.CORBA_RTCUtil.CorbaURI(name, manager_name).toString()
 
             mobj = self._orb.string_to_object(mgrloc)
             mgr = mobj._narrow(RTM.Manager)
@@ -783,7 +782,13 @@ class NamingManager:
         guard = OpenRTM_aist.ScopedLock(self._namesMutex)
         for n in self._names:
             if n.ns:
-                n.ns.unbindObject(name)
+                try:
+                    n.ns.unbindObject(name)
+                except BaseException:
+                    del n.ns
+                    n.ns = None
+
+
         self.unregisterCompName(name)
         self.unregisterMgrName(name)
         self.unregisterPortName(name)
@@ -899,7 +904,10 @@ class NamingManager:
 
     def bindCompsTo(self, ns):
         for comp in self._compNames:
-            ns.bindObject(comp.name, comp.rtobj)
+            try:
+                ns.bindObject(comp.name, comp.rtobj)
+            except BaseException:
+                pass
 
     ##
     # @if jp
