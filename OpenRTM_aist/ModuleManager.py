@@ -925,7 +925,19 @@ class ModuleManager:
 
     class DLLPred:
         def __init__(self, name=None, factory=None):
-            self._filepath = name or factory
+            if name is not None:
+                self._filepath = name
+            else:
+                self._filepath = factory.properties.getProperty(
+                    "file_path")
 
         def __call__(self, dll):
-            return self._filepath == dll.properties.getProperty("file_path")
+            try:
+                return os.path.samefile(
+                    self._filepath,
+                    dll.properties.getProperty("file_path")
+                )
+            except FileNotFoundError:
+                return self._filepath == dll.properties.getProperty("file_path")
+            except BaseException:
+                return False
