@@ -1536,3 +1536,224 @@ def set_configuration_parameter(conf, confset, value_name, value):
     confset.configuration_data = confData
     conf.set_configuration_set_values(confset)
     return True
+
+
+##
+# @if jp
+# @class CorbaURI
+# @brief 指定のCORBAオブジェクト参照用URLから参照形式、ホスト名、ポート番号、
+#        パス、オブジェクトキーを取得する機能を提供するクラス
+#
+# @since 2.0.0
+#
+# @else
+# @class CorbaURI
+# @brief
+#
+# @since 2.0.0
+#
+# @endif
+class CorbaURI:
+    ##
+    # @if jp
+    #
+    # @brief コンストラクタ
+    #
+    #  uriには以下の形式のURLを指定できる
+    #  - corbaloc形式(例：corbaloc:iiop:192.168.11.1:2809/Nameservice)
+    #  - corbaname形式(例：corbaname::192.168.11.1:2809#ConsoleOut0.rtc)
+    #  - HTTP(例：http://192.168.11.1:2809/call#Nameservice)
+    #  - HTTPS(例：https://192.168.11.1:2809/call#Nameservice)
+    #  - WS(例：ws://192.168.11.1:2809/ws#Nameservice)
+    #  - WSS(例：wss://192.168.11.1:2809/ws#Nameservice)
+    #
+    #  また、giop:ではじまるエンドポイントを指定することもできる
+    #  この場合は上記のcorbaloc形式、corbaname形式、HTTP、HTTPS、WS、WSSのURLに変換する
+    #  - giop::192.168.11.1:2809 -> corbaloc:iiop:192.168.11.1:2809
+    #  - giop:tcp:192.168.11.1:2809 -> corbaloc:iiop:192.168.11.1:2809
+    #  - giop:ssl:192.168.11.1:2809 -> corbaloc:ssliop:192.168.11.1:2809
+    #  - giop:http:http://192.168.11.1:2809/call ->
+    #                   http://192.168.11.1:2809/call
+    #
+    #  アドレス、ポート番号を指定した場合はcorbaloc形式URLに変換する。
+    #  - 192.168.11.1:2809 -> corbaloc:iiop:192.168.11.1:2809
+    #
+    #  objkeyを指定した場合はURIの末尾に追加する。
+    #  - corbaloc:iiop:192.168.11.1:2809 ->
+    #        corbaloc:iiop:192.168.11.1:2809/Nameservice
+    #  - corbaname::192.168.11.1:2809 ->
+    #     corbaloc:iiop:192.168.11.1:2809#ConsoleOut0.rtc
+    #  - http://192.168.11.1:2809/call ->
+    #     http://192.168.11.1:2809/call#Nameservice
+    #
+    # @param self
+    # @param uri CORBAオブジェクト参照用URL
+    # @param objkey オブジェクト名
+    #
+    # @else
+    #
+    # @brief Consructor
+    #
+    #
+    # @param self
+    # @param uri
+    # @param objkey
+    #
+    # @endif
+    def __init__(self, uri, objkey=""):
+        import urllib.parse
+        if uri.find("giop:tcp:") == 0:
+            uri = uri.replace("giop:tcp:", "corbaloc:iiop:")
+        elif uri.find("giop:ssl:") == 0:
+            uri = uri.replace("giop:ssl:", "corbaloc:ssliop:")
+        elif uri.find("giop:http:") == 0:
+            uri = uri.replace("giop:http:", "")
+        elif uri.find("giop::") == 0:
+            uri = uri.replace("giop::", "corbaloc:iiop:")
+        elif uri.find("iiop://") == 0:
+            uri = uri.replace("iiop://", "corbaloc:iiop:")
+        elif uri.find("diop://") == 0:
+            uri = uri.replace("diop://", "corbaloc:diop:")
+        elif uri.find("uiop://") == 0:
+            uri = uri.replace("uiop://", "corbaloc:uiop:")
+        elif uri.find("shmiop://") == 0:
+            uri = uri.replace("shmiop://", "corbaloc:shmiop:")
+        elif uri.find("inet:") == 0:
+            uri = uri.replace("inet:", "corbaloc:iiop:")
+
+        self._uri = ""
+        self._port = None
+        self._addressonly = False
+        ret = urllib.parse.urlparse(uri)
+        self._protocol = ret.scheme
+
+        loc = [s.strip() for s in ret.netloc.split(":")]
+        if len(loc) >= 2:
+            self._host = loc[0]
+            self._port = int(loc[1])
+        else:
+            self._host = ret.netloc
+        self._path = ret.path
+        self._fragment = ret.fragment
+
+        if self._fragment:
+            self._uri = uri
+            return
+        else:
+            self._fragment = objkey
+            if self._protocol == "corbaloc":
+                self._uri = uri + "/"
+                self._uri += self._fragment
+            elif self._protocol:
+                self._uri = uri + "#"
+                self._uri += self._fragment
+            else:
+                self._uri = "corbaloc:iiop:"
+                self._uri += uri + "/"
+                self._uri += self._fragment
+                self._protocol = "corbaloc"
+                self._addressonly = True
+                host_port = [s.strip() for s in uri.split(":")]
+                if len(host_port) == 2:
+                    self._host = host_port[0]
+                    try:
+                        self._port = int(host_port[1])
+                    except BaseException:
+                        pass
+    ##
+    # @if jp
+    #
+    # @brief  CORBAオブジェクト参照用URLを取得する
+    #
+    # @param self
+    # @return CORBAオブジェクト参照用URL
+    #
+    # @else
+    #
+    # @brief Consructor
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+
+    def toString(self):
+        return self._uri
+
+    ##
+    # @if jp
+    #
+    # @brief  参照形式を取得する
+    # 例：corbaloc、corbaname、http、https、ws、wss
+    #
+    # @param self
+    # @return 参照形式
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    def getProtocol(self):
+        return self._protocol
+
+    ##
+    # @if jp
+    #
+    # @brief  ホスト名を取得する
+    #
+    # @param self
+    # @return ホスト名
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    def getHost(self):
+        return self._host
+
+    ##
+    # @if jp
+    #
+    # @brief  ポート番号を取得する
+    #
+    # @param self
+    # @return ポート番号
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    def getPort(self):
+        return self._port
+
+    ##
+    # @if jp
+    #
+    # @brief  初期化時にCORBAオブジェクト参照用URLを指定した場合はfalse、
+    # ホスト名、ポート番号のみを指定した場合はtrueを返す。
+    #
+    # @param self
+    # @return 参照先の指定方法
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @return
+    #
+    # @endif
+    def isAddressOnly(self):
+        return self._addressonly

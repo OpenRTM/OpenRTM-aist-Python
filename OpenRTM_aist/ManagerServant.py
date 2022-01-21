@@ -20,6 +20,7 @@ import threading
 import time
 from omniORB import CORBA
 import OpenRTM_aist
+import OpenRTM_aist.CORBA_RTCUtil
 import RTC
 import RTM
 import RTM__POA
@@ -1158,9 +1159,7 @@ class ManagerServant(RTM__POA.Manager):
         self._rtcout.RTC_TRACE("findManager(host_port = %s)", host_port)
         try:
             config = copy.deepcopy(self._mgr.getConfig())
-            mgrloc = "corbaloc:iiop:"
-            mgrloc += host_port
-            mgrloc += "/" + config.getProperty("manager.name")
+            mgrloc = OpenRTM_aist.CORBA_RTCUtil.CorbaURI(host_port, config.getProperty("manager.name")).toString()
 
             self._rtcout.RTC_DEBUG("corbaloc: %s", mgrloc)
 
