@@ -1757,3 +1757,186 @@ class CorbaURI:
     # @endif
     def isAddressOnly(self):
         return self._addressonly
+
+
+##
+# @if jp
+# @class RTCURIObject クラス
+# @brief RTCURIObject クラス
+# rtcname形式、rtcloc形式のURIから通信先のアドレス、RTC名等を
+# 取得する機能を提供するクラス
+# rtcname形式は以下のようにrtcname.{通信プロトコル}/{アドレス}/{ネームサーバーでの登録パス}
+# で指定可能である。通信プロトコルを省略するとiiopに設定する。
+#
+# rtcname.ssliop://localhost:2809/test.host_cxt/ConsoleOut0
+#
+# ただし、http通信を指定する場合は以下のようにアドレスの後は#で区切る必要がある。
+#
+# rtcname.https://localhost:2809/call#test.host_cxt/ConsoleOut0
+#
+# rtcloc形式は以下のようにrtcloc.{通信プロトコル}/{アドレス}/{カテゴリ名}/{RTC名}
+# で指定可能である。通信プロトコルを省略するとiiopに設定する。
+#
+# rtcloc.ssliop://localhost:2810/example/ConsoleOut0
+#
+# ただし、http通信を指定する場合は以下のようにアドレスの後は#で区切る必要がある。
+#
+# rtcloc.http://localhost:2810/call#example/ConsoleOut0
+#
+# @since 2.0.0
+#
+# @else
+# @class RTCURIObject class
+# @brief RTCURIObject class
+# @brief
+#
+# @since 2.0.0
+#
+# @endif
+class RTCURIObject:
+    ##
+    # @if jp
+    #
+    # @brief コンストラクタ
+    #
+    # @param uri rtcname形式、もしくはrtcloc形式のURI
+    # @param isrtcname rtcname形式を指定する場合はtrue、それ以外はfalse
+    # @param isrtcloc rtcloc形式を指定する場合はtrue、それ以外はfalse
+    #
+    # @else
+    #
+    # @brief Consructor
+    #
+    #
+    # @param uri
+    # @param isrtcname
+    # @param isrtcloc
+    #
+    # @endif
+    def __init__(self, uri, isrtcname=False, isrtcloc=False):
+        self._is_rtcname = False
+        self._is_rtcloc = False
+        self._rtcpath = ""
+        self._address = ""
+        pos = uri.find("://")
+        if pos >= 0:
+            ptype = uri[0:pos]
+            addrname = uri[pos+3:]
+            protocol = ""
+
+            if ptype.find("rtcname") == 0:
+                self._is_rtcname = True
+            elif ptype.find("rtcloc") == 0:
+                self._is_rtcloc = True
+            else:
+                return
+
+            if isrtcname:
+                if not self._is_rtcname:
+                    return
+
+            if isrtcloc:
+                if not self._is_rtcloc:
+                    return
+
+            pos = ptype.find(".")
+            seprtc = "/"
+            if pos >= 0:
+                protocol = ptype[pos+1:]
+                if protocol == "http" or protocol == "https" or protocol == "ws" or protocol == "wss":
+                    seprtc = "#"
+
+            pos = addrname.find(seprtc)
+            hostport = ""
+
+            if pos >= 0:
+                hostport = addrname[0:pos]
+                self._rtcpath = addrname[pos+1:]
+            else:
+                self._rtcpath = addrname
+
+            if protocol == "http" or protocol == "https" or protocol == "ws" or protocol == "wss":
+                self._address = protocol
+                self._address += "://"
+                self._address += hostport
+
+            else:
+                self._address = "corbaloc:"
+                self._address += protocol
+                self._address += ":"
+                self._address += hostport
+
+    ##
+    # @if jp
+    #
+    # @brief デストラクタ
+    #
+    #
+    # @else
+    #
+    # @brief Destructor
+    #
+    #
+    # @endif
+    def getRTCName(self):
+        return self._rtcpath
+
+    ##
+    # @if jp
+    #
+    # @brief RTC名を取得する
+    #
+    # rtcname形式の場合はネームサーバーに登録したRTCのパスを取得できる。
+    # context1.kind1/context2.kind2/..../RTC_name
+    #
+    # rtcloc形式の場合はカテゴリ名/RTC名で取得できる。
+    #
+    # @return RTC名
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    def getAddress(self):
+        return self._address
+
+    ##
+    # @if jp
+    #
+    # @brief URIがrtcname形式かを判定する
+    #
+    # @return true：rtcname形式、false：それ以外
+    #
+    # @return RTC名
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    def isRTCNameURI(self):
+        return self._is_rtcname
+
+    ##
+    # @if jp
+    #
+    # @brief URIがrtcname形式かを判定する
+    #
+    # @brief URIがrtcloc形式かを判定する
+    #
+    # @return true：rtcname形式、false：それ以外
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    def isRTCLocURI(self):
+        return self._is_rtcloc
