@@ -1799,22 +1799,16 @@ class Manager:
 
     @staticmethod
     def isORBEndPoint(endpoint):
-        if "giop:" in endpoint:
-            return True
-        elif "iiop://" in endpoint:
-            return True
-        elif "diop://" in endpoint:
-            return True
-        elif "uiop://" in endpoint:
-            return True
-        elif "shmiop://" in endpoint:
-            return True
-        elif "inet:" in endpoint:
-            return True
+        headers = ["giop:", "iiop://",
+                   "diop://", "uiop://",
+                   "ssliop://", "shmiop://",
+                   "htiop://", "inet:"]
+
+        for header in headers:
+            if header in endpoint:
+                return True
+
         return False
-
-
-
 
     ##
     # @if jp

@@ -1602,24 +1602,36 @@ class CorbaURI:
     # @endif
     def __init__(self, uri, objkey=""):
         import urllib.parse
-        if uri.find("giop:tcp:") == 0:
-            uri = uri.replace("giop:tcp:", "corbaloc:iiop:")
-        elif uri.find("giop:ssl:") == 0:
-            uri = uri.replace("giop:ssl:", "corbaloc:ssliop:")
-        elif uri.find("giop:http:") == 0:
-            uri = uri.replace("giop:http:", "")
-        elif uri.find("giop::") == 0:
-            uri = uri.replace("giop::", "corbaloc:iiop:")
-        elif uri.find("iiop://") == 0:
-            uri = uri.replace("iiop://", "corbaloc:iiop:")
-        elif uri.find("diop://") == 0:
-            uri = uri.replace("diop://", "corbaloc:diop:")
-        elif uri.find("uiop://") == 0:
-            uri = uri.replace("uiop://", "corbaloc:uiop:")
-        elif uri.find("shmiop://") == 0:
-            uri = uri.replace("shmiop://", "corbaloc:shmiop:")
-        elif uri.find("inet:") == 0:
-            uri = uri.replace("inet:", "corbaloc:iiop:")
+        protocols_str = {"giop:tcp:": "corbaloc:iiop:",
+                         "giop:ssl:": "corbaloc:ssliop:",
+                         "giop:http:": "",
+                         "giop::": "corbaloc:iiop:",
+                         "iiop://": "corbaloc:iiop:",
+                         "diop://": "corbaloc:diop:",
+                         "uiop://": "corbaloc:uiop:",
+                         "ssliop://": "corbaloc:ssliop:",
+                         "shmiop://": "corbaloc:shmiop:",
+                         "htiop://": "corbaloc:htiop:",
+                         "inet:": "corbaloc:iiop:"}
+
+        converted = False
+        for k, v in protocols_str.items():
+            if uri.find(k) == 0:
+                uri = uri.replace(k, v)
+                converted = True
+                break
+
+        protocols_o_str = {"iiop:": "corbaloc:iiop:",
+                           "ssliop:": "corbaloc:ssliop:",
+                           "diop:": "corbaloc:diop:",
+                           "shmiop:": "corbaloc:shmiop:",
+                           "htiop:": "corbaloc:htiop:"}
+
+        if not converted:
+            for k, v in protocols_o_str.items():
+                if uri.find(k) == 0:
+                    uri = uri.replace(k, v)
+                    break
 
         self._uri = ""
         self._port = None
