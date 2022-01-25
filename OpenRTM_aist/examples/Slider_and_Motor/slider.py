@@ -15,8 +15,8 @@ else:
 
 
 class SliderMulti(Frame):
-    def __init__(self, channels, master=None):
-        Frame.__init__(self, master)
+    def __init__(self, channels, main=None):
+        Frame.__init__(self, main)
         self.init(channels)
         self.pack()
 

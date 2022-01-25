@@ -204,11 +204,11 @@ class ManagerServant(RTM__POA.Manager):
         self._mgr = OpenRTM_aist.Manager.instance()
         self._owner = None
         self._rtcout = self._mgr.getLogbuf("ManagerServant")
-        self._isMaster = False
-        self._masters = []
-        self._slaves = []
-        self._masterMutex = threading.RLock()
-        self._slaveMutex = threading.RLock()
+        self._isMain = False
+        self._mains = []
+        self._subordinates = []
+        self._mainMutex = threading.RLock()
+        self._subordinateMutex = threading.RLock()
         self._objref = RTM.Manager._nil
 
         config = copy.deepcopy(self._mgr.getConfig())
@@ -220,22 +220,22 @@ class ManagerServant(RTM__POA.Manager):
             "Manager CORBA servant was successfully created.")
 
         if OpenRTM_aist.toBool(config.getProperty(
-                "manager.is_master"), "YES", "NO", True):
-            # this is master manager
-            self._rtcout.RTC_TRACE("This manager is master.")
-            self._isMaster = True
+                "manager.is_main"), "YES", "NO", True):
+            # this is main manager
+            self._rtcout.RTC_TRACE("This manager is main.")
+            self._isMain = True
             return
         else:
-            # this is slave manager
-            self._rtcout.RTC_TRACE("This manager is slave.")
+            # this is subordinate manager
+            self._rtcout.RTC_TRACE("This manager is subordinate.")
             try:
                 owner = self.findManager(
-                    config.getProperty("corba.master_manager"))
+                    config.getProperty("corba.main_manager"))
                 if not owner:
-                    self._rtcout.RTC_INFO("Master manager not found")
+                    self._rtcout.RTC_INFO("Main manager not found")
                     return
-                self.add_master_manager(owner)
-                owner.add_slave_manager(self._objref)
+                self.add_main_manager(owner)
+                owner.add_subordinate_manager(self._objref)
                 return
             except BaseException:
                 self._rtcout.RTC_ERROR("Unknown exception cought.")
@@ -268,28 +268,28 @@ class ManagerServant(RTM__POA.Manager):
     # @endif
 
     def exit(self):
-        guard_master = OpenRTM_aist.ScopedLock(self._masterMutex)
-        for master in self._masters:
+        guard_main = OpenRTM_aist.ScopedLock(self._mainMutex)
+        for main in self._mains:
             try:
-                if CORBA.is_nil(master):
+                if CORBA.is_nil(main):
                     continue
-                master.remove_slave_manager(self._objref)
+                main.remove_subordinate_manager(self._objref)
             except BaseException:
                 pass
-        self._masters = []
+        self._mains = []
 
-        guard_slave = OpenRTM_aist.ScopedLock(self._slaveMutex)
-        for slave in self._slaves:
+        guard_subordinate = OpenRTM_aist.ScopedLock(self._subordinateMutex)
+        for subordinate in self._subordinates:
             try:
-                if CORBA.is_nil(slave):
+                if CORBA.is_nil(subordinate):
                     continue
-                slave.remove_master_manager(self._objref)
+                subordinate.remove_main_manager(self._objref)
             except BaseException:
                 pass
-        self._slaves = []
+        self._subordinates = []
 
-        del guard_slave
-        del guard_master
+        del guard_subordinate
+        del guard_main
         if not CORBA.is_nil(self._objref):
             poa = self._mgr.getORB().resolve_initial_references("omniINSPOA")
             poa.deactivate_object(poa.servant_to_id(self))
@@ -413,17 +413,17 @@ class ManagerServant(RTM__POA.Manager):
             OpenRTM_aist.NVUtil.copyFromProperties(
                 cprof[i].properties, p)
 
-        if self._isMaster:
-            guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
-            for slave in self._slaves[:]:
+        if self._isMain:
+            guard = OpenRTM_aist.ScopedLock(self._subordinateMutex)
+            for subordinate in self._subordinates[:]:
                 try:
-                    profs = slave.get_loaded_modules()
+                    profs = subordinate.get_loaded_modules()
                     cprof.extend(profs)
                 except BaseException:
                     self._rtcout.RTC_ERROR("Unknown exception cought.")
                     self._rtcout.RTC_DEBUG(
                         OpenRTM_aist.Logger.print_exception())
-                    self._slaves.remove(slave)
+                    self._subordinates.remove(subordinate)
 
         return cprof
 
@@ -457,17 +457,17 @@ class ManagerServant(RTM__POA.Manager):
             OpenRTM_aist.NVUtil.copyFromProperties(
                 cprof[i].properties, p)
 
-        if self._isMaster:
-            guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
-            for slave in self._slaves[:]:
+        if self._isMain:
+            guard = OpenRTM_aist.ScopedLock(self._subordinateMutex)
+            for subordinate in self._subordinates[:]:
                 try:
-                    profs = slave.get_factory_profiles()
+                    profs = subordinate.get_factory_profiles()
                     cprof.extend(profs)
                 except BaseException:
                     self._rtcout.RTC_ERROR("Unknown exception cought.")
                     self._rtcout.RTC_DEBUG(
                         OpenRTM_aist.Logger.print_exception())
-                    self._slaves.remove(slave)
+                    self._subordinates.remove(subordinate)
 
         return cprof
 
@@ -511,23 +511,23 @@ class ManagerServant(RTM__POA.Manager):
 
         comp_param = CompParam(module_name)
 
-        if self._isMaster:
-            guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
-            for slave in self._slaves[:]:
+        if self._isMain:
+            guard = OpenRTM_aist.ScopedLock(self._subordinateMutex)
+            for subordinate in self._subordinates[:]:
                 try:
-                    prof = slave.get_configuration()
+                    prof = subordinate.get_configuration()
                     prop = OpenRTM_aist.Properties()
                     OpenRTM_aist.NVUtil.copyToProperties(prop, prof)
-                    slave_lang = prop.getProperty("manager.language")
-                    if slave_lang == comp_param.language():
-                        rtc = slave.create_component(module_name)
+                    subordinate_lang = prop.getProperty("manager.language")
+                    if subordinate_lang == comp_param.language():
+                        rtc = subordinate.create_component(module_name)
                         if not CORBA.is_nil(rtc):
                             return rtc
                 except BaseException:
                     self._rtcout.RTC_ERROR("Unknown exception cought.")
                     self._rtcout.RTC_DEBUG(
                         OpenRTM_aist.Logger.print_exception())
-                    self._slaves.remove(slave)
+                    self._subordinates.remove(subordinate)
             del guard
             if not manager_name:
                 module_name = module_name + "&manager_name=manager_%p"
@@ -610,22 +610,22 @@ class ManagerServant(RTM__POA.Manager):
         for rtc in rtcs:
             crtcs.append(rtc.getObjRef())
 
-        # get slaves' component references
-        self._rtcout.RTC_DEBUG("%d slave managers exists.", len(self._slaves))
-        for slave in self._slaves[:]:
+        # get subordinates' component references
+        self._rtcout.RTC_DEBUG("%d subordinate managers exists.", len(self._subordinates))
+        for subordinate in self._subordinates[:]:
             try:
-                if not CORBA.is_nil(slave):
-                    srtcs = slave.get_components()
+                if not CORBA.is_nil(subordinate):
+                    srtcs = subordinate.get_components()
                     OpenRTM_aist.CORBA_SeqUtil.push_back_list(crtcs, srtcs)
 
             except BaseException:
                 self._rtcout.RTC_ERROR("Unknown exception cought.")
                 self._rtcout.RTC_DEBUG(OpenRTM_aist.Logger.print_exception())
-                self._slaves.remove(slave)
-                #self._rtcout.RTC_INFO("slave (%d) has disappeared.", i)
-                #self._slaves[i] = RTM.Manager._nil
+                self._subordinates.remove(subordinate)
+                #self._rtcout.RTC_INFO("subordinate (%d) has disappeared.", i)
+                #self._subordinates[i] = RTM.Manager._nil
 
-                #OpenRTM_aist.CORBA_SeqUtil.erase(self._slaves, i)
+                #OpenRTM_aist.CORBA_SeqUtil.erase(self._subordinates, i)
                 #i -= 1
 
         return crtcs
@@ -655,23 +655,23 @@ class ManagerServant(RTM__POA.Manager):
         rtcs = self._mgr.getComponents()
         cprofs = [rtc.get_component_profile() for rtc in rtcs]
 
-        # copy slaves' component profiles
-        guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
-        self._rtcout.RTC_DEBUG("%d slave managers exists.", len(self._slaves))
+        # copy subordinates' component profiles
+        guard = OpenRTM_aist.ScopedLock(self._subordinateMutex)
+        self._rtcout.RTC_DEBUG("%d subordinate managers exists.", len(self._subordinates))
 
-        for slave in self._slaves[:]:
+        for subordinate in self._subordinates[:]:
             try:
-                if not CORBA.is_nil(slave):
-                    sprofs = slave.get_component_profiles()
+                if not CORBA.is_nil(subordinate):
+                    sprofs = subordinate.get_component_profiles()
                     OpenRTM_aist.CORBA_SeqUtil.push_back_list(cprofs, sprofs)
             except BaseException:
                 self._rtcout.RTC_ERROR("Unknown exception cought.")
                 self._rtcout.RTC_DEBUG(OpenRTM_aist.Logger.print_exception())
-                self._slaves.remove(slave)
-                #self._rtcout.RTC_INFO("slave (%d) has disappeared.", i)
-                #self._slaves[i] = RTM.Manager._nil
+                self._subordinates.remove(subordinate)
+                #self._rtcout.RTC_INFO("subordinate (%d) has disappeared.", i)
+                #self._subordinates[i] = RTM.Manager._nil
 
-                #OpenRTM_aist.CORBA_SeqUtil.erase(self._slaves, i)
+                #OpenRTM_aist.CORBA_SeqUtil.erase(self._subordinates, i)
                 #i -= 1
 
         del guard
@@ -768,27 +768,27 @@ class ManagerServant(RTM__POA.Manager):
     # @return マスターマネージャかどうかのbool値
     #
     # @else
-    # @brief Whether this manager is master or not
+    # @brief Whether this manager is main or not
     #
-    # It returns "True" if this manager is a master, and it returns
+    # It returns "True" if this manager is a main, and it returns
     # "False" in other cases.
     #
-    # @return A boolean value that means it is master or not.
+    # @return A boolean value that means it is main or not.
     #
     # @endif
     #
-    # bool is_master();
+    # bool is_main();
 
-    def is_master(self):
+    def is_main(self):
         # since Python2.5
-        # self._rtcout.RTC_TRACE("is_master(): %s", (lambda x: "YES" if x else "NO")(self._isMaster))
+        # self._rtcout.RTC_TRACE("is_main(): %s", (lambda x: "YES" if x else "NO")(self._isMain))
         ret = ""
-        if self._isMaster:
+        if self._isMain:
             ret = "YES"
         else:
             ret = "NO"
-        self._rtcout.RTC_TRACE("is_master(): %s", ret)
-        return self._isMaster
+        self._rtcout.RTC_TRACE("is_main(): %s", ret)
+        return self._isMain
 
     ##
     # @if jp
@@ -801,23 +801,23 @@ class ManagerServant(RTM__POA.Manager):
     # @return マスターマネージャのリスト
     #
     # @else
-    # @brief Getting master managers
+    # @brief Getting main managers
     #
-    # This operation returns master manager list if this manager is
-    # slave. If this manager is master, an empty sequence would be
+    # This operation returns main manager list if this manager is
+    # subordinate. If this manager is main, an empty sequence would be
     # returned.
     #
-    # @return Master manager list
+    # @return Main manager list
     #
     # @endif
     #
-    # RTM::ManagerList* get_master_managers();
+    # RTM::ManagerList* get_main_managers();
 
-    def get_master_managers(self):
-        self._rtcout.RTC_TRACE("get_master_managers()")
-        guard = OpenRTM_aist.ScopedLock(self._masterMutex)
+    def get_main_managers(self):
+        self._rtcout.RTC_TRACE("get_main_managers()")
+        guard = OpenRTM_aist.ScopedLock(self._mainMutex)
 
-        return self._masters
+        return self._mains
 
     ##
     # @if jp
@@ -832,34 +832,34 @@ class ManagerServant(RTM__POA.Manager):
     # @return マスターマネージャ
     #
     # @else
-    # @brief Getting a master manager
+    # @brief Getting a main manager
     #
-    # This operation returns a master manager with specified id. If
+    # This operation returns a main manager with specified id. If
     # the manager with the specified id does not exist, nil object
     # reference would be returned.
     #
-    # @return A master manager
+    # @return A main manager
     #
     # @endif
     #
-    # RTC::ReturnCode_t add_master_manager(RTM::Manager_ptr mgr);
+    # RTC::ReturnCode_t add_main_manager(RTM::Manager_ptr mgr);
 
-    def add_master_manager(self, mgr):
-        guard = OpenRTM_aist.ScopedLock(self._masterMutex)
+    def add_main_manager(self, mgr):
+        guard = OpenRTM_aist.ScopedLock(self._mainMutex)
         self._rtcout.RTC_TRACE(
-            "add_master_manager(), %d masters", len(
-                self._masters))
+            "add_main_manager(), %d mains", len(
+                self._mains))
         index = OpenRTM_aist.CORBA_SeqUtil.find(
-            self._masters, self.is_equiv(mgr))
+            self._mains, self.is_equiv(mgr))
 
         if not (index < 0):  # found in my list
             self._rtcout.RTC_ERROR("Already exists.")
             return RTC.BAD_PARAMETER
 
-        OpenRTM_aist.CORBA_SeqUtil.push_back(self._masters, mgr)
+        OpenRTM_aist.CORBA_SeqUtil.push_back(self._mains, mgr)
         self._rtcout.RTC_TRACE(
-            "add_master_manager() done, %d masters", len(
-                self._masters))
+            "add_main_manager() done, %d mains", len(
+                self._mains))
         del guard
         return RTC.RTC_OK
 
@@ -873,34 +873,34 @@ class ManagerServant(RTM__POA.Manager):
     # @return ReturnCode_t
     #
     # @else
-    # @brief Removing a master manager
+    # @brief Removing a main manager
     #
-    # This operation removes a master manager from this manager.
+    # This operation removes a main manager from this manager.
     #
-    # @param mgr A master manager
+    # @param mgr A main manager
     # @return ReturnCode_t
     #
     # @endif
     #
-    # RTC::ReturnCode_t remove_master_manager(RTM::Manager_ptr mgr);
+    # RTC::ReturnCode_t remove_main_manager(RTM::Manager_ptr mgr);
 
-    def remove_master_manager(self, mgr):
-        guard = OpenRTM_aist.ScopedLock(self._masterMutex)
+    def remove_main_manager(self, mgr):
+        guard = OpenRTM_aist.ScopedLock(self._mainMutex)
         self._rtcout.RTC_TRACE(
-            "remove_master_manager(), %d masters", len(
-                self._masters))
+            "remove_main_manager(), %d mains", len(
+                self._mains))
 
         index = OpenRTM_aist.CORBA_SeqUtil.find(
-            self._masters, self.is_equiv(mgr))
+            self._mains, self.is_equiv(mgr))
 
         if index < 0:  # not found in my list
             self._rtcout.RTC_ERROR("Not found.")
             return RTC.BAD_PARAMETER
 
-        OpenRTM_aist.CORBA_SeqUtil.erase(self._masters, index)
+        OpenRTM_aist.CORBA_SeqUtil.erase(self._mains, index)
         self._rtcout.RTC_TRACE(
-            "remove_master_manager() done, %d masters", len(
-                self._masters))
+            "remove_main_manager() done, %d mains", len(
+                self._mains))
         del guard
         return RTC.RTC_OK
 
@@ -915,24 +915,24 @@ class ManagerServant(RTM__POA.Manager):
     # @return スレーブマネージャのリスト
     #
     # @else
-    # @brief Getting slave managers
+    # @brief Getting subordinate managers
     #
-    # This operation returns slave manager list if this manager is
-    # slave. If this manager is slave, an empty sequence would be
+    # This operation returns subordinate manager list if this manager is
+    # subordinate. If this manager is subordinate, an empty sequence would be
     # returned.
     #
-    # @return Slave manager list
+    # @return Subordinate manager list
     #
     # @endif
     #
-    # RTM::ManagerList* get_slave_managers();
+    # RTM::ManagerList* get_subordinate_managers();
 
-    def get_slave_managers(self):
-        guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
+    def get_subordinate_managers(self):
+        guard = OpenRTM_aist.ScopedLock(self._subordinateMutex)
         self._rtcout.RTC_TRACE(
-            "get_slave_managers(), %d slaves", len(
-                self._slaves))
-        return self._slaves
+            "get_subordinate_managers(), %d subordinates", len(
+                self._subordinates))
+        return self._subordinates
 
     ##
     # @if jp
@@ -944,34 +944,34 @@ class ManagerServant(RTM__POA.Manager):
     # @return ReturnCode_t
     #
     # @else
-    # @brief Getting a slave manager
+    # @brief Getting a subordinate manager
     #
-    # This operation add a slave manager to this manager.
+    # This operation add a subordinate manager to this manager.
     #
-    # @param mgr A slave manager
+    # @param mgr A subordinate manager
     # @return ReturnCode_t
     #
     # @endif
     #
-    # RTC::ReturnCode_t add_slave_manager(RTM::Manager_ptr mgr);
+    # RTC::ReturnCode_t add_subordinate_manager(RTM::Manager_ptr mgr);
 
-    def add_slave_manager(self, mgr):
-        guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
+    def add_subordinate_manager(self, mgr):
+        guard = OpenRTM_aist.ScopedLock(self._subordinateMutex)
         self._rtcout.RTC_TRACE(
-            "add_slave_manager(), %d slaves", len(
-                self._slaves))
+            "add_subordinate_manager(), %d subordinates", len(
+                self._subordinates))
 
         index = OpenRTM_aist.CORBA_SeqUtil.find(
-            self._slaves, self.is_equiv(mgr))
+            self._subordinates, self.is_equiv(mgr))
 
         if not (index < 0):  # found in my list
             self._rtcout.RTC_ERROR("Already exists.")
             return RTC.BAD_PARAMETER
 
-        OpenRTM_aist.CORBA_SeqUtil.push_back(self._slaves, mgr)
+        OpenRTM_aist.CORBA_SeqUtil.push_back(self._subordinates, mgr)
         self._rtcout.RTC_TRACE(
-            "add_slave_manager() done, %d slaves", len(
-                self._slaves))
+            "add_subordinate_manager() done, %d subordinates", len(
+                self._subordinates))
         del guard
         return RTC.RTC_OK
 
@@ -985,33 +985,33 @@ class ManagerServant(RTM__POA.Manager):
     # @return ReturnCode_t
     #
     # @else
-    # @brief Removing a slave manager
+    # @brief Removing a subordinate manager
     #
-    # This operation removes a slave manager from this manager.
+    # This operation removes a subordinate manager from this manager.
     #
-    # @param mgr A slave manager
+    # @param mgr A subordinate manager
     # @return ReturnCode_t
     #
     # @endif
     #
-    # RTC::ReturnCode_t remove_slave_manager(RTM::Manager_ptr mgr);
+    # RTC::ReturnCode_t remove_subordinate_manager(RTM::Manager_ptr mgr);
 
-    def remove_slave_manager(self, mgr):
-        guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
+    def remove_subordinate_manager(self, mgr):
+        guard = OpenRTM_aist.ScopedLock(self._subordinateMutex)
         self._rtcout.RTC_TRACE(
-            "remove_slave_manager(), %d slaves", len(
-                self._slaves))
+            "remove_subordinate_manager(), %d subordinates", len(
+                self._subordinates))
         index = OpenRTM_aist.CORBA_SeqUtil.find(
-            self._slaves, self.is_equiv(mgr))
+            self._subordinates, self.is_equiv(mgr))
 
         if index < 0:  # not found in my list
             self._rtcout.RTC_ERROR("Not found.")
             return RTC.BAD_PARAMETER
 
-        OpenRTM_aist.CORBA_SeqUtil.erase(self._slaves, index)
+        OpenRTM_aist.CORBA_SeqUtil.erase(self._subordinates, index)
         self._rtcout.RTC_TRACE(
-            "remove_slave_manager() done, %d slaves", len(
-                self._slaves))
+            "remove_subordinate_manager() done, %d subordinates", len(
+                self._subordinates))
         del guard
         return RTC.RTC_OK
 
@@ -1046,25 +1046,25 @@ class ManagerServant(RTM__POA.Manager):
     # ReturnCode_t shutdown()
 
     def shutdown(self):
-        guard_master = OpenRTM_aist.ScopedLock(self._masterMutex)
-        for master in self._masters:
+        guard_main = OpenRTM_aist.ScopedLock(self._mainMutex)
+        for main in self._mains:
             try:
-                if CORBA.is_nil(master):
+                if CORBA.is_nil(main):
                     continue
-                master.remove_slave_manager(self._objref)
+                main.remove_subordinate_manager(self._objref)
             except BaseException:
                 pass
-        self._masters = []
+        self._mains = []
 
-        guard_slave = OpenRTM_aist.ScopedLock(self._slaveMutex)
-        for slaves in self._slaves:
+        guard_subordinate = OpenRTM_aist.ScopedLock(self._subordinateMutex)
+        for subordinates in self._subordinates:
             try:
-                if CORBA.is_nil(slaves):
+                if CORBA.is_nil(subordinates):
                     continue
-                slaves.remove_master_manager(self._objref)
+                subordinates.remove_main_manager(self._objref)
             except BaseException:
                 pass
-        self._slaves = []
+        self._subordinates = []
 
         wait_time = 1.0
         if self._mgr.getConfig().findNode("manager.termination_waittime"):
@@ -1237,53 +1237,53 @@ class ManagerServant(RTM__POA.Manager):
         name = prop.getProperty("manager.instance_name")
         if name == manager_name:
             return self.getObjRef()
-        if self._isMaster:
-            guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
-            for slave in self._slaves[:]:
+        if self._isMain:
+            guard = OpenRTM_aist.ScopedLock(self._subordinateMutex)
+            for subordinate in self._subordinates[:]:
                 try:
-                    prof = slave.get_configuration()
+                    prof = subordinate.get_configuration()
                     prop = OpenRTM_aist.Properties()
                     OpenRTM_aist.NVUtil.copyToProperties(prop, prof)
                     name = prop.getProperty("manager.instance_name")
                     if name == manager_name:
-                        return slave
+                        return subordinate
 
                 except BaseException:
                     self._rtcout.RTC_ERROR("Unknown exception cought.")
                     self._rtcout.RTC_DEBUG(
                         OpenRTM_aist.Logger.print_exception())
-                    self._slaves.remove(slave)
+                    self._subordinates.remove(subordinate)
             del guard
         else:
-            guard = OpenRTM_aist.ScopedLock(self._masterMutex)
-            for master in self._masters:
+            guard = OpenRTM_aist.ScopedLock(self._mainMutex)
+            for main in self._mains:
                 try:
-                    prof = master.get_configuration()
+                    prof = main.get_configuration()
                     prop = OpenRTM_aist.Properties()
                     OpenRTM_aist.NVUtil.copyToProperties(prop, prof)
                     name = prop.getProperty("manager.instance_name")
                     if name == manager_name:
-                        return master
+                        return main
                 except BaseException:
                     self._rtcout.RTC_ERROR("Unknown exception cought.")
                     self._rtcout.RTC_DEBUG(
                         OpenRTM_aist.Logger.print_exception())
                     continue
 
-                slaves = master.get_slave_managers()
-                for slave in slaves[:]:
+                subordinates = main.get_subordinate_managers()
+                for subordinate in subordinates[:]:
                     try:
-                        prof = slave.get_configuration()
+                        prof = subordinate.get_configuration()
                         prop = OpenRTM_aist.Properties()
                         OpenRTM_aist.NVUtil.copyToProperties(prop, prof)
                         name = prop.getProperty("manager.instance_name")
                         if name == manager_name:
-                            return slave
+                            return subordinate
                     except BaseException:
                         self._rtcout.RTC_ERROR("Unknown exception cought.")
                         self._rtcout.RTC_DEBUG(
                             OpenRTM_aist.Logger.print_exception())
-                        master.remove_slave_manager(slave)
+                        main.remove_subordinate_manager(subordinate)
 
             del guard
 
@@ -1410,10 +1410,10 @@ class ManagerServant(RTM__POA.Manager):
                 load_path = load_path.replace("\\", "\\\\")
             else:
                 cmd = rtcd_cmd
-            cmd += " -o " + "manager.is_master:NO"
+            cmd += " -o " + "manager.is_main:NO"
             cmd += " -o " + "manager.corba_servant:YES"
-            cmd += " -o " + "corba.master_manager:" + \
-                config.getProperty("corba.master_manager")
+            cmd += " -o " + "corba.main_manager:" + \
+                config.getProperty("corba.main_manager")
             cmd += " -o " + "manager.name:" + \
                 config.getProperty("manager.name")
             cmd += " -o " + "manager.instance_name:" + mgrstr
@@ -1423,25 +1423,25 @@ class ManagerServant(RTM__POA.Manager):
 
             self._rtcout.RTC_DEBUG("Invoking command: %s.", cmd)
 
-            slaves_names = []
+            subordinates_names = []
             regex = r'manager_[0-9]+'
             if mgrstr == "manager_%p":
-                guard_slave = OpenRTM_aist.ScopedLock(self._slaveMutex)
-                for slave in self._slaves[:]:
+                guard_subordinate = OpenRTM_aist.ScopedLock(self._subordinateMutex)
+                for subordinate in self._subordinates[:]:
                     try:
-                        prof = slave.get_configuration()
+                        prof = subordinate.get_configuration()
                         prop = OpenRTM_aist.Properties()
                         OpenRTM_aist.NVUtil.copyToProperties(prop, prof)
                         name = prop.getProperty("manager.instance_name")
                         if re.match(regex, name):
-                            slaves_names.append(name)
+                            subordinates_names.append(name)
                     except BaseException:
                         self._rtcout.RTC_ERROR("Unknown exception cought.")
                         self._rtcout.RTC_DEBUG(
                             OpenRTM_aist.Logger.print_exception())
-                        self._slaves.remove(slave)
+                        self._subordinates.remove(subordinate)
 
-                del guard_slave
+                del guard_subordinate
 
             ret = OpenRTM_aist.launch_shell(cmd)
 
@@ -1456,24 +1456,24 @@ class ManagerServant(RTM__POA.Manager):
             while CORBA.is_nil(mgrobj):
                 if mgrstr == "manager_%p":
 
-                    guard_slave = OpenRTM_aist.ScopedLock(self._slaveMutex)
+                    guard_subordinate = OpenRTM_aist.ScopedLock(self._subordinateMutex)
 
-                    for slave in self._slaves[:]:
+                    for subordinate in self._subordinates[:]:
                         try:
-                            prof = slave.get_configuration()
+                            prof = subordinate.get_configuration()
                             prop = OpenRTM_aist.Properties()
                             OpenRTM_aist.NVUtil.copyToProperties(prop, prof)
                             name = prop.getProperty("manager.instance_name")
 
                             if re.match(regex, name) and not (
-                                    name in slaves_names):
-                                mgrobj = slave
+                                    name in subordinates_names):
+                                mgrobj = subordinate
                         except BaseException:
                             self._rtcout.RTC_ERROR("Unknown exception cought.")
                             self._rtcout.RTC_DEBUG(
                                 OpenRTM_aist.Logger.print_exception())
-                            self._slaves.remove(slave)
-                    del guard_slave
+                            self._subordinates.remove(subordinate)
+                    del guard_subordinate
 
                 else:
                     mgrobj = self.findManagerByName(mgrstr)
@@ -1563,7 +1563,7 @@ class ManagerServant(RTM__POA.Manager):
                 load_path = load_path.replace("\\", "\\\\")
             else:
                 cmd = rtcd_cmd
-            cmd += " -o corba.master_manager:"
+            cmd += " -o corba.main_manager:"
             cmd += mgrstr  # port number
             cmd += " -o \"manager.modules.load_path:"
             cmd += load_path + "\""
@@ -1620,32 +1620,32 @@ class ManagerServant(RTM__POA.Manager):
     # @brief
     # @param self
     # @endif
-    # void updateMasterManager()
-    def updateMasterManager(self):
-        if not self._isMaster and self._objref:
-            guard = OpenRTM_aist.ScopedLock(self._masterMutex)
-            if self._masters:
-                for master in self._masters[:]:
+    # void updateMainManager()
+    def updateMainManager(self):
+        if not self._isMain and self._objref:
+            guard = OpenRTM_aist.ScopedLock(self._mainMutex)
+            if self._mains:
+                for main in self._mains[:]:
                     try:
-                        if master._non_existent():
-                            self._masters.remove(master)
+                        if main._non_existent():
+                            self._mains.remove(main)
                     except BaseException:
                         self._rtcout.RTC_ERROR("Unknown exception cought.")
                         self._rtcout.RTC_ERROR(
                             OpenRTM_aist.Logger.print_exception())
-                        self._masters.remove(master)
+                        self._mains.remove(main)
             del guard
 
-            if not self._masters:
+            if not self._mains:
                 try:
                     config = self._mgr.getConfig()
                     owner = self.findManager(
-                        config.getProperty("corba.master_manager"))
+                        config.getProperty("corba.main_manager"))
                     if not owner:
-                        self._rtcout.RTC_INFO("Master manager not found")
+                        self._rtcout.RTC_INFO("Main manager not found")
                         return
-                    self.add_master_manager(owner)
-                    owner.add_slave_manager(self._objref)
+                    self.add_main_manager(owner)
+                    owner.add_subordinate_manager(self._objref)
 
                     return
                 except BaseException:

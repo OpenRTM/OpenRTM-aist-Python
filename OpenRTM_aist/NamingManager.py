@@ -516,15 +516,15 @@ class NamingOnManager(NamingBase):
                     if not CORBA.is_nil(mgr):
                         rtc_list = mgr.get_components_by_name(rtc_name)
 
-                        slaves = mgr.get_slave_managers()
-                        for slave in slaves:
+                        subordinates = mgr.get_subordinate_managers()
+                        for subordinate in subordinates:
                             try:
                                 rtc_list.extend(
-                                    slave.get_components_by_name(rtc_name))
+                                    subordinate.get_components_by_name(rtc_name))
                             except BaseException:
                                 self._rtcout.RTC_DEBUG(
                                     OpenRTM_aist.Logger.print_exception())
-                                mgr.remove_slave_manager(slave)
+                                mgr.remove_subordinate_manager(subordinate)
 
                     return rtc_list
         return rtc_list
@@ -551,12 +551,12 @@ class NamingOnManager(NamingBase):
         if name == "*":
             mgr_sev = self._mgr.getManagerServant()
             mgr = None
-            if mgr_sev.is_master():
+            if mgr_sev.is_main():
                 mgr = mgr_sev.getObjRef()
             else:
-                masters = mgr_sev.get_master_managers()
-                if masters:
-                    mgr = masters[0]
+                mains = mgr_sev.get_main_managers()
+                if mains:
+                    mgr = mains[0]
                 else:
                     mgr = mgr_sev.getObjRef()
             return mgr

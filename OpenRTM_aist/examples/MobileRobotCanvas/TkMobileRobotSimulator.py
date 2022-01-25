@@ -424,25 +424,25 @@ class PropertyDialog:
         self.toplevel.destroy()
         return
 
-    def button(self, master, label, func):
-        bt = Button(master, text=label, command=func, width=10,
+    def button(self, main, label, func):
+        bt = Button(main, text=label, command=func, width=10,
                     padx=3, pady=3)
         bt.pack(side=TOP, padx=5, pady=5)
         return
 
-    def profile_label(self, master):
+    def profile_label(self, main):
         t = ["Robot's name: ", "Robot's type: ", "Description: ", "Vendor: "]
         for i in range(len(t)):
-            Label(master, text=t[i], anchor=W).grid(row=i, sticky=W,
+            Label(main, text=t[i], anchor=W).grid(row=i, sticky=W,
                                                     padx=3, pady=3)
         l = [self.name, self.type, self.description, self.vendor]
         for i in range(len(l)):
-            Label(master, text=l[i], anchor=W).grid(row=i, column=1, sticky=W,
+            Label(main, text=l[i], anchor=W).grid(row=i, column=1, sticky=W,
                                                     padx=3, pady=3)
         return
 
-    def label_entry(self, master, label0, var, label1):
-        f = Frame(master)
+    def label_entry(self, main, label0, var, label1):
+        f = Frame(main)
         l0 = Label(
             f,
             text=label0,
@@ -655,8 +655,8 @@ class DDMobileRobot(SimulatedObject):
 
 
 class TkMobileRobot(Frame):
-    def __init__(self, master=None, width=800, height=600):
-        Frame.__init__(self, master)
+    def __init__(self, main=None, width=800, height=600):
+        Frame.__init__(self, main)
 
         # canvas properties
         self.width = width
@@ -929,7 +929,7 @@ def TkMobileRobotSimulatorInit(manager):
 
 def main():
     m = TkMobileRobot(Tk())
-    m.master.title("Tk Mobile Robot Simulator")
+    m.main.title("Tk Mobile Robot Simulator")
     mgr = OpenRTM_aist.Manager.init(sys.argv)
     mgr.activateManager()
     profile = OpenRTM_aist.Properties(defaults_str=tkmobilerobotsimulator_spec)

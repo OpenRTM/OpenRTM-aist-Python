@@ -973,9 +973,9 @@ class PortBase(RTC__POA.PortService):
 
         guard_connection = OpenRTM_aist.ScopedLock(self._connection_mutex)
         # The Port of which the reference is stored in the beginning of
-        # connectorProfile's PortServiceList is master Port.
-        # The master Port has the responsibility of disconnecting all Ports.
-        # The slave Ports have only responsibility of deleting its own
+        # connectorProfile's PortServiceList is main Port.
+        # The main Port has the responsibility of disconnecting all Ports.
+        # The subordinate Ports have only responsibility of deleting its own
         # ConnectorProfile.
 
         guard = OpenRTM_aist.ScopedLock(self._profile_mutex)

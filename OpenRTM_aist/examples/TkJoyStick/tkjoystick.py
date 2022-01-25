@@ -311,8 +311,8 @@ class Stick:
 
 
 class TkJoystick(Frame):
-    def __init__(self, r=10, width=300, height=300, master=None):
-        Frame.__init__(self, master)
+    def __init__(self, r=10, width=300, height=300, main=None):
+        Frame.__init__(self, main)
 
         self.pos_x = 0.0
         self.pos_y = 0.0

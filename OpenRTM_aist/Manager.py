@@ -1212,7 +1212,7 @@ class Manager:
 
             if OpenRTM_aist.toBool(self._config.getProperty("manager.shutdown_on_nortcs"),
                                    "YES", "NO", True) and \
-                not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
+                not OpenRTM_aist.toBool(self._config.getProperty("manager.is_main"),
                                         "YES", "NO", False):
                 comps = self.getComponents()
                 if not comps:
@@ -1423,7 +1423,7 @@ class Manager:
 
         if OpenRTM_aist.toBool(self._config.getProperty("manager.shutdown_auto"),
                                    "YES", "NO", True) and \
-                not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
+                not OpenRTM_aist.toBool(self._config.getProperty("manager.is_main"),
                                         "YES", "NO", False) and \
                 self._needsTimer:
             tm = OpenRTM_aist.TimeValue(20, 0)
@@ -1820,14 +1820,14 @@ class Manager:
                 "corba.endpoint: %s",
                 self._config.getProperty("corba.endpoint"))
 
-        # If this process has master manager,
-        # master manager's endpoint inserted at the top of endpoints
-        self._rtcout.RTC_DEBUG("manager.is_master: %s",
-                               self._config.getProperty("manager.is_master"))
+        # If this process has main manager,
+        # main manager's endpoint inserted at the top of endpoints
+        self._rtcout.RTC_DEBUG("manager.is_main: %s",
+                               self._config.getProperty("manager.is_main"))
 
         if OpenRTM_aist.toBool(self._config.getProperty(
-                "manager.is_master"), "YES", "NO", False):
-            mm = self._config.getProperty("corba.master_manager", ":2810")
+                "manager.is_main"), "YES", "NO", False):
+            mm = self._config.getProperty("corba.main_manager", ":2810")
             mmm = [s.strip() for s in mm.split(":")]
             if len(mmm) == 2:
                 endpoints.insert(0, ":" + mmm[1])
@@ -2323,26 +2323,26 @@ class Manager:
         prop = self._config.getNode("manager")
         names = OpenRTM_aist.split(prop.getProperty("naming_formats"), ",")
 
-        if OpenRTM_aist.toBool(prop.getProperty("is_master"),
+        if OpenRTM_aist.toBool(prop.getProperty("is_main"),
                                "YES", "NO", True):
             for name in names:
                 mgr_name = self.formatString(name, prop)
                 self._namingManager.bindManagerObject(
                     mgr_name, self._mgrservant)
 
-        if OpenRTM_aist.toBool(self._config.getProperty("corba.update_master_manager.enable"),
+        if OpenRTM_aist.toBool(self._config.getProperty("corba.update_main_manager.enable"),
                                    "YES", "NO", True) and \
-                not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
+                not OpenRTM_aist.toBool(self._config.getProperty("manager.is_main"),
                                         "YES", "NO", False) and \
                 self._needsTimer:
             tm = OpenRTM_aist.TimeValue(10, 0)
-            if self._config.findNode("corba.update_master_manager.interval"):
+            if self._config.findNode("corba.update_main_manager.interval"):
                 duration = float(self._config.getProperty(
-                    "corba.update_master_manager.interval"))
+                    "corba.update_main_manager.interval"))
                 if duration:
                     tm.set_time(duration)
 
-            self.addTask(self._mgrservant.updateMasterManager, tm)
+            self.addTask(self._mgrservant.updateMainManager, tm)
 
         otherref = None
 

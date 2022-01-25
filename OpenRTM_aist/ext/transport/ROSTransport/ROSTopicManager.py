@@ -595,7 +595,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
     ##
     # @if jp
-    # @brief getMasterUriコールバック関数
+    # @brief getMainUriコールバック関数
     #
     # @param self
     # @param caller_id 呼び出しID
@@ -610,8 +610,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    # def getMasterUri(self, caller_id):
-    #  return 0, "master URI not set", ""
+    # def getMainUri(self, caller_id):
+    #  return 0, "main URI not set", ""
 
     ##
     # @if jp
