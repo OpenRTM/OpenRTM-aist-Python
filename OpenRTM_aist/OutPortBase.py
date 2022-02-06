@@ -1205,7 +1205,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
             prop = OpenRTM_aist.Properties()
             OpenRTM_aist.NVUtil.copyToProperties(
                 prop, self._profile.properties)
-            prop_dataport = prop.getNode("dataport.interface_type")
+            prop_dataport = prop.getNode("dataport.interface_option")
             prop_dataport.mergeProperties(prop_options)
             OpenRTM_aist.NVUtil.copyFromProperties(
                 self._profile.properties, prop)
@@ -1263,7 +1263,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
             prop = OpenRTM_aist.Properties()
             OpenRTM_aist.NVUtil.copyToProperties(
                 prop, self._profile.properties)
-            prop_dataport = prop.getNode("dataport.interface_type")
+            prop_dataport = prop.getNode("dataport.interface_option")
             prop_dataport.mergeProperties(prop_options)
             OpenRTM_aist.NVUtil.copyFromProperties(
                 self._profile.properties, prop)
