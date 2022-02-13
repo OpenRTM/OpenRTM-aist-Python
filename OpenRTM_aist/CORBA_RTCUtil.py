@@ -1869,21 +1869,6 @@ class RTCURIObject:
     ##
     # @if jp
     #
-    # @brief デストラクタ
-    #
-    #
-    # @else
-    #
-    # @brief Destructor
-    #
-    #
-    # @endif
-    def getRTCName(self):
-        return self._rtcpath
-
-    ##
-    # @if jp
-    #
     # @brief RTC名を取得する
     #
     # rtcname形式の場合はネームサーバーに登録したRTCのパスを取得できる。
@@ -1892,6 +1877,24 @@ class RTCURIObject:
     # rtcloc形式の場合はカテゴリ名/RTC名で取得できる。
     #
     # @return RTC名
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @return
+    #
+    # @endif
+    def getRTCName(self):
+        return self._rtcpath
+
+    ##
+    # @if jp
+    #
+    # @brief 通信先のアドレスを取得する
+    #
+    #
+    # @return 通信先のアドレス
     #
     # @else
     #
