@@ -1780,6 +1780,38 @@ class Manager:
 
     ##
     # @if jp
+    # @brief giopからはじまるORBエンドポイントでの指定した場合にtrue、
+    #       それ以外(例えばホスト名:ポート番号の指定)の場合はfalseを返す。
+    # 
+    #
+    # @param endpoint エンドポイント
+    # @return エンドポイントの指定方法
+    #
+    # @else
+    # @brief 
+    #
+    # @param endpoint 
+    # @return 
+    #
+    # @endif
+    #
+    # static bool isORBEndPoint(const std::string& endpoint);
+
+    @staticmethod
+    def isORBEndPoint(endpoint):
+        headers = ["giop:", "iiop://",
+                   "diop://", "uiop://",
+                   "ssliop://", "shmiop://",
+                   "htiop://", "inet:"]
+
+        for header in headers:
+            if header in endpoint:
+                return True
+
+        return False
+
+    ##
+    # @if jp
     # @brief エンドポイントの生成
     #
     # コンフィグレーションからエンドポイントを生成する。
@@ -1828,11 +1860,14 @@ class Manager:
         if OpenRTM_aist.toBool(self._config.getProperty(
                 "manager.is_master"), "YES", "NO", False):
             mm = self._config.getProperty("corba.master_manager", ":2810")
-            mmm = [s.strip() for s in mm.split(":")]
-            if len(mmm) == 2:
-                endpoints.insert(0, ":" + mmm[1])
+            if not Manager.isORBEndPoint(mm):
+                mmm = [s.strip() for s in mm.split(":")]
+                if len(mmm) == 2:
+                    endpoints.insert(0, ":" + mmm[1])
+                else:
+                    endpoints.insert(0, ":2810")
             else:
-                endpoints.insert(0, ":2810")
+                endpoints.insert(0, mm)
 
         endpoints = OpenRTM_aist.unique_sv(endpoints)
 
@@ -1871,12 +1906,21 @@ class Manager:
                 if endpoint == "all:":
                     opt += " -ORBendPointPublish all(addr)"
                 else:
-                    opt += " -ORBendPoint giop:tcp:" + endpoint
+                    if not Manager.isORBEndPoint(endpoint):
+                        opt += " -ORBendPoint giop:tcp:" + endpoint
+                    else:
+                        opt += " -ORBendPoint " + endpoint
 
             elif corba == "TAO":
-                opt += "-ORBEndPoint iiop://" + endpoint
+                if not Manager.isORBEndPoint(endpoint):
+                    opt += "-ORBEndPoint iiop://" + endpoint
+                else:
+                    opt += "-ORBEndPoint " + endpoint
             elif corba == "MICO":
-                opt += "-ORBIIOPAddr inet:" + endpoint
+                if not Manager.isORBEndPoint(endpoint):
+                    opt += "-ORBIIOPAddr inet:" + endpoint
+                else:
+                    opt += "-ORBIIOPAddr " + endpoint
 
             endpoints[i] = endpoint
 

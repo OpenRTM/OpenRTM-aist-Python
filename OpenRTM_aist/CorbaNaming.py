@@ -17,6 +17,7 @@
 
 import omniORB.CORBA as CORBA
 import CosNaming
+import OpenRTM_aist.CORBA_RTCUtil
 import string
 import sys
 import traceback
@@ -85,7 +86,7 @@ class CorbaNaming:
         self._blLength = 100
 
         if name_server:
-            self._nameServer = "corbaloc::" + name_server + "/NameService"
+            self._nameServer = OpenRTM_aist.CORBA_RTCUtil.CorbaURI(name_server, "NameService").toString()
             try:
                 obj = orb.string_to_object(self._nameServer)
                 self._rootContext = obj._narrow(CosNaming.NamingContext)
@@ -129,7 +130,7 @@ class CorbaNaming:
     # @endif
 
     def init(self, name_server):
-        self._nameServer = "corbaloc::" + name_server + "/NameService"
+        self._nameServer = OpenRTM_aist.CORBA_RTCUtil.CorbaURI(name_server, "NameService").toString()
         obj = self._orb.string_to_object(self._nameServer)
         self._rootContext = obj._narrow(CosNaming.NamingContext)
         if CORBA.is_nil(self._rootContext):
