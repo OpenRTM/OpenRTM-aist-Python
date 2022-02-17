@@ -1853,18 +1853,21 @@ class RTCURIObject:
                 hostport = addrname[0:pos]
                 self._rtcpath = addrname[pos+1:]
             else:
-                self._rtcpath = addrname
+                hostport = addrname
 
-            if protocol == "http" or protocol == "https" or protocol == "ws" or protocol == "wss":
-                self._address = protocol
-                self._address += "://"
-                self._address += hostport
+            if hostport != "*":
+                if protocol == "http" or protocol == "https" or protocol == "ws" or protocol == "wss":
+                    self._address = protocol
+                    self._address += "://"
+                    self._address += hostport
 
+                else:
+                    self._address = "corbaloc:"
+                    self._address += protocol
+                    self._address += ":"
+                    self._address += hostport
             else:
-                self._address = "corbaloc:"
-                self._address += protocol
-                self._address += ":"
-                self._address += hostport
+                self._address = hostport
 
     ##
     # @if jp
