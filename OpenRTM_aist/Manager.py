@@ -1446,7 +1446,7 @@ class Manager:
             try:
                 self._module.load(mpm_, basename_)
             except BaseException:
-                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+                print(OpenRTM_aist.Logger.print_exception())
 
         self._config.setProperty("manager.instance_name", self.formatString(self._config.getProperty("manager.instance_name"),
                                                                             self._config))
