@@ -100,6 +100,13 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
         self._messageType = "ros:std_msgs/Float32"
         self._roscorehost = ""
         self._roscoreport = ""
+        self._so_reuseaddr = True
+        self._so_keepalive = True
+        self._tcp_keepcnt = 9
+        self._tcp_keepidle = 60
+        self._tcp_keepintvl = 10
+        self._tcp_nodelay = True
+        self._sock_timeout = 60.0
 
         self._tcp_connecters = []
         self._con_mutex = threading.RLock()
@@ -225,6 +232,44 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             "marshaling_type", "ros:std_msgs/Float32")
         self._topic = prop.getProperty("ros.topic", "chatter")
         self._topic = "/" + self._topic
+
+        self._so_reuseaddr = OpenRTM_aist.toBool(prop.getProperty(
+            "ros.so_reuseaddr"), "YES", "NO", True)
+
+        self._so_keepalive = OpenRTM_aist.toBool(prop.getProperty(
+            "ros.so_keepalive"), "YES", "NO", True)
+
+        try:
+            self._tcp_keepcnt = int(prop.getProperty(
+                "ros.tcp_keepcnt"))
+        except ValueError as error:
+            pass
+            # self._rtcout.RTC_ERROR(error)
+
+        try:
+            self._tcp_keepidle = int(prop.getProperty(
+                "ros.tcp_keepidle"))
+        except ValueError as error:
+            pass
+            # self._rtcout.RTC_ERROR(error)
+
+        try:
+            self._tcp_keepintvl = int(prop.getProperty(
+                "ros.tcp_keepintvl"))
+        except ValueError as error:
+            pass
+            # self._rtcout.RTC_ERROR(error)
+
+        self._tcp_nodelay = OpenRTM_aist.toBool(prop.getProperty(
+            "ros.tcp_nodelay"), "YES", "NO", True)
+
+        try:
+            self._sock_timeout = float(prop.getProperty(
+                "ros.sock.timeout"))
+        except ValueError as error:
+            pass
+            # self._rtcout.RTC_ERROR(error)
+
         self._roscorehost = prop.getProperty("ros.roscore.host")
         self._roscoreport = prop.getProperty("ros.roscore.port")
 
@@ -234,9 +279,10 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
                 ROSInPort.ROS_MASTER_URI)
             env = os.getenv(ROSInPort.ROS_MASTER_URI)
             if env:
-                self._rtcout.RTC_VERBOSE("$%s: %s", (ROSInPort.ROS_MASTER_URI, env))
-                env = env.replace("http://","")
-                env = env.replace("https://","")
+                self._rtcout.RTC_VERBOSE(
+                    "$%s: %s", (ROSInPort.ROS_MASTER_URI, env))
+                env = env.replace("http://", "")
+                env = env.replace("https://", "")
                 envsplit = env.split(":")
                 self._roscorehost = envsplit[0]
                 if len(envsplit) >= 2:
@@ -247,7 +293,6 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
         if not self._roscoreport:
             self._roscoreport = ROSInPort.ROS_DEFAULT_MASTER_PORT
-
 
         self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
         self._rtcout.RTC_VERBOSE(
@@ -268,7 +313,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             info_type = info.datatype()
         else:
             self._rtcout.RTC_ERROR("can not found %s", self._messageType)
-            return
+            raise
 
         self._rtcout.RTC_VERBOSE("caller id: %s", self._callerid)
 
@@ -282,7 +327,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
                 self._callerid, self._topic, info_type, self._topicmgr.getURI())
         except xmlrpclib.Fault as err:
             self._rtcout.RTC_ERROR("XML-RPC ERROR: %s", err.faultString)
-            return
+            raise
         self.connect(self._callerid, self._topic, val)
 
     ##
@@ -340,13 +385,47 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             else:
                 _, dest_addr, dest_port = result
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-                sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
-                sock.setsockopt(socket.SOL_TCP, socket.TCP_KEEPCNT, 9)
-                sock.setsockopt(socket.SOL_TCP, socket.TCP_KEEPIDLE, 60)
-                sock.setsockopt(socket.SOL_TCP, socket.TCP_KEEPINTVL, 10)
-                sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-                sock.settimeout(60.0)
+                so_reuseaddr = 1
+                if not self._so_reuseaddr:
+                    so_reuseaddr = 0
+                sock.setsockopt(socket.SOL_SOCKET,
+                                socket.SO_REUSEADDR, so_reuseaddr)
+                so_keepalive = 1
+                if not self._so_keepalive:
+                    so_keepalive = 0
+                sock.setsockopt(socket.SOL_SOCKET,
+                                socket.SO_KEEPALIVE, so_keepalive)
+                if self._so_keepalive:
+                    sock.setsockopt(
+                        socket.SOL_TCP, socket.TCP_KEEPCNT, self._tcp_keepcnt)
+                    sock.setsockopt(
+                        socket.SOL_TCP, socket.TCP_KEEPIDLE, self._tcp_keepidle)
+                    sock.setsockopt(
+                        socket.SOL_TCP, socket.TCP_KEEPINTVL, self._tcp_keepintvl)
+
+                tcp_nodelay = 1
+                if not self._tcp_nodelay:
+                    tcp_nodelay = 0
+
+                sock.setsockopt(socket.IPPROTO_TCP,
+                                socket.TCP_NODELAY, tcp_nodelay)
+                sock.settimeout(self._sock_timeout)
+
+                self._rtcout.RTC_VERBOSE(
+                    "SO_REUSEADDR: %s", self._so_reuseaddr)
+                self._rtcout.RTC_VERBOSE(
+                    "SO_KEEPALIVE: %s", self._so_keepalive)
+                self._rtcout.RTC_VERBOSE(
+                    "TCP_KEEPCNT: %d", self._tcp_keepcnt)
+                self._rtcout.RTC_VERBOSE(
+                    "TCP_KEEPIDLE: %d", self._tcp_keepidle)
+                self._rtcout.RTC_VERBOSE(
+                    "TCP_KEEPINTVL: %d", self._tcp_keepintvl)
+                self._rtcout.RTC_VERBOSE(
+                    "TCP_NODELAY: %d", self._tcp_nodelay)
+                self._rtcout.RTC_VERBOSE(
+                    "Socket timeout: %lf", self._sock_timeout)
+
                 sock.connect((dest_addr, dest_port))
 
                 fileno = sock.fileno()
@@ -391,9 +470,12 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
                         "Can not found %s", self._messageType)
 
                 sock.setblocking(1)
+                tcp_nodelay = '1'
+                if not self._tcp_nodelay:
+                    tcp_nodelay = '0'
                 fields = {'topic': topic,
                           'message_definition': info_message_definition,
-                          'tcp_nodelay': '0',
+                          'tcp_nodelay': tcp_nodelay,
                           'md5sum': info_md5sum,
                           'type': info_type,
                           'callerid': self._callerid}
@@ -794,6 +876,36 @@ class SubListener:
                 return
 
 
+ros_sub_option = [
+    "topic.__value__", "chatter",
+    "topic.__widget__", "text",
+    "topic.__constraint__", "none",
+    "roscore.host.__value__", "",
+    "roscore.host.__widget__", "text",
+    "roscore.host.__constraint__", "none",
+    "roscore.port.__value__", "",
+    "roscore.port.__widget__", "text",
+    "roscore.port.__constraint__", "none",
+    "node.name.__value__", "",
+    "node.name.__widget__", "text",
+    "node.name.__constraint__", "none",
+    "node.anonymous.__value__", "NO",
+    "node.anonymous.__widget__", "radio",
+    "node.anonymous.__constraint__", "(YES, NO)",
+    "tcp_nodelay.__value__", "YES",
+    "tcp_nodelay.__widget__", "radio",
+    "tcp_nodelay.__constraint__", "(YES, NO)",
+    "tcp_keepcnt.__value__", "9",
+    "tcp_keepcnt.__widget__", "spin",
+    "tcp_keepcnt.__constraint__", "1 <= x <= 10000",
+    "tcp_keepidle.__value__", "60",
+    "tcp_keepidle.__widget__", "spin",
+    "tcp_keepidle.__constraint__", "1 <= x <= 10000",
+    "tcp_keepintvl.__value__", "10",
+    "tcp_keepintvl.__widget__", "spin",
+    "tcp_keepintvl.__constraint__", "1 <= x <= 10000",
+    ""
+]
 ##
 # @if jp
 # @brief モジュール登録関数
@@ -805,7 +917,11 @@ class SubListener:
 #
 # @endif
 #
+
+
 def ROSInPortInit():
+    prop = OpenRTM_aist.Properties(defaults_str=ros_sub_option)
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("ros",
-                       ROSInPort)
+                       ROSInPort,
+                       prop)

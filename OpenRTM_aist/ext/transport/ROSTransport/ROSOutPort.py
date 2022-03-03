@@ -81,6 +81,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         self._topic = "chatter"
         self._roscorehost = ""
         self._roscoreport = ""
+        self._tcp_nodelay = True
         self._tcp_connecters = []
         self._con_mutex = threading.RLock()
         self._message_data_sent = 0
@@ -149,6 +150,10 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
             "marshaling_type", "ros:std_msgs/Float32")
         self._topic = prop.getProperty("ros.topic", "chatter")
         self._topic = "/" + self._topic
+
+        self._tcp_nodelay = OpenRTM_aist.toBool(prop.getProperty(
+            "ros.tcp_nodelay"), "YES", "NO", True)
+
         self._roscorehost = prop.getProperty("ros.roscore.host")
         self._roscoreport = prop.getProperty("ros.roscore.port")
 
@@ -204,6 +209,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
                 self._topicmgr.getURI())
         except xmlrpclib.Fault as err:
             self._rtcout.RTC_ERROR("XML-RPC ERROR: %s", err.faultString)
+            raise
 
     ##
     # @if jp
@@ -278,9 +284,12 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
                 "MD5sum in not match(%s:%s)", (info_md5sum, md5sum))
             return
 
+        tcp_nodelay = '1'
+        if not self._tcp_nodelay:
+            tcp_nodelay = '0'
         fields = {'topic': topic_name,
                   'message_definition': info_message_definition,
-                  'tcp_nodelay': '0',
+                  'tcp_nodelay': tcp_nodelay,
                   'md5sum': info_md5sum,
                   'type': info_type,
                   'callerid': self._callerid}
@@ -484,6 +493,28 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         return self._messageType
 
 
+ros_pub_option = [
+    "topic.__value__", "chatter",
+    "topic.__widget__", "text",
+    "topic.__constraint__", "none",
+    "roscore.host.__value__", "",
+    "roscore.host.__widget__", "text",
+    "roscore.host.__constraint__", "none",
+    "roscore.port.__value__", "",
+    "roscore.port.__widget__", "text",
+    "roscore.port.__constraint__", "none",
+    "node.name.__value__", "",
+    "node.name.__widget__", "text",
+    "node.name.__constraint__", "none",
+    "node.anonymous.__value__", "NO",
+    "node.anonymous.__widget__", "radio",
+    "node.anonymous.__constraint__", "(YES, NO)",
+    "tcp_nodelay.__value__", "YES",
+    "tcp_nodelay.__widget__", "radio",
+    "tcp_nodelay.__constraint__", "(YES, NO)",
+    ""
+]
+
 ##
 # @if jp
 # @brief モジュール登録関数
@@ -498,6 +529,8 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
 
 def ROSOutPortInit():
+    prop = OpenRTM_aist.Properties(defaults_str=ros_pub_option)
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("ros",
-                       ROSOutPort)
+                       ROSOutPort,
+                       prop)
