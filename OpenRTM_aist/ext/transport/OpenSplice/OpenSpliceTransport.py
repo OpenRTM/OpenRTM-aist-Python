@@ -92,5 +92,6 @@ def OpenSpliceTransportInit(mgr):
     OpenSpliceInPort.OpenSpliceInPortInit()
     OpenSpliceOutPort.OpenSpliceOutPortInit()
     OpenSpliceSerializer.OpenSpliceSerializerInit()
+    OpenSpliceTopicManager.init(mgr.getConfig().getNode("opensplice"))
 
     mgr.addManagerActionListener(ManagerActionListener())
