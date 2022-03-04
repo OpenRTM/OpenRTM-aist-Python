@@ -282,38 +282,6 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
     # @endif
     # virtual ExecutionContext_ptr get_context(UniqueId exec_handle)
 
-    def get_owned_contexts(self):
-        return OpenRTM_aist.RTObject_impl.get_owned_contexts(self)
-
-    ##
-    # @if jp
-    # @brief [CORBA interface] ExecutionContextを取得する
-    #
-    # 指定したハンドルの ExecutionContext を取得する。
-    # ハンドルから ExecutionContext へのマッピングは、特定の RTC インスタンスに
-    # 固有である。ハンドルはこの RTC を attach_context した際に取得できる。
-    #
-    # @param self
-    # @param ec_id 取得対象 ExecutionContext ハンドル
-    #
-    # @return ExecutionContext
-    #
-    # @else
-    # @brief [CORBA interface] Get ExecutionContext.
-    #
-    # Obtain a reference to the execution context represented by the given
-    # handle.
-    # The mapping from handle to context is specific to a particular RTC
-    # instance. The given handle must have been obtained by a previous call to
-    # attach_context on this RTC.
-    #
-    # @param ec_id ExecutionContext handle
-    #
-    # @return ExecutionContext
-    #
-    # @endif
-    # virtual ExecutionContext_ptr get_context(UniqueId exec_handle)
-
     def get_context(self, ec_id):
         return OpenRTM_aist.RTObject_impl.get_context(self, ec_id)
 

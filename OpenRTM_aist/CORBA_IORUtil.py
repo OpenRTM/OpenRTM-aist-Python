@@ -8,9 +8,12 @@
 #  @author Noriaki Ando
 #
 
+import sys
 from omniORB import CORBA
 from omniORB import *
 from omniORB import any
+from omniORB import cdrMarshal
+from omniORB import cdrUnmarshal
 from IORProfile_idl import *
 from IORProfile_idl import _0__GlobalIDL
 endian = True
