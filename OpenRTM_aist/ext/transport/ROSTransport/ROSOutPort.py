@@ -36,7 +36,6 @@ import time
 import sys
 import threading
 import os
-import time
 
 
 ##
