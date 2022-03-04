@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: run unittest
+      - name: run static code analysis
         run:  | 
                 export OPENRTMPYTHON_IMAGE=openrtm-aist-python:${{matrix.os}}-$(date +%s)
                 docker build .. --file scripts/${{matrix.os}}/Dockerfile --tag $OPENRTMPYTHON_IMAGE
