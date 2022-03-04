@@ -78,7 +78,7 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListener):
         return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE, cdrdata
 
     def run(self, data):
-        self._fsm.dispatch(pyfsm.Event(self._handler, data_))
+        self._fsm.dispatch(pyfsm.Event(self._handler, data))
 
 
 class EventConnListener(OpenRTM_aist.ConnectorListener):

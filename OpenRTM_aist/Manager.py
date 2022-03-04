@@ -1160,7 +1160,7 @@ class Manager:
 
         avail_ec_ = OpenRTM_aist.ExecutionContextFactory.instance().getIdentifiers()
 
-        if not ec_id in avail_ec_:
+        if ec_id not in avail_ec_:
             self._rtcout.RTC_ERROR("Factory not found: %s", ec_id)
             return None
 
@@ -2098,7 +2098,7 @@ class Manager:
 
             ret = OpenRTM_aist.setProcessAffinity(cpu_num)
 
-            if ret == False:
+            if ret is False:
                 self._rtcout.RTC_ERROR("CPU affinity mask setting failed")
 
     ##
