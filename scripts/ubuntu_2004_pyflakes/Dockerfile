@@ -10,8 +10,8 @@ RUN apt update\
  wget
 
 
-RUN sudo pip3 install pyflakes\
- && sudo pip3 install --upgrade pyflakes
+RUN pip3 install pyflakes\
+ && pip3 install --upgrade pyflakes
 
 
 CMD cd /root/OpenRTM-aist-Python/\

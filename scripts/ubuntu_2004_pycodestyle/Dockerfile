@@ -10,8 +10,8 @@ RUN apt update\
  wget
 
 
-RUN sudo pip3 install pycodestyle\
- && sudo pip3 install --upgrade pycodestyle
+RUN pip3 install pycodestyle\
+ && pip3 install --upgrade pycodestyle
 
 
 CMD cd /root/OpenRTM-aist-Python/\
