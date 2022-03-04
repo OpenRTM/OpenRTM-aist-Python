@@ -4,7 +4,7 @@ COPY OpenRTM-aist-Python /root/OpenRTM-aist-Python
 
 RUN apt update\
  && apt install -y --no-install-recommends\
- pip3\
+ python3-pip\
  g++\
  ca-certificates\
  wget
