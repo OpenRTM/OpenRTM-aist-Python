@@ -1,0 +1,16 @@
+name: Workflow for openrtm-aist-python static code analysis
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu_2004_pycodestyle, ubuntu_2004_pyflakes, ubuntu_2004_flake8, ubuntu_2004_bandit]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: run unittest
+        run:  | 
+                export OPENRTMPYTHON_IMAGE=openrtm-aist-python:${{matrix.os}}-$(date +%s)
+                docker build .. --file scripts/${{matrix.os}}/Dockerfile --tag $OPENRTMPYTHON_IMAGE
+                docker run $OPENRTMPYTHON_IMAGE
