@@ -951,7 +951,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     """
         prop.mergeProperties(conn_prop.getNode("dataport.outport"))
 
-        if not self.isExistingMarshalingType(prop):
+        if self._value is not None and not self.isExistingMarshalingType(prop):
             return RTC.RTC_ERROR
 
         #
@@ -1039,7 +1039,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     """
         prop.mergeProperties(conn_prop.getNode("dataport.outport"))
 
-        if not self.isExistingMarshalingType(prop):
+        if self._value is not None and not self.isExistingMarshalingType(prop):
             return RTC.RTC_ERROR
 
         #
