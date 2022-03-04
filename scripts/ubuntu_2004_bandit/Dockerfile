@@ -10,8 +10,8 @@ RUN apt update\
  wget
 
 
-RUN sudo pip3 install bandit\
- && sudo pip3 install --upgrade bandit
+RUN pip3 install bandit\
+ && pip3 install --upgrade bandit
 
 
 CMD cd /root/OpenRTM-aist-Python/\

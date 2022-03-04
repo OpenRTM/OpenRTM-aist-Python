@@ -10,8 +10,8 @@ RUN apt update\
  wget
 
 
-RUN sudo pip3 install flake8\
- && sudo pip3 install --upgrade flake8
+RUN pip3 install flake8\
+ && pip3 install --upgrade flake8
 
 
 CMD cd /root/OpenRTM-aist-Python/\
