@@ -440,9 +440,9 @@ class OpenSpliceTopicManager(object):
             history_qos_policy_kind = dds.DDSHistoryKind.KEEP_LAST
             history_qos_policy_kind_str = prop.getProperty(
                 "writer_qos.history.kind")
-            if history_qos_policy_kind_str == "KEEP_ALL":
+            if history_qos_policy_kind_str == "KEEP_ALL_HISTORY_QOS":
                 history_qos_policy_kind = dds.DDSHistoryKind.KEEP_ALL
-            elif history_qos_policy_kind_str == "KEEP_LAST":
+            elif history_qos_policy_kind_str == "KEEP_LAST_HISTORY_QOS":
                 history_qos_policy_kind = dds.DDSHistoryKind.KEEP_LAST
 
             history_depth = 1
