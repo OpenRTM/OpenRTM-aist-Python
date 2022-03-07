@@ -39,6 +39,7 @@ import threading
 class ROS2InPort(OpenRTM_aist.InPortProvider):
     """
     """
+    ddstype = "fast-rtps"
 
     ##
     # @if jp
@@ -67,7 +68,7 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
         OpenRTM_aist.InPortProvider.__init__(self)
 
         # PortProfile setting
-        self.setInterfaceType("ros2")
+        self.setInterfaceType(self.ddstype)
 
         self._profile = None
         self._listeners = None
@@ -144,12 +145,11 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
         self._properties = prop
 
-        args = []
-        self._topicmgr = ROS2TopicManager.instance(args)
+        self._topicmgr = ROS2TopicManager.instance()
 
         self._messageType = prop.getProperty(
             "marshaling_type", "ros2:std_msgs/Float32")
-        self._topic = prop.getProperty("ros2.topic", "chatter")
+        self._topic = prop.getProperty(self.ddstype+".topic", "chatter")
 
         self._rtcout.RTC_VERBOSE("message type: %s", self._messageType)
         self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
@@ -159,18 +159,23 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 
         info_type = info.datatype()
 
-        qos = ROS2TopicManager.get_qosprofile(prop.getNode("ros2.subscriber.qos"))
+        ddsprop = prop.getNode(self.ddstype)
+
+        qos = ROS2TopicManager.get_qosprofile(ddsprop.getNode("reader_qos"))
 
         self._rtcout.RTC_VERBOSE("history policy: %s", qos.history)
         self._rtcout.RTC_VERBOSE("depth: %d", qos.depth)
         self._rtcout.RTC_VERBOSE("reliability policy: %s", qos.reliability)
         self._rtcout.RTC_VERBOSE("durability policy: %s", qos.durability)
-        self._rtcout.RTC_VERBOSE("lifespan: %d [nsec]", qos.lifespan.nanoseconds)
-        self._rtcout.RTC_VERBOSE("deadline: %d [nsec]", qos.deadline.nanoseconds)
+        self._rtcout.RTC_VERBOSE(
+            "lifespan: %d [nsec]", qos.lifespan.nanoseconds)
+        self._rtcout.RTC_VERBOSE(
+            "deadline: %d [nsec]", qos.deadline.nanoseconds)
         self._rtcout.RTC_VERBOSE("liveliness policy: %s", qos.liveliness)
-        self._rtcout.RTC_VERBOSE("liveliness lease duration: %d [nsec]", qos.liveliness_lease_duration.nanoseconds)
-        self._rtcout.RTC_VERBOSE("avoid ros namespace conventions: %s", qos.avoid_ros_namespace_conventions)
-
+        self._rtcout.RTC_VERBOSE(
+            "liveliness lease duration: %d [nsec]", qos.liveliness_lease_duration.nanoseconds)
+        self._rtcout.RTC_VERBOSE(
+            "avoid ros namespace conventions: %s", qos.avoid_ros_namespace_conventions)
 
         self._subscriber = self._topicmgr.createSubscriber(
             info_type, self._topic, self.ros2_callback, qos)
@@ -353,6 +358,48 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
         return data
 
 
+ros2_sub_option = [
+    "topic.__value__", "chatter",
+    "topic.__widget__", "text",
+    "topic.__constraint__", "none",
+    "reader_qos.durability.kind.__value__", "TRANSIENT_DURABILITY_QOS",
+    "reader_qos.durability.kind.__widget__", "radio",
+    "reader_qos.durability.kind.__constraint__", "(VOLATILE_DURABILITY_QOS, TRANSIENT_LOCAL_DURABILITY_QOS, SYSTEM_DEFAULT_QOS)",
+    "reader_qos.deadline.period.sec.__value__", "0",
+    "reader_qos.deadline.period.sec.__widget__", "spin",
+    "reader_qos.deadline.period.sec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.deadline.period.nanosec.__value__", "0",
+    "reader_qos.deadline.period.nanosec.__widget__", "text",
+    "reader_qos.deadline.period.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.liveliness.kind.__value__", "AUTOMATIC_LIVELINESS_QOS",
+    "reader_qos.liveliness.kind.__widget__", "radio",
+    "reader_qos.liveliness.kind.__constraint__", "(AUTOMATIC_LIVELINESS_QOS, MANUAL_BY_TOPIC_LIVELINESS_QOS, SYSTEM_DEFAULT_LIVELINESS_QOS)",
+    "reader_qos.liveliness.lease_duration.sec.__value__", "0",
+    "reader_qos.liveliness.lease_duration.sec.__widget__", "spin",
+    "reader_qos.liveliness.lease_duration.sec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.liveliness.lease_duration.nanosec.__value__", "0",
+    "reader_qos.liveliness.lease_duration.nanosec.__widget__", "spin",
+    "reader_qos.liveliness.lease_duration.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.reliability.kind.__value__", "RELIABLE_RELIABILITY_QOS",
+    "reader_qos.reliability.kind.__widget__", "radio",
+    "reader_qos.reliability.kind.__constraint__", "(BEST_EFFORT_RELIABILITY_QOS, RELIABLE_RELIABILITY_QOS, SYSTEM_DEFAULT_RELIABILITY_QOS)",
+    "reader_qos.history.kind.__value__", "KEEP_LAST_HISTORY_QOS",
+    "reader_qos.history.kind.__widget__", "radio",
+    "reader_qos.history.kind.__constraint__", "(KEEP_LAST_HISTORY_QOS, KEEP_ALL_HISTORY_QOS, SYSTEM_DEFAULT_HISTORY_QOS)",
+    "reader_qos.history.depth.__value__", "1",
+    "reader_qos.history.depth.__widget__", "spin",
+    "reader_qos.history.depth.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.lifespan.duration.sec.__value__", "10000",
+    "reader_qos.lifespan.duration.sec.__widget__", "spin",
+    "reader_qos.lifespan.duration.sec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.lifespan.duration.nanosec.__value__", "2147483647",
+    "reader_qos.lifespan.duration.nanosec.__widget__", "spin",
+    "reader_qos.lifespan.duration.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.avoid_ros_namespace_conventions.__value__", "YES",
+    "reader_qos.avoid_ros_namespace_conventions.__widget__", "radio",
+    "reader_qos.avoid_ros_namespace_conventions.__constraint__", "(YES, NO)",
+    ""]
+
 ##
 # @if jp
 # @brief モジュール登録関数
@@ -364,7 +411,12 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
 #
 # @endif
 #
-def ROS2InPortInit():
+
+
+def ROS2InPortInit(ddstype="fast-rtps"):
+    prop = OpenRTM_aist.Properties(defaults_str=ros2_sub_option)
     factory = OpenRTM_aist.InPortProviderFactory.instance()
-    factory.addFactory("ros2",
-                       ROS2InPort)
+    factory.addFactory(ddstype,
+                       ROS2InPort,
+                       prop)
+    ROS2InPort.ddstype = ddstype

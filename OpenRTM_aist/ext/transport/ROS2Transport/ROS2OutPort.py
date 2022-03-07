@@ -38,6 +38,7 @@ import RTC
 class ROS2OutPort(OpenRTM_aist.InPortConsumer):
     """
     """
+    ddstype = "fast-rtps"
 
     ##
     # @if jp
@@ -114,12 +115,11 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 
         self._properties = prop
 
-        args = []
-        self._topicmgr = ROS2TopicManager.instance(args)
+        self._topicmgr = ROS2TopicManager.instance()
 
         self._messageType = prop.getProperty(
             "marshaling_type", "ros2:std_msgs/Float32")
-        self._topic = prop.getProperty("ros2.topic", "chatter")
+        self._topic = prop.getProperty(self.ddstype+".topic", "chatter")
 
         self._rtcout.RTC_VERBOSE("message type: %s", self._messageType)
         self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
@@ -129,19 +129,25 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 
         info_type = info.datatype()
 
-        qos = ROS2TopicManager.get_qosprofile(prop.getNode("ros2.publisher.qos"))
+        ddsprop = prop.getNode(self.ddstype)
+
+        qos = ROS2TopicManager.get_qosprofile(
+            ddsprop.getNode("writer_qos"))
 
         self._rtcout.RTC_VERBOSE("history policy: %s", qos.history)
         self._rtcout.RTC_VERBOSE("depth: %d", qos.depth)
         self._rtcout.RTC_VERBOSE("reliability policy: %s", qos.reliability)
         self._rtcout.RTC_VERBOSE("durability policy: %s", qos.durability)
-        self._rtcout.RTC_VERBOSE("lifespan: %d [nsec]", qos.lifespan.nanoseconds)
-        self._rtcout.RTC_VERBOSE("deadline: %d [nsec]", qos.deadline.nanoseconds)
+        self._rtcout.RTC_VERBOSE(
+            "lifespan: %d [nsec]", qos.lifespan.nanoseconds)
+        self._rtcout.RTC_VERBOSE(
+            "deadline: %d [nsec]", qos.deadline.nanoseconds)
         self._rtcout.RTC_VERBOSE("liveliness policy: %s", qos.liveliness)
-        self._rtcout.RTC_VERBOSE("liveliness lease duration: %d [nsec]", qos.liveliness_lease_duration.nanoseconds)
-        self._rtcout.RTC_VERBOSE("avoid ros namespace conventions: %s", qos.avoid_ros_namespace_conventions)
+        self._rtcout.RTC_VERBOSE(
+            "liveliness lease duration: %d [nsec]", qos.liveliness_lease_duration.nanoseconds)
+        self._rtcout.RTC_VERBOSE(
+            "avoid ros namespace conventions: %s", qos.avoid_ros_namespace_conventions)
 
-        
         self._publisher = self._topicmgr.createPublisher(
             info_type, self._topic, qos)
 
@@ -268,6 +274,48 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
         pass
 
 
+ros2_pub_option = [
+    "topic.__value__", "chatter",
+    "topic.__widget__", "text",
+    "topic.__constraint__", "none",
+    "writer_qos.durability.kind.__value__", "TRANSIENT_DURABILITY_QOS",
+    "writer_qos.durability.kind.__widget__", "radio",
+    "writer_qos.durability.kind.__constraint__", "(VOLATILE_DURABILITY_QOS, TRANSIENT_LOCAL_DURABILITY_QOS, SYSTEM_DEFAULT_QOS)",
+    "writer_qos.deadline.period.sec.__value__", "10000",
+    "writer_qos.deadline.period.sec.__widget__", "spin",
+    "writer_qos.deadline.period.sec.__constraint__", "0 <= x <= 2147483647",
+    "writer_qos.deadline.period.nanosec.__value__", "2147483647",
+    "writer_qos.deadline.period.nanosec.__widget__", "text",
+    "writer_qos.deadline.period.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "writer_qos.liveliness.kind.__value__", "AUTOMATIC_LIVELINESS_QOS",
+    "writer_qos.liveliness.kind.__widget__", "radio",
+    "writer_qos.liveliness.kind.__constraint__", "(AUTOMATIC_LIVELINESS_QOS, MANUAL_BY_TOPIC_LIVELINESS_QOS, SYSTEM_DEFAULT_LIVELINESS_QOS)",
+    "writer_qos.liveliness.lease_duration.sec.__value__", "0",
+    "writer_qos.liveliness.lease_duration.sec.__widget__", "spin",
+    "writer_qos.liveliness.lease_duration.sec.__constraint__", "0 <= x <= 2147483647",
+    "writer_qos.liveliness.lease_duration.nanosec.__value__", "0",
+    "writer_qos.liveliness.lease_duration.nanosec.__widget__", "spin",
+    "writer_qos.liveliness.lease_duration.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "writer_qos.reliability.kind.__value__", "RELIABLE_RELIABILITY_QOS",
+    "writer_qos.reliability.kind.__widget__", "radio",
+    "writer_qos.reliability.kind.__constraint__", "(BEST_EFFORT_RELIABILITY_QOS, RELIABLE_RELIABILITY_QOS, SYSTEM_DEFAULT_RELIABILITY_QOS)",
+    "writer_qos.history.kind.__value__", "KEEP_LAST_HISTORY_QOS",
+    "writer_qos.history.kind.__widget__", "radio",
+    "writer_qos.history.kind.__constraint__", "(KEEP_LAST_HISTORY_QOS, KEEP_ALL_HISTORY_QOS, SYSTEM_DEFAULT_HISTORY_QOS)",
+    "writer_qos.history.depth.__value__", "1",
+    "writer_qos.history.depth.__widget__", "spin",
+    "writer_qos.history.depth.__constraint__", "0 <= x <= 2147483647",
+    "writer_qos.lifespan.duration.sec.__value__", "0",
+    "writer_qos.lifespan.duration.sec.__widget__", "spin",
+    "writer_qos.lifespan.duration.sec.__constraint__", "0 <= x <= 2147483647",
+    "writer_qos.lifespan.duration.nanosec.__value__", "0",
+    "writer_qos.lifespan.duration.nanosec.__widget__", "spin",
+    "writer_qos.lifespan.duration.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "writer_qos.avoid_ros_namespace_conventions.__value__", "YES",
+    "writer_qos.avoid_ros_namespace_conventions.__widget__", "radio",
+    "writer_qos.avoid_ros_namespace_conventions.__constraint__", "(YES, NO)",
+    ""]
+
 ##
 # @if jp
 # @brief モジュール登録関数
@@ -279,7 +327,12 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 #
 # @endif
 #
-def ROS2OutPortInit():
+
+
+def ROS2OutPortInit(ddstype="fast-rtps"):
+    prop = OpenRTM_aist.Properties(defaults_str=ros2_pub_option)
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
-    factory.addFactory("ros2",
-                       ROS2OutPort)
+    factory.addFactory(ddstype,
+                       ROS2OutPort,
+                       prop)
+    ROS2OutPort.ddstype = ddstype
