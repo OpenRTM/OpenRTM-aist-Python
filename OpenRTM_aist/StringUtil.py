@@ -695,6 +695,8 @@ def urlparam2map(_str):
     tmp = _str[qpos:].split("&")
     retmap = {}
     for v in tmp:
+        if not v.strip():
+            continue
         pos = v.find("=")
         if pos != -1:
             retmap[v[0:pos]] = v[pos + 1:]
