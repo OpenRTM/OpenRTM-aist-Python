@@ -601,10 +601,7 @@ class CorbaNaming:
         else:
             name_ = name
 
-        try:
-            self._rootContext.unbind(name_)
-        except BaseException:
-            raise
+        self._rootContext.unbind(name_)
 
         return
 
