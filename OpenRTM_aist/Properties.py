@@ -761,6 +761,7 @@ class Properties:
 
             _str = _str.rstrip('\r\n')
             _str = _str.rstrip('\n')
+            _str = _str.strip()
 
             if not _str:
                 continue
