@@ -898,7 +898,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
         # marge ConnectorProfile for buffer property.
         prop.mergeProperties(conn_prop.getNode("dataport.inport"))
 
-        if not self.isExistingMarshalingType(prop):
+        if self._value is not None and not self.isExistingMarshalingType(prop):
             return RTC.RTC_ERROR
 
         #
@@ -1008,7 +1008,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
         # marge ConnectorProfile for buffer property.
         prop.mergeProperties(conn_prop.getNode("dataport.inport"))
 
-        if not self.isExistingMarshalingType(prop):
+        if self._value is not None and not self.isExistingMarshalingType(prop):
             return RTC.RTC_ERROR
 
         #

@@ -149,7 +149,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
         if self._cpu:
             ret = OpenRTM_aist.setThreadAffinity(self._cpu)
-            if ret == False:
+            if ret is False:
                 self._rtcout.RTC_ERROR("CPU affinity mask setting failed")
                 
         while self.threadRunning():
@@ -631,13 +631,13 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
     def onAddedComponent(self, rtobj):
         guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
-        if self._workerthread._running == False:
+        if self._workerthread._running is False:
             self._worker.updateComponentList()
         return RTC.RTC_OK
 
     def onRemovedComponent(self, rtobj):
         guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
-        if self._workerthread._running == False:
+        if self._workerthread._running is False:
             self._worker.updateComponentList()
         return RTC.RTC_OK
 
@@ -652,7 +652,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
         # If worker thread is stopped, restart worker thread.
         if self.isRunning():
             guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
-            if self._workerthread._running == False:
+            if self._workerthread._running is False:
                 self._workerthread._running = True
                 self._workerthread._cond.acquire()
                 self._workerthread._cond.notify()
@@ -677,7 +677,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
         # If worker thread is stopped, restart worker thread.
         if self.isRunning():
             guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
-            if self._workerthread._running == False:
+            if self._workerthread._running is False:
                 self._workerthread._running = True
                 self._workerthread._cond.acquire()
                 self._workerthread._cond.notify()
@@ -696,7 +696,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
                                    self.getStateString(comp.getStates().next)))
         if self.isAllNextState(RTC.INACTIVE_STATE):
             guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
-            if self._workerthread._running == True:
+            if self._workerthread._running is True:
                 self._workerthread._running = False
                 self._rtcout.RTC_TRACE(
                     "All RTCs are INACTIVE. Stopping worker thread.")
@@ -714,7 +714,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
                                    self.getStateString(comp.getStates().next)))
         if self.isAllNextState(RTC.INACTIVE_STATE):
             guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
-            if self._workerthread._running == True:
+            if self._workerthread._running is True:
                 self._workerthread._running = False
                 self._rtcout.RTC_TRACE(
                     "All RTCs are INACTIVE. Stopping worker thread.")
@@ -732,7 +732,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
                                    self.getStateString(comp.getStates().next)))
         if self.isAllNextState(RTC.INACTIVE_STATE):
             guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
-            if self._workerthread._running == True:
+            if self._workerthread._running is True:
                 self._workerthread._running = False
                 self._rtcout.RTC_TRACE(
                     "All RTCs are INACTIVE. Stopping worker thread.")
@@ -750,7 +750,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
                                    self.getStateString(comp.getStates().next)))
         if self.isAllNextState(RTC.INACTIVE_STATE):
             guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
-            if self._workerthread._running == True:
+            if self._workerthread._running is True:
                 self._workerthread._running = False
                 self._rtcout.RTC_TRACE(
                     "All RTCs are INACTIVE. Stopping worker thread.")
