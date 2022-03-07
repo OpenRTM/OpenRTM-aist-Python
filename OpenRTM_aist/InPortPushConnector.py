@@ -346,7 +346,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
         self._provider = None
 
         # delete buffer
-        if self._buffer and self._deleteBuffer == True:
+        if self._buffer and self._deleteBuffer is True:
             bfactory = OpenRTM_aist.CdrBufferFactory.instance()
 
         self._buffer = None

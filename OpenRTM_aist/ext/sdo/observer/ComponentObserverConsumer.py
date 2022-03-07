@@ -1005,7 +1005,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
             self._portname = portname
 
         def onBufferWrite(self, info, cdrdata):
-            param = self._portname + ":" + info
+            msg_ = self._portname + ":" + info
             self._coc.updateStatus(OpenRTM.CONFIGURATION, msg_)
             return
 

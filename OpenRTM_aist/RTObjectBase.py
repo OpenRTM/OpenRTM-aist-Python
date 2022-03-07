@@ -5126,9 +5126,9 @@ class RTObjectBase:
         if self._manager:
             eclist_ = self._manager.createdExecutionContexts()
             for e_ in eclist_:
-                if ec.getProperties().getProperty("type") == ec_arg.getProperty("type") and \
-                        ec.getProperties().getProperty("name") == ec_arg.getProperty("name"):
-                    return RTC.RTC_OK, ec
+                if e_.getProperties().getProperty("type") == ec_arg.getProperty("type") and \
+                        e_.getProperties().getProperty("name") == ec_arg.getProperty("name"):
+                    return RTC.RTC_OK, e_
 
         return RTC.RTC_ERROR, None
 
@@ -5151,7 +5151,7 @@ class RTObjectBase:
                                        (ec_type_, ec_name_))
             else:
                 # If EC's name is empty or no existing EC, create new EC.
-                if not ec_type_ in avail_ec_:
+                if ec_type_ not in avail_ec_:
                     self._rtcout.RTC_WARN("EC %s is not available.", ec_type_)
                     self._rtcout.RTC_DEBUG("Available ECs: %s",
                                            OpenRTM_aist.flatten(avail_ec_))
@@ -5182,7 +5182,7 @@ class RTObjectBase:
 
             ec_ = [None]
             ec_type_ = default_prop.getProperty("exec_cxt.periodic.type")
-            if not ec_type_ in avail_ec_:
+            if ec_type_ not in avail_ec_:
                 self._rtcout.RTC_WARN("EC %s is not available.", ec_type_)
                 self._rtcout.RTC_DEBUG("Available ECs: %s",
                                        OpenRTM_aist.flatten(avail_ec_))
