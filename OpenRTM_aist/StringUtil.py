@@ -699,7 +699,9 @@ def urlparam2map(_str):
             continue
         pos = v.find("=")
         if pos != -1:
-            retmap[v[0:pos]] = v[pos + 1:]
+            key = v[0:pos]
+            if key.strip():
+                retmap[key] = v[pos + 1:]
         else:
             retmap[v] = ""
     return retmap
