@@ -110,15 +110,6 @@ def ROS2TransportInit(mgr):
 
     ROS2Serializer.ROS2SerializerInit()
 
-    tmp_args = mgr.getConfig().getProperty("ros2.args").split("\"")
-    args = []
-    for i, tmp_arg in enumerate(tmp_args):
-        if i % 2 == 0:
-            args.extend(tmp_arg.strip().split(" "))
-        else:
-            args.append(tmp_arg)
-
-    args.insert(0, "manager")
-    ROS2TopicManager.init(args)
+    ROS2TopicManager.init(mgr.getConfig().getNode("ros2"))
 
     mgr.addManagerActionListener(ManagerActionListener())

@@ -102,9 +102,21 @@ class ROS2TopicManager(object):
     #
     # @endif
 
-    def start(self, args=[]):
+    def start(self, prop):
+
+        tmp_args = prop.getProperty("args").split("\"")
+        args = []
+        for i, tmp_arg in enumerate(tmp_args):
+            if i % 2 == 0:
+                args.extend(tmp_arg.strip().split(" "))
+            else:
+                args.append(tmp_arg)
+
+        args.insert(0, "manager")
+
         rclpy.init(args=args)
-        self._node = Node("openrtm")
+
+        self._node = Node(prop.getProperty("node.name", "openrtm"))
 
         def spin():
             while self._loop:
@@ -216,14 +228,14 @@ class ROS2TopicManager(object):
     #
     # @endif
 
-    def init(args=[]):
+    def init(prop):
         global manager
         global mutex
 
         guard = OpenRTM_aist.ScopedLock(mutex)
         if manager is None:
             manager = ROS2TopicManager()
-            manager.start(args)
+            manager.start(prop)
 
     init = staticmethod(init)
 
@@ -422,9 +434,11 @@ class ROS2TopicManager(object):
     #
     # @endif
     def getDuration(prop, DDSDuration):
+        sec_str = prop.getProperty("sec")
+        nanosec_str = prop.getProperty("nanosec")
         try:
-            sec = int(prop.getProperty("sec"))
-            nanosec = int(prop.getProperty("nanosec"))
+            sec = int(sec_str)
+            nanosec = int(nanosec_str)
             return DDSDuration(seconds=sec, nanoseconds=nanosec)
         except ValueError as error:
             return None
