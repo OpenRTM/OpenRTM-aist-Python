@@ -124,18 +124,31 @@ class OpenSpliceTopicManager(object):
         self._rtcout.RTC_DEBUG("%s", prop)
         uri = prop.getProperty("uri")
         profile = prop.getProperty("profile")
+        domainid = -1
+        try:
+            domainid = int(prop.getProperty("domain.id"))
+        except ValueError as error:
+            pass
         if uri and profile:
             self._qosProfile = dds.QosProvider(uri, profile)
             # participant_name = prop.getProperty("participant_qos.name")
-            self._domainParticipant = dds.DomainParticipant(
-                qos=self._qosProfile.get_participant_qos())
+            if domainid == -1:
+                self._domainParticipant = dds.DomainParticipant(
+                    qos=self._qosProfile.get_participant_qos())
+            else:
+                self._domainParticipant = dds.DomainParticipant(
+                    did=domainid,
+                    qos=self._qosProfile.get_participant_qos())
             self._rtcout.RTC_INFO(
                 "DomainParticipantQos initialisation successful")
 
         else:
             self._rtcout.RTC_INFO(
                 "DomainParticipantQos has been set to the default value.")
-            self._domainParticipant = dds.DomainParticipant()
+            if domainid == -1:
+                self._domainParticipant = dds.DomainParticipant()
+            else:
+                self._domainParticipant = dds.DomainParticipant(did=domainid)
 
         self.createPublisher(prop)
         self.createSubscriber(prop)
@@ -1129,12 +1142,16 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
     def getDuration(self, prop):
+        sec_str = prop.getProperty("sec")
+        nanosec_str = prop.getProperty("nanosec")
+        if sec_str == "2147483647" and nanosec_str == "2147483647":
+            return dds.DDSDuration.infinity()
         try:
-            sec = int(prop.getProperty("sec"))
-            nanosec = int(prop.getProperty("nanosec"))
+            sec = int(sec_str)
+            nanosec = int(nanosec_str)
             return dds.DDSDuration(sec=sec, nanosec=nanosec)
         except ValueError as error:
-            pass
+            return None
             # self._rtcout.RTC_ERROR(error)
 
     ##
