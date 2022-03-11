@@ -128,6 +128,9 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
         self._writer = self._topicmgr.createWriter(
             topic, prop.getNode("opensplice"))
 
+        if self._writer is None:
+            raise MemoryError("Writer creation failed")
+
     ##
     # @if jp
     # @brief 接続先へのデータ送信

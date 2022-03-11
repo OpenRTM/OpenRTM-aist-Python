@@ -162,6 +162,9 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
         self._reader = self._topicmgr.createReader(
             topic, SubListener(self), prop.getNode("opensplice"))
 
+        if self._reader is None:
+            raise MemoryError("Reader creation failed")
+
     # virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
 
     def setBuffer(self, buffer):
