@@ -180,6 +180,9 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
         self._subscriber = self._topicmgr.createSubscriber(
             info_type, self._topic, self.ros2_callback, qos)
 
+        if self._subscriber is None:
+            raise MemoryError("Subscriber creation failed")
+
     # virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
 
     def setBuffer(self, buffer):

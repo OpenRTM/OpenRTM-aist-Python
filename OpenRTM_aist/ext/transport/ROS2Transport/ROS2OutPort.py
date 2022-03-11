@@ -151,6 +151,9 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
         self._publisher = self._topicmgr.createPublisher(
             info_type, self._topic, qos)
 
+        if self._publisher is None:
+            raise MemoryError("Publisher creation failed")
+
     ##
     # @if jp
     # @brief 接続先へのデータ送信
