@@ -209,7 +209,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
                 self._topicmgr.getURI())
         except xmlrpclib.Fault as err:
             self._rtcout.RTC_ERROR("XML-RPC ERROR: %s", err.faultString)
-            raise
+            raise MemoryError("XML-RPC ERROR")
 
     ##
     # @if jp

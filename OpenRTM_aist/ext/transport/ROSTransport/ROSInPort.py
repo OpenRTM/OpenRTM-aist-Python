@@ -313,7 +313,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             info_type = info.datatype()
         else:
             self._rtcout.RTC_ERROR("can not found %s", self._messageType)
-            raise
+            raise MemoryError("Message Type ERROR")
 
         self._rtcout.RTC_VERBOSE("caller id: %s", self._callerid)
 
@@ -327,7 +327,8 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
                 self._callerid, self._topic, info_type, self._topicmgr.getURI())
         except xmlrpclib.Fault as err:
             self._rtcout.RTC_ERROR("XML-RPC ERROR: %s", err.faultString)
-            raise
+            raise MemoryError("XML-RPC ERROR")
+
         self.connect(self._callerid, self._topic, val)
 
     ##
