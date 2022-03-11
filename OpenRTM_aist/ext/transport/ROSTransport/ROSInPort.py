@@ -893,6 +893,12 @@ ros_sub_option = [
     "node.anonymous.__value__", "NO",
     "node.anonymous.__widget__", "radio",
     "node.anonymous.__constraint__", "(YES, NO)",
+    "so_reuseaddr.__value__", "YES",
+    "so_reuseaddr.__widget__", "radio",
+    "so_reuseaddr.__constraint__", "(YES, NO)",
+    "so_keepalive.__value__", "YES",
+    "so_keepalive.__widget__", "radio",
+    "so_keepalive.__constraint__", "(YES, NO)",
     "tcp_nodelay.__value__", "YES",
     "tcp_nodelay.__widget__", "radio",
     "tcp_nodelay.__constraint__", "(YES, NO)",
@@ -905,6 +911,9 @@ ros_sub_option = [
     "tcp_keepintvl.__value__", "10",
     "tcp_keepintvl.__widget__", "spin",
     "tcp_keepintvl.__constraint__", "1 <= x <= 10000",
+    "ros.sock.timeout.__value__", "60",
+    "ros.sock.timeout.__widget__", "spin",
+    "ros.sock.timeout.__constraint__", "1 <= x <= 10000",
     ""
 ]
 ##
