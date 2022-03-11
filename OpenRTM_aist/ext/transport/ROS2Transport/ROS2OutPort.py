@@ -119,7 +119,10 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 
         self._messageType = prop.getProperty(
             "marshaling_type", "ros2:std_msgs/Float32")
-        self._topic = prop.getProperty(self.ddstype+".topic", "chatter")
+
+        ddsprop = prop.getNode(self.ddstype)
+
+        self._topic = ddsprop.getProperty("topic", "chatter")
 
         self._rtcout.RTC_VERBOSE("message type: %s", self._messageType)
         self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
@@ -128,8 +131,6 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
         info = factory.getInfo(self._messageType)
 
         info_type = info.datatype()
-
-        ddsprop = prop.getNode(self.ddstype)
 
         qos = ROS2TopicManager.get_qosprofile(
             ddsprop.getNode("writer_qos"))
@@ -277,6 +278,24 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
         pass
 
 
+##
+# @if jp
+# @class ROS2OutPortB
+# @brief ROS2Transportのインターフェース型ros2とDDS実装(fast-rtps or rti-connext-dds etc.)
+# の2つで登録するために、ROS2OutPortのインターフェース型名をros2に設定したオブジェクト
+#
+# @else
+# @class ROS2OutPortB
+# @brief
+#
+#
+# @endif
+class ROS2OutPortB(ROS2OutPort):
+    def __init__(self):
+        self.ddstype = "ros2"
+        ROS2OutPort.__init__(self)
+
+
 ros2_pub_option = [
     "topic.__value__", "chatter",
     "topic.__widget__", "text",
@@ -337,5 +356,8 @@ def ROS2OutPortInit(ddstype="fast-rtps"):
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory(ddstype,
                        ROS2OutPort,
+                       prop)
+    factory.addFactory("ros2",
+                       ROS2OutPortB,
                        prop)
     ROS2OutPort.ddstype = ddstype
