@@ -534,12 +534,11 @@ class ExecutionContextWorker:
                     id_, comp))
             del guard
         except BaseException:
-            del guard
             self._rtcout.RTC_ERROR("addComponent() failed.")
             return RTC.RTC_ERROR
 
         self._rtcout.RTC_DEBUG("addComponent() succeeded.")
-        if self._running == False:
+        if self._running is False:
             self.updateComponentList()
         return RTC.RTC_OK
 
@@ -635,7 +634,7 @@ class ExecutionContextWorker:
         guard = OpenRTM_aist.ScopedLock(self._removedMutex)
         self._removedComps.append(rtobj_)
         del guard
-        if self._running == False:
+        if self._running is False:
             self.updateComponentList()
         return RTC.RTC_OK
 

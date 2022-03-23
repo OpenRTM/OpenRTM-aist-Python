@@ -207,6 +207,7 @@ openrtm_ext_packages = [
     "OpenRTM_aist.ext.sdo",
     "OpenRTM_aist.ext.sdo.observer",
     "OpenRTM_aist.ext.ssl",
+    "OpenRTM_aist.ext.http",
     "OpenRTM_aist.ext.logger",
     "OpenRTM_aist.ext.logger.fluentlogger",
     "OpenRTM_aist.ext.transport",
