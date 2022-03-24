@@ -98,9 +98,14 @@ class ModuleManager:
             self._rtcout = self._mgr.getLogbuf("ModuleManager")
         self._modprofs = []
         self._loadfailmods = {}
-        langs = self._properties.getProperty(
-            "manager.supported_languages").split(",")
-        for lang in langs:
+        if OpenRTM_aist.toBool(prop.getProperty("manager.is_master"),
+                               "YES", "NO", False):
+            self._supported_languages = self._properties.getProperty(
+                "manager.supported_languages").split(",")
+        else:
+            self._supported_languages = ["Python", "Python3"]
+
+        for lang in self._supported_languages:
             lang = lang.strip()
             self._loadfailmods[lang] = []
 
@@ -271,7 +276,14 @@ class ModuleManager:
                 file_path = file_name
 
         else:
-            file_path = self.findFile(file_name, self._loadPath)
+            paths = self._properties.getProperty(
+                "manager.modules.Python.load_paths").split(",")
+            paths.extend(self._properties.getProperty(
+                "manager.modules.Python3.load_paths").split(","))
+            paths.extend(self._loadPath)
+
+            file_path = self.findFile(file_name, paths)
+
             if not file_path:
                 raise ModuleManager.FileNotFound(file_name)
 
@@ -731,13 +743,12 @@ class ModuleManager:
     def getLoadableModules(self):
         self._rtcout.RTC_TRACE("getLoadableModules()")
         # getting loadable module file path list.
-        langs = self._properties.getProperty(
-            "manager.supported_languages").split(",")
+
         self._rtcout.RTC_DEBUG(
             "langs: %s",
             self._properties.getProperty("manager.supported_languages"))
 
-        for lang in langs:
+        for lang in self._supported_languages:
             lang = lang.strip()
 
             modules_ = []
