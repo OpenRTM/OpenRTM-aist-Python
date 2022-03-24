@@ -494,20 +494,21 @@ class ManagerServant(RTM__POA.Manager):
 
         self._rtcout.RTC_TRACE("create_component(%s)", module_name)
 
-        rtc = self.createComponentByAddress(module_name)
-        if not CORBA.is_nil(rtc):
-            return rtc
-
-        rtc = self.createComponentByManagerName(module_name)
+        rtc, module_name, manager_address = self.createComponentByAddress(
+            module_name)
 
         if not CORBA.is_nil(rtc):
             return rtc
+        elif manager_address:
+            return RTC.RTObject._nil
 
-        #module_name = module_name.split("&")[0]
-        _, module_name = self.getParameterByModulename(
-            "manager_address", module_name)
-        manager_name, module_name = self.getParameterByModulename(
-            "manager_name", module_name)
+        rtc, module_name, manager_name = self.createComponentByManagerName(
+            module_name)
+
+        if not CORBA.is_nil(rtc):
+            return rtc
+        elif manager_name:
+            return RTC.RTObject._nil
 
         comp_param = CompParam(module_name)
 
@@ -532,7 +533,7 @@ class ManagerServant(RTM__POA.Manager):
             if not manager_name:
                 module_name = module_name + "&manager_name=manager_%p"
 
-                rtc = self.createComponentByManagerName(module_name)
+                rtc, _, _ = self.createComponentByManagerName(module_name)
                 return rtc
 
         else:
@@ -1375,7 +1376,7 @@ class ManagerServant(RTM__POA.Manager):
         mgrstr, arg = self.getParameterByModulename("manager_name", arg)
 
         if not mgrstr:
-            return RTC.RTObject._nil
+            return RTC.RTObject._nil, arg, mgrstr
 
         if mgrstr == "manager_%p":
             mgrobj = RTM.Manager._nil
@@ -1400,9 +1401,8 @@ class ManagerServant(RTM__POA.Manager):
                     ".manager_cmd")
 
             load_path = config.getProperty("manager.modules.load_path")
-            load_path_language = config.getProperty(
-                "manager.modules." + comp_param.language() + ".load_paths")
-            load_path = load_path + "," + load_path_language
+            lang_path_key = "manager.modules." + comp_param.language() + ".load_paths"
+            load_path_language = config.getProperty(lang_path_key)
 
             if os.name == "nt":
                 cmd = "cmd /c " + rtcd_cmd
@@ -1418,6 +1418,7 @@ class ManagerServant(RTM__POA.Manager):
                 config.getProperty("manager.name")
             cmd += " -o " + "manager.instance_name:" + mgrstr
             cmd += " -o " + "\"manager.modules.load_path:" + load_path + "\""
+            cmd += " -o " + "\"" + lang_path_key + ":" + load_path_language + "\""
             cmd += " -o " + "manager.supported_languages:" + comp_param.language()
             cmd += " -o " + "manager.shutdown_auto:NO"
 
@@ -1447,7 +1448,7 @@ class ManagerServant(RTM__POA.Manager):
 
             if ret == -1:
                 self._rtcout.RTC_DEBUG("%s: failed", cmd)
-                return RTC.RTObject._nil
+                return RTC.RTObject._nil, arg, mgrstr
             time.sleep(0.01)
             count = 0
 
@@ -1488,7 +1489,7 @@ class ManagerServant(RTM__POA.Manager):
 
         if CORBA.is_nil(mgrobj):
             self._rtcout.RTC_WARN("Manager cannot be found.")
-            return RTC.RTObject._nil
+            return RTC.RTObject._nil, arg, mgrstr
 
         self._rtcout.RTC_DEBUG("Creating component on %s", mgrstr)
         self._rtcout.RTC_DEBUG("arg: %s", arg)
@@ -1496,15 +1497,15 @@ class ManagerServant(RTM__POA.Manager):
         try:
             rtobj = mgrobj.create_component(arg)
 
-            return rtobj
+            return rtobj, arg, mgrstr
         except CORBA.SystemException:
             self._rtcout.RTC_DEBUG(
                 "Exception was caught while creating component.")
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
-            return RTC.RTObject._nil
+            return RTC.RTObject._nil, arg, mgrstr
         except BaseException:
             self._rtcout.RTC_DEBUG(OpenRTM_aist.Logger.print_exception())
-            return RTC.RTObject._nil
+            return RTC.RTObject._nil, arg, mgrstr
 
     ##
     # @if jp
@@ -1528,12 +1529,12 @@ class ManagerServant(RTM__POA.Manager):
         mgrstr, arg = self.getParameterByModulename("manager_address", arg)
 
         if not mgrstr:
-            return RTC.RTObject._nil
+            return RTC.RTObject._nil, arg, mgrstr
 
         mgrvstr = mgrstr.split(":")
         if len(mgrvstr) != 2:
             self._rtcout.RTC_WARN("Invalid manager address: %s", mgrstr)
-            return RTC.RTObject._nil
+            return RTC.RTObject._nil, arg, mgrstr
 
         # find manager
         mgrobj = self.findManager(mgrstr)
@@ -1555,7 +1556,7 @@ class ManagerServant(RTM__POA.Manager):
 
             load_path = config.getProperty("manager.modules.load_path")
             load_path_language = config.getProperty(
-                "manager.modules." + comp_param.language() + ".load_path")
+                "manager.modules." + comp_param.language() + ".load_paths")
             load_path = load_path + "," + load_path_language
 
             if os.name == "nt":
@@ -1574,7 +1575,7 @@ class ManagerServant(RTM__POA.Manager):
 
             if ret == -1:
                 self._rtcout.RTC_DEBUG("%s: failed", cmd)
-                return RTC.RTObject._nil
+                return RTC.RTObject._nil, arg, mgrstr
 
             # find manager
             time.sleep(0.01)
@@ -1593,22 +1594,22 @@ class ManagerServant(RTM__POA.Manager):
 
         if CORBA.is_nil(mgrobj):
             self._rtcout.RTC_WARN("Manager cannot be found.")
-            return RTC.RTObject._nil
+            return RTC.RTObject._nil, arg, mgrstr
 
         self._rtcout.RTC_DEBUG("Creating component on %s", mgrstr)
         self._rtcout.RTC_DEBUG("arg: %s", arg)
         try:
             rtobj = mgrobj.create_component(arg)
             self._rtcout.RTC_DEBUG("Component created %s", arg)
-            return rtobj
+            return rtobj, arg, mgrstr
         except CORBA.SystemException:
             self._rtcout.RTC_DEBUG(
                 "Exception was caught while creating component.")
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
-            return RTC.RTObject._nil
+            return RTC.RTObject._nil, arg, mgrstr
         except BaseException:
             self._rtcout.RTC_DEBUG(OpenRTM_aist.Logger.print_exception())
-            return RTC.RTObject._nil
+            return RTC.RTObject._nil, arg, mgrstr
 
     ##
     # @if jp
