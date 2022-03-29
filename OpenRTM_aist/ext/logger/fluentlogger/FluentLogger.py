@@ -151,7 +151,6 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
         for l in leaf0:
             key = l.getName()
             if key.find("output") != -1:
-                formatter = fluent.handler.FluentRecordFormatter()
                 tag = l.getProperty("tag")
                 if tag == "":
                     return False
