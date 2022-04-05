@@ -10,11 +10,11 @@
 #
 #
 
-
+import omniORB
+from omniORB import CORBA
 import OpenRTM_aist
 import OpenRTM
 import OpenRTM__POA
-from omniORB import CORBA
 
 import threading
 
@@ -158,7 +158,17 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
             portshmem = self._ptr()
 
             guard = OpenRTM_aist.ScopedLock(self._mutex)
-            ret = portshmem.get()
+
+            try:
+                ret = portshmem.get()
+            except CORBA.COMM_FAILURE as ex:
+                if ex.minor == omniORB.COMM_FAILURE_WaitingForReply:
+                    self._rtcout.RTC_DEBUG("Retry get message")
+                    ret = portshmem.get()
+                else:
+                    raise
+            except BaseException:
+                raise
 
             data = None
 

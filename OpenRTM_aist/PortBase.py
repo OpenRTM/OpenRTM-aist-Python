@@ -17,6 +17,8 @@
 
 import threading
 import copy
+import omniORB
+from omniORB import CORBA
 
 import OpenRTM_aist
 import OpenRTM_aist.CORBA_RTCUtil
@@ -2304,6 +2306,16 @@ class PortBase(RTC__POA.PortService):
             try:
                 if port._non_existent():
                     self._rtcout.RTC_WARN("Dead Port reference detected.")
+                    return False
+            except CORBA.COMM_FAILURE as ex:
+                if ex.minor == omniORB.COMM_FAILURE_WaitingForReply:
+                    self._rtcout.RTC_DEBUG("Retry access connected port")
+                    if port._non_existent():
+                        self._rtcout.RTC_WARN("Dead Port reference detected.")
+                        return False
+                else:
+                    self._rtcout.RTC_WARN(
+                        OpenRTM_aist.Logger.print_exception())
                     return False
             except BaseException:
                 self._rtcout.RTC_WARN(OpenRTM_aist.Logger.print_exception())

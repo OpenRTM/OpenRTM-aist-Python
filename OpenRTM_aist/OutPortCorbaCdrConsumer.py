@@ -18,7 +18,9 @@
 #
 
 
+import omniORB
 from omniORB import any
+from omniORB import CORBA
 import OpenRTM_aist
 import OpenRTM
 
@@ -201,7 +203,16 @@ class OutPortCorbaCdrConsumer(
         try:
             data = None
             outportcdr = self._ptr()
-            ret, cdr_data = outportcdr.get()
+            try:
+                ret, cdr_data = outportcdr.get()
+            except CORBA.COMM_FAILURE as ex:
+                if ex.minor == omniORB.COMM_FAILURE_WaitingForReply:
+                    self._rtcout.RTC_DEBUG("Retry get message")
+                    ret, cdr_data = outportcdr.get()
+                else:
+                    raise
+            except BaseException:
+                raise
 
             if ret == OpenRTM.PORT_OK:
                 self._rtcout.RTC_DEBUG("get() successful")
