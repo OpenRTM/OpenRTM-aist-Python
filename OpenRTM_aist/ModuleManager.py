@@ -79,7 +79,7 @@ class ModuleManager:
         for i, cp in enumerate(self._configPath):
             self._configPath[i] = OpenRTM_aist.eraseHeadBlank(
                 cp)
-        self._loadPath = prop.getProperty(MOD_LOADPTH, "./").split(",")
+        self._loadPath = prop.getProperty(MOD_LOADPTH).split(",")
         for i, lp in enumerate(self._loadPath):
             self._loadPath[i] = OpenRTM_aist.eraseHeadBlank(lp)
 
@@ -507,7 +507,13 @@ class ModuleManager:
         except BaseException:
             pass
 
-        imp_file = __import__(basename.split(".")[0])
+        try:
+            imp_file = __import__(basename.split(".")[0])
+        except:
+            self._rtcout.RTC_WARN("Module import failed %s", fullname)
+            self._rtcout.RTC_DEBUG(OpenRTM_aist.Logger.print_exception())
+            return None
+        
         comp_spec = getattr(imp_file, comp_spec_name, None)
         if not comp_spec:
             return None
