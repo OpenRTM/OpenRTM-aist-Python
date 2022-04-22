@@ -39,13 +39,13 @@ install: build
 	dh_installdirs
 
 	# installing core
-	python3 setup.py install_core --prefix=$(CURDIR)/debian/openrtm-aist-python3/usr --install-layout=deb
+	python3 setup.py install_core --prefix=$(CURDIR)/debian/openrtm2-python3/usr --install-layout=deb
 	# installing examples
-	(mkdir $(CURDIR)/debian/openrtm-aist-python3-example/usr/)
-	python3 setup.py install_example --install-dir=$(CURDIR)/debian/openrtm-aist-python3-example/usr/
+	(mkdir $(CURDIR)/debian/openrtm2-python3-example/usr/)
+	python3 setup.py install_example --install-dir=$(CURDIR)/debian/openrtm2-python3-example/usr/
 	# installing examples
-	(mkdir $(CURDIR)/debian/openrtm-aist-python3-doc/usr/)
-	python3 setup.py install_doc --install-dir=$(CURDIR)/debian/openrtm-aist-python3-doc/usr/
+	(mkdir $(CURDIR)/debian/openrtm2-python3-doc/usr/)
+	python3 setup.py install_doc --install-dir=$(CURDIR)/debian/openrtm2-python3-doc/usr/
 	dh_install -s
 
 # Build architecture-independent files here.
