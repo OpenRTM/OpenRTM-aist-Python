@@ -1269,7 +1269,11 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
         if provider is not None:
             self._rtcout.RTC_DEBUG("provider created")
-            provider.init(prop.getNode("provider"))
+            try:
+                provider.init(prop.getNode("provider"))
+            except BaseException:
+                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+                return None
 
             if not provider.publishInterface(cprof.properties):
                 self._rtcout.RTC_ERROR(
@@ -1311,7 +1315,11 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
         if consumer is not None:
             self._rtcout.RTC_DEBUG("consumer created")
 
-            consumer.init(prop.getNode("consumer"))
+            try:
+                consumer.init(prop.getNode("consumer"))
+            except BaseException:
+                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+                return None
 
             if not consumer.subscribeInterface(cprof.properties):
                 self._rtcout.RTC_ERROR("interface subscription failed.")
