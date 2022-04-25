@@ -51,14 +51,14 @@ class Factory:
     # ReturnCode addFactory(const Identifier& id,
     # Creator creator)
 
-    def addFactory(self, id, creator):
+    def addFactory(self, id, creator, prop=None):
         if not creator:
             return self.INVALID_ARG
 
         if id in self._creators:
             return self.ALREADY_EXISTS
 
-        self._creators[id] = creator
+        self._creators[id] = FactoryEntry(id, creator, prop)
         return self.FACTORY_OK
 
     # ReturnCode removeFactory(const Identifier& id)
@@ -76,8 +76,33 @@ class Factory:
         if id not in self._creators:
             print("Factory.createObject return None id: ", id)
             return None
-        obj_ = self._creators[id]()
+        obj_ = self._creators[id].creator()
         return obj_
+
+    def getProperties(self, id):
+        if not id in self._creators:
+            print("Factory.getProperties return None id: ", id)
+            return None
+        return self._creators[id].prop
+
+
+class FactoryEntry:
+    def __init__(self, id, creator, prop=None):
+        self._id = id
+        self._creator = creator
+        self._prop = prop
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def creator(self):
+        return self._creator
+
+    @property
+    def prop(self):
+        return self._prop
 
 
 gfactory = None
