@@ -23,14 +23,20 @@ if os.name == "nt":
     cpp_suffixes = "dll"
     supported_languages = "C++, Python, Java"
     lang = "Python"
+    rtcd_cpp_command = "rtcd"
+    rtcprof_cpp_command = "rtcprof"
 elif os.name == "posix":
     cpp_suffixes = "so"
     supported_languages = "C++, Python, Python3, Java"
     lang = "Python3"
+    rtcd_cpp_command = "rtcd2"
+    rtcprof_cpp_command = "rtcprof2"
 else:
     cpp_suffixes = "dylib"
     supported_languages = "C++, Python, Python3, Java"
     lang = "Python3"
+    rtcd_cpp_command = "rtcd"
+    rtcprof_cpp_command = "rtcprof"
 
 ##
 # @if jp
@@ -90,11 +96,11 @@ default_config = ["config.version", OpenRTM_aist.openrtm_version,
                   "manager.auto_shutdown_duration", "20.0",
                   "manager.termination_waittime", "1.0",
                   "manager.name", "manager",
-                  "manager.command", "rtcd",
+                  "manager.command", "rtcd_python",
                   "manager.nameservers", "default",
                   "manager.language", lang,
                   "manager.components.naming_policy", "process_unique",
-                  "manager.modules.C++.manager_cmd", "rtcd",
+                  "manager.modules.C++.manager_cmd", rtcd_cpp_command,
                   "manager.modules.Python.manager_cmd", "rtcd_python",
                   "manager.modules.Java.manager_cmd", "rtcd_java",
                   "manager.modules.search_auto", "YES",
@@ -102,7 +108,7 @@ default_config = ["config.version", OpenRTM_aist.openrtm_version,
                   "sdo.service.provider.enabled_services", "ALL",
                   "sdo.service.consumer.enabled_services", "ALL",
                   "manager.supported_languages", supported_languages,
-                  "manager.modules.C++.profile_cmd", "rtcprof",
+                  "manager.modules.C++.profile_cmd", rtcprof_cpp_command,
                   "manager.modules.Python.profile_cmd", "rtcprof_python",
                   "manager.modules.Java.profile_cmd", "rtcprof_java",
                   "manager.modules.C++.suffixes", cpp_suffixes,
