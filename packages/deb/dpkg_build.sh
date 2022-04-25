@@ -37,10 +37,10 @@ BUILD_ROOT=""
 cleanup_files()
 {
   get_version_info
-  rm -f ../openrtm-aist*.deb
-  rm -f ../openrtm-aist*.dsc
-  rm -f ../openrtm-aist*.changes
-  rm -f ../openrtm-aist*.tar.gz
+  rm -f ../openrtm*.deb
+  rm -f ../openrtm*.dsc
+  rm -f ../openrtm*.changes
+  rm -f ../openrtm*.tar.gz
   rm -rf ${BUILD_ROOT}
 }
 
@@ -133,9 +133,9 @@ create_files()
   ARCH=$DEB_HOST_ARCH
   PKG_VERSION=`dpkg-parsechangelog | sed -n 's/^Version: //p'`
 cat << EOF >> debian/files
-openrtm-aist-python3_${PKG_VERSION}_${ARCH}.deb main extra
-openrtm-aist-python3-example_${PKG_VERSION}_${ARCH}.deb main extra
-openrtm-aist-python3-doc_${PKG_VERSION}_all.deb main extra
+openrtm2-python3_${PKG_VERSION}_${ARCH}.deb main extra
+openrtm2-python3-example_${PKG_VERSION}_${ARCH}.deb main extra
+openrtm2-python3-doc_${PKG_VERSION}_all.deb main extra
 EOF
 }
 
@@ -163,10 +163,10 @@ build_package()
 
 copy_debfiles()
 {
-  mv ./openrtm-aist*.deb ..
-  mv ./openrtm-aist*.dsc ..
-  mv ./openrtm-aist*.changes ..
-  mv ./openrtm-aist*.tar.gz ..
+  mv ./openrtm2*.deb ..
+  mv ./openrtm2*.dsc ..
+  mv ./openrtm2*.changes ..
+  mv ./openrtm2*.tar.gz ..
 }
 
 #==============================
