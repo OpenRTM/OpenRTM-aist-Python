@@ -28,5 +28,5 @@ Description: OpenRTM-aist-Python examples
 
 Package: openrtm2-python3-doc
 Architecture: all
-Description: Documentation for openrtm-aist-python
+Description: Documentation for openrtm2-python3
  Class reference manual of OpenRTM-aist.
