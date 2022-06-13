@@ -1599,7 +1599,7 @@ class Manager:
         for mod_ in lmod_:
             if not mod_:
                 continue
-            basename_ = mod_.split(".")[0] + "Init"
+            basename_ = os.path.basename(mod_).split(".")[0] + "Init"
             try:
                 self._module.load(mod_, basename_)
             except BaseException:
