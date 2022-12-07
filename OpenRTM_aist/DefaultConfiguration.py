@@ -23,24 +23,14 @@ if os.name == "nt":
     cpp_suffixes = "dll"
     supported_languages = "C++, Python, Java"
     lang = "Python"
-    rtcd_cpp_command = "rtcd"
-    rtcprof_cpp_command = "rtcprof"
-    rtcd_java_command = "rtcd_java"
-    rtcprof_java_command = "rtcprof_java"
 elif os.name == "posix":
     cpp_suffixes = "so"
     supported_languages = "C++, Python, Python3, Java"
     lang = "Python3"
-    rtcd_cpp_command = "rtcd2"
-    rtcprof_cpp_command = "rtcprof2"
-    rtcd_java_command = "rtcd2_java"
-    rtcprof_java_command = "rtcprof2_java"
 else:
     cpp_suffixes = "dylib"
     supported_languages = "C++, Python, Python3, Java"
     lang = "Python3"
-    rtcd_cpp_command = "rtcd"
-    rtcprof_cpp_command = "rtcprof"
 
 ##
 # @if jp
@@ -104,17 +94,17 @@ default_config = ["config.version", OpenRTM_aist.openrtm_version,
                   "manager.nameservers", "default",
                   "manager.language", lang,
                   "manager.components.naming_policy", "process_unique",
-                  "manager.modules.C++.manager_cmd", rtcd_cpp_command,
-                  "manager.modules.Python.manager_cmd", "rtcd_python",
-                  "manager.modules.Java.manager_cmd", rtcd_java_command,
+                  "manager.modules.C++.manager_cmd", "rtcd2",
+                  "manager.modules.Python.manager_cmd", "rtcd2_python",
+                  "manager.modules.Java.manager_cmd", "rtcd2_java",
                   "manager.modules.search_auto", "YES",
                   "manager.local_service.enabled_services", "ALL",
                   "sdo.service.provider.enabled_services", "ALL",
                   "sdo.service.consumer.enabled_services", "ALL",
                   "manager.supported_languages", supported_languages,
-                  "manager.modules.C++.profile_cmd", rtcprof_cpp_command,
-                  "manager.modules.Python.profile_cmd", "rtcprof_python",
-                  "manager.modules.Java.profile_cmd", rtcprof_java_command,
+                  "manager.modules.C++.profile_cmd", "rtcprof2",
+                  "manager.modules.Python.profile_cmd", "rtcprof2_python",
+                  "manager.modules.Java.profile_cmd", "rtcprof2_java",
                   "manager.modules.C++.suffixes", cpp_suffixes,
                   "manager.modules.Python.suffixes", "py",
                   "manager.modules.Java.suffixes", "class",
