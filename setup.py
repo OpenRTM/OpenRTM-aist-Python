@@ -107,7 +107,7 @@ import string
 import sys
 pkg_major_version = "2"
 pkg_minor_version = "0"
-pkg_revision_num = "0"
+pkg_revision_num = "1"
 
 # ============================================================
 # MODIFICATION IS ALLOWED IF IT IS NEED TO MODIFY.
@@ -258,8 +258,8 @@ baseidl_path = os.path.normpath(current_dir + "/" + baseidl_dir)
 #
 # scripts settings
 #
-pkg_scripts_unix = ['OpenRTM_aist/utils/rtcd/rtcd_python3',
-                    'OpenRTM_aist/utils/rtcprof/rtcprof_python3']
+pkg_scripts_unix = ['OpenRTM_aist/utils/rtcd/rtcd2_python3',
+                    'OpenRTM_aist/utils/rtcprof/rtcprof2_python3']
 pkg_scripts_win32 = ['OpenRTM_aist/utils/rtcd/rtcd_python.py',
                      #                     'OpenRTM_aist/utils/rtcd/rtcd_python.exe',
                      'OpenRTM_aist/utils/rtcd/rtcd_python.bat',
