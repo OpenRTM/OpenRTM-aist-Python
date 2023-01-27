@@ -51,7 +51,7 @@ class Factory:
     # ReturnCode addFactory(const Identifier& id,
     # Creator creator)
 
-    def addFactory(self, id, creator):
+    def addFactory(self, id, creator, prop=None):
         if not creator:
             return self.INVALID_ARG
 
