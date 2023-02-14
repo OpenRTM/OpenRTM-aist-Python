@@ -405,7 +405,7 @@ class Manager:
 
         sdofactory_ = OpenRTM_aist.SdoServiceConsumerFactory.instance()
         self._config.setProperty("sdo.service.consumer.available_services",
-                                 OpenRTM_aist.flatten(sdofactory_.getIdentifiers()))
+                                 ",".join([x.strip() for x in sdofactory_.getIdentifiers()]))
 
         self.invokeInitProc()
         self.initPreCreation()
@@ -2657,10 +2657,8 @@ class Manager:
         naming_formats = self._config.getProperty("naming.formats")
         if comp_prop.findNode("naming.formats"):
             naming_formats = comp_prop.getProperty("naming.formats")
-        naming_formats = OpenRTM_aist.flatten(
-            OpenRTM_aist.unique_sv(
-                OpenRTM_aist.split(
-                    naming_formats, ",")))
+        naming_formats = ",".join([x.strip() for x in OpenRTM_aist.unique_sv(
+            OpenRTM_aist.split(naming_formats, ","))])
 
         naming_names = self.formatString(naming_formats, comp.getProperties())
         comp.getProperties().setProperty("naming.formats", naming_formats)
@@ -3161,7 +3159,7 @@ class Manager:
 
             tmp = port0_str.split(".")
             tmp.pop()
-            comp0_name = OpenRTM_aist.flatten(tmp, ".")
+            comp0_name = ".".join([x.strip() for x in tmp])
 
             port0_name = port0_str
 
@@ -3203,7 +3201,7 @@ class Manager:
 
                 tmp = port_str.split(".")
                 tmp.pop()
-                comp_name = OpenRTM_aist.flatten(tmp, ".")
+                comp_name = ".".join([x.strip() for x in tmp])
                 port_name = port_str
 
                 if comp_name.find("://") == -1:
