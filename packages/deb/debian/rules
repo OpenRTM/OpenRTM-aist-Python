@@ -46,7 +46,7 @@ install: build
 	# installing examples
 	(mkdir $(CURDIR)/debian/openrtm2-python3-doc/usr/)
 	python3 setup.py install_doc --install-dir=$(CURDIR)/debian/openrtm2-python3-doc/usr/
-	dh_install -s
+	dh_install -a
 
 # Build architecture-independent files here.
 binary-indep: build install
