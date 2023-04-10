@@ -2389,6 +2389,8 @@ class Manager:
             except BaseException:
                 self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
 
+        self.cleanupComponents()
+
         for ec in self._ecs:
             try:
                 self._poa.deactivate_object(self._poa.servant_to_id(ec))
