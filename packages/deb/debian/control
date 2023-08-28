@@ -26,7 +26,3 @@ Depends: openrtm2-python3
 Description: OpenRTM-aist-Python examples
  Example components and sources of OpenRTM-aist.
 
-Package: openrtm2-python3-doc
-Architecture: all
-Description: Documentation for openrtm2-python3
- Class reference manual of OpenRTM-aist.
