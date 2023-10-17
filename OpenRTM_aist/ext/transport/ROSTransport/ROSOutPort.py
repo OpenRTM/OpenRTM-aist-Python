@@ -344,7 +344,12 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
                 connector.sendall(data)
             except BaseException:
                 self._rtcout.RTC_ERROR("send error")
-                self._topicmgr.removeSubscriberLink(connector.getConnection())
+                try:
+                    self._topicmgr.removeSubscriberLink(connector.getConnection())
+                except OSError as e:
+                    self._rtcout.RTC_ERROR(e)
+                    
+                    
                 # connector.shutdown(socket.SHUT_RDWR)
 
                 ret = self.CONNECTION_LOST
