@@ -352,7 +352,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
                     
                 # connector.shutdown(socket.SHUT_RDWR)
 
-                ret = self.CONNECTION_LOST
+                #ret = self.CONNECTION_LOST
                 self._tcp_connecters.remove(connector)
         return ret
 
