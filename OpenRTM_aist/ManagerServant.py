@@ -494,6 +494,13 @@ class ManagerServant(RTM__POA.Manager):
 
         self._rtcout.RTC_TRACE("create_component(%s)", module_name)
 
+        if module_name.find("?") == 0:
+            self._rtcout.RTC_ERROR("Module name is empty.")
+            return RTC.RTObject._nil
+        elif "?" not in module_name and "=" in module_name:
+            self._rtcout.RTC_ERROR("Incorrect module name.")
+            return RTC.RTObject._nil
+
         rtc, module_name, manager_address = self.createComponentByAddress(
             module_name)
 
@@ -530,8 +537,14 @@ class ManagerServant(RTM__POA.Manager):
                         OpenRTM_aist.Logger.print_exception())
                     self._slaves.remove(slave)
             del guard
+            
             if not manager_name:
-                module_name = module_name + "&manager_name=manager_%p"
+                props = OpenRTM_aist.urlparam2map(module_name)
+                if not props:
+                    module_name += "?"
+                else:
+                    module_name += "&"
+                module_name = module_name + "manager_name=manager_%p"
 
                 rtc, _, _ = self.createComponentByManagerName(module_name)
                 return rtc
@@ -1311,47 +1324,34 @@ class ManagerServant(RTM__POA.Manager):
     # std::string getParameterByModulename(string param_name, string
     # &module_name)
     def getParameterByModulename(self, param_name, module_name):
-        arg = module_name
-        pos0 = arg.find("&" + param_name + "=")
-        pos1 = arg.find("?" + param_name + "=")
+        id_and_conf = [s.strip() for s in module_name.split("?")]
 
-        if pos0 == -1 and pos1 == -1:
+        if len(id_and_conf) != 2:
             return "", module_name
+        
+        id = id_and_conf[0]
 
-        pos = 0
-        if pos0 == -1:
-            pos = pos1
+        props = OpenRTM_aist.urlparam2map(module_name)
+        
+        if param_name in props.keys():
+            paramstr = props.pop(param_name)
+            self._rtcout.RTC_VERBOSE("%s arg: %s", (param_name, paramstr))
+            module_name = id
+            if len(props) > 0:
+                module_name += "?"
+                i = 0
+                for key, value in props.items():
+                    if i > 0:
+                        module_name += "&"
+                    i += 1
+                    module_name += key + "=" + value
+            return paramstr, module_name
+
+
         else:
-            pos = pos0
+            return "", module_name
+            
 
-        paramstr = ""
-        endpos = arg.find('&', pos + 1)
-        if endpos == -1:
-            endpos = arg.find('?', pos + 1)
-            if endpos == -1:
-                paramstr = arg[(pos + 1):]
-            else:
-                paramstr = arg[(pos + 1): endpos]
-        else:
-            paramstr = arg[(pos + 1): endpos]
-        self._rtcout.RTC_VERBOSE("%s arg: %s", (param_name, paramstr))
-
-        eqpos = paramstr.find("=")
-        # if eqpos == -1:
-        #  self._rtcout.RTC_WARN("Invalid argument: %s", module_name)
-        #  return ""
-
-        paramstr = paramstr[eqpos + 1:]
-        self._rtcout.RTC_DEBUG("%s is %s", (param_name, paramstr))
-
-        if endpos == -1:
-            arg = arg[:pos]
-        else:
-            arg = arg[:pos] + arg[endpos:]
-
-        module_name = arg
-
-        return paramstr, module_name
 
     ##
     # @if jp
