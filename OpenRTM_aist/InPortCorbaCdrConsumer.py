@@ -16,7 +16,7 @@
 #     All rights reserved.
 #
 
-
+import omniORB
 from omniORB import any
 from omniORB import CORBA
 import OpenRTM_aist
@@ -155,8 +155,18 @@ class InPortCorbaCdrConsumer(
 
         try:
             inportcdr = self._ptr()
+
             if inportcdr:
-                return self.convertReturnCode(inportcdr.put(data))
+                try:
+                    return self.convertReturnCode(inportcdr.put(data))
+                except CORBA.COMM_FAILURE as ex:
+                    if ex.minor == omniORB.COMM_FAILURE_WaitingForReply:
+                        self._rtcout.RTC_DEBUG("Retry put message")
+                        return self.convertReturnCode(inportcdr.put(data))
+                    else:
+                        raise
+                except BaseException:
+                    raise
             return self.CONNECTION_LOST
         except BaseException:
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
