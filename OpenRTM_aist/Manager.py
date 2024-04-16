@@ -938,15 +938,15 @@ class Manager:
                                        comp_id.getProperty("implementation_id"))
                 return None
 
-            if not found_obj.findNode("module_file_name"):
-                self._rtcout.RTC_ERROR("Hmm...module_file_name key not found.")
+            if not found_obj.findNode("module_file_path"):
+                self._rtcout.RTC_ERROR("Hmm...module_file_path key not found.")
                 return None
 
             # module loading
             self._rtcout.RTC_INFO(
                 "Loading module: %s",
-                found_obj.getProperty("module_file_name"))
-            self.load(found_obj.getProperty("module_file_name"), "")
+                found_obj.getProperty("module_file_path"))
+            self.load(found_obj.getProperty("module_file_path"), "")
             factory = self._factory.find(comp_id)
             if not factory:
                 self._rtcout.RTC_ERROR("Factory not found for loaded module: %s",
@@ -3577,16 +3577,19 @@ class Manager:
                 self._category = ""
                 self._impleid = name
                 self._version = ""
+                self._language = ""
             elif prop:
                 self._vendor = prop.getProperty("vendor")
                 self._category = prop.getProperty("category")
                 self._impleid = prop.getProperty("implementation_id")
                 self._version = prop.getProperty("version")
+                self._language = prop.getProperty("language")
             elif factory:
                 self._vendor = factory.profile().getProperty("vendor")
                 self._category = factory.profile().getProperty("category")
                 self._impleid = factory.profile().getProperty("implementation_id")
                 self._version = factory.profile().getProperty("version")
+                self._language = factory.profile().getProperty("language")
 
         def __call__(self, factory):
             if self._impleid == "":
@@ -3607,6 +3610,10 @@ class Manager:
 
             if self._version != "" and self._version != _prop.getProperty(
                     "version"):
+                return False
+            
+            if self._language != "" and self._language != _prop.getProperty(
+                    "language"):
                 return False
 
             return True
