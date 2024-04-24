@@ -49,7 +49,7 @@ install: build
 	(mkdir -p $(TARGET)/lib/python3/dist-packages)
 	(cp -r $(CURDIR)/OpenRTM_aist $(TARGET)/lib/python3/dist-packages)
 	(cp -r $(CURDIR)/OpenRTM_aist*.dist-info $(TARGET)/lib/python3/dist-packages)
-	(cp $(CURDIR)/bin/OpenRTM-aist.pth $(TARGET)/lib/python3/dist-packages)
+	(cp $(CURDIR)/OpenRTM-aist.pth $(TARGET)/lib/python3/dist-packages)
 
 	# for openrtm2-python3-example package
 	(mkdir -p $(TARGET_example))
