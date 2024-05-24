@@ -25,12 +25,12 @@ if os.name == "nt":
     lang = "Python"
 elif os.name == "posix":
     cpp_suffixes = "so"
-    supported_languages = "C++, Python, Python3, Java"
-    lang = "Python3"
+    supported_languages = "C++, Python, Java"
+    lang = "Python"
 else:
     cpp_suffixes = "dylib"
-    supported_languages = "C++, Python, Python3, Java"
-    lang = "Python3"
+    supported_languages = "C++, Python, Java"
+    lang = "Python"
 
 ##
 # @if jp
@@ -90,7 +90,7 @@ default_config = ["config.version", OpenRTM_aist.openrtm_version,
                   "manager.auto_shutdown_duration", "20.0",
                   "manager.termination_waittime", "1.0",
                   "manager.name", "manager",
-                  "manager.command", "rtcd_python",
+                  "manager.command", "rtcd2_python",
                   "manager.nameservers", "default",
                   "manager.language", lang,
                   "manager.components.naming_policy", "process_unique",
@@ -112,10 +112,3 @@ default_config = ["config.version", OpenRTM_aist.openrtm_version,
                   "manager.modules.Python.load_paths", "",
                   "manager.modules.Java.load_paths", ""]
 
-if os.name != "nt":
-    python3_config = [
-        "manager.modules.Python3.manager_cmd", "rtcd2_python3",
-        "manager.modules.Python3.profile_cmd", "rtcprof2_python3",
-        "manager.modules.Python3.suffixes", "py",
-        "manager.modules.Python3.load_paths", ""]
-    default_config.extend(python3_config)
