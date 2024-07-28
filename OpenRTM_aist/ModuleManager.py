@@ -285,8 +285,8 @@ class ModuleManager:
                 import_name = splitted_name[-1]
                 file_path = file_name
 
-            paths = self._properties.getProperty(
         elif not file_path:
+            paths = self._properties.getProperty(
                 "manager.modules.Python.load_paths").split(",")
             paths.extend(self._properties.getProperty(
                 "manager.modules.Python3.load_paths").split(","))
