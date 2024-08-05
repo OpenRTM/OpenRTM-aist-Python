@@ -568,6 +568,17 @@ class Manager:
     def load(self, fname, initfunc):
         self._rtcout.RTC_TRACE("Manager.load(fname = %s, initfunc = %s)",
                                (fname, initfunc))
+        prop = OpenRTM_aist.Properties()
+        prop.setProperty("module_file_name", fname)
+
+        return self.load_prop(prop, initfunc)
+
+    def load_prop(self, prop, initfunc):
+        self._rtcout.RTC_TRACE("Manager.load(module_file_name = %s, module_file_path = %s, language = %s, initfunc = %s)",
+                               (prop.getProperty("module_file_name"),
+                                prop.getProperty("module_file_path"),
+                                prop.getProperty("language")))
+        fname = prop.getProperty("module_file_name")
         fname = fname.replace("/", os.sep)
         fname = fname.replace("\\", os.sep)
         fname, initfunc = self._listeners.module_.preLoad(fname, initfunc)
@@ -582,7 +593,7 @@ class Manager:
             if not initfunc:
                 mod = [s.strip() for s in fname_.split(".")]
                 initfunc = mod[0] + "Init"
-            path = self._module.load(fname, initfunc)
+            path = self._module.load_prop(prop, initfunc)
             self._rtcout.RTC_DEBUG("module path: %s", path)
             path, initfunc = self._listeners.module_.postLoad(path, initfunc)
         except OpenRTM_aist.ModuleManager.NotAllowedOperation as e:
@@ -946,7 +957,7 @@ class Manager:
             self._rtcout.RTC_INFO(
                 "Loading module: %s",
                 found_obj.getProperty("module_file_path"))
-            self.load(found_obj.getProperty("module_file_path"), "")
+            self.load_prop(found_obj, "")
             factory = self._factory.find(comp_id)
             if not factory:
                 self._rtcout.RTC_ERROR("Factory not found for loaded module: %s",

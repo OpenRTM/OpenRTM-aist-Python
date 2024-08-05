@@ -246,8 +246,19 @@ class ModuleManager:
     # std::string ModuleManager::load(const std::string& file_name,
     #                                 const std::string& init_func)
     def load(self, file_name, init_func=None):
-
         self._rtcout.RTC_TRACE("load(fname = %s)", file_name)
+
+        prop = OpenRTM_aist.Properties()
+        prop.setProperty("module_file_name", file_name)
+        return self.load_prop(prop, init_func)
+
+    def load_prop(self, prop, init_func=None):
+        self._rtcout.RTC_TRACE("load(module_file_name = %s, module_file_path = %s, language = %s)", 
+                               (prop.getProperty("module_file_name"),
+                                prop.getProperty("module_file_path"),
+                                prop.getProperty("language")))
+        file_name = prop.getProperty("module_file_name")
+        file_path = prop.getProperty("module_file_path")
         if file_name == "":
             raise ModuleManager.InvalidArguments("Invalid file name.")
 
@@ -260,7 +271,6 @@ class ModuleManager:
 
         import_name = os.path.split(file_name)[-1]
         pathChanged = False
-        file_path = None
 
         if OpenRTM_aist.isAbsolutePath(file_name):
             if not self._absoluteAllowed:
@@ -275,7 +285,7 @@ class ModuleManager:
                 import_name = splitted_name[-1]
                 file_path = file_name
 
-        else:
+        elif not file_path:
             paths = self._properties.getProperty(
                 "manager.modules.Python.load_paths").split(",")
             paths.extend(self._properties.getProperty(
