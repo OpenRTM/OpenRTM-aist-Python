@@ -784,7 +784,7 @@ class ConnectorDataListenerHolder:
 
         endian = info.properties.getProperty(
             "serializer.cdr.endian", "little")
-        if endian is not "little" and endian is not None:
+        if endian != "little" and endian is not None:
             # Maybe endian is ["little","big"]
             endian = OpenRTM_aist.split(endian, ",")
             # Maybe self._endian is "little" or "big"

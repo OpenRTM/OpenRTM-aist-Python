@@ -14,8 +14,8 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
-
 import OpenRTM_aist
+import RTC
 import OpenRTM
 import OpenRTM__POA
 

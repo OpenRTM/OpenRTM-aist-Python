@@ -193,10 +193,11 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
     #
     # virtual ReturnCode get(cdrMemoryStream& data);
 
-    def get(self, data):
+    def get(self):
         self._rtcout.RTC_PARANOID("get()")
 
         try:
+            data = None
             dataservice = self._ptr()
             ret, cdr_data = dataservice.pull()
 
