@@ -254,10 +254,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
         # publisher list
         factory = OpenRTM_aist.PublisherFactory.instance()
-        pubs = OpenRTM_aist.flatten(factory.getIdentifiers())
-
-        # blank characters are deleted for RTSE's bug
-        pubs = pubs.lstrip()
+        pubs = ",".join([x.strip() for x in factory.getIdentifiers()])
 
         self._rtcout.RTC_DEBUG("available subscription_type: %s", pubs)
         self.addProperty("dataport.subscription_type", pubs)
