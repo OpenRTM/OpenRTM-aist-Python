@@ -20,6 +20,7 @@
 import OpenRTM_aist
 import ROS2MessageInfo
 import rclpy
+import rclpy.qos
 from rclpy.node import Node
 from rclpy.qos import QoSProfile
 
@@ -101,9 +102,21 @@ class ROS2TopicManager(object):
     #
     # @endif
 
-    def start(self, args=[]):
+    def start(self, prop):
+
+        tmp_args = prop.getProperty("args").split("\"")
+        args = []
+        for i, tmp_arg in enumerate(tmp_args):
+            if i % 2 == 0:
+                args.extend(tmp_arg.strip().split(" "))
+            else:
+                args.append(tmp_arg)
+
+        args.insert(0, "manager")
+
         rclpy.init(args=args)
-        self._node = Node("openrtm")
+
+        self._node = Node(prop.getProperty("node.name", "openrtm"))
 
         def spin():
             while self._loop:
@@ -151,7 +164,7 @@ class ROS2TopicManager(object):
     # @param self
     # @param msgtype
     # @param topic
-    # @param qos 
+    # @param qos
     # @return
     #
     # @endif
@@ -184,7 +197,7 @@ class ROS2TopicManager(object):
     # @param msgtype
     # @param topic
     # @param listener
-    # @param qos 
+    # @param qos
     # @return
     #
     # @endif
@@ -205,6 +218,29 @@ class ROS2TopicManager(object):
 
     ##
     # @if jp
+    # @brief 初期化
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    #
+    # @endif
+
+    def init(prop):
+        global manager
+        global mutex
+
+        guard = OpenRTM_aist.ScopedLock(mutex)
+        if manager is None:
+            manager = ROS2TopicManager()
+            manager.start(prop)
+
+    init = staticmethod(init)
+
+    ##
+    # @if jp
     # @brief インスタンス取得
     #
     # @return インスタンス
@@ -217,14 +253,14 @@ class ROS2TopicManager(object):
     #
     # @endif
 
-    def instance(args=[]):
+    def instance():
         global manager
         global mutex
 
         guard = OpenRTM_aist.ScopedLock(mutex)
         if manager is None:
             manager = ROS2TopicManager()
-            manager.start(args)
+            manager.start()
 
         return manager
 
@@ -254,7 +290,6 @@ class ROS2TopicManager(object):
 
     shutdown_global = staticmethod(shutdown_global)
 
-
     ##
     # @if jp
     # @brief プロパティからQoSProfileを設定する
@@ -268,6 +303,7 @@ class ROS2TopicManager(object):
     # @return QoSProfile
     #
     # @endif
+
     def get_qosprofile(prop):
 
         if hasattr(rclpy.qos, "HistoryPolicy"):
@@ -295,90 +331,118 @@ class ROS2TopicManager(object):
         else:
             LivelinessPolicy = rclpy.qos.QoSLivelinessPolicy
 
-        history = HistoryPolicy.KEEP_LAST
-        history_type = prop.getProperty("history", "KEEP_LAST")
-        
-        if history_type == "SYSTEM_DEFAULT":
-            history = HistoryPolicy.SYSTEM_DEFAULT
-        elif history_type == "KEEP_ALL":
-            history = HistoryPolicy.KEEP_ALL
-        else:
-            history = HistoryPolicy.KEEP_LAST
+        durability_kind = DurabilityPolicy.SYSTEM_DEFAULT
+        durability_kind_str = prop.getProperty(
+            "durability.kind")
+        if durability_kind_str == "VOLATILE_DURABILITY_QOS":
+            durability_kind = DurabilityPolicy.VOLATILE
+        elif durability_kind_str == "TRANSIENT_LOCAL_DURABILITY_QOS":
+            durability_kind = DurabilityPolicy.TRANSIENT_LOCAL
+        elif durability_kind_str == "SYSTEM_DEFAULT_QOS":
+            durability_kind = DurabilityPolicy.SYSTEM_DEFAULT
 
-        
-        depth = 10
-        depth_value_str = prop.getProperty("depth", "10")
+        deadline_period = ROS2TopicManager.getDuration(
+            prop.getNode("deadline.period"), Duration)
+
+        if deadline_period is None:
+            deadline_period = Duration(
+                seconds=0, nanoseconds=0)
+
+        liveliness_kind = LivelinessPolicy.SYSTEM_DEFAULT
+        liveliness_kind_str = prop.getProperty(
+            "liveliness.kind")
+        if liveliness_kind_str == "AUTOMATIC_LIVELINESS_QOS":
+            liveliness_kind = LivelinessPolicy.AUTOMATIC
+        elif liveliness_kind_str == "MANUAL_BY_TOPIC_LIVELINESS_QOS":
+            liveliness_kind = LivelinessPolicy.MANUAL_BY_TOPIC
+        elif liveliness_kind_str == "SYSTEM_DEFAULT_LIVELINESS_QOS":
+            liveliness_kind = LivelinessPolicy.SYSTEM_DEFAULT
+
+        liveliness_lease_duration_time = ROS2TopicManager.getDuration(
+            prop.getNode("liveliness.lease_duration"), Duration)
+
+        if liveliness_lease_duration_time is None:
+            liveliness_lease_duration_time = Duration(
+                seconds=0, nanoseconds=0)
+
+        reliability_kind = ReliabilityPolicy.SYSTEM_DEFAULT
+        reliability_kind_str = prop.getProperty(
+            "reliability.kind")
+        if reliability_kind_str == "BEST_EFFORT_RELIABILITY_QOS":
+            reliability_kind = ReliabilityPolicy.BEST_EFFORT
+        elif reliability_kind_str == "RELIABLE_RELIABILITY_QOS":
+            reliability_kind = ReliabilityPolicy.RELIABLE
+        elif reliability_kind_str == "SYSTEM_DEFAULT_RELIABILITY_QOS":
+            reliability_kind = ReliabilityPolicy.SYSTEM_DEFAULT
+
+        history_qos_policy_kind = HistoryPolicy.SYSTEM_DEFAULT
+        history_qos_policy_kind_str = prop.getProperty(
+            "history.kind")
+        if history_qos_policy_kind_str == "KEEP_ALL_HISTORY_QOS":
+            history_qos_policy_kind = HistoryPolicy.KEEP_ALL
+        elif history_qos_policy_kind_str == "KEEP_LAST_HISTORY_QOS":
+            history_qos_policy_kind = HistoryPolicy.KEEP_LAST
+        elif history_qos_policy_kind_str == "SYSTEM_DEFAULT_HISTORY_QOS":
+            history_qos_policy_kind = HistoryPolicy.SYSTEM_DEFAULT
+
+        history_depth = 1
         try:
-            depth = int(depth_value_str)
-        except ValueError:
+            history_depth = int(prop.getProperty(
+                "history.depth"))
+        except ValueError as error:
             pass
+            # self._rtcout.RTC_ERROR(error)
 
-        reliability = ReliabilityPolicy.RELIABLE
-        reliability_type = prop.getProperty("reliability", "RELIABLE")
-        if reliability_type == "SYSTEM_DEFAULT":
-            reliability = ReliabilityPolicy.SYSTEM_DEFAULT
-        elif reliability_type == "BEST_EFFORT":
-            reliability = ReliabilityPolicy.BEST_EFFORT
-        else:
-            reliability = ReliabilityPolicy.RELIABLE
+        lifespan_duration = ROS2TopicManager.getDuration(
+            prop.getNode("lifespan.duration"), Duration)
 
-        durability = DurabilityPolicy.VOLATILE
-        durability_type = prop.getProperty("durability", "VOLATILE")
-        if durability_type == "SYSTEM_DEFAULT":
-            durability = DurabilityPolicy.SYSTEM_DEFAULT
-        elif durability_type == "TRANSIENT_LOCAL":
-            durability = DurabilityPolicy.TRANSIENT_LOCAL
-        else:
-            durability = DurabilityPolicy.VOLATILE
-        
-        lifespan = Duration(seconds=0, nanoseconds=0)
-        lifespan_value_str = prop.getProperty("lifespan", "0")
-        try:
-            lifespan_value = int(lifespan_value_str)
-            lifespan = Duration(nanoseconds=lifespan_value)
-        except ValueError:
-            pass
+        if lifespan_duration is None:
+            lifespan_duration = Duration(
+                seconds=10000, nanoseconds=2147483647)
 
-        deadline = Duration(seconds=0, nanoseconds=0)
-        deadline_value_str = prop.getProperty("deadline", "0")
-        try:
-            deadline_value = int(deadline_value_str)
-            deadline = Duration(nanoseconds=deadline_value)
-        except ValueError:
-            pass
+        avoid_ros_namespace_conventions = OpenRTM_aist.toBool(prop.getProperty(
+            "avoid_ros_namespace_conventions"), "YES", "NO", False)
 
-        liveliness = LivelinessPolicy.SYSTEM_DEFAULT
-        liveliness_type = prop.getProperty("liveliness", "SYSTEM_DEFAULT")
-        if liveliness_type == "AUTOMATIC":
-            liveliness = LivelinessPolicy.AUTOMATIC
-        elif liveliness_type == "MANUAL_BY_NODE":
-            liveliness = LivelinessPolicy.MANUAL_BY_NODE
-        elif liveliness_type == "MANUAL_BY_TOPIC":
-            liveliness = LivelinessPolicy.MANUAL_BY_TOPIC
-        else:
-            liveliness = LivelinessPolicy.SYSTEM_DEFAULT
-
-        liveliness_lease_duration = Duration(seconds=0, nanoseconds=0)
-        liveliness_lease_duration_value_str = prop.getProperty("liveliness_lease_duration", "0")
-        try:
-            liveliness_lease_duration_value = int(liveliness_lease_duration_value_str)
-            liveliness_lease_duration = Duration(nanoseconds=liveliness_lease_duration_value)
-        except ValueError:
-            pass
-
-        avoid_ros_namespace_conventions = False
-        if OpenRTM_aist.toBool(prop.getProperty(
-            "avoid_ros_namespace_conventions"), "YES", "NO", False):
-            avoid_ros_namespace_conventions = True
-        else:
-            avoid_ros_namespace_conventions = False
-            
-
-        qos = QoSProfile(history=history, depth=depth, reliability=reliability, durability=durability, 
-                        lifespan=lifespan, deadline=deadline, liveliness=liveliness,
-                        liveliness_lease_duration=liveliness_lease_duration, 
-                        avoid_ros_namespace_conventions=avoid_ros_namespace_conventions)
+        qos = QoSProfile(history=history_qos_policy_kind, depth=history_depth,
+                         reliability=reliability_kind,
+                         durability=durability_kind,
+                         lifespan=lifespan_duration,
+                         deadline=deadline_period,
+                         liveliness=liveliness_kind,
+                         liveliness_lease_duration=liveliness_lease_duration_time,
+                         avoid_ros_namespace_conventions=avoid_ros_namespace_conventions)
 
         return qos
 
     get_qosprofile = staticmethod(get_qosprofile)
+
+    ##
+    # @if jp
+    # @brief プロパティからDDS::Durationを設定して取得する
+    #
+    # @param self
+    # @param prop プロパティ(sec、nanosecの要素に値を格納する)
+    # @return DDS::Duration
+    #
+    # @else
+    #
+    # @brief
+    #
+    # @param self
+    # @param prop
+    # @return
+    #
+    # @endif
+    def getDuration(prop, DDSDuration):
+        sec_str = prop.getProperty("sec")
+        nanosec_str = prop.getProperty("nanosec")
+        try:
+            sec = int(sec_str)
+            nanosec = int(nanosec_str)
+            return DDSDuration(seconds=sec, nanoseconds=nanosec)
+        except ValueError as error:
+            return None
+            # self._rtcout.RTC_ERROR(error)
+        return None
+
+    getDuration = staticmethod(getDuration)
