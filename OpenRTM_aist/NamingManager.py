@@ -19,6 +19,7 @@ import threading
 
 
 import OpenRTM_aist
+import OpenRTM_aist.CORBA_RTCUtil
 from omniORB import CORBA
 import RTM
 import RTC
@@ -279,6 +280,7 @@ class NamingOnCorba(NamingBase):
     # @endif
 
     def getComponentByName(self, context, name, rtcs):
+        self._rtcout.RTC_TRACE("getComponentByName(name  = %s)", name)
         length = 500
         bl, bi = context.list(length)
         for i in bl:
@@ -317,45 +319,53 @@ class NamingOnCorba(NamingBase):
     # virtual RTCList string_to_component(string name) = 0;
 
     def string_to_component(self, name):
+        self._rtcout.RTC_TRACE("string_to_component(name  = %s)", name)
         rtc_list = []
-        tmp = name.split("://")
-        if len(tmp) > 1:
-            if tmp[0] == "rtcname":
-                #tag = tmp[0]
-                url = tmp[1]
-                r = url.split("/")
-                if len(r) > 1:
-                    host = r[0]
 
-                    rtc_name = url[len(host) + 1:]
+        rtcuri = OpenRTM_aist.CORBA_RTCUtil.RTCURIObject(name, True, False)
 
-                    try:
-                        cns = None
-                        if host == "*":
-                            cns = self._cosnaming
-                        else:
-                            orb = OpenRTM_aist.Manager.instance().getORB()
-                            cns = OpenRTM_aist.CorbaNaming(orb, host)
-                        names = rtc_name.split("/")
+        if not rtcuri.isRTCNameURI():
+            self._rtcout.RTC_WARN("syntax error: %s", name)
+            return rtc_list
+        else:
+            self._rtcout.RTC_INFO("URI: %s, Address: %s, Name: %s",
+                                  (name, rtcuri.getAddress(),
+                                   rtcuri.getRTCName()))
+            try:
+                cns = None
+                if rtcuri.getAddress() == "*":
+                    cns = self._cosnaming
+                else:
+                    orb = OpenRTM_aist.Manager.instance().getORB()
+                    cns = OpenRTM_aist.CorbaNaming(orb, rtcuri.getAddress())
 
-                        if len(names) == 2 and names[0] == "*":
-                            root_cxt = cns.getRootContext()
-                            self.getComponentByName(
-                                root_cxt, names[1], rtc_list)
-                            return rtc_list
-                        else:
-                            rtc_name += ".rtc"
-                            obj = cns.resolveStr(rtc_name)
-                            if CORBA.is_nil(obj):
-                                return []
-                            if obj._non_existent():
-                                return []
-                            rtc_list.append(obj)
-                            return rtc_list
-                    except BaseException:
-                        self._rtcout.RTC_ERROR(
-                            OpenRTM_aist.Logger.print_exception())
-                        return []
+                rtcname = rtcuri.getRTCName()
+                context = ""
+                compname = ""
+
+                pos = rtcname.find("/")
+                if pos >= 0:
+                    context = rtcname[0:pos]
+                    compname = rtcname[pos + 1:]
+
+                if context == "*":
+                    root_cxt = cns.getRootContext()
+                    self.getComponentByName(
+                        root_cxt, compname, rtc_list)
+                    return rtc_list
+                else:
+                    rtcname += ".rtc"
+                    obj = cns.resolveStr(rtcname)
+                    if CORBA.is_nil(obj):
+                        return rtc_list
+                    if obj._non_existent():
+                        return rtc_list
+                    rtc_list.append(obj)
+                    return rtc_list
+            except BaseException:
+                self._rtcout.RTC_ERROR(
+                    OpenRTM_aist.Logger.print_exception())
+                return rtc_list
 
         return rtc_list
 
@@ -502,33 +512,32 @@ class NamingOnManager(NamingBase):
     #
     # virtual RTCList string_to_component();
     def string_to_component(self, name):
+        self._rtcout.RTC_TRACE("string_to_component(name  = %s)", name)
         rtc_list = []
-        tmp = name.split("://")
 
-        if len(tmp) > 1:
-            if tmp[0] == "rtcloc":
-                #tag = tmp[0]
-                url = tmp[1]
-                r = url.split("/")
-                if len(r) > 1:
-                    host = r[0]
-                    rtc_name = url[len(host) + 1:]
+        rtcuri = OpenRTM_aist.CORBA_RTCUtil.RTCURIObject(name, False, True)
 
-                    mgr = self.getManager(host)
-                    if not CORBA.is_nil(mgr):
-                        rtc_list = mgr.get_components_by_name(rtc_name)
+        if not rtcuri.isRTCLocURI():
+            self._rtcout.RTC_WARN("syntax error: %s", name)
+            return rtc_list
+        else:
+            self._rtcout.RTC_INFO("URI: %s, Address: %s, Name: %s",
+                                  (name, rtcuri.getAddress(),
+                                   rtcuri.getRTCName()))
 
-                        slaves = mgr.get_slave_managers()
-                        for slave in slaves:
-                            try:
-                                rtc_list.extend(
-                                    slave.get_components_by_name(rtc_name))
-                            except BaseException:
-                                self._rtcout.RTC_DEBUG(
-                                    OpenRTM_aist.Logger.print_exception())
-                                mgr.remove_slave_manager(slave)
-
-                    return rtc_list
+            mgr = self.getManager(rtcuri.getAddress())
+            if not CORBA.is_nil(mgr):
+                rtc_list = mgr.get_components_by_name(rtcuri.getRTCName())
+                slaves = mgr.get_slave_managers()
+                for slave in slaves:
+                    try:
+                        rtc_list.extend(
+                            slave.get_components_by_name(rtcuri.getRTCName()))
+                    except BaseException:
+                        self._rtcout.RTC_DEBUG(
+                            OpenRTM_aist.Logger.print_exception())
+                        mgr.remove_slave_manager(slave)
+                return rtc_list
         return rtc_list
 
     ##
@@ -550,6 +559,7 @@ class NamingOnManager(NamingBase):
     #
     # virtual Manager_ptr getManager(string name);
     def getManager(self, name):
+        self._rtcout.RTC_TRACE("getManager(name = %s)", name)
         if name == "*":
             mgr_sev = self._mgr.getManagerServant()
             mgr = None
@@ -563,11 +573,10 @@ class NamingOnManager(NamingBase):
                     mgr = mgr_sev.getObjRef()
             return mgr
         try:
-            mgrloc = "corbaloc:iiop:"
             prop = self._mgr.getConfig()
             manager_name = prop.getProperty("manager.name")
-            mgrloc += name
-            mgrloc += "/" + manager_name
+            mgrloc = OpenRTM_aist.CORBA_RTCUtil.CorbaURI(
+                name, manager_name).toString()
 
             mobj = self._orb.string_to_object(mgrloc)
             mgr = mobj._narrow(RTM.Manager)
@@ -793,7 +802,12 @@ class NamingManager:
         guard = OpenRTM_aist.ScopedLock(self._namesMutex)
         for n in self._names:
             if n.ns:
-                n.ns.unbindObject(name)
+                try:
+                    n.ns.unbindObject(name)
+                except BaseException:
+                    del n.ns
+                    n.ns = None
+
         self.unregisterCompName(name)
         self.unregisterMgrName(name)
         self.unregisterPortName(name)
@@ -910,7 +924,10 @@ class NamingManager:
 
     def bindCompsTo(self, ns):
         for comp in self._compNames:
-            ns.bindObject(comp.name, comp.rtobj)
+            try:
+                ns.bindObject(comp.name, comp.rtobj)
+            except BaseException:
+                pass
 
     ##
     # @if jp
