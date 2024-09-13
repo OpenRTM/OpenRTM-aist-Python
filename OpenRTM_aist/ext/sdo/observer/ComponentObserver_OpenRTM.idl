@@ -16,7 +16,7 @@
  *
  */
 
-#include <SDOPackage.idl>
+#include "SDOPackage.idl"
 
 /*!
  * @if jp

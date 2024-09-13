@@ -405,7 +405,7 @@ class Manager:
 
         sdofactory_ = OpenRTM_aist.SdoServiceConsumerFactory.instance()
         self._config.setProperty("sdo.service.consumer.available_services",
-                                 OpenRTM_aist.flatten(sdofactory_.getIdentifiers()))
+                                 ",".join([x.strip() for x in sdofactory_.getIdentifiers()]))
 
         self.invokeInitProc()
         self.initPreCreation()
@@ -568,6 +568,17 @@ class Manager:
     def load(self, fname, initfunc):
         self._rtcout.RTC_TRACE("Manager.load(fname = %s, initfunc = %s)",
                                (fname, initfunc))
+        prop = OpenRTM_aist.Properties()
+        prop.setProperty("module_file_name", fname)
+
+        return self.load_prop(prop, initfunc)
+
+    def load_prop(self, prop, initfunc):
+        self._rtcout.RTC_TRACE("Manager.load(module_file_name = %s, module_file_path = %s, language = %s, initfunc = %s)",
+                               (prop.getProperty("module_file_name"),
+                                prop.getProperty("module_file_path"),
+                                prop.getProperty("language")))
+        fname = prop.getProperty("module_file_name")
         fname = fname.replace("/", os.sep)
         fname = fname.replace("\\", os.sep)
         fname, initfunc = self._listeners.module_.preLoad(fname, initfunc)
@@ -582,7 +593,7 @@ class Manager:
             if not initfunc:
                 mod = [s.strip() for s in fname_.split(".")]
                 initfunc = mod[0] + "Init"
-            path = self._module.load(fname, initfunc)
+            path = self._module.load_prop(prop, initfunc)
             self._rtcout.RTC_DEBUG("module path: %s", path)
             path, initfunc = self._listeners.module_.postLoad(path, initfunc)
         except OpenRTM_aist.ModuleManager.NotAllowedOperation as e:
@@ -938,15 +949,15 @@ class Manager:
                                        comp_id.getProperty("implementation_id"))
                 return None
 
-            if not found_obj.findNode("module_file_name"):
-                self._rtcout.RTC_ERROR("Hmm...module_file_name key not found.")
+            if not found_obj.findNode("module_file_path"):
+                self._rtcout.RTC_ERROR("Hmm...module_file_path key not found.")
                 return None
 
             # module loading
             self._rtcout.RTC_INFO(
                 "Loading module: %s",
-                found_obj.getProperty("module_file_name"))
-            self.load(found_obj.getProperty("module_file_name"), "")
+                found_obj.getProperty("module_file_path"))
+            self.load_prop(found_obj, "")
             factory = self._factory.find(comp_id)
             if not factory:
                 self._rtcout.RTC_ERROR("Factory not found for loaded module: %s",
@@ -1599,7 +1610,7 @@ class Manager:
         for mod_ in lmod_:
             if not mod_:
                 continue
-            basename_ = mod_.split(".")[0] + "Init"
+            basename_ = os.path.basename(mod_).split(".")[0] + "Init"
             try:
                 self._module.load(mod_, basename_)
             except BaseException:
@@ -1680,9 +1691,9 @@ class Manager:
 
         self._rtcout.RTC_INFO(
             "%s", self._config.getProperty("openrtm.version"))
-        self._rtcout.RTC_INFO("Copyright (C) 2003-2020, Noriaki Ando and OpenRTM development team,")
+        self._rtcout.RTC_INFO("Copyright (C) 2003-2024, Noriaki Ando and OpenRTM development team,")
         self._rtcout.RTC_INFO("  Intelligent Systems Research Institute, AIST,")
-        self._rtcout.RTC_INFO("Copyright (C) 2020, Noriaki Ando and OpenRTM development team,")
+        self._rtcout.RTC_INFO("Copyright (C) 2024, Noriaki Ando and OpenRTM development team,")
         self._rtcout.RTC_INFO("  Industrial Cyber-Physical Research Center, AIST,")
         self._rtcout.RTC_INFO("  All right reserved.")
         self._rtcout.RTC_INFO("Manager starting.")
@@ -2389,6 +2400,8 @@ class Manager:
             except BaseException:
                 self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
 
+        self.cleanupComponents()
+
         for ec in self._ecs:
             try:
                 self._poa.deactivate_object(self._poa.servant_to_id(ec))
@@ -2657,10 +2670,8 @@ class Manager:
         naming_formats = self._config.getProperty("naming.formats")
         if comp_prop.findNode("naming.formats"):
             naming_formats = comp_prop.getProperty("naming.formats")
-        naming_formats = OpenRTM_aist.flatten(
-            OpenRTM_aist.unique_sv(
-                OpenRTM_aist.split(
-                    naming_formats, ",")))
+        naming_formats = ",".join([x.strip() for x in OpenRTM_aist.unique_sv(
+            OpenRTM_aist.split(naming_formats, ","))])
 
         naming_names = self.formatString(naming_formats, comp.getProperties())
         comp.getProperties().setProperty("naming.formats", naming_formats)
@@ -3161,7 +3172,7 @@ class Manager:
 
             tmp = port0_str.split(".")
             tmp.pop()
-            comp0_name = OpenRTM_aist.flatten(tmp, ".")
+            comp0_name = ".".join([x.strip() for x in tmp])
 
             port0_name = port0_str
 
@@ -3203,7 +3214,7 @@ class Manager:
 
                 tmp = port_str.split(".")
                 tmp.pop()
-                comp_name = OpenRTM_aist.flatten(tmp, ".")
+                comp_name = ".".join([x.strip() for x in tmp])
                 port_name = port_str
 
                 if comp_name.find("://") == -1:
@@ -3577,16 +3588,19 @@ class Manager:
                 self._category = ""
                 self._impleid = name
                 self._version = ""
+                self._language = ""
             elif prop:
                 self._vendor = prop.getProperty("vendor")
                 self._category = prop.getProperty("category")
                 self._impleid = prop.getProperty("implementation_id")
                 self._version = prop.getProperty("version")
+                self._language = prop.getProperty("language")
             elif factory:
                 self._vendor = factory.profile().getProperty("vendor")
                 self._category = factory.profile().getProperty("category")
                 self._impleid = factory.profile().getProperty("implementation_id")
                 self._version = factory.profile().getProperty("version")
+                self._language = factory.profile().getProperty("language")
 
         def __call__(self, factory):
             if self._impleid == "":
@@ -3607,6 +3621,10 @@ class Manager:
 
             if self._version != "" and self._version != _prop.getProperty(
                     "version"):
+                return False
+            
+            if self._language != "" and self._language != _prop.getProperty(
+                    "language"):
                 return False
 
             return True

@@ -232,8 +232,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
             self.removePort(member, self._expPorts)
             self._rtobj.getProperties().setProperty(
                 "conf.default.exported_ports",
-                OpenRTM_aist.flatten(
-                    self._expPorts))
+                ",".join([x.strip() for x in self._expPorts]))
             self.removeParticipantFromEC(member)
             self.removeOrganizationFromTarget(member)
             self.startOwnedEC(member)
