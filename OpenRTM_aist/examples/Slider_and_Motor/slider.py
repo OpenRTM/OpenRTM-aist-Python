@@ -5,7 +5,7 @@
 from __future__ import print_function
 
 import time
-import dummy_threading
+import threading
 import sys
 if sys.version_info[0] == 2:
     from Tkinter import *
@@ -28,7 +28,7 @@ class SliderMulti(Frame):
 
         i = 0
         for channel in self._channels:
-            self.var.append(DoubleVar(0))
+            self.var.append(DoubleVar(value=0))
             self.scales.append(
                 Scale(self, label=channel[0], variable=self.var[i],
                       to=channel[1], orient=VERTICAL))
@@ -57,7 +57,7 @@ class SliderMulti(Frame):
 def test():
     channels = (("angle", 0, 360, 0.1, 200), ("velocity", -100, 100, 0.1, 200))
     slider = SliderMulti(channels)
-    sth = dummy_threading.Thread(target=slider.mainloop, args=())
+    sth = threading.Thread(target=slider.mainloop, args=())
     sth.start()
 #	thread.start_new_thread(slider.mainloop, ())
 

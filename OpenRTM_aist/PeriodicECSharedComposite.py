@@ -232,8 +232,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
             self.removePort(member, self._expPorts)
             self._rtobj.getProperties().setProperty(
                 "conf.default.exported_ports",
-                OpenRTM_aist.flatten(
-                    self._expPorts))
+                ",".join([x.strip() for x in self._expPorts]))
             self.removeParticipantFromEC(member)
             self.removeOrganizationFromTarget(member)
             self.startOwnedEC(member)
@@ -471,7 +470,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
                 "port_name: %s is in %s?",
                 (port_name,
                  OpenRTM_aist.flatten(portlist)))
-            if not port_name in portlist:
+            if port_name not in portlist:
                 self._rtcout.RTC_DEBUG(
                     "Not found: %s is in %s?", (port_name, OpenRTM_aist.flatten(portlist)))
                 continue
@@ -509,7 +508,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
                 "port_name: %s is in %s?",
                 (port_name,
                  OpenRTM_aist.flatten(portlist)))
-            if not port_name in portlist:
+            if port_name not in portlist:
                 self._rtcout.RTC_DEBUG(
                     "Not found: %s is in %s?", (port_name, OpenRTM_aist.flatten(portlist)))
                 continue
@@ -968,13 +967,8 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
         sdos = self._org.get_members()
 
         for sdo in sdos:
-            orglist = rtc.get_owned_organizations()
-            for org in orglist:
-                child_sdos = org.get_members()
-                for child_sdo in child_sdos:
-                    child = child_sdo._narrow(RTC.RTObject)
-
-                    self.resetChildComp(child)
+            rtc = sdo._narrow(RTC.RTObject)
+            self.resetChildComp(rtc)
 
         return RTC.RTC_OK
 

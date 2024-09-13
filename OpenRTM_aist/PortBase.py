@@ -719,7 +719,7 @@ class PortBase(RTC__POA.PortService):
             for port in connector_profile.ports:
                 if not port._is_equivalent(self._objref):
                     ret = OpenRTM_aist.CORBA_RTCUtil.already_connected(
-                        port, self._objref)
+                        self._objref, port)
                     if ret:
                         return (RTC.PRECONDITION_NOT_MET, connector_profile)
 
