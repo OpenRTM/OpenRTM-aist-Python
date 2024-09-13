@@ -771,10 +771,10 @@ def findFile(dir, filename, filelist):
     for d in dirs:
         if os.path.isdir(d):
             findFile(d, filename, filelist)
-        files = glob.glob(os.path.join(dir, filename))
-        for f in files:
-            if os.path.isfile(d):
-                filelist.append(f)
+    files = glob.glob(os.path.join(dir, filename))
+    for f in files:
+        if os.path.isfile(f):
+            filelist.append(f)
 
 
 ##

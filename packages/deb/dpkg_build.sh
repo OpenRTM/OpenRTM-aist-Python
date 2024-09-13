@@ -37,10 +37,10 @@ BUILD_ROOT=""
 cleanup_files()
 {
   get_version_info
-  rm -f ../openrtm-aist*.deb
-  rm -f ../openrtm-aist*.dsc
-  rm -f ../openrtm-aist*.changes
-  rm -f ../openrtm-aist*.tar.gz
+  rm -f ../openrtm*.deb
+  rm -f ../openrtm*.dsc
+  rm -f ../openrtm*.changes
+  rm -f ../openrtm*.tar.gz
   rm -rf ${BUILD_ROOT}
 }
 
@@ -107,24 +107,42 @@ check_distribution()
 
 get_version_info()
 {
-    VERSION=`python3 ../../setup.py --version`
+    VERSION=`dpkg-parsechangelog --show-field Version | cut -b 1-5`
     SHORT_VERSION=`echo $VERSION | sed 's/\.[0-9]*$//'`
     BUILD_ROOT="buildroot"
-    PKG_NAME="OpenRTM-aist-Python-${VERSION}"
-}
-
-create_source_package()
-{
-  cd ../../
-  python3 setup.py build
-  python3 setup.py sdist
-  cd -
 }
 
 extract_source()
 {
-  tar xvzf ../../dist/${PKG_NAME}.tar.gz
-  mv ${PKG_NAME} ${BUILD_ROOT}
+  mkdir ${BUILD_ROOT}
+  cp -r ../../examples ${BUILD_ROOT}/
+  cp -r ../../OpenRTM_aist* ${BUILD_ROOT}/
+  cp ../../OpenRTM-aist.pth ${BUILD_ROOT}/
+  find ${BUILD_ROOT}/examples | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf
+  find ${BUILD_ROOT}/examples -name "*.bat" | xargs rm -f
+  rm ${BUILD_ROOT}/examples/rtc.conf.sample
+  rm ${BUILD_ROOT}/OpenRTM_aist/RTM_IDL/*.pth
+  rm -rf ${BUILD_ROOT}/OpenRTM_aist/RTM_IDL/ext
+  rm -rf ${BUILD_ROOT}/OpenRTM_aist/docs
+  rm -rf ${BUILD_ROOT}/OpenRTM_aist/ext/sdo/observer/test
+  rm ${BUILD_ROOT}/OpenRTM_aist/ext/extended_fsm/*.conf
+  rm ${BUILD_ROOT}/OpenRTM_aist/ext/fsm4rtc_observer/*.idl
+  rm ${BUILD_ROOT}/OpenRTM_aist/ext/fsm4rtc_observer/*.conf
+  rm ${BUILD_ROOT}/OpenRTM_aist/ext/fsm4rtc_observer/setup.*
+  rm ${BUILD_ROOT}/OpenRTM_aist/ext/http/*.conf
+  rm ${BUILD_ROOT}/OpenRTM_aist/ext/logger/fluentlogger/*.conf
+  rm -rf ${BUILD_ROOT}/OpenRTM_aist/ext/ssl/test
+  rm ${BUILD_ROOT}/OpenRTM_aist/ext/ssl/*.conf
+  rm ${BUILD_ROOT}/OpenRTM_aist/ext/transport/OpenSplice/*.conf
+  rm ${BUILD_ROOT}/OpenRTM_aist/ext/transport/ROS2Transport/*.conf
+  rm ${BUILD_ROOT}/OpenRTM_aist/ext/transport/ROSTransport/*.conf
+  rm ${BUILD_ROOT}/OpenRTM_aist/utils/rtcd/README
+  rm ${BUILD_ROOT}/OpenRTM_aist/utils/rtcd/*.conf
+  rm ${BUILD_ROOT}/OpenRTM_aist/utils/rtcd/*.bat
+  rm ${BUILD_ROOT}/OpenRTM_aist/utils/rtcd/rtcd2_python
+  rm ${BUILD_ROOT}/OpenRTM_aist/utils/rtcprof/*.bat
+  rm ${BUILD_ROOT}/OpenRTM_aist/utils/rtcprof/rtcprof2_python
+  cp -r ../../local/bin ${BUILD_ROOT}/
 }
 
 create_files()
@@ -133,9 +151,8 @@ create_files()
   ARCH=$DEB_HOST_ARCH
   PKG_VERSION=`dpkg-parsechangelog | sed -n 's/^Version: //p'`
 cat << EOF >> debian/files
-openrtm-aist-python3_${PKG_VERSION}_${ARCH}.deb main extra
-openrtm-aist-python3-example_${PKG_VERSION}_${ARCH}.deb main extra
-openrtm-aist-python3-doc_${PKG_VERSION}_all.deb main extra
+openrtm2-python3_${PKG_VERSION}_${ARCH}.deb main extra
+openrtm2-python3-example_${PKG_VERSION}_${ARCH}.deb main extra
 EOF
 }
 
@@ -163,10 +180,10 @@ build_package()
 
 copy_debfiles()
 {
-  mv ./openrtm-aist*.deb ..
-  mv ./openrtm-aist*.dsc ..
-  mv ./openrtm-aist*.changes ..
-  mv ./openrtm-aist*.tar.gz ..
+  mv ./openrtm2*.deb ..
+  mv ./openrtm2*.dsc ..
+  mv ./openrtm2*.changes ..
+  mv ./openrtm2*.tar.gz ..
 }
 
 #==============================
@@ -178,7 +195,6 @@ check_distribution
 get_version_info
 
 cleanup_files
-create_source_package
 extract_source
 create_files
 copy_control_files
