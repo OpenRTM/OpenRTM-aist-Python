@@ -24,7 +24,7 @@ import os
 import yaml
 import copy
 
-from distutils.sysconfig import get_python_lib
+from setuptools._distutils.sysconfig import get_python_lib
 
 default_profile = """
 rtcProfile:

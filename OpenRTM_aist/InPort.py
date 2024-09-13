@@ -95,8 +95,8 @@ class InPort(OpenRTM_aist.InPortBase):
         self._valueMutex = threading.RLock()
 
         marshaling_types = OpenRTM_aist.SerializerFactories.instance().getSerializerList(value)
-        marshaling_types = OpenRTM_aist.flatten(marshaling_types).lstrip()
-        self.addProperty("dataport.marshaling_types", marshaling_types)
+        marshaling_types_str = ",".join([x.strip() for x in marshaling_types])
+        self.addProperty("dataport.marshaling_types", marshaling_types_str)
 
         self._listeners.setDataType(copy.deepcopy(value))
         self._listeners.setPortType(OpenRTM_aist.PortType.InPortType)
