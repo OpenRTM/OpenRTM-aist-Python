@@ -355,7 +355,7 @@ def appendStringValue(nv, name, value):
                 find_flag = True
 
         if not find_flag:
-            tmp_str += ", "
+            tmp_str += ","
             tmp_str += value
             nv[index].value = any.to_any(tmp_str)
     else:

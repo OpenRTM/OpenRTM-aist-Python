@@ -245,7 +245,7 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
             self._rtcout.RTC_PARANOID("ROS2InPort.put()")
             if not self._connector:
                 self.onReceiverError(data)
-                return OpenRTM.PORT_ERROR
+                return
 
             data = self.onReceived(data)
 

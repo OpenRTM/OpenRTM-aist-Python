@@ -349,7 +349,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         if not self._syncmode:
             guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
         if not self._thebuffer.empty():
-            _, value = self._thebuffer.read(value)
+            _, value = self._thebuffer.read()
             if guard_ctrl is not None:
                 del guard_ctrl
             self.notify()

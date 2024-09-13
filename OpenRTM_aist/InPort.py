@@ -95,8 +95,8 @@ class InPort(OpenRTM_aist.InPortBase):
         self._valueMutex = threading.RLock()
 
         marshaling_types = OpenRTM_aist.SerializerFactories.instance().getSerializerList(value)
-        marshaling_types = OpenRTM_aist.flatten(marshaling_types).lstrip()
-        self.addProperty("dataport.marshaling_types", marshaling_types)
+        marshaling_types_str = ",".join([x.strip() for x in marshaling_types])
+        self.addProperty("dataport.marshaling_types", marshaling_types_str)
 
         self._listeners.setDataType(copy.deepcopy(value))
         self._listeners.setPortType(OpenRTM_aist.PortType.InPortType)
@@ -152,7 +152,7 @@ class InPort(OpenRTM_aist.InPortBase):
         self._rtcout.RTC_TRACE("isNew()")
 
         guard = OpenRTM_aist.ScopedLock(self._valueMutex)
-        if self._directNewData == True:
+        if self._directNewData is True:
             self._rtcout.RTC_TRACE(
                 "isNew() returns true because of direct write.")
             return True
@@ -226,7 +226,7 @@ class InPort(OpenRTM_aist.InPortBase):
 
     def isEmpty(self, names=None):
         self._rtcout.RTC_TRACE("isEmpty()")
-        if self._directNewData == True:
+        if self._directNewData is True:
             return False
         if not self._connectors:
             self._rtcout.RTC_DEBUG("no connectors")
@@ -347,7 +347,7 @@ class InPort(OpenRTM_aist.InPortBase):
             self._rtcout.RTC_TRACE("OnRead called")
 
         guard = OpenRTM_aist.ScopedLock(self._valueMutex)
-        if self._directNewData == True:
+        if self._directNewData is True:
 
             self._rtcout.RTC_TRACE("Direct data transfer")
             if self._OnReadConvert is not None:
