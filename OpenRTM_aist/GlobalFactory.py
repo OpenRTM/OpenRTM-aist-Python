@@ -34,7 +34,7 @@ class Factory:
     # bool hasFactory(const Identifier& id)
 
     def hasFactory(self, id):
-        if not id in self._creators:
+        if id not in self._creators:
             return False
         return True
 
@@ -51,7 +51,7 @@ class Factory:
     # ReturnCode addFactory(const Identifier& id,
     # Creator creator)
 
-    def addFactory(self, id, creator):
+    def addFactory(self, id, creator, prop=None):
         if not creator:
             return self.INVALID_ARG
 
@@ -64,7 +64,7 @@ class Factory:
     # ReturnCode removeFactory(const Identifier& id)
 
     def removeFactory(self, id):
-        if not id in self._creators:
+        if id not in self._creators:
             return self.NOT_FOUND
 
         del self._creators[id]
@@ -73,7 +73,7 @@ class Factory:
     # AbstractClass* createObject(const Identifier& id)
 
     def createObject(self, id):
-        if not id in self._creators:
+        if id not in self._creators:
             print("Factory.createObject return None id: ", id)
             return None
         obj_ = self._creators[id]()

@@ -136,7 +136,6 @@ def main():
                                                                        skip_count))
 
     ret, conprof = pin[0].connect(conprof)
-    print(ret)
 
     # activate ConsoleIn0
     eclistin = inobj.get_owned_contexts()

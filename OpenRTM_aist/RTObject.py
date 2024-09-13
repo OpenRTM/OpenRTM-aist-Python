@@ -4337,38 +4337,6 @@ class RTObject_impl:
 
     ##
     # @if jp
-    #
-    # @brief ConfigurationSetNameListener を削除する
-    #
-    # addConfigurationSetNameListener で追加されたリスナオブジェクトを
-    # 削除する。
-    #
-    # @param type ConfigurationSetNameListenerType型の値。
-    #             ON_UPDATE_CONFIG_PARAM がある。
-    # @param listener 与えたリスナオブジェクトへのポインタ
-    #
-    # @else
-    #
-    # @brief Removing ConfigurationSetNameListener
-    #
-    # This function removes a listener object which is added by
-    # addConfigurationSetNameListener() function.
-    #
-    # @param type ConfigurationSetNameListenerType value
-    #             ON_UPDATE_CONFIG_PARAM is only allowed.
-    # @param listener a pointer to ConfigurationSetNameListener
-    #             listener object.
-    #
-    # @endif
-    # void
-    # removeConfigurationSetNameListener(ConfigurationSetNameListenerType type,
-    # ConfigurationSetNameListener* listener);
-    def removeConfigurationSetNameListener(self, type, listener):
-        self._configsets.removeConfigurationSetNameListener(type, listener)
-        return
-
-    ##
-    # @if jp
     # @brief PreFsmActionListener リスナを追加する
     #
     # FsmAction 実装関数の呼び出し直前のイベントに関連する各種リ
@@ -5215,7 +5183,7 @@ class RTObject_impl:
                                        (ec_type_, ec_name_))
             else:
                 # If EC's name is empty or no existing EC, create new EC.
-                if not ec_type_ in avail_ec_:
+                if ec_type_ not in avail_ec_:
                     self._rtcout.RTC_WARN("EC %s is not available.", ec_type_)
                     self._rtcout.RTC_DEBUG("Available ECs: %s",
                                            OpenRTM_aist.flatten(avail_ec_))
@@ -5245,7 +5213,7 @@ class RTObject_impl:
             default_prop.setDefaults(OpenRTM_aist.default_config)
 
             ec_type_ = default_prop.getProperty("exec_cxt.periodic.type")
-            if not ec_type_ in avail_ec_:
+            if ec_type_ not in avail_ec_:
                 self._rtcout.RTC_WARN("EC %s is not available.", ec_type_)
                 self._rtcout.RTC_DEBUG("Available ECs: %s",
                                        OpenRTM_aist.flatten(avail_ec_))

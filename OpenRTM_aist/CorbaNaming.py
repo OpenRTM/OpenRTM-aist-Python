@@ -347,14 +347,12 @@ class CorbaNaming:
             if force:
                 self.rebindRecursive(self._rootContext, name_list, obj)
             else:
-                self.__print_exception()
                 raise
 
         except CosNaming.NamingContext.CannotProceed as err:
             if force:
                 self.rebindRecursive(err.cxt, err.rest_of_name, obj)
             else:
-                self.__print_exception()
                 raise
 
     ##
@@ -571,12 +569,8 @@ class CorbaNaming:
         else:
             name_ = name
 
-        try:
-            obj = self._rootContext.resolve(name_)
-            return obj
-        except CosNaming.NamingContext.NotFound:
-            self.__print_exception()
-            return None
+        obj = self._rootContext.resolve(name_)
+        return obj
 
     ##
     # @if jp
@@ -612,10 +606,7 @@ class CorbaNaming:
         else:
             name_ = name
 
-        try:
-            self._rootContext.unbind(name_)
-        except BaseException:
-            self.__print_exception()
+        self._rootContext.unbind(name_)
 
         return
 
@@ -680,14 +671,12 @@ class CorbaNaming:
             if force:
                 self.bindRecursive(self._rootContext, name_, self.newContext())
             else:
-                self.__print_exception()
                 raise
         except CosNaming.NamingContext.CannotProceed as err:
             if force:
                 self.bindRecursive(
                     err.cxt, err.rest_of_name, self.newContext())
             else:
-                self.__print_exception()
                 raise
         return None
 

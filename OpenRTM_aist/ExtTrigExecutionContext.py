@@ -410,13 +410,13 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
     def onAddedComponent(self, rtobj):
         guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
-        if self._workerthread._ticked == False:
+        if self._workerthread._ticked is False:
             self._worker.updateComponentList()
         return RTC.RTC_OK
 
     def onRemovedComponent(self, rtobj):
         guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
-        if self._workerthread._ticked == False:
+        if self._workerthread._ticked is False:
             self._worker.updateComponentList()
         return RTC.RTC_OK
 

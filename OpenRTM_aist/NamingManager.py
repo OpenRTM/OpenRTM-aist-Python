@@ -354,6 +354,8 @@ class NamingOnCorba(NamingBase):
                             rtc_list.append(obj)
                             return rtc_list
                     except BaseException:
+                        self._rtcout.RTC_ERROR(
+                            OpenRTM_aist.Logger.print_exception())
                         return []
 
         return rtc_list
@@ -671,6 +673,8 @@ class NamingManager:
                 try:
                     n.ns.bindObject(name, rtobj)
                 except BaseException:
+                    self._rtcout.RTC_DEBUG(
+                        OpenRTM_aist.Logger.print_exception())
                     del n.ns
                     n.ns = None
 
@@ -684,6 +688,8 @@ class NamingManager:
                 try:
                     n.ns.bindObject(name, mgr)
                 except BaseException:
+                    self._rtcout.RTC_DEBUG(
+                        OpenRTM_aist.Logger.print_exception())
                     del n.ns
                     n.ns = None
 
@@ -714,6 +720,8 @@ class NamingManager:
                 try:
                     n.ns.bindPortObject(name, port)
                 except BaseException:
+                    self._rtcout.RTC_DEBUG(
+                        OpenRTM_aist.Logger.print_exception())
                     del n.ns
                     n.ns = None
         self.registerPortName(name, port)
@@ -755,6 +763,8 @@ class NamingManager:
                         del name.ns
                         name.ns = None
                 except BaseException:
+                    self._rtcout.RTC_DEBUG(
+                        OpenRTM_aist.Logger.print_exception())
                     self._rtcout.RTC_INFO("Name server: %s (%s) disappeared.",
                                           (name.nsname,
                                            name.method))
@@ -878,6 +888,7 @@ class NamingManager:
                                       (method, name_server))
                 return name
             except BaseException:
+                self._rtcout.RTC_DEBUG(OpenRTM_aist.Logger.print_exception())
                 self._rtcout.RTC_INFO("NameServer connection failed: %s/%s",
                                       (method, name_server))
                 return None
@@ -1060,6 +1071,7 @@ class NamingManager:
                                        (ns.method, ns.nsname))
 
         except BaseException:
+            self._rtcout.RTC_DEBUG(OpenRTM_aist.Logger.print_exception())
             self._rtcout.RTC_DEBUG("Name server: %s/%s disappeared again.",
                                    (ns.method, ns.nsname))
             if nsobj is not None:
