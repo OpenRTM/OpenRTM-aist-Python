@@ -178,7 +178,7 @@ class SdoServiceAdmin:
 
         availableProviderTypes = OpenRTM_aist.SdoServiceProviderFactory.instance().getIdentifiers()
         prop.setProperty("sdo.service.provider.available_services",
-                         str(OpenRTM_aist.flatten(availableProviderTypes)))
+                         ",".join([x.strip() for x in availableProviderTypes]))
         self._rtcout.RTC_DEBUG("sdo.service.provider.available_services: %s",
                                prop.getProperty("sdo.service.provider.available_services"))
 
@@ -223,7 +223,7 @@ class SdoServiceAdmin:
                                str(constypes))
 
         prop.setProperty("sdo.service.consumer.available_services",
-                         str(OpenRTM_aist.flatten(OpenRTM_aist.SdoServiceConsumerFactory.instance().getIdentifiers())))
+                         ",".join([x.strip() for x in OpenRTM_aist.SdoServiceConsumerFactory.instance().getIdentifiers()]))
         self._rtcout.RTC_DEBUG("sdo.service.consumer.available_services: %s",
                                prop.getProperty("sdo.service.consumer.available_services"))
 

@@ -695,11 +695,13 @@ def urlparam2map(_str):
     tmp = _str[qpos:].split("&")
     retmap = {}
     for v in tmp:
+        if not v.strip():
+            continue
         pos = v.find("=")
         if pos != -1:
-            retmap[v[0:pos]] = v[pos + 1:]
-        else:
-            retmap[v] = ""
+            key = v[0:pos]
+            if key.strip():
+                retmap[key] = v[pos + 1:]
     return retmap
 
 ##
@@ -767,10 +769,10 @@ def findFile(dir, filename, filelist):
     for d in dirs:
         if os.path.isdir(d):
             findFile(d, filename, filelist)
-        files = glob.glob(os.path.join(dir, filename))
-        for f in files:
-            if os.path.isfile(d):
-                filelist.append(f)
+    files = glob.glob(os.path.join(dir, filename))
+    for f in files:
+        if os.path.isfile(f):
+            filelist.append(f)
 
 
 ##

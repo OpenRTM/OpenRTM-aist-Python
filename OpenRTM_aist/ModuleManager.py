@@ -79,7 +79,7 @@ class ModuleManager:
         for i, cp in enumerate(self._configPath):
             self._configPath[i] = OpenRTM_aist.eraseHeadBlank(
                 cp)
-        self._loadPath = prop.getProperty(MOD_LOADPTH, "./").split(",")
+        self._loadPath = prop.getProperty(MOD_LOADPTH).split(",")
         for i, lp in enumerate(self._loadPath):
             self._loadPath[i] = OpenRTM_aist.eraseHeadBlank(lp)
 
@@ -98,9 +98,14 @@ class ModuleManager:
             self._rtcout = self._mgr.getLogbuf("ModuleManager")
         self._modprofs = []
         self._loadfailmods = {}
-        langs = self._properties.getProperty(
-            "manager.supported_languages").split(",")
-        for lang in langs:
+        if OpenRTM_aist.toBool(prop.getProperty("manager.is_master"),
+                               "YES", "NO", False):
+            self._supported_languages = self._properties.getProperty(
+                "manager.supported_languages").split(",")
+        else:
+            self._supported_languages = ["Python", "Python3"]
+
+        for lang in self._supported_languages:
             lang = lang.strip()
             self._loadfailmods[lang] = []
 
@@ -241,8 +246,19 @@ class ModuleManager:
     # std::string ModuleManager::load(const std::string& file_name,
     #                                 const std::string& init_func)
     def load(self, file_name, init_func=None):
-
         self._rtcout.RTC_TRACE("load(fname = %s)", file_name)
+
+        prop = OpenRTM_aist.Properties()
+        prop.setProperty("module_file_name", file_name)
+        return self.load_prop(prop, init_func)
+
+    def load_prop(self, prop, init_func=None):
+        self._rtcout.RTC_TRACE("load(module_file_name = %s, module_file_path = %s, language = %s)", 
+                               (prop.getProperty("module_file_name"),
+                                prop.getProperty("module_file_path"),
+                                prop.getProperty("language")))
+        file_name = prop.getProperty("module_file_name")
+        file_path = prop.getProperty("module_file_path")
         if file_name == "":
             raise ModuleManager.InvalidArguments("Invalid file name.")
 
@@ -255,7 +271,6 @@ class ModuleManager:
 
         import_name = os.path.split(file_name)[-1]
         pathChanged = False
-        file_path = None
 
         if OpenRTM_aist.isAbsolutePath(file_name):
             if not self._absoluteAllowed:
@@ -270,8 +285,15 @@ class ModuleManager:
                 import_name = splitted_name[-1]
                 file_path = file_name
 
-        else:
-            file_path = self.findFile(file_name, self._loadPath)
+        elif not file_path:
+            paths = self._properties.getProperty(
+                "manager.modules.Python.load_paths").split(",")
+            paths.extend(self._properties.getProperty(
+                "manager.modules.Python3.load_paths").split(","))
+            paths.extend(self._loadPath)
+
+            file_path = self.findFile(file_name, paths)
+
             if not file_path:
                 raise ModuleManager.FileNotFound(file_name)
 
@@ -495,7 +517,13 @@ class ModuleManager:
         except BaseException:
             pass
 
-        imp_file = __import__(basename.split(".")[0])
+        try:
+            imp_file = __import__(basename.split(".")[0])
+        except:
+            self._rtcout.RTC_WARN("Module import failed %s", fullname)
+            self._rtcout.RTC_DEBUG(OpenRTM_aist.Logger.print_exception())
+            return None
+        
         comp_spec = getattr(imp_file, comp_spec_name, None)
         if not comp_spec:
             return None
@@ -731,13 +759,12 @@ class ModuleManager:
     def getLoadableModules(self):
         self._rtcout.RTC_TRACE("getLoadableModules()")
         # getting loadable module file path list.
-        langs = self._properties.getProperty(
-            "manager.supported_languages").split(",")
+
         self._rtcout.RTC_DEBUG(
             "langs: %s",
             self._properties.getProperty("manager.supported_languages"))
 
-        for lang in langs:
+        for lang in self._supported_languages:
             lang = lang.strip()
 
             modules_ = []
