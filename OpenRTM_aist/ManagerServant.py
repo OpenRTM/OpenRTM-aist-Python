@@ -494,6 +494,14 @@ class ManagerServant(RTM__POA.Manager):
 
         self._rtcout.RTC_TRACE("create_component(%s)", module_name)
 
+        if not module_name:
+            self._rtcout.RTC_ERROR("Module name is empty.")
+            return RTC.RTObject._nil
+        if module_name.lstrip().find("?") == 0:
+            self._rtcout.RTC_ERROR("Module name is empty.")
+            return RTC.RTObject._nil
+
+
         rtc, module_name, manager_address = self.createComponentByAddress(
             module_name)
 
@@ -530,8 +538,13 @@ class ManagerServant(RTM__POA.Manager):
                         OpenRTM_aist.Logger.print_exception())
                     self._slaves.remove(slave)
             del guard
+            
             if not manager_name:
-                module_name = module_name + "&manager_name=manager_%p"
+                if "?" not in module_name:
+                    module_name += "?"
+                else:
+                    module_name += "&"
+                module_name += "manager_name=manager_%p"
 
                 rtc, _, _ = self.createComponentByManagerName(module_name)
                 return rtc
@@ -1311,47 +1324,28 @@ class ManagerServant(RTM__POA.Manager):
     # std::string getParameterByModulename(string param_name, string
     # &module_name)
     def getParameterByModulename(self, param_name, module_name):
-        arg = module_name
-        pos0 = arg.find("&" + param_name + "=")
-        pos1 = arg.find("?" + param_name + "=")
+        param_start = module_name.find(param_name+"=")
 
-        if pos0 == -1 and pos1 == -1:
+        if param_start < 0:
             return "", module_name
+        
+        param_end = module_name.find("&", param_start)
 
-        pos = 0
-        if pos0 == -1:
-            pos = pos1
-        else:
-            pos = pos0
+        if param_end < 0:
+            param_end = len(module_name)
 
-        paramstr = ""
-        endpos = arg.find('&', pos + 1)
-        if endpos == -1:
-            endpos = arg.find('?', pos + 1)
-            if endpos == -1:
-                paramstr = arg[(pos + 1):]
-            else:
-                paramstr = arg[(pos + 1): endpos]
-        else:
-            paramstr = arg[(pos + 1): endpos]
-        self._rtcout.RTC_VERBOSE("%s arg: %s", (param_name, paramstr))
+        param_value = module_name[param_start+len(param_name)+1:param_end]
 
-        eqpos = paramstr.find("=")
-        # if eqpos == -1:
-        #  self._rtcout.RTC_WARN("Invalid argument: %s", module_name)
-        #  return ""
+        self._rtcout.RTC_DEBUG("%s is %s", (param_name, param_value))
 
-        paramstr = paramstr[eqpos + 1:]
-        self._rtcout.RTC_DEBUG("%s is %s", (param_name, paramstr))
+        if module_name[param_start-1] == "?":
+            module_name = module_name[:param_start] + module_name[param_end:]
+        elif module_name[param_start-1] == "&":
+            module_name = module_name[:param_start-1] + module_name[param_end:]
 
-        if endpos == -1:
-            arg = arg[:pos]
-        else:
-            arg = arg[:pos] + arg[endpos:]
+        return param_value, module_name
+            
 
-        module_name = arg
-
-        return paramstr, module_name
 
     ##
     # @if jp
@@ -1374,6 +1368,7 @@ class ManagerServant(RTM__POA.Manager):
         arg = module_name
 
         mgrstr, arg = self.getParameterByModulename("manager_name", arg)
+        param = OpenRTM_aist.urlparam2map(arg)
 
         if not mgrstr:
             return RTC.RTObject._nil, arg, mgrstr
@@ -1410,6 +1405,11 @@ class ManagerServant(RTM__POA.Manager):
                 load_path = load_path.replace("\\", "\\\\")
             else:
                 cmd = rtcd_cmd
+            if "config_file" in param.keys():
+                cmd += " -f \"" + param["config_file"] + "\""
+            elif config.findNode("config_file"):
+                cmd += " -f \"" + config.getProperty("config_file") + "\""
+            
             cmd += " -o " + "manager.is_master:NO"
             cmd += " -o " + "manager.corba_servant:YES"
             cmd += " -o " + "corba.master_manager:" + \
@@ -1527,6 +1527,7 @@ class ManagerServant(RTM__POA.Manager):
 
         arg = module_name
         mgrstr, arg = self.getParameterByModulename("manager_address", arg)
+        param = OpenRTM_aist.urlparam2map(arg)
 
         if not mgrstr:
             return RTC.RTObject._nil, arg, mgrstr
@@ -1564,6 +1565,10 @@ class ManagerServant(RTM__POA.Manager):
                 load_path = load_path.replace("\\", "\\\\")
             else:
                 cmd = rtcd_cmd
+            if "config_file" in param.keys():
+                cmd += " -f \"" + param["config_file"] + "\""
+            elif config.findNode("config_file"):
+                cmd += " -f \"" + config.getProperty("config_file") + "\""
             cmd += " -o corba.master_manager:"
             cmd += mgrstr  # port number
             cmd += " -o \"manager.modules.load_path:"

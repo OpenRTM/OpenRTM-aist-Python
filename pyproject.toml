@@ -1,0 +1,5 @@
+[build-system]
+requires = ["RTM-Python-build-idl@git+https://github.com/OpenRTM/RTM-Python-build-idl", "wheel", "setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
