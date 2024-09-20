@@ -92,10 +92,9 @@ class DataListener(OpenRTM_aist.ConnectorDataListenerT):
     def __del__(self):
         pass
 
-    def __call__(self, info, cdrdata):
-        data = OpenRTM_aist.ConnectorDataListenerT.__call__(
-            self, info, cdrdata, self._data, OpenRTM_aist.PortType.InPortType)
+    def __call__(self, info, data):
         self._comp.receiveData(data.tm, len(data.data))
+        return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE, data
 
 
 class ConnListener(OpenRTM_aist.ConnectorListener):
@@ -113,6 +112,7 @@ class ConnListener(OpenRTM_aist.ConnectorListener):
         print(info.properties)
         print("------------------------------")
         self._comp.setConnectorProfile(info)
+        return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
 
 
 ##
@@ -263,7 +263,7 @@ class Throughput_py(OpenRTM_aist.DataFlowComponentBase):
         # Set CORBA Service Ports
         # self.getConfigService().update()
         # print self._datatype
-        self._data_type = OpenRTM_aist.normalize(self._datatype)
+        self._data_type = OpenRTM_aist.normalize(self._datatype[0])
         if self._data_type == "octet":
             self._d_in = RTC.TimedOctetSeq(RTC.Time(0, 0), [])
             self._d_out = RTC.TimedOctetSeq(RTC.Time(0, 0), [])
