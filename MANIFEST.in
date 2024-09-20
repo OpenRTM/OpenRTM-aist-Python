@@ -1,7 +1,10 @@
 include OpenRTM-aist.pth
 include MANIFEST.in
 include setup.py
+include setup.cfg
+include pyproject.toml
 include README
+exclude README.md
 recursive-include packages Makefile
 recursive-include packages/deb *.sh copyright changelog rules README* compat control control.* files
 recursive-include packages/rpm *.sh openrtm-aist.spec.in openrtm-aist_py3.spec.in
