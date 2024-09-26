@@ -702,6 +702,8 @@ def urlparam2map(_str):
             key = v[0:pos]
             if key.strip():
                 retmap[key] = v[pos + 1:]
+        else:
+            retmap[v] = ""
     return retmap
 
 ##
