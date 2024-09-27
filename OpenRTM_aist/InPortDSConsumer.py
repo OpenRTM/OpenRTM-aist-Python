@@ -15,6 +15,7 @@
 #     All rights reserved.
 
 
+import omniORB
 from omniORB import any
 from omniORB import CORBA
 import OpenRTM_aist
@@ -154,7 +155,16 @@ class InPortDSConsumer(OpenRTM_aist.InPortConsumer,
         try:
             dataservice = self._ptr()
             if dataservice:
-                return self.convertReturnCode(dataservice.push(data))
+                try:
+                    return self.convertReturnCode(dataservice.push(data))
+                except CORBA.COMM_FAILURE as ex:
+                    if ex.minor == omniORB.COMM_FAILURE_WaitingForReply:
+                        self._rtcout.RTC_DEBUG("Retry push message")
+                        return self.convertReturnCode(dataservice.push(data))
+                    else:
+                        raise
+                except BaseException:
+                    raise
             return self.CONNECTION_LOST
         except BaseException:
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
