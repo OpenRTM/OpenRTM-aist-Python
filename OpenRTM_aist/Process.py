@@ -4,7 +4,7 @@
 
 ##
 # \file Process.py
-# \brief Process handling functions
+# \\brief Process handling functions
 # \author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
 #
 # Copyright (C) 2010
