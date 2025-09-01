@@ -117,6 +117,7 @@ extract_source()
   mkdir ${BUILD_ROOT}
   cp -r ../../examples ${BUILD_ROOT}/
   cp -r ../../OpenRTM_aist* ${BUILD_ROOT}/
+  cp -r ../../openrtm_aist* ${BUILD_ROOT}/
   cp ../../OpenRTM-aist.pth ${BUILD_ROOT}/
   find ${BUILD_ROOT}/examples | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf
   find ${BUILD_ROOT}/examples -name "*.bat" | xargs rm -f
