@@ -83,14 +83,14 @@ class AutoTestIn(OpenRTM_aist.DataFlowComponentBase):
 
     """
     \class AutoTestIn
-    \brief ModuleDescription
+    \\brief ModuleDescription
 
     """
 
     def __init__(self, manager):
         """
-        \brief constructor
-        \param manager Maneger Object
+        \\brief constructor
+        \\param manager Maneger Object
         """
         OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
         self._cnt = 0

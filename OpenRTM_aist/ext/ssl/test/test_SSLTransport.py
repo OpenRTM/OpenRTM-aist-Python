@@ -3,7 +3,7 @@
 
 #
 # \file test_SSLTrasport.py
-# \brief
+# \\brief
 # \date $Date: $
 # \author Nobuhiko Miyamoto
 #

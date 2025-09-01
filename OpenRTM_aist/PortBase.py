@@ -2462,13 +2462,13 @@ class PortBase(RTC__POA.PortService):
     class find_conn_id:
         def __init__(self, id_):
             """
-             \param id_(string)
+             \\param id_(string)
             """
             self._id = id_
 
         def __call__(self, cprof):
             """
-             \param cprof(RTC.ConnectorProfile)
+             \\param cprof(RTC.ConnectorProfile)
             """
             return str(self._id) == str(cprof.connector_id)
 
@@ -2482,13 +2482,13 @@ class PortBase(RTC__POA.PortService):
     class find_port_ref:
         def __init__(self, port_ref):
             """
-             \param port_ref(RTC.PortService)
+             \\param port_ref(RTC.PortService)
             """
             self._port_ref = port_ref
 
         def __call__(self, port_ref):
             """
-             \param port_ref(RTC.PortService)
+             \\param port_ref(RTC.PortService)
             """
             return self._port_ref._is_equivalent(port_ref)
 
@@ -2502,8 +2502,8 @@ class PortBase(RTC__POA.PortService):
     class connect_func:
         def __init__(self, p, prof):
             """
-             \param p(RTC.PortService)
-             \param prof(RTC.ConnectorProfile)
+             \\param p(RTC.PortService)
+             \\param prof(RTC.ConnectorProfile)
             """
             self._port_ref = p
             self._connector_profile = prof
@@ -2511,7 +2511,7 @@ class PortBase(RTC__POA.PortService):
 
         def __call__(self, p):
             """
-             \param p(RTC.PortService)
+             \\param p(RTC.PortService)
             """
             if not self._port_ref._is_equivalent(p):
                 retval = p.notify_connect(self._connector_profile)
@@ -2528,8 +2528,8 @@ class PortBase(RTC__POA.PortService):
     class disconnect_func:
         def __init__(self, p, prof):
             """
-             \param p(RTC.PortService)
-             \param prof(RTC.ConnectorProfile)
+             \\param p(RTC.PortService)
+             \\param prof(RTC.ConnectorProfile)
             """
             self._port_ref = p
             self._connector_profile = prof
@@ -2537,7 +2537,7 @@ class PortBase(RTC__POA.PortService):
 
         def __call__(self, p):
             """
-             \param p(RTC.PortService)
+             \\param p(RTC.PortService)
             """
             if not self._port_ref._is_equivalent(p):
                 retval = p.disconnect(self._connector_profile.connector_id)
@@ -2554,14 +2554,14 @@ class PortBase(RTC__POA.PortService):
     class disconnect_all_func:
         def __init__(self, p):
             """
-             \param p(OpenRTM_aist.PortBase)
+             \\param p(OpenRTM_aist.PortBase)
             """
             self.return_code = RTC.RTC_OK
             self._port = p
 
         def __call__(self, p):
             """
-             \param p(RTC.ConnectorProfile)
+             \\param p(RTC.ConnectorProfile)
             """
             retval = self._port.disconnect(p.connector_id)
             if retval != RTC.RTC_OK:
@@ -2577,15 +2577,15 @@ class PortBase(RTC__POA.PortService):
     class find_interface:
         def __init__(self, name, pol):
             """
-             \param name(string)
-             \param pol(RTC.PortInterfacePolarity)
+             \\param name(string)
+             \\param pol(RTC.PortInterfacePolarity)
             """
             self._name = name
             self._pol = pol
 
         def __call__(self, prof):
             """
-             \param prof(RTC.PortInterfaceProfile)
+             \\param prof(RTC.PortInterfaceProfile)
             """
             name = prof.instance_name
             return (str(self._name) == str(name)) and (

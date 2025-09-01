@@ -4,7 +4,7 @@
 
 """
  \file AutoTestOut.py
- \brief ModuleDescription
+ \\brief ModuleDescription
  \date $Date$
 
 
@@ -55,7 +55,7 @@ class AutoTestOut(OpenRTM_aist.DataFlowComponentBase):
 
     """
     \class AutoTestOut
-    \brief ModuleDescription
+    \\brief ModuleDescription
     """
 
     def __init__(self, manager):
