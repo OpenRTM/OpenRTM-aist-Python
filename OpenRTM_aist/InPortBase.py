@@ -1175,10 +1175,25 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
         # InPortProvider supports "push" dataflow type
         if provider_types:
+            prop_options = OpenRTM_aist.Properties()
             self._rtcout.RTC_DEBUG("dataflow_type push is supported")
             self.appendProperty("dataport.dataflow_type", "push")
             for provider_type in provider_types:
                 self.appendProperty("dataport.interface_type", provider_type)
+                prop_if = factory.getProperties(provider_type)
+                if prop_if is None:
+                    prop_if = OpenRTM_aist.Properties()
+
+                prop_node = prop_options.getNode(provider_type)
+                prop_node.mergeProperties(prop_if)
+
+            prop = OpenRTM_aist.Properties()
+            OpenRTM_aist.NVUtil.copyToProperties(
+                prop, self._profile.properties)
+            prop_dataport = prop.getNode("dataport.interface_option")
+            prop_dataport.mergeProperties(prop_options)
+            OpenRTM_aist.NVUtil.copyFromProperties(
+                self._profile.properties, prop)
 
         self._providerTypes = provider_types
         return
@@ -1219,10 +1234,25 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
 
         # OutPortConsumer supports "pull" dataflow type
         if consumer_types:
+            prop_options = OpenRTM_aist.Properties()
             self._rtcout.RTC_PARANOID("dataflow_type pull is supported")
             self.appendProperty("dataport.dataflow_type", "pull")
             for consumer_type in consumer_types:
                 self.appendProperty("dataport.interface_type", consumer_type)
+                prop_if = factory.getProperties(consumer_type)
+                if prop_if is None:
+                    prop_if = OpenRTM_aist.Properties()
+
+                prop_node = prop_options.getNode(consumer_type)
+                prop_node.mergeProperties(prop_if)
+
+            prop = OpenRTM_aist.Properties()
+            OpenRTM_aist.NVUtil.copyToProperties(
+                prop, self._profile.properties)
+            prop_dataport = prop.getNode("dataport.interface_option")
+            prop_dataport.mergeProperties(prop_options)
+            OpenRTM_aist.NVUtil.copyFromProperties(
+                self._profile.properties, prop)
 
         self._consumerTypes = consumer_types
         return
