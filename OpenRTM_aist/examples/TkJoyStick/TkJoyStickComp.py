@@ -75,7 +75,7 @@ class TkJoyStick(OpenRTM_aist.DataFlowComponentBase):
         return RTC.RTC_OK
 
     """
-   \brief Converting from canvas data to MobileRobotCanvas data
+   \\brief Converting from canvas data to MobileRobotCanvas data
   """
 
     def convert(self, x, y):

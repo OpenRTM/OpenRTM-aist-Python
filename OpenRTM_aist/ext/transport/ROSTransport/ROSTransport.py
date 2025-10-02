@@ -92,5 +92,6 @@ def ROSTransportInit(mgr):
     ROSInPort.ROSInPortInit()
     ROSOutPort.ROSOutPortInit()
     ROSSerializer.ROSSerializerInit()
+    ROSTopicManager.init()
 
     mgr.addManagerActionListener(ManagerActionListener())

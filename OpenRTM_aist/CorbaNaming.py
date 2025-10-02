@@ -4,7 +4,7 @@
 
 ##
 # \file CorbaNaming.py
-# \brief CORBA naming service helper class
+# \\brief CORBA naming service helper class
 # \author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
 #
 # Copyright (C) 2006-2008

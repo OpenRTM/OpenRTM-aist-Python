@@ -577,7 +577,8 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.load(module_file_name = %s, module_file_path = %s, language = %s, initfunc = %s)",
                                (prop.getProperty("module_file_name"),
                                 prop.getProperty("module_file_path"),
-                                prop.getProperty("language")))
+                                prop.getProperty("language"),
+                                initfunc))
         fname = prop.getProperty("module_file_name")
         fname = fname.replace("/", os.sep)
         fname = fname.replace("\\", os.sep)

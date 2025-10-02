@@ -887,6 +887,29 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
 
     ##
     # @if jp
+    # @brief 初期化
+    #
+    #
+    # @else
+    #
+    # @brief
+    #
+    #
+    # @endif
+
+    def init():
+        global manager
+        global mutex
+
+        guard = OpenRTM_aist.Guard.ScopedLock(mutex)
+        if manager is None:
+            manager = ROSTopicManager()
+            manager.start()
+
+    init = staticmethod(init)
+
+    ##
+    # @if jp
     # @brief インスタンス取得
     #
     # @return インスタンス
