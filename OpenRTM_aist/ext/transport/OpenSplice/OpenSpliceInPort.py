@@ -148,20 +148,22 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
 
         self._properties = prop
 
-        qosxml = prop.getProperty("opensplice.QOSXML")
-        qosprofile = prop.getProperty("opensplice.QOSPrfile")
-        self._topicmgr = OpenSpliceTopicManager.instance(qosxml, qosprofile)
+        self._topicmgr = OpenSpliceTopicManager.instance()
 
-        self._dataType = prop.getProperty("data_type", self._dataType)
+        self._dataType = prop.getProperty("dataport.data_type", self._dataType)
 
         self._topic = prop.getProperty("opensplice.topic", "chatter")
 
-        topic = self._topicmgr.createTopic(self._dataType, self._topic)
+        topic = self._topicmgr.createTopic(self._dataType, self._topic, prop)
 
         self._rtcout.RTC_VERBOSE("data type: %s", self._dataType)
         self._rtcout.RTC_VERBOSE("topic name: %s", self._topic)
 
-        self._reader = self._topicmgr.createReader(topic, SubListener(self))
+        self._reader = self._topicmgr.createReader(
+            topic, SubListener(self), prop.getNode("opensplice"))
+
+        if self._reader is None:
+            raise MemoryError("Reader creation failed")
 
     # virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
 
@@ -376,6 +378,172 @@ class SubListener(dds.Listener):
             self._sub.put(sd)
 
 
+opensplice_sub_option = [
+    "topic.__value__", "chatter",
+    "topic.__widget__", "text",
+    "topic.__constraint__", "none",
+    "reader_qos.durability.kind.__value__", "TRANSIENT_DURABILITY_QOS",
+    "reader_qos.durability.kind.__widget__", "radio",
+    "reader_qos.durability.kind.__constraint__", "(VOLATILE_DURABILITY_QOS, TRANSIENT_LOCAL_DURABILITY_QOS, TRANSIENT_DURABILITY_QOS, PERSISTENT_DURABILITY_QOS)",
+    "reader_qos.deadline.period.sec.__value__", "2147483647",
+    "reader_qos.deadline.period.sec.__widget__", "spin",
+    "reader_qos.deadline.period.sec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.deadline.period.nanosec.__value__", "2147483647",
+    "reader_qos.deadline.period.nanosec.__widget__", "text",
+    "reader_qos.deadline.period.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.latency_budget.duration.sec.__value__", "0",
+    "reader_qos.latency_budget.duration.sec.__widget__", "spin",
+    "reader_qos.latency_budget.duration.sec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.latency_budget.duration.nanosec.__value__", "0",
+    "reader_qos.latency_budget.duration.nanosec.__widget__", "spin",
+    "reader_qos.latency_budget.duration.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.liveliness.kind.__value__", "AUTOMATIC_LIVELINESS_QOS",
+    "reader_qos.liveliness.kind.__widget__", "radio",
+    "reader_qos.liveliness.kind.__constraint__", "(AUTOMATIC_LIVELINESS_QOS, MANUAL_BY_PARTICIPANT_LIVELINESS_QOS, MANUAL_BY_TOPIC_LIVELINESS_QOS)",
+    "reader_qos.liveliness.lease_duration.sec.__value__", "2147483647",
+    "reader_qos.liveliness.lease_duration.sec.__widget__", "spin",
+    "reader_qos.liveliness.lease_duration.sec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.liveliness.lease_duration.nanosec.__value__", "2147483647",
+    "reader_qos.liveliness.lease_duration.nanosec.__widget__", "spin",
+    "reader_qos.liveliness.lease_duration.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.reliability.kind.__value__", "BEST_EFFORT_RELIABILITY_QOS",
+    "reader_qos.reliability.kind.__widget__", "radio",
+    "reader_qos.reliability.kind.__constraint__", "(BEST_EFFORT_RELIABILITY_QOS, RELIABLE_RELIABILITY_QOS)",
+    "reader_qos.reliability.max_blocking_time.sec.__value__", "2147483647",
+    "reader_qos.reliability.max_blocking_time.sec.__widget__", "spin",
+    "reader_qos.reliability.max_blocking_time.sec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.reliability.max_blocking_time.nanosec.__value__", "2147483647",
+    "reader_qos.reliability.max_blocking_time.nanosec.__widget__", "spin",
+    "reader_qos.reliability.max_blocking_time.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.destination_order.kind.__value__", "BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS",
+    "reader_qos.destination_order.kind.__widget__", "radio",
+    "reader_qos.destination_order.kind.__constraint__", "(BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS, BY_SOURCE_TIMESTAMP_DESTINATIONORDER_QOS)",
+    "reader_qos.history.kind.__value__", "KEEP_LAST_HISTORY_QOS",
+    "reader_qos.history.kind.__widget__", "radio",
+    "reader_qos.history.kind.__constraint__", "(KEEP_LAST_HISTORY_QOS, KEEP_ALL_HISTORY_QOS)",
+    "reader_qos.history.depth.__value__", "1",
+    "reader_qos.history.depth.__widget__", "spin",
+    "reader_qos.history.depth.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.resource_limits.max_samples.__value__", "-1",
+    "reader_qos.resource_limits.max_samples.__widget__", "spin",
+    "reader_qos.resource_limits.max_samples.__constraint__", "-1 <= x <= 2147483647",
+    "reader_qos.resource_limits.max_instances.__value__", "-1",
+    "reader_qos.resource_limits.max_instances.__widget__", "spin",
+    "reader_qos.resource_limits.max_instances.__constraint__", "-1 <= x <= 2147483647",
+    "reader_qos.resource_limits.max_samples_per_instance.__value__", "-1",
+    "reader_qos.resource_limits.max_samples_per_instance.__widget__", "spin",
+    "reader_qos.resource_limits.max_samples_per_instance.__constraint__", "-1 <= x <= 2147483647",
+    "reader_qos.ownership.kind.__value__", "SHARED_OWNERSHIP_QOS",
+    "reader_qos.ownership.kind.__widget__", "radio",
+    "reader_qos.ownership.kind.__constraint__", "(SHARED_OWNERSHIP_QOS, EXCLUSIVE_OWNERSHIP_QOS)",
+    "reader_qos.time_based_filter.minimum_separation.sec.__value__", "0",
+    "reader_qos.time_based_filter.minimum_separation.sec.__widget__", "spin",
+    "reader_qos.time_based_filter.minimum_separation.sec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.time_based_filter.minimum_separation.nanosec.__value__", "0",
+    "reader_qos.time_based_filter.minimum_separation.nanosec.__widget__", "spin",
+    "reader_qos.time_based_filter.minimum_separation.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.reader_data_lifecycle.autopurge_disposed_samples_delay.sec.__value__", "2147483647",
+    "reader_qos.reader_data_lifecycle.autopurge_disposed_samples_delay.sec.__widget__", "spin",
+    "reader_qos.reader_data_lifecycle.autopurge_disposed_samples_delay.sec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.reader_data_lifecycle.autopurge_disposed_samples_delay.nanosec.__value__", "2147483647",
+    "reader_qos.reader_data_lifecycle.autopurge_disposed_samples_delay.nanosec.__widget__", "spin",
+    "reader_qos.reader_data_lifecycle.autopurge_disposed_samples_delay.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.reader_data_lifecycle.autopurge_nowriter_samples_delay.sec.__value__", "2147483647",
+    "reader_qos.reader_data_lifecycle.autopurge_nowriter_samples_delay.sec.__widget__", "spin",
+    "reader_qos.reader_data_lifecycle.autopurge_nowriter_samples_delay.sec.__constraint__", "0 <= x <= 2147483647",
+    "reader_qos.reader_data_lifecycle.autopurge_nowriter_samples_delay.nanosec.__value__", "2147483647",
+    "reader_qos.reader_data_lifecycle.autopurge_nowriter_samples_delay.nanosec.__widget__", "spin",
+    "reader_qos.reader_data_lifecycle.autopurge_nowriter_samples_delay.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.durability.kind.__value__", "TRANSIENT_DURABILITY_QOS",
+    "topic_qos.durability.kind.__widget__", "radio",
+    "topic_qos.durability.kind.__constraint__", "(VOLATILE_DURABILITY_QOS, TRANSIENT_LOCAL_DURABILITY_QOS, TRANSIENT_DURABILITY_QOS, PERSISTENT_DURABILITY_QOS)",
+    "topic_qos.deadline.period.sec.__value__", "2147483647",
+    "topic_qos.deadline.period.sec.__widget__", "spin",
+    "topic_qos.deadline.period.sec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.deadline.period.nanosec.__value__", "2147483647",
+    "topic_qos.deadline.period.nanosec.__widget__", "spin",
+    "topic_qos.deadline.period.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.latency_budget.duration.sec.__value__", "0",
+    "topic_qos.latency_budget.duration.sec.__widget__", "spin",
+    "topic_qos.latency_budget.duration.sec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.latency_budget.duration.nanosec.__value__", "0",
+    "topic_qos.latency_budget.duration.nanosec.__widget__", "spin",
+    "topic_qos.latency_budget.duration.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.liveliness.kind.__value__", "AUTOMATIC_LIVELINESS_QOS",
+    "topic_qos.liveliness.kind.__widget__", "radio",
+    "topic_qos.liveliness.kind.__constraint__", "(AUTOMATIC_LIVELINESS_QOS, MANUAL_BY_PARTICIPANT_LIVELINESS_QOS, MANUAL_BY_TOPIC_LIVELINESS_QOS)",
+    "topic_qos.liveliness.lease_duration.sec.__value__", "2147483647",
+    "topic_qos.liveliness.lease_duration.sec.__widget__", "spin",
+    "topic_qos.liveliness.lease_duration.sec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.liveliness.lease_duration.nanosec.__value__", "2147483647",
+    "topic_qos.liveliness.lease_duration.nanosec.__widget__", "spin",
+    "topic_qos.liveliness.lease_duration.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.reliability.kind.__value__", "RELIABLE_RELIABILITY_QOS",
+    "topic_qos.reliability.kind.__widget__", "radio",
+    "topic_qos.reliability.kind.__constraint__", "(BEST_EFFORT_RELIABILITY_QOS, RELIABLE_RELIABILITY_QOS)",
+    "topic_qos.reliability.max_blocking_time.sec.__value__", "2147483647",
+    "topic_qos.reliability.max_blocking_time.sec.__widget__", "spin",
+    "topic_qos.reliability.max_blocking_time.sec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.reliability.max_blocking_time.nanosec.__value__", "2147483647",
+    "topic_qos.reliability.max_blocking_time.nanosec.__widget__", "spin",
+    "topic_qos.reliability.max_blocking_time.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.destination_order.kind.__value__", "BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS",
+    "topic_qos.destination_order.kind.__widget__", "radio",
+    "topic_qos.destination_order.kind.__constraint__", "(BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS, BY_SOURCE_TIMESTAMP_DESTINATIONORDER_QOS)",
+    "topic_qos.history.kind.__value__", "KEEP_ALL_HISTORY_QOS",
+    "topic_qos.history.kind.__widget__", "radio",
+    "topic_qos.history.kind.__constraint__", "(KEEP_LAST_HISTORY_QOS, KEEP_ALL_HISTORY_QOS)",
+    "topic_qos.history.depth.__value__", "1",
+    "topic_qos.history.depth.__widget__", "spin",
+    "topic_qos.history.depth.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.resource_limits.max_samples.__value__", "-1",
+    "topic_qos.resource_limits.max_samples.__widget__", "spin",
+    "topic_qos.resource_limits.max_samples.__constraint__", "-1 <= x <= 2147483647",
+    "topic_qos.resource_limits.max_instances.__value__", "-1",
+    "topic_qos.resource_limits.max_instances.__widget__", "spin",
+    "topic_qos.resource_limits.max_instances.__constraint__", "-1 <= x <= 2147483647",
+    "topic_qos.resource_limits.max_samples_per_instance.__value__", "-1",
+    "topic_qos.resource_limits.max_samples_per_instance.__widget__", "spin",
+    "topic_qos.resource_limits.max_samples_per_instance.__constraint__", "-1 <= x <= 2147483647",
+    "topic_qos.transport_priority.value.__value__", "0",
+    "topic_qos.transport_priority.value.__widget__", "spin",
+    "topic_qos.transport_priority.value.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.lifespan.duration.sec.__value__", "2147483647",
+    "topic_qos.lifespan.duration.sec.__widget__", "spin",
+    "topic_qos.lifespan.duration.sec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.lifespan.duration.nanosec.__value__", "2147483647",
+    "topic_qos.lifespan.duration.nanosec.__widget__", "spin",
+    "topic_qos.lifespan.duration.nanosec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.ownership.kind.__value__", "SHARED_OWNERSHIP_QOS",
+    "topic_qos.ownership.kind.__widget__", "radio",
+    "topic_qos.ownership.kind.__constraint__", "(SHARED_OWNERSHIP_QOS, EXCLUSIVE_OWNERSHIP_QOS)",
+    "topic_qos.transport_priority.value.__value__", "0",
+    "topic_qos.transport_priority.value.__widget__", "spin",
+    "topic_qos.transport_priority.value.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.durability_service.history_depth.__value__", "1",
+    "topic_qos.durability_service.history_depth.__widget__", "spin",
+    "topic_qos.durability_service.history_depth.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.durability_service.history_kind.__value__", "KEEP_LAST_HISTORY_QOS",
+    "topic_qos.durability_service.history_kind.__widget__", "radio",
+    "topic_qos.durability_service.history_kind.__constraint__", "(KEEP_LAST_HISTORY_QOS, KEEP_ALL_HISTORY_QOS)",
+    "topic_qos.durability_service.max_instances.__value__", "-1",
+    "topic_qos.durability_service.max_instances.__widget__", "spin",
+    "topic_qos.durability_service.max_instances.__constraint__", "-1 <= x <= 2147483647",
+    "topic_qos.durability_service.max_samples.__value__", "-1",
+    "topic_qos.durability_service.max_samples.__widget__", "spin",
+    "topic_qos.durability_service.max_samples.__constraint__", "-1 <= x <= 2147483647",
+    "topic_qos.durability_service.max_samples_per_instance.__value__", "-1",
+    "topic_qos.durability_service.max_samples_per_instance.__widget__", "spin",
+    "topic_qos.durability_service.max_samples_per_instance.__constraint__", "-1 <= x <= 2147483647",
+    "topic_qos.durability_service.service_cleanup_delay.sec.__value__", "0",
+    "topic_qos.durability_service.service_cleanup_delay.sec.__widget__", "spin",
+    "topic_qos.durability_service.service_cleanup_delay.sec.__constraint__", "0 <= x <= 2147483647",
+    "topic_qos.durability_service.service_cleanup_delay.nanosec.__value__", "0",
+    "topic_qos.durability_service.service_cleanup_delay.nanosec.__widget__", "spin",
+    "topic_qos.durability_service.service_cleanup_delay.nanosec.__constraint__", "0 <= x <= 2147483647",
+    ""
+]
+
 ##
 # @if jp
 # @brief モジュール登録関数
@@ -387,7 +555,11 @@ class SubListener(dds.Listener):
 #
 # @endif
 #
+
+
 def OpenSpliceInPortInit():
+    prop = OpenRTM_aist.Properties(defaults_str=opensplice_sub_option)
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("opensplice",
-                       OpenSpliceInPort)
+                       OpenSpliceInPort,
+                       prop)
