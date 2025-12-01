@@ -52,6 +52,8 @@ class ConnListener(OpenRTM_aist.ConnectorListener):
         print("Listener:       ", self._name)
         print("Profile::name:  ", info.name)
         print("Profile::id:    ", info.id)
+        print("Profile::properties: ")
+        print(info.properties)
         print("------------------------------")
         return OpenRTM_aist.ConnectorListenerStatus.NO_CHANGE
 
