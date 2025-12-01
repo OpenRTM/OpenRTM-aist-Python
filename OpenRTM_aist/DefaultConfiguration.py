@@ -3,7 +3,7 @@
 
 ##
 # \file DefaultConfiguration.py
-# \brief RTC manager default configuration
+# \\brief RTC manager default configuration
 # \date $Date: $
 # \author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
 #

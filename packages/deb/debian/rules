@@ -48,7 +48,7 @@ install: build
 	(cp $(CURDIR)/bin/rtc*2_python $(TARGET)/bin)
 	(mkdir -p $(TARGET)/lib/python3/dist-packages)
 	(cp -r $(CURDIR)/OpenRTM_aist $(TARGET)/lib/python3/dist-packages)
-	(cp -r $(CURDIR)/OpenRTM_aist*.dist-info $(TARGET)/lib/python3/dist-packages)
+	(cp -r $(CURDIR)/openrtm_aist*.dist-info $(TARGET)/lib/python3/dist-packages)
 	(cp $(CURDIR)/OpenRTM-aist.pth $(TARGET)/lib/python3/dist-packages)
 
 	# for openrtm2-python3-example package

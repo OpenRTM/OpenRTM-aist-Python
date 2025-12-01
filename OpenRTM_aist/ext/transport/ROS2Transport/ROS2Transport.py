@@ -17,6 +17,7 @@
 # $Id$
 #
 
+import os
 import OpenRTM_aist
 import ROS2InPort
 import ROS2OutPort
@@ -89,8 +90,26 @@ class ManagerActionListener(OpenRTM_aist.ManagerActionListener):
 # @endif
 #
 def ROS2TransportInit(mgr):
-    ROS2InPort.ROS2InPortInit()
-    ROS2OutPort.ROS2OutPortInit()
+    ddstype_env = os.getenv("RMW_IMPLEMENTATION")
+    ddstype = "fast-rtps"
+    if ddstype_env == "rmw_fastrtps_cpp" or ddstype_env == "rmw_fastrtps_dynamic_cpp":
+        ddstype = "fast-rtps"
+    elif ddstype_env == "rmw_connext_cpp" or ddstype_env == "rti_connext_cpp" or ddstype_env == "rmw_connextdds":
+        ddstype = "rti-connext-dds"
+    elif ddstype_env == "rmw_opensplice_cpp":
+        ddstype = "opensplice"
+    elif ddstype_env == "rmw_iceoryx_cpp":
+        ddstype = "iceoryx"
+    elif ddstype_env == "rmw_connextddsmicro":
+        ddstype = "rti-connext-dds-micro"
+    elif ddstype_env == "rmw_cyclonedds_cpp":
+        ddstype = "cyclone-dds"
+
+    ROS2OutPort.ROS2OutPortInit(ddstype)
+    ROS2InPort.ROS2InPortInit(ddstype)
+
     ROS2Serializer.ROS2SerializerInit()
+
+    ROS2TopicManager.init(mgr.getConfig().getNode("ros2"))
 
     mgr.addManagerActionListener(ManagerActionListener())

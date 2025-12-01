@@ -272,26 +272,29 @@ class ModuleManager:
         import_name = os.path.split(file_name)[-1]
         pathChanged = False
 
-        if OpenRTM_aist.isAbsolutePath(file_name):
+        name = OpenRTM_aist.replaceEnv(file_name)
+        if OpenRTM_aist.isAbsolutePath(name):
             if not self._absoluteAllowed:
                 raise ModuleManager.NotAllowedOperation(
                     "Absolute path is not allowed")
             else:
-                splitted_name = os.path.split(file_name)
+                splitted_name = os.path.split(name)
                 save_path = sys.path[:]
                 sys.path.append(splitted_name[0])
 
                 pathChanged = True
                 import_name = splitted_name[-1]
-                file_path = file_name
+                file_path = name
 
-        elif not file_path:
-            paths = self._properties.getProperty(
+        else:
+            paths_lang = self._properties.getProperty(
                 "manager.modules.Python.load_paths").split(",")
-            paths.extend(self._properties.getProperty(
+            paths_lang.extend(self._properties.getProperty(
                 "manager.modules.Python3.load_paths").split(","))
-            paths.extend(self._loadPath)
-
+            paths_lang.extend(self._loadPath)
+            paths = []
+            for path in paths_lang:
+                paths.append(OpenRTM_aist.replaceEnv(path))
             file_path = self.findFile(file_name, paths)
 
             if not file_path:
@@ -583,6 +586,7 @@ class ModuleManager:
                 continue
             self._rtcout.RTC_DEBUG("Module load path: %s", path)
             flist = []
+            path = OpenRTM_aist.replaceEnv(path)
             for suffix in suffixes:
                 suffix = OpenRTM_aist.eraseHeadBlank(suffix)
 

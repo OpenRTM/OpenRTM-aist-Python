@@ -3,7 +3,7 @@
 
 ##
 # \file DataFlowComponentBase.py
-# \brief DataFlowParticipant RT-Component base class
+# \\brief DataFlowParticipant RT-Component base class
 # \date $Date: 2007/09/04$
 # \author Noriaki Ando <n-ando@aist.go.jp>
 #
