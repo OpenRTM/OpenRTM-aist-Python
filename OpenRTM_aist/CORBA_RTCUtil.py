@@ -1601,7 +1601,6 @@ class CorbaURI:
     #
     # @endif
     def __init__(self, uri, objkey=""):
-        import urllib.parse
         protocols_str = {"giop:tcp:": "corbaloc:iiop:",
                          "giop:ssl:": "corbaloc:ssliop:",
                          "giop:http:": "",
@@ -1615,9 +1614,10 @@ class CorbaURI:
                          "inet:": "corbaloc:iiop:"}
 
         converted = False
+        
         for k, v in protocols_str.items():
-            if uri.find(k) == 0:
-                uri = uri.replace(k, v)
+            if uri.startswith(k):
+                uri = v + uri[len(k):]
                 converted = True
                 break
 
@@ -1627,51 +1627,107 @@ class CorbaURI:
                            "shmiop:": "corbaloc:shmiop:",
                            "htiop:": "corbaloc:htiop:"}
 
+        
         if not converted:
             for k, v in protocols_o_str.items():
-                if uri.find(k) == 0:
-                    uri = uri.replace(k, v)
+                if uri.startswith(k):
+                    uri = v + uri[len(k):]
                     break
 
         self._uri = ""
         self._port = None
         self._addressonly = False
-        ret = urllib.parse.urlparse(uri)
-        self._protocol = ret.scheme
+        if uri.startswith("corbaloc:"):
+            self._protocol = "corbaloc"
+            rest, sep, fragment = uri.partition("/")
+            self._fragment = fragment if sep else ""
 
-        loc = [s.strip() for s in ret.netloc.split(":")]
-        if len(loc) >= 2:
-            self._host = loc[0]
-            self._port = int(loc[1])
-        else:
-            self._host = ret.netloc
-        self._path = ret.path
-        self._fragment = ret.fragment
-
-        if self._fragment:
-            self._uri = uri
-            return
-        else:
-            self._fragment = objkey
-            if self._protocol == "corbaloc":
-                self._uri = uri + "/"
-                self._uri += self._fragment
-            elif self._protocol:
-                self._uri = uri + "#"
-                self._uri += self._fragment
+            if self._fragment:
+                self._uri = uri
             else:
-                self._uri = "corbaloc:iiop:"
-                self._uri += uri + "/"
-                self._uri += self._fragment
-                self._protocol = "corbaloc"
-                self._addressonly = True
-                host_port = [s.strip() for s in uri.split(":")]
-                if len(host_port) == 2:
-                    self._host = host_port[0]
-                    try:
-                        self._port = int(host_port[1])
-                    except BaseException:
-                        pass
+                self._fragment = objkey
+                self._uri = uri + "/" + self._fragment
+
+    
+            host_port = [s.strip() for s in rest.split(":")]
+            if len(host_port) == 4:
+                self._host = host_port[2]
+                try:
+                    self._port = int(host_port[3])
+                except BaseException:
+                    pass
+            elif len(host_port) == 3:
+                self._host = host_port[2]
+
+        elif uri.startswith("corbaname:"):
+            self._protocol = "corbaname"
+            rest, sep, fragment = uri.partition("#")
+            self._fragment = fragment if sep else ""
+
+
+            if self._fragment:
+                self._uri = uri
+            else:
+                self._fragment = objkey
+                self._uri = uri + "#" + self._fragment
+
+    
+            host_port = [s.strip() for s in rest.split(":")]
+            if len(host_port) == 4:
+                self._host = host_port[2]
+                try:
+                    self._port = int(host_port[3])
+                except BaseException:
+                    pass
+            elif len(host_port) == 3:
+                self._host = host_port[2]
+
+
+            
+        elif "://" in uri:
+            import urllib.parse
+            ret = urllib.parse.urlparse(uri)
+            self._protocol = ret.scheme
+            loc = [s.strip() for s in ret.netloc.split(":")]
+            if len(loc) >= 2:
+                self._host = loc[0]
+                try:
+                    self._port = int(loc[1])
+                except BaseException:
+                    pass
+            else:
+                self._host = ret.netloc
+            self._path = ret.path
+            self._fragment = ret.fragment
+            if self._fragment:
+                self._uri = uri
+            else:
+                self._fragment = objkey
+                self._uri = uri + "#" + self._fragment
+
+        else:
+            rest, sep, fragment = uri.partition("/")
+            self._fragment = fragment if sep else ""
+
+            self._uri = "corbaloc:iiop:"
+            if self._fragment:
+                self._uri += uri
+            else:
+                self._fragment = objkey
+                self._uri += uri + "/" + self._fragment
+
+            self._protocol = "corbaloc"
+            self._addressonly = True
+            host_port = [s.strip() for s in rest.split(":")]
+            if len(host_port) == 2:
+                self._host = host_port[0]
+                try:
+                    self._port = int(host_port[1])
+                except BaseException:
+                    pass
+            elif len(host_port) == 1:
+                self._host = host_port[0]
+                
     ##
     # @if jp
     #
