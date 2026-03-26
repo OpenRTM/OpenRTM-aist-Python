@@ -767,7 +767,6 @@ class Properties:
 
             _str = _str.rstrip('\r\n')
             _str = _str.rstrip('\n')
-            _str = _str.strip()
 
             if not _str:
                 continue
@@ -779,6 +778,12 @@ class Properties:
             pline += _str
             # if pline == "":
             # continue
+            
+            end = len(_str.rstrip(" \t")) - 1
+            if end >= 0 and _str[end] == "\\" and not OpenRTM_aist.isEscaped(_str, end):
+                if end != len(_str) - 1:
+                    print(f"Warning: Trailing whitespace after '\\' prevents line continuation: {_str}")
+
 
             key = []
             value = []
