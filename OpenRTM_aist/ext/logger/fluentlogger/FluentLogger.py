@@ -4,7 +4,7 @@
 
 ##
 # @file FluentLogger.py
-# @brief File logger stream class
+# @brief Fluent logger stream class
 # @date $Date: $
 # @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
 # Copyright (C) 2017
