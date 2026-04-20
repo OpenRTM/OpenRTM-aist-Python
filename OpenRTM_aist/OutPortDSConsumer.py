@@ -16,7 +16,9 @@
 #     All rights reserved.
 
 
+import omniORB
 from omniORB import any
+from omniORB import CORBA
 import OpenRTM_aist
 import RTC
 
@@ -199,7 +201,16 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
         try:
             data = None
             dataservice = self._ptr()
-            ret, cdr_data = dataservice.pull()
+            try:
+                ret, cdr_data = dataservice.pull()
+            except CORBA.COMM_FAILURE as ex:
+                if ex.minor == omniORB.COMM_FAILURE_WaitingForReply:
+                    self._rtcout.RTC_DEBUG("Retry pull message")
+                    ret, cdr_data = dataservice.pull()
+                else:
+                    raise
+            except BaseException:
+                raise
 
             if ret == RTC.PORT_OK:
                 self._rtcout.RTC_DEBUG("get() successful")

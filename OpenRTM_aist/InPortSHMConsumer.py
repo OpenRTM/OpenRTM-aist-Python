@@ -8,7 +8,8 @@
 # @author Nobuhiko Miyamoto
 #
 
-
+import omniORB
+from omniORB import CORBA
 import OpenRTM_aist
 import OpenRTM__POA
 
@@ -184,12 +185,24 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
             if portshmem:
 
                 guard = OpenRTM_aist.ScopedLock(self._mutex)
-
-                self._shmem.setEndian(self._endian)
-                self._shmem.create_memory(self._memory_size, self._shm_address)
-                self._shmem.write(data)
-
-                ret = portshmem.put()
+                try:
+                    self._shmem.setEndian(self._endian)
+                    self._shmem.create_memory(
+                        self._memory_size, self._shm_address)
+                    self._shmem.write(data)
+                    ret = portshmem.put()
+                except CORBA.COMM_FAILURE as ex:
+                    if ex.minor == omniORB.COMM_FAILURE_WaitingForReply:
+                        self._rtcout.RTC_DEBUG("Retry put message")
+                        self._shmem.setEndian(self._endian)
+                        self._shmem.create_memory(
+                            self._memory_size, self._shm_address)
+                        self._shmem.write(data)
+                        ret = portshmem.put()
+                    else:
+                        raise
+                except BaseException:
+                    raise
                 del guard
                 return self.convertReturnCode(ret)
             return self.CONNECTION_LOST
