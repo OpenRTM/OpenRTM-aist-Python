@@ -1692,9 +1692,9 @@ class Manager:
 
         self._rtcout.RTC_INFO(
             "%s", self._config.getProperty("openrtm.version"))
-        self._rtcout.RTC_INFO("Copyright (C) 2003-2024, Noriaki Ando and OpenRTM development team,")
+        self._rtcout.RTC_INFO("Copyright (C) 2003-2026, Noriaki Ando and OpenRTM development team,")
         self._rtcout.RTC_INFO("  Intelligent Systems Research Institute, AIST,")
-        self._rtcout.RTC_INFO("Copyright (C) 2024, Noriaki Ando and OpenRTM development team,")
+        self._rtcout.RTC_INFO("Copyright (C) 2026, Noriaki Ando and OpenRTM development team,")
         self._rtcout.RTC_INFO("  Industrial Cyber-Physical Research Center, AIST,")
         self._rtcout.RTC_INFO("  All right reserved.")
         self._rtcout.RTC_INFO("Manager starting.")
