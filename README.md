@@ -1,4 +1,6 @@
-This is a release of OpenRTM-aist-Python-2.0.0, dual-license open source RT-Middleware.
+[![Static Code Analysis](https://github.com/OpenRTM/OpenRTM-aist-Python/actions/workflows/static_code_analysis.yaml/badge.svg)](https://github.com/OpenRTM/OpenRTM-aist-Python/actions/workflows/static_code_analysis.yaml)
+
+OpenRTM-aist-Python is a dual-licensed, open-source RT middleware.
 
 Carefully read the following files before you configure, build, install  
 OpenRTM and develop RT-Components.

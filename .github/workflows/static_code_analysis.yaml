@@ -1,4 +1,4 @@
-name: Workflow for openrtm-aist-python static code analysis
+name: OpenRTM-aist-Python SAST
 on: [push, pull_request]
 jobs:
   build:
