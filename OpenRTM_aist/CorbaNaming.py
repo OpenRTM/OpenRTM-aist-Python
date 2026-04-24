@@ -130,7 +130,8 @@ class CorbaNaming:
     # @endif
 
     def init(self, name_server):
-        self._nameServer = OpenRTM_aist.CORBA_RTCUtil.CorbaURI(name_server, "NameService").toString()
+        self._nameServer = OpenRTM_aist.CORBA_RTCUtil.CorbaURI(
+            name_server, "NameService").toString()
         obj = self._orb.string_to_object(self._nameServer)
         self._rootContext = obj._narrow(CosNaming.NamingContext)
         if CORBA.is_nil(self._rootContext):

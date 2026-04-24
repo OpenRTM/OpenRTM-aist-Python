@@ -3215,9 +3215,12 @@ class Manager:
             if not ("interface_type" in configs.keys()):
                 configs["interface_type"] = "corba_cdr"
 
-            tmp = port0_str.split(".")
-            tmp.pop()
-            comp0_name = ".".join([x.strip() for x in tmp])
+            pos_port0 = port0_str.rfind(".")
+            comp0_name = ""
+            if pos_port0 >= 0:
+                comp0_name = port0_str[0:pos_port0]
+            else:
+                comp0_name = port0_str
 
             port0_name = port0_str
 
@@ -3240,7 +3243,7 @@ class Manager:
                 comp0_ref, port0_name)
 
             if CORBA.is_nil(port0_var):
-                self._rtcout.RTC_DEBUG("port %s found: " % port0_str)
+                self._rtcout.RTC_DEBUG("port %s not found: " % port0_str)
                 continue
 
             if not ports:
@@ -3257,9 +3260,13 @@ class Manager:
 
             for port_str in ports:
 
-                tmp = port_str.split(".")
-                tmp.pop()
-                comp_name = ".".join([x.strip() for x in tmp])
+                pos_port = port_str.rfind(".")
+                comp_name = ""
+                if pos_port >= 0:
+                    comp_name = port_str[0:pos_port]
+                else:
+                    comp_name = port_str
+
                 port_name = port_str
 
                 if comp_name.find("://") == -1:
@@ -3281,7 +3288,7 @@ class Manager:
                     comp_ref, port_name)
 
                 if CORBA.is_nil(port_var):
-                    self._rtcout.RTC_DEBUG("port %s found: " % port_str)
+                    self._rtcout.RTC_DEBUG("port %s not found: " % port_str)
                     continue
 
                 prop = OpenRTM_aist.Properties()
