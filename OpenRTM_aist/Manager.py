@@ -3128,9 +3128,13 @@ class Manager:
             con_name += ":"
             con_name += p1.name
             prop = OpenRTM_aist.Properties()
-            if RTC.RTC_OK != OpenRTM_aist.CORBA_RTCUtil.connect(
-                    con_name, prop, port, p):
-                self._rtcout.RTC_ERROR("Connection error in topic connection.")
+            try:
+                if RTC.RTC_OK != OpenRTM_aist.CORBA_RTCUtil.connect(
+                        con_name, prop, port, p):
+                    self._rtcout.RTC_ERROR(
+                        "Connection error in topic connection.")
+            except BaseException:
+                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
 
     ##
     # @if jp
@@ -3159,9 +3163,13 @@ class Manager:
             con_name += ":"
             con_name += p1.name
             prop = OpenRTM_aist.Properties()
-            if RTC.RTC_OK != OpenRTM_aist.CORBA_RTCUtil.connect(
-                    con_name, prop, port, p):
-                self._rtcout.RTC_ERROR("Connection error in topic connection.")
+            try:
+                if RTC.RTC_OK != OpenRTM_aist.CORBA_RTCUtil.connect(
+                        con_name, prop, port, p):
+                    self._rtcout.RTC_ERROR(
+                        "Connection error in topic connection.")
+            except BaseException:
+                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
 
     ##
     # @if jp
@@ -3215,9 +3223,12 @@ class Manager:
             if not ("interface_type" in configs.keys()):
                 configs["interface_type"] = "corba_cdr"
 
-            tmp = port0_str.split(".")
-            tmp.pop()
-            comp0_name = ".".join([x.strip() for x in tmp])
+            pos_port0 = port0_str.rfind(".")
+            comp0_name = ""
+            if pos_port0 >= 0:
+                comp0_name = port0_str[0:pos_port0]
+            else:
+                comp0_name = port0_str
 
             port0_name = port0_str
 
@@ -3236,11 +3247,16 @@ class Manager:
                 comp0_ref = rtcs[0]
                 port0_name = port0_str.split("/")[-1]
 
-            port0_var = OpenRTM_aist.CORBA_RTCUtil.get_port_by_name(
-                comp0_ref, port0_name)
+            port0_var = None
+            try:
+                port0_var = OpenRTM_aist.CORBA_RTCUtil.get_port_by_name(
+                    comp0_ref, port0_name)
+            except BaseException:
+                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+                continue
 
             if CORBA.is_nil(port0_var):
-                self._rtcout.RTC_DEBUG("port %s found: " % port0_str)
+                self._rtcout.RTC_DEBUG("port %s not found: " % port0_str)
                 continue
 
             if not ports:
@@ -3251,15 +3267,24 @@ class Manager:
                     v = v.strip()
                     prop.setProperty("dataport." + k, v)
 
-                if RTC.RTC_OK != OpenRTM_aist.CORBA_RTCUtil.connect(
-                        c, prop, port0_var, RTC.PortService._nil):
-                    self._rtcout.RTC_ERROR("Connection error: %s" % c)
+                try:
+                    if RTC.RTC_OK != OpenRTM_aist.CORBA_RTCUtil.connect(
+                            c, prop, port0_var, RTC.PortService._nil):
+                        self._rtcout.RTC_ERROR("Connection error: %s" % c)
+                except BaseException:
+                    self._rtcout.RTC_ERROR(
+                        OpenRTM_aist.Logger.print_exception())
+                    continue
 
             for port_str in ports:
 
-                tmp = port_str.split(".")
-                tmp.pop()
-                comp_name = ".".join([x.strip() for x in tmp])
+                pos_port = port_str.rfind(".")
+                comp_name = ""
+                if pos_port >= 0:
+                    comp_name = port_str[0:pos_port]
+                else:
+                    comp_name = port_str
+
                 port_name = port_str
 
                 if comp_name.find("://") == -1:
@@ -3277,11 +3302,17 @@ class Manager:
                     comp_ref = rtcs[0]
                     port_name = port_str.split("/")[-1]
 
-                port_var = OpenRTM_aist.CORBA_RTCUtil.get_port_by_name(
-                    comp_ref, port_name)
+                port_var = None
+                try:
+                    port_var = OpenRTM_aist.CORBA_RTCUtil.get_port_by_name(
+                        comp_ref, port_name)
+                except BaseException:
+                    self._rtcout.RTC_ERROR(
+                        OpenRTM_aist.Logger.print_exception())
+                    continue
 
                 if CORBA.is_nil(port_var):
-                    self._rtcout.RTC_DEBUG("port %s found: " % port_str)
+                    self._rtcout.RTC_DEBUG("port %s not found: " % port_str)
                     continue
 
                 prop = OpenRTM_aist.Properties()
@@ -3290,10 +3321,13 @@ class Manager:
                     k = k.strip()
                     v = v.strip()
                     prop.setProperty("dataport." + k, v)
-
-                if RTC.RTC_OK != OpenRTM_aist.CORBA_RTCUtil.connect(
-                        c, prop, port0_var, port_var):
-                    self._rtcout.RTC_ERROR("Connection error: %s" % c)
+                try:
+                    if RTC.RTC_OK != OpenRTM_aist.CORBA_RTCUtil.connect(
+                            c, prop, port0_var, port_var):
+                        self._rtcout.RTC_ERROR("Connection error: %s" % c)
+                except BaseException:
+                    self._rtcout.RTC_ERROR(
+                        OpenRTM_aist.Logger.print_exception())
 
     ##
     # @if jp
@@ -3329,7 +3363,14 @@ class Manager:
                         self._rtcout.RTC_ERROR("%s not found." % c)
                         continue
                     comp_ref = rtcs[0]
-                ret = OpenRTM_aist.CORBA_RTCUtil.activate(comp_ref)
+                ret = RTC.RTC_OK
+                try:
+                    ret = OpenRTM_aist.CORBA_RTCUtil.activate(comp_ref)
+                except BaseException:
+                    self._rtcout.RTC_ERROR(
+                        OpenRTM_aist.Logger.print_exception())
+                    continue
+
                 if ret != RTC.RTC_OK:
                     self._rtcout.RTC_ERROR("%s activation failed." % c)
                 else:

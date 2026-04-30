@@ -131,7 +131,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
             self._buffer = self.createBuffer(info)
 
         if self._buffer is None or not self._provider:
-            raise
+            raise MemoryError("InPortPushConnector creation failed")
 
         self._buffer.init(info.properties.getNode("buffer"))
         self._provider.init(info.properties)
