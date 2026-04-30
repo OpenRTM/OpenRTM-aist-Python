@@ -382,6 +382,8 @@ class Properties:
     # @endif
 
     def getProperty(self, key, default=None):
+        if not key.strip():
+            return self.empty
         if default is None:
             keys = []
             #keys = str.split(key, ".")
@@ -419,6 +421,8 @@ class Properties:
     # @endif
 
     def getDefault(self, key):
+        if not key.strip():
+            return self.empty
         keys = []
         #keys = str.split(key, ".")
         self.split(key, ".", keys)
@@ -459,6 +463,8 @@ class Properties:
     # @endif
 
     def setProperty(self, key, value=None):
+        if not key.strip():
+            return value
         if value is not None:
             keys = []
             #keys = str.split(key, ".")
@@ -772,6 +778,12 @@ class Properties:
             pline += _str
             # if pline == "":
             # continue
+            
+            end = len(_str.rstrip(" \t")) - 1
+            if end >= 0 and _str[end] == "\\" and not OpenRTM_aist.isEscaped(_str, end):
+                if end != len(_str) - 1:
+                    print(f"Warning: Trailing whitespace after '\\' prevents line continuation: {_str}")
+
 
             key = []
             value = []
@@ -964,7 +976,7 @@ class Properties:
     # Properties* const Properties::findNode(const std::string& key) const
 
     def findNode(self, key):
-        if not key:
+        if not key.strip():
             return None
 
         keys = []
@@ -987,7 +999,7 @@ class Properties:
     # @endif
 
     def getNode(self, key):
-        if not key:
+        if not key.strip():
             return self
 
         leaf = self.findNode(key)
@@ -1015,7 +1027,7 @@ class Properties:
     # @endif
 
     def createNode(self, key):
-        if not key:
+        if not key.strip():
             return False
 
         if self.findNode(key):
@@ -1182,7 +1194,7 @@ class Properties:
     # @endif
 
     def split(self, _str, delim, value):
-        if _str == "":
+        if not _str.strip():
             return False
 
         begin_it = end_it = 0

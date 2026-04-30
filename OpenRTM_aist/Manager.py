@@ -577,7 +577,8 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.load(module_file_name = %s, module_file_path = %s, language = %s, initfunc = %s)",
                                (prop.getProperty("module_file_name"),
                                 prop.getProperty("module_file_path"),
-                                prop.getProperty("language")))
+                                prop.getProperty("language"),
+                                initfunc))
         fname = prop.getProperty("module_file_name")
         fname = fname.replace("/", os.sep)
         fname = fname.replace("\\", os.sep)
@@ -1691,9 +1692,9 @@ class Manager:
 
         self._rtcout.RTC_INFO(
             "%s", self._config.getProperty("openrtm.version"))
-        self._rtcout.RTC_INFO("Copyright (C) 2003-2024, Noriaki Ando and OpenRTM development team,")
+        self._rtcout.RTC_INFO("Copyright (C) 2003-2026, Noriaki Ando and OpenRTM development team,")
         self._rtcout.RTC_INFO("  Intelligent Systems Research Institute, AIST,")
-        self._rtcout.RTC_INFO("Copyright (C) 2024, Noriaki Ando and OpenRTM development team,")
+        self._rtcout.RTC_INFO("Copyright (C) 2026, Noriaki Ando and OpenRTM development team,")
         self._rtcout.RTC_INFO("  Industrial Cyber-Physical Research Center, AIST,")
         self._rtcout.RTC_INFO("  All right reserved.")
         self._rtcout.RTC_INFO("Manager starting.")
@@ -1810,22 +1811,16 @@ class Manager:
 
     @staticmethod
     def isORBEndPoint(endpoint):
-        if "giop:" in endpoint:
-            return True
-        elif "iiop://" in endpoint:
-            return True
-        elif "diop://" in endpoint:
-            return True
-        elif "uiop://" in endpoint:
-            return True
-        elif "shmiop://" in endpoint:
-            return True
-        elif "inet:" in endpoint:
-            return True
+        headers = ["giop:", "iiop://",
+                   "diop://", "uiop://",
+                   "ssliop://", "shmiop://",
+                   "htiop://", "inet:"]
+
+        for header in headers:
+            if header in endpoint:
+                return True
+
         return False
-
-
-
 
     ##
     # @if jp

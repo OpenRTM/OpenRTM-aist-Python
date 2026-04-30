@@ -33,6 +33,8 @@ class RTObjectStateMachine:
     #                      RTC::LightweightRTObject_ptr comp);
     def __init__(self, id, comp):
         global NUM_OF_LIFECYCLESTATE
+        
+        self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("RTObjectStateMachine")
         self._id = id
         self._rtobj = comp
         self._sm = OpenRTM_aist.StateMachine(NUM_OF_LIFECYCLESTATE)
@@ -122,7 +124,20 @@ class RTObjectStateMachine:
             return
         if not self._ca:
             return
-        self._caVar.on_startup(self._id)
+        try:
+            self._caVar.on_startup(self._id)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return
         return
 
     # void onShutdown(void);
@@ -133,7 +148,20 @@ class RTObjectStateMachine:
 
         if not self._ca:
             return
-        self._caVar.on_shutdown(self._id)
+        try:
+            self._caVar.on_shutdown(self._id)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return
         return
 
     # void onActivated(const ExecContextStates& st);
@@ -145,8 +173,21 @@ class RTObjectStateMachine:
 
         if not self._ca:
             return
-        if self._caVar.on_activated(self._id) != RTC.RTC_OK:
-            self._sm.goTo(RTC.ERROR_STATE)
+        try:
+            if self._caVar.on_activated(self._id) != RTC.RTC_OK:
+                self._sm.goTo(RTC.ERROR_STATE)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return
         return
 
     # void onDeactivated(const ExecContextStates& st);
@@ -157,7 +198,20 @@ class RTObjectStateMachine:
 
         if not self._ca:
             return
-        self._caVar.on_deactivated(self._id)
+        try:
+            self._caVar.on_deactivated(self._id)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return
         return
 
     # void onAborting(const ExecContextStates& st);
@@ -168,7 +222,20 @@ class RTObjectStateMachine:
 
         if not self._ca:
             return
-        self._caVar.on_aborting(self._id)
+        try:
+            self._caVar.on_aborting(self._id)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return
         return
 
     # void onError(const ExecContextStates& st);
@@ -179,7 +246,20 @@ class RTObjectStateMachine:
 
         if not self._ca:
             return
-        self._caVar.on_error(self._id)
+        try:
+            self._caVar.on_error(self._id)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return
         return
 
     # void onReset(const ExecContextStates& st);
@@ -191,8 +271,21 @@ class RTObjectStateMachine:
 
         if not self._ca:
             return
-        if self._caVar.on_reset(self._id) != RTC.RTC_OK:
-            self._sm.goTo(RTC.ERROR_STATE)
+        try:
+            if self._caVar.on_reset(self._id) != RTC.RTC_OK:
+                self._sm.goTo(RTC.ERROR_STATE)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return
         return
 
     # RTC::DataflowComponentAction
@@ -208,8 +301,21 @@ class RTObjectStateMachine:
         if not self._dfc:
             return
 
-        if self._dfcVar.on_execute(self._id) != RTC.RTC_OK:
-            self._sm.goTo(RTC.ERROR_STATE)
+        try:
+            if self._dfcVar.on_execute(self._id) != RTC.RTC_OK:
+                self._sm.goTo(RTC.ERROR_STATE)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return
         return
 
     # void onStateUpdate(const ExecContextStates& st);
@@ -224,8 +330,21 @@ class RTObjectStateMachine:
         if not self._dfc:
             return
 
-        if self._dfcVar.on_state_update(self._id) != RTC.RTC_OK:
-            self._sm.goTo(RTC.ERROR_STATE)
+        try:
+            if self._dfcVar.on_state_update(self._id) != RTC.RTC_OK:
+                self._sm.goTo(RTC.ERROR_STATE)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return
         return
 
     # RTC::ReturnCode_t onRateChanged(void);
@@ -239,9 +358,22 @@ class RTObjectStateMachine:
         if not self._dfc:
             return RTC.RTC_ERROR
 
-        ret = self._dfcVar.on_rate_changed(self._id)
-        if ret != RTC.RTC_OK:
-            self._sm.goTo(RTC.ERROR_STATE)
+        try:
+            ret = self._dfcVar.on_rate_changed(self._id)
+            if ret != RTC.RTC_OK:
+                self._sm.goTo(RTC.ERROR_STATE)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return RTC.RTC_ERROR
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return RTC.RTC_ERROR
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return RTC.RTC_ERROR
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return RTC.RTC_ERROR
         return ret
 
     # FsmParticipantAction
@@ -250,8 +382,21 @@ class RTObjectStateMachine:
         if not self._fsm:
             return
 
-        if self._fsmVar.on_action(self._id) != RTC.RTC_OK:
-            self._sm.goTo(RTC.ERROR_STATE)
+        try:
+            if self._fsmVar.on_action(self._id) != RTC.RTC_OK:
+                self._sm.goTo(RTC.ERROR_STATE)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return
         return
 
     # MultiModeComponentAction
@@ -260,8 +405,21 @@ class RTObjectStateMachine:
         if not self._mode:
             return
 
-        if self._modeVar.on_mode_changed(self._id) != RTC.RTC_OK:
-            self._sm.goTo(RTC.ERROR_STATE)
+        try:
+            if self._modeVar.on_mode_changed(self._id) != RTC.RTC_OK:
+                self._sm.goTo(RTC.ERROR_STATE)
+        except CORBA.TRANSIENT as e:
+            self._rtcout.RTC_ERROR(f"TRANSIENT: {e}")
+            return
+        except CORBA.COMM_FAILURE as e:
+            self._rtcout.RTC_ERROR(f"COMM_FAILURE: {e}")
+            return
+        except CORBA.SystemException as e:
+            self._rtcout.RTC_ERROR(f"CORBA SystemException: {e}")
+            return
+        except BaseException as e:
+            self._rtcout.RTC_ERROR(f"Unknown exception: {e}")
+            return
         return
 
     # Getting state of the context

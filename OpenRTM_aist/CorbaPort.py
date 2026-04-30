@@ -3,7 +3,7 @@
 
 ##
 #  \file  CorbaPort.py
-#  \brief CorbaPort class
+#  \\brief CorbaPort class
 #  \date  $Date: 2007/09/26 $
 #  \author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
 #

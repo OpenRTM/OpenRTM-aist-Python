@@ -4,7 +4,7 @@
 
 ##
 # \file CorbaNaming.py
-# \brief CORBA naming service helper class
+# \\brief CORBA naming service helper class
 # \author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
 #
 # Copyright (C) 2006-2008
@@ -86,14 +86,16 @@ class CorbaNaming:
         self._blLength = 100
 
         if name_server:
-            self._nameServer = OpenRTM_aist.CORBA_RTCUtil.CorbaURI(
-                name_server, "NameService").toString()
+            self._nameServer = OpenRTM_aist.CORBA_RTCUtil.CorbaURI(name_server, "NameService").toString()
+            try:
+                obj = orb.string_to_object(self._nameServer)
+                self._rootContext = obj._narrow(CosNaming.NamingContext)
+                if CORBA.is_nil(self._rootContext):
+                    print("CorbaNaming: Failed to narrow the root naming context.")
 
-            obj = orb.string_to_object(self._nameServer)
-            self._rootContext = obj._narrow(CosNaming.NamingContext)
-            if CORBA.is_nil(self._rootContext):
-                print("CorbaNaming: Failed to narrow the root naming context.")
-                raise MemoryError
+            except CORBA.ORB.InvalidName:
+                self.__print_exception()
+                print("Service required is invalid [does not exist].")
 
         return
 

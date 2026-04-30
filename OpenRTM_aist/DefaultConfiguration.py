@@ -3,7 +3,7 @@
 
 ##
 # \file DefaultConfiguration.py
-# \brief RTC manager default configuration
+# \\brief RTC manager default configuration
 # \date $Date: $
 # \author Noriaki Ando <n-ando@aist.go.jp> and Shinji Kurihara
 #
@@ -69,7 +69,7 @@ default_config = ["config.version", OpenRTM_aist.openrtm_version,
                   "naming.update.interval", "10.0",
                   "timer.enable", "YES",
                   "timer.tick", "0.1",
-                  "corba.args", "-ORBclientCallTimeOutPeriod 10000",
+                  "corba.args", "-ORBclientCallTimeOutPeriod 10000 -ORBinConScanPeriod 0",
                   "corba.endpoints", "all",
                   "corba.id", OpenRTM_aist.corba_name,
                   "corba.nameservers", "localhost",
@@ -97,6 +97,7 @@ default_config = ["config.version", OpenRTM_aist.openrtm_version,
                   "manager.modules.C++.manager_cmd", "rtcd2",
                   "manager.modules.Python.manager_cmd", "rtcd2_python",
                   "manager.modules.Java.manager_cmd", "rtcd2_java",
+                  "manager.modules.Docker.manager_cmd", "rtcd2_docker",
                   "manager.modules.search_auto", "YES",
                   "manager.local_service.enabled_services", "ALL",
                   "sdo.service.provider.enabled_services", "ALL",
@@ -105,10 +106,16 @@ default_config = ["config.version", OpenRTM_aist.openrtm_version,
                   "manager.modules.C++.profile_cmd", "rtcprof2",
                   "manager.modules.Python.profile_cmd", "rtcprof2_python",
                   "manager.modules.Java.profile_cmd", "rtcprof2_java",
+                  "manager.modules.Docker.profile_cmd", "rtcprof2_docker",
                   "manager.modules.C++.suffixes", cpp_suffixes,
                   "manager.modules.Python.suffixes", "py",
                   "manager.modules.Java.suffixes", "class",
+                  "manager.modules.Docker.suffixes", "docker",
                   "manager.modules.C++.load_paths", "",
                   "manager.modules.Python.load_paths", "",
-                  "manager.modules.Java.load_paths", ""]
+                  "manager.modules.Java.load_paths", "",
+                  "manager.modules.Docker.load_paths", "",
+                  "manager.modules.Docker.create_comp", "NO",
+                  "manager.modules.Docker.build_comp", "YES"
+                  ]
 

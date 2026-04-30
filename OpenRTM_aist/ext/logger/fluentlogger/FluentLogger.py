@@ -4,7 +4,7 @@
 
 ##
 # @file FluentLogger.py
-# @brief File logger stream class
+# @brief Fluent logger stream class
 # @date $Date: $
 # @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
 # Copyright (C) 2017
@@ -151,7 +151,6 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
         for l in leaf0:
             key = l.getName()
             if key.find("output") != -1:
-                formatter = fluent.handler.FluentRecordFormatter()
                 tag = l.getProperty("tag")
                 if tag == "":
                     return False

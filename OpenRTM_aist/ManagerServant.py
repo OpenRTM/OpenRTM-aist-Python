@@ -522,23 +522,28 @@ class ManagerServant(RTM__POA.Manager):
         comp_param = CompParam(module_name)
 
         if self._isMaster:
-            guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
-            for slave in self._slaves[:]:
-                try:
-                    prof = slave.get_configuration()
-                    prop = OpenRTM_aist.Properties()
-                    OpenRTM_aist.NVUtil.copyToProperties(prop, prof)
-                    slave_lang = prop.getProperty("manager.language")
-                    if slave_lang == comp_param.language():
-                        rtc = slave.create_component(module_name)
-                        if not CORBA.is_nil(rtc):
-                            return rtc
-                except BaseException:
-                    self._rtcout.RTC_ERROR("Unknown exception cought.")
-                    self._rtcout.RTC_DEBUG(
-                        OpenRTM_aist.Logger.print_exception())
-                    self._slaves.remove(slave)
-            del guard
+            lang_create_flag = "manager.modules."
+            lang_create_flag += comp_param.language() + ".create_comp"
+            create_comp = OpenRTM_aist.toBool(self._mgr.getConfig().getProperty(
+                lang_create_flag), "YES", "NO", True)
+            if create_comp:
+                guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
+                for slave in self._slaves[:]:
+                    try:
+                        prof = slave.get_configuration()
+                        prop = OpenRTM_aist.Properties()
+                        OpenRTM_aist.NVUtil.copyToProperties(prop, prof)
+                        slave_lang = prop.getProperty("manager.language")
+                        if slave_lang == comp_param.language():
+                            rtc = slave.create_component(module_name)
+                            if not CORBA.is_nil(rtc):
+                                return rtc
+                    except BaseException:
+                        self._rtcout.RTC_ERROR("Unknown exception cought.")
+                        self._rtcout.RTC_DEBUG(
+                            OpenRTM_aist.Logger.print_exception())
+                        self._slaves.remove(slave)
+                del guard
             
             if not manager_name:
                 if "?" not in module_name:
@@ -1378,10 +1383,24 @@ class ManagerServant(RTM__POA.Manager):
             mgrobj = self.findManagerByName(mgrstr)
 
         comp_param = CompParam(arg)
+        lang = comp_param.language()
+        if not lang:
+            lang = "Python"
+        self._rtcout.RTC_INFO("Specified manager's language: %s", lang)
+
+        prop = self._mgr.getConfig()
+        lang_create_flag = "manager.modules."
+        lang_create_flag += lang + ".create_comp"
+        create_comp = OpenRTM_aist.toBool(prop.getProperty(
+                lang_create_flag), "YES", "NO", True)
+        lang_build_flag = "manager.modules."
+        lang_build_flag += lang + ".build_comp"
+        build_comp = OpenRTM_aist.toBool(prop.getProperty(
+                lang_build_flag), "YES", "NO", True)
 
         if CORBA.is_nil(mgrobj):
             self._rtcout.RTC_WARN("%s cannot be found.", mgrstr)
-            config = copy.deepcopy(self._mgr.getConfig())
+            config = copy.deepcopy(prop)
             rtcd_cmd = config.getProperty(
                 "manager.modules." +
                 comp_param.language() +
@@ -1408,6 +1427,15 @@ class ManagerServant(RTM__POA.Manager):
                 cmd += " -f \"" + param["config_file"] + "\""
             elif config.findNode("config_file"):
                 cmd += " -f \"" + config.getProperty("config_file") + "\""
+            if create_comp:
+                cmd += " -o " + "\"manager.modules.load_path:" + load_path + "\""
+            else:
+                tmp = arg.split("?")
+                rtcd_cmd += " -o \"module_name:" +  tmp[0] + "\""
+                rtcd_cmd += " -o \"module_option:" +  param["module.options"] + "\""
+                if not build_comp:
+                    rtcd_cmd += " -o \"module_build:NO\""
+
             
             cmd += " -o " + "manager.is_master:NO"
             cmd += " -o " + "manager.corba_servant:YES"
@@ -1416,10 +1444,11 @@ class ManagerServant(RTM__POA.Manager):
             cmd += " -o " + "manager.name:" + \
                 config.getProperty("manager.name")
             cmd += " -o " + "manager.instance_name:" + mgrstr
-            cmd += " -o " + "\"manager.modules.load_path:" + load_path + "\""
+            
             cmd += " -o " + "\"" + lang_path_key + ":" + load_path_language + "\""
             cmd += " -o " + "manager.supported_languages:" + comp_param.language()
-            cmd += " -o " + "manager.shutdown_auto:NO"
+            if create_comp:
+                cmd += " -o " + "manager.shutdown_auto:NO"
 
             self._rtcout.RTC_DEBUG("Invoking command: %s.", cmd)
 
@@ -1494,9 +1523,25 @@ class ManagerServant(RTM__POA.Manager):
         self._rtcout.RTC_DEBUG("arg: %s", arg)
 
         try:
-            rtobj = mgrobj.create_component(arg)
-
-            return rtobj, arg, mgrstr
+            if create_comp:
+                rtobj = mgrobj.create_component(arg)
+                return rtobj, arg, mgrstr
+            else:
+                for i in range(0, 1000):
+                    profs = mgrobj.get_component_profiles()
+                    for prof in profs:
+                        if comp_param.impl_id() == prof.type_name:
+                            instance_name = prof.instance_name
+                            try:
+                                rtc_list = mgrobj.get_components_by_name(instance_name)
+                                if rtc_list:
+                                    return rtc_list[0], arg, mgrstr
+                            except CORBA.SystemException as e:
+                                self._rtcout.RTC_ERROR("Exception was caught while creating component.")
+                            except BaseException as e:
+                                self._rtcout.RTC_ERROR("Unknown non-CORBA exception cought.")
+                    time.sleep(0.01)
+            return RTC.RTObject._nil, arg, mgrstr
         except CORBA.SystemException:
             self._rtcout.RTC_DEBUG(
                 "Exception was caught while creating component.")
@@ -1540,12 +1585,22 @@ class ManagerServant(RTM__POA.Manager):
         mgrobj = self.findManager(mgrstr)
 
         comp_param = CompParam(arg)
+        lang = comp_param.language()
+        if not lang:
+            lang = "Python"
+        self._rtcout.RTC_INFO("Specified manager's language: %s", lang)
+
+        prop = self._mgr.getConfig()
+        lang_create_flag = "manager.modules."
+        lang_create_flag += lang + ".create_comp"
+        create_comp = OpenRTM_aist.toBool(prop.getProperty(
+                lang_create_flag), "YES", "NO", True)
 
         if CORBA.is_nil(mgrobj):
-            config = copy.deepcopy(self._mgr.getConfig())
+            config = copy.deepcopy(prop)
             rtcd_cmd = config.getProperty(
                 "manager.modules." +
-                comp_param.language() +
+                lang +
                 ".manager_cmd")
             if not rtcd_cmd:
                 lang = config.getProperty("manager.language")
@@ -1603,9 +1658,25 @@ class ManagerServant(RTM__POA.Manager):
         self._rtcout.RTC_DEBUG("Creating component on %s", mgrstr)
         self._rtcout.RTC_DEBUG("arg: %s", arg)
         try:
-            rtobj = mgrobj.create_component(arg)
-            self._rtcout.RTC_DEBUG("Component created %s", arg)
-            return rtobj, arg, mgrstr
+            if create_comp:
+                rtobj = mgrobj.create_component(arg)
+                self._rtcout.RTC_DEBUG("Component created %s", arg)
+                return rtobj, arg, mgrstr
+            else:
+                profs = mgrobj.get_component_profiles()
+                for prof in profs:
+                    if comp_param.impl_id() == prof.type_name:
+                        instance_name = prof.instance_name
+                        try:
+                            rtc_list = mgrobj.get_components_by_name(instance_name)
+                            if rtc_list:
+                                return rtc_list[0], arg, mgrstr
+                        except CORBA.SystemException as e:
+                            self._rtcout.RTC_ERROR("Exception was caught while creating component.")
+                        except BaseException as e:
+                            self._rtcout.RTC_ERROR("Unknown non-CORBA exception cought.")
+            self._rtcout.RTC_ERROR("Component creatiion failed.")
+            return RTC.RTObject._nil, arg, mgrstr
         except CORBA.SystemException:
             self._rtcout.RTC_DEBUG(
                 "Exception was caught while creating component.")

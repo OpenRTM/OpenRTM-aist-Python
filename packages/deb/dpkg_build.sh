@@ -117,6 +117,7 @@ extract_source()
   mkdir ${BUILD_ROOT}
   cp -r ../../examples ${BUILD_ROOT}/
   cp -r ../../OpenRTM_aist* ${BUILD_ROOT}/
+  cp -r ../../openrtm_aist*.dist-info ${BUILD_ROOT}/
   cp ../../OpenRTM-aist.pth ${BUILD_ROOT}/
   find ${BUILD_ROOT}/examples | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf
   find ${BUILD_ROOT}/examples -name "*.bat" | xargs rm -f
@@ -130,9 +131,11 @@ extract_source()
   rm ${BUILD_ROOT}/OpenRTM_aist/ext/fsm4rtc_observer/*.conf
   rm ${BUILD_ROOT}/OpenRTM_aist/ext/fsm4rtc_observer/setup.*
   rm ${BUILD_ROOT}/OpenRTM_aist/ext/http/*.conf
+  cp ./conf/http/*.conf ${BUILD_ROOT}/OpenRTM_aist/ext/http/
   rm ${BUILD_ROOT}/OpenRTM_aist/ext/logger/fluentlogger/*.conf
   rm -rf ${BUILD_ROOT}/OpenRTM_aist/ext/ssl/test
   rm ${BUILD_ROOT}/OpenRTM_aist/ext/ssl/*.conf
+  cp ./conf/ssl/*.conf ${BUILD_ROOT}/OpenRTM_aist/ext/ssl/
   rm ${BUILD_ROOT}/OpenRTM_aist/ext/transport/OpenSplice/*.conf
   rm ${BUILD_ROOT}/OpenRTM_aist/ext/transport/ROS2Transport/*.conf
   rm ${BUILD_ROOT}/OpenRTM_aist/ext/transport/ROSTransport/*.conf

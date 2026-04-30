@@ -3,7 +3,7 @@
 
 #
 # \file test_SSLTrasport.py
-# \brief
+# \\brief
 # \date $Date: $
 # \author Nobuhiko Miyamoto
 #
@@ -65,8 +65,8 @@ class TestSSLTransport(unittest.TestCase):
         sys.argv.extend(['-o', 'manager.preload.modules:SSLTransport.py'])
         sys.argv.extend(['-o', 'manager.modules.load_path:./,../'])
         sys.argv.extend(
-            ['-o', 'corba.ssl.certificate_authority_file:root.crt'])
-        sys.argv.extend(['-o', 'corba.ssl.key_file:server.pem'])
+            ['-o', 'corba.ssl.certificate_authority_file:root-sample.crt'])
+        sys.argv.extend(['-o', 'corba.ssl.key_file:server-sample.pem'])
         sys.argv.extend(['-o', 'corba.ssl.key_file_password:password'])
         os.environ['ORBsslVerifyMode'] = "none"
         self.outport_process = multiprocessing.Process(

@@ -22,7 +22,7 @@
 #
 # ExecutionContextのインスタンスを破棄するための関数。
 #
-# \param ec 破棄対象ExecutionContextのインスタンス
+# \\param ec 破棄対象ExecutionContextのインスタンス
 #
 # @else
 #
