@@ -139,7 +139,7 @@ class ECS_Formatter(ecs_logging.StdlibFormatter):
     #
     def __init__(self, fmt=None, datefmt=None, style="%", validate=None, stack_trace_limit=None, exclude_fields=()):
         ecs_logging.StdlibFormatter.__init__(
-            self, fmt, datefmt, style, validate, stack_trace_limit, exclude_fields)
+            self, fmt=fmt, datefmt=datefmt, style=style, validate=validate, stack_trace_limit=stack_trace_limit, exclude_fields=exclude_fields)
 
     ##
     # @if jp
