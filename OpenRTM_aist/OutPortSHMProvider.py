@@ -9,7 +9,8 @@
 #
 #
 
-
+import omniORB
+from omniORB import CORBA
 import OpenRTM_aist
 import OpenRTM
 
@@ -171,8 +172,26 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,
             self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
             return OpenRTM.UNKNOWN_ERROR
 
-        self.setEndian(self._endian)
-        self.create_memory(self._memory_size, self._shm_address)
+        try:
+            self.setEndian(self._endian)
+            self.create_memory(self._memory_size, self._shm_address)
+        except CORBA.COMM_FAILURE as ex:
+            if ex.minor == omniORB.COMM_FAILURE_WaitingForReply:
+                self._rtcout.RTC_DEBUG("Retry set memory")
+                try:
+                    self.setEndian(self._endian)
+                    self.create_memory(self._memory_size, self._shm_address)
+                except BaseException:
+                    self._rtcout.RTC_TRACE(
+                        OpenRTM_aist.Logger.print_exception())
+                    return OpenRTM.UNKNOWN_ERROR
+            else:
+                self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
+                return OpenRTM.UNKNOWN_ERROR
+        except BaseException:
+            self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
+            return OpenRTM.UNKNOWN_ERROR
+
         if cdr:
             self.write(cdr)
 
