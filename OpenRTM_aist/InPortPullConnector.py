@@ -133,7 +133,7 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
             self._buffer = self.createBuffer(self._profile)
 
         if not self._buffer or not self._consumer:
-            raise
+            raise MemoryError("InPortPullConnector creation failed")
 
         self._buffer.init(info.properties.getNode("buffer"))
         self._consumer.init(info.properties)
@@ -414,4 +414,5 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
 
     def setDataType(self, data):
         OpenRTM_aist.InPortConnector.setDataType(self, data)
-        self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(self._marshaling_type, data)
+        self._serializer = OpenRTM_aist.SerializerFactories.instance(
+        ).createSerializer(self._marshaling_type, data)

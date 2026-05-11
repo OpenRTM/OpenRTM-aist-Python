@@ -134,7 +134,7 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
         if not self._provider or not self._buffer:
             self._rtcout.RTC_ERROR(
                 "Exeption: in OutPortPullConnector.__init__().")
-            raise
+            raise MemoryError("OutPortPullConnector creation failed")
 
         self._buffer.init(info.properties.getNode("buffer"))
         self._provider.init(info.properties)
@@ -417,7 +417,8 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
 
     def setDataType(self, data):
         OpenRTM_aist.OutPortConnector.setDataType(self, data)
-        self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(self._marshaling_type, data)
+        self._serializer = OpenRTM_aist.SerializerFactories.instance(
+        ).createSerializer(self._marshaling_type, data)
 
     class WorkerThreadCtrl:
         def __init__(self):

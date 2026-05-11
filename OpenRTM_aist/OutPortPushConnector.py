@@ -139,17 +139,17 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
             self._buffer = self.createBuffer(info)
 
         if not self._publisher or not self._buffer or not self._consumer:
-            raise
+            raise MemoryError("OutPortPushConnector creation failed")
 
         if self._publisher.init(info.properties) != self.PORT_OK:
-            raise
+            raise MemoryError("OutPortPushConnector creation failed")
 
         if self._profile.properties.hasKey("serializer"):
             endian = self._profile.properties.getProperty(
                 "serializer.cdr.endian")
             if not endian:
                 self._rtcout.RTC_ERROR("write(): endian is not set.")
-                raise
+                raise MemoryError("OutPortPushConnector creation failed")
 
             # Maybe endian is ["little","big"]
             endian = OpenRTM_aist.split(endian, ",")
@@ -517,4 +517,5 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
 
     def setDataType(self, data):
         OpenRTM_aist.OutPortConnector.setDataType(self, data)
-        self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(self._marshaling_type, data)
+        self._serializer = OpenRTM_aist.SerializerFactories.instance(
+        ).createSerializer(self._marshaling_type, data)
