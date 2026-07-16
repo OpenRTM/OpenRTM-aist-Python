@@ -1,0 +1,51 @@
+FROM ubuntu:22.04 
+
+ARG VERSION
+
+ENV TZ=Asia/Tokyo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt update\
+ && apt install -y --no-install-recommends \
+ gnupg \
+ python3 \
+ python3-all-dev \
+ wget \
+ doxygen \
+ graphviz \
+ pkg-config \
+ libssl-dev \
+ build-essential \
+ debhelper \
+ devscripts \
+ fakeroot \
+ python3-pip \
+ python3.10-venv \
+ git
+
+RUN python3 -m pip install build
+
+RUN wget --no-check-certificate https://openrtm.org/pub/openrtm-keyring.gpg -O /etc/apt/keyrings/openrtm-keyring.gpg \
+ && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/openrtm-keyring.gpg] http://openrtm.org/pub/Linux/ubuntu/ $(cat /etc/os-release | sed -n 's/VERSION_CODENAME=//p') main" | tee /etc/apt/sources.list.d/openrtm.list > /dev/null \
+ && apt update \
+ && apt install -y --no-install-recommends \
+ libomniorb4-dev \
+ omniidl \
+ omniorb-nameserver \
+ omniidl-python3 \
+ python3-omniorb-omg
+
+COPY OpenRTM-aist-Python /root/OpenRTM-aist-Python
+WORKDIR /root/OpenRTM-aist-Python
+RUN python3 -m build \
+ && cd dist \
+ && python3 -m pip install --no-index --prefix=./ openrtm_aist_python-${VERSION}-py3-none-any.whl \
+ && mv local/lib/python3*/dist-packages/OpenRTM_aist/examples . \
+ && mv local/lib/python3*/dist-packages/* . \
+ && cp -r ../packages/deb/conf packages/deb/
+
+WORKDIR /root/OpenRTM-aist-Python/dist/packages/deb
+RUN mkdir -p /root/python-deb-pkgs \
+ && chmod 775 dpkg_build.sh \
+ && ./dpkg_build.sh \
+ && cp ../openrtm* /root/python-deb-pkgs/
