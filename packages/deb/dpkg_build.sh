@@ -173,7 +173,7 @@ build_package()
     exit -1
   fi
   cd $BUILD_ROOT
-  dpkg-buildpackage -W -us -uc -rfakeroot
+  dpkg-buildpackage -W -us -uc -b -rfakeroot
   if test $? -ne 0; then
     echo "dpkg-build failed"
     exit -1
@@ -184,9 +184,7 @@ build_package()
 copy_debfiles()
 {
   mv ./openrtm2*.deb ..
-  mv ./openrtm2*.dsc ..
   mv ./openrtm2*.changes ..
-  mv ./openrtm2*.tar.gz ..
 }
 
 #==============================
