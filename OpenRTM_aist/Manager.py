@@ -141,6 +141,7 @@ class Manager:
         self._needsTimer = False
         self._orb = None
         self._poa = None
+        self._rootPOA = None
         self._poaManager = None
         self._finalized = self.Finalized()
         self._listeners = OpenRTM_aist.ManagerActionListeners()
@@ -1400,6 +1401,71 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.getPOAManager()")
         return self._poaManager
 
+    ##
+    # @if jp
+    # @brief Bi-Directional GIOP を使うか
+    #
+    # corba.bidirectional_giop が YES なら、Manager の POA (getPOA()) は
+    # BiDirectional ポリシー (BOTH) を持つ POA になる。ORB の Bi-Directional
+    # GIOP のオプション (-ORBofferBiDirectionalGIOP など) は、corba.args に書く。
+    # 相手が開いた接続で呼び返せるので、
+    # NAT やコンテナの中など、外から接続できないプロセスの RTC を使える。
+    #
+    # @return 使うなら True
+    #
+    # @else
+    # @brief Whether Bi-Directional GIOP is used
+    #
+    # If corba.bidirectional_giop is YES, the POA of the Manager (getPOA())
+    # has the BiDirectional policy (BOTH). The ORB options for Bi-Directional
+    # GIOP (-ORBofferBiDirectionalGIOP etc.) are given in corba.args.
+    # Callbacks use the connection that the
+    # other side opened, so RTCs in a process that cannot be connected to
+    # from outside (behind NAT, in a container, etc.) can be used.
+    #
+    # @return True if used
+    # @endif
+    def isBiDirectionalGIOP(self):
+        return OpenRTM_aist.toBool(
+            self._config.getProperty("corba.bidirectional_giop"),
+            "YES", "NO", False)
+
+    ##
+    # @if jp
+    # @brief BiDirectional ポリシーを持つ POA を作る
+    #
+    # RootPOA の子として、BiDirectional (BOTH) と IMPLICIT_ACTIVATION の
+    # ポリシーを持つ POA "bidir" を作る。_this() で暗黙に活性化される
+    # サーバントもこの POA に置くため、サーバントの既定の POA
+    # (_default_POA) をこの POA にする。
+    #
+    # @param root RootPOA
+    # @return 作った POA
+    #
+    # @else
+    # @brief Creates a POA with the BiDirectional policy
+    #
+    # Creates the POA "bidir" with the BiDirectional (BOTH) and
+    # IMPLICIT_ACTIVATION policies as a child of the RootPOA. The default
+    # POA of servants (_default_POA) becomes this POA, so that servants
+    # implicitly activated by _this() are also placed in it.
+    #
+    # @param root RootPOA
+    # @return the created POA
+    # @endif
+    def createBiDirectionalPOA(self, root):
+        from omniORB import BiDirPolicy
+        policies = [
+            self._orb.create_policy(
+                BiDirPolicy.BIDIRECTIONAL_POLICY_TYPE,
+                CORBA.Any(CORBA.TC_ushort, BiDirPolicy.BOTH)),
+            root.create_implicit_activation_policy(
+                PortableServer.IMPLICIT_ACTIVATION)]
+        poa = root.create_POA("bidir", self._poaManager, policies)
+        PortableServer.Servant._default_POA = lambda servant: poa
+        self._rtcout.RTC_INFO("Bi-Directional GIOP is enabled.")
+        return poa
+
     # ============================================================
     # Manager initialize and finalization
     # ============================================================
@@ -1756,6 +1822,10 @@ class Manager:
 
             self._poaManager = self._poa._get_the_POAManager()
 
+            if self.isBiDirectionalGIOP():
+                self._rootPOA = self._poa
+                self._poa = self.createBiDirectionalPOA(self._rootPOA)
+
         except BaseException:
             self._rtcout.RTC_ERROR(
                 "Exception: Caught unknown exception in initORB().")
@@ -1782,6 +1852,14 @@ class Manager:
     def createORBOptions(self):
         opt = self._config.getProperty("corba.args")
         self._rtcout.RTC_DEBUG("corba.args: %s", opt)
+
+        if self.isBiDirectionalGIOP() and "BiDirectionalGIOP" not in opt:
+            # The ORB options for Bi-Directional GIOP are not added here;
+            # they are given in corba.args (or the omniORB configuration).
+            self._rtcout.RTC_WARN(
+                "corba.bidirectional_giop is YES, but corba.args has no "
+                "-ORBofferBiDirectionalGIOP / -ORBacceptBiDirectionalGIOP "
+                "(see the omniORB options for Bi-Directional GIOP).")
 
         endpoints = self.createORBEndpoints()
         opt = self.createORBEndpointOption(opt, endpoints)
