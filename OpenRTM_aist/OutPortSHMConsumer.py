@@ -81,17 +81,22 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
     #
     def __del__(self, CorbaConsumer=OpenRTM_aist.CorbaConsumer):
         self._rtcout.RTC_PARANOID("~OutPortSHMConsumer()")
+        self.releaseObject()
         CorbaConsumer.__del__(self)
-        try:
-            if not self._ptr():
-                self._ptr().close_memory(True)
-        except BaseException:
-            self._rtcout.RTC_WARN(
-                "Exception caught from PortSharedMemory.close_memory().")
-            self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
 
         oid = OpenRTM_aist.Manager.instance().getPOA().servant_to_id(self._shmem)
         OpenRTM_aist.Manager.instance().getPOA().deactivate_object(oid)
+
+    def releaseObject(self):
+        peer = self._ptr(True)
+        OpenRTM_aist.CorbaConsumer.releaseObject(self)
+        if peer is not None:
+            try:
+                peer.close_memory(True)
+            except Exception:
+                self._rtcout.RTC_WARN(
+                    "Exception caught from PortSharedMemory.close_memory().")
+                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
 
     ##
     # @if jp

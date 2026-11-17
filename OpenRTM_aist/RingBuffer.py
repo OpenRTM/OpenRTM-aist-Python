@@ -15,7 +15,6 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
-import sys
 import threading
 import OpenRTM_aist
 
@@ -387,20 +386,13 @@ class RingBuffer(OpenRTM_aist.BufferBase):
                         sec = self._wtimeout.sec()
                         nsec = self._wtimeout.usec() * 1000
 
-                    # true: signaled, false: timeout
                     if sec != 0 or nsec != 0:
                         wait_time = sec + (nsec / 1000000000.0)
                     else:
                         wait_time = None
-                    ret = self._full_cond.wait(wait_time)
-                    if sys.version_info[0] == 3:
-                        if not ret:
-                            self._full_cond.release()
-                            return OpenRTM_aist.BufferStatus.TIMEOUT
-                    else:
-                        if self.full():
-                            self._full_cond.release()
-                            return OpenRTM_aist.BufferStatus.TIMEOUT
+                    if not self._full_cond.wait_for(lambda: not self.full(), wait_time):
+                        self._full_cond.release()
+                        return OpenRTM_aist.BufferStatus.TIMEOUT
 
                 else:  # unknown condition
                     self._full_cond.release()
@@ -632,8 +624,6 @@ class RingBuffer(OpenRTM_aist.BufferBase):
             if not (sec < 0):  # if second arg is set -> block mode
                 timedread = True
                 readback = False
-                sec = self._rtimeout.sec()
-                nsec = self._rtimeout.usec() * 1000
 
             if readback and not timedread:      # "readback" mode
                 if not self._wcount > 0:
@@ -649,20 +639,13 @@ class RingBuffer(OpenRTM_aist.BufferBase):
                 if sec < 0:
                     sec = self._rtimeout.sec()
                     nsec = self._rtimeout.usec() * 1000
-                #  true: signaled, false: timeout
                 if sec != 0 or nsec != 0:
                     wait_time = sec + (nsec / 1000000000.0)
                 else:
                     wait_time = None
-                ret = self._empty_cond.wait(wait_time)
-                if sys.version_info[0] == 3:
-                    if not ret:
-                        self._empty_cond.release()
-                        return OpenRTM_aist.BufferStatus.TIMEOUT, None
-                else:
-                    if self.empty():
-                        self._empty_cond.release()
-                        return OpenRTM_aist.BufferStatus.TIMEOUT, None
+                if not self._empty_cond.wait_for(lambda: not self.empty(), wait_time):
+                    self._empty_cond.release()
+                    return OpenRTM_aist.BufferStatus.TIMEOUT, None
 
             else:                              # unknown condition
                 self._empty_cond.release()
