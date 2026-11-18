@@ -54,6 +54,13 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
     """
     """
 
+    def _outportIorKey(self, properties):
+        key = "dataport." + self._interfacetypestr + ".outport_ior"
+        if (self._interfacetypestr == "shared_memory"
+                and OpenRTM_aist.NVUtil.find_index(properties, key) < 0):
+            return "dataport.corba_cdr.outport_ior"
+        return key
+
     ##
     # @if jp
     # @brief コンストラクタ
@@ -156,20 +163,21 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
     #
     # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
 
+
     def subscribeInterface(self, properties):
         self._rtcout.RTC_TRACE("subscribeInterface()")
-        index = OpenRTM_aist.NVUtil.find_index(
-            properties, "dataport."+self._interfacetypestr+".outport_ior")
+        key = self._outportIorKey(properties)
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
 
         if index < 0:
             self._rtcout.RTC_DEBUG(
-                "dataport."+self._interfacetypestr+".outport_ior not found.")
+                "%s not found.", key)
             return False
 
         if OpenRTM_aist.NVUtil.isString(
-                properties, "dataport."+self._interfacetypestr+".outport_ior"):
+                properties, key):
             self._rtcout.RTC_DEBUG(
-                "dataport."+self._interfacetypestr+".outport_ior found.")
+                "%s found.", key)
             ior = ""
             # try:
             ior = any.from_any(properties[index].value, keep_structs=True)
@@ -209,11 +217,11 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
 
     def unsubscribeInterface(self, properties):
         self._rtcout.RTC_TRACE("unsubscribeInterface()")
-        index = OpenRTM_aist.NVUtil.find_index(properties,
-                                               "dataport."+self._interfacetypestr+".outport_ior")
+        key = self._outportIorKey(properties)
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
         if index < 0:
             self._rtcout.RTC_DEBUG(
-                "dataport."+self._interfacetypestr+".outport_ior not found.")
+                "%s not found.", key)
             return
 
         ior = ""
@@ -223,7 +231,7 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
 
             if ior:
                 self._rtcout.RTC_DEBUG(
-                    "dataport."+self._interfacetypestr+".outport_ior found.")
+                    "%s found.", key)
                 orb = OpenRTM_aist.Manager.instance().getORB()
                 obj = orb.string_to_object(ior)
                 if self._ptr(True)._is_equivalent(obj):
