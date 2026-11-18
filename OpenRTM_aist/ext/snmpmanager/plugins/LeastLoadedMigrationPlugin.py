@@ -75,7 +75,7 @@ PLUGIN_API = 1
 # @param ctx plugin context
 # @param config plugin configuration (load_step: load added for each placed RTC; default 10)
 # @~
-def setup(ctx, config):
+def setup(ctx, config) -> None:
     default_step = float(config.get("load_step", 10.0))
 
     def load_of(robot):
@@ -87,7 +87,7 @@ def setup(ctx, config):
         except (TypeError, ValueError):
             return 0.0
 
-    def migrate(ctx, args):
+    def migrate(ctx, args) -> bool:
         source = args["from"]
         exclude = set(args.get("exclude", [source]))
         step = float(args.get("load_step", default_step))

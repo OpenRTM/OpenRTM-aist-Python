@@ -52,7 +52,7 @@ class SDOServiceProfile:
     # @else
     #
     # @endif
-    def __init__(self, id_=None, type_=None):
+    def __init__(self, id_=None, type_=None) -> None:
         if id_ is None:
             self.id = ""
         else:
@@ -99,7 +99,7 @@ class SDOServiceProfile:
     # @brief Setting ServiceProfile.id
     # @endif
 
-    def setName(self, id_):
+    def setName(self, id_: str) -> None:
         self.id = id_
 
     ##
@@ -132,7 +132,7 @@ class SDOServiceProfile:
     # @brief Setting SDOServiceProfile.interfaceType
     # @endif
 
-    def setInterfaceType(self, interfaceType):
+    def setInterfaceType(self, interfaceType: str) -> None:
         self.interfaceType = interfaceType
 
     # @if jp
@@ -164,7 +164,7 @@ class SDOServiceProfile:
     # @brief Setting SDOServiceProfile.idlDefnition
     # @endif
 
-    def setIdlDefinition(self, idlDefinition):
+    def setIdlDefinition(self, idlDefinition: str) -> None:
         self.idlDefinition = idlDefinition
 
     ##
@@ -197,7 +197,7 @@ class SDOServiceProfile:
     # @brief Setting SDO ServiceProfile.properties
     # @endif
 
-    def setProperties(self, properties):
+    def setProperties(self, properties) -> None:
         self.properties = properties
 
     ##
@@ -232,7 +232,7 @@ class SDOServiceProfile:
     # @brief Setting SDO ServiceProfile.serviceRef
     # @endif
 
-    def setServiceRef(self, serviceRef):
+    def setServiceRef(self, serviceRef) -> None:
         self.serviceRef = serviceRef
 
     ##

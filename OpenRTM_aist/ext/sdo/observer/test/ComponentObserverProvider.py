@@ -26,15 +26,15 @@ import OpenRTM_aist
 
 
 class ComponentObserver_i(OpenRTM__POA.ComponentObserver):
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def update_status(self, status_kind, hint):
+    def update_status(self, status_kind: str, hint: str) -> None:
         print("update_status: ", status_kind, ", ", hint)
         return
 
 
-def main():
+def main() -> None:
     orb = CORBA.ORB_init(sys.argv)
     poa = orb.resolve_initial_references("RootPOA")
     poa._get_the_POAManager().activate()

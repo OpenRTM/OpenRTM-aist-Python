@@ -65,7 +65,7 @@ OPS = {"<": operator.lt, "<=": operator.le, ">": operator.gt, ">=": operator.ge,
 # @param ctx plugin context
 # @param config entry of "plugins" in migration.json
 # @~
-def setup(ctx, config):
+def setup(ctx, config) -> None:
     def alive_count(ctx, args, now):
         targets = set(args.get("robots", []))
         n = sum(1 for r in ctx.alive_robots() if not targets or r["name"] in targets)

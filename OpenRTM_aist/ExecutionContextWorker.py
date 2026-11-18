@@ -17,6 +17,7 @@
 # $Id$
 #
 
+import typing as _typing
 import threading
 from omniORB import CORBA
 
@@ -65,7 +66,7 @@ class ExecutionContextWorker:
     #  - rate : 0.0
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("ec_worker")
         self._running = False
         self._rtcout.RTC_TRACE("ExecutionContextWorker.__init__")
@@ -91,7 +92,7 @@ class ExecutionContextWorker:
     #
     # @endif
 
-    def exit(self):
+    def exit(self) -> None:
         self._rtcout.RTC_TRACE("exit")
         return
 
@@ -100,7 +101,7 @@ class ExecutionContextWorker:
     # ============================================================
     # void setECRef(RTC::ExecutionContextService_ptr ref);
 
-    def setECRef(self, ref):
+    def setECRef(self, ref: 'RTC._objref_ExecutionContextService') -> None:
         self._ref = ref
         return
 
@@ -461,7 +462,7 @@ class ExecutionContextWorker:
     # @endif
     # RTC::LifeCycleState getComponentState(RTC::LightweightRTObject_ptr comp);
 
-    def getComponentState(self, comp):
+    def getComponentState(self, comp: 'RTC._objref_LightweightRTObject'):
         self._rtcout.RTC_TRACE("getComponentState()")
         guard = OpenRTM_aist.ScopedLock(self._mutex)
         rtobj_ = self.findComponent(comp)
@@ -617,7 +618,7 @@ class ExecutionContextWorker:
     # @endif
     # RTC::ReturnCode_t removeComponent(RTC::LightweightRTObject_ptr comp);
 
-    def removeComponent(self, comp):
+    def removeComponent(self, comp: '_typing.Optional[RTC._objref_LightweightRTObject]'):
         self._rtcout.RTC_TRACE("removeComponent()")
         if CORBA.is_nil(comp):
             self._rtcout.RTC_ERROR("nil reference is given.")
@@ -640,7 +641,7 @@ class ExecutionContextWorker:
 
     # RTObjectStateMachine* findComponent(RTC::LightweightRTObject_ptr comp);
 
-    def findComponent(self, comp):
+    def findComponent(self, comp: 'RTC._objref_LightweightRTObject'):
         for comp_ in self._comps:
             if comp_.isEquivalent(comp):
                 return comp_
@@ -649,7 +650,7 @@ class ExecutionContextWorker:
 
     # bool isAllCurrentState(RTC::LifeCycleState state);
 
-    def isAllCurrentState(self, state):
+    def isAllCurrentState(self, state) -> bool:
         guard = OpenRTM_aist.ScopedLock(self._mutex)
         for comp in self._comps:
             if not comp.isCurrentState(state):
@@ -661,7 +662,7 @@ class ExecutionContextWorker:
 
     # bool isAllNextState(RTC::LifeCycleState state);
 
-    def isAllNextState(self, state):
+    def isAllNextState(self, state) -> bool:
         guard = OpenRTM_aist.ScopedLock(self._mutex)
         for comp in self._comps:
             if not comp.isNextState(state):
@@ -673,7 +674,7 @@ class ExecutionContextWorker:
 
     # bool isOneOfCurrentState(RTC::LifeCycleState state);
 
-    def isOneOfCurrentState(self, state):
+    def isOneOfCurrentState(self, state) -> bool:
         guard = OpenRTM_aist.ScopedLock(self._mutex)
         for comp in self._comps:
             if comp.isCurrentState(state):
@@ -685,7 +686,7 @@ class ExecutionContextWorker:
 
     # bool isOneOfNextState(RTC::LifeCycleState state);
 
-    def isOneOfNextState(self, state):
+    def isOneOfNextState(self, state) -> bool:
         guard = OpenRTM_aist.ScopedLock(self._mutex)
         for comp in self._comps:
             if comp.isNextState(state):
@@ -697,7 +698,7 @@ class ExecutionContextWorker:
 
     # void invokeWorker();
 
-    def invokeWorker(self):
+    def invokeWorker(self) -> None:
         self._rtcout.RTC_PARANOID("invokeWorker()")
 
         for comp in self._comps:
@@ -714,7 +715,7 @@ class ExecutionContextWorker:
 
     # void invokeWorkerPreDo();
 
-    def invokeWorkerPreDo(self):
+    def invokeWorkerPreDo(self) -> None:
         self._rtcout.RTC_PARANOID("invokeWorkerPreDo()")
         # m_comps never changes its size here
         for comp in self._comps:
@@ -722,7 +723,7 @@ class ExecutionContextWorker:
         return
 
     # void invokeWorkerDo();
-    def invokeWorkerDo(self):
+    def invokeWorkerDo(self) -> None:
         self._rtcout.RTC_PARANOID("invokeWorkerDo()")
         # m_comps never changes its size here
         for comp in self._comps:
@@ -730,7 +731,7 @@ class ExecutionContextWorker:
         return
 
     # void invokeWorkerPostDo();
-    def invokeWorkerPostDo(self):
+    def invokeWorkerPostDo(self) -> None:
         self._rtcout.RTC_PARANOID("invokeWorkerPostDo()")
         # m_comps never changes its size here
         for comp in self._comps:
@@ -740,7 +741,7 @@ class ExecutionContextWorker:
         return
 
     # void updateComponentList();
-    def updateComponentList(self):
+    def updateComponentList(self) -> None:
         guard = OpenRTM_aist.ScopedLock(self._mutex)
         # adding component
         guard_added = OpenRTM_aist.ScopedLock(self._addedMutex)

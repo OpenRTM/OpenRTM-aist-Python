@@ -54,7 +54,7 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.OutPortCorbaConsumerBase.__init__(
             self, OpenRTM__POA.PortSharedMemory, "shared_memory")
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OutPortSHMConsumer")
@@ -78,7 +78,7 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~OutPortSHMConsumer()")
         self.releaseObject()
         OpenRTM_aist.OutPortCorbaConsumerBase.__del__(self)
@@ -86,7 +86,7 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
         oid = OpenRTM_aist.Manager.instance().getPOA().servant_to_id(self._shmem)
         OpenRTM_aist.Manager.instance().getPOA().deactivate_object(oid)
 
-    def releaseObject(self):
+    def releaseObject(self) -> None:
         peer = self._ptr(True)
         OpenRTM_aist.CorbaConsumer.releaseObject(self)
         if peer is not None:
@@ -114,14 +114,14 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     #
     # virtual void init(coil::Properties& prop);
 
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("init()")
 
         self._properties = prop
 
         return
 
-    def setObject(self, obj):
+    def setObject(self, obj: 'CORBA.Object') -> bool:
         if OpenRTM_aist.CorbaConsumer.setObject(self, obj):
             portshmem = self._ptr()
             if portshmem:
@@ -129,12 +129,12 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
                 return True
         return False
 
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._rtcout.RTC_TRACE("setBuffer()")
         self._buffer = buffer
         return
 
-    def setListener(self, info, listeners):
+    def setListener(self, info: 'OpenRTM_aist.ConnectorInfo', listeners) -> None:
         self._rtcout.RTC_TRACE("setListener()")
         self._listeners = listeners
         self._profile = info
@@ -257,7 +257,7 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     #
     # inline void onBufferWrite(const cdrMemoryStream& data)
 
-    def onBufferWrite(self, data):
+    def onBufferWrite(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE, self._profile, data)
@@ -275,7 +275,7 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
 
     # inline void onReceived(const cdrMemoryStream& data)
 
-    def onReceived(self, data):
+    def onReceived(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED, self._profile, data)
@@ -296,7 +296,7 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     #
     # inline void onSenderEmpty()
 
-    def onSenderEmpty(self):
+    def onSenderEmpty(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
@@ -305,7 +305,7 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
 
     # inline void onSenderTimeout()
 
-    def onSenderTimeout(self):
+    def onSenderTimeout(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
@@ -314,7 +314,7 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
 
     # inline void onSenderError()
 
-    def onSenderError(self):
+    def onSenderError(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
@@ -322,7 +322,7 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
         return
 
 
-def OutPortSHMConsumerInit():
+def OutPortSHMConsumerInit() -> None:
     factory = OpenRTM_aist.OutPortConsumerFactory.instance()
     factory.addFactory("shared_memory",
                        OpenRTM_aist.OutPortSHMConsumer)

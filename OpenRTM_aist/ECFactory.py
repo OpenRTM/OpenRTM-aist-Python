@@ -27,7 +27,7 @@
 # @else
 #
 # @endif
-def ECDelete(ec):
+def ECDelete(ec: str) -> None:
     del ec
 
 
@@ -142,7 +142,7 @@ class ECFactoryPython(ECFactoryBase):
     # @else
     #
     # @endif
-    def __init__(self, name, new_func, delete_func):
+    def __init__(self, name: str, new_func, delete_func) -> None:
         self._name = name
         self._New = new_func
         self._Delete = delete_func
@@ -197,5 +197,5 @@ class ECFactoryPython(ECFactoryBase):
     # @else
     #
     # @endif
-    def destroy(self, ec):
+    def destroy(self, ec: str) -> None:
         self._Delete(ec)

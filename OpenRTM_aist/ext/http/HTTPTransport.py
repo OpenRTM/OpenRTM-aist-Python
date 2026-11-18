@@ -14,7 +14,7 @@ from omniORB import httpTP
 import OpenRTM_aist
 
 
-def HTTPTransportInit(manager):
+def HTTPTransportInit(manager) -> None:
 
     #os.environ['ORBtraceLevel'] = '25'
     #os.environ['ORBendPoint'] = 'giop:http:ws://127.0.0.1:2810/ws'

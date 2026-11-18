@@ -44,7 +44,7 @@ LOG = logging.getLogger(__name__)
 # @~english
 # @brief Entry point (starts the manager and RTCFailover)
 # @~
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--failover-config', default=None)
     parser.add_argument('--log-level', default='INFO')

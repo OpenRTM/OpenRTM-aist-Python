@@ -65,7 +65,7 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     # self
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortCorbaConsumerBase.__init__(
             self, CSP.InPortCsp, "csp_channel")
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortCSPConsumer")
@@ -89,7 +89,7 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     # @param CorbaConsumer Value of CorbaConsumer.
     # @endif
     #
-    def __del__(self, CorbaConsumer=OpenRTM_aist.CorbaConsumer):
+    def __del__(self, CorbaConsumer=OpenRTM_aist.CorbaConsumer) -> None:
         self._rtcout.RTC_PARANOID("~InPortCSPConsumer()")
         OpenRTM_aist.InPortCorbaConsumerBase.__del__(self)
 
@@ -117,7 +117,7 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     # @endif
     #
 
-    def put(self, data):
+    def put(self, data: bytes):
         self._rtcout.RTC_PARANOID("put()")
 
         try:
@@ -160,7 +160,7 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     # @param retry Whether this query is a retry.
     # @param option Options used for guard matching.
     # @endif
-    def isWritable(self, retry=False, option=[]):
+    def isWritable(self, retry: bool = False, option: list = []):
         self._rtcout.RTC_PARANOID("isWritable()")
         self._query_state.value = CSP.NOT_READY
         try:
@@ -191,7 +191,7 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     #
     # @endif
     #
-    def matchCondition(self, option=[]):
+    def matchCondition(self, option: list = []):
         self._rtcout.RTC_PARANOID("matchCondition()")
         try:
             inportcsp = self._ptr()
@@ -240,7 +240,7 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
 # @else
 # @brief Register the factory for InPortCSPConsumer.
 # @endif
-def InPortCSPConsumerInit():
+def InPortCSPConsumerInit() -> None:
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("csp_channel",
                        OpenRTM_aist.InPortCSPConsumer)

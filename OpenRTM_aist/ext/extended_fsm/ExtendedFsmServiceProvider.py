@@ -28,7 +28,7 @@ import OpenRTM_aist.NVUtil
 
 class ExtendedFsmServiceProvider(
         RTC__POA.ExtendedFsmService, OpenRTM_aist.SdoServiceProviderBase):
-    def __init__(self):
+    def __init__(self) -> None:
         self._rtobj = None
         self._profile = None
         self._fsmState = ""
@@ -44,7 +44,7 @@ class ExtendedFsmServiceProvider(
     # @brief Initialization
     # @endif
     #
-    def init(self, rtobj, profile):
+    def init(self, rtobj, profile) -> bool:
         self._rtobj = rtobj
         self._profile = profile
         return True
@@ -56,7 +56,7 @@ class ExtendedFsmServiceProvider(
     # @brief Re-initialization
     # @endif
     #
-    def reinit(self, profile):
+    def reinit(self, profile) -> bool:
         self._profile = profile
         return True
 
@@ -135,7 +135,7 @@ class ExtendedFsmServiceProvider(
     #
     # @endif
     #
-    def set_fsm_structure(self, fsm_structure):
+    def set_fsm_structure(self, fsm_structure: 'RTC.FsmStructure'):
         self._fsmStructure = fsm_structure
         return RTC.RTC_OK
 
@@ -188,7 +188,7 @@ class ExtendedFsmServiceProvider(
     # @endif
     #
 
-    def setListeners(self, prop):
+    def setListeners(self, prop: 'OpenRTM_aist.Properties'):
         pass
 
     ##
@@ -198,7 +198,7 @@ class ExtendedFsmServiceProvider(
     # @brief FSM status change
     # @endif
     #
-    def changeStatus(self, state):
+    def changeStatus(self, state: str) -> None:
         self._fsmState = state
 
     ##
@@ -208,7 +208,7 @@ class ExtendedFsmServiceProvider(
     # @brief Unsetting heartbeat
     # @endif
     #
-    def changeStructure(self, fsm_structure):
+    def changeStructure(self, fsm_structure: str) -> None:
         self._fsmStructure.structure = fsm_structure
 
     ##
@@ -272,7 +272,7 @@ class ExtendedFsmServiceProvider(
         pass
 
 
-def ExtendedFsmServiceProviderInit(mgr=None):
+def ExtendedFsmServiceProviderInit(mgr=None) -> None:
     factory = OpenRTM_aist.SdoServiceProviderFactory.instance()
     factory.addFactory(RTC.ExtendedFsmService._NP_RepositoryId,
                        ExtendedFsmServiceProvider)

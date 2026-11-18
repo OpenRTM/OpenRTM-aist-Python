@@ -34,6 +34,7 @@ import copy
 import CSP
 import threading
 import time
+import typing as _typing
 
 
 ##
@@ -84,7 +85,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     # @param manager Manager to associate with the object.
     # @endif
     #
-    def __init__(self, name, value, manager=None):
+    def __init__(self, name: str, value, manager=None) -> None:
         super(CSPOutPort, self).__init__(name, OpenRTM_aist.toTypename(value))
         self._value = value
         self._ctrl = OpenRTM_aist.CSPOutPort.WorkerThreadCtrl()
@@ -122,7 +123,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         super(CSPOutPort, self).__del__()
 
     ##
@@ -163,7 +164,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     #
     # @endif
     #
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         super(CSPOutPort, self).init(prop)
         num = 10
         ret, num = OpenRTM_aist.stringTo(
@@ -194,7 +195,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     #
     # @endif
     #
-    def setManager(self, manager):
+    def setManager(self, manager) -> None:
         self.beginSelection()
         self._readable_listener.setManager(manager)
         self._manager = manager
@@ -214,7 +215,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     #
     # @endif
     #
-    def releaseManager(self):
+    def releaseManager(self) -> None:
         self._readable_listener.releaseManager()
         self._manager = None
 
@@ -224,7 +225,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     # @else
     # @brief Initialize reservation and scan state for a new selection.
     # @endif
-    def beginSelection(self):
+    def beginSelection(self) -> None:
         with self._ctrl._cond:
             self._ctrl._selection_closed = False
 
@@ -236,7 +237,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     # @brief Mark the end of selection and clear unselected state.
     # @param selected Value of selected.
     # @endif
-    def endSelection(self, selected):
+    def endSelection(self, selected) -> None:
         with self._ctrl._cond:
             self._ctrl._selection_closed = True
 
@@ -246,7 +247,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     # @else
     # @brief Perform the wait previous read operation.
     # @endif
-    def _waitPreviousRead(self):
+    def _waitPreviousRead(self) -> bool:
         deadline = time.monotonic() + self._channeltimeout
         while self._ctrl._reserved and not self._ctrl._reading:
             remaining = deadline - time.monotonic()
@@ -306,7 +307,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     # @param option Options used for guard matching.
     # @endif
     #
-    def dataWritable(self, option=[]):
+    def dataWritable(self, option: list = []):
         _ = OpenRTM_aist.ScopedLock(self._connector_mutex)
         for con in self._connectors:
             if con.isWritable(False, option):
@@ -337,7 +338,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     # @param option Options used for guard matching.
     # @endif
     #
-    def dataWritableRetry(self, option=[]):
+    def dataWritableRetry(self, option: list = []):
         cons = self._ctrl._connectors[:]
         for con in cons:
             if con.isWritable(True, option):
@@ -435,7 +436,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     #
     # @endif
     #
-    def setSyncMode(self, mode):
+    def setSyncMode(self, mode: bool) -> None:
         self._syncmode = mode
 
     ##
@@ -519,7 +520,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     #
     # @endif
     #
-    def setWritableConnector(self, con):
+    def setWritableConnector(self, con) -> None:
         self._writableConnector = con
 
     ##
@@ -537,7 +538,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     #
     # @endif
     #
-    def setData(self, data):
+    def setData(self, data) -> None:
         self._buffdata[0] = data
 
     ##
@@ -654,7 +655,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     # @brief Set on write.
     # @param on_write Value of on_write.
     # @endif
-    def setOnWrite(self, on_write):
+    def setOnWrite(self, on_write) -> None:
         self._OnWrite = on_write
 
     ##
@@ -665,7 +666,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     # @brief Set on write convert.
     # @param on_wconvert Value of on_wconvert.
     # @endif
-    def setOnWriteConvert(self, on_wconvert):
+    def setOnWriteConvert(self, on_wconvert) -> None:
         self._OnWriteConvert = on_wconvert
 
     ##
@@ -683,7 +684,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     #
     # @endif
     #
-    def setGuard(self, option):
+    def setGuard(self, option) -> None:
         self._option = option
         self._readable_listener.setGuard(option)
 
@@ -700,7 +701,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     #
     # @endif
     #
-    def clearGuard(self):
+    def clearGuard(self) -> None:
         self._option = []
         self._readable_listener.clearGuard()
 
@@ -753,7 +754,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         # @param port Port to operate on.
         # @endif
         #
-        def __init__(self, data, control, timeout, port, manager=None):
+        def __init__(self, data: list, control, timeout: int, port: 'CSPOutPort', manager=None) -> None:
             self._ctrl = control
             self._data = data
             self._channeltimeout = timeout
@@ -789,7 +790,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         # @endif
         #
 
-        def __call__(self, con, retry=False, provider=CSP.InPortCsp._nil):
+        def __call__(self, con, retry: bool = False, provider=CSP.InPortCsp._nil) -> '_typing.Optional[bool]':
             with self._mutex:
                 if retry and con not in self._ctrl._searched_connectors:
                     return False
@@ -831,7 +832,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         #
         # @endif
         #
-        def setManager(self, manager):
+        def setManager(self, manager) -> None:
             _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = manager
 
@@ -850,7 +851,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         #
         # @endif
         #
-        def releaseManager(self):
+        def releaseManager(self) -> None:
             _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = None
 
@@ -869,7 +870,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         #
         # @endif
         #
-        def setGuard(self, option):
+        def setGuard(self, option) -> None:
             self._option = option
 
         ##
@@ -885,7 +886,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         #
         # @endif
         #
-        def clearGuard(self):
+        def clearGuard(self) -> None:
             self._option = []
 
     ##
@@ -934,7 +935,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         # @param port Port to operate on.
         # @endif
         #
-        def __init__(self, data, control, timeout, port=None):
+        def __init__(self, data: list, control, timeout: int, port=None) -> None:
             self._ctrl = control
             self._data = data
             self._channeltimeout = timeout
@@ -997,7 +998,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         # @else
         # @brief Initialize the instance and its internal state.
         # @endif
-        def __init__(self):
+        def __init__(self) -> None:
             self._mutex = threading.RLock()
             self._cond = threading.Condition(self._mutex)
             self._reading = False

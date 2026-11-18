@@ -74,7 +74,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     #
     # @endif
     #
-    def __init__(self, info, provider, listeners, buffer=None):
+    def __init__(self, info, provider, listeners, buffer=None) -> None:
         OpenRTM_aist.InPortConnector.__init__(self, info, buffer)
         self._provider = provider
         self._listeners = listeners
@@ -116,7 +116,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     #
@@ -207,7 +207,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @return
     # @endif
 
-    def isReadable(self, retry=False):
+    def isReadable(self, retry: bool = False):
         self._rtcout.RTC_TRACE("isReadable()")
         if self._consumer:
             return self._consumer.isReadable(retry, getattr(self._provider, "_objref", self._provider))
@@ -307,7 +307,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     #
     # virtual CdrBufferBase* createBuffer(Profile& profile);
 
-    def createBuffer(self, profile):
+    def createBuffer(self, profile) -> None:
         return None
 
     ##
@@ -364,7 +364,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @return
     # @param option Options used for guard matching.
     # @endif
-    def _isWritableState(self, retry=False, option=None):
+    def _isWritableState(self, retry: bool = False, option=None):
         """Return READY only after the existing callback made a reservation.
 
         If notify ran, use its locked decision even if the manager advances
@@ -406,7 +406,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @param retry Whether this query is a retry.
     # @param option Options used for guard matching.
     # @endif
-    def isWritable(self, retry=False, option=[]):
+    def isWritable(self, retry: bool = False, option: list = []):
         self._rtcout.RTC_TRACE("isWritable(%d %s)", (retry, str(option)))
         if self._isWritableCallback:
             return self._isWritableCallback(self, retry, option)
@@ -438,7 +438,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @brief Set write listener.
     # @param listener
     # @endif
-    def setWriteListener(self, listener):
+    def setWriteListener(self, listener) -> None:
         self._writeCallback = listener
 
     #
@@ -449,7 +449,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @brief Set is writable listener.
     # @param listener
     # @endif
-    def setIsWritableListener(self, listener):
+    def setIsWritableListener(self, listener) -> None:
         self._isWritableCallback = listener
 
     #
@@ -460,7 +460,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @brief Set match condition listener.
     # @param listener
     # @endif
-    def setMatchConditionListener(self, listener):
+    def setMatchConditionListener(self, listener) -> None:
         self._isMatchConditionCallback = listener
 
     ##
@@ -470,7 +470,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @brief Invoke callback when connection is established
     # @endif
     # void onConnect()
-    def onConnect(self):
+    def onConnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_CONNECT, self._profile)
@@ -483,7 +483,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @brief Invoke callback when connection is destroied
     # @endif
     # void onDisconnect()
-    def onDisconnect(self):
+    def onDisconnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT, self._profile)
@@ -497,7 +497,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @brief set Consumer
     # @param consumer Value of consumer.
     # @endif
-    def setConsumer(self, consumer):
+    def setConsumer(self, consumer) -> None:
         self._consumer = consumer
         self._consumer.setListener(self._info, self._listeners)
 
@@ -523,7 +523,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @brief Handle the on Buffer Empty notification.
     # @param data Data to transmit or receive.
     # @endif
-    def onBufferEmpty(self, data):
+    def onBufferEmpty(self, data) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
@@ -537,7 +537,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @brief Handle the on Buffer Read Timeout notification.
     # @param data Data to transmit or receive.
     # @endif
-    def onBufferReadTimeout(self, data):
+    def onBufferReadTimeout(self, data) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
@@ -559,7 +559,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @param cdr
     # @return
     # @endif
-    def deserializeData(self, cdr):
+    def deserializeData(self, cdr: bytes):
         if self._serializer is None:
             self._rtcout.RTC_ERROR("serializer creation failure.")
             return self.UNKNOWN_ERROR, None
@@ -588,7 +588,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @brief Release the peer CORBA interface reference.
     # @param prop
     # @endif
-    def unsubscribeInterface(self, prop):
+    def unsubscribeInterface(self, prop: list) -> None:
         if self._consumer:
             self._consumer.unsubscribeInterface(prop)
 
@@ -600,7 +600,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @brief Set data type.
     # @param data Data to transmit or receive.
     # @endif
-    def setDataType(self, data):
+    def setDataType(self, data) -> None:
         OpenRTM_aist.InPortConnector.setDataType(self, data)
         self._serializer = OpenRTM_aist.SerializerFactories.instance(
         ).createSerializer(self._marshaling_type, data)

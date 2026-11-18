@@ -69,7 +69,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("PublisherPeriodic")
         self._consumer = None
         self._buffer = None
@@ -97,7 +97,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @else
     # @brief Destructor
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_TRACE("~PublisherPeriodic()")
 
     ##
@@ -109,7 +109,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @else
     # @brief
     # @endif
-    def exit(self):
+    def exit(self) -> None:
         self._rtcout.RTC_TRACE("exit()")
         if self._task:
             self._task.resume()
@@ -132,7 +132,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # void PublisherNew::setPushPolicy(const coil::Properties& prop)
-    def setPushPolicy(self, prop):
+    def setPushPolicy(self, prop: 'OpenRTM_aist.Properties') -> None:
         push_policy = prop.getProperty("publisher.push_policy", "new")
         self._rtcout.RTC_DEBUG("push_policy: %s", push_policy)
 
@@ -180,7 +180,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # bool PublisherNew::createTask(const coil::Properties& prop)
-    def createTask(self, prop):
+    def createTask(self, prop: 'OpenRTM_aist.Properties'):
         factory = OpenRTM_aist.PeriodicTaskFactory.instance()
 
         th = factory.getIdentifiers()
@@ -303,7 +303,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # PublisherBase::ReturnCode PublisherPeriodic::init(coil::Properties& prop)
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties'):
         self._rtcout.RTC_TRACE("init()")
         self.setPushPolicy(prop)
         return self.createTask(prop)
@@ -419,7 +419,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # PublisherBase::ReturnCode
     # PublisherPeriodic::setListener(ConnectorInfo& info,
     #                               ConnectorListeners* listeners)
-    def setListener(self, info, listeners):
+    def setListener(self, info: 'OpenRTM_aist.ConnectorInfo', listeners):
         self._rtcout.RTC_TRACE("setListeners()")
 
         if not listeners:
@@ -510,7 +510,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # PublisherPeriodic::write(const cdrMemoryStream& data,
     #                          unsigned long sec,
     #                          unsigned long usec)
-    def write(self, data, sec, usec):
+    def write(self, data: int, sec: int, usec: int):
         self._rtcout.RTC_PARANOID("write()")
 
         if not self._consumer or not self._buffer or not self._listeners:
@@ -638,7 +638,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # int PublisherPeriodic::svc(void)
-    def svc(self):
+    def svc(self) -> int:
         _ = OpenRTM_aist.ScopedLock(self._retmutex)
 
         if self._pushPolicy == self.PUBLISHER_POLICY_ALL:
@@ -856,7 +856,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # PublisherBase::ReturnCodea
     # PublisherPeriodic::convertReturn(BufferStatus::Enum status,
     #                                  const cdrMemoryStream& data)
-    def convertReturn(self, status, data):
+    def convertReturn(self, status: int, data: int):
         if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
             return self.PORT_OK
 
@@ -901,7 +901,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # PublisherPeriodic::invokeListener(DataPortStatus::Enum status,
     #                                   const cdrMemoryStream& data)
 
-    def invokeListener(self, status, data):
+    def invokeListener(self, status: int, data: int):
         # ret:
         # PORT_OK, PORT_ERROR, SEND_FULL, SEND_TIMEOUT, CONNECTION_LOST,
         # UNKNOWN_ERROR
@@ -939,7 +939,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onBufferWrite(const cdrMemoryStream& data)
-    def onBufferWrite(self, data):
+    def onBufferWrite(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE, self._profile, data)
@@ -955,7 +955,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onBufferFull(const cdrMemoryStream& data)
-    def onBufferFull(self, data):
+    def onBufferFull(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL, self._profile, data)
@@ -971,7 +971,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onBufferWriteTimeout(const cdrMemoryStream& data)
-    def onBufferWriteTimeout(self, data):
+    def onBufferWriteTimeout(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT, self._profile, data)
@@ -987,7 +987,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     #  inline void onBufferRead(const cdrMemoryStream& data)
-    def onBufferRead(self, data):
+    def onBufferRead(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ, self._profile, data)
@@ -1003,7 +1003,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onSend(const cdrMemoryStream& data)
-    def onSend(self, data):
+    def onSend(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_SEND, self._profile, data)
@@ -1019,7 +1019,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onReceived(const cdrMemoryStream& data)
-    def onReceived(self, data):
+    def onReceived(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED, self._profile, data)
@@ -1035,7 +1035,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onReceiverFull(const cdrMemoryStream& data)
-    def onReceiverFull(self, data):
+    def onReceiverFull(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL, self._profile, data)
@@ -1051,7 +1051,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onReceiverTimeout(const cdrMemoryStream& data)
-    def onReceiverTimeout(self, data):
+    def onReceiverTimeout(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT, self._profile, data)
@@ -1067,7 +1067,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onReceiverError(const cdrMemoryStream& data)
-    def onReceiverError(self, data):
+    def onReceiverError(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR, self._profile, data)
@@ -1082,7 +1082,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     #
     # inline void onBufferEmpty()
 
-    def onBufferEmpty(self):
+    def onBufferEmpty(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
@@ -1096,7 +1096,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onSenderEmpty()
-    def onSenderEmpty(self):
+    def onSenderEmpty(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
@@ -1110,7 +1110,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onSenderError()
-    def onSenderError(self):
+    def onSenderError(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
@@ -1125,7 +1125,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     #
     # bool bufferIsEmpty()
 
-    def bufferIsEmpty(self):
+    def bufferIsEmpty(self) -> bool:
         if self._buffer and self._buffer.empty() and not self._readback:
             self._rtcout.RTC_DEBUG("buffer empty")
             self.onBufferEmpty()
@@ -1135,6 +1135,6 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
         return False
 
 
-def PublisherPeriodicInit():
+def PublisherPeriodicInit() -> None:
     OpenRTM_aist.PublisherFactory.instance().addFactory("periodic",
                                                         OpenRTM_aist.PublisherPeriodic)

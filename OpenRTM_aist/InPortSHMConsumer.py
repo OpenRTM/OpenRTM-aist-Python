@@ -58,7 +58,7 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortCorbaConsumerBase.__init__(
             self, OpenRTM__POA.PortSharedMemory, "shared_memory")
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortSHMConsumer")
@@ -90,7 +90,7 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~InPortSHMConsumer()")
         OpenRTM_aist.InPortCorbaConsumerBase.__del__(self)
         self._shmem.close_memory(True)
@@ -118,7 +118,7 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     # @endif
     #
     # virtual void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
 
         self._rtcout.RTC_TRACE("init()")
         self._properties = prop
@@ -143,14 +143,14 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
 
         return
 
-    def _inportPropertyPrefix(self, properties):
+    def _inportPropertyPrefix(self, properties: list):
         prefix = "dataport.shared_memory"
         if any(OpenRTM_aist.NVUtil.find_index(properties, prefix + suffix) >= 0
                for suffix in (".inport_ior", ".inport_ref")):
             return prefix
         return super()._inportPropertyPrefix(properties)
 
-    def setObject(self, obj):
+    def setObject(self, obj) -> bool:
         if OpenRTM_aist.CorbaConsumer.setObject(self, obj):
             portshmem = self._ptr()
             if portshmem:
@@ -245,7 +245,7 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
             return self.UNKNOWN_ERROR
 
 
-def InPortSHMConsumerInit():
+def InPortSHMConsumerInit() -> None:
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("shared_memory",
                        OpenRTM_aist.InPortSHMConsumer)

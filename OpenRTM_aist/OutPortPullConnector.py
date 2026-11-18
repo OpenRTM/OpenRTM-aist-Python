@@ -121,7 +121,7 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
     #                      OutPortProvider* provider,
     #                      ConnectorListeners& listeners,
     #                      CdrBufferBase* buffer = 0);
-    def __init__(self, info, provider, listeners, buffer=None):
+    def __init__(self, info: 'OpenRTM_aist.ConnectorInfo', provider, listeners, buffer=None) -> None:
         OpenRTM_aist.OutPortConnector.__init__(self, info)
         self._provider = provider
         self._listeners = listeners
@@ -176,7 +176,7 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -373,7 +373,7 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
     #
     # CdrBufferBase* createBuffer(ConnectorInfo& info);
 
-    def createBuffer(self, info):
+    def createBuffer(self, info: 'OpenRTM_aist.ConnectorInfo'):
         buf_type = info.properties.getProperty("buffer_type", "ring_buffer")
         return OpenRTM_aist.CdrBufferFactory.instance().createObject(buf_type)
 
@@ -385,7 +385,7 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
     # @endif
     # void onConnect()
 
-    def onConnect(self):
+    def onConnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_CONNECT, self._profile)
@@ -399,7 +399,7 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
     # @endif
     # void onDisconnect()
 
-    def onDisconnect(self):
+    def onDisconnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT, self._profile)
@@ -412,16 +412,16 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
     # @brief
     # @endif
     # void onDisconnect()
-    def setDirectMode(self):
+    def setDirectMode(self) -> None:
         self._directMode = True
 
-    def setDataType(self, data):
+    def setDataType(self, data) -> None:
         OpenRTM_aist.OutPortConnector.setDataType(self, data)
         self._serializer = OpenRTM_aist.SerializerFactories.instance(
         ).createSerializer(self._marshaling_type, data)
 
     class WorkerThreadCtrl:
-        def __init__(self):
+        def __init__(self) -> None:
             self._mutex = threading.RLock()
             self._cond = threading.Condition(self._mutex)
             self._completed = False

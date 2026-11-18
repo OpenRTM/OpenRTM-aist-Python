@@ -87,7 +87,7 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.LogstreamBase.__init__(self)
     ##
     # @if jp
@@ -103,7 +103,7 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
     ##
     # @if jp
@@ -130,7 +130,7 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> bool:
         self.logger = logging.getLogger("fluent")
         self.handlers = []
 
@@ -207,7 +207,7 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def log(self, msg, level, name):
+    def log(self, msg: str, level: int, name: str) -> bool:
         log = self.getLogger(name)
         if level == OpenRTM_aist.Logger.FATAL:
             log.log(logging.FATAL, msg)
@@ -250,7 +250,7 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def setLogLevel(self, level):
+    def setLogLevel(self, level: int) -> None:
         if level == OpenRTM_aist.Logger.INFO:
             self.logger.setLevel(logging.INFO)
         elif level == OpenRTM_aist.Logger.FATAL:
@@ -290,7 +290,7 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def shutdown(self):
+    def shutdown(self) -> bool:
         for h in self.handlers:
             logging.Handler.close(h)
             self.logger.removeHandler(h)
@@ -317,7 +317,7 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
     #
     # @endif
     #
-    def getLogger(self, name):
+    def getLogger(self, name: str):
         if name:
             return logging.getLogger("fluent." + name)
         else:
@@ -356,7 +356,7 @@ class ManagerNameFilter(logging.Filter):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         logging.Filter.__init__(self)
         conf = OpenRTM_aist.Manager.instance().getConfig()
         self._managername = conf.getProperty("manager.instance_name")
@@ -373,11 +373,11 @@ class ManagerNameFilter(logging.Filter):
     # @endif
     #
 
-    def filter(self, record):
+    def filter(self, record) -> bool:
         record.manager = self._managername
         return True
 
 
-def FluentLoggerInit(mgr):
+def FluentLoggerInit(mgr: 'OpenRTM_aist.Manager') -> None:
     OpenRTM_aist.LogstreamFactory.instance().addFactory("fluentd",
                                                         FluentLogger)

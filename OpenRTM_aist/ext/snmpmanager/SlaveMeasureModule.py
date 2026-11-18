@@ -90,7 +90,7 @@ MAX_SAMPLES = 3600
 # @param ec_cpu {RTC: usage of the execution context threads}
 # @return {RTC: CPU usage}
 # @~
-def attribute_cpu(proc_cpu, ec_cpu):
+def attribute_cpu(proc_cpu: int, ec_cpu: dict):
     if not ec_cpu:
         return {}
     total = sum(max(0.0, v) for v in ec_cpu.values())
@@ -255,7 +255,7 @@ def aggregate(runs, min_samples=10, max_runs=20, cpu_stat="max"):
 def render_placement(agg, environment, robot):
     from xml.sax.saxutils import quoteattr as q
 
-    def a(name, value):
+    def a(name, value) -> str:
         return f' plc:{name}={q(str(value))}'
 
     date = time.strftime("%Y-%m-%dT%H:%M:%S%z", time.localtime(agg["updated"] or time.time()))
@@ -321,7 +321,7 @@ class ProcInfo:
     # @~english
     # @brief Constructor
     # @~
-    def __init__(self):
+    def __init__(self) -> None:
         self._p = psutil.Process() if psutil is not None else None
 
     ##
@@ -417,7 +417,7 @@ class PortCounter:
     # @param name port name
     # @param direction in / out
     # @~
-    def __init__(self, name, direction):
+    def __init__(self, name, direction) -> None:
         self.name = name
         self.direction = direction
         self.lock = threading.Lock()
@@ -440,7 +440,7 @@ class PortCounter:
     # @param connector_id connector ID
     # @param size number of bytes
     # @~
-    def add(self, connector_id, size):
+    def add(self, connector_id, size) -> None:
         now = time.monotonic()
         with self.lock:
             self.msgs += 1
@@ -520,7 +520,7 @@ class Measure:
     # @param manager manager
     # @param conf settings of rtc.conf
     # @~
-    def __init__(self, manager, conf):
+    def __init__(self, manager, conf) -> None:
         self._mgr = manager
         self._conf = conf
         self._name = conf.getProperty("manager.instance_name", "") or f"manager_{os.getpid()}"
@@ -545,7 +545,7 @@ class Measure:
     # @~english
     # @brief Called just before an RTC is created; records the USS
     # @~
-    def pre_create(self):
+    def pre_create(self) -> None:
         self._pending_uss = self._proc.uss_mb()
         with self._lock:
             if not self._comps:
@@ -564,7 +564,7 @@ class Measure:
     # @param rtobj RTC
     # @param increment USS increment at creation (difference from pre_create if None)
     # @~
-    def post_create(self, rtobj, increment=None):
+    def post_create(self, rtobj, increment=None) -> None:
         if rtobj is None:
             return
         try:
@@ -595,7 +595,7 @@ class Measure:
     # @param rtobj RTC
     # @param rec record of the RTC
     # @~
-    def _attach_ports(self, rtobj, rec):
+    def _attach_ports(self, rtobj, rec) -> None:
         import OpenRTM_aist
         T = OpenRTM_aist.ConnectorDataListenerType
         try:
@@ -693,7 +693,7 @@ class Measure:
     # @~english
     # @brief Body of the measurement thread (takes a sample and writes it every snmp.measure.interval seconds)
     # @~
-    def _loop(self):
+    def _loop(self) -> None:
         prev_t, prev_cpu = time.monotonic(), self._proc.cpu_seconds()
         last_write = 0.0
         while self._running:
@@ -724,7 +724,7 @@ class Measure:
     # @param dt seconds since the previous sample
     # @param proc_cpu CPU usage of the whole process
     # @~
-    def _sample(self, now, dt, proc_cpu):
+    def _sample(self, now, dt, proc_cpu) -> None:
         threads = self._proc.thread_seconds()
         uss = self._proc.uss_mb()
         alive = self._alive_ids()
@@ -809,7 +809,7 @@ class Measure:
     # @~english
     # @brief Writes the measurement results to the file
     # @~
-    def write(self):
+    def write(self) -> None:
         data = self.snapshot()
         if not data["components"]:
             return
@@ -826,7 +826,7 @@ class Measure:
     # @~english
     # @brief Stops the measurement and writes the final results
     # @~
-    def stop(self):
+    def stop(self) -> None:
         self._running = False
         try:
             self.write()
@@ -847,7 +847,7 @@ _measure = None
 #
 # @param manager manager
 # @~
-def SNMPMeasureInit(manager):
+def SNMPMeasureInit(manager) -> None:
     global _measure
     conf = manager.getConfig()
     if conf.getProperty("snmp.measure.enabled", "NO").strip().upper() != "YES":
@@ -891,11 +891,11 @@ def make_listeners(measure):
             measure.pre_create()
             return args          # 戻り値が生成の引数になる (None を返すと生成できない)
 
-        def postCreate(self, rtobj):
+        def postCreate(self, rtobj) -> None:
             measure.post_create(rtobj)
 
     class _Shutdown(OpenRTM_aist.ManagerActionListener):
-        def preShutdown(self):
+        def preShutdown(self) -> None:
             measure.stop()
 
     return _Lifecycle(), _Shutdown()

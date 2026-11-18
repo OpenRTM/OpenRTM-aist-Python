@@ -67,7 +67,7 @@ class CompParam:
     #
     # @endif
 
-    def __init__(self, module_name):
+    def __init__(self, module_name: str) -> None:
         module_name = module_name.split("?")[0]
         param_list = module_name.split(":")
         if len(param_list) < len(CompParam.prof_list):
@@ -202,7 +202,7 @@ class ManagerServant(RTM__POA.Manager):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         self._mgr = OpenRTM_aist.Manager.instance()
         self._owner = None
         self._rtcout = self._mgr.getLogbuf("ManagerServant")
@@ -256,7 +256,7 @@ class ManagerServant(RTM__POA.Manager):
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -270,7 +270,7 @@ class ManagerServant(RTM__POA.Manager):
     #
     # @endif
 
-    def exit(self):
+    def exit(self) -> None:
         guard_master = OpenRTM_aist.ScopedLock(self._masterMutex)
         for master in self._masters:
             try:
@@ -331,7 +331,7 @@ class ManagerServant(RTM__POA.Manager):
     # @endif
     #
     # ReturnCode_t load_module(const char* pathname, const char* initfunc)
-    def load_module(self, pathname, initfunc):
+    def load_module(self, pathname: str, initfunc: str):
         self._rtcout.RTC_TRACE(
             "ManagerServant::load_module(%s, %s)", (pathname, initfunc))
         self._mgr.load(pathname, initfunc)
@@ -358,7 +358,7 @@ class ManagerServant(RTM__POA.Manager):
     #
     # ReturnCode_t unload_module(const char* pathname)
 
-    def unload_module(self, pathname):
+    def unload_module(self, pathname: str):
         self._rtcout.RTC_TRACE("ManagerServant::unload_module(%s)", pathname)
         self._mgr.unload(pathname)
         return RTC.RTC_OK
@@ -500,7 +500,7 @@ class ManagerServant(RTM__POA.Manager):
     # @endif
     #
     # RTObject_ptr create_component(const char* module_name)
-    def create_component(self, module_name):
+    def create_component(self, module_name: str):
 
         self._rtcout.RTC_TRACE("create_component(%s)", module_name)
 
@@ -591,7 +591,7 @@ class ManagerServant(RTM__POA.Manager):
     #
     # ReturnCode_t delete_component(const char* instance_name)
 
-    def delete_component(self, instance_name):
+    def delete_component(self, instance_name: str):
         self._rtcout.RTC_TRACE("delete_component(%s)", instance_name)
         comp_ = self._mgr.getComponent(instance_name)
         if not comp_:
@@ -780,7 +780,7 @@ class ManagerServant(RTM__POA.Manager):
     #
     # ReturnCode_t set_configuration(const char* name, const char* value)
 
-    def set_configuration(self, name, value):
+    def set_configuration(self, name: str, value: str):
         self._rtcout.RTC_TRACE(
             "set_configuration(name = %s, value = %s)", (name, value))
         self._mgr.getConfig().setProperty(name, value)
@@ -1129,7 +1129,7 @@ class ManagerServant(RTM__POA.Manager):
     #
     # Object_ptr get_service(const char* name)
 
-    def get_service(self, name):
+    def get_service(self, name: str):
         return CORBA.Object._nil
 
     ##
@@ -1157,7 +1157,7 @@ class ManagerServant(RTM__POA.Manager):
     #
     # bool createINSManager();
 
-    def createINSManager(self):
+    def createINSManager(self) -> bool:
         try:
             poa = self._mgr.getORB().resolve_initial_references("omniINSPOA")
             poa._get_the_POAManager().activate()
@@ -1196,7 +1196,7 @@ class ManagerServant(RTM__POA.Manager):
     #
     # RTM::Manager_ptr findManager(const char* host_port);
 
-    def findManager(self, host_port):
+    def findManager(self, host_port: str):
         self._rtcout.RTC_TRACE("findManager(host_port = %s)", host_port)
         try:
             config = copy.deepcopy(self._mgr.getConfig())
@@ -1238,7 +1238,7 @@ class ManagerServant(RTM__POA.Manager):
     # @return
     # @endif
     # RTCList get_components_by_name(string name)
-    def get_components_by_name(self, name):
+    def get_components_by_name(self, name: str):
         self._rtcout.RTC_TRACE("get_components_by_name()")
         rtcs = self._mgr.getComponents()
         crtcs = []
@@ -1275,7 +1275,7 @@ class ManagerServant(RTM__POA.Manager):
     # @return
     # @endif
     # RTC::Manager_ptr findManagerByName(string manager_name)
-    def findManagerByName(self, manager_name):
+    def findManagerByName(self, manager_name: str):
         self._rtcout.RTC_TRACE(
             "findManagerByName(manager_name = %s)",
             manager_name)
@@ -1355,7 +1355,7 @@ class ManagerServant(RTM__POA.Manager):
     # @endif
     # std::string getParameterByModulename(string param_name, string
     # &module_name)
-    def getParameterByModulename(self, param_name, module_name):
+    def getParameterByModulename(self, param_name: str, module_name: str):
         param_start = module_name.find(param_name + "=")
 
         if param_start < 0:
@@ -1394,7 +1394,7 @@ class ManagerServant(RTM__POA.Manager):
     # @endif
     # RTC::RTObject_ptr createComponentByManagerName(string module_name)
 
-    def createComponentByManagerName(self, module_name):
+    def createComponentByManagerName(self, module_name: str):
 
         arg = module_name
 
@@ -1595,7 +1595,7 @@ class ManagerServant(RTM__POA.Manager):
     # @return
     # @endif
     # RTC::RTObject_ptr createComponentByAddress(string module_name)
-    def createComponentByAddress(self, module_name):
+    def createComponentByAddress(self, module_name: str):
 
         arg = module_name
         mgrstr, arg = self.getParameterByModulename("manager_address", arg)
@@ -1721,7 +1721,7 @@ class ManagerServant(RTM__POA.Manager):
     # @param self
     # @endif
     # void updateMasterManager()
-    def updateMasterManager(self):
+    def updateMasterManager(self) -> None:
         if not self._isMaster and self._objref:
             guard = OpenRTM_aist.ScopedLock(self._masterMutex)
             if self._masters:
@@ -1754,7 +1754,7 @@ class ManagerServant(RTM__POA.Manager):
                         OpenRTM_aist.Logger.print_exception())
 
     class is_equiv:
-        def __init__(self, mgr):
+        def __init__(self, mgr) -> None:
             self._mgr = mgr
 
         def __call__(self, mgr):
@@ -1784,12 +1784,12 @@ class ManagerServant(RTM__POA.Manager):
 # operation.
 # @endif
 class ManagerForwarder(RTM__POA.Manager):
-    def __init__(self, target):
+    def __init__(self, target) -> None:
         self._target = target
 
 
-def _make_forward(name):
-    def forward(self, *args):
+def _make_forward(name: str):
+    def forward(self, *args) -> None:
         raise omniORB.LOCATION_FORWARD(self._target, False)
     forward.__name__ = name
     return forward

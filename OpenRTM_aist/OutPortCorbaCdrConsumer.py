@@ -73,7 +73,7 @@ class OutPortCorbaCdrConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.OutPortCorbaConsumerBase.__init__(
             self, OpenRTM.OutPortCdr, "corba_cdr")
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OutPortCorbaCdrConsumer")
@@ -95,7 +95,7 @@ class OutPortCorbaCdrConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~OutPortCorbaCdrConsumer()")
         OpenRTM_aist.OutPortCorbaConsumerBase.__del__(self)
 
@@ -126,7 +126,7 @@ class OutPortCorbaCdrConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     #
     # virtual void setBuffer(CdrBufferBase* buffer);
 
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._rtcout.RTC_TRACE("setBuffer()")
         self._buffer = buffer
         return
@@ -134,7 +134,7 @@ class OutPortCorbaCdrConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     # void OutPortCorbaCdrConsumer::setListener(ConnectorInfo& info,
     #                                           ConnectorListeners* listeners)
 
-    def setListener(self, info, listeners):
+    def setListener(self, info: 'OpenRTM_aist.ConnectorInfo', listeners) -> None:
         self._rtcout.RTC_TRACE("setListener()")
         self._listeners = listeners
         self._profile = info
@@ -286,7 +286,7 @@ class OutPortCorbaCdrConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     #
     # inline void onSenderEmpty()
 
-    def onSenderEmpty(self):
+    def onSenderEmpty(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
@@ -295,7 +295,7 @@ class OutPortCorbaCdrConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
 
     # inline void onSenderTimeout()
 
-    def onSenderTimeout(self):
+    def onSenderTimeout(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
@@ -304,7 +304,7 @@ class OutPortCorbaCdrConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
 
     # inline void onSenderError()
 
-    def onSenderError(self):
+    def onSenderError(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
@@ -312,7 +312,7 @@ class OutPortCorbaCdrConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
         return
 
 
-def OutPortCorbaCdrConsumerInit():
+def OutPortCorbaCdrConsumerInit() -> None:
     factory = OpenRTM_aist.OutPortConsumerFactory.instance()
     factory.addFactory("corba_cdr",
                        OpenRTM_aist.OutPortCorbaCdrConsumer)

@@ -75,12 +75,12 @@ def _read_profile_xml(path):
     def qualified(name):
         return "{" + name if "}" in name else name
 
-    def start(name, attributes):
+    def start(name, attributes) -> None:
         builder.start(qualified(name), {
             qualified(key): value for key, value in attributes.items()
         })
 
-    def reject_doctype(*args):
+    def reject_doctype(*args) -> None:
         raise ET.ParseError("placement XML must not contain a DTD")
 
     parser = expat.ParserCreate(namespace_separator="}")
@@ -121,7 +121,7 @@ class PlacementError(Exception):
     # @param message message
     # @param reasons list of reasons
     # @~
-    def __init__(self, message, reasons=None):
+    def __init__(self, message: str, reasons=None) -> None:
         super().__init__(message)
         self.reasons = reasons or []
 
@@ -181,7 +181,7 @@ class ProfileDB:
     # @param prefer_measured whether to prefer runtime measurements
     # @param min_samples minimum number of samples of a measurement to use
     # @~
-    def __init__(self, root, environment, prefer_measured=True, min_samples=1):
+    def __init__(self, root, environment, prefer_measured: bool = True, min_samples=1) -> None:
         self.environment = environment
         self.prefer_measured = prefer_measured
         self.min_samples = int(min_samples)
@@ -517,7 +517,7 @@ def build_edges(connections, items):
 # @param rmap {robot name: Robot}
 # @return True if satisfied
 # @~
-def _links_ok(assign, edges, rmap):
+def _links_ok(assign: dict, edges: list, rmap: dict) -> bool:
     for e in edges:
         if e.a in assign and e.b in assign and assign[e.a] != assign[e.b]:
             if not (rmap[assign[e.a]].link_ok and rmap[assign[e.b]].link_ok):
@@ -545,7 +545,7 @@ def _links_ok(assign, edges, rmap):
 # @param primary name of the primary robot
 # @return Placement (None if the constraints are not satisfied)
 # @~
-def _evaluate(assign, items, robots, edges, primary):
+def _evaluate(assign: dict, items: list, robots: list, edges: list, primary: str):
     usage = {r.name: {"cpu": 0.0, "mem": 0.0, "langs": set(r.languages)} for r in robots}
     for it in items:
         u = usage[assign[it.name]]
@@ -599,7 +599,7 @@ LOGICS = ("optimal", "first_fit", "objective")
 # @param objective objective function fn(item, robot, state) -> float for logic=objective (objective_value if None)
 # @return Placement
 # @~
-def solve(items, robots, edges, primary, logic="optimal", objective=None):
+def solve(items: list, robots: list, edges: list, primary: str, logic: str = "optimal", objective=None):
     reasons = [f"{it.name} ({it.module}) を置けるロボットがない" for it in items if not it.candidates]
     if reasons:
         raise PlacementError("配置できない RTC があります", reasons)
@@ -634,7 +634,7 @@ def solve(items, robots, edges, primary, logic="optimal", objective=None):
 # @param primary name of the primary robot
 # @return best Placement (None if none)
 # @~
-def _exhaustive(items, robots, edges, primary):
+def _exhaustive(items: list, robots: list, edges: list, primary: str):
     order = sorted(items, key=lambda i: -i.cpu)
     rmap = {r.name: r for r in robots}
     best = [None]
@@ -644,7 +644,7 @@ def _exhaustive(items, robots, edges, primary):
     def partial_cross():
         return sum(e.weight for e in edges if e.a in assign and e.b in assign and assign[e.a] != assign[e.b])
 
-    def rec(k):
+    def rec(k: int) -> None:
         if best[0] is not None and round(partial_cross(), 3) > best[0].score[0]:
             return  # ロボットをまたぐ通信量が既に最良解より多い
         if k == len(order):
@@ -877,7 +877,7 @@ def connected_groups(items, edges):
 # @param robots robots
 # @return list of lines of the explanation
 # @~
-def capacity_report(items, robots):
+def capacity_report(items: list, robots: list):
     total_cpu = sum(i.cpu for i in items)
     total_mem = sum(i.memory_mb for i in items)
     lines = [f"必要量の合計: CPU {total_cpu:.1f}%, メモリ {total_mem:.1f}MB (slave マネージャの分を除く)"]

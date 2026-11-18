@@ -53,6 +53,7 @@
 #
 
 import re
+import typing as _typing
 
 NAME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]*$")
 # ほかの監視の値と重なる名前は使えない (条件の metric で区別できなくなる)
@@ -91,7 +92,7 @@ def extend_output_oid(token):
 # @param get_property get_property(key, default) -> str (Properties.getProperty of OpenRTM)
 # @return {name: OID}
 # @~
-def parse_config(get_property):
+def parse_config(get_property: '_typing.Callable[..., object]'):
     names = [n.strip() for n in get_property("snmp.metrics", "").split(",") if n.strip()]
     out = {}
     for name in names:
@@ -123,7 +124,7 @@ def parse_config(get_property):
 # @param raw SNMP value
 # @return number (None if not a number)
 # @~
-def parse_value(raw):
+def parse_value(raw: str):
     if raw is None:
         return None
     try:
@@ -144,7 +145,7 @@ def parse_value(raw):
 # @param names names of the custom metrics
 # @return {"\<name\>_max": (name, ">"), "\<name\>_min": (name, "<")}
 # @~
-def constraint_keys(names):
+def constraint_keys(names: list):
     out = {}
     for n in names:
         out[n + "_max"] = (n, ">")
@@ -166,7 +167,7 @@ def constraint_keys(names):
 # @param names names of the custom metrics
 # @param where location shown in the error message
 # @~
-def validate_constraints(constraints, names, where):
+def validate_constraints(constraints: dict, names: list, where: str) -> None:
     if constraints is None:
         return
     if not isinstance(constraints, dict):
@@ -197,7 +198,7 @@ def validate_constraints(constraints, names, where):
 # @param names names of the custom metrics
 # @return [(key, name, value, operator, threshold)]
 # @~
-def violations(values, constraints, names):
+def violations(values: dict, constraints: dict, names: list):
     out = []
     if not constraints:
         return out
@@ -227,6 +228,6 @@ def violations(values, constraints, names):
 # @param v one item of violations()
 # @return string
 # @~
-def describe(v):
+def describe(v) -> str:
     _, name, value, op, limit = v
     return f"{name} {value:g} {op} {limit:g}"

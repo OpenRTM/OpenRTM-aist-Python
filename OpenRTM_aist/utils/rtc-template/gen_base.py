@@ -17,6 +17,7 @@
 #  $Id: gen_base.py 775 2008-07-28 16:14:45Z n-ando $
 #
 
+import typing as _typing
 import os
 from builtins import input as raw_input
 import re
@@ -26,7 +27,7 @@ import yat
 
 class gen_base:
 
-    def check_overwrite(self, fname, wmode="w"):
+    def check_overwrite(self, fname: str, wmode: str = "w") -> '_typing.Tuple[_typing.Optional[_typing.IO[str]], _typing.Optional[_typing.List[str]]]':
         """
         Check file exist or not.
         """
@@ -50,7 +51,7 @@ class gen_base:
             return open(fname, wmode), None
         return
 
-    def replace_tags(self, lines, data):
+    def replace_tags(self, lines: '_typing.Iterable[str]', data: '_typing.Dict[str, _typing.Any]') -> str:
         in_tag = False
         tag_name = ""
         ret_lines = ""
@@ -77,14 +78,14 @@ class gen_base:
 
         return ret_lines
 
-    def gen_tags(self, tags):
+    def gen_tags(self, tags: '_typing.Dict[str, str]') -> None:
         for key in tags.keys():
             t = yat.Template(tags[key])
             text = t.generate(self.data)
             tags[key] = text
         return
 
-    def gen(self, fname, temp_txt, data, tags):
+    def gen(self, fname: str, temp_txt: str, data: '_typing.Dict[str, _typing.Any]', tags: '_typing.Dict[str, str]') -> None:
         f, lines = self.check_overwrite(fname)
         if not f:      # overwrite: No
             return

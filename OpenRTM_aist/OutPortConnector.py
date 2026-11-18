@@ -55,7 +55,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
     # @endif
     #
     # OutPortConnector(ConnectorInfo& info);
-    def __init__(self, info):
+    def __init__(self, info) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OutPortConnector")
         self._profile = info
         self._endian = True
@@ -70,7 +70,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
     # @brief Destructor
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -172,7 +172,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
     # @endif
     #
     # const char* name();
-    def setDirectMode(self):
+    def setDirectMode(self) -> None:
         self._directMode = True
 
     ##
@@ -210,7 +210,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
     # @param retry
     # @return
     # @endif
-    def isWritable(self, retry):
+    def isWritable(self, retry) -> bool:
         return False
 
     #
@@ -224,7 +224,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
     # @return
     # @return
     # @endif
-    def isReadable(self):
+    def isReadable(self) -> bool:
         return False
 
     #
@@ -271,13 +271,13 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
     # @brief
     # @param prop
     # @endif
-    def unsubscribeInterface(self, prop):
+    def unsubscribeInterface(self, prop: list):
         pass
 
     # template<class DataType>
     # void setDataTyep(DataType data);
 
-    def setDataType(self, data):
+    def setDataType(self, data) -> None:
         self._dataType = data
 
 
@@ -346,5 +346,5 @@ class IsReadableListenerBase(object):
     # @param con
     # @return
     # @endif
-    def __call__(self, con, retry=False):
+    def __call__(self, con, retry: bool = False) -> bool:
         return False

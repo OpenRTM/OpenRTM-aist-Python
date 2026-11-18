@@ -16,6 +16,7 @@
 
 
 import threading
+import typing as _typing
 
 import OpenRTM_aist
 
@@ -32,7 +33,12 @@ import OpenRTM_aist
 # @else
 #
 # @endif
-class ObjectManager:
+_Identifier = _typing.TypeVar("_Identifier")
+_Object = _typing.TypeVar("_Object")
+_Visitor = _typing.TypeVar("_Visitor", bound=_typing.Callable)
+
+
+class ObjectManager(_typing.Generic[_Identifier, _Object]):
     """
     """
 
@@ -49,8 +55,8 @@ class ObjectManager:
     # @else
     #
     # @endif
-    def __init__(self, predicate):
-        self._objects = self.Objects()
+    def __init__(self, predicate: _typing.Callable[..., _typing.Callable[[_Object], bool]]) -> None:
+        self._objects: ObjectManager.Objects[_Object] = self.Objects()
         self._predicate = predicate
 
     ##
@@ -59,10 +65,10 @@ class ObjectManager:
     # @brief オブジェクト管理用内部クラス
     # @endif
 
-    class Objects:
-        def __init__(self):
+    class Objects(_typing.Generic[_Object]):
+        def __init__(self) -> None:
             self._mutex = threading.RLock()
-            self._obj = []
+            self._obj: _typing.List[_Object] = []
 
     ##
     # @if jp
@@ -81,7 +87,7 @@ class ObjectManager:
     #
     # @endif
 
-    def registerObject(self, obj):
+    def registerObject(self, obj: _Object) -> bool:
         _ = OpenRTM_aist.ScopedLock(self._objects._mutex)
         predi = self._predicate(factory=obj)
 
@@ -109,7 +115,7 @@ class ObjectManager:
     #
     # @endif
 
-    def unregisterObject(self, id):
+    def unregisterObject(self, id: _Identifier) -> _typing.Optional[_Object]:
         _ = OpenRTM_aist.ScopedLock(self._objects._mutex)
         predi = self._predicate(name=id)
         i = 0
@@ -140,7 +146,7 @@ class ObjectManager:
     #
     # @endif
 
-    def find(self, id):
+    def find(self, id: _Identifier) -> _typing.Optional[_Object]:
         _ = OpenRTM_aist.ScopedLock(self._objects._mutex)
         if isinstance(id, str):
             predi = self._predicate(name=id)
@@ -168,7 +174,7 @@ class ObjectManager:
     #
     # @endif
 
-    def getObjects(self):
+    def getObjects(self) -> _typing.List[_Object]:
         _ = OpenRTM_aist.ScopedLock(self._objects._mutex)
         return self._objects._obj
 
@@ -185,7 +191,7 @@ class ObjectManager:
     #
     # @endif
 
-    def for_each(self, p):
+    def for_each(self, p: _typing.Callable[[], _Visitor]) -> _Visitor:
         _ = OpenRTM_aist.ScopedLock(self._objects._mutex)
         predi = p()
 

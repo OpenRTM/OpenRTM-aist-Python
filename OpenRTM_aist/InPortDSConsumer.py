@@ -71,7 +71,7 @@ class InPortDSConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortCorbaConsumerBase.__init__(
             self, RTC.DataPushService, "data_service")
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortDSConsumer")
@@ -90,7 +90,7 @@ class InPortDSConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~InPortDSConsumer()")
         OpenRTM_aist.InPortCorbaConsumerBase.__del__(self)
         return
@@ -129,7 +129,7 @@ class InPortDSConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     #
     # virtual ReturnCode put(const cdrMemoryStream& data);
 
-    def put(self, data):
+    def put(self, data: bytes):
         self._rtcout.RTC_PARANOID("put()")
 
         try:
@@ -179,7 +179,7 @@ class InPortDSConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
             return self.UNKNOWN_ERROR
 
 
-def InPortDSConsumerInit():
+def InPortDSConsumerInit() -> None:
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("data_service",
                        OpenRTM_aist.InPortDSConsumer)

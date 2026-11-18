@@ -21,6 +21,7 @@ import getopt
 import platform
 
 import OpenRTM_aist
+import typing as _typing
 
 
 ##
@@ -128,7 +129,7 @@ class ManagerConfig:
     # @param argv The command line arguments
     #
     # @endif
-    def __init__(self, argv=None):
+    def __init__(self, argv=None) -> None:
 
         self._configFile = ""
         self._argprop = OpenRTM_aist.Properties()
@@ -171,7 +172,7 @@ class ManagerConfig:
     #
     # @endif
 
-    def init(self, argv):
+    def init(self, argv) -> None:
         self.parseArgs(argv)
         return
 
@@ -190,7 +191,7 @@ class ManagerConfig:
     # Configure to the properties specified by Manager's configuration
     #
     # @endif
-    def configure(self, prop):
+    def configure(self, prop: 'OpenRTM_aist.Properties'):
         prop.setDefaults(OpenRTM_aist.default_config)
         if self.findConfigFile():
             # try:
@@ -260,7 +261,7 @@ class ManagerConfig:
     #
     # @endif
 
-    def parseArgs(self, argv):
+    def parseArgs(self, argv) -> None:
         try:
             opts, args = getopt.getopt(argv[1:], "adif:o:p:")
         except getopt.GetoptError:
@@ -337,7 +338,7 @@ class ManagerConfig:
     #
     # @endif
 
-    def findConfigFile(self):
+    def findConfigFile(self) -> bool:
         if self._configFile != "":
             if not self.fileExist(self._configFile):
                 # print(OpenRTM_aist.Logger.print_exception())
@@ -392,7 +393,7 @@ class ManagerConfig:
     #
     # @endif
 
-    def setSystemInformation(self, prop):
+    def setSystemInformation(self, prop: 'OpenRTM_aist.Properties'):
         if os.name == 'nt':
             sysinfo = platform.uname()
         else:
@@ -429,7 +430,7 @@ class ManagerConfig:
     #
     # @endif
 
-    def fileExist(self, filename):
+    def fileExist(self, filename: str) -> '_typing.Optional[bool]':
         try:
             fp = open(filename)
         except BaseException:

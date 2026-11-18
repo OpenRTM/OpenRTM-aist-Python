@@ -61,7 +61,7 @@ class NamingBase:
     # @else
     #
     # @endif
-    def bindObject(self, name, rtobj):
+    def bindObject(self, name: str, rtobj):
         pass
 
     def bindPortObject(self, name, port):
@@ -100,7 +100,7 @@ class NamingBase:
     # @endif
     #
     # virtual bool isAlive() = 0;
-    def isAlive(self):
+    def isAlive(self) -> bool:
         return True
 
     ##
@@ -157,7 +157,7 @@ class NamingOnCorba(NamingBase):
     # @else
     #
     # @endif
-    def __init__(self, orb, names):
+    def __init__(self, orb, names: str) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf('manager.namingoncorba')
         self._cosnaming = OpenRTM_aist.CorbaNaming(orb, names)
         self._endpoint = ""
@@ -178,7 +178,7 @@ class NamingOnCorba(NamingBase):
     # @else
     #
     # @endif
-    def bindObject(self, name, rtobj):
+    def bindObject(self, name: str, rtobj) -> None:
         self._rtcout.RTC_TRACE("bindObject(name = %s, rtobj or mgr)", name)
         try:
             self._cosnaming.rebindByString(name, rtobj.getObjRef(), True)
@@ -203,7 +203,7 @@ class NamingOnCorba(NamingBase):
     #
     # @endif
 
-    def bindPortObject(self, name, port):
+    def bindPortObject(self, name: str, port) -> None:
         self._rtcout.RTC_TRACE("bindPortObject(name = %s, port)", name)
         try:
             self._cosnaming.rebindByString(name, port.getPortRef(), True)
@@ -226,7 +226,7 @@ class NamingOnCorba(NamingBase):
     #
     # @endif
 
-    def unbindObject(self, name):
+    def unbindObject(self, name: str) -> None:
         self._rtcout.RTC_TRACE("unbindObject(name  = %s)", name)
         try:
             self._cosnaming.unbind(name)
@@ -279,7 +279,7 @@ class NamingOnCorba(NamingBase):
     #
     # @endif
 
-    def getComponentByName(self, context, name, rtcs):
+    def getComponentByName(self, context, name: str, rtcs: list) -> None:
         self._rtcout.RTC_TRACE("getComponentByName(name  = %s)", name)
         length = 500
         bl, bi = context.list(length)
@@ -318,7 +318,7 @@ class NamingOnCorba(NamingBase):
     #
     # virtual RTCList string_to_component(string name) = 0;
 
-    def string_to_component(self, name):
+    def string_to_component(self, name: str):
         self._rtcout.RTC_TRACE("string_to_component(name  = %s)", name)
         rtc_list = []
 
@@ -406,7 +406,7 @@ class NamingOnManager(NamingBase):
     # @param mgr
     #
     # @endif
-    def __init__(self, orb, mgr):
+    def __init__(self, orb, mgr: 'OpenRTM_aist.Manager') -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf('manager.namingonmanager')
         self._cosnaming = None
         self._orb = orb
@@ -427,7 +427,7 @@ class NamingOnManager(NamingBase):
     #
     # @endif
 
-    def bindObject(self, name, rtobj):
+    def bindObject(self, name: str, rtobj) -> None:
         self._rtcout.RTC_TRACE("bindObject(name = %s, rtobj or mgr)", name)
         """print(isinstance(rtobj, OpenRTM.ManagerServant))
     if isinstance(rtobj, OpenRTM.ManagerServant):
@@ -449,7 +449,7 @@ class NamingOnManager(NamingBase):
     #
     # @endif
 
-    def bindPortObject(self, name, port):
+    def bindPortObject(self, name, port) -> None:
         self._rtcout.RTC_TRACE("bindPortObject(name = %s, port)", name)
 
         return
@@ -467,7 +467,7 @@ class NamingOnManager(NamingBase):
     #
     # @endif
 
-    def unbindObject(self, name):
+    def unbindObject(self, name) -> None:
         self._rtcout.RTC_TRACE("unbindObject(name  = %s)", name)
 
         return
@@ -489,7 +489,7 @@ class NamingOnManager(NamingBase):
     #
     # virtual bool isAlive();
 
-    def isAlive(self):
+    def isAlive(self) -> bool:
         self._rtcout.RTC_TRACE("isAlive()")
         return True
 
@@ -511,7 +511,7 @@ class NamingOnManager(NamingBase):
     # @endif
     #
     # virtual RTCList string_to_component();
-    def string_to_component(self, name):
+    def string_to_component(self, name: str):
         self._rtcout.RTC_TRACE("string_to_component(name  = %s)", name)
         rtc_list = []
 
@@ -558,7 +558,7 @@ class NamingOnManager(NamingBase):
     # @endif
     #
     # virtual Manager_ptr getManager(string name);
-    def getManager(self, name):
+    def getManager(self, name: str):
         self._rtcout.RTC_TRACE("getManager(name = %s)", name)
         if name == "*":
             mgr_sev = self._mgr.getManagerServant()
@@ -624,7 +624,7 @@ class NamingManager:
     # @else
     #
     # @endif
-    def __init__(self, manager):
+    def __init__(self, manager: 'OpenRTM_aist.Manager') -> None:
         self._manager = manager
         self._rtcout = manager.getLogbuf('manager.namingmanager')
         # self._rtcout.setLogLevel(manager.getConfig().getProperty("logger.log_level"))
@@ -654,7 +654,7 @@ class NamingManager:
     #
     # @endif
 
-    def registerNameServer(self, method, name_server):
+    def registerNameServer(self, method: str, name_server: str) -> None:
         self._rtcout.RTC_TRACE("NamingManager::registerNameServer(%s, %s)",
                                (method, name_server))
         name = self.createNamingObj(method, name_server)
@@ -675,7 +675,7 @@ class NamingManager:
     #
     # @endif
 
-    def bindObject(self, name, rtobj):
+    def bindObject(self, name: str, rtobj) -> None:
         self._rtcout.RTC_TRACE("NamingManager::bindObject(%s)", name)
         _ = OpenRTM_aist.ScopedLock(self._namesMutex)
         for n in self._names:
@@ -690,7 +690,7 @@ class NamingManager:
 
         self.registerCompName(name, rtobj)
 
-    def bindManagerObject(self, name, mgr):
+    def bindManagerObject(self, name: str, mgr) -> None:
         self._rtcout.RTC_TRACE("NamingManager::bindManagerObject(%s)", name)
         _ = OpenRTM_aist.ScopedLock(self._namesMutex)
         for n in self._names:
@@ -722,7 +722,7 @@ class NamingManager:
     #
     # @endif
     # void bindPortObject(const char* name, PortBase* port)
-    def bindPortObject(self, name, port):
+    def bindPortObject(self, name: str, port) -> None:
         self._rtcout.RTC_TRACE("NamingManager::bindPortObject(%s)", name)
         _ = OpenRTM_aist.ScopedLock(self._namesMutex)
         for n in self._names:
@@ -750,7 +750,7 @@ class NamingManager:
     #
     # @endif
 
-    def update(self):
+    def update(self) -> None:
         self._rtcout.RTC_TRACE("NamingManager::update()")
         _ = OpenRTM_aist.ScopedLock(self._namesMutex)
         rebind = OpenRTM_aist.toBool(self._manager.getConfig().getProperty("naming.update.rebind"),
@@ -797,7 +797,7 @@ class NamingManager:
     #
     # @endif
 
-    def unbindObject(self, name):
+    def unbindObject(self, name: str) -> None:
         self._rtcout.RTC_TRACE("NamingManager::unbindObject(%s)", name)
         _ = OpenRTM_aist.ScopedLock(self._namesMutex)
         for n in self._names:
@@ -825,7 +825,7 @@ class NamingManager:
     #
     # @endif
 
-    def unbindAll(self):
+    def unbindAll(self) -> None:
         self._rtcout.RTC_TRACE(
             "NamingManager::unbindAll(): %d names.", len(
                 self._compNames))
@@ -884,7 +884,7 @@ class NamingManager:
     #
     # @endif
 
-    def createNamingObj(self, method, name_server):
+    def createNamingObj(self, method: str, name_server: str):
         self._rtcout.RTC_TRACE("createNamingObj(method = %s, nameserver = %s)",
                                (method, name_server))
         mth = method
@@ -922,7 +922,7 @@ class NamingManager:
     #
     # @endif
 
-    def bindCompsTo(self, ns):
+    def bindCompsTo(self, ns) -> None:
         for comp in self._compNames:
             try:
                 ns.bindObject(comp.name, comp.rtobj)
@@ -944,7 +944,7 @@ class NamingManager:
     #
     # @endif
 
-    def registerCompName(self, name, rtobj):
+    def registerCompName(self, name: str, rtobj) -> None:
         for c in self._compNames:
             if c.name == name:
                 c.rtobj = rtobj
@@ -953,7 +953,7 @@ class NamingManager:
         self._compNames.append(self.Comps(name, rtobj))
         return
 
-    def registerMgrName(self, name, mgr):
+    def registerMgrName(self, name: str, mgr) -> None:
         for m in self._mgrNames:
             if m.name == name:
                 m.mgr = mgr
@@ -978,7 +978,7 @@ class NamingManager:
     # @param port
     #
     # @endif
-    def registerPortName(self, name, port):
+    def registerPortName(self, name: str, port) -> None:
         for p in self._portNames:
             if p.name == name:
                 p.port = port
@@ -1000,7 +1000,7 @@ class NamingManager:
     # @else
     #
     # @endif
-    def unregisterCompName(self, name):
+    def unregisterCompName(self, name: str) -> None:
         len_ = len(self._compNames)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -1009,7 +1009,7 @@ class NamingManager:
                 return
         return
 
-    def unregisterMgrName(self, name):
+    def unregisterMgrName(self, name: str) -> None:
         len_ = len(self._mgrNames)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -1034,7 +1034,7 @@ class NamingManager:
     #
     # @endif
 
-    def unregisterPortName(self, name):
+    def unregisterPortName(self, name: str) -> None:
         len_ = len(self._portNames)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -1064,7 +1064,7 @@ class NamingManager:
     #
     # void retryConnection(Names* ns);
 
-    def retryConnection(self, ns):
+    def retryConnection(self, ns) -> None:
         # recreate NamingObj
         nsobj = None
         try:
@@ -1127,7 +1127,7 @@ class NamingManager:
     # @endif
     #
     # RTCList string_to_component(string name);
-    def string_to_component(self, name):
+    def string_to_component(self, name: str):
         for n in self._names:
             if n.ns:
                 comps = n.ns.string_to_component(name)
@@ -1144,7 +1144,7 @@ class NamingManager:
     #
     # @endif
     class NameServer:
-        def __init__(self, meth, name, naming):
+        def __init__(self, meth: str, name: str, naming) -> None:
             self.method = meth
             self.nsname = name
             self.ns = naming
@@ -1159,12 +1159,12 @@ class NamingManager:
     # @endif
 
     class Comps:
-        def __init__(self, n, obj):
+        def __init__(self, n: str, obj) -> None:
             self.name = n
             self.rtobj = obj
 
     class Mgr:
-        def __init__(self, n, obj):
+        def __init__(self, n: str, obj) -> None:
             self.name = n
             self.mgr = obj
 
@@ -1177,6 +1177,6 @@ class NamingManager:
     # @endif
 
     class Port:
-        def __init__(self, n, obj):
+        def __init__(self, n: str, obj) -> None:
             self.name = n
             self.port = obj

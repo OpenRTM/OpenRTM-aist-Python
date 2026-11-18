@@ -41,27 +41,27 @@ periodicecsharedcomposite_spec = ["implementation_id", "PeriodicECSharedComposit
                                   ""]
 
 
-def stringToStrVec(v, _is):
+def stringToStrVec(v: list, _is: str):
     _str = OpenRTM_aist.eraseBlank(_is)
     v = _str.split(",")
     return True, v
 
 
 class setCallback(OpenRTM_aist.ConfigurationSetListener):
-    def __init__(self, org):
+    def __init__(self, org: 'PeriodicECOrganization') -> None:
         self._org = org
         pass
 
-    def __call__(self, config_set):
+    def __call__(self, config_set: 'OpenRTM_aist.Properties') -> None:
         self._org.updateDelegatedPorts()
 
 
 class addCallback(OpenRTM_aist.ConfigurationSetListener):
-    def __init__(self, org):
+    def __init__(self, org: 'PeriodicECOrganization') -> None:
         self._org = org
         pass
 
-    def __call__(self, config_set):
+    def __call__(self, config_set: 'OpenRTM_aist.Properties') -> None:
         self._org.updateDelegatedPorts()
         return
 
@@ -99,7 +99,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     #
     # @endif
     #
-    def __init__(self, rtobj):
+    def __init__(self, rtobj: 'PeriodicECSharedComposite') -> None:
         OpenRTM_aist.Organization_impl.__init__(self, rtobj.getObjRef())
         self._rtobj = rtobj
         self._ec = None
@@ -133,7 +133,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     #
     # Boolean add_members(const SDOList& sdo_list)
 
-    def add_members(self, sdo_list):
+    def add_members(self, sdo_list: list):
         self._rtcout.RTC_DEBUG("add_members()")
         self.updateExportedPortsList()
         for sdo in sdo_list:
@@ -177,7 +177,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     #
     # Boolean set_members(const SDOList& sdo_list)
 
-    def set_members(self, sdo_list):
+    def set_members(self, sdo_list: list):
         self._rtcout.RTC_DEBUG("set_members()")
         # self._rtcMembers = []
         self.removeAllMembers()
@@ -223,7 +223,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     #
     # Boolean remove_member(const char* id)
 
-    def remove_member(self, id):
+    def remove_member(self, id: str):
         self._rtcout.RTC_DEBUG("remove_member(id = %s)", id)
         for member in self._rtcMembers:
             if str(id) != str(member._profile.instance_name):
@@ -252,7 +252,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     # @endif
     #
 
-    def removeAllMembers(self):
+    def removeAllMembers(self) -> None:
         self._rtcout.RTC_DEBUG("removeAllMembers()")
         self.updateExportedPortsList()
         for member in self._rtcMembers:
@@ -295,7 +295,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     #
     # void stopOwnedEC(Member& member);
 
-    def stopOwnedEC(self, member):
+    def stopOwnedEC(self, member) -> None:
         ecs = member._eclist
         for ec in ecs:
             ec.stop()
@@ -310,7 +310,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     # @endif
     #
 
-    def startOwnedEC(self, member):
+    def startOwnedEC(self, member) -> None:
         ecs = member._eclist
         for ec in ecs:
             ec.start()
@@ -326,7 +326,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     #
     # void addOrganizationToTarget(Member& member);
 
-    def addOrganizationToTarget(self, member):
+    def addOrganizationToTarget(self, member) -> None:
         conf = member._config
         if CORBA.is_nil(conf):
             return
@@ -343,7 +343,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     #
     # void removeOrganizationFromTarget(Member& member)
 
-    def removeOrganizationFromTarget(self, member):
+    def removeOrganizationFromTarget(self, member) -> None:
         # get given RTC's configuration object
         if CORBA.is_nil(member._config):
             return
@@ -361,7 +361,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     #
     # void addParticipantToEC(Member& member)
 
-    def addParticipantToEC(self, member):
+    def addParticipantToEC(self, member) -> None:
         if CORBA.is_nil(self._ec) or self._ec is None:
             ecs = self._rtobj.get_owned_contexts()
             if ecs:
@@ -373,7 +373,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
 
         return
 
-    def addRTCToEC(self, rtobj):
+    def addRTCToEC(self, rtobj) -> None:
 
         # set ec to target RTC
 
@@ -400,7 +400,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     #
     # void PeriodicECOrganization::removeParticipantFromEC(Member& member)
 
-    def removeParticipantFromEC(self, member):
+    def removeParticipantFromEC(self, member) -> None:
         if CORBA.is_nil(self._ec) or self._ec is None:
             ecs = self._rtobj.get_owned_contexts()
             if ecs:
@@ -452,7 +452,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     #
     # void addPort(Member& member, PortList& portlist);
 
-    def addPort(self, member, portlist):
+    def addPort(self, member, portlist: list) -> None:
         self._rtcout.RTC_TRACE("addPort(%s)", OpenRTM_aist.flatten(portlist))
         if not portlist:
             return
@@ -490,7 +490,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     #
     # void removePort(Member& member, PortList& portlist)
 
-    def removePort(self, member, portlist):
+    def removePort(self, member, portlist: list) -> None:
         self._rtcout.RTC_DEBUG("removePort()")
         if not portlist:
             return
@@ -528,7 +528,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     # @endif
     #
 
-    def updateExportedPortsList(self):
+    def updateExportedPortsList(self) -> None:
         plist = self._rtobj.getProperties().getProperty("conf.default.exported_ports")
         if plist:
             p = OpenRTM_aist.eraseBlank(plist)
@@ -543,7 +543,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
     # @brief Update/Remove a member of Organization
     # @endif
     #
-    def updateDelegatedPorts(self):
+    def updateDelegatedPorts(self) -> None:
         oldPorts = self._expPorts
         ports = self._rtobj.getProperties().getProperty("conf.default.exported_ports")
         newPorts = ports.split(",")
@@ -572,7 +572,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
         return
 
     class Member:
-        def __init__(self, rtobj):
+        def __init__(self, rtobj) -> None:
             self._rtobj = rtobj
             self._profile = rtobj.get_component_profile()
             self._eclist = rtobj.get_owned_contexts()
@@ -584,7 +584,7 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
             tmp.swap(self)
             return self
 
-        def swap(self, x):
+        def swap(self, x) -> None:
             rtobj = x._rtobj
             profile = x._profile
             eclist = x._eclist
@@ -658,7 +658,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
     #
     # @endif
     #
-    def __init__(self, manager):
+    def __init__(self, manager: 'OpenRTM_aist.Manager') -> None:
         OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
 
         self._ref = self._this()
@@ -700,7 +700,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_TRACE("destructor of PeriodicECSharedComposite")
         OpenRTM_aist.RTObject_impl.__del__(self)
 
@@ -717,7 +717,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
     # @param self
     #
     # @endif
-    def shutdown(self):
+    def shutdown(self) -> None:
         OpenRTM_aist.RTObject_impl.shutdown(self)
         poa = OpenRTM_aist.Manager.instance().getPOA()
         poa.deactivate_object(poa.servant_to_id(self._org))
@@ -807,7 +807,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
     # @endif
     #
 
-    def onActivated(self, exec_handle):
+    def onActivated(self, exec_handle: int):
         self._rtcout.RTC_TRACE("onActivated(%d)", exec_handle)
         sdos = self._org.get_members()
 
@@ -846,7 +846,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
     # @param rtobj RTC
     #
     # @endif
-    def activateChildComp(self, rtobj):
+    def activateChildComp(self, rtobj: 'RTC._objref_RTObject') -> None:
         ecs = self.get_owned_contexts()
 
         orglist = rtobj.get_owned_organizations()
@@ -891,7 +891,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
     # @endif
     #
 
-    def onDeactivated(self, exec_handle):
+    def onDeactivated(self, exec_handle: int):
         self._rtcout.RTC_TRACE("onDeactivated(%d)", exec_handle)
         sdos = self._org.get_members()
 
@@ -916,7 +916,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
     # @param rtobj RTC
     #
     # @endif
-    def deactivateChildComp(self, rtobj):
+    def deactivateChildComp(self, rtobj: 'RTC._objref_RTObject') -> None:
         ecs = self.get_owned_contexts()
 
         orglist = rtobj.get_owned_organizations()
@@ -959,7 +959,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
     #
     # @endif
     #
-    def onReset(self, exec_handle):
+    def onReset(self, exec_handle: int):
         self._rtcout.RTC_TRACE("onReset(%d)", exec_handle)
         sdos = self._org.get_members()
 
@@ -985,7 +985,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
     #
     # @endif
 
-    def resetChildComp(self, rtobj):
+    def resetChildComp(self, rtobj: 'RTC._objref_RTObject') -> None:
         ecs = self.get_owned_contexts()
 
         orglist = rtobj.get_owned_organizations()
@@ -1029,7 +1029,7 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
         return RTC.RTC_OK
 
 
-def PeriodicECSharedCompositeInit(manager):
+def PeriodicECSharedCompositeInit(manager: 'OpenRTM_aist.Manager') -> None:
     profile = OpenRTM_aist.Properties(
         defaults_str=periodicecsharedcomposite_spec)
     manager.registerFactory(profile,

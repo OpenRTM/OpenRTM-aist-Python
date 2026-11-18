@@ -12,6 +12,7 @@ import OpenRTM_aist
 import OpenRTM_aist.RTObject
 from omniORB import CORBA
 import RTC
+import typing as _typing
 
 
 ##
@@ -31,7 +32,7 @@ import RTC
 #
 # @endif
 # coil::Properties get_component_profile(const RTC::RTObject_ptr rtc)
-def get_component_profile(rtc):
+def get_component_profile(rtc: '_typing.Optional[RTC._objref_RTObject]'):
     prop = OpenRTM_aist.Properties()
     if CORBA.is_nil(rtc):
         return prop
@@ -56,7 +57,7 @@ def get_component_profile(rtc):
 # @return
 #
 # @endif
-def is_existing(rtc):
+def is_existing(rtc: 'RTC._objref_RTObject') -> '_typing.Optional[bool]':
     try:
         if rtc._non_existent():
             return False
@@ -81,7 +82,7 @@ def is_existing(rtc):
 # @param
 #
 # @endif
-def is_alive_in_default_ec(rtc):
+def is_alive_in_default_ec(rtc: 'RTC._objref_RTObject'):
     ec = get_actual_ec(rtc)
     if CORBA.is_nil(ec):
         return False
@@ -108,7 +109,7 @@ def is_alive_in_default_ec(rtc):
 # @endif
 # RTC::ExecutionContext_var get_actual_ec(const RTC::RTObject_ptr
 # rtc,RTC::UniqueId ec_id = 0)
-def get_actual_ec(rtc, ec_id=0):
+def get_actual_ec(rtc: '_typing.Optional[RTC._objref_RTObject]', ec_id: int = 0):
     if ec_id < 0:
         return RTC.ExecutionContext._nil
     if CORBA.is_nil(rtc):
@@ -148,7 +149,7 @@ def get_actual_ec(rtc, ec_id=0):
 # @param
 #
 # @endif
-def get_ec_id(rtc, ec):
+def get_ec_id(rtc: '_typing.Optional[RTC._objref_RTObject]', ec: '_typing.Optional[RTC._objref_ExecutionContext]'):
     if CORBA.is_nil(rtc):
         return -1
     if CORBA.is_nil(ec):
@@ -192,7 +193,7 @@ def get_ec_id(rtc, ec):
 #
 # @endif
 # RTC::ReturnCode_t activate(RTC::RTObject_ptr rtc, RTC::UniqueId ec_id = 0)
-def activate(rtc, ec_id=0):
+def activate(rtc: '_typing.Optional[RTC._objref_RTObject]', ec_id: int = 0):
     if CORBA.is_nil(rtc):
         return RTC.BAD_PARAMETER
     ec = get_actual_ec(rtc, ec_id)
@@ -221,7 +222,7 @@ def activate(rtc, ec_id=0):
 #
 # @endif
 # RTC::ReturnCode_t deactivate(RTC::RTObject_ptr rtc, RTC::UniqueId ec_id = 0)
-def deactivate(rtc, ec_id=0):
+def deactivate(rtc: '_typing.Optional[RTC._objref_RTObject]', ec_id: int = 0):
     if CORBA.is_nil(rtc):
         return RTC.BAD_PARAMETER
     ec = get_actual_ec(rtc, ec_id)
@@ -251,7 +252,7 @@ def deactivate(rtc, ec_id=0):
 # RTC::ReturnCode_t reset(RTC::RTObject_ptr rtc, RTC::UniqueId ec_id = 0)
 
 
-def reset(rtc, ec_id=0):
+def reset(rtc: '_typing.Optional[RTC._objref_RTObject]', ec_id: int = 0):
     if CORBA.is_nil(rtc):
         return RTC.BAD_PARAMETER
     ec = get_actual_ec(rtc, ec_id)
@@ -311,7 +312,7 @@ def get_state(rtc, ec_id=0):
 # @endif
 
 
-def is_in_inactive(rtc, ec_id=0):
+def is_in_inactive(rtc: 'RTC._objref_RTObject', ec_id: int = 0) -> bool:
     ret, state = get_state(rtc, ec_id)
     if ret:
         if state == RTC.INACTIVE_STATE:
@@ -339,7 +340,7 @@ def is_in_inactive(rtc, ec_id=0):
 # @endif
 
 
-def is_in_active(rtc, ec_id=0):
+def is_in_active(rtc: 'RTC._objref_RTObject', ec_id: int = 0) -> bool:
     ret, state = get_state(rtc, ec_id)
     if ret:
         if state == RTC.ACTIVE_STATE:
@@ -367,7 +368,7 @@ def is_in_active(rtc, ec_id=0):
 # @endif
 
 
-def is_in_error(rtc, ec_id=0):
+def is_in_error(rtc: 'RTC._objref_RTObject', ec_id: int = 0) -> bool:
     ret, state = get_state(rtc, ec_id)
     if ret:
         if state == RTC.ERROR_STATE:
@@ -391,7 +392,7 @@ def is_in_error(rtc, ec_id=0):
 # @return
 #
 # @endif
-def get_default_rate(rtc):
+def get_default_rate(rtc: 'RTC._objref_RTObject'):
     ec = get_actual_ec(rtc)
     if CORBA.is_nil(ec):
         return RTC.BAD_PARAMETER
@@ -415,7 +416,7 @@ def get_default_rate(rtc):
 # @param ec
 #
 # @endif
-def set_default_rate(rtc, rate):
+def set_default_rate(rtc: 'RTC._objref_RTObject', rate: float):
     ec = get_actual_ec(rtc)
     if CORBA.is_nil(ec):
         return RTC.BAD_PARAMETER
@@ -439,7 +440,7 @@ def set_default_rate(rtc, rate):
 # @return
 #
 # @endif
-def get_current_rate(rtc, ec_id):
+def get_current_rate(rtc: 'RTC._objref_RTObject', ec_id: int):
     ec = get_actual_ec(rtc, ec_id)
     if CORBA.is_nil(ec):
         return RTC.BAD_PARAMETER
@@ -464,7 +465,7 @@ def get_current_rate(rtc, ec_id):
 # @param
 #
 # @endif
-def set_current_rate(rtc, ec_id, rate):
+def set_current_rate(rtc: 'RTC._objref_RTObject', ec_id: int, rate: float):
     ec = get_actual_ec(rtc, ec_id)
     if CORBA.is_nil(ec):
         return RTC.BAD_PARAMETER
@@ -488,7 +489,7 @@ def set_current_rate(rtc, ec_id, rate):
 # @param
 #
 # @endif
-def add_rtc_to_default_ec(localcomp, othercomp):
+def add_rtc_to_default_ec(localcomp: 'RTC._objref_RTObject', othercomp: '_typing.Optional[RTC._objref_RTObject]'):
     if CORBA.is_nil(othercomp):
         return RTC.BAD_PARAMETER
     ec = get_actual_ec(localcomp)
@@ -514,7 +515,7 @@ def add_rtc_to_default_ec(localcomp, othercomp):
 # @param
 #
 # @endif
-def remove_rtc_to_default_ec(localcomp, othercomp):
+def remove_rtc_to_default_ec(localcomp: 'RTC._objref_RTObject', othercomp: '_typing.Optional[RTC._objref_RTObject]'):
     if CORBA.is_nil(othercomp):
         return RTC.BAD_PARAMETER
     ec = get_actual_ec(localcomp)
@@ -540,7 +541,7 @@ def remove_rtc_to_default_ec(localcomp, othercomp):
 # @return
 #
 # @endif
-def get_participants_rtc(rtc):
+def get_participants_rtc(rtc: 'RTC._objref_RTObject'):
     ec = get_actual_ec(rtc)
     if CORBA.is_nil(ec):
         return []
@@ -564,7 +565,7 @@ def get_participants_rtc(rtc):
 # @return
 #
 # @endif
-def get_port_names(rtc):
+def get_port_names(rtc: '_typing.Optional[RTC._objref_RTObject]'):
     names = []
     if CORBA.is_nil(rtc):
         return names
@@ -592,7 +593,7 @@ def get_port_names(rtc):
 # @return
 #
 # @endif
-def get_inport_names(rtc):
+def get_inport_names(rtc: '_typing.Optional[RTC._objref_RTObject]'):
     names = []
     if CORBA.is_nil(rtc):
         return names
@@ -624,7 +625,7 @@ def get_inport_names(rtc):
 # @return
 #
 # @endif
-def get_outport_names(rtc):
+def get_outport_names(rtc: '_typing.Optional[RTC._objref_RTObject]'):
     names = []
     if CORBA.is_nil(rtc):
         return names
@@ -656,7 +657,7 @@ def get_outport_names(rtc):
 # @return
 #
 # @endif
-def get_svcport_names(rtc):
+def get_svcport_names(rtc: '_typing.Optional[RTC._objref_RTObject]'):
     names = []
     if CORBA.is_nil(rtc):
         return names
@@ -693,7 +694,7 @@ def get_svcport_names(rtc):
 #
 # RTC::PortService_var get_port_by_name(const RTC::RTObject_ptr rtc,
 # std::string port_name)
-def get_port_by_name(rtc, port_name):
+def get_port_by_name(rtc: '_typing.Optional[RTC._objref_RTObject]', port_name: str):
     if CORBA.is_nil(rtc):
         return RTC.PortService._nil
     ports = rtc.get_ports()
@@ -723,7 +724,7 @@ def get_port_by_name(rtc, port_name):
 # @return
 #
 # @endif
-def get_connector_names_by_portref(port):
+def get_connector_names_by_portref(port: '_typing.Optional[RTC._objref_PortService]'):
     names = []
     if CORBA.is_nil(port):
         return names
@@ -751,7 +752,7 @@ def get_connector_names_by_portref(port):
 # @endif
 
 
-def get_connector_names(rtc, port_name):
+def get_connector_names(rtc: 'RTC._objref_RTObject', port_name: str):
     names = []
     port = get_port_by_name(rtc, port_name)
     if CORBA.is_nil(port):
@@ -778,7 +779,7 @@ def get_connector_names(rtc, port_name):
 # @return
 #
 # @endif
-def get_connector_ids_by_portref(port):
+def get_connector_ids_by_portref(port: '_typing.Optional[RTC._objref_PortService]'):
     ids = []
     if CORBA.is_nil(port):
         return ids
@@ -806,7 +807,7 @@ def get_connector_ids_by_portref(port):
 # @return
 #
 # @endif
-def get_connector_ids(rtc, port_name):
+def get_connector_ids(rtc: 'RTC._objref_RTObject', port_name: str):
     ids = []
     port = get_port_by_name(rtc, port_name)
     if CORBA.is_nil(port):
@@ -843,7 +844,7 @@ def get_connector_ids(rtc, port_name):
 # RTC::PortService_ptr port1)
 
 
-def create_connector(name, prop_arg, port0, port1):
+def create_connector(name: str, prop_arg: 'OpenRTM_aist.Properties', port0: 'RTC._objref_PortService', port1: '_typing.Optional[RTC._objref_PortService]'):
     prop = prop_arg
     if CORBA.is_nil(port1):
         conn_prof = RTC.ConnectorProfile(name, "", [port0], [])
@@ -883,7 +884,7 @@ def create_connector(name, prop_arg, port0, port1):
 #
 # @endif
 
-def already_connected(localport, otherport):
+def already_connected(localport: 'RTC._objref_PortService', otherport: 'RTC._objref_PortService') -> bool:
     if localport._is_equivalent(otherport):
         return False
     conprof = localport.get_connector_profiles()
@@ -920,7 +921,7 @@ def already_connected(localport, otherport):
 # @endif
 # RTC::ReturnCode_t connect(const std::string name,const coil::Properties
 # prop,const RTC::PortService_ptr port0,const RTC::PortService_ptr port1)
-def connect(name, prop, port0, port1):
+def connect(name: str, prop: 'OpenRTM_aist.Properties', port0: '_typing.Optional[RTC._objref_PortService]', port1: '_typing.Optional[RTC._objref_PortService]'):
     if CORBA.is_nil(port0):
         return RTC.BAD_PARAMETER
     # if CORBA.is_nil(port1):
@@ -959,7 +960,7 @@ def connect(name, prop, port0, port1):
 # RTC::ReturnCode_t connect_multi(const std::string name,const
 # coil::Properties prop,const RTC::PortService_ptr
 # port,RTC::PortServiceList_var& target_ports)
-def connect_multi(name, prop, port, target_ports):
+def connect_multi(name: str, prop: 'OpenRTM_aist.Properties', port: '_typing.Optional[RTC._objref_PortService]', target_ports):
     ret = RTC.RTC_OK
     if CORBA.is_nil(port):
         return RTC.BAD_PARAMETER
@@ -1009,7 +1010,7 @@ class find_port:
     #
     # @endif
     # find_port(const std::string name)
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         self._name = name
     ##
     # @if jp
@@ -1067,7 +1068,7 @@ class find_port:
 # port_name0,RTC::RTObject_ptr rtc1,const std::string port_name1)
 
 
-def connect_by_name(name, prop, rtc0, port_name0, rtc1, port_name1):
+def connect_by_name(name: str, prop: 'OpenRTM_aist.Properties', rtc0: '_typing.Optional[RTC._objref_RTObject]', port_name0, rtc1: '_typing.Optional[RTC._objref_RTObject]', port_name1):
     if CORBA.is_nil(rtc0):
         return RTC.BAD_PARAMETER
     if CORBA.is_nil(rtc1):
@@ -1101,7 +1102,7 @@ def connect_by_name(name, prop, rtc0, port_name0, rtc1, port_name1):
 # @return
 #
 # @endif
-def disconnect(connector_prof):
+def disconnect(connector_prof: 'RTC.ConnectorProfile'):
     ports = connector_prof.ports
     return disconnect_by_portref_connector_id(
         ports[0], connector_prof.connector_id)
@@ -1126,7 +1127,7 @@ def disconnect(connector_prof):
 # @return
 #
 # @endif
-def disconnect_by_portref_connector_name(port_ref, conn_name):
+def disconnect_by_portref_connector_name(port_ref, conn_name: str):
     if CORBA.is_nil(port_ref):
         return RTC.BAD_PARAMETER
     conprof = port_ref.get_connector_profiles()
@@ -1183,7 +1184,7 @@ def disconnect_by_portname_connector_name(port_name, conn_name):
 # @param
 #
 # @endif
-def disconnect_by_portref_connector_id(port_ref, conn_id):
+def disconnect_by_portref_connector_id(port_ref, conn_id: str):
     if CORBA.is_nil(port_ref):
         return RTC.BAD_PARAMETER
     return port_ref.disconnect(conn_id)
@@ -1280,7 +1281,7 @@ def disconnect_all_by_name(port_name):
 # @return
 #
 # @endif
-def get_port_by_url(port_name):
+def get_port_by_url(port_name: str):
     mgr = OpenRTM_aist.Manager.instance()
     nm = mgr.getNaming()
     p = port_name.split(".")
@@ -1349,7 +1350,7 @@ def disconnect_by_port_name(localport, othername):
 # @return
 #
 # @endif
-def get_configuration(rtc, conf_name):
+def get_configuration(rtc: 'RTC._objref_RTObject', conf_name: str):
     conf = rtc.get_configuration()
 
     confset = conf.get_configuration_set(conf_name)
@@ -1380,7 +1381,7 @@ def get_configuration(rtc, conf_name):
 # @return
 #
 # @endif
-def get_parameter_by_key(rtc, confset_name, value_name):
+def get_parameter_by_key(rtc: 'RTC._objref_RTObject', confset_name: str, value_name: str):
     conf = rtc.get_configuration()
 
     confset = conf.get_configuration_set(confset_name)
@@ -1408,7 +1409,7 @@ def get_parameter_by_key(rtc, confset_name, value_name):
 # @return
 #
 # @endif
-def get_active_configuration_name(rtc):
+def get_active_configuration_name(rtc: 'RTC._objref_RTObject'):
     conf = rtc.get_configuration()
     confset = conf.get_active_configuration_set()
     return confset.id
@@ -1431,7 +1432,7 @@ def get_active_configuration_name(rtc):
 # @endif
 
 
-def get_active_configuration(rtc):
+def get_active_configuration(rtc: 'RTC._objref_RTObject'):
     conf = rtc.get_configuration()
 
     confset = conf.get_active_configuration_set()
@@ -1463,7 +1464,7 @@ def get_active_configuration(rtc):
 # @return
 #
 # @endif
-def set_configuration(rtc, confset_name, value_name, value):
+def set_configuration(rtc: 'RTC._objref_RTObject', confset_name: str, value_name: str, value: str) -> bool:
     conf = rtc.get_configuration()
 
     confset = conf.get_configuration_set(confset_name)
@@ -1495,7 +1496,7 @@ def set_configuration(rtc, confset_name, value_name, value):
 # @return
 #
 # @endif
-def set_active_configuration(rtc, value_name, value):
+def set_active_configuration(rtc: 'RTC._objref_RTObject', value_name: str, value: str) -> bool:
     conf = rtc.get_configuration()
 
     confset = conf.get_active_configuration_set()
@@ -1527,7 +1528,7 @@ def set_active_configuration(rtc, value_name, value):
 # @return
 #
 # @endif
-def set_configuration_parameter(conf, confset, value_name, value):
+def set_configuration_parameter(conf, confset, value_name: str, value: str) -> bool:
     confData = confset.configuration_data
     prop = OpenRTM_aist.Properties()
     OpenRTM_aist.NVUtil.copyToProperties(prop, confData)
@@ -1600,7 +1601,7 @@ class CorbaURI:
     # @param objkey
     #
     # @endif
-    def __init__(self, uri, objkey=""):
+    def __init__(self, uri: str, objkey: str = "") -> None:
         protocols_str = {"giop:tcp:": "corbaloc:iiop:",
                          "giop:ssl:": "corbaloc:ssliop:",
                          "giop:http:": "",
@@ -1875,7 +1876,7 @@ class RTCURIObject:
     # @param isrtcloc
     #
     # @endif
-    def __init__(self, uri, isrtcname=False, isrtcloc=False):
+    def __init__(self, uri: str, isrtcname: bool = False, isrtcloc: bool = False) -> None:
         self._is_rtcname = False
         self._is_rtcloc = False
         self._rtcpath = ""

@@ -55,7 +55,7 @@ PLUGIN_API = 1
 # @param ctx plugin context
 # @param config plugin configuration (not used)
 # @~
-def setup(ctx, config):
+def setup(ctx, config) -> None:
     def first_fit(ctx, items, robots, edges, primary, args):
         import RTCPlacement as pl
         order = args.get("order") or [primary] + [r.name for r in robots if r.name != primary]

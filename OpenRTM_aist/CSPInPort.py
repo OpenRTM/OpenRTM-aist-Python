@@ -88,7 +88,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     # @param manager Manager to associate with the object.
     # @endif
     #
-    def __init__(self, name, value, manager=None):
+    def __init__(self, name: str, value, manager=None) -> None:
         super(CSPInPort, self).__init__(name, "any")
         self._ctrl = OpenRTM_aist.CSPInPort.WorkerThreadCtrl()
         self._name = name
@@ -125,7 +125,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         super(CSPInPort, self).__del__()
 
     ##
@@ -170,7 +170,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     # @endif
     #
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         super(CSPInPort, self).init(prop)
 
         channeltimeout = 10
@@ -219,7 +219,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     # @endif
     #
-    def setManager(self, manager):
+    def setManager(self, manager) -> None:
         self._writable_listener.setManager(manager)
         self._manager = manager
         if manager:
@@ -238,7 +238,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     # @endif
     #
-    def releaseManager(self):
+    def releaseManager(self) -> None:
         self._writable_listener.releaseManager()
         self._manager = None
 
@@ -258,7 +258,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     # @endif
     #
-    def setWritingConnector(self, con):
+    def setWritingConnector(self, con) -> None:
         self._writingConnector = con
 
     ##
@@ -277,7 +277,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     # @endif
     #
-    def notify(self):
+    def notify(self) -> None:
         for con in self._connectors:
             guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             if not self._syncmode:
@@ -350,7 +350,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     # @endif
     #
-    def getDataBufferMode(self, con, retry):
+    def getDataBufferMode(self, con, retry: bool):
         guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond, True)
         if not self._syncmode:
             guard_ctrl.lock()
@@ -529,7 +529,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     # @endif
     #
-    def getDataZeroMode(self, con, retry):
+    def getDataZeroMode(self, con, retry: bool):
         if con.isReadable(retry):
             #import time
             # time.sleep(1)
@@ -708,7 +708,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     # @endif
     #
-    def setSyncMode(self, mode):
+    def setSyncMode(self, mode: bool) -> None:
         self._syncmode = mode
 
     ##
@@ -909,7 +909,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     # @brief Set on read.
     # @param on_read Value of on_read.
     # @endif
-    def setOnRead(self, on_read):
+    def setOnRead(self, on_read) -> None:
         self._OnRead = on_read
 
     ##
@@ -920,7 +920,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     # @brief Set on read convert.
     # @param on_rconvert Value of on_rconvert.
     # @endif
-    def setOnReadConvert(self, on_rconvert):
+    def setOnReadConvert(self, on_rconvert) -> None:
         self._OnReadConvert = on_rconvert
 
     ##
@@ -973,7 +973,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @param port Port to operate on.
         # @endif
         #
-        def __init__(self, buff, control, timeout, port, manager=None):
+        def __init__(self, buff, control, timeout: int, port: 'CSPInPort', manager=None) -> None:
             self._ctrl = control
             self._buffer = buff
             self._channeltimeout = timeout
@@ -1008,7 +1008,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @endif
         #
 
-        def __call__(self, con, retry=False, option=None):
+        def __call__(self, con, retry: bool = False, option=None) -> bool:
             guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
 
             if retry:
@@ -1050,7 +1050,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         #
         # @endif
         #
-        def setManager(self, manager):
+        def setManager(self, manager) -> None:
             _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = manager
 
@@ -1069,7 +1069,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         #
         # @endif
         #
-        def releaseManager(self):
+        def releaseManager(self) -> None:
             _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = None
 
@@ -1115,7 +1115,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         #
         # @endif
         #
-        def __init__(self, buff, control):
+        def __init__(self, buff, control) -> None:
             self._ctrl = control
             self._buffer = buff
         ##
@@ -1141,7 +1141,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @endif
         #
 
-        def __call__(self, data):
+        def __call__(self, data: bytes):
             _ = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             self._buffer.write(data)
             self._ctrl._writing = False
@@ -1197,7 +1197,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @param port Port to operate on.
         # @endif
         #
-        def __init__(self, buff, control, timeout, port, manager=None):
+        def __init__(self, buff, control, timeout: int, port: 'CSPInPort', manager=None) -> None:
             self._ctrl = control
             self._buffer = buff
             self._channeltimeout = timeout
@@ -1232,7 +1232,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @endif
         #
 
-        def __call__(self, con, retry=False, option=None):
+        def __call__(self, con, retry: bool = False, option=None) -> bool:
             guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             if retry:
                 if con not in self._ctrl._searched_connectors:
@@ -1272,7 +1272,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         #
         # @endif
         #
-        def setManager(self, manager):
+        def setManager(self, manager) -> None:
             _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = manager
 
@@ -1291,7 +1291,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         #
         # @endif
         #
-        def releaseManager(self):
+        def releaseManager(self) -> None:
             _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = None
 
@@ -1337,7 +1337,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         #
         # @endif
         #
-        def __init__(self, buff, control):
+        def __init__(self, buff, control) -> None:
             self._ctrl = control
             self._buffer = buff
         ##
@@ -1383,7 +1383,7 @@ class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @else
         # @brief Initialize the instance and its internal state.
         # @endif
-        def __init__(self):
+        def __init__(self) -> None:
             self._mutex = threading.RLock()
             self._cond = threading.Condition(self._mutex)
             self._writing = False

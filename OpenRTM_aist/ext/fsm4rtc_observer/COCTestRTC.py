@@ -21,13 +21,13 @@ coctestrtc_spec = ["implementation_id", "COCTestRTC",
 
 
 class DataListener(OpenRTM_aist.ConnectorDataListenerT):
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         self._name = name
 
-    def __del__(self):
+    def __del__(self) -> None:
         print("dtor of ", self._name)
 
-    def __call__(self, info, data):
+    def __call__(self, info, data: 'RTC.TimedLong'):
         print("------------------------------")
         print("Listener:       ", self._name)
         print("Profile::name:  ", info.name)
@@ -38,10 +38,10 @@ class DataListener(OpenRTM_aist.ConnectorDataListenerT):
 
 
 class ConnListener(OpenRTM_aist.ConnectorListener):
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         self._name = name
 
-    def __del__(self):
+    def __del__(self) -> None:
         print("dtor of ", self._name)
 
     def __call__(self, info):
@@ -54,7 +54,7 @@ class ConnListener(OpenRTM_aist.ConnectorListener):
 
 
 class COCTestRTC(OpenRTM_aist.DataFlowComponentBase):
-    def __init__(self, manager):
+    def __init__(self, manager) -> None:
         OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
         return
 
@@ -100,21 +100,21 @@ class COCTestRTC(OpenRTM_aist.DataFlowComponentBase):
         return RTC.RTC_OK
 
 
-def COCTestRTCInit(manager):
+def COCTestRTCInit(manager) -> None:
     profile = OpenRTM_aist.Properties(defaults_str=coctestrtc_spec)
     manager.registerFactory(profile,
                             COCTestRTC,
                             OpenRTM_aist.Delete)
 
 
-def MyModuleInit(manager):
+def MyModuleInit(manager) -> None:
     COCTestRTCInit(manager)
 
     # Create a component
     _ = manager.createComponent("COCTestRTC")
 
 
-def main():
+def main() -> None:
     # Initialize manager
     mgr = OpenRTM_aist.Manager.init(sys.argv)
 

@@ -48,7 +48,7 @@ class RescanArbiter:
     # @else
     # @brief Initialize the instance and its internal state.
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._lock = threading.RLock()
         self._sequence = itertools.count()
         self._pid = os.getpid()
@@ -87,7 +87,7 @@ class RescanArbiter:
     # @param connector Value of connector.
     # @param port Port to operate on.
     # @endif
-    def connect(self, connector, port):
+    def connect(self, connector, port) -> None:
         with self._lock:
             key = connector.id()
             ends = self._connections.setdefault(key, weakref.WeakValueDictionary())
@@ -103,7 +103,7 @@ class RescanArbiter:
     # @param manager Manager to associate with the object.
     # @param port Port to operate on.
     # @endif
-    def _ready_peer(self, manager, port):
+    def _ready_peer(self, manager, port) -> bool:
         # Never take port locks here: RPC listeners acquire port then manager.
         connectors = list(getattr(port, '_connectors', ()))
         if not connectors:  # Test/custom ports, or a remote/standalone endpoint.
@@ -133,7 +133,7 @@ class RescanArbiter:
     # @else
     # @brief Assign a rescan grant to a waiting manager.
     # @endif
-    def schedule(self):
+    def schedule(self) -> None:
         with self._lock:
             if self._owner is not None and self._owner() is None:
                 self._owner = None
@@ -174,7 +174,7 @@ class RescanArbiter:
     # @param manager Manager to associate with the object.
     # @param token Generation of the rescan grant to release.
     # @endif
-    def release(self, manager, token):
+    def release(self, manager, token) -> None:
         """Release the exact consumed/cancelled grant, never a newer grant.
 
         The token is captured before publishing a new wait, or while closing
@@ -216,7 +216,7 @@ class CSPConnectionInfo:
     # @param args Value of args.
     # @param kwargs Value of kwargs.
     # @endif
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self._csp_peer_priorities = {}
         self._csp_request_peers = {}
         super(CSPConnectionInfo, self).__init__(*args, **kwargs)

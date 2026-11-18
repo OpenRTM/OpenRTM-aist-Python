@@ -64,7 +64,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.OutPortProvider.__init__(self)
         self.setInterfaceType("data_service")
 
@@ -100,7 +100,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -114,7 +114,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     #
     # @endif
     #
-    def exit(self):
+    def exit(self) -> None:
         oid = self._default_POA().servant_to_id(self)
         self._default_POA().deactivate_object(oid)
 
@@ -146,7 +146,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # virtual void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties'):
         pass
 
     ##
@@ -176,7 +176,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     #
     # virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
 
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._buffer = buffer
         return
 
@@ -227,7 +227,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     # virtual void setListener(ConnectorInfo& info,
     #                          ConnectorListeners* listeners);
 
-    def setListener(self, info, listeners):
+    def setListener(self, info, listeners) -> None:
         self._profile = info
         self._listeners = listeners
         return
@@ -258,7 +258,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     #
     # virtual void setConnector(OutPortConnector* connector);
 
-    def setConnector(self, connector):
+    def setConnector(self, connector) -> None:
         self._connector = connector
         return
 
@@ -314,7 +314,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onBufferRead(const cdrMemoryStream& data)
-    def onBufferRead(self, data):
+    def onBufferRead(self, data: bytes):
         if self._listeners and self._profile:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ, self._profile, data)
@@ -330,7 +330,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onSend(const cdrMemoryStream& data)
-    def onSend(self, data):
+    def onSend(self, data: bytes):
         if self._listeners and self._profile:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_SEND, self._profile, data)
@@ -344,7 +344,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onBufferEmpty()
-    def onBufferEmpty(self):
+    def onBufferEmpty(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
@@ -358,7 +358,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onBufferReadTimeout()
-    def onBufferReadTimeout(self):
+    def onBufferReadTimeout(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
@@ -372,7 +372,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onSenderEmpty()
-    def onSenderEmpty(self):
+    def onSenderEmpty(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
@@ -386,7 +386,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onSenderTimeout()
-    def onSenderTimeout(self):
+    def onSenderTimeout(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
@@ -400,7 +400,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onSenderError()
-    def onSenderError(self):
+    def onSenderError(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
@@ -416,7 +416,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
     # ::OpenRTM::PortStatus convertReturn(BufferStatus::Enum status,
     #                                     const cdrMemoryStream& data);
 
-    def convertReturn(self, status, data):
+    def convertReturn(self, status: int, data: bytes):
         if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
             data = self.onBufferRead(data)
             data = self.onSend(data)
@@ -448,7 +448,7 @@ class OutPortDSProvider(OpenRTM_aist.OutPortProvider,
             return (RTC.UNKNOWN_ERROR, data)
 
 
-def OutPortDSProviderInit():
+def OutPortDSProviderInit() -> None:
     factory = OpenRTM_aist.OutPortProviderFactory.instance()
     factory.addFactory("data_service",
                        OpenRTM_aist.OutPortDSProvider)

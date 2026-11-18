@@ -47,7 +47,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     # @else
     # @brief FileNameService ctor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
 
         self._profile = OpenRTM_aist.LocalServiceProfile()
         self._profile.name = service_name
@@ -71,7 +71,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     # @brief FileNameService dtor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_TRACE("FileNameservice.__del__()")
         self.cleanupFiles()
         return
@@ -94,7 +94,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     # virtual bool
     # init(const ::coil::Properties& profile);
 
-    def init(self, profile):
+    def init(self, profile: 'OpenRTM_aist.Properties') -> bool:
         self._rtcout.RTC_TRACE("init()")
         self._rtcout.RTC_DEBUG(profile)
         self._profile.properties.mergeProperties(profile)
@@ -164,7 +164,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     # @endif
     # virtual void finalize();
 
-    def finalize(self):
+    def finalize(self) -> None:
         self.cleanupFiles()
         return
 
@@ -183,7 +183,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     # void
     # onRegisterNameservice(coil::vstring& path, coil::vstring& ns_info);
 
-    def onRegisterNameservice(self, path, ns_info):
+    def onRegisterNameservice(self, path: list, ns_info: list) -> None:
         self._rtcout.RTC_TRACE("onRegisterNameservice(path = %s",
                                OpenRTM_aist.flatten(path))
         self._rtcout.RTC_TRACE(" nsinfo = %s",
@@ -228,7 +228,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     # void
     # onUnregisterNameservice(coil::vstring& path);
 
-    def onUnregisterNameservice(self, path):
+    def onUnregisterNameservice(self, path: list) -> None:
         self._rtcout.RTC_TRACE("onUnregisterNameservice(%s)",
                                OpenRTM_aist.flatten(path))
         for p in path:
@@ -267,7 +267,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     # @endif
     # bool createDirectory(fs::path& directory);
 
-    def createDirectory(self, directory):
+    def createDirectory(self, directory: str) -> bool:
         self._rtcout.RTC_TRACE("createDirectory(%s)", directory)
         if not os.path.exists(directory):
             self._rtcout.RTC_DEBUG("Directory %s not found", directory)
@@ -302,7 +302,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     # @endif
     # std::string getFname(std::string& path) const;
 
-    def getFname(self, path):
+    def getFname(self, path: str):
         self._rtcout.RTC_TRACE("getFname(%s)", path)
 
         pathstring_ = self._profile.properties.getProperty("base_path")
@@ -335,7 +335,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     # @endif
     # void cleanupFiles();
 
-    def cleanupFiles(self):
+    def cleanupFiles(self) -> None:
         self._rtcout.RTC_TRACE("cleanupFiles()")
         for file in self._files:
             os.remove(file)
@@ -352,7 +352,7 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     # @endif
     # bool processServiceProfile(const ::coil::Properties& props);
 
-    def processServiceProfile(self, props):
+    def processServiceProfile(self, props) -> bool:
         return True
 
 
@@ -374,7 +374,7 @@ class NamingAction:
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self, fns):
+    def __init__(self, fns) -> None:
         self._fns = fns
         return
 
@@ -385,7 +385,7 @@ class NamingAction:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -399,7 +399,7 @@ class NamingAction:
     # virtual void preBind(RTC::RTObject_impl* rtobj,
     #                      coil::vstring& name);
 
-    def preBind(self, rtobj, name):
+    def preBind(self, rtobj, name: list) -> None:
         objref_ = rtobj.getObjRef()
         ior_ = OpenRTM_aist.Manager.instance().getORB().object_to_string(objref_)
         ns_info_ = [ior_]
@@ -417,7 +417,7 @@ class NamingAction:
     # virtual void postBind(RTC::RTObject_impl* rtobj,
     #                       coil::vstring& name);
 
-    def postBind(self, rtobj, name):
+    def postBind(self, rtobj, name: list) -> None:
         return
 
     ##
@@ -431,7 +431,7 @@ class NamingAction:
     # virtual void preUnbind(RTC::RTObject_impl* rtobj,
     #                        coil::vstring& name);
 
-    def preUnbind(self, rtobj, name):
+    def preUnbind(self, rtobj, name: list) -> None:
         return
 
     ##
@@ -445,7 +445,7 @@ class NamingAction:
     # virtual void postUnbind(RTC::RTObject_impl* rtobj,
     #                         coil::vstring& name);
 
-    def postUnbind(self, rtobj, name):
+    def postUnbind(self, rtobj, name: list) -> None:
         self._fns.onUnregisterNameservice(name)
         return
 
@@ -462,7 +462,7 @@ class NamingAction:
 # This initialization function registers FileNameservice to the factory.
 #
 # @endif
-def FileNameserviceInit(manager):
+def FileNameserviceInit(manager: 'OpenRTM_aist.Manager') -> None:
     factory_ = OpenRTM_aist.LocalServiceFactory.instance()
     factory_.addFactory(service_name,
                         FileNameservice)

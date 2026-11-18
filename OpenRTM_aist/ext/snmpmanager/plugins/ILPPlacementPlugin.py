@@ -115,7 +115,7 @@ class _Model:
     # @~english
     # @brief Constructor. Creates an empty model without variables and rows
     # @~
-    def __init__(self):
+    def __init__(self) -> None:
         self.names, self.lb, self.ub, self.integer = [], [], [], []
         self.rows = []
 
@@ -137,7 +137,7 @@ class _Model:
     # @param integer True for an integer variable
     # @return index of the variable
     # @~
-    def var(self, name, lb=0.0, ub=1.0, integer=True):
+    def var(self, name, lb=0.0, ub=1.0, integer: bool = True):
         self.names.append(name)
         self.lb.append(lb)
         self.ub.append(ub)
@@ -158,7 +158,7 @@ class _Model:
     # @param lo lower bound
     # @param hi upper bound
     # @~
-    def add(self, coefs, lo=-INF, hi=INF):
+    def add(self, coefs, lo=-INF, hi=INF) -> None:
         coefs = {k: v for k, v in coefs.items() if v != 0}
         if coefs or lo > 0 or hi < 0:
             self.rows.append((coefs, lo, hi))
@@ -493,7 +493,7 @@ def solve_ilp(items, robots, edges, primary, args=None, log=None):
 # @param ctx plugin context
 # @param config plugin configuration (not used)
 # @~
-def setup(ctx, config):
+def setup(ctx, config) -> None:
     def ilp(ctx, items, robots, edges, primary, args):
         return solve_ilp(items, robots, edges, primary, args, ctx.log)
 

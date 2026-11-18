@@ -1,7 +1,7 @@
 # Add path to OpenRTM_aist/RTM_IDL if need be 2008/06/06
 import sys
 import os
-_openrtm_idl_path = os.path.join(os.path.dirname(__file__), "RTM_IDL")
+_openrtm_idl_path = os.path.join(os.path.dirname(__file__), "RTM_IDL")  # type: str
 if _openrtm_idl_path not in sys.path:
     sys.path.append(_openrtm_idl_path)
 del _openrtm_idl_path

@@ -15,6 +15,7 @@
 #     All rights reserved.
 
 
+import typing as _typing
 import sys
 import os
 import glob
@@ -72,7 +73,7 @@ class ModuleManager:
     # @brief constructor
     #
     # @endif
-    def __init__(self, prop):
+    def __init__(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._properties = prop
 
         self._configPath = prop.getProperty(CONFIG_PATH).split(",")
@@ -124,7 +125,7 @@ class ModuleManager:
     # @brief destructor
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         self.unloadAll()
 
     ##
@@ -136,7 +137,7 @@ class ModuleManager:
     # @endif
 
     class Error(Exception):
-        def __init__(self, reason_):
+        def __init__(self, reason_: str) -> None:
             self.reason = reason_
 
     ##
@@ -148,7 +149,7 @@ class ModuleManager:
     # @endif
 
     class NotFound(Exception):
-        def __init__(self, name_):
+        def __init__(self, name_: str) -> None:
             self.name = name_
 
     ##
@@ -160,7 +161,7 @@ class ModuleManager:
     # @endif
 
     class FileNotFound(NotFound):
-        def __init__(self, name_):
+        def __init__(self, name_: str) -> None:
             ModuleManager.NotFound.__init__(self, name_)
 
     ##
@@ -172,7 +173,7 @@ class ModuleManager:
     # @endif
 
     class ModuleNotFound(NotFound):
-        def __init__(self, name_):
+        def __init__(self, name_: str) -> None:
             ModuleManager.NotFound.__init__(self, name_)
 
     ##
@@ -184,7 +185,7 @@ class ModuleManager:
     # @endif
 
     class SymbolNotFound(NotFound):
-        def __init__(self, name_):
+        def __init__(self, name_: str) -> None:
             ModuleManager.NotFound.__init__(self, name_)
 
     ##
@@ -196,7 +197,7 @@ class ModuleManager:
     # @endif
 
     class NotAllowedOperation(Error):
-        def __init__(self, reason_):
+        def __init__(self, reason_: str) -> None:
             ModuleManager.Error.__init__(self, reason_)
 
     ##
@@ -208,7 +209,7 @@ class ModuleManager:
     # @endif
 
     class InvalidArguments(Error):
-        def __init__(self, reason_):
+        def __init__(self, reason_: str) -> None:
             ModuleManager.Error.__init__(self, reason_)
 
     ##
@@ -220,7 +221,7 @@ class ModuleManager:
     # @endif
 
     class InvalidOperation(Error):
-        def __init__(self, reason_):
+        def __init__(self, reason_: str) -> None:
             ModuleManager.Error.__init__(self, reason_)
 
     ##
@@ -245,14 +246,14 @@ class ModuleManager:
     # @endif
     # std::string ModuleManager::load(const std::string& file_name,
     #                                 const std::string& init_func)
-    def load(self, file_name, init_func=None):
+    def load(self, file_name: str, init_func: _typing.Optional[str] = None):
         self._rtcout.RTC_TRACE("load(fname = %s)", file_name)
 
         prop = OpenRTM_aist.Properties()
         prop.setProperty("module_file_name", file_name)
         return self.load_prop(prop, init_func)
 
-    def load_prop(self, prop, init_func=None):
+    def load_prop(self, prop: 'OpenRTM_aist.Properties', init_func=None):
         self._rtcout.RTC_TRACE("load(module_file_name = %s, module_file_path = %s, language = %s)",
                                (prop.getProperty("module_file_name"),
                                 prop.getProperty("module_file_path"),
@@ -358,7 +359,7 @@ class ModuleManager:
     # @brief Unload module
     # @endif
 
-    def unload(self, file_name):
+    def unload(self, file_name: str) -> None:
         dll = self._modules.find(file_name)
         if not dll:
             raise ModuleManager.NotFound(file_name)
@@ -380,7 +381,7 @@ class ModuleManager:
     # @brief Unload all modules
     # @endif
 
-    def unloadAll(self):
+    def unloadAll(self) -> None:
         dlls = self._modules.getObjects()
 
         for dll in dlls:
@@ -402,7 +403,7 @@ class ModuleManager:
     # @brief Look up a named symbol in the module
     # @endif
 
-    def symbol(self, file_name, func_name):
+    def symbol(self, file_name: str, func_name: str):
         dll = self._modules.find(file_name)
         if not dll:
             raise ModuleManager.ModuleNotFound(file_name)
@@ -427,7 +428,7 @@ class ModuleManager:
     # @brief Set default module load path
     # @endif
 
-    def setLoadpath(self, load_path_list):
+    def setLoadpath(self, load_path_list: list) -> None:
         self._loadPath = load_path_list
         return
 
@@ -461,7 +462,7 @@ class ModuleManager:
     # @brief Add module load path
     # @endif
 
-    def addLoadpath(self, load_path):
+    def addLoadpath(self, load_path: list) -> None:
         for path in load_path:
             self._loadPath.append(path)
         return
@@ -489,7 +490,7 @@ class ModuleManager:
 
         return modules
 
-    def __getRtcProfile(self, fname):
+    def __getRtcProfile(self, fname: str):
         # file name with full path
         fullname = fname
         # directory name
@@ -567,7 +568,7 @@ class ModuleManager:
     # @brief Getting loadable file list on the loadpath for given language
     # @endif
 
-    def getModuleList(self, lang, modules):
+    def getModuleList(self, lang: str, modules: list) -> None:
         language_key = "manager.modules." + lang
         lprop = self._properties.getNode(language_key)
 
@@ -625,7 +626,7 @@ class ModuleManager:
     # @brief Adding file path not existing cache
     # @endif
 
-    def addNewFile(self, fpath, modules, lang):
+    def addNewFile(self, fpath: str, modules: list, lang: str) -> None:
         for modprof in self._modprofs:
             if modprof.getProperty("module_file_path") == fpath:
                 self._rtcout.RTC_DEBUG(
@@ -651,7 +652,7 @@ class ModuleManager:
     # @brief Getting loadable file list on the loadpath for given language
     # @endif
 
-    def getModuleProfiles(self, lang, modules, modprops):
+    def getModuleProfiles(self, lang: str, modules: list, modprops: list) -> None:
         language_key = "manager.modules." + lang
         lprop = self._properties.getNode(language_key)
 
@@ -712,7 +713,7 @@ class ModuleManager:
     # @brief Removing incalid module profiles
     # @endif
 
-    def removeInvalidModules(self):
+    def removeInvalidModules(self) -> None:
         for modprof in self._modprofs:
             if not os.path.isfile(modprof.getProperty("module_file_path")):
                 self._modprofs.remove(modprof)
@@ -730,7 +731,7 @@ class ModuleManager:
     # @brief
     # @endif
 
-    def deleteSamePath(self, paths):
+    def deleteSamePath(self, paths: list):
         tmp_paths = []
         for path in paths:
             if path:
@@ -800,7 +801,7 @@ class ModuleManager:
     # @brief Allow absolute load path
     # @endif
 
-    def allowAbsolutePath(self):
+    def allowAbsolutePath(self) -> None:
         self._absoluteAllowed = True
 
     ##
@@ -815,7 +816,7 @@ class ModuleManager:
     # @brief Forbid absolute load path
     # @endif
 
-    def disallowAbsolutePath(self):
+    def disallowAbsolutePath(self) -> None:
         self._absoluteAllowed = False
 
     ##
@@ -832,7 +833,7 @@ class ModuleManager:
     # @brief Allow module download
     # @endif
 
-    def allowModuleDownload(self):
+    def allowModuleDownload(self) -> None:
         self._downloadAllowed = True
 
     ##
@@ -847,7 +848,7 @@ class ModuleManager:
     # @brief Forbid module download
     # @endif
 
-    def disallowModuleDownload(self):
+    def disallowModuleDownload(self) -> None:
         self._downloadAllowed = False
 
     ##
@@ -866,7 +867,7 @@ class ModuleManager:
     # @brief Search file from load path
     # @endif
 
-    def findFile(self, fname, load_path):
+    def findFile(self, fname: str, load_path: list):
         file_name = fname
         for path in load_path:
             suffix = self._properties.getProperty(
@@ -901,7 +902,7 @@ class ModuleManager:
     # @brief Check file existance
     # @endif
 
-    def fileExist(self, filename):
+    def fileExist(self, filename: str) -> bool:
         fname = filename
         suffix = self._properties.getProperty(
             "manager.modules." + self._managerLanguage + ".suffixes")
@@ -928,7 +929,7 @@ class ModuleManager:
     # @brief Create initialize function symbol
     # @endif
 
-    def getInitFuncName(self, file_path):
+    def getInitFuncName(self, file_path: str):
         base_name = os.path.basename(file_path)
         return str(self._initFuncPrefix) + \
             str(base_name) + str(self._initFuncSuffix)
@@ -942,17 +943,17 @@ class ModuleManager:
     # @endif
 
     class DLL:
-        def __init__(self, dll):
+        def __init__(self, dll) -> None:
             self.dll = dll
             return
 
     class DLLEntity:
-        def __init__(self, dll, prop):
+        def __init__(self, dll, prop: 'OpenRTM_aist.Properties') -> None:
             self.dll = dll
             self.properties = prop
 
     class DLLPred:
-        def __init__(self, name=None, factory=None):
+        def __init__(self, name=None, factory=None) -> None:
             if name is not None:
                 self._filepath = name
             else:

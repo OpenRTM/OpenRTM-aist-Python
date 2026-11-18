@@ -60,6 +60,7 @@ import re
 import operator
 import collections
 from pathlib import Path
+import typing as _typing
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import CustomMetrics      # 追加の監視の値 (カスタムメトリクス)
@@ -103,7 +104,7 @@ class StartupFailure(Exception):
     # @param message message
     # @param reasons list of reasons
     # @~
-    def __init__(self, message, reasons=None):
+    def __init__(self, message, reasons=None) -> None:
         super().__init__(message)
         self.reasons = reasons or []
 
@@ -126,7 +127,7 @@ class _PluginHost:
     #
     # @param mgr SNMPManager
     # @~
-    def __init__(self, mgr):
+    def __init__(self, mgr) -> None:
         self._m = mgr
 
     ##
@@ -153,7 +154,7 @@ class _PluginHost:
     #
     # @param message message
     # @~
-    def log(self, message):
+    def log(self, message) -> None:
         self._m._log(message)
 
     ##
@@ -228,7 +229,7 @@ class _PluginHost:
     # @param label name shown in logs
     # @return True
     # @~
-    def apply_plan(self, plan, label):
+    def apply_plan(self, plan, label) -> bool:
         config_data = self._m.loadMigrationConfig()
         self._m._validate_plan(plan, config_data["managers"], label)
         self._m._apply_plan(config_data, plan, label)
@@ -278,7 +279,7 @@ class _PluginHost:
     # @param kind event kind
     # @param detail details
     # @~
-    def event(self, robot, kind, detail=""):
+    def event(self, robot, kind, detail="") -> None:
         self._m._event(robot, kind, detail)
 
 
@@ -324,7 +325,7 @@ class SNMPManager:
     # @param port SNMP port number
     # @~
 
-    def __init__(self, manager, conf, port=161):
+    def __init__(self, manager, conf, port=161) -> None:
         self._conf = conf
         self._port = port
         self._robot = None
@@ -446,7 +447,7 @@ class SNMPManager:
     #
     # @param message message
     # @~
-    def _log(self, message):
+    def _log(self, message) -> None:
         self._rtcout.RTC_INFO(message)
         print(f"[SNMPManager:{self._name}] {message}", flush=True)
 
@@ -456,7 +457,7 @@ class SNMPManager:
     # @~english
     # @brief Reads optional OID overrides and discovery ranges from rtc.conf
     # @~
-    def _loadSNMPConfig(self):
+    def _loadSNMPConfig(self) -> None:
         keys = (
             'CpuOid', 'MemTotalOid', 'MemAvailOid', 'TrapNameOid',
             'TrapInfoOid', 'InterdaceNameOid', 'InterfaceRecieveOid',
@@ -558,7 +559,7 @@ class SNMPManager:
     # @~english
     # @brief Initializes (starts trap reception, robot discovery, and the threads for monitoring, startup configuration, recovery, etc.)
     # @~
-    def init(self):
+    def init(self) -> None:
         if self._running:
             return
         self._running = True
@@ -616,7 +617,7 @@ class SNMPManager:
     # @~english
     # @brief Stops the threads
     # @~
-    def stop(self):
+    def stop(self) -> None:
         self._running = False
         loop = getattr(self, '_trap_loop', None)
         if loop is not None and loop.is_running():
@@ -631,7 +632,7 @@ class SNMPManager:
     # @~english
     # @brief Waits for the threads to finish
     # @~
-    def join(self):
+    def join(self) -> None:
         self._trap_thread.join()
         self._polling_thread.join()
         self._trap_cheking_thread.join()
@@ -678,7 +679,7 @@ class SNMPManager:
     #
     # Discovery at init() only sees robots that are already running; this lets robots that boot later join (enabled by snmp.discovery_interval).
     # @~
-    def rediscover(self):
+    def rediscover(self) -> None:
         if self._discovery_interval <= 0:
             return
         now = time.monotonic()
@@ -707,7 +708,7 @@ class SNMPManager:
     # @param name robot name
     # @return True if newly registered
     # @~
-    def _registerRobot(self, ip, name):
+    def _registerRobot(self, ip, name) -> bool:
         with self._robot_lock:
             for robot in self._robotList:
                 if robot.ipaddress == ip:
@@ -731,7 +732,7 @@ class SNMPManager:
     # @param name robot name
     # @return corbaloc string
     # @~
-    def _managerCorbaloc(self, ip, name):
+    def _managerCorbaloc(self, ip, name) -> str:
         return f"corbaloc:iiop:{ip}:{self._manager_corba_port}/{name}"
 
     ##
@@ -823,7 +824,7 @@ class SNMPManager:
     # @param metrics names of the custom metrics
     # @~
     @staticmethod
-    def _validate_extensions(config_data, managers, plugins, metrics=()):
+    def _validate_extensions(config_data, managers, plugins, metrics=()) -> None:
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         import RTCPlacement as pl
         # 追加の監視の値の制約: 置くロボット (metric_constraints) と実行ロボット (executor_constraints)
@@ -922,7 +923,7 @@ class SNMPManager:
     # @param label name shown in error messages
     # @~
     @staticmethod
-    def _validate_plan(plan, managers, label):
+    def _validate_plan(plan, managers, label) -> None:
         components = plan.get("components", [])
         connections = plan.get("connections", [])
         if not isinstance(components, list) or not isinstance(connections, list):
@@ -1092,7 +1093,7 @@ class SNMPManager:
     # @param group condition group
     # @~
 
-    def _validate_condition_group(self, group):
+    def _validate_condition_group(self, group) -> None:
         if not isinstance(group, dict) or group.get("operator") not in ("AND", "OR"):
             raise ValueError("Condition group must use AND or OR")
         conditions = group.get("conditions")
@@ -1245,7 +1246,7 @@ class SNMPManager:
     # @~english
     # @brief Evaluates the migration rules using the sampled metrics; duration and cooldown use monotonic time
     # @~
-    def check_migration_conditions(self):
+    def check_migration_conditions(self) -> None:
         try:
             config_data = self.loadMigrationConfig()
             group = config_data.get("migration_conditions")
@@ -1289,7 +1290,7 @@ class SNMPManager:
     # @~english
     # @brief Starts the migration on conditions in another thread
     # @~
-    def _migration_from_conditions(self):
+    def _migration_from_conditions(self) -> None:
         try:
             self._run_migration_from_conditions()
         finally:
@@ -1301,7 +1302,7 @@ class SNMPManager:
     # @~english
     # @brief Performs the migration on conditions
     # @~
-    def _run_migration_from_conditions(self):
+    def _run_migration_from_conditions(self) -> None:
         try:
             self._log("migration started")
             self._event(self._name, "migration_started")
@@ -1330,7 +1331,7 @@ class SNMPManager:
     # @param config_data contents of the configuration file
     # @param allow_down whether stopped robots are allowed
     # @~
-    def getManagerRef(self, config_data, allow_down=False):
+    def getManagerRef(self, config_data, allow_down: bool = False) -> None:
         with self._robot_lock:
             robots = list(self._robotList)
             if self._robot is not None:
@@ -1405,7 +1406,7 @@ class SNMPManager:
     # @~english
     # @brief Waits for SNMP discovery, then applies the startup plan once
     # @~
-    def _startup_configuration(self):
+    def _startup_configuration(self) -> None:
         retry = max(0.2, float(self._conf.getProperty("snmp.startup_retry_interval", "3")))
         timeout = float(self._conf.getProperty("snmp.startup_timeout", "60"))
         deadline = time.monotonic() + timeout if timeout >= 0 else None
@@ -1562,11 +1563,11 @@ class SNMPManager:
     # @~english
     # @brief Notifies the other robots that the startup configuration is completed (with executor: auto, waiting robots proceed)
     # @~
-    def _notify_startup_completed(self):
+    def _notify_startup_completed(self) -> None:
         with self._robot_lock:
             ips = [r.ipaddress for r in self._robotList]
 
-        def send():
+        def send() -> None:
             for ip in ips:
                 try:
                     self._send_trap_message(ip, "Startup Completed")
@@ -1586,7 +1587,7 @@ class SNMPManager:
     # @param src_ip source IP address
     # @param sender name of the sending robot
     # @~
-    def _on_startup_notice(self, src_ip, sender):
+    def _on_startup_notice(self, src_ip, sender) -> None:
         self._startup_reported_by = sender or src_ip
         if self._startup_querying:
             # 問い合わせへの返事: _already_started_elsewhere() が受け取る
@@ -1611,7 +1612,7 @@ class SNMPManager:
     #
     # @param src_ip IP address of the inquirer
     # @~
-    def _on_startup_query(self, src_ip):
+    def _on_startup_query(self, src_ip) -> None:
         done = self._startup_known and self._startup_failure is None
         threading.Thread(target=self._send_trap_message,
                          args=(src_ip, "Startup Completed" if done else "Startup Pending"), daemon=True).start()
@@ -1626,7 +1627,7 @@ class SNMPManager:
     #
     # @param src_ip source IP address
     # @~
-    def _on_startup_pending(self, src_ip):
+    def _on_startup_pending(self, src_ip) -> None:
         if self._startup_querying:
             self._startup_pending_from.add(src_ip)
             if self._startup_pending_from >= self._startup_query_targets:
@@ -1677,7 +1678,7 @@ class SNMPManager:
     #
     # @param config_data contents of the configuration file
     # @~
-    def _launch_standby(self, config_data):
+    def _launch_standby(self, config_data) -> None:
         sb = self._standby_cfg(config_data)
         mods = (sb or {}).get("modules", [])
         if not mods:
@@ -1699,7 +1700,7 @@ class SNMPManager:
     # @param status status
     # @param **extra additional items
     # @~
-    def _write_startup_status(self, status, **extra):
+    def _write_startup_status(self, status, **extra) -> None:
         path = self._conf.getProperty("snmp.startup_status_file", "startup_status.json")
         try:
             with open(path, "w", encoding="utf-8") as f:
@@ -1720,7 +1721,7 @@ class SNMPManager:
     # @param message message
     # @param reasons list of reasons
     # @~
-    def _startup_failed(self, message, reasons):
+    def _startup_failed(self, message, reasons) -> None:
         self._startup_failure = message
         self._rtcout.RTC_ERROR("SYSTEM STARTUP FAILED: " + message)
         self._log("SYSTEM STARTUP FAILED: " + message)
@@ -1787,7 +1788,7 @@ class SNMPManager:
     # @param force_standby whether standby modules must be used
     # @return (manual plan, lines of explanation)
     # @~
-    def _auto_plan(self, config_data, plan, exclude=(), strict=True, force_standby=False):
+    def _auto_plan(self, config_data, plan, exclude=(), strict: bool = True, force_standby: bool = False):
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         import RTCPlacement as pl
 
@@ -2006,7 +2007,7 @@ class SNMPManager:
     # @return True if allowed
     # @~
     @staticmethod
-    def _link_ok(link, rules):
+    def _link_ok(link, rules) -> bool:
         def val(k):
             v = link.get(k)
             return None if v is None else float(v)
@@ -2062,7 +2063,7 @@ class SNMPManager:
     # @~english
     # @brief Body of the recovery thread
     # @~
-    def _recovery_loop(self):
+    def _recovery_loop(self) -> None:
         while self._running:
             interval = 2.0
             try:
@@ -2241,7 +2242,7 @@ class SNMPManager:
     # @param cfg contents of the configuration file
     # @param rc recovery settings
     # @~
-    def _recovery_tick(self, cfg, rc):
+    def _recovery_tick(self, cfg, rc) -> None:
         if not self._startup_completed or self._recovering:
             return
         if not self._isExecutor(cfg, rc, purpose="recovery"):
@@ -2307,7 +2308,7 @@ class SNMPManager:
     # @param rc recovery settings
     # @param due RTCs to recover
     # @~
-    def _recover(self, cfg, rc, due):
+    def _recover(self, cfg, rc, due) -> None:
         started = time.perf_counter()
         cooldown = float(rc.get("cooldown_seconds", 20))
         stages = dict(self.RecoveryDefaultStages, **rc.get("stages", {}))
@@ -2511,7 +2512,7 @@ class SNMPManager:
     # @param robot robot name
     # @param comp reference of the RTC
     # @~
-    def _recovery_terminate(self, name, inst, robot, comp):
+    def _recovery_terminate(self, name, inst, robot, comp) -> None:
         if comp is None:
             return
         mgr = self._migration_managers.get(robot)
@@ -2651,7 +2652,7 @@ class SNMPManager:
     # @~english
     # @brief Refreshes the RTC lists of all robots
     # @~
-    def _refresh_inventory(self):
+    def _refresh_inventory(self) -> None:
         with self._robot_lock:
             robots = ([self._robot] if self._robot is not None else []) + list(self._robotList)
         for r in robots:
@@ -2681,7 +2682,7 @@ class SNMPManager:
     # @~english
     # @brief Body of the thread that refreshes the RTC lists periodically
     # @~
-    def _inventory_loop(self):
+    def _inventory_loop(self) -> None:
         while self._running:
             try:
                 self._refresh_inventory()
@@ -2756,7 +2757,7 @@ class SNMPManager:
     # @~english
     # @brief Body of the thread that periodically collects and saves the measurements made by the managers
     # @~
-    def _measure_loop(self):
+    def _measure_loop(self) -> None:
         while self._running:
             time.sleep(self._measure_save_interval)
             try:
@@ -2865,7 +2866,7 @@ class SNMPManager:
     #
     # @return True if available
     # @~
-    def _install_process_observer(self):
+    def _install_process_observer(self) -> bool:
         if not self._observer_enabled or self._observer_installed:
             return False
         factory_cls = getattr(OpenRTM_aist, "ProcessCallbackFactory", None)
@@ -2877,7 +2878,7 @@ class SNMPManager:
         owner = self
 
         class SNMPProcessCallback(base):
-            def callback(self, code, options):
+            def callback(self, code, options) -> None:
                 owner._on_slave_exit(code, options or {})
 
         factory = factory_cls.instance()
@@ -2924,7 +2925,7 @@ class SNMPManager:
     # @param code exit code
     # @param options information of the slave (manager_name, pid, command, module)
     # @~
-    def _on_slave_exit(self, code, options):
+    def _on_slave_exit(self, code, options) -> None:
         name = options.get("manager_name") or ""
         pid = options.get("pid")
         rtcs = self._rtcs_in_slave(name)
@@ -2940,7 +2941,7 @@ class SNMPManager:
             ips = [r.ipaddress for r in self._robotList if r.status != "dead"]
         info = f"{self._name}|{','.join(rtcs)}"
 
-        def send():
+        def send() -> None:
             for ip in ips:
                 try:
                     self._send_trap_message(ip, "Slave Exited", info=info)
@@ -2960,7 +2961,7 @@ class SNMPManager:
     # @param src_ip source IP address
     # @param info contents of the notice
     # @~
-    def _on_slave_exit_notice(self, src_ip, info):
+    def _on_slave_exit_notice(self, src_ip, info) -> None:
         robot, _, names = (info or "").partition("|")
         rtcs = [n for n in names.split(",") if n]
         self._log(f"slave of {robot or src_ip} exited abnormally: {', '.join(rtcs) or '-'}")
@@ -2978,12 +2979,12 @@ class SNMPManager:
     # @param robot robot name
     # @param rtcs RTCs of the slave
     # @~
-    def _mark_crashed(self, robot, rtcs):
+    def _mark_crashed(self, robot, rtcs) -> None:
         now = time.monotonic()
         for n in rtcs:
             self._crashed[n] = (robot, now)
 
-        def refresh():
+        def refresh() -> None:
             try:
                 self._refresh_inventory()     # RTC がなくなったことを、次のポーリングを待たずに反映する
             except Exception:
@@ -3009,7 +3010,7 @@ class SNMPManager:
     # @param table crash records (slave records if omitted)
     # @return True if it crashed recently
     # @~
-    def _crash_hint(self, name, now, window=60.0, table=None):
+    def _crash_hint(self, name, now, window=60.0, table=None) -> bool:
         table = self._crashed if table is None else table
         inst = (self._recovery_where.get(name) or {}).get("instance")
         for key in (name, inst):
@@ -3039,7 +3040,7 @@ class SNMPManager:
     #
     # @param inv RTC list
     # @~
-    def _attach_observers(self, inv):
+    def _attach_observers(self, inv) -> None:
         orb = self.mgr.getORB()
         current = {}
         for c in inv:
@@ -3122,7 +3123,7 @@ class SNMPManager:
     # @param ior IOR of the RTC
     # @param entry record of the attachment
     # @~
-    def _detach_observer(self, ior, entry):
+    def _detach_observer(self, ior, entry) -> None:
         with self._observer_lock:
             self._observers.pop(ior, None)
         if entry.get("oid") is not None:
@@ -3145,7 +3146,7 @@ class SNMPManager:
     # @param kind status kind
     # @param hint hint
     # @~
-    def _on_observer_status(self, instance, kind, hint):
+    def _on_observer_status(self, instance, kind, hint) -> None:
         if instance not in self._observer_noticed:
             self._observer_noticed.add(instance)
             self._log(f"observer: first notice from {instance}: {kind} {hint}")
@@ -3157,7 +3158,7 @@ class SNMPManager:
             ips = [r.ipaddress for r in self._robotList if r.status != "dead"]
         info = f"{self._name}|{instance}"
 
-        def send():
+        def send() -> None:
             for ip in ips:
                 try:
                     self._send_trap_message(ip, "RTC Error", info=info)
@@ -3177,7 +3178,7 @@ class SNMPManager:
     # @param src_ip source IP address
     # @param info contents of the notice
     # @~
-    def _on_rtc_error_notice(self, src_ip, info):
+    def _on_rtc_error_notice(self, src_ip, info) -> None:
         robot, _, instance = (info or "").partition("|")
         if instance:
             self._log(f"RTC {instance} on {robot or src_ip} reported ERROR (component observer)")
@@ -3195,10 +3196,10 @@ class SNMPManager:
     # @param robot robot name
     # @param instance instance name
     # @~
-    def _mark_error(self, robot, instance):
+    def _mark_error(self, robot, instance) -> None:
         self._error_notified[instance] = (robot, time.monotonic())
 
-        def refresh():
+        def refresh() -> None:
             try:
                 self._refresh_inventory()     # ERROR になったことを、次のポーリングを待たずに反映する
             except Exception:
@@ -3508,7 +3509,7 @@ class SNMPManager:
     #
     # @param config_data plan
     # @~
-    def createComponent(self, config_data):
+    def createComponent(self, config_data) -> None:
         import RTCPlacement as pl
         self._port_module = {}
         self._migration_components = {}
@@ -3577,7 +3578,7 @@ class SNMPManager:
     #
     # @param config_data plan
     # @~
-    def activateComp(self, config_data):
+    def activateComp(self, config_data) -> None:
         for entry in config_data["components"]:
             if not entry.get("activate", False):
                 continue
@@ -3670,7 +3671,7 @@ class SNMPManager:
     #
     # @param comp reference of the RTC
     # @~
-    def _forget_ports(self, comp):
+    def _forget_ports(self, comp) -> None:
         with self._port_cache_lock:
             self._port_cache.pop(self._comp_key(comp), None)
 
@@ -3759,7 +3760,7 @@ class SNMPManager:
     # @return True if it exists
     # @~
     @staticmethod
-    def _connector_exists(source, target, name):
+    def _connector_exists(source, target, name) -> bool:
         # Compare object references, not port names: after a migration the
         # moved RTC keeps its instance name, so the old and new ports share
         # the same name while being different objects.
@@ -3784,7 +3785,7 @@ class SNMPManager:
     #
     # @param config_data plan
     # @~
-    def connectPort(self, config_data):
+    def connectPort(self, config_data) -> None:
         self._planned_instance = {e["name"]: self._instance_name(e) for e in config_data["components"]}
         for entry in config_data["connections"]:
             for attempt in (0, 1):
@@ -3830,7 +3831,7 @@ class SNMPManager:
     #
     # @param plan plan
     # @~
-    def removeComponents(self, plan):
+    def removeComponents(self, plan) -> None:
         for entry, comp in self._resolve_removals(plan):
             # Never delete an RTC that this plan itself uses.
             if any(comp._is_equivalent(used) for used in self._migration_components.values()):
@@ -3914,7 +3915,7 @@ class SNMPManager:
     # @param entry entry of the plan
     # @param comp reference of the RTC
     # @~
-    def _remove_one(self, entry, comp):
+    def _remove_one(self, entry, comp) -> None:
         for ec in comp.get_owned_contexts():
             try:
                 if ec.get_component_state(comp) == RTC.ACTIVE_STATE:
@@ -3948,7 +3949,7 @@ class SNMPManager:
     # @param plan plan
     # @param label name shown in logs
     # @~
-    def _apply_plan(self, config_data, plan, label):
+    def _apply_plan(self, config_data, plan, label) -> None:
         with self._migration_lock:
             if self._migration:
                 raise RuntimeError("Another RTC configuration operation is running")
@@ -4003,7 +4004,7 @@ class SNMPManager:
     #
     # @return True if applied
     # @~
-    def migration(self):
+    def migration(self) -> bool:
         config_data = self.loadMigrationConfig()
         plan = config_data.get("migration")
         if plan is None:
@@ -4049,7 +4050,7 @@ class SNMPManager:
     # @param varBinds variable bindings
     # @param cbCtx callback context
     # @~
-    def trap_callback(self, snmpEngine, stateRef, contextEngineId, contextName, varBinds, cbCtx):
+    def trap_callback(self, snmpEngine, stateRef, contextEngineId, contextName, varBinds, cbCtx) -> None:
         try:
             # PySNMP 7.x dispatcher exposes get_transport_info().
             src_ip = snmpEngine.message_dispatcher.get_transport_info(stateRef)[1][0]
@@ -4146,7 +4147,7 @@ class SNMPManager:
     # @param info additional information
     # @return True if sent
     # @~
-    def _send_trap_message(self, target_ip, message, community=None, port=162, info=None):
+    def _send_trap_message(self, target_ip, message, community=None, port=162, info=None) -> bool:
         result = asyncio.run(self._send_notification_async(
             target_ip, message, community or self._community, port, info=info))
         error_indication, error_status, error_index, var_binds = result
@@ -4207,7 +4208,7 @@ class SNMPManager:
     # @param community community name
     # @return True if found
     # @~
-    def check_snmp_device(self, ip, community=None):
+    def check_snmp_device(self, ip, community=None) -> bool:
         if self._discovery_mode == 'sysname':
             result = self.get_snmp_data(ip, [self._sysname_oid])
             if not result:
@@ -4277,7 +4278,7 @@ class SNMPManager:
     # @param timeout seconds to wait
     # @return result of the coroutine
     # @~
-    def _run_snmp(self, make_coro, timeout=15):
+    def _run_snmp(self, make_coro: '_typing.Callable[..., object]', timeout=15):
         loop = getattr(self, "_trap_loop", None)
         if loop is not None and loop.is_running() and threading.current_thread() is not getattr(self, "_trap_thread", None):
             return asyncio.run_coroutine_threadsafe(make_coro(True), loop).result(timeout)
@@ -4299,7 +4300,7 @@ class SNMPManager:
     # @param shared whether to use the shared SNMP engine
     # @return list of values
     # @~
-    async def _get_snmp_data_async(self, ip, oids, shared=False):
+    async def _get_snmp_data_async(self, ip, oids, shared: bool = False):
         engine = self._shared_engine() if shared else SnmpEngine()
         try:
             result = await get_cmd(
@@ -4350,7 +4351,7 @@ class SNMPManager:
     # @param shared whether to use the shared SNMP engine
     # @return ifIndex (None if not found)
     # @~
-    async def _get_ifindex_by_name_async(self, ipaddress, ifname, shared=False):
+    async def _get_ifindex_by_name_async(self, ipaddress, ifname, shared: bool = False):
         engine = self._shared_engine() if shared else SnmpEngine()
         try:
             target = await UdpTransportTarget.create(
@@ -4432,7 +4433,7 @@ class SNMPManager:
     #
     # Slaves are shut down first. The local master is shut down last, since stopping it can terminate this process and the SNMP extension itself.
     # @~
-    def shutdown_comp(self):
+    def shutdown_comp(self) -> None:
         if self._shutdown and getattr(self, "_shutdown_started", False):
             return
         self._shutdown = True
@@ -4465,7 +4466,7 @@ class SNMPManager:
     # @~english
     # @brief Body of the thread that handles received traps
     # @~
-    def trap_checking(self):
+    def trap_checking(self) -> None:
         count = 0
         while self._running:
             if self._robot is None:
@@ -4611,7 +4612,7 @@ class SNMPManager:
     #
     # @param robot robot
     # @~
-    def _updateCgroup(self, robot):
+    def _updateCgroup(self, robot) -> None:
         if self._conf.getProperty("snmp.cgroup.enabled", "NO").upper() != "YES":
             return
         oids = {k: self._extend_output_oid(v) for k, v in self.CgroupExtendTokens.items()}
@@ -4652,7 +4653,7 @@ class SNMPManager:
     #
     # @param robot robot
     # @~
-    def _updateBattery(self, robot):
+    def _updateBattery(self, robot) -> None:
         oid = self._extend_output_oid(self._battery_extend)
         try:
             data = self.get_snmp_data(robot.ipaddress, [oid])
@@ -4672,7 +4673,7 @@ class SNMPManager:
     # @param robot robot
     # @param interval polling interval (seconds)
     # @~
-    def setRobotData(self, robot, interval):
+    def setRobotData(self, robot, interval) -> None:
         try:
             self._updateCgroup(robot)
         except Exception:
@@ -4828,7 +4829,7 @@ class SNMPManager:
     # @param rtt_ms round-trip time (ms)
     # @param now current time
     # @~
-    def _record_probe(self, robot, ok, rtt_ms, now):
+    def _record_probe(self, robot, ok, rtt_ms, now) -> None:
         if robot.probes.maxlen != self._probe_window:
             robot.probes = collections.deque(robot.probes, maxlen=self._probe_window)
         robot.probes.append((ok, rtt_ms if ok else None))
@@ -4857,7 +4858,7 @@ class SNMPManager:
     # @param robot robot
     # @param now current time
     # @~
-    def _update_status(self, robot, now):
+    def _update_status(self, robot, now) -> None:
         if robot.is_local:
             return
         evidence = max([t for t in (robot.last_seen, robot.last_heartbeat) if t is not None], default=None)
@@ -4880,7 +4881,7 @@ class SNMPManager:
     # @~english
     # @brief Active monitoring: sends probes to all robots in parallel every probe_interval
     # @~
-    def _liveness_loop(self):
+    def _liveness_loop(self) -> None:
         while self._running:
             started = time.monotonic()
             with self._robot_lock:
@@ -4906,8 +4907,8 @@ class SNMPManager:
     #
     # @param ips list of IP addresses
     # @~
-    async def _heartbeat_all_async(self, ips):
-        async def one(ip):
+    async def _heartbeat_all_async(self, ips) -> None:
+        async def one(ip) -> None:
             try:
                 await self._send_notification_async(ip, 'Heartbeat', self._community, self._trap_port, shared=True)
             except Exception:
@@ -4920,7 +4921,7 @@ class SNMPManager:
     # @~english
     # @brief Sender side of passive monitoring: keeps sending Heartbeat traps to the other robots
     # @~
-    def _heartbeat_loop(self):
+    def _heartbeat_loop(self) -> None:
         while self._running:
             with self._robot_lock:
                 ips = [r.ipaddress for r in self._robotList]
@@ -4941,7 +4942,7 @@ class SNMPManager:
     #
     # @param src_ip source IP address
     # @~
-    def _on_heartbeat(self, src_ip):
+    def _on_heartbeat(self, src_ip) -> None:
         now = time.monotonic()
         with self._robot_lock:
             robot = next((r for r in self._robotList if r.ipaddress == src_ip), None)
@@ -4982,7 +4983,7 @@ class SNMPManager:
     # @param kind event kind
     # @param detail details
     # @~
-    def _event(self, robot_name, kind, detail=""):
+    def _event(self, robot_name, kind, detail="") -> None:
         self._log(f"event {kind}: {robot_name or '-'} {detail}".rstrip())
         store = getattr(self, "_store", None)
         if store is not None:
@@ -5021,7 +5022,7 @@ class SNMPManager:
     # @~english
     # @brief Body of the thread that periodically saves the monitoring values to SQLite
     # @~
-    def _store_loop(self):
+    def _store_loop(self) -> None:
         while self._running:
             time.sleep(self._db_interval)
             with self._robot_lock:
@@ -5040,7 +5041,7 @@ class SNMPManager:
     # @~english
     # @brief Opens the SQLite store (before the discovered events of discovery)
     # @~
-    def _open_store(self):
+    def _open_store(self) -> None:
         if self._db_enabled:
             sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
             import MonitoringStore
@@ -5053,7 +5054,7 @@ class SNMPManager:
     # @~english
     # @brief Starts the monitoring threads
     # @~
-    def _start_monitoring(self):
+    def _start_monitoring(self) -> None:
         if getattr(self, "_store", None) is not None:
             threading.Thread(target=self._store_loop, daemon=True).start()
         if self._liveness_enabled:
@@ -5072,7 +5073,7 @@ class SNMPManager:
     # @~english
     # @brief Body of the thread that periodically polls the monitoring values of all robots
     # @~
-    def polling(self):
+    def polling(self) -> None:
         while self._running:
             try:
                 self.rediscover()
@@ -5094,7 +5095,7 @@ class SNMPManager:
     # @~english
     # @brief Body of the thread that receives SNMP traps
     # @~
-    def trap_receiver(self):
+    def trap_receiver(self) -> None:
         loop = self._trap_loop
         asyncio.set_event_loop(loop)
         engine = None
@@ -5140,7 +5141,7 @@ class SNMPManager:
         # @param ipaddress IP address
         # @param is_local True for this robot
         # @~
-        def __init__(self, name, ipaddress, is_local=False):
+        def __init__(self, name, ipaddress, is_local: bool = False) -> None:
             self.name = name
             self.ipaddress = ipaddress
             self.is_local = is_local
@@ -5249,7 +5250,7 @@ class _ObserverMixin:
     # @param owner SNMPManager
     # @param instance instance name of the RTC
     # @~
-    def __init__(self, owner, instance):
+    def __init__(self, owner, instance) -> None:
         self._owner = owner
         self._instance = instance
 
@@ -5265,7 +5266,7 @@ class _ObserverMixin:
     # @param status_kind status kind
     # @param hint hint
     # @~
-    def update_status(self, status_kind, hint):
+    def update_status(self, status_kind, hint) -> None:
         try:
             kind = str(status_kind).split(".")[-1]   # OpenRTM.RTC_STATUS -> "RTC_STATUS"
             self._owner._on_observer_status(self._instance, kind, hint)
@@ -5328,7 +5329,7 @@ class SNMPManagerListener(OpenRTM_aist.ManagerActionListener):
     #
     # @param snmp_manager SNMPManager
     # @~
-    def __init__(self, snmp_manager):
+    def __init__(self, snmp_manager) -> None:
         self._snmp_manager = snmp_manager
 
     ##
@@ -5337,7 +5338,7 @@ class SNMPManagerListener(OpenRTM_aist.ManagerActionListener):
     # @~english
     # @brief Called just before the manager shuts down
     # @~
-    def preShutdown(self):
+    def preShutdown(self) -> None:
         self._snmp_manager.stop()
 
 
@@ -5351,7 +5352,7 @@ class SNMPManagerListener(OpenRTM_aist.ManagerActionListener):
 #
 # @param manager manager
 # @~
-def SNMPManagerInit(manager):
+def SNMPManagerInit(manager) -> None:
     global _snmp_manager, _snmp_listener
     if _snmp_manager is not None:
         return
@@ -5378,7 +5379,7 @@ def SNMPManagerInit(manager):
 # @~english
 # @brief Entry point when started standalone (initializes the manager and starts SNMPManager)
 # @~
-def main():
+def main() -> None:
     # Standalone mode: initialize the OpenRTM Manager only once.
     manager = OpenRTM_aist.Manager.init(sys.argv)
     manager.activateManager()

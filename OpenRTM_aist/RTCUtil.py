@@ -41,7 +41,7 @@ import OpenRTM
 # @endif
 
 
-def isDataFlowComponent(obj):
+def isDataFlowComponent(obj: 'CORBA.Object') -> bool:
     dfp = obj._narrow(OpenRTM.DataFlowComponent)
     return not CORBA.is_nil(dfp)
 
@@ -65,7 +65,7 @@ def isDataFlowComponent(obj):
 # @else
 #
 # @endif
-def isFsmParticipant(obj):
+def isFsmParticipant(obj: 'CORBA.Object') -> bool:
     fsmp = obj._narrow(RTC.FsmParticipant)
     return not CORBA.is_nil(fsmp)
 
@@ -88,7 +88,7 @@ def isFsmParticipant(obj):
 # @else
 #
 # @endif
-def isFsmObject(obj):
+def isFsmObject(obj: 'CORBA.Object') -> bool:
     fsm = obj._narrow(RTC.FsmObject)
     return not CORBA.is_nil(fsm)
 
@@ -111,7 +111,7 @@ def isFsmObject(obj):
 # @else
 #
 # @endif
-def isMultiModeObject(obj):
+def isMultiModeObject(obj: 'CORBA.Object') -> bool:
     mmc = obj._narrow(RTC.MultiModeObject)
     return not CORBA.is_nil(mmc)
 

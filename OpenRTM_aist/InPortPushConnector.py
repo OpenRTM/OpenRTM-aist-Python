@@ -117,7 +117,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     #
     # InPortPushConnector(ConnectorInfo info, InPortProvider* provider,
     # ConnectorListeners listeners, CdrBufferBase* buffer = 0);
-    def __init__(self, info, provider, listeners, buffer=None):
+    def __init__(self, info: 'OpenRTM_aist.ConnectorInfo', provider, listeners, buffer=None) -> None:
         OpenRTM_aist.InPortConnector.__init__(self, info, buffer)
         self._provider = provider
         self._listeners = listeners
@@ -172,7 +172,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -449,7 +449,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     #
     # ReturnCode write(const OpenRTM::CdrData& data);
 
-    def write(self, data):
+    def write(self, data: bytes):
         if self._sync_readwrite:
             self._readready_worker._cond.acquire()
             while not self._readready_worker._completed:
@@ -481,7 +481,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     # @endif
     # void onConnect()
 
-    def onConnect(self):
+    def onConnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_CONNECT, self._profile)
@@ -494,7 +494,7 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
     # @brief Invoke callback when connection is destroied
     # @endif
     # void onDisconnect()
-    def onDisconnect(self):
+    def onDisconnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT, self._profile)
@@ -506,25 +506,25 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ, self._profile, data)
         return data
 
-    def onBufferEmpty(self, data):
+    def onBufferEmpty(self, data) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
         return
 
-    def onBufferReadTimeout(self, data):
+    def onBufferReadTimeout(self, data) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
         return
 
-    def setDataType(self, data):
+    def setDataType(self, data) -> None:
         OpenRTM_aist.InPortConnector.setDataType(self, data)
         self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(
             self._marshaling_type, data)
 
     class WorkerThreadCtrl:
-        def __init__(self):
+        def __init__(self) -> None:
             self._mutex = threading.RLock()
             self._cond = threading.Condition(self._mutex)
             self._completed = False

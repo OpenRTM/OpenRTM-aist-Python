@@ -60,7 +60,7 @@
 # @param ctx plugin context
 # @param config plugin configuration (defaults of latency_weight and loss_weight)
 # @~
-def setup(ctx, config):
+def setup(ctx, config) -> None:
     def link_aware(ctx, item, robot, state, args):
         lw = float(args.get("latency_weight", config.get("latency_weight", 1.0)))
         pw = float(args.get("loss_weight", config.get("loss_weight", 1.0)))

@@ -31,7 +31,7 @@ class LocalServiceProfile:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         ##
         # @if jp
         # @brief LocalServiceのサービス名
@@ -185,7 +185,7 @@ class LocalServiceBase:
     # @endif
     # virtual bool
     # init(const coil::Properties& props) = 0;
-    def init(self, props):
+    def init(self, props: 'OpenRTM_aist.Properties'):
         pass
 
     ##
@@ -206,7 +206,7 @@ class LocalServiceBase:
     # virtual bool
     # reinit(const coil::Properties& props) = 0;
 
-    def reinit(self, props):
+    def reinit(self, props: 'OpenRTM_aist.Properties'):
         pass
 
     ##
@@ -255,11 +255,11 @@ localservicefactory = None
 
 
 class LocalServiceFactory(OpenRTM_aist.Factory, LocalServiceBase):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
         return
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     def instance():

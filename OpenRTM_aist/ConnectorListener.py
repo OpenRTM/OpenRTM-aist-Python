@@ -94,7 +94,7 @@ class PortType:
 
 
 class ConnectorDataListenerType:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ON_BUFFER_WRITE = 0
@@ -218,7 +218,7 @@ class ConnectorDataListener(object):
     """
     """
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     # virtual ReturnCode operator()(const ConnectorInfo& info,
@@ -249,7 +249,7 @@ class ConnectorDataListener(object):
     #
     # @endif
     #
-    def toString(status):
+    def toString(status: int):
         typeString = ["ON_BUFFER_WRITE",
                       "ON_BUFFER_FULL",
                       "ON_BUFFER_WRITE_TIMEOUT",
@@ -297,7 +297,7 @@ class ConnectorDataListenerT(ConnectorDataListener):
     """
     """
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -330,7 +330,7 @@ class ConnectorDataListenerT(ConnectorDataListener):
     # virtual ReturnCode operator()(const ConnectorInfo& info,
     #                         const cdrMemoryStream& cdrdata)
 
-    def __call__(self, info, cdrdata, data, porttype=PortType.OutPortType):
+    def __call__(self, info, cdrdata: bytes, data, porttype: int = PortType.OutPortType):
         endian = info.properties.getProperty("serializer.cdr.endian", "little")
         if endian != "little" and endian is not None:
             # Maybe endian is ["little","big"]
@@ -397,7 +397,7 @@ class ConnectorDataListenerT(ConnectorDataListener):
 # enum ConnectorListenerType
 class ConnectorListenerType:
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ON_BUFFER_EMPTY = 0
@@ -615,7 +615,7 @@ class ConnectorListener:
     """
     """
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     # virtual void operator()(const ConnectorInfo& info) = 0;
@@ -645,7 +645,7 @@ class ConnectorListener:
     #
     # @endif
     #
-    def toString(status):
+    def toString(status: int):
         typeString = ["ON_BUFFER_EMPTY",
                       "ON_BUFFER_READ_TIMEOUT",
                       "ON_SENDER_EMPTY",
@@ -686,7 +686,7 @@ class ConnectorDataListenerHolder:
     # @brief Constructor
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         self._mutex = threading.RLock()
         self._data = None
@@ -701,7 +701,7 @@ class ConnectorDataListenerHolder:
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -725,7 +725,7 @@ class ConnectorDataListenerHolder:
     #
     # void addListener(ConnectorDataListener* listener);
 
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
         return
@@ -751,7 +751,7 @@ class ConnectorDataListenerHolder:
     #
     # void removeListener(ConnectorDataListener* listener);
 
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for (i, _listener) in enumerate(self._listeners):
             if self._listeners[i] == listener:
@@ -849,10 +849,10 @@ class ConnectorDataListenerHolder:
                 ret = ret | listener_ret
         return ret, cdrdata
 
-    def setDataType(self, dataType):
+    def setDataType(self, dataType) -> None:
         self._data = dataType
 
-    def setPortType(self, portType):
+    def setPortType(self, portType: int) -> None:
         self._portType = portType
 
 ##
@@ -881,7 +881,7 @@ class ConnectorListenerHolder:
     # @brief Constructor
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         self._mutex = threading.RLock()
         return
@@ -894,7 +894,7 @@ class ConnectorListenerHolder:
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -918,7 +918,7 @@ class ConnectorListenerHolder:
     #
     # void addListener(ConnectorListener* listener);
 
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
         return
@@ -944,7 +944,7 @@ class ConnectorListenerHolder:
     #
     # void removeListener(ConnectorListener* listener);
 
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for (i, _listener) in enumerate(self._listeners):
             if self._listeners[i] == listener:
@@ -995,7 +995,7 @@ class ConnectorListeners:
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self.connectorData_ = [OpenRTM_aist.ConnectorDataListenerHolder() for i in range(
             OpenRTM_aist.ConnectorDataListenerType.CONNECTOR_DATA_LISTENER_NUM)]
         self.connector_ = [OpenRTM_aist.ConnectorListenerHolder() for i in range(
@@ -1020,7 +1020,7 @@ class ConnectorListeners:
     #
     # @endif
 
-    def setDataType(self, dataType):
+    def setDataType(self, dataType) -> None:
         for holder in self.connectorData_:
             holder.setDataType(dataType)
 
@@ -1039,7 +1039,7 @@ class ConnectorListeners:
     # @param porttype
     #
     # @endif
-    def setPortType(self, porttype):
+    def setPortType(self, porttype: int) -> None:
         for holder in self.connectorData_:
             holder.setPortType(porttype)
 
@@ -1062,7 +1062,7 @@ class ConnectorListeners:
     # @return
     #
     # @endif
-    def addListener(self, ltype, listener):
+    def addListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.connector_):
             self.connector_[ltype].addListener(listener)
             return True
@@ -1087,7 +1087,7 @@ class ConnectorListeners:
     # @return
     #
     # @endif
-    def addDataListener(self, ltype, listener):
+    def addDataListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.connectorData_):
             self.connectorData_[ltype].addListener(listener)
             return True
@@ -1112,7 +1112,7 @@ class ConnectorListeners:
     # @return
     #
     # @endif
-    def removeListener(self, ltype, listener):
+    def removeListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.connector_):
             self.connector_[ltype].removeListener(listener)
             return True
@@ -1137,7 +1137,7 @@ class ConnectorListeners:
     # @return
     #
     # @endif
-    def removeDataListener(self, ltype, listener):
+    def removeDataListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.connectorData_):
             self.connectorData_[ltype].removeListener(listener)
             return True
@@ -1166,7 +1166,7 @@ class ConnectorListeners:
     # @return
     #
     # @endif
-    def notifyData(self, ltype, info, cdrdata):
+    def notifyData(self, ltype: int, info, cdrdata):
         if ltype < len(self.connectorData_):
             return self.connectorData_[ltype].notify(info, cdrdata)
         return ConnectorListenerStatus.NO_CHANGE, None
@@ -1191,7 +1191,7 @@ class ConnectorListeners:
     # @return
     #
     # @endif
-    def notify(self, ltype, info):
+    def notify(self, ltype: int, info):
         if ltype < len(self.connector_):
             return self.connector_[ltype].notify(info)
         return ConnectorListenerStatus.NO_CHANGE

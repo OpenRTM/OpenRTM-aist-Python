@@ -84,7 +84,7 @@ class PreFsmActionListenerType:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
     PRE_ON_INIT = 0
     PRE_ON_ENTRY = 1
@@ -234,7 +234,7 @@ class PreFsmActionListener:
     # @brief Constructor
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -245,7 +245,7 @@ class PreFsmActionListener:
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -290,7 +290,7 @@ class PreFsmActionListener:
     #
     # @endif
     #
-    def toString(status):
+    def toString(status: int):
         typeString = ["PRE_ON_INIT",
                       "PRE_ON_ENTRY",
                       "PRE_ON_DO",
@@ -335,7 +335,7 @@ class PostFsmActionListenerType:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
     POST_ON_INIT = 0
     POST_ON_ENTRY = 1
@@ -485,7 +485,7 @@ class PostFsmActionListener:
     # @brief Constructor
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -496,7 +496,7 @@ class PostFsmActionListener:
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -541,7 +541,7 @@ class PostFsmActionListener:
     #
     # @endif
     #
-    def toString(status):
+    def toString(status: int):
         typeString = ["POST_ON_INIT",
                       "POST_ON_ENTRY",
                       "POST_ON_DO",
@@ -585,7 +585,7 @@ class FsmProfileListenerType:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
     SET_FSM_PROFILE = 0
     GET_FSM_PROFILE = 1
@@ -741,7 +741,7 @@ class FsmProfileListener:
     # @brief Constructor
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -751,7 +751,7 @@ class FsmProfileListener:
     # @brief Destructor
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -796,7 +796,7 @@ class FsmProfileListener:
     #
     # @endif
     #
-    def toString(status):
+    def toString(status: int):
         typeString = ["SET_FSM_PROFILE",
                       "GET_FSM_PROFILE",
                       "ADD_FSM_STATE",
@@ -831,7 +831,7 @@ class FsmStructureListenerType:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
     SET_FSM_STRUCTURE = 0
     GET_FSM_STRUCTURE = 1
@@ -969,7 +969,7 @@ class FsmStructureListener:
     # @brief Constructor
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -980,7 +980,7 @@ class FsmStructureListener:
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -1025,7 +1025,7 @@ class FsmStructureListener:
     #
     # @endif
     #
-    def toString(status):
+    def toString(status: int):
         typeString = ["SET_FSM_STRUCTURE",
                       "GET_FSM_STRUCTURE"]
         if status < len(typeString):
@@ -1059,7 +1059,7 @@ class PreFsmActionListenerHolder:
     # @brief Constructor
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         self._mutex = threading.RLock()
 
@@ -1070,7 +1070,7 @@ class PreFsmActionListenerHolder:
     # @brief Destructor
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -1091,7 +1091,7 @@ class PreFsmActionListenerHolder:
     # @endif
     #
 
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
 
@@ -1112,7 +1112,7 @@ class PreFsmActionListenerHolder:
     # @param listener Removed listener
     # @endif
     #
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         len_ = len(self._listeners)
         for i in range(len_):
@@ -1138,7 +1138,7 @@ class PreFsmActionListenerHolder:
     # @param info ConnectorInfo
     # @endif
     #
-    def notify(self, state):
+    def notify(self, state: str) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for listener in self._listeners:
             listener(state)
@@ -1169,7 +1169,7 @@ class PostFsmActionListenerHolder:
     # @brief Constructor
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         self._mutex = threading.RLock()
 
@@ -1180,7 +1180,7 @@ class PostFsmActionListenerHolder:
     # @brief Destructor
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -1200,7 +1200,7 @@ class PostFsmActionListenerHolder:
     # @param listener Added listener
     # @endif
     #
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
 
@@ -1221,7 +1221,7 @@ class PostFsmActionListenerHolder:
     # @param listener Removed listener
     # @endif
     #
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         len_ = len(self._listeners)
         for i in range(len_):
@@ -1247,7 +1247,7 @@ class PostFsmActionListenerHolder:
     # @param info ConnectorInfo
     # @endif
     #
-    def notify(self, state, ret):
+    def notify(self, state: str, ret) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for listener in self._listeners:
             listener(state, ret)
@@ -1278,7 +1278,7 @@ class FsmProfileListenerHolder:
     # @brief Constructor
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         self._mutex = threading.RLock()
 
@@ -1289,7 +1289,7 @@ class FsmProfileListenerHolder:
     # @brief Destructor
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -1310,7 +1310,7 @@ class FsmProfileListenerHolder:
     # @endif
     #
 
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
 
@@ -1331,7 +1331,7 @@ class FsmProfileListenerHolder:
     # @param listener Removed listener
     # @endif
     #
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         len_ = len(self._listeners)
         for i in range(len_):
@@ -1357,7 +1357,7 @@ class FsmProfileListenerHolder:
     # @param info ConnectorInfo
     # @endif
     #
-    def notify(self, state):
+    def notify(self, state) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for listener in self._listeners:
             listener(state)
@@ -1389,7 +1389,7 @@ class FsmStructureListenerHolder:
     # @brief Constructor
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         self._mutex = threading.RLock()
 
@@ -1400,7 +1400,7 @@ class FsmStructureListenerHolder:
     # @brief Destructor
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -1421,7 +1421,7 @@ class FsmStructureListenerHolder:
     # @endif
     #
 
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
 
@@ -1442,7 +1442,7 @@ class FsmStructureListenerHolder:
     # @param listener Removed listener
     # @endif
     #
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         len_ = len(self._listeners)
         for i in range(len_):
@@ -1468,7 +1468,7 @@ class FsmStructureListenerHolder:
     # @param info ConnectorInfo
     # @endif
     #
-    def notify(self, state):
+    def notify(self, state) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for listener in self._listeners:
             listener(state)
@@ -1500,7 +1500,7 @@ class FsmActionListeners:
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
 
         ##
         # @if jp
@@ -1569,7 +1569,7 @@ class FsmActionListeners:
     # @return
     #
     # @endif
-    def addPreActionListener(self, ltype, listener):
+    def addPreActionListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.preaction_):
             self.preaction_[ltype].addListener(listener)
             return True
@@ -1594,7 +1594,7 @@ class FsmActionListeners:
     # @return
     #
     # @endif
-    def addPostActionListener(self, ltype, listener):
+    def addPostActionListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.postaction_):
             self.postaction_[ltype].addListener(listener)
             return True
@@ -1619,7 +1619,7 @@ class FsmActionListeners:
     # @return
     #
     # @endif
-    def addProfileListener(self, ltype, listener):
+    def addProfileListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.profile_):
             self.profile_[ltype].addListener(listener)
             return True
@@ -1644,7 +1644,7 @@ class FsmActionListeners:
     # @return
     #
     # @endif
-    def addStructureListener(self, ltype, listener):
+    def addStructureListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.structure_):
             self.structure_[ltype].addListener(listener)
             return True
@@ -1669,7 +1669,7 @@ class FsmActionListeners:
     # @return
     #
     # @endif
-    def removePreActionListener(self, ltype, listener):
+    def removePreActionListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.preaction_):
             self.preaction_[ltype].removeListener(listener)
             return True
@@ -1694,7 +1694,7 @@ class FsmActionListeners:
     # @return
     #
     # @endif
-    def removePostActionListener(self, ltype, listener):
+    def removePostActionListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.postaction_):
             self.postaction_[ltype].removeListener(listener)
             return True
@@ -1719,7 +1719,7 @@ class FsmActionListeners:
     # @return
     #
     # @endif
-    def removeProfileListener(self, ltype, listener):
+    def removeProfileListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.profile_):
             self.profile_[ltype].removeListener(listener)
             return True
@@ -1744,7 +1744,7 @@ class FsmActionListeners:
     # @return
     #
     # @endif
-    def removeStructureListener(self, ltype, listener):
+    def removeStructureListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.structure_):
             self.structure_[ltype].removeListener(listener)
             return True
@@ -1767,7 +1767,7 @@ class FsmActionListeners:
     # @param ec_id
     #
     # @endif
-    def notifyPreAction(self, ltype, ec_id):
+    def notifyPreAction(self, ltype: int, ec_id: str) -> None:
         if ltype < len(self.preaction_):
             self.preaction_[ltype].notify(ec_id)
 
@@ -1790,7 +1790,7 @@ class FsmActionListeners:
     # @param ret
     #
     # @endif
-    def notifyPostAction(self, ltype, ec_id, ret):
+    def notifyPostAction(self, ltype: int, ec_id: str, ret) -> None:
         if ltype < len(self.postaction_):
             self.postaction_[ltype].notify(ec_id, ret)
 
@@ -1811,7 +1811,7 @@ class FsmActionListeners:
     # @param pprofile
     #
     # @endif
-    def notifyProfile(self, ltype, pprofile):
+    def notifyProfile(self, ltype, pprofile) -> None:
         if ltype < len(self.profile_):
             self.profile_[ltype].notify(pprofile)
 
@@ -1832,6 +1832,6 @@ class FsmActionListeners:
     # @param ec_id
     #
     # @endif
-    def notifyStructure(self, ltype, ec_id):
+    def notifyStructure(self, ltype, ec_id) -> None:
         if ltype < len(self.structure_):
             self.structure_[ltype].notify(ec_id)

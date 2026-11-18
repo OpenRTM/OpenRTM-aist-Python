@@ -37,7 +37,7 @@ import RTC
 #
 # @endif
 class StateHolder:
-    def __init__(self):
+    def __init__(self) -> None:
         self.curr = None
         self.prev = None
         self.next = None
@@ -152,7 +152,7 @@ class StateMachine:
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self, num_of_state):
+    def __init__(self, num_of_state: int) -> None:
         self._num = num_of_state
         self._listener = None
         self._entry = {}
@@ -183,7 +183,7 @@ class StateMachine:
     # @brief Set NOP function
     # @endif
 
-    def setNOP(self, call_back):
+    def setNOP(self, call_back) -> None:
         self.setNullFunc(self._entry, call_back)
         self.setNullFunc(self._do, call_back)
         self.setNullFunc(self._exit, call_back)
@@ -204,7 +204,7 @@ class StateMachine:
     # @brief Set Listener Object
     # @endif
 
-    def setListener(self, listener):
+    def setListener(self, listener) -> None:
         assert (listener)
         self._listener = listener
         return
@@ -225,7 +225,7 @@ class StateMachine:
     # @brief Set Entry action function
     # @endif
 
-    def setEntryAction(self, state, call_back):
+    def setEntryAction(self, state, call_back) -> bool:
         if state in self._entry:
             self._entry[state] = call_back
         else:
@@ -248,7 +248,7 @@ class StateMachine:
     # @brief Set PreDo action function
     # @endif
 
-    def setPreDoAction(self, state, call_back):
+    def setPreDoAction(self, state, call_back) -> bool:
         if state in self._predo:
             self._predo[state] = call_back
         else:
@@ -271,7 +271,7 @@ class StateMachine:
     # @brief Set Do action function
     # @endif
 
-    def setDoAction(self, state, call_back):
+    def setDoAction(self, state, call_back) -> bool:
         if state in self._do:
             self._do[state] = call_back
         else:
@@ -294,7 +294,7 @@ class StateMachine:
     # @brief Set PostDo action function
     # @endif
 
-    def setPostDoAction(self, state, call_back):
+    def setPostDoAction(self, state, call_back) -> bool:
         if state in self._postdo:
             self._postdo[state] = call_back
         else:
@@ -317,7 +317,7 @@ class StateMachine:
     # @brief Set Exit action function
     # @endif
 
-    def setExitAction(self, state, call_back):
+    def setExitAction(self, state, call_back) -> bool:
         if state in self._exit:
             self._exit[state] = call_back
         else:
@@ -340,7 +340,7 @@ class StateMachine:
     # @brief Set state transition action function
     # @endif
 
-    def setTransitionAction(self, call_back):
+    def setTransitionAction(self, call_back) -> bool:
         self._transit = call_back
         return True
 
@@ -357,7 +357,7 @@ class StateMachine:
     # @brief Set Exit action function
     # @endif
 
-    def setStartState(self, states):
+    def setStartState(self, states: 'StateHolder') -> None:
         self._states = StateHolder()
         self._states.curr = states.curr
         self._states.prev = states.prev
@@ -415,7 +415,7 @@ class StateMachine:
     # @brief Evaluate current status
     # @endif
 
-    def isIn(self, state):
+    def isIn(self, state) -> bool:
         _ = OpenRTM_aist.ScopedLock(self._mutex)
         if self._states.curr == state:
             return True
@@ -439,7 +439,7 @@ class StateMachine:
     # @brief Change status
     # @endif
 
-    def goTo(self, state):
+    def goTo(self, state) -> None:
         _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._states.next = state
         if self._states.curr == state:
@@ -459,7 +459,7 @@ class StateMachine:
     # @brief Worker function
     # @endif
 
-    def worker(self):
+    def worker(self) -> None:
         states = StateHolder()
         self.sync(states)
         # If no state transition required, execute set of do-actions
@@ -500,7 +500,7 @@ class StateMachine:
 
     # void worker_pre()
 
-    def worker_pre(self):
+    def worker_pre(self) -> None:
         state = StateHolder()
         self.sync(state)
         if state.curr == state.next:
@@ -522,7 +522,7 @@ class StateMachine:
         return
 
     # void worker_do()
-    def worker_do(self):
+    def worker_do(self) -> None:
         state = StateHolder()
         self.sync(state)
 
@@ -533,7 +533,7 @@ class StateMachine:
 
     # void worker_post()
 
-    def worker_post(self):
+    def worker_post(self) -> None:
         state = StateHolder()
         self.sync(state)
         if self._postdo[state.curr]:
@@ -555,7 +555,7 @@ class StateMachine:
     # @brief Worker function
     # @endif
 
-    def setNullFunc(self, s, nullfunc):
+    def setNullFunc(self, s: dict, nullfunc) -> None:
         for i in range(self._num):
             if StateMachine.state_array[i] in s:
                 s[StateMachine.state_array[i]] = nullfunc
@@ -573,7 +573,7 @@ class StateMachine:
     # @else
     # @endif
 
-    def sync(self, states):
+    def sync(self, states: 'StateHolder') -> None:
         _ = OpenRTM_aist.ScopedLock(self._mutex)
         states.prev = self._states.prev
         states.curr = self._states.curr
@@ -604,6 +604,6 @@ class StateMachine:
     # @else
     # @endif
 
-    def update_curr(self, curr):
+    def update_curr(self, curr) -> None:
         _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._states.curr = curr

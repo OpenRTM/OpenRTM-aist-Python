@@ -51,7 +51,7 @@ class FiniteStateMachineComponent_impl(
     #
     #
     # @endif
-    def __init__(self, manager=None, orb=None, poa=None):
+    def __init__(self, manager=None, orb=None, poa=None) -> None:
         OpenRTM_aist.RTObject_impl.__init__(self, manager, orb, poa)
 
     ##
@@ -71,7 +71,7 @@ class FiniteStateMachineComponent_impl(
     #
     # @endif
 
-    def on_action(self, ec_id):
+    def on_action(self, ec_id: int):
         self._rtcout.RTC_TRACE("on_action(%d)", ec_id)
         ret = RTC.RTC_ERROR
         try:

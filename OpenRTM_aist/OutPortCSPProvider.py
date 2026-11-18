@@ -65,7 +65,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # self
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.OutPortProvider.__init__(self)
 
         # PortProfile setting
@@ -98,7 +98,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -112,7 +112,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     #
     # @endif
     #
-    def exit(self):
+    def exit(self) -> None:
         oid = OpenRTM_aist.Manager.instance().getPOA().servant_to_id(self)
         OpenRTM_aist.Manager.instance().getPOA().deactivate_object(oid)
 
@@ -125,7 +125,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @brief Perform the init operation.
     # @param prop Properties used for initialization.
     # @endif
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties'):
 
         pass
 
@@ -137,7 +137,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @brief Set buffer.
     # @param buffer Value of buffer.
     # @endif
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._buffer = buffer
         return
 
@@ -151,7 +151,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @param info Value of info.
     # @param listeners Value of listeners.
     # @endif
-    def setListener(self, info, listeners):
+    def setListener(self, info, listeners) -> None:
         self._profile = info
         self._listeners = listeners
         return
@@ -164,7 +164,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @brief Set connector.
     # @param connector Value of connector.
     # @endif
-    def setConnector(self, connector):
+    def setConnector(self, connector) -> None:
         self._connector = connector
         return
 
@@ -228,7 +228,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @endif
     #
 
-    def is_readable(self, retry, provider):
+    def is_readable(self, retry: bool, provider):
         self._rtcout.RTC_PARANOID("is_readable(%d %s)", (retry, str(provider)))
         if self._connector:
             state_query = getattr(self._connector, "_isReadableState", None)
@@ -272,7 +272,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @else
     # @brief Handle the on Buffer Empty notification.
     # @endif
-    def onBufferEmpty(self):
+    def onBufferEmpty(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
@@ -284,7 +284,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @else
     # @brief Handle the on Buffer Read Timeout notification.
     # @endif
-    def onBufferReadTimeout(self):
+    def onBufferReadTimeout(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
@@ -296,7 +296,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @else
     # @brief Handle the on Sender Empty notification.
     # @endif
-    def onSenderEmpty(self):
+    def onSenderEmpty(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
@@ -308,7 +308,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @else
     # @brief Handle the on Sender Timeout notification.
     # @endif
-    def onSenderTimeout(self):
+    def onSenderTimeout(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
@@ -320,7 +320,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @else
     # @brief Handle the on Sender Error notification.
     # @endif
-    def onSenderError(self):
+    def onSenderError(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
@@ -374,7 +374,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
 # @else
 # @brief Register the factory for OutPortCSPProvider.
 # @endif
-def OutPortCSPProviderInit():
+def OutPortCSPProviderInit() -> None:
     factory = OpenRTM_aist.OutPortProviderFactory.instance()
     factory.addFactory("csp_channel",
                        OpenRTM_aist.OutPortCSPProvider)

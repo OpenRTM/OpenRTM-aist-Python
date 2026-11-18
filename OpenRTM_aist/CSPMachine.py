@@ -74,7 +74,7 @@ class CSPMachine(OpenRTM_aist.StaticFSM.Machine):
     # @param cspmgr Value of cspmgr.
     # @endif
     #
-    def __init__(self, TOP, comp, cspmgr):
+    def __init__(self, TOP, comp, cspmgr) -> None:
         OpenRTM_aist.StaticFSM.Machine.__init__(self, TOP, comp)
         self._manager = cspmgr
         #self._ctrl = OpenRTM_aist.CSPManager.CSPThreadCtrl()
@@ -92,7 +92,7 @@ class CSPMachine(OpenRTM_aist.StaticFSM.Machine):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -156,7 +156,7 @@ class CSPMachine(OpenRTM_aist.StaticFSM.Machine):
     #
     # @endif
     #
-    def run_event(self, timeout=10):
+    def run_event(self, timeout: int = 10):
         ret, outport, inport = self._manager.select(timeout)
         if ret:
             if inport:

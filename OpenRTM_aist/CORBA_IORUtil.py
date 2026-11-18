@@ -206,7 +206,7 @@ class IOP:
 
 
 class cdrStream:
-    def __init__(self, cdrdata):
+    def __init__(self, cdrdata) -> None:
         self.pos = 0
         self.cdrdata = cdrdata
         return
@@ -217,14 +217,14 @@ class cdrStream:
     def pos(self):
         return self.pos
 
-    def rewind(self):
+    def rewind(self) -> None:
         self.pos = 0
 
-    def incr(self, count=1):
+    def incr(self, count=1) -> None:
         self.pos += count
 
 
-def unmarshalBoolean(cdr):
+def unmarshalBoolean(cdr) -> None:
     cdrUnmarshal(CORBA.TC_boolean, "".join(cdr.data(2)))
 
 
@@ -239,7 +239,7 @@ def toString(ior):
     return header + binascii.hexlify(data).decode("ascii")
 
 
-def toIOR(iorstr):
+def toIOR(iorstr: str):
     global endian
     if len(iorstr) < 4:
         return
@@ -294,7 +294,7 @@ def getEndpoints(ior):
     return addr
 
 
-def extractAddrs(comps):
+def extractAddrs(comps: list):
     addr = []
     for c in comps:
         # print("TAG component type: ", IOP.ComponentID[c.tag])
@@ -344,7 +344,7 @@ def extractAddrs(comps):
 # @endif
 
 
-def replaceEndpoint(iorstr, endpoint):
+def replaceEndpoint(iorstr: str, endpoint: str):
     ior = toIOR(iorstr)
     for p in ior.profiles:
         # TAG_INTERNET_IOP

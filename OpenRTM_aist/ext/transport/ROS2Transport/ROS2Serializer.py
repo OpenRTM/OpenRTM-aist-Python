@@ -94,7 +94,7 @@ def ros2_basic_data(message_type):
         # @param self
         #
         # @endif
-        def __init__(self):
+        def __init__(self) -> None:
             pass
 
         ##
@@ -109,7 +109,7 @@ def ros2_basic_data(message_type):
         # @brief self
         #
         # @endif
-        def __del__(self):
+        def __del__(self) -> None:
             pass
 
         ##
@@ -238,7 +238,7 @@ def ros2_basic_data(message_type):
 #
 
 
-def ROS2BasicDataInit(message_type, name):
+def ROS2BasicDataInit(message_type, name) -> None:
     datatypes = [RTC.TimedState, RTC.TimedShort, RTC.TimedLong,
                  RTC.TimedUShort, RTC.TimedULong, RTC.TimedFloat,
                  RTC.TimedDouble, RTC.TimedChar, RTC.TimedWChar,
@@ -286,7 +286,7 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -301,7 +301,7 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -396,7 +396,7 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROS2Point3DInit():
+def ROS2Point3DInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros2:geometry_msgs/PointStamped",
                                                               ROS2Point3DData, RTC.TimedPoint3D)
     ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:geometry_msgs/PointStamped",
@@ -433,7 +433,7 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -448,7 +448,7 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -545,7 +545,7 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROS2QuaternionInit():
+def ROS2QuaternionInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros2:geometry_msgs/QuaternionStamped",
                                                               ROS2QuaternionData, RTC.TimedQuaternion)
     ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:geometry_msgs/QuaternionStamped",
@@ -582,7 +582,7 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -597,7 +597,7 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -692,7 +692,7 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROS2Vector3DInit():
+def ROS2Vector3DInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros2:geometry_msgs/Vector3Stamped",
                                                               ROS2Vector3DData, RTC.TimedVector3D)
     ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:geometry_msgs/Vector3Stamped",
@@ -729,7 +729,7 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -744,7 +744,7 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -845,7 +845,7 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROS2CameraImageInit():
+def ROS2CameraImageInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros2:sensor_msgs/Image",
                                                               ROS2CameraImageData, RTC.CameraImage)
     ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:sensor_msgs/Image",
@@ -864,7 +864,7 @@ def ROS2CameraImageInit():
 #
 # @endif
 #
-def ROS2SerializerInit():
+def ROS2SerializerInit() -> None:
     ROS2BasicDataInit(Float32, "ros2:std_msgs/Float32")
     ROS2BasicDataInit(Float64, "ros2:std_msgs/Float64")
     ROS2BasicDataInit(Int8, "ros2:std_msgs/Int8")

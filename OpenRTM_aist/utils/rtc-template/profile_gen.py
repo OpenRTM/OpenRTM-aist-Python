@@ -16,6 +16,7 @@
 #  $Id$
 #
 
+import typing as _typing
 import gen_base
 
 profile_yaml = """rtcProfile:
@@ -340,13 +341,13 @@ profile_yaml = """rtcProfile:
 
 
 class profile_gen(gen_base.gen_base):
-    def __init__(self, data):
+    def __init__(self, data: '_typing.Dict[str, _typing.Any]') -> None:
         self.data = data
         self.data["fname"] = data["basicInfo"]["name"] + ".yaml"
         self.tags = {}
 
-    def print_yamlprofile(self):
+    def print_yamlprofile(self) -> None:
         self.gen(self.data["fname"], profile_yaml, self.data, self.tags)
 
-    def print_all(self):
+    def print_all(self) -> None:
         self.print_yamlprofile()

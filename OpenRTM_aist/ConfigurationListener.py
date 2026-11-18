@@ -31,7 +31,7 @@ class ConfigurationParamListenerType:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ON_UPDATE_CONFIG_PARAM = 0
@@ -63,7 +63,7 @@ class ConfigurationParamListener:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -89,7 +89,7 @@ class ConfigurationParamListener:
     #
     # @endif
     # static const char* toString(ConfigurationParamListenerType type)
-    def toString(status):
+    def toString(status: int):
         typeString = ["ON_UPDATE_CONFIG_PARAM"]
 
         if status < len(typeString):
@@ -106,7 +106,7 @@ class ConfigurationParamListener:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -149,7 +149,7 @@ class ConfigurationSetListenerType:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ON_SET_CONFIG_SET = 0
@@ -183,7 +183,7 @@ class ConfigurationSetListener:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -211,7 +211,7 @@ class ConfigurationSetListener:
     # @endif
     # static const char* toString(ConfigurationSetListenerType type)
 
-    def toString(status):
+    def toString(status: int):
         typeString = ["ON_SET_CONFIG_SET",
                       "ON_ADD_CONFIG_SET"]
         if status < len(typeString):
@@ -228,7 +228,7 @@ class ConfigurationSetListener:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -264,7 +264,7 @@ class ConfigurationSetNameListenerType:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ON_UPDATE_CONFIG_SET = 0
@@ -300,7 +300,7 @@ class ConfigurationSetNameListener:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -328,7 +328,7 @@ class ConfigurationSetNameListener:
     # @endif
     # static const char* toString(ConfigurationSetNameListenerType type)
 
-    def toString(status):
+    def toString(status: int):
         typeString = ["ON_UPDATE_CONFIG_SET",
                       "ON_REMOVE_CONFIG_SET",
                       "ON_ACTIVATE_CONFIG_SET"]
@@ -346,7 +346,7 @@ class ConfigurationSetNameListener:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -395,7 +395,7 @@ class ConfigurationParamListenerHolder:
     # @brief Constructor
     # @endif
     # ConfigurationParamListenerHolder();
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         pass
 
@@ -406,7 +406,7 @@ class ConfigurationParamListenerHolder:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         for (idx, listener) in enumerate(self._listeners):
             del self._listeners[idx]
         return
@@ -429,7 +429,7 @@ class ConfigurationParamListenerHolder:
     # @endif
     # void addListener(ConfigurationParamListener* listener);
 
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         self._listeners.append(listener)
         return
 
@@ -451,7 +451,7 @@ class ConfigurationParamListenerHolder:
     # @endif
     # void removeListener(ConfigurationParamListener* listener);
 
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         len_ = len(self._listeners)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -480,7 +480,7 @@ class ConfigurationParamListenerHolder:
     # @endif
     # void notify(const char* config_set_name, const char* config_param_name);
 
-    def notify(self, config_set_name, config_param_name):
+    def notify(self, config_set_name: str, config_param_name: str) -> None:
         for listener in self._listeners:
             listener(config_set_name, config_param_name)
         return
@@ -513,7 +513,7 @@ class ConfigurationSetListenerHolder:
     # @brief Constructor
     # @endif
     # ConfigurationSetListenerHolder();
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         pass
 
@@ -524,7 +524,7 @@ class ConfigurationSetListenerHolder:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -545,7 +545,7 @@ class ConfigurationSetListenerHolder:
     # @endif
     # void addListener(ConfigurationSetListener* listener);
 
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         self._listeners.append(listener)
         return
 
@@ -567,7 +567,7 @@ class ConfigurationSetListenerHolder:
     # @endif
     # void removeListener(ConfigurationSetListener* listener);
 
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         len_ = len(self._listeners)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -596,7 +596,7 @@ class ConfigurationSetListenerHolder:
     # @endif
     # void notify(const coil::Properties& config_set);
 
-    def notify(self, config_set):
+    def notify(self, config_set) -> None:
         for listener in self._listeners:
             listener(config_set)
         return
@@ -629,7 +629,7 @@ class ConfigurationSetNameListenerHolder:
     # @brief Constructor
     # @endif
     # ConfigurationSetNameListenerHolder();
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         pass
 
@@ -640,7 +640,7 @@ class ConfigurationSetNameListenerHolder:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -661,7 +661,7 @@ class ConfigurationSetNameListenerHolder:
     # @endif
     # void addListener(ConfigurationSetNameListener* listener);
 
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         self._listeners.append(listener)
         return
 
@@ -683,7 +683,7 @@ class ConfigurationSetNameListenerHolder:
     # @endif
     # void removeListener(ConfigurationSetNameListener* listener);
 
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         len_ = len(self._listeners)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -710,7 +710,7 @@ class ConfigurationSetNameListenerHolder:
     # @endif
     # void notify(const char* config_set_name);
 
-    def notify(self, config_set_name):
+    def notify(self, config_set_name: str) -> None:
         for listener in self._listeners:
             listener(config_set_name)
         return
@@ -745,7 +745,7 @@ class ConfigurationListeners:
     #
     # @endif
 
-    def __init__(self):
+    def __init__(self) -> None:
         ##
         # @if jp
         # @brief ConfigurationParamListenerTypeリスナ配列
@@ -801,7 +801,7 @@ class ConfigurationListeners:
     # @return
     #
     # @endif
-    def addConfigParamListener(self, ltype, listener):
+    def addConfigParamListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.configparam_):
             self.configparam_[ltype].addListener(listener)
             return True
@@ -826,7 +826,7 @@ class ConfigurationListeners:
     # @return
     #
     # @endif
-    def addConfigurationSetListener(self, ltype, listener):
+    def addConfigurationSetListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.configset_):
             self.configset_[ltype].addListener(listener)
             return True
@@ -851,7 +851,7 @@ class ConfigurationListeners:
     # @return
     #
     # @endif
-    def addConfigurationSetNameListener(self, ltype, listener):
+    def addConfigurationSetNameListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.configsetname_):
             self.configsetname_[ltype].addListener(listener)
             return True
@@ -876,7 +876,7 @@ class ConfigurationListeners:
     # @return
     #
     # @endif
-    def removeConfigParamListener(self, ltype, listener):
+    def removeConfigParamListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.configparam_):
             self.configparam_[ltype].removeListener(listener)
             return True
@@ -901,7 +901,7 @@ class ConfigurationListeners:
     # @return
     #
     # @endif
-    def removeConfigurationSetListener(self, ltype, listener):
+    def removeConfigurationSetListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.configset_):
             self.configset_[ltype].removeListener(listener)
             return True
@@ -926,7 +926,7 @@ class ConfigurationListeners:
     # @return
     #
     # @endif
-    def removeConfigurationSetNameListener(self, ltype, listener):
+    def removeConfigurationSetNameListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.configsetname_):
             self.configsetname_[ltype].removeListener(listener)
             return True
@@ -952,7 +952,7 @@ class ConfigurationListeners:
     # @return
     #
     # @endif
-    def notifyConfigParam(self, ltype, config_set_name, config_param_name):
+    def notifyConfigParam(self, ltype: int, config_set_name: str, config_param_name: str) -> None:
         if ltype < len(self.configparam_):
             self.configparam_[ltype].notify(config_set_name, config_param_name)
 
@@ -974,7 +974,7 @@ class ConfigurationListeners:
     # @return
     #
     # @endif
-    def notifyConfigurationSet(self, ltype, config_set):
+    def notifyConfigurationSet(self, ltype: int, config_set) -> None:
         if ltype < len(self.configset_):
             self.configset_[ltype].notify(config_set)
 
@@ -996,6 +996,6 @@ class ConfigurationListeners:
     # @return
     #
     # @endif
-    def notifyConfigurationSetName(self, ltype, config_set_name):
+    def notifyConfigurationSetName(self, ltype: int, config_set_name: str) -> None:
         if ltype < len(self.configsetname_):
             self.configsetname_[ltype].notify(config_set_name)

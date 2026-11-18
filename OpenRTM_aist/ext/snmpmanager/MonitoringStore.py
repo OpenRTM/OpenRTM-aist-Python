@@ -109,7 +109,7 @@ CREATE INDEX IF NOT EXISTS custom_metrics_robot_ts ON custom_metrics (robot, nam
 # @param value value
 # @return number (or None)
 # @~
-def _num(value):
+def _num(value: str):
     try:
         return None if value is None else float(value)
     except (TypeError, ValueError):
@@ -137,7 +137,7 @@ class MetricsStore:
     # @param observer name of the recording robot (this one)
     # @param retention_hours hours to keep rows before deleting them
     # @~
-    def __init__(self, path, observer, retention_hours=24.0):
+    def __init__(self, path: str, observer: str, retention_hours: float = 24.0) -> None:
         self.path = path
         self.observer = observer
         self.retention = float(retention_hours) * 3600.0
@@ -163,7 +163,7 @@ class MetricsStore:
     #
     # @param rows [{"robot", "ip", "status", \<METRIC_COLUMNS\>...}]
     # @~
-    def record_metrics(self, rows):
+    def record_metrics(self, rows) -> None:
         now = time.time()
         self._queue.put(("metrics", [(now, self.observer, r.get("robot"), r.get("ip"), r.get(
             "status")) + tuple(_num(r.get(c)) for c in METRIC_COLUMNS[1:]) for r in rows]))
@@ -182,7 +182,7 @@ class MetricsStore:
     # @param kind event kind
     # @param detail details
     # @~
-    def record_event(self, robot, kind, detail=""):
+    def record_event(self, robot: str, kind: str, detail: str = "") -> None:
         self._queue.put(("event", (time.time(), self.observer, robot, kind, detail)))
 
     ##
@@ -195,7 +195,7 @@ class MetricsStore:
     #
     # @param runs list of measurement runs updated by SlaveMeasureModule.update_runs()
     # @~
-    def record_measurements(self, runs):
+    def record_measurements(self, runs) -> None:
         import json
         now = time.time()
         rows = []
@@ -218,7 +218,7 @@ class MetricsStore:
     #
     # @param rows [{"robot", "metrics": {name: value}}]
     # @~
-    def record_custom_metrics(self, rows):
+    def record_custom_metrics(self, rows: list) -> None:
         now = time.time()
         out = [(now, self.observer, r.get("robot"), name, _num(v))
                for r in rows for name, v in sorted((r.get("metrics") or {}).items())]
@@ -231,7 +231,7 @@ class MetricsStore:
     # @~english
     # @brief Stops the writer thread and closes the database
     # @~
-    def close(self):
+    def close(self) -> None:
         self._queue.put(("stop", None))
         self._thread.join(timeout=5)
 
@@ -242,7 +242,7 @@ class MetricsStore:
     # @~english
     # @brief Body of the writer thread
     # @~
-    def _run(self):
+    def _run(self) -> None:
         try:
             conn = sqlite3.connect(self.path)
             conn.executescript(SCHEMA)
@@ -294,7 +294,7 @@ class MetricsStore:
     # @param payload contents to write
     # @~
     @staticmethod
-    def _write(conn, kind, payload):
+    def _write(conn, kind: str, payload) -> None:
         if kind == "metrics":
             conn.executemany("INSERT INTO metrics VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", payload)
         elif kind == "event":
@@ -352,7 +352,7 @@ def _fmt(v, nd=1):
 # @param argv command arguments
 # @return exit code
 # @~
-def main(argv):
+def main(argv) -> int:
     if len(argv) < 3:
         print(__doc__)
         return 1

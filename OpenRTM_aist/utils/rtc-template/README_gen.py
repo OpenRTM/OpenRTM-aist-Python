@@ -16,6 +16,7 @@
 #  $Id: README_gen.py 775 2008-07-28 16:14:45Z n-ando $
 #
 
+import typing as _typing
 import os
 import time
 import gen_base
@@ -188,7 +189,7 @@ configuration = """Configuration:
 
 
 class README_gen(gen_base.gen_base):
-    def __init__(self, data):
+    def __init__(self, data: '_typing.Dict[str, _typing.Any]') -> None:
         self.data = data.copy()
         self.data['fname'] = "README." + self.data['basicInfo']['name']
         self.data['version'] = os.popen("rtm-config --version", "r").read()
@@ -204,7 +205,7 @@ class README_gen(gen_base.gen_base):
         self.gen_tags(self.tags)
         return
 
-    def CreateActions(self):
+    def CreateActions(self) -> str:
         actnames = [
             "onInitialize",
             "onFinalize",
@@ -237,8 +238,8 @@ class README_gen(gen_base.gen_base):
             actions += acttext % (a, a, a, a)
         return actions
 
-    def print_readme(self):
+    def print_readme(self) -> None:
         self.gen(self.data["fname"], readme, self.data, self.tags)
 
-    def print_all(self):
+    def print_all(self) -> None:
         self.print_readme()

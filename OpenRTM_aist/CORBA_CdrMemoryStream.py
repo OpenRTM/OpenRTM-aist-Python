@@ -55,7 +55,7 @@ class CORBA_CdrMemoryStream(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._endian = None
 
     ##
@@ -70,7 +70,7 @@ class CORBA_CdrMemoryStream(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -108,7 +108,7 @@ class CORBA_CdrMemoryStream(OpenRTM_aist.ByteDataStreamBase):
     #
     # @endif
     # virtual void isLittleEndian(bool little_endian) = 0;
-    def isLittleEndian(self, little_endian):
+    def isLittleEndian(self, little_endian: bool) -> None:
         self._endian = little_endian
 
     ##
@@ -170,7 +170,7 @@ class CORBA_CdrMemoryStream(OpenRTM_aist.ByteDataStreamBase):
     # @endif
     # virtual bool deserialize(DataType& data) = 0;
 
-    def deserialize(self, cdr, data_type):
+    def deserialize(self, cdr: bytes, data_type):
         if self._endian is not None:
             try:
                 data = cdrUnmarshal(
@@ -182,6 +182,6 @@ class CORBA_CdrMemoryStream(OpenRTM_aist.ByteDataStreamBase):
             return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, data_type
 
 
-def CORBA_CdrMemoryStreamInit():
+def CORBA_CdrMemoryStreamInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializerGlobal("cdr",
                                                                     CORBA_CdrMemoryStream)

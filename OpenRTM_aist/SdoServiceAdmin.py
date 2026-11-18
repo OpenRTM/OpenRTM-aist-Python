@@ -13,6 +13,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
+import typing as _typing
 import copy
 import threading
 import OpenRTM_aist
@@ -104,7 +105,7 @@ class SdoServiceAdmin:
     # @param
     # @endif
     # SdoServiceAdmin(::RTC::RTObject_impl& rtobj);
-    def __init__(self, rtobj):
+    def __init__(self, rtobj) -> None:
         self._rtobj = rtobj
         self._consumerTypes = []
         self._providers = []
@@ -148,7 +149,7 @@ class SdoServiceAdmin:
     # Virtual destractor.
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -162,7 +163,7 @@ class SdoServiceAdmin:
     # @param self
     # @param rtobj
     #
-    def init(self, rtobj):
+    def init(self, rtobj) -> None:
 
         self._rtcout.RTC_TRACE("SdoServiceAdmin::SdoServiceAdmin(%s)",
                                rtobj.getProperties().getProperty("instance_name"))
@@ -247,7 +248,7 @@ class SdoServiceAdmin:
     # @param self
     #
 
-    def exit(self):
+    def exit(self) -> None:
         len_ = len(self._providers)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -292,7 +293,7 @@ class SdoServiceAdmin:
     # SDOPackage::ServiceProfile*
     # SdoServiceAdmin::getServiceProviderProfile(const char* id)
 
-    def getServiceProviderProfile(self, id):
+    def getServiceProviderProfile(self, id: str):
         idstr = id
         _ = OpenRTM_aist.ScopedLock(self._provider_mutex)
         for provider in self._providers:
@@ -311,7 +312,7 @@ class SdoServiceAdmin:
     # SDOPackage::SDOService_ptr SdoServiceAdmin::getServiceProvider(const
     # char* id)
 
-    def getServiceProvider(self, id):
+    def getServiceProvider(self, id: str):
         prof = self.getServiceProviderProfile(id)
         return prof.service
 
@@ -326,7 +327,7 @@ class SdoServiceAdmin:
     # addSdoServiceProvider(const SDOPackage::ServiceProfile& prof,
     #                       SdoServiceProviderBase* provider)
 
-    def addSdoServiceProvider(self, prof, provider):
+    def addSdoServiceProvider(self, prof: 'SDOPackage.ServiceProfile', provider) -> bool:
         self._rtcout.RTC_TRACE("SdoServiceAdmin::addSdoServiceProvider(if=%s)",
                                prof.interface_type)
         _ = OpenRTM_aist.ScopedLock(self._provider_mutex)
@@ -349,7 +350,7 @@ class SdoServiceAdmin:
     #
     # bool SdoServiceAdmin::removeSdoServiceProvider(const char* id)
 
-    def removeSdoServiceProvider(self, id):
+    def removeSdoServiceProvider(self, id: str) -> bool:
         self._rtcout.RTC_TRACE("removeSdoServiceProvider(%d)", id)
         guard = OpenRTM_aist.ScopedLock(self._provider_mutex)
 
@@ -377,7 +378,7 @@ class SdoServiceAdmin:
     # @endif
     # bool addSdoServiceConsumer(const SDOPackage::ServiceProfile& sProfile);
 
-    def addSdoServiceConsumer(self, sProfile):
+    def addSdoServiceConsumer(self, sProfile: 'SDOPackage.ServiceProfile'):
         self._rtcout.RTC_TRACE("addSdoServiceConsumer(IFR = %s)",
                                sProfile.interface_type)
         profile = copy.deepcopy(sProfile)
@@ -449,7 +450,7 @@ class SdoServiceAdmin:
     # @endif
     # bool removeSdoServiceConsumer(const char* id);
 
-    def removeSdoServiceConsumer(self, id):
+    def removeSdoServiceConsumer(self, id: _typing.Optional[str]) -> bool:
         if id is None or id[0] == '\0':
             self._rtcout.RTC_ERROR(
                 "removeSdoServiceConsumer(): id is invalid.")
@@ -481,7 +482,7 @@ class SdoServiceAdmin:
     # bool SdoServiceAdmin::
     # isEnabledConsumerType(const SDOPackage::ServiceProfile& sProfile)
 
-    def isEnabledConsumerType(self, sProfile):
+    def isEnabledConsumerType(self, sProfile: 'SDOPackage.ServiceProfile') -> bool:
         if self._allConsumerEnabled:
             return True
 
@@ -504,7 +505,7 @@ class SdoServiceAdmin:
     # @endif
     # bool isExistingConsumerType(const SDOPackage::ServiceProfile& sProfile);
 
-    def isExistingConsumerType(self, sProfile):
+    def isExistingConsumerType(self, sProfile: 'SDOPackage.ServiceProfile') -> bool:
         factory = OpenRTM_aist.SdoServiceConsumerFactory.instance()
         consumerTypes = factory.getIdentifiers()
         for consumerType in consumerTypes:
@@ -526,7 +527,7 @@ class SdoServiceAdmin:
         return str(OpenRTM_aist.uuid1())
 
     # std::string SdoServiceAdmin::ifrToKey(std::string& ifr)
-    def ifrToKey(self, ifr):
+    def ifrToKey(self, ifr: str):
         ifrvstr = ifr.split(":")
         ifrvstr[1] = ifrvstr[1].lower()
         ifrvstr[1] = ifrvstr[1].replace(".", "_")

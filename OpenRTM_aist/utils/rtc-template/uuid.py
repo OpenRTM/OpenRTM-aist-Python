@@ -14,6 +14,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
+import typing as _typing
 import hashlib
 import subprocess
 import sys
@@ -41,8 +42,8 @@ if sys.version_info[0] == 3:
 # @endif
 class UUID(object):
 
-    def __init__(self, hex=None, bytes=None, fields=None, int_value=None,
-                 version=None):
+    def __init__(self, hex: '_typing.Optional[str]' = None, bytes: '_typing.Optional[_typing.Union[str, bytes]]' = None, fields: '_typing.Optional[_typing.Tuple[int, int, int, int, int, int]]' = None, int_value: '_typing.Optional[int]' = None,
+                 version: '_typing.Optional[int]' = None) -> None:
         r"""Create a UUID from either a string of 32 hexadecimal digits,
         a string of 16 bytes as the 'bytes' argument, a tuple of six
         integers (32-bit time_low, 16-bit time_mid, 16-bit time_hi_version,
@@ -115,24 +116,24 @@ class UUID(object):
             return (self.int_value > other.int_value) - (self.int_value < other.int_value)
         return NotImplemented
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.int_value)
 
-    def __int__(self):
+    def __int__(self) -> int:
         return self.int_value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'UUID(%r)' % str(self)
 
-    def __setattr__(self, name, value):
+    def __setattr__(self, name, value) -> None:
         raise TypeError('UUID objects are immutable')
 
-    def __str__(self):
+    def __str__(self) -> str:
         hex = '%032x' % self.int_value
         return '%s-%s-%s-%s-%s' % (
             hex[:8], hex[8:12], hex[12:16], hex[16:20], hex[20:])
 
-    def get_bytes(self):
+    def get_bytes(self) -> str:
         bytes = ''
         for shift in range(0, 128, 8):
             bytes = chr((self.int_value >> shift) & 0xff) + bytes
@@ -140,63 +141,63 @@ class UUID(object):
 
     bytes = property(get_bytes)
 
-    def get_fields(self):
+    def get_fields(self) -> '_typing.Tuple[int, int, int, int, int, int]':
         return (self.time_low, self.time_mid, self.time_hi_version,
                 self.clock_seq_hi_variant, self.clock_seq_low, self.node)
 
     fields = property(get_fields)
 
-    def get_time_low(self):
+    def get_time_low(self) -> int:
         return self.int_value >> 96
 
     time_low = property(get_time_low)
 
-    def get_time_mid(self):
+    def get_time_mid(self) -> int:
         return (self.int_value >> 80) & 0xffff
 
     time_mid = property(get_time_mid)
 
-    def get_time_hi_version(self):
+    def get_time_hi_version(self) -> int:
         return (self.int_value >> 64) & 0xffff
 
     time_hi_version = property(get_time_hi_version)
 
-    def get_clock_seq_hi_variant(self):
+    def get_clock_seq_hi_variant(self) -> int:
         return (self.int_value >> 56) & 0xff
 
     clock_seq_hi_variant = property(get_clock_seq_hi_variant)
 
-    def get_clock_seq_low(self):
+    def get_clock_seq_low(self) -> int:
         return (self.int_value >> 48) & 0xff
 
     clock_seq_low = property(get_clock_seq_low)
 
-    def get_time(self):
+    def get_time(self) -> int:
         return (((self.time_hi_version & 0x0fff) << 48) | (self.time_mid << 32) | self.time_low)
 
     time = property(get_time)
 
-    def get_clock_seq(self):
+    def get_clock_seq(self) -> int:
         return (((self.clock_seq_hi_variant & 0x3f) << 8) | self.clock_seq_low)
 
     clock_seq = property(get_clock_seq)
 
-    def get_node(self):
+    def get_node(self) -> int:
         return self.int_value & 0xffffffffffff
 
     node = property(get_node)
 
-    def get_hex(self):
+    def get_hex(self) -> str:
         return '%032x' % self.int_value
 
     hex = property(get_hex)
 
-    def get_urn(self):
+    def get_urn(self) -> str:
         return 'urn:uuid:' + str(self)
 
     urn = property(get_urn)
 
-    def get_variant(self):
+    def get_variant(self) -> str:
         if not self.int_value & (0x8000 << 48):
             return RESERVED_NCS
         elif not self.int_value & (0x4000 << 48):
@@ -208,7 +209,7 @@ class UUID(object):
 
     variant = property(get_variant)
 
-    def get_version(self):
+    def get_version(self) -> int:
         # The version bits are only meaningful for RFC 4122 UUIDs.
         if self.variant == RFC_4122:
             return int((self.int_value >> 76) & 0xf)
@@ -216,7 +217,7 @@ class UUID(object):
     version = property(get_version)
 
 
-def _ifconfig_getnode():
+def _ifconfig_getnode() -> '_typing.Optional[int]':
     """Get the hardware address on Unix by running ifconfig."""
     import os
     try:
@@ -233,7 +234,7 @@ def _ifconfig_getnode():
                 return int(words[i + 1].replace(':', ''), 16)
 
 
-def _ipconfig_getnode():
+def _ipconfig_getnode() -> '_typing.Optional[int]':
     """Get the hardware address on Windows by running ipconfig.exe."""
     import os
     import re
@@ -258,7 +259,7 @@ def _ipconfig_getnode():
                 return int(value.replace('-', ''), 16)
 
 
-def _netbios_getnode():
+def _netbios_getnode() -> '_typing.Optional[int]':
     """Get the hardware address on Windows using NetBIOS calls.
     See http://support.microsoft.com/kb/118623 for details."""
     import win32wnet
@@ -323,19 +324,19 @@ except BaseException:
     pass
 
 
-def _unixdll_getnode():
+def _unixdll_getnode() -> int:
     """Get the hardware address on Unix using ctypes."""
     _uuid_generate_time(_buffer)
     return UUID(bytes=_buffer.raw).node
 
 
-def _windll_getnode():
+def _windll_getnode() -> int:
     """Get the hardware address on Windows using ctypes."""
     if _UuidCreate(_buffer) == 0:
         return UUID(bytes=_buffer.raw).node
 
 
-def _random_getnode():
+def _random_getnode() -> int:
     """Get a random node ID, with eighth bit set as suggested by RFC 4122."""
     import random
     return random.randrange(0, 1 << 48) | 0x010000000000
@@ -344,7 +345,7 @@ def _random_getnode():
 _node = None
 
 
-def getnode():
+def getnode() -> int:
     """Get the hardware address as a 48-bit integer.  The first time this
     runs, it may launch a separate program, which could be quite slow.  If
     all attempts to obtain the hardware address fail, we choose a random
@@ -369,7 +370,7 @@ def getnode():
             return _node
 
 
-def uuid1(node=None, clock_seq=None):
+def uuid1(node=None, clock_seq=None) -> 'UUID':
     """Generate a UUID from a host ID, sequence number, and the current time.
     If 'node' is not given, getnode() is used to obtain the hardware
     address.  If 'clock_seq' is given, it is used as the sequence number;
@@ -400,7 +401,7 @@ def uuid1(node=None, clock_seq=None):
                         clock_seq_hi_variant, clock_seq_low, node), version=1)
 
 
-def _uuid_name_bytes(namespace, name):
+def _uuid_name_bytes(namespace: 'UUID', name: '_typing.Union[str, bytes]') -> bytes:
     namespace_bytes = namespace.bytes
     if isinstance(namespace_bytes, str):
         namespace_bytes = namespace_bytes.encode("latin-1")
@@ -409,13 +410,13 @@ def _uuid_name_bytes(namespace, name):
     return namespace_bytes + name
 
 
-def uuid3(namespace, name):
+def uuid3(namespace: 'UUID', name: '_typing.Union[str, bytes]') -> 'UUID':
     """Generate a UUID from the MD5 hash of a namespace UUID and a name."""
     digest = hashlib.md5(_uuid_name_bytes(namespace, name), usedforsecurity=False).hexdigest()
     return UUID(hex=digest, version=3)
 
 
-def uuid4():
+def uuid4() -> 'UUID':
     """Generate a random UUID."""
 
     # When the system provides a version-4 UUID generator, use it.
@@ -433,7 +434,7 @@ def uuid4():
         return UUID(bytes=bytes, version=4)
 
 
-def uuid5(namespace, name):
+def uuid5(namespace: 'UUID', name: '_typing.Union[str, bytes]') -> 'UUID':
     """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
     digest = hashlib.sha1(_uuid_name_bytes(namespace, name), usedforsecurity=False).hexdigest()
     return UUID(hex=digest[:32], version=5)

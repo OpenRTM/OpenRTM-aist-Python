@@ -46,7 +46,7 @@ import copy
 # @endif
 # template <class DataType>
 # void setTimestamp(DataType& data)
-def setTimestamp(data):
+def setTimestamp(data) -> None:
     # set timestamp
     tm = OpenRTM_aist.Time()
     data.tm.sec = tm.sec
@@ -88,7 +88,7 @@ class OutPort(OpenRTM_aist.OutPortBase):
     # @brief Constructor
     #
     # @endif
-    def __init__(self, name, value, buffer=None):
+    def __init__(self, name: str, value, buffer=None) -> None:
         OpenRTM_aist.OutPortBase.__init__(
             self, name, OpenRTM_aist.toTypename(value))
         self._value = value
@@ -118,7 +118,7 @@ class OutPort(OpenRTM_aist.OutPortBase):
         self._valueMutex = threading.RLock()
         self._directValue = value
 
-    def __del__(self, OutPortBase=OpenRTM_aist.OutPortBase):
+    def __del__(self, OutPortBase=OpenRTM_aist.OutPortBase) -> None:
         OutPortBase.__del__(self)
         return
 
@@ -260,7 +260,7 @@ class OutPort(OpenRTM_aist.OutPortBase):
     #
     # @endif
 
-    def setOnWrite(self, on_write):
+    def setOnWrite(self, on_write) -> None:
         self._OnWrite = on_write
 
     ##
@@ -282,7 +282,7 @@ class OutPort(OpenRTM_aist.OutPortBase):
     #
     # @endif
 
-    def setOnWriteConvert(self, on_wconvert):
+    def setOnWriteConvert(self, on_wconvert) -> None:
         self._OnWriteConvert = on_wconvert
 
     ##
@@ -333,7 +333,7 @@ class OutPort(OpenRTM_aist.OutPortBase):
         return (not self._directNewData)
 
     class subscribe:
-        def __init__(self, prof, subs=None):
+        def __init__(self, prof, subs=None) -> None:
             if subs:
                 self._prof = subs._prof
                 self._consumer = subs._consumer
@@ -342,6 +342,6 @@ class OutPort(OpenRTM_aist.OutPortBase):
             self._prof = prof
             self._consumer = None
 
-        def __call__(self, cons):
+        def __call__(self, cons) -> None:
             if cons.subscribeInterface(self._prof.properties):
                 self._consumer = cons

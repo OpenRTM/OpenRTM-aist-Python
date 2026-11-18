@@ -49,7 +49,7 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.OutPortProvider.__init__(self)
         OpenRTM_aist.SharedMemory.__init__(self)
         self.setInterfaceType("shared_memory")
@@ -86,7 +86,7 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -100,12 +100,12 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,
     #
     # @endif
     #
-    def exit(self):
+    def exit(self) -> None:
         oid = self._default_POA().servant_to_id(self)
         self._default_POA().deactivate_object(oid)
 
     # virtual void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
 
         ds = prop.getProperty("shem_default_size")
         self._memory_size = self.string_to_MemorySize(ds)
@@ -125,16 +125,16 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,
 
         return
 
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._buffer = buffer
         return
 
-    def setListener(self, info, listeners):
+    def setListener(self, info: 'OpenRTM_aist.ConnectorInfo', listeners) -> None:
         self._profile = info
         self._listeners = listeners
         return
 
-    def setConnector(self, connector):
+    def setConnector(self, connector) -> None:
         self._connector = connector
         return
 
@@ -198,49 +198,49 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,
 
         return self.convertReturn(ret, cdr)
 
-    def onBufferRead(self, data):
+    def onBufferRead(self, data: bytes):
         if self._listeners and self._profile:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ, self._profile, data)
         return data
 
-    def onSend(self, data):
+    def onSend(self, data: bytes):
         if self._listeners and self._profile:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_SEND, self._profile, data)
         return data
 
-    def onBufferEmpty(self):
+    def onBufferEmpty(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
         return
 
-    def onBufferReadTimeout(self):
+    def onBufferReadTimeout(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
         return
 
-    def onSenderEmpty(self):
+    def onSenderEmpty(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
         return
 
-    def onSenderTimeout(self):
+    def onSenderTimeout(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
         return
 
-    def onSenderError(self):
+    def onSenderError(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
         return
 
-    def convertReturn(self, status, data):
+    def convertReturn(self, status: int, data: bytes):
         if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
             data = self.onBufferRead(data)
             self.onSend(data)
@@ -272,7 +272,7 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,
             return OpenRTM.UNKNOWN_ERROR
 
 
-def OutPortSHMProviderInit():
+def OutPortSHMProviderInit() -> None:
     factory = OpenRTM_aist.OutPortProviderFactory.instance()
     factory.addFactory("shared_memory",
                        OpenRTM_aist.OutPortSHMProvider)

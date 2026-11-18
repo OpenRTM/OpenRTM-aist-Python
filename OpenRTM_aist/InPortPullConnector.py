@@ -122,7 +122,7 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     #                     OutPortConsumer* consumer,
     #                     ConnectorListeners& listeners,
     #                     CdrBufferBase* buffer = 0);
-    def __init__(self, info, consumer, listeners, buffer=None):
+    def __init__(self, info: 'OpenRTM_aist.ConnectorInfo', consumer, listeners, buffer=None) -> None:
         OpenRTM_aist.InPortConnector.__init__(self, info, buffer)
         self._consumer = consumer
         self._listeners = listeners
@@ -165,7 +165,7 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -355,7 +355,7 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     # @brief Invoke callback when connection is established
     # @endif
     # void onConnect()
-    def onConnect(self):
+    def onConnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_CONNECT, self._profile)
@@ -368,7 +368,7 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     # @brief Invoke callback when connection is destroied
     # @endif
     # void onDisconnect()
-    def onDisconnect(self):
+    def onDisconnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT, self._profile)
@@ -391,7 +391,7 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     #
     # bool setOutPort(setOutPort* directOutPort);
 
-    def setOutPort(self, directOutPort):
+    def setOutPort(self, directOutPort) -> bool:
         if self._directOutPort is not None:
             return False
         self._directOutPort = directOutPort
@@ -407,11 +407,11 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
     # @param prop
     # @endif
 
-    def unsubscribeInterface(self, prop):
+    def unsubscribeInterface(self, prop: list) -> None:
         if self._consumer:
             self._consumer.unsubscribeInterface(prop)
 
-    def setDataType(self, data):
+    def setDataType(self, data) -> None:
         OpenRTM_aist.InPortConnector.setDataType(self, data)
         self._serializer = OpenRTM_aist.SerializerFactories.instance(
         ).createSerializer(self._marshaling_type, data)

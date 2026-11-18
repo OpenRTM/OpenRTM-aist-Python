@@ -14,6 +14,7 @@
 #      All rights reserved.
 #
 
+import typing as _typing
 import platform
 import os
 import subprocess
@@ -23,13 +24,13 @@ orb = default_orb
 default_port = "2809"
 
 
-def get_hostname():
+def get_hostname() -> str:
     sysinfo = platform.uname()
     hostname = sysinfo[1]
     return str(hostname)
 
 
-def get_tempdir():
+def get_tempdir() -> str:
     temp_dir = os.environ.get('TEMP', "")
     if temp_dir != "":
         return temp_dir
@@ -41,7 +42,7 @@ def get_tempdir():
     return os.getcwd()
 
 
-def find_nscmd(ns_cmd, ns_env=""):
+def find_nscmd(ns_cmd: str, ns_env: str = "") -> '_typing.Optional[str]':
     if sys.platform == "win32":
         ns_path = os.path.join(sys.exec_prefix, ns_cmd)
     else:
@@ -63,7 +64,7 @@ def find_nscmd(ns_cmd, ns_env=""):
     return None
 
 
-def del_file(file_path):
+def del_file(file_path: '_typing.Union[str, os.PathLike]') -> int:
     try:
         os.remove(file_path)
     except FileNotFoundError:
@@ -71,11 +72,11 @@ def del_file(file_path):
     return 0
 
 
-def usage():
+def usage() -> None:
     print("Usage: python rtm-naming.py port_number")
 
 
-def omninames(port="", endpoint=""):
+def omninames(port: '_typing.Union[str, int]' = "", endpoint: str = "") -> None:
     hostname = get_hostname()
     log_path = get_tempdir()
 

@@ -45,7 +45,7 @@ class OutPortConsumer(OpenRTM_aist.DataPortStatus):
     def get(self, data):
         return self.CONNECTION_LOST
 
-    def isReadable(self, retry):
+    def isReadable(self, retry) -> bool:
         return True
 
     ##
@@ -57,12 +57,12 @@ class OutPortConsumer(OpenRTM_aist.DataPortStatus):
     #
     class subscribe:
         # subscribe(const SDOPackage::NVList& prop)
-        def __init__(self, prop):
+        def __init__(self, prop) -> None:
             self._prop = prop
             return
 
         # void operator()(OutPortConsumer* consumer)
-        def __call__(self, consumer):
+        def __call__(self, consumer) -> None:
             consumer.subscribeInterface(self._prop)
             return
 
@@ -75,12 +75,12 @@ class OutPortConsumer(OpenRTM_aist.DataPortStatus):
     #
     class unsubscribe:
         # unsubscribe(const SDOPackage::NVList& prop)
-        def __init__(self, prop):
+        def __init__(self, prop) -> None:
             self._prop = prop
             return
 
         # void operator()(OutPortConsumer* consumer)
-        def __call__(self, consumer):
+        def __call__(self, consumer) -> None:
             consumer.unsubscribeInterface(self._prop)
             return
 
@@ -89,11 +89,11 @@ outportconsumerfactory = None
 
 
 class OutPortConsumerFactory(OpenRTM_aist.Factory, OutPortConsumer):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
         pass
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     def instance():

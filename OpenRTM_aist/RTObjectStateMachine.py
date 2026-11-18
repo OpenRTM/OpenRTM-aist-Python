@@ -31,7 +31,7 @@ class RTObjectStateMachine:
 
     # RTObjectStateMachine(RTC::ExecutionContextHandle_t id,
     #                      RTC::LightweightRTObject_ptr comp);
-    def __init__(self, id, comp):
+    def __init__(self, id: int, comp: 'RTC._objref_LightweightRTObject') -> None:
 
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("RTObjectStateMachine")
         self._id = id
@@ -82,7 +82,7 @@ class RTObjectStateMachine:
         self._sm.goTo(RTC.INACTIVE_STATE)
         return
 
-    def __del__(self):
+    def __del__(self) -> None:
         if self._ca:
             self._ca = False
             self._caVar = None
@@ -108,7 +108,7 @@ class RTObjectStateMachine:
         return self._rtobj
 
     # bool isEquivalent(RTC::LightweightRTObject_ptr comp);
-    def isEquivalent(self, comp):
+    def isEquivalent(self, comp: 'RTC._objref_LightweightRTObject'):
         return self._rtobj._is_equivalent(comp)
 
     # RTC::ExecutionContextHandle_t getExecutionContextHandle();
@@ -117,7 +117,7 @@ class RTObjectStateMachine:
 
     # RTC::ComponentAction operations
     # void onStartup(void);
-    def onStartup(self):
+    def onStartup(self) -> None:
         if self._rtObjPtr:
             self._rtObjPtr.on_startup(self._id)
             return
@@ -140,7 +140,7 @@ class RTObjectStateMachine:
         return
 
     # void onShutdown(void);
-    def onShutdown(self):
+    def onShutdown(self) -> None:
         if self._rtObjPtr:
             self._rtObjPtr.on_shutdown(self._id)
             return
@@ -164,7 +164,7 @@ class RTObjectStateMachine:
         return
 
     # void onActivated(const ExecContextStates& st);
-    def onActivated(self, st):
+    def onActivated(self, st) -> None:
         if self._rtObjPtr:
             if self._rtObjPtr.on_activated(self._id) != RTC.RTC_OK:
                 self._sm.goTo(RTC.ERROR_STATE)
@@ -190,7 +190,7 @@ class RTObjectStateMachine:
         return
 
     # void onDeactivated(const ExecContextStates& st);
-    def onDeactivated(self, st):
+    def onDeactivated(self, st) -> None:
         if self._rtObjPtr:
             self._rtObjPtr.on_deactivated(self._id)
             return
@@ -214,7 +214,7 @@ class RTObjectStateMachine:
         return
 
     # void onAborting(const ExecContextStates& st);
-    def onAborting(self, st):
+    def onAborting(self, st) -> None:
         if self._rtObjPtr:
             self._rtObjPtr.on_aborting(self._id)
             return
@@ -238,7 +238,7 @@ class RTObjectStateMachine:
         return
 
     # void onError(const ExecContextStates& st);
-    def onError(self, st):
+    def onError(self, st) -> None:
         if self._rtObjPtr:
             self._rtObjPtr.on_error(self._id)
             return
@@ -262,7 +262,7 @@ class RTObjectStateMachine:
         return
 
     # void onReset(const ExecContextStates& st);
-    def onReset(self, st):
+    def onReset(self, st) -> None:
         if self._rtObjPtr:
             if self._rtObjPtr.on_reset(self._id) != RTC.RTC_OK:
                 self._sm.goTo(RTC.ERROR_STATE)
@@ -289,7 +289,7 @@ class RTObjectStateMachine:
 
     # RTC::DataflowComponentAction
     # void onExecute(const ExecContextStates& st);
-    def onExecute(self, st):
+    def onExecute(self, st) -> None:
         if self.isNextState(RTC.ERROR_STATE):
             return
         if self._rtObjPtr:
@@ -318,7 +318,7 @@ class RTObjectStateMachine:
         return
 
     # void onStateUpdate(const ExecContextStates& st);
-    def onStateUpdate(self, st):
+    def onStateUpdate(self, st) -> None:
         if self.isNextState(RTC.ERROR_STATE):
             return
         if self._rtObjPtr:
@@ -377,7 +377,7 @@ class RTObjectStateMachine:
 
     # FsmParticipantAction
     # void onAction(const ExecContextStates& st);
-    def onAction(self, st):
+    def onAction(self, st) -> None:
         if not self._fsm:
             return
 
@@ -400,7 +400,7 @@ class RTObjectStateMachine:
 
     # MultiModeComponentAction
     # void onModeChanged(const ExecContextStates& st);
-    def onModeChanged(self, st):
+    def onModeChanged(self, st) -> None:
         if not self._mode:
             return
 
@@ -439,7 +439,7 @@ class RTObjectStateMachine:
         return self._sm.getStates().next == state
 
     # void goTo(ExecContextState state);
-    def goTo(self, state):
+    def goTo(self, state) -> None:
         self._sm.goTo(state)
         return
 
@@ -457,25 +457,25 @@ class RTObjectStateMachine:
     def workerPostDo(self):
         return self._sm.worker_post()
 
-    def activate(self):
+    def activate(self) -> bool:
         if self.isCurrentState(RTC.INACTIVE_STATE):
             self._activation = True
             return True
         return False
 
-    def deactivate(self):
+    def deactivate(self) -> bool:
         if self.isCurrentState(RTC.ACTIVE_STATE):
             self._deactivation = True
             return True
         return False
 
-    def reset(self):
+    def reset(self) -> bool:
         if self.isCurrentState(RTC.ERROR_STATE):
             self._reset = True
             return True
         return False
 
-    def updateState(self):
+    def updateState(self) -> None:
         if self._activation:
             if self.isCurrentState(RTC.INACTIVE_STATE) and not self.isNextState(RTC.ERROR_STATE):
                 self._sm.goTo(RTC.ACTIVE_STATE)
@@ -493,7 +493,7 @@ class RTObjectStateMachine:
 
     # void setComponentAction(const RTC::LightweightRTObject_ptr comp);
 
-    def setComponentAction(self, comp):
+    def setComponentAction(self, comp: 'RTC._objref_LightweightRTObject') -> None:
         self._caVar = comp._narrow(RTC.ComponentAction)
         if CORBA.is_nil(self._caVar):
             return
@@ -510,14 +510,14 @@ class RTObjectStateMachine:
         return
 
     # void setDataFlowComponentAction(const RTC::LightweightRTObject_ptr comp);
-    def setDataFlowComponentAction(self, comp):
+    def setDataFlowComponentAction(self, comp: 'RTC._objref_LightweightRTObject') -> None:
         self._dfcVar = comp._narrow(RTC.DataFlowComponentAction)
         if not CORBA.is_nil(self._dfcVar):
             self._dfc = True
         return
 
     # void setFsmParticipantAction(const RTC::LightweightRTObject_ptr comp);
-    def setFsmParticipantAction(self, comp):
+    def setFsmParticipantAction(self, comp: 'RTC._objref_LightweightRTObject') -> None:
         self._fsmVar = comp._narrow(RTC.FsmParticipantAction)
         if not CORBA.is_nil(self._fsmVar):
             self._fsm = True
@@ -525,7 +525,7 @@ class RTObjectStateMachine:
 
     # void setMultiModeComponentAction(const RTC::LightweightRTObject_ptr
     # comp);
-    def setMultiModeComponentAction(self, comp):
+    def setMultiModeComponentAction(self, comp: 'RTC._objref_LightweightRTObject') -> None:
         self._modeVar = comp._narrow(RTC.MultiModeComponentAction)
         if not CORBA.is_nil(self._modeVar):
             self._mode = True

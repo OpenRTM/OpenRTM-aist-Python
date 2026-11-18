@@ -51,7 +51,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     """
     """
 
-    def _inportPropertyPrefix(self, properties):
+    def _inportPropertyPrefix(self, properties: list):
         return "dataport." + self._interfacetypestr
 
     ##
@@ -71,7 +71,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     #
     # @endif
     #
-    def __init__(self, interfaceType, interfacetypestr):
+    def __init__(self, interfaceType, interfacetypestr: str) -> None:
         OpenRTM_aist.InPortConsumer.__init__(self)
         OpenRTM_aist.CorbaConsumer.__init__(self, interfaceType)
         self._rtcout = OpenRTM_aist.Manager.instance(
@@ -93,7 +93,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~InPortCorbaConsumerBase()")
         OpenRTM_aist.CorbaConsumer.__del__(self)
         return
@@ -113,7 +113,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     # @endif
     #
     # virtual void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("init()")
         self._properties = prop
         return
@@ -143,7 +143,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     #
     # virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
 
-    def publishInterfaceProfile(self, properties):
+    def publishInterfaceProfile(self, properties) -> None:
         return
 
     ##
@@ -170,7 +170,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     #
     # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
 
-    def subscribeInterface(self, properties):
+    def subscribeInterface(self, properties: list) -> bool:
         self._rtcout.RTC_TRACE("subscribeInterface()")
         # self._rtcout.RTC_DEBUG_STR(OpenRTM_aist.NVUtil.toString(properties))
 
@@ -202,7 +202,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     # @endif
     #
     # virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
-    def unsubscribeInterface(self, properties):
+    def unsubscribeInterface(self, properties: list) -> None:
         self._rtcout.RTC_TRACE("unsubscribeInterface()")
         # self._rtcout.RTC_DEBUG_STR(OpenRTM_aist.NVUtil.toString(properties))
 
@@ -226,7 +226,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     # @endif
     #
     # bool subscribeFromIor(const SDOPackage::NVList& properties);
-    def subscribeFromIor(self, properties):
+    def subscribeFromIor(self, properties: list) -> bool:
         self._rtcout.RTC_TRACE("subscribeFromIor()")
 
         key = self._inportPropertyPrefix(properties) + ".inport_ior"
@@ -272,7 +272,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     # @endif
     #
     # bool subscribeFromRef(const SDOPackage::NVList& properties);
-    def subscribeFromRef(self, properties):
+    def subscribeFromRef(self, properties: list) -> bool:
         self._rtcout.RTC_TRACE("subscribeFromRef()")
         key = self._inportPropertyPrefix(properties) + ".inport_ref"
         index = OpenRTM_aist.NVUtil.find_index(properties, key)
@@ -314,7 +314,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     # @endif
     #
     # bool unsubscribeFromIor(const SDOPackage::NVList& properties);
-    def unsubscribeFromIor(self, properties):
+    def unsubscribeFromIor(self, properties: list) -> bool:
         self._rtcout.RTC_TRACE("unsubscribeFromIor()")
         key = self._inportPropertyPrefix(properties) + ".inport_ior"
         index = OpenRTM_aist.NVUtil.find_index(properties, key)
@@ -357,7 +357,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     # @endif
     #
     # bool unsubscribeFromRef(const SDOPackage::NVList& properties);
-    def unsubscribeFromRef(self, properties):
+    def unsubscribeFromRef(self, properties: list) -> bool:
         self._rtcout.RTC_TRACE("unsubscribeFromRef()")
         key = self._inportPropertyPrefix(properties) + ".inport_ref"
         index = OpenRTM_aist.NVUtil.find_index(properties, key)

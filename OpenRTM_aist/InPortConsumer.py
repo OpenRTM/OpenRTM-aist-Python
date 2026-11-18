@@ -48,7 +48,7 @@ class InPortConsumer(OpenRTM_aist.DataPortStatus):
     def put(self, data):
         return self.CONNECTION_LOST
 
-    def isWritable(self, retry):
+    def isWritable(self, retry) -> bool:
         return True
 
     ##
@@ -60,10 +60,10 @@ class InPortConsumer(OpenRTM_aist.DataPortStatus):
     #
 
     class publishInterfaceProfileFunc:
-        def __init__(self, prop):
+        def __init__(self, prop) -> None:
             self._prop = prop
 
-        def __call__(self, consumer):
+        def __call__(self, consumer) -> None:
             consumer.publishInterfaceProfile(self._prop)
 
     ##
@@ -75,7 +75,7 @@ class InPortConsumer(OpenRTM_aist.DataPortStatus):
     #
 
     class subscribeInterfaceFunc:
-        def __init__(self, prop):
+        def __init__(self, prop) -> None:
             self._prop = prop
 
         def __call__(self, consumer):
@@ -87,11 +87,11 @@ inportconsumerfactory = None
 
 class InPortConsumerFactory(OpenRTM_aist.Factory, InPortConsumer):
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
         pass
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     def instance():

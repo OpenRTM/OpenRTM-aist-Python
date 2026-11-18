@@ -72,7 +72,7 @@ class InPortCorbaCdrConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortCorbaConsumerBase.__init__(
             self, OpenRTM.InPortCdr, "corba_cdr")
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortCorbaCdrConsumer")
@@ -91,7 +91,7 @@ class InPortCorbaCdrConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~InPortCorbaCdrConsumer()")
         OpenRTM_aist.InPortCorbaConsumerBase.__del__(self)
         return
@@ -129,7 +129,7 @@ class InPortCorbaCdrConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     # @endif
     #
     # virtual ReturnCode put(const cdrMemoryStream& data);
-    def put(self, data):
+    def put(self, data: bytes):
         self._rtcout.RTC_PARANOID("put()")
 
         try:
@@ -180,7 +180,7 @@ class InPortCorbaCdrConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
             return self.UNKNOWN_ERROR
 
 
-def InPortCorbaCdrConsumerInit():
+def InPortCorbaCdrConsumerInit() -> None:
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("corba_cdr",
                        OpenRTM_aist.InPortCorbaCdrConsumer)

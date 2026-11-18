@@ -39,6 +39,7 @@ import logging
 import os
 import queue
 import threading
+import typing as _typing
 
 LOG = logging.getLogger(__name__)
 _LOCK = threading.RLock()
@@ -207,10 +208,10 @@ class _ObserverFactory:
             import OpenRTM__POA
 
             class FailoverObserver(OpenRTM__POA.ComponentObserver):
-                def __init__(self, ctrl, gid, comp_key):
+                def __init__(self, ctrl, gid, comp_key) -> None:
                     self.ctrl, self.group_id, self.key = ctrl, gid, comp_key
 
-                def update_status(self, status_kind, hint):  # oneway
+                def update_status(self, status_kind, hint) -> None:  # oneway
                     if status_kind == OpenRTM.RTC_STATUS and hint.split(':', 1)[0] == 'ERROR':
                         self.ctrl.notify_error(self.group_id, self.key, hint)
 
@@ -237,7 +238,7 @@ class FailoverController:
     # @param manager manager
     # @param config configuration
     # @~
-    def __init__(self, manager, config):
+    def __init__(self, manager, config) -> None:
         self.manager = manager
         self.config = config
         self.groups = {g['id']: g for g in config['groups']}
@@ -314,7 +315,7 @@ class FailoverController:
     # @return True if it matches
     # @~
     @staticmethod
-    def _matches(comp, spec, allow_error=False):
+    def _matches(comp, spec, allow_error: bool = False):
         profile = comp.get_component_profile()
         if profile.type_name != spec['type']:
             return False
@@ -338,7 +339,7 @@ class FailoverController:
     # @param allow_error whether RTCs in ERROR are allowed
     # @return RTC (None if not found)
     # @~
-    def _find(self, manager_id, spec, allow_error=False):
+    def _find(self, manager_id, spec, allow_error: bool = False):
         for comp in self._components(manager_id):
             try:
                 if self._matches(comp, spec, allow_error):
@@ -369,7 +370,7 @@ class FailoverController:
     # @~english
     # @brief Creates the RTCs in the configuration (candidates with create)
     # @~
-    def create_initial(self):
+    def create_initial(self) -> None:
         for group in self.groups.values():
             first = group['alternatives'][0]
             if not first.get('create', False):
@@ -507,7 +508,7 @@ class FailoverController:
     # @param conn connection settings
     # @param comp RTC
     # @~
-    def _connect(self, conn, comp):
+    def _connect(self, conn, comp) -> None:
         local_port = self._port(comp, conn['port'])
         external = self._external_port(conn['external'])
         left, right = (local_port, external) if conn['direction'] == 'output' else (external, local_port)
@@ -528,7 +529,7 @@ class FailoverController:
     # @param conn connection settings
     # @param components RTCs of the group
     # @~
-    def _connect_internal(self, conn, components):
+    def _connect_internal(self, conn, components) -> None:
         src = self._port(components[conn['source']['role']], conn['source']['port'])
         dst = self._port(components[conn['target']['role']], conn['target']['port'])
         name = conn.get('name', 'failover_internal')
@@ -551,7 +552,7 @@ class FailoverController:
     # @param group group
     # @param old_components RTCs before switching
     # @~
-    def _disconnect(self, group, old_components):
+    def _disconnect(self, group, old_components) -> None:
         # 外部ポート上の、名前が一致するコネクタだけを切断する (他の接続は残す)。
         # 古い RTC のプロセスが落ちていても、外部側から切れば片付く。
         for conn in group.get('connections', []):
@@ -610,7 +611,7 @@ class FailoverController:
     # @param skip_current whether to skip the current candidate
     # @return True if switched
     # @~
-    def switch(self, group_id, skip_current=True):
+    def switch(self, group_id, skip_current: bool = True) -> '_typing.Optional[bool]':
         with _LOCK:
             group = self.groups[group_id]
             alternatives = sorted(enumerate(group['alternatives']),
@@ -658,7 +659,7 @@ class FailoverController:
     # @param group group
     # @param old RTCs before switching
     # @~
-    def _handle_old(self, group, old):
+    def _handle_old(self, group, old) -> None:
         action = group.get('on_failure', 'keep')
         if action == 'keep':
             return
@@ -684,7 +685,7 @@ class FailoverController:
     #
     # @param group_id group ID (all if omitted)
     # @~
-    def register_observers(self, group_id=None):
+    def register_observers(self, group_id=None) -> None:
         if not self.observer_enabled:
             return
         groups = [group_id] if group_id else list(self.groups)
@@ -710,7 +711,7 @@ class FailoverController:
     # @param group_id group ID
     # @param comp RTC
     # @~
-    def _add_observer(self, group_id, comp):
+    def _add_observer(self, group_id, comp) -> None:
         import SDOPackage
         try:
             key = self._key(comp)
@@ -747,7 +748,7 @@ class FailoverController:
     # @param key key of the RTC
     # @param hint hint
     # @~
-    def notify_error(self, group_id, key, hint):
+    def notify_error(self, group_id, key, hint) -> None:
         state = self.current.get(group_id)
         if state is None or key not in state['keys']:
             LOG.info('ERROR on a standby RTC of group %s ignored (%s)', group_id, hint)
@@ -767,7 +768,7 @@ class FailoverController:
     # @param group_id group ID
     # @param reason reason
     # @~
-    def _enqueue(self, group_id, reason):
+    def _enqueue(self, group_id, reason) -> None:
         with _LOCK:
             if group_id in self._pending:
                 return  # 同じ障害の通知が続けて届いた場合は 1 回にまとめる
@@ -780,7 +781,7 @@ class FailoverController:
     # @~english
     # @brief Body of the thread that handles switching requests
     # @~
-    def _worker(self):
+    def _worker(self) -> None:
         while not self._stop.is_set():
             try:
                 group_id, reason = self._queue.get(timeout=0.5)
@@ -802,7 +803,7 @@ class FailoverController:
     # @~english
     # @brief Body of the liveness thread. Also switches when the current RTC is unreachable (process exit) or an ERROR was missed
     # @~
-    def _liveness(self):
+    def _liveness(self) -> None:
         while not self._stop.wait(self.liveness_interval):
             for group_id, state in list(self.current.items()):
                 for role, comp in state['components'].items():
@@ -855,7 +856,7 @@ class FailoverController:
     # @~english
     # @brief Stops the threads
     # @~
-    def stop(self):
+    def stop(self) -> None:
         self._stop.set()
 
     ##

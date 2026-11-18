@@ -142,7 +142,7 @@ class ListenerHolder:
     # @else
     # @brief ListenerHolder class ctor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self.listener_mutex = threading.RLock()
         self.listeners = []
         return
@@ -154,7 +154,7 @@ class ListenerHolder:
     # @brief ListenerHolder class dtor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -164,7 +164,7 @@ class ListenerHolder:
     # @brief add listener object
     # @endif
     # virtual void addListener(ListenerClass* listener)
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
         self.listeners.append(listener)
         del guard
@@ -177,7 +177,7 @@ class ListenerHolder:
     # @brief remove listener object
     # @endif
     # virtual void removeListener(ListenerClass* listener)
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         _ = OpenRTM_aist.ScopedLock(self.listener_mutex)
         for (i, listener_) in enumerate(self.listeners):
             if self.listeners[i] == listener:
@@ -185,7 +185,7 @@ class ListenerHolder:
                 return
         return
 
-    def LISTENERHOLDER_CALLBACK(self, func, *args):
+    def LISTENERHOLDER_CALLBACK(self, func: str, *args):
         _ = OpenRTM_aist.ScopedLock(self.listener_mutex)
         for listener in self.listeners:
             func_ = getattr(listener, func, None)

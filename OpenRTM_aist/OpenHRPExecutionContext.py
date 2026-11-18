@@ -27,7 +27,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("rtobject.exttrig_sync_ec")
         self._rtcout.RTC_TRACE("OpenHRPExecutionContext.__init__()")
         OpenRTM_aist.ExecutionContextBase.__init__(self, "exttrig_sync_ec")
@@ -41,7 +41,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
         self._count = 0
         return
 
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_TRACE("OpenHRPExecutionContext().__del__()")
         return
 
@@ -55,7 +55,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # @brief Move forward one step of ExecutionContext
     # @endif
 
-    def tick(self):
+    def tick(self) -> None:
         self._rtcout.RTC_TRACE("tick()")
         if not self.isRunning():
             return
@@ -158,7 +158,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # RTC::ReturnCode_t OpenHRPExecutionContext::set_rate(CORBA::Double rate)
     #   throw (CORBA::SystemException)
 
-    def set_rate(self, rate):
+    def set_rate(self, rate: int):
         return OpenRTM_aist.ExecutionContextBase.setRate(self, rate)
 
     ##
@@ -171,7 +171,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # OpenHRPExecutionContext::add_component(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def add_component(self, comp):
+    def add_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.addComponent(self, comp)
 
     ##
@@ -184,7 +184,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # remove_component(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def remove_component(self, comp):
+    def remove_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.removeComponent(self, comp)
 
     ##
@@ -197,7 +197,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # activate_component(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def activate_component(self, comp):
+    def activate_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.activateComponent(self, comp)
 
     ##
@@ -210,7 +210,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # deactivate_component(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def deactivate_component(self, comp):
+    def deactivate_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.deactivateComponent(
             self, comp)
 
@@ -224,7 +224,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # reset_component(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def reset_component(self, comp):
+    def reset_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.resetComponent(self, comp)
 
     ##
@@ -239,7 +239,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # get_component_state(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def get_component_state(self, comp):
+    def get_component_state(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.getComponentState(self, comp)
 
     ##
@@ -269,17 +269,17 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
     def get_profile(self):
         return OpenRTM_aist.ExecutionContextBase.getProfile(self)
 
-    def onAddedComponent(self, rtobj):
+    def onAddedComponent(self, rtobj: 'RTC._objref_LightweightRTObject'):
         _ = OpenRTM_aist.ScopedLock(self._tickmutex)
         self._worker.updateComponentList()
         return RTC.RTC_OK
 
-    def onRemovedComponent(self, rtobj):
+    def onRemovedComponent(self, rtobj: 'RTC._objref_LightweightRTObject'):
         _ = OpenRTM_aist.ScopedLock(self._tickmutex)
         self._worker.updateComponentList()
         return RTC.RTC_OK
 
-    def onWaitingActivated(self, comp, count):
+    def onWaitingActivated(self, comp, count: int):
         self._rtcout.RTC_TRACE("onWaitingActivated(count = %d)", count)
         self._rtcout.RTC_PARANOID("curr: %s, next: %s",
                                   (self.getStateString(comp.getStates().curr),
@@ -287,7 +287,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
         self.tick()
         return RTC.RTC_OK
 
-    def onWaitingDeactivated(self, comp, count):
+    def onWaitingDeactivated(self, comp, count: int):
         self._rtcout.RTC_TRACE("onWaitingDeactivated(count = %d)", count)
         self._rtcout.RTC_PARANOID("curr: %s, next: %s",
                                   (self.getStateString(comp.getStates().curr),
@@ -295,7 +295,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
         self.tick()
         return RTC.RTC_OK
 
-    def onWaitingReset(self, comp, count):
+    def onWaitingReset(self, comp, count: int):
         self._rtcout.RTC_TRACE("onWaitingReset(count = %d)", count)
         self._rtcout.RTC_PARANOID("curr: %s, next: %s",
                                   (self.getStateString(comp.getStates().curr),
@@ -304,7 +304,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
         return RTC.RTC_OK
 
 
-def OpenHRPExecutionContextInit(manager):
+def OpenHRPExecutionContextInit(manager: 'OpenRTM_aist.Manager') -> None:
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("OpenHRPExecutionContext",
                                                                OpenRTM_aist.OpenHRPExecutionContext)
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("SynchExtTriggerEC",

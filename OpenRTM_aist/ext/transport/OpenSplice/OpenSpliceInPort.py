@@ -64,7 +64,7 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortProvider.__init__(self)
 
         # PortProfile setting
@@ -97,7 +97,7 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -114,7 +114,7 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
     # @endif
     #
 
-    def exit(self):
+    def exit(self) -> None:
         self._rtcout.RTC_PARANOID("exit()")
         if self._reader:
             self._reader.close()
@@ -139,7 +139,7 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
     #
     # virtual void init(coil::Properties& prop);
 
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_PARANOID("init()")
 
         if not prop.propertyNames():
@@ -167,7 +167,7 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
 
     # virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
 
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         return
 
     ##
@@ -187,7 +187,7 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
     #
     # void setListener(ConnectorInfo& info,
     #                  ConnectorListeners* listeners);
-    def setListener(self, info, listeners):
+    def setListener(self, info, listeners) -> None:
         self._profile = info
         self._listeners = listeners
         return
@@ -210,7 +210,7 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
     # @endif
     #
 
-    def put(self, data):
+    def put(self, data: bytes) -> None:
         _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         try:
             self._rtcout.RTC_PARANOID("OpenSpliceInPort.put()")
@@ -227,7 +227,7 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
         except BaseException:
             self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
 
-    def convertReturn(self, status, data):
+    def convertReturn(self, status: int, data: bytes) -> None:
         if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
             self.onBufferWrite(data)
             return
@@ -262,7 +262,7 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
     #
     # inline void onBufferWrite(const cdrMemoryStream& data)
 
-    def onBufferWrite(self, data):
+    def onBufferWrite(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE, self._profile, data)
@@ -293,7 +293,7 @@ class OpenSpliceInPort(OpenRTM_aist.InPortProvider):
 
     # inline void onReceived(const cdrMemoryStream& data)
 
-    def onReceived(self, data):
+    def onReceived(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED, self._profile, data)
@@ -353,7 +353,7 @@ class SubListener(dds.Listener):
     #
     # @endif
     #
-    def __init__(self, subscriber):
+    def __init__(self, subscriber) -> None:
         dds.Listener.__init__(self)
         self._sub = subscriber
 
@@ -372,7 +372,7 @@ class SubListener(dds.Listener):
     #
     # @endif
     #
-    def on_data_available(self, entity):
+    def on_data_available(self, entity) -> None:
         samples = entity.read(10)
         for (sd, _) in samples:
             self._sub.put(sd)
@@ -557,7 +557,7 @@ opensplice_sub_option = [
 #
 
 
-def OpenSpliceInPortInit():
+def OpenSpliceInPortInit() -> None:
     prop = OpenRTM_aist.Properties(defaults_str=opensplice_sub_option)
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("opensplice",

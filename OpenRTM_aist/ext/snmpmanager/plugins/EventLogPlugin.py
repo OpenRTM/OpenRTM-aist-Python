@@ -58,11 +58,11 @@ PLUGIN_API = 1
 # @param ctx plugin context
 # @param config plugin configuration (path, kinds)
 # @~
-def setup(ctx, config):
+def setup(ctx, config) -> None:
     path = config.get("path", "plugin_events.jsonl")
     lock = threading.Lock()
 
-    def write(ctx, event):
+    def write(ctx, event) -> None:
         with lock, open(path, "a", encoding="utf-8") as f:
             f.write(json.dumps(event, ensure_ascii=False) + "\n")
 

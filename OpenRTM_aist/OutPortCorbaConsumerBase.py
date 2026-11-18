@@ -54,7 +54,7 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
     """
     """
 
-    def _outportIorKey(self, properties):
+    def _outportIorKey(self, properties: list):
         return "dataport." + self._interfacetypestr + ".outport_ior"
 
     ##
@@ -74,7 +74,7 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
     #
     # @endif
     #
-    def __init__(self, interfaceType, interfacetypestr):
+    def __init__(self, interfaceType, interfacetypestr: str) -> None:
         OpenRTM_aist.OutPortConsumer.__init__(self)
         OpenRTM_aist.CorbaConsumer.__init__(self, interfaceType)
         self._rtcout = OpenRTM_aist.Manager.instance(
@@ -96,7 +96,7 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~OutPortCorbaConsumerBase()")
         OpenRTM_aist.CorbaConsumer.__del__(self)
         pass
@@ -130,7 +130,7 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
     #
     # virtual void init(coil::Properties& prop);
 
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("init()")
         self._properties = prop
         return
@@ -159,7 +159,7 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
     #
     # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
 
-    def subscribeInterface(self, properties):
+    def subscribeInterface(self, properties: list):
         self._rtcout.RTC_TRACE("subscribeInterface()")
         key = self._outportIorKey(properties)
         index = OpenRTM_aist.NVUtil.find_index(properties, key)
@@ -210,7 +210,7 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
     #
     # virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
 
-    def unsubscribeInterface(self, properties):
+    def unsubscribeInterface(self, properties: list) -> None:
         self._rtcout.RTC_TRACE("unsubscribeInterface()")
         key = self._outportIorKey(properties)
         index = OpenRTM_aist.NVUtil.find_index(properties, key)

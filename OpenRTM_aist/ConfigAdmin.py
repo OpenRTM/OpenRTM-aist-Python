@@ -15,11 +15,12 @@
 #     All rights reserved.
 
 
+import typing as _typing
 import OpenRTM_aist
 
 
 class OnUpdateCallback:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def __call__(self, config_set):
@@ -27,7 +28,7 @@ class OnUpdateCallback:
 
 
 class OnUpdateParamCallback:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def __call__(self, config_set, config_param):
@@ -35,7 +36,7 @@ class OnUpdateParamCallback:
 
 
 class OnSetConfigurationSetCallback:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def __call__(self, config_set):
@@ -43,7 +44,7 @@ class OnSetConfigurationSetCallback:
 
 
 class OnAddConfigurationAddCallback:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def __call__(self, config_set):
@@ -51,7 +52,7 @@ class OnAddConfigurationAddCallback:
 
 
 class OnRemoveConfigurationSetCallback:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def __call__(self, config_set):
@@ -59,7 +60,7 @@ class OnRemoveConfigurationSetCallback:
 
 
 class OnActivateSetCallback:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def __call__(self, config_id):
@@ -114,7 +115,7 @@ class Config:
     # @param trans Function to transform into string format
     #
     # @endif
-    def __init__(self, name, var, def_val, trans=None):
+    def __init__(self, name: str, var: list, def_val: str, trans=None) -> None:
         self.name = name
         self.default_value = def_val
         self.string_value = ""
@@ -144,7 +145,7 @@ class Config:
     #
     # void setCallback(CallbackFunc cbf);
 
-    def setCallback(self, cbf):
+    def setCallback(self, cbf) -> None:
         self.callback = cbf
 
         return
@@ -166,7 +167,7 @@ class Config:
     #
     # void notifyUpdate(const char* key, const char* val);
 
-    def notifyUpdate(self, key, val):
+    def notifyUpdate(self, key: str, val: str) -> None:
         self.callback(key, val)
         return
 
@@ -196,7 +197,7 @@ class Config:
     # @endif
     # virtual bool update(const char* val)
 
-    def update(self, val):
+    def update(self, val: str) -> bool:
         if self.string_value == val:
             return True
         self.string_value = val
@@ -377,7 +378,7 @@ class ConfigAdmin:
     #
     # @endif
     # ConfigAdmin(coil::Properties& prop);
-    def __init__(self, configsets):
+    def __init__(self, configsets: 'OpenRTM_aist.Properties') -> None:
         self._configsets = configsets
         self._activeId = "default"
         self._active = True
@@ -406,7 +407,7 @@ class ConfigAdmin:
     # @param self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         del self._params
 
     ##
@@ -451,7 +452,7 @@ class ConfigAdmin:
     #                    const char* def_val,
     #                    bool (*trans)(VarType&, const char*) = coil::stringTo)
 
-    def bindParameter(self, param_name, var, def_val, trans=None):
+    def bindParameter(self, param_name: str, var: list, def_val: str, trans=None) -> bool:
         if trans is None:
             trans = OpenRTM_aist.stringTo
 
@@ -497,7 +498,7 @@ class ConfigAdmin:
     #
     # bool unbindParameter(const char* param_name);
 
-    def unbindParameter(self, param_name):
+    def unbindParameter(self, param_name: str) -> bool:
         find_idx = -1
         for (find_idx, param) in enumerate(self._params):
             if param.name == param_name:
@@ -617,7 +618,7 @@ class ConfigAdmin:
     # @endif
     #
 
-    def update(self, config_set=None, config_param=None):
+    def update(self, config_set: _typing.Optional[str] = None, config_param: _typing.Optional[str] = None) -> None:
         # update(const char* config_set)
 
         if config_set and config_param is None:
@@ -679,7 +680,7 @@ class ConfigAdmin:
     # @endif
     # bool isExist(const char* name);
 
-    def isExist(self, param_name):
+    def isExist(self, param_name: str) -> bool:
         if not self._params:
             return False
 
@@ -792,7 +793,7 @@ class ConfigAdmin:
     # @endif
     # bool haveConfig(const char* config_id);
 
-    def haveConfig(self, config_id):
+    def haveConfig(self, config_id: str) -> bool:
         if self._configsets.hasKey(config_id) is None:
             return False
         else:
@@ -882,7 +883,7 @@ class ConfigAdmin:
     #
     # @endif
     # const coil::Properties& getConfigurationSet(const char* config_id);
-    def getConfigurationSet(self, config_id):
+    def getConfigurationSet(self, config_id: str):
 
         prop = self._configsets.findNode(config_id)
         if prop is None:
@@ -915,7 +916,7 @@ class ConfigAdmin:
     # @endif
     # bool setConfigurationSetValues(const coil::Properties& config_set)
 
-    def setConfigurationSetValues(self, config_set):
+    def setConfigurationSetValues(self, config_set: 'OpenRTM_aist.Properties') -> bool:
         node_ = config_set.getName()
         if node_ == "" or node_ is None:
             return False
@@ -993,7 +994,7 @@ class ConfigAdmin:
     # @endif
     # bool addConfigurationSet(const coil::Properties& configuration_set);
 
-    def addConfigurationSet(self, configset):
+    def addConfigurationSet(self, configset: 'OpenRTM_aist.Properties') -> bool:
         if self._configsets.hasKey(configset.getName()):
             return False
         node = configset.getName()
@@ -1071,7 +1072,7 @@ class ConfigAdmin:
     #
     # bool removeConfigurationSet(const char* config_id);
 
-    def removeConfigurationSet(self, config_id):
+    def removeConfigurationSet(self, config_id: str) -> bool:
         if config_id == "default":
             return False
         if self._activeId == config_id:
@@ -1129,7 +1130,7 @@ class ConfigAdmin:
     # @endif
     # bool activateConfigurationSet(const char* config_id);
 
-    def activateConfigurationSet(self, config_id):
+    def activateConfigurationSet(self, config_id: str) -> bool:
         if config_id == "" or config_id is None:
             return False
 
@@ -1170,7 +1171,7 @@ class ConfigAdmin:
     #
     # void setOnUpdate(OnUpdateCallback* cb);
 
-    def setOnUpdate(self, cb):
+    def setOnUpdate(self, cb) -> None:
         print("setOnUpdate function is obsolete.")
         print("Use addConfigurationSetNameListener instead.")
         self._listeners.addConfigurationSetNameListener(
@@ -1198,7 +1199,7 @@ class ConfigAdmin:
     #
     # void setOnUpdateParam(OnUpdateParamCallback* cb);
 
-    def setOnUpdateParam(self, cb):
+    def setOnUpdateParam(self, cb) -> None:
         print("setOnUpdateParam function is obsolete.")
         print("Use addConfigurationParamListener instead.")
         self._listeners.addConfigParamListener(
@@ -1226,7 +1227,7 @@ class ConfigAdmin:
     #
     # void setOnSetConfigurationSet(OnSetConfigurationSetCallback* cb);
 
-    def setOnSetConfigurationSet(self, cb):
+    def setOnSetConfigurationSet(self, cb) -> None:
         print("setOnSetConfigurationSet function is obsolete.")
         print("Use addConfigurationSetListener instead.")
         self._listeners.addConfigurationSetListener(
@@ -1254,7 +1255,7 @@ class ConfigAdmin:
     #
     # void setOnAddConfigurationSet(OnAddConfigurationAddCallback* cb);
 
-    def setOnAddConfigurationSet(self, cb):
+    def setOnAddConfigurationSet(self, cb) -> None:
         print("setOnAddConfigurationSet function is obsolete.")
         print("Use addConfigurationSetListener instead.")
         self._listeners.addConfigurationSetListener(
@@ -1282,7 +1283,7 @@ class ConfigAdmin:
     #
     # void setOnRemoveConfigurationSet(OnRemoveConfigurationSetCallback* cb);
 
-    def setOnRemoveConfigurationSet(self, cb):
+    def setOnRemoveConfigurationSet(self, cb) -> None:
         print("setOnRemoveConfigurationSet function is obsolete.")
         print("Use addConfigurationSetNameListener instead.")
         self._listeners.addConfigurationSetNameListener(
@@ -1310,7 +1311,7 @@ class ConfigAdmin:
     #
     # void setOnActivateSet(OnActivateSetCallback* cb);
 
-    def setOnActivateSet(self, cb):
+    def setOnActivateSet(self, cb) -> None:
         print("setOnActivateSet function is obsolete.")
         print("Use addConfigurationSetNameListener instead.")
         self._listeners.addConfigurationSetNameListener(
@@ -1353,7 +1354,7 @@ class ConfigAdmin:
     #
     # void addConfigurationParamListener(ConfigurationParamListenerType type,
     #                                    ConfigurationParamListener* listener);
-    def addConfigurationParamListener(self, type, listener):
+    def addConfigurationParamListener(self, type: int, listener) -> None:
         self._listeners.addConfigParamListener(type, listener)
         return
 
@@ -1384,7 +1385,7 @@ class ConfigAdmin:
     # void removeConfigurationParamListener(ConfigurationParamListenerType type,
     # ConfigurationParamListener* listener);
 
-    def removeConfigurationParamListener(self, type, listener):
+    def removeConfigurationParamListener(self, type: int, listener) -> None:
         self._listeners.removeConfigParamListener(type, listener)
         return
 
@@ -1420,7 +1421,7 @@ class ConfigAdmin:
     # void addConfigurationSetListener(ConfigurationSetListenerType type,
     #                                  ConfigurationSetListener* listener);
 
-    def addConfigurationSetListener(self, type, listener):
+    def addConfigurationSetListener(self, type: int, listener) -> None:
         self._listeners.addConfigurationSetListener(type, listener)
         return
 
@@ -1448,7 +1449,7 @@ class ConfigAdmin:
     # void removeConfigurationSetListener(ConfigurationSetListenerType type,
     #                                     ConfigurationSetListener* listener);
 
-    def removeConfigurationSetListener(self, type, listener):
+    def removeConfigurationSetListener(self, type: int, listener) -> None:
         self._listeners.removeConfigurationSetListener(type, listener)
         return
 
@@ -1487,7 +1488,7 @@ class ConfigAdmin:
     # addConfigurationSetNameListener(ConfigurationSetNameListenerType type,
     #                                 ConfigurationSetNameListener* listener);
 
-    def addConfigurationSetNameListener(self, type, listener):
+    def addConfigurationSetNameListener(self, type: int, listener) -> None:
         self._listeners.addConfigurationSetNameListener(type, listener)
         return
 
@@ -1520,7 +1521,7 @@ class ConfigAdmin:
     # removeConfigurationSetNameListener(ConfigurationSetNameListenerType type,
     # ConfigurationSetNameListener* listener);
 
-    def removeConfigurationSetNameListener(self, type, listener):
+    def removeConfigurationSetNameListener(self, type: int, listener) -> None:
         self._listeners.removeConfigurationSetNameListener(type, listener)
         return
 
@@ -1547,7 +1548,7 @@ class ConfigAdmin:
     #
     # void onUpdate(const char* config_set);
 
-    def onUpdate(self, config_set):
+    def onUpdate(self, config_set: str) -> None:
         self._listeners.notifyConfigurationSetName(
             OpenRTM_aist.ConfigurationSetNameListenerType.ON_UPDATE_CONFIG_SET, config_set)
         return
@@ -1577,7 +1578,7 @@ class ConfigAdmin:
     #
     # void onUpdateParam(const char* config_param, const char* config_value);
 
-    def onUpdateParam(self, config_param, config_value):
+    def onUpdateParam(self, config_param: str, config_value: str) -> None:
         self._changedParam.append(config_param)
         self._listeners.notifyConfigParam(OpenRTM_aist.ConfigurationParamListenerType.ON_UPDATE_CONFIG_PARAM, config_param,
                                           config_value)
@@ -1606,7 +1607,7 @@ class ConfigAdmin:
     #
     # void onSetConfigurationSet(const coil::Properties& config_set);
 
-    def onSetConfigurationSet(self, config_set):
+    def onSetConfigurationSet(self, config_set: 'OpenRTM_aist.Properties') -> None:
         self._listeners.notifyConfigurationSet(
             OpenRTM_aist.ConfigurationSetListenerType.ON_SET_CONFIG_SET, config_set)
         return
@@ -1634,7 +1635,7 @@ class ConfigAdmin:
     #
     # void onAddConfigurationSet(const coil::Properties& config_set);
 
-    def onAddConfigurationSet(self, config_set):
+    def onAddConfigurationSet(self, config_set: 'OpenRTM_aist.Properties') -> None:
         self._listeners.notifyConfigurationSet(
             OpenRTM_aist.ConfigurationSetListenerType.ON_ADD_CONFIG_SET, config_set)
         return
@@ -1662,7 +1663,7 @@ class ConfigAdmin:
     #
     # void onRemoveConfigurationSet(const char* config_id);
 
-    def onRemoveConfigurationSet(self, config_id):
+    def onRemoveConfigurationSet(self, config_id: str) -> None:
         self._listeners.notifyConfigurationSetName(
             OpenRTM_aist.ConfigurationSetNameListenerType.ON_REMOVE_CONFIG_SET, config_id)
         return
@@ -1690,13 +1691,13 @@ class ConfigAdmin:
     #
     # void onActivateSet(const char* config_id);
 
-    def onActivateSet(self, config_id):
+    def onActivateSet(self, config_id: str) -> None:
         self._listeners.notifyConfigurationSetName(
             OpenRTM_aist.ConfigurationSetNameListenerType.ON_ACTIVATE_CONFIG_SET, config_id)
         return
 
     class find_conf:
-        def __init__(self, name):
+        def __init__(self, name) -> None:
             self._name = name
             return
 

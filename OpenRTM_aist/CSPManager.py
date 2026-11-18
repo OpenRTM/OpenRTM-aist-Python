@@ -72,7 +72,7 @@ class CSPManager(object):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         self._outports = []
         self._inports = []
         self._ctrl = CSPManager.CSPThreadCtrl()
@@ -136,7 +136,7 @@ class CSPManager(object):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -152,7 +152,7 @@ class CSPManager(object):
     #
     # @endif
     #
-    def reset(self):
+    def reset(self) -> None:
         with self._ctrl._cond:
             token = (self._arbitration_grant if self._arbitration_grant is not None
                      else self._arbitration_token)
@@ -187,7 +187,7 @@ class CSPManager(object):
     # @param outport Output port.
     # @param inport Input port.
     # @endif
-    def _finishSelection(self, ret=False, outport=None, inport=None):
+    def _finishSelection(self, ret: bool = False, outport=None, inport=None):
         with self._ctrl._cond:
             if ret and self._selection_winner is None:
                 self._selection_winner = (outport, inport)
@@ -233,7 +233,7 @@ class CSPManager(object):
     # @brief Retain unavailable remote connections as retry candidates.
     # @param port Port to operate on.
     # @endif
-    def _rememberUnavailablePeers(self, port):
+    def _rememberUnavailablePeers(self, port) -> None:
         for connector in list(getattr(port, '_connectors', ())):
             getter = getattr(connector, 'getPeerReadinessState', None)
             if getter is None or getter() not in (CSP.SCANNING, CSP.NOT_SELECTING):
@@ -262,7 +262,7 @@ class CSPManager(object):
     # @param ports Port candidates to search.
     # @param retry Whether this query is a retry.
     # @endif
-    def _probePorts(self, ports, retry=False):
+    def _probePorts(self, ports: list, retry: bool = False):
         for port in list(ports):
             with self._ctrl._cond:
                 if not self._selection_active or self._scan_yield:
@@ -424,7 +424,7 @@ class CSPManager(object):
     #
     # @endif
     #
-    def select(self, timeout):
+    def select(self, timeout: int):
         deadline = time.monotonic() + max(timeout, 0)
         with self._ctrl._cond:
             if self._selection_active:
@@ -618,7 +618,7 @@ class CSPManager(object):
     # @brief Prepare a remote rescan using the fixed priorities exchanged at connection time.
     # @endif
 
-    def _schedulePriorityRescan(self):
+    def _schedulePriorityRescan(self) -> None:
         """Retry only requests from lower-priority remote managers.
 
         No remote state is fetched. Receivers yield at a local scan boundary;
@@ -659,7 +659,7 @@ class CSPManager(object):
     #
     # @endif
     #
-    def addInPort(self, port):
+    def addInPort(self, port) -> None:
         self._inports.append(port)
 
     ##
@@ -677,7 +677,7 @@ class CSPManager(object):
     #
     # @endif
     #
-    def addOutPort(self, port):
+    def addOutPort(self, port) -> None:
         self._outports.append(port)
 
     ##
@@ -695,7 +695,7 @@ class CSPManager(object):
     #
     # @endif
     #
-    def removeInPort(self, port):
+    def removeInPort(self, port) -> None:
         self._inports.remove(port)
 
     ##
@@ -713,7 +713,7 @@ class CSPManager(object):
     #
     # @endif
     #
-    def removeOutPort(self, port):
+    def removeOutPort(self, port) -> None:
         self._outports.remove(port)
 
     ##
@@ -729,7 +729,7 @@ class CSPManager(object):
         # @else
         # @brief Initialize the instance and its internal state.
         # @endif
-        def __init__(self):
+        def __init__(self) -> None:
             self._mutex = threading.RLock()
             self._cond = threading.Condition(self._mutex)
             self._port = None

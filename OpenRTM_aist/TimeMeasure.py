@@ -19,6 +19,7 @@
 #
 #
 
+import typing as _typing
 import sys
 import time
 import math
@@ -72,7 +73,7 @@ class Time:
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         tm = time.time()
         tm_f = float(tm - long(tm))     # 小数部の取り出し
         self.sec = long(tm - tm_f)   # 整数部の取り出し
@@ -96,7 +97,7 @@ class Time:
     # @else
     #
     # @endif
-    def __sub__(self, tm):
+    def __sub__(self, tm: 'Time'):
 
         res = Time()
 
@@ -131,7 +132,7 @@ class Time:
     # inline int settimeofday(const struct timeval *tv , const struct timezone
     # *tz)
 
-    def settimeofday(self, tv, tz):
+    def settimeofday(self, tv: 'OpenRTM_aist.TimeValue', tz: int) -> int:
         if os.name == "nt":
             from ctypes import windll, Structure, c_ushort, byref, c_ulong, c_long
 
@@ -195,7 +196,7 @@ class TimeMeasure:
     #
     # Constructor
     #
-    def __init__(self, buflen=100):
+    def __init__(self, buflen: int = 100) -> None:
         self._countMax = buflen + 1
         self._record = [
             OpenRTM_aist.TimeValue(
@@ -214,7 +215,7 @@ class TimeMeasure:
     #
     # Begin time measurement for time statistics
     #
-    def tick(self):
+    def tick(self) -> None:
         self._begin = Time().gettimeofday()
         return
 
@@ -223,7 +224,7 @@ class TimeMeasure:
     #
     # End of time measurement for time statistics
     #
-    def tack(self):
+    def tack(self) -> None:
         if self._begin.sec() == 0:
             return
 
@@ -239,7 +240,7 @@ class TimeMeasure:
     def interval(self):
         return self._interval
 
-    def reset(self):
+    def reset(self) -> None:
         self._count = 0
         self._recurred = False
         self._begin = OpenRTM_aist.TimeValue(0.0)
@@ -264,8 +265,8 @@ class TimeMeasure:
     # max_interval, min_interval, mean_interval [ns]
     #
 
-    def getStatistics(self, max_interval=None, min_interval=None,
-                      mean_interval=None, stddev=None):
+    def getStatistics(self, max_interval: _typing.Optional[_typing.List[float]] = None, min_interval: _typing.Optional[_typing.List[float]] = None,
+                      mean_interval: _typing.Optional[_typing.List[float]] = None, stddev: _typing.Optional[_typing.List[float]] = None):
 
         if not max_interval and not min_interval and not mean_interval and not stddev:
             max_i = [0.0]
@@ -304,7 +305,7 @@ class TimeMeasure:
         return True
 
     class Statistics:
-        def __init__(self, max=None, min=None, mean=None, stdd=None):
+        def __init__(self, max=None, min=None, mean=None, stdd=None) -> None:
             if not max and not min and not mean and not stdd:
                 self._max_interval = 0.0
                 self._min_interval = 0.0

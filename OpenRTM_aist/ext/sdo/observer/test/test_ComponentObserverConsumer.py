@@ -29,16 +29,16 @@ sys.path.insert(1, "../")
 
 
 class ComponentObserver_i(OpenRTM__POA.ComponentObserver):
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def update_status(self, status_kind, hint):
+    def update_status(self, status_kind, hint: str) -> None:
         print("update_status: ", status_kind, ", ", hint)
         return
 
 
 class MockRTC(OpenRTM_aist.RTObject_impl):
-    def __init__(self):
+    def __init__(self) -> None:
         self._orb = CORBA.ORB_init()
         self._poa = self._orb.resolve_initial_references("RootPOA")
         OpenRTM_aist.RTObject_impl.__init__(self, orb=self._orb, poa=self._poa)
@@ -55,7 +55,7 @@ class TestComponentObserverConsumer(unittest.TestCase):
     """
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self._orb = CORBA.ORB_init(sys.argv)
         self._poa = self._orb.resolve_initial_references("RootPOA")
         self._poa._get_the_POAManager().activate()
@@ -74,7 +74,7 @@ class TestComponentObserverConsumer(unittest.TestCase):
         self.coc.init(self._mock, self._sprof)
         return
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.coc.finalize()
         del self.coc
         self._mock.exit()
@@ -82,25 +82,25 @@ class TestComponentObserverConsumer(unittest.TestCase):
         OpenRTM_aist.Manager.instance().shutdownManager()
         return
 
-    def test_reinit(self):
+    def test_reinit(self) -> None:
         self.assertEqual(self.coc.reinit(self._sprof), True)
         return
 
-    def test_getProfile(self):
+    def test_getProfile(self) -> None:
         self.coc.getProfile()
         return
 
-    def test_finalize(self):
+    def test_finalize(self) -> None:
         self.coc.finalize()
         return
 
-    def test_updateStatus(self):
+    def test_updateStatus(self) -> None:
         self.coc.updateStatus(
             OpenRTM.COMPONENT_PROFILE,
             "update Component profile")
         return
 
-    def test_toString(self):
+    def test_toString(self) -> None:
         self.assertEqual(
             "COMPONENT_PROFILE",
             self.coc.toString(
@@ -118,7 +118,7 @@ class TestComponentObserverConsumer(unittest.TestCase):
         self.assertEqual("HEARTBEAT", self.coc.toString(OpenRTM.HEARTBEAT))
         return
 
-    def test_setListeners(self):
+    def test_setListeners(self) -> None:
         prop = OpenRTM_aist.Properties()
         prop.setProperty("observed_status",
                          "component_profile, rtc_status, port_profile, \
@@ -126,15 +126,15 @@ class TestComponentObserverConsumer(unittest.TestCase):
         self.coc.setListeners(prop)
         return
 
-    def setfunc(self):
+    def setfunc(self) -> None:
         print("setfunc")
         return
 
-    def unsetfunc(self):
+    def unsetfunc(self) -> None:
         print("unsetfunc")
         return
 
-    def test_switchListeners(self):
+    def test_switchListeners(self) -> None:
         self.coc.switchListeners(
             True, [True], 0, self.setfunc, self. unsetfunc)
         self.coc.switchListeners(
@@ -145,11 +145,11 @@ class TestComponentObserverConsumer(unittest.TestCase):
             False, [False], 0, self.setfunc, self. unsetfunc)
         return
 
-    def test_heartbeat(self):
+    def test_heartbeat(self) -> None:
         self.coc.heartbeat()
         return
 
-    def test_setHeartbeat(self):
+    def test_setHeartbeat(self) -> None:
         prop = OpenRTM_aist.Properties()
         prop.setProperty("heartbeat.enable", "NO")
         prop.setProperty("heartbeat.interval", "1.0")
@@ -163,39 +163,39 @@ class TestComponentObserverConsumer(unittest.TestCase):
         self.coc.setHeartbeat(prop)
         return
 
-    def test_unsetHeartbeat(self):
+    def test_unsetHeartbeat(self) -> None:
         self.coc.unsetHeartbeat()
         return
 
-    def test_setComponentStatusListeners(self):
+    def test_setComponentStatusListeners(self) -> None:
         self.coc.setComponentStatusListeners()
         return
 
-    def test_unsetComponentStatusListeners(self):
+    def test_unsetComponentStatusListeners(self) -> None:
         self.coc.unsetComponentStatusListeners()
         return
 
-    def test_setPortProfileListeners(self):
+    def test_setPortProfileListeners(self) -> None:
         self.coc.setPortProfileListeners()
         return
 
-    def test_unsetPortProfileListeners(self):
+    def test_unsetPortProfileListeners(self) -> None:
         self.coc.unsetPortProfileListeners()
         return
 
-    def test_setExecutionContextListeners(self):
+    def test_setExecutionContextListeners(self) -> None:
         self.coc.setExecutionContextListeners()
         return
 
-    def test_unsetExecutionContextListeners(self):
+    def test_unsetExecutionContextListeners(self) -> None:
         self.coc.unsetExecutionContextListeners()
         return
 
-    def test_setConfigurationListeners(self):
+    def test_setConfigurationListeners(self) -> None:
         self.coc.setConfigurationListeners()
         return
 
-    def test_unsetConfigurationListeners(self):
+    def test_unsetConfigurationListeners(self) -> None:
         self.coc.unsetConfigurationListeners()
         return
 

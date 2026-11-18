@@ -59,7 +59,7 @@ class OpenSpliceTopicManager(object):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OpenSpliceTopicManager")
         self._qosProfile = None
         self._domainParticipant = None
@@ -84,7 +84,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -119,7 +119,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def start(self, prop):
+    def start(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_PARANOID("OpenSpliceManager::start()")
         self._rtcout.RTC_DEBUG("%s", prop)
         uri = prop.getProperty("uri")
@@ -170,7 +170,7 @@ class OpenSpliceTopicManager(object):
     # @return
     #
     # @endif
-    def createPublisher(self, prop):
+    def createPublisher(self, prop: 'OpenRTM_aist.Properties') -> bool:
         self._rtcout.RTC_INFO("OpenSpliceManager::createPublisher()")
 
         if self._publisher:
@@ -233,7 +233,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def createSubscriber(self, prop):
+    def createSubscriber(self, prop: 'OpenRTM_aist.Properties') -> bool:
         self._rtcout.RTC_INFO("OpenSpliceManager::createSubscriber()")
 
         if self._subscriber:
@@ -293,7 +293,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         global manager
 
         manager = None
@@ -328,7 +328,7 @@ class OpenSpliceTopicManager(object):
     # @return
     #
     # @endif
-    def genInfo(self, datatype):
+    def genInfo(self, datatype: str):
         _ = OpenRTM_aist.ScopedLock(mutex)
         if datatype in self._info:
             return self._info[datatype]
@@ -358,7 +358,7 @@ class OpenSpliceTopicManager(object):
     # @return
     #
     # @endif
-    def createWriter(self, topic, prop):
+    def createWriter(self, topic, prop: 'OpenRTM_aist.Properties'):
         self._rtcout.RTC_INFO(
             "OpenSpliceManager::createWriter()")
         _ = OpenRTM_aist.ScopedLock(mutex)
@@ -599,7 +599,7 @@ class OpenSpliceTopicManager(object):
     # @return
     #
     # @endif
-    def createReader(self, topic, listener, prop):
+    def createReader(self, topic, listener, prop: 'OpenRTM_aist.Properties'):
         self._rtcout.RTC_INFO(
             "OpenSpliceManager::createReader(topic)")
         _ = OpenRTM_aist.ScopedLock(mutex)
@@ -833,7 +833,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def createTopic(self, datatype, topicname, prop):
+    def createTopic(self, datatype: str, topicname: str, prop: 'OpenRTM_aist.Properties'):
         self._rtcout.RTC_INFO("OpenSpliceManager")
         _ = OpenRTM_aist.ScopedLock(mutex)
         if topicname in self._topic:
@@ -1137,7 +1137,7 @@ class OpenSpliceTopicManager(object):
     # @return
     #
     # @endif
-    def getDuration(self, prop):
+    def getDuration(self, prop: 'OpenRTM_aist.Properties'):
         sec_str = prop.getProperty("sec")
         nanosec_str = prop.getProperty("nanosec")
         if sec_str == "2147483647" and nanosec_str == "2147483647":
@@ -1168,7 +1168,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def getTopic(self, topicname):
+    def getTopic(self, topicname: str):
         if topicname in self._topic:
             return self._topic[topicname]
         return None
@@ -1237,7 +1237,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def shutdown_global():
+    def shutdown_global() -> None:
         global manager
 
         _ = OpenRTM_aist.ScopedLock(mutex)

@@ -42,7 +42,7 @@ if sys.version_info[0] == 3:
 class UUID(object):
 
     def __init__(self, hex=None, bytes=None, fields=None, int_value=None,
-                 version=None):
+                 version=None) -> None:
         r"""Create a UUID from either a string of 32 hexadecimal digits,
         a string of 16 bytes as the 'bytes' argument, a tuple of six
         integers (32-bit time_low, 16-bit time_mid, 16-bit time_hi_version,
@@ -77,7 +77,7 @@ class UUID(object):
             if len(bytes) != 16:
                 raise ValueError('bytes is not a 16-char string')
 
-            def ord_func(v):
+            def ord_func(v: int):
                 if sys.version_info[0] == 3:
                     return ord(chr(v))
                 else:
@@ -130,7 +130,7 @@ class UUID(object):
     def __repr__(self):
         return 'UUID(%r)' % str(self)
 
-    def __setattr__(self, name, value):
+    def __setattr__(self, name: str, value: int) -> None:
         raise TypeError('UUID objects are immutable')
 
     def __str__(self):
@@ -406,7 +406,7 @@ def uuid1(node=None, clock_seq=None):
                         clock_seq_hi_variant, clock_seq_low, node), version=1)
 
 
-def _uuid_name_bytes(namespace, name):
+def _uuid_name_bytes(namespace: 'UUID', name):
     namespace_bytes = namespace.bytes
     if isinstance(namespace_bytes, str):
         namespace_bytes = namespace_bytes.encode("latin-1")
@@ -415,7 +415,7 @@ def _uuid_name_bytes(namespace, name):
     return namespace_bytes + name
 
 
-def uuid3(namespace, name):
+def uuid3(namespace: 'UUID', name):
     """Generate a UUID from the MD5 hash of a namespace UUID and a name."""
     digest = hashlib.md5(_uuid_name_bytes(namespace, name), usedforsecurity=False).hexdigest()
     return UUID(hex=digest, version=3)
@@ -439,7 +439,7 @@ def uuid4():
         return UUID(bytes=bytes, version=4)
 
 
-def uuid5(namespace, name):
+def uuid5(namespace: 'UUID', name):
     """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
     digest = hashlib.sha1(_uuid_name_bytes(namespace, name), usedforsecurity=False).hexdigest()
     return UUID(hex=digest[:32], version=5)

@@ -53,7 +53,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     #
     # InPortConnector(ConnectorInfo& info,
     #                 CdrBufferBase* buffer);
-    def __init__(self, info, buffer):
+    def __init__(self, info, buffer) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortConnector")
         self._profile = info
         self._buffer = buffer
@@ -68,7 +68,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -212,7 +212,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # template<class DataType>
     # void setDataTyep(DataType data);
 
-    def setDataType(self, data):
+    def setDataType(self, data) -> None:
         self._dataType = data
 
     def write(self, data):
@@ -254,7 +254,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @param self
     # @return
     # @endif
-    def isWritable(self, retry=False):
+    def isWritable(self, retry: bool = False) -> bool:
         return False
 
     #
@@ -270,7 +270,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @return
     # @endif
 
-    def isReadable(self, retry=False):
+    def isReadable(self, retry: bool = False) -> bool:
         return False
 
     ##
@@ -290,7 +290,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @brief
     # @param prop
     # @endif
-    def unsubscribeInterface(self, prop):
+    def unsubscribeInterface(self, prop: list):
         pass
 
 
@@ -359,7 +359,7 @@ class IsWritableListenerBase(object):
     # @param con
     # @return
     # @endif
-    def __call__(self, con, retry=False):
+    def __call__(self, con, retry: bool = False) -> bool:
         return False
 
 
@@ -396,5 +396,5 @@ class MatchConditionListenerBase(object):
     # @param con
     # @return
     # @endif
-    def __call__(self, option=[]):
+    def __call__(self, option=[]) -> bool:
         return False

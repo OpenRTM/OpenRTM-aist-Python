@@ -25,6 +25,7 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile
 
 import threading
+import typing as _typing
 
 
 manager = None
@@ -62,7 +63,7 @@ class ROS2TopicManager(object):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._node = None
         self._thread = None
         self._loop = False
@@ -85,7 +86,7 @@ class ROS2TopicManager(object):
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -104,7 +105,7 @@ class ROS2TopicManager(object):
     #
     # @endif
 
-    def start(self, prop):
+    def start(self, prop) -> None:
 
         tmp_args = prop.getProperty("args").split("\"")
         args = []
@@ -129,7 +130,7 @@ class ROS2TopicManager(object):
 
         self._loop = True
 
-        def spin():
+        def spin() -> None:
             while self._loop and rclpy.ok():
                 rclpy.spin_once(self._node, timeout_sec=0.01)
         self._thread = threading.Thread(target=spin)
@@ -150,7 +151,7 @@ class ROS2TopicManager(object):
     #
     # @endif
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         self._loop = False
         if self._thread:
             self._thread.join()
@@ -284,7 +285,7 @@ class ROS2TopicManager(object):
     #
     # @endif
 
-    def shutdown_global():
+    def shutdown_global() -> None:
         global manager
 
         _ = OpenRTM_aist.ScopedLock(mutex)
@@ -309,7 +310,7 @@ class ROS2TopicManager(object):
     #
     # @endif
 
-    def get_qosprofile(prop):
+    def get_qosprofile(prop: 'OpenRTM_aist.Properties'):
 
         if hasattr(rclpy.qos, "HistoryPolicy"):
             HistoryPolicy = rclpy.qos.HistoryPolicy
@@ -438,7 +439,7 @@ class ROS2TopicManager(object):
     # @return
     #
     # @endif
-    def getDuration(prop, DDSDuration):
+    def getDuration(prop: 'OpenRTM_aist.Properties', DDSDuration: '_typing.Callable[..., object]'):
         sec_str = prop.getProperty("sec")
         nanosec_str = prop.getProperty("nanosec")
         try:

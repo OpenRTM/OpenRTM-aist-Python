@@ -79,7 +79,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     #                      OutPortProvider* provider,
     #                      ConnectorListeners& listeners,
     #                      CdrBufferBase* buffer = 0);
-    def __init__(self, info, provider, listeners, buffer=None):
+    def __init__(self, info, provider, listeners, buffer=None) -> None:
         OpenRTM_aist.OutPortConnector.__init__(self, info)
         self._provider = provider
         self._listeners = listeners
@@ -124,7 +124,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -181,7 +181,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @param option Options used for guard matching.
     # @endif
     #
-    def isWritable(self, retry=False, option=[]):
+    def isWritable(self, retry: bool = False, option: list = []):
         self._rtcout.RTC_TRACE("isWritable()")
         if self._consumer:
             return self._consumer.isWritable(retry, option)
@@ -238,7 +238,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @param option Options used for guard matching.
     # @endif
     #
-    def _isReadableState(self, retry=False, option=None):
+    def _isReadableState(self, retry: bool = False, option=None):
         """Return READY only after the existing callback made a reservation.
 
         If notify ran, use its locked decision even if the manager advances
@@ -278,7 +278,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @param retry Whether this query is a retry.
     # @param option Options used for guard matching.
     # @endif
-    def isReadable(self, retry=False, option=[]):
+    def isReadable(self, retry: bool = False, option=[]):
         self._rtcout.RTC_TRACE("isReadable(%d %s)", (retry, str(option)))
         if self._isReadableCallback:
             return self._isReadableCallback(self, retry, option)
@@ -301,7 +301,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @endif
     #
 
-    def setReadListener(self, listener):
+    def setReadListener(self, listener) -> None:
         self._rtcout.RTC_TRACE("setReadListener()")
         self._readCallback = listener
 
@@ -320,7 +320,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @param listener Value of listener.
     # @endif
     #
-    def setIsReadableListener(self, listener):
+    def setIsReadableListener(self, listener) -> None:
         self._rtcout.RTC_TRACE("setIsReadableListener()")
         self._isReadableCallback = listener
 
@@ -373,7 +373,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     #
     # virtual CdrBufferBase* getBuffer();
 
-    def getBuffer(self):
+    def getBuffer(self) -> None:
         return None
 
     ##
@@ -422,7 +422,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @endif
     # void onConnect()
 
-    def onConnect(self):
+    def onConnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_CONNECT, self._profile)
@@ -436,7 +436,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @endif
     # void onDisconnect()
 
-    def onDisconnect(self):
+    def onDisconnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT, self._profile)
@@ -450,7 +450,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @brief set Consumer
     # @param consumer Value of consumer.
     # @endif
-    def setConsumer(self, consumer):
+    def setConsumer(self, consumer) -> None:
         self._rtcout.RTC_TRACE("setConsumer()")
         self._consumer = consumer
 
@@ -498,7 +498,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @brief Release the peer CORBA interface reference.
     # @param prop
     # @endif
-    def unsubscribeInterface(self, prop):
+    def unsubscribeInterface(self, prop: list) -> None:
         if self._consumer:
             self._consumer.unsubscribeInterface(prop)
 
@@ -510,7 +510,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @brief Set data type.
     # @param data Data to transmit or receive.
     # @endif
-    def setDataType(self, data):
+    def setDataType(self, data) -> None:
         OpenRTM_aist.OutPortConnector.setDataType(self, data)
         self._serializer = OpenRTM_aist.SerializerFactories.instance(
         ).createSerializer(self._marshaling_type, data)

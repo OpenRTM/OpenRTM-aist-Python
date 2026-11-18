@@ -20,6 +20,7 @@ import OpenRTM_aist
 import OpenRTM
 import RTC
 import sys
+import typing as _typing
 sys.path.insert(1, ".")
 
 
@@ -40,7 +41,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     # @brief ctor of ComponentObserverConsumer
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         self._rtobj = None
         self._profile = None
         self._observer = OpenRTM_aist.CorbaConsumer(
@@ -73,7 +74,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -86,7 +87,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     # virtual bool init(RTObject_impl& rtobj,
     #                   const SDOPackage::ServiceProfile& profile);
 
-    def init(self, rtobj, profile):
+    def init(self, rtobj, profile) -> bool:
         if not self._observer.setObject(profile.service):
             # narrowing failed
             return False
@@ -109,7 +110,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # virtual bool reinit(const SDOPackage::ServiceProfile& profile);
 
-    def reinit(self, profile):
+    def reinit(self, profile) -> bool:
         if not self._observer._ptr()._is_equivalent(profile.service):
             tmp = OpenRTM_aist.CorbaConsumer(
                 interfaceType=OpenRTM.ComponentObserver)
@@ -146,7 +147,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # virtual void finalize();
 
-    def finalize(self):
+    def finalize(self) -> None:
         _ = OpenRTM_aist.ScopedLock(self._mutex)
         self.unsetComponentProfileListeners()
         self.unsetComponentStatusListeners()
@@ -165,7 +166,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # inline void updateStatus(OpenRTM::StatusKind statuskind, const char* msg)
 
-    def updateStatus(self, statuskind, msg):
+    def updateStatus(self, statuskind, msg: str) -> None:
         try:
             self._observer._ptr().update_status(statuskind, msg)
         except BaseException:
@@ -200,7 +201,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # void setListeners(coil::Properties& prop);
 
-    def setListeners(self, prop):
+    def setListeners(self, prop: 'OpenRTM_aist.Properties') -> None:
         if not prop.getProperty("observed_status"):
             prop.setProperty("observed_status", "ALL")
 
@@ -268,7 +269,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #                      void (ComponentObserverConsumer::*setfunc)(),
     #                      void (ComponentObserverConsumer::*unsetfunc)());
 
-    def switchListeners(self, next, pre, pre_idx, setfunc, unsetfunc):
+    def switchListeners(self, next: bool, pre: list, pre_idx: int, setfunc: '_typing.Callable[..., object]', unsetfunc) -> None:
         if (not pre[pre_idx]) and next:
             setfunc()
             pre[pre_idx] = True
@@ -290,7 +291,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # void heartbeat();
 
-    def heartbeat(self):
+    def heartbeat(self) -> None:
         if self._heartbeat:
             self.updateStatus(OpenRTM.HEARTBEAT, "")
         return
@@ -303,7 +304,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     # @endif
     #
     # void setDataPortInterval(coil::Properties& prop);
-    def setDataPortInterval(self, prop):
+    def setDataPortInterval(self, prop: 'OpenRTM_aist.Properties') -> None:
 
         outportInterval = [0.0]
         if OpenRTM_aist.stringTo(outportInterval, prop.getProperty(
@@ -324,7 +325,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # void setHeartbeat(coil::Properties& prop);
 
-    def setHeartbeat(self, prop):
+    def setHeartbeat(self, prop: 'OpenRTM_aist.Properties') -> None:
         self.unsetHeartbeat()
         if OpenRTM_aist.toBool(prop.getProperty(
                 "heartbeat.enable"), "YES", "NO", False):
@@ -349,7 +350,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # void unsetHeartbeat();
 
-    def unsetHeartbeat(self):
+    def unsetHeartbeat(self) -> None:
         if self._heartbeat:
             OpenRTM_aist.Manager.instance().removeTask(self._hbtaskid)
             self._heartbeat = False
@@ -367,7 +368,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # void setComponentStatusListeners();
 
-    def setComponentStatusListeners(self):
+    def setComponentStatusListeners(self) -> None:
         postclistener_ = OpenRTM_aist.PostComponentActionListenerType
         if not self._compstat.activatedListener:
             self._compstat.activatedListener = \
@@ -404,7 +405,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # void unsetComponentStatusListeners();
 
-    def unsetComponentStatusListeners(self):
+    def unsetComponentStatusListeners(self) -> None:
         postclistener_ = OpenRTM_aist.PostComponentActionListenerType
         if self._compstat.activatedListener:
             self._rtobj.removePostComponentActionListener(postclistener_.POST_ON_ACTIVATED,
@@ -445,7 +446,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # void setPortProfileListeners();
 
-    def setPortProfileListeners(self):
+    def setPortProfileListeners(self) -> None:
         plistener_ = OpenRTM_aist.PortActionListenerType
         if not self._portaction.portAddListener:
             self._portaction.portAddListener = \
@@ -497,7 +498,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     # @endif
     #
     # void unsetPortProfileListeners();
-    def unsetPortProfileListeners(self):
+    def unsetPortProfileListeners(self) -> None:
         plistener_ = OpenRTM_aist.PortActionListenerType
         if self._portaction.portAddListener:
             self._rtobj.removePortActionListener(plistener_.ADD_PORT,
@@ -546,7 +547,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # void setExecutionContextListeners();
 
-    def setExecutionContextListeners(self):
+    def setExecutionContextListeners(self) -> None:
         ectype_ = OpenRTM_aist.ExecutionContextActionListenerType
         if not self._ecaction.ecAttached:
             self._ecaction.ecAttached = \
@@ -585,7 +586,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # void unsetExecutionContextListeners();
 
-    def unsetExecutionContextListeners(self):
+    def unsetExecutionContextListeners(self) -> None:
         ectype_ = OpenRTM_aist.ExecutionContextActionListenerType
         if self._ecaction.ecAttached:
             self._rtobj.removeExecutionContextActionListener(ectype_.EC_ATTACHED,
@@ -649,7 +650,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # void setConfigurationListeners();
 
-    def setConfigurationListeners(self):
+    def setConfigurationListeners(self) -> None:
         confprmlistenertype_ = OpenRTM_aist.ConfigurationParamListenerType
         self._configMsg.updateConfigParamListener = \
             self._rtobj.addConfigurationParamListener(confprmlistenertype_.ON_UPDATE_CONFIG_PARAM,
@@ -686,7 +687,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     #
     # void unsetConfigurationListeners();
 
-    def unsetConfigurationListeners(self):
+    def unsetConfigurationListeners(self) -> None:
         confprmlistenertype_ = OpenRTM_aist.ConfigurationParamListenerType
         if self._configMsg.updateConfigParamListener:
             self._rtobj.removeConfigurationParamListener(confprmlistenertype_.ON_UPDATE_CONFIG_PARAM,
@@ -735,7 +736,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
         """
 
         #CompStatMsg(ComponentObserverConsumer& coc)
-        def __init__(self, coc):
+        def __init__(self, coc) -> None:
             self.activatedListener = None
             self.deactivatedListener = None
             self.resetListener = None
@@ -744,13 +745,13 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
             self._coc = coc
             return
 
-        def __del__(self):
+        def __del__(self) -> None:
             del self._coc
             return
 
         # void onGeneric(const char* msgprefix, UniqueId ec_id, ReturnCode_t
         # ret)
-        def onGeneric(self, msgprefix, ec_id, ret):
+        def onGeneric(self, msgprefix: str, ec_id: int, ret) -> None:
             if ret == RTC.RTC_OK:
                 msg_ = msgprefix
                 msg_ += str(ec_id)
@@ -758,27 +759,27 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
             return
 
         # void onActivated(UniqueId ec_id, ReturnCode_t ret)
-        def onActivated(self, ec_id, ret):
+        def onActivated(self, ec_id: int, ret) -> None:
             self.onGeneric("ACTIVE:", ec_id, ret)
             return
 
         # void onDeactivated(UniqueId ec_id, ReturnCode_t ret)
-        def onDeactivated(self, ec_id, ret):
+        def onDeactivated(self, ec_id: int, ret) -> None:
             self.onGeneric("INACTIVE:", ec_id, ret)
             return
 
         # void onReset(UniqueId ec_id, ReturnCode_t ret)
-        def onReset(self, ec_id, ret):
+        def onReset(self, ec_id, ret) -> None:
             self.onGeneric("INACTIVE:", ec_id, ret)
             return
 
         # void onAborting(UniqueId ec_id, ReturnCode_t ret)
-        def onAborting(self, ec_id, ret):
+        def onAborting(self, ec_id, ret) -> None:
             self.onGeneric("ERROR:", ec_id, ret)
             return
 
         # void onFinalize(UniqueId ec_id, ReturnCode_t ret)
-        def onFinalize(self, ec_id, ret):
+        def onFinalize(self, ec_id: int, ret) -> None:
             self._coc.unsetHeartbeat()
             self.onGeneric("FINALIZE:", ec_id, ret)
             return
@@ -795,7 +796,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
         """
 
         #PortAction(ComponentObserverConsumer& coc)
-        def __init__(self, coc):
+        def __init__(self, coc) -> None:
             self.portAddListener = None
             self.portRemoveListener = None
             self.portConnectListener = None
@@ -803,37 +804,37 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
             self._coc = coc
             return
 
-        def __del__(self):
+        def __del__(self) -> None:
             del self._coc
             return
 
         # void onGeneric(const char* _msg, const char* portname)
-        def onGeneric(self, _msg, portname):
+        def onGeneric(self, _msg: str, portname: str) -> None:
             msg_ = _msg
             msg_ += portname
             self._coc.updateStatus(OpenRTM.PORT_PROFILE, msg_)
             return
 
         # void onAddPort(const ::RTC::PortProfile& pprof)
-        def onAddPort(self, pprof):
+        def onAddPort(self, pprof: 'RTC.PortProfile') -> None:
             self.onGeneric("ADD:", str(pprof.name))
             return
 
         # void onRemovePort(const ::RTC::PortProfile& pprof)
-        def onRemovePort(self, pprof):
+        def onRemovePort(self, pprof: 'RTC.PortProfile') -> None:
             self.onGeneric("REMOVE:", str(pprof.name))
             return
 
         # void onConnect(const char* portname,
         #                 ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
-        def onConnect(self, portname, pprof, ret):
+        def onConnect(self, portname, pprof, ret) -> None:
             if ret == RTC.RTC_OK:
                 self.onGeneric("CONNECT:", portname)
             return
 
         # void onDisconnect(const char* portname,
         #                  ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
-        def onDisconnect(self, portname, pprof, ret):
+        def onDisconnect(self, portname, pprof, ret) -> None:
             if ret == RTC.RTC_OK:
                 self.onGeneric("DISCONNECT:", portname)
             return
@@ -850,7 +851,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
         """
         """
 
-        def __init__(self, coc, msg, interval):
+        def __init__(self, coc, msg: str, interval: 'OpenRTM_aist.TimeValue') -> None:
             self._coc = coc
             self._msg = msg
             self._interval = interval
@@ -880,7 +881,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
         """
 
         #ECAction(ComponentObserverConsumer& coc)
-        def __init__(self, coc):
+        def __init__(self, coc) -> None:
             self.ecAttached = None
             self.ecDetached = None
             self.ecRatechanged = None
@@ -889,40 +890,40 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
             self._coc = coc
             return
 
-        def __del__(self):
+        def __del__(self) -> None:
             del self._coc
             return
 
         # void onGeneric(const char* _msg, UniqueId ec_id)
-        def onGeneric(self, _msg, ec_id):
+        def onGeneric(self, _msg: str, ec_id: int) -> None:
             msg_ = _msg + str(ec_id)
             self._coc.updateStatus(OpenRTM.EC_STATUS, msg_)
             return
 
         # void onAttached(UniqueId ec_id)
-        def onAttached(self, ec_id):
+        def onAttached(self, ec_id: int) -> None:
             self.onGeneric("ATTACHED:", ec_id)
             return
 
         # void onDetached(UniqueId ec_id)
-        def onDetached(self, ec_id):
+        def onDetached(self, ec_id: int) -> None:
             self.onGeneric("DETACHED:", ec_id)
             return
 
         # void onRateChanged(UniqueId ec_id, ReturnCode_t ret)
-        def onRateChanged(self, ec_id, ret):
+        def onRateChanged(self, ec_id, ret) -> None:
             if ret == RTC.RTC_OK:
                 self.onGeneric("RATE_CHANGED:", ec_id)
             return
 
         # void onStartup(UniqueId ec_id, ReturnCode_t ret)
-        def onStartup(self, ec_id, ret):
+        def onStartup(self, ec_id: int, ret) -> None:
             if ret == RTC.RTC_OK:
                 self.onGeneric("STARTUP:", ec_id)
             return
 
         # void onShutdown(UniqueId ec_id, ReturnCode_t ret)
-        def onShutdown(self, ec_id, ret):
+        def onShutdown(self, ec_id: int, ret) -> None:
             if ret == RTC.RTC_OK:
                 self.onGeneric("SHUTDOWN:", ec_id)
             return
@@ -940,7 +941,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
         """
 
         #ConfigAction(ComponentObserverConsumer& coc)
-        def __init__(self, coc):
+        def __init__(self, coc) -> None:
             self.updateConfigParamListener = None
             self.setConfigSetListener = None
             self.addConfigSetListener = None
@@ -949,13 +950,13 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
             self.activateConfigSetListener = None
             self._coc = coc
 
-        def __del__(self):
+        def __del__(self) -> None:
             del self._coc
             return
 
         # void updateConfigParam(const char* configsetname,
         #                       const char* configparamname)
-        def updateConfigParam(self, configsetname, configparamname):
+        def updateConfigParam(self, configsetname, configparamname) -> None:
             msg_ = "UPDATE_CONFIG_PARAM: "
             msg_ += configsetname
             msg_ += "."
@@ -964,53 +965,53 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
             return
 
         # void setConfigSet(const coil::Properties& config_set)
-        def setConfigSet(self, config_set):
+        def setConfigSet(self, config_set: 'OpenRTM_aist.Properties') -> None:
             msg_ = "SET_CONFIG_SET: "
             msg_ += config_set.getName()
             self._coc.updateStatus(OpenRTM.CONFIGURATION, msg_)
             return
 
         # void addConfigSet(const coil::Properties& config_set)
-        def addConfigSet(self, config_set):
+        def addConfigSet(self, config_set) -> None:
             msg_ = "ADD_CONFIG_SET: "
             msg_ += config_set.getName()
             self._coc.updateStatus(OpenRTM.CONFIGURATION, msg_)
             return
 
         # void updateConfigSet(const char* config_set_name)
-        def updateConfigSet(self, config_set_name):
+        def updateConfigSet(self, config_set_name: str) -> None:
             msg_ = "UPDATE_CONFIG_SET: "
             msg_ += config_set_name
             self._coc.updateStatus(OpenRTM.CONFIGURATION, msg_)
             return
 
         # void removeConfigSet(const char* config_set_name)
-        def removeConfigSet(self, config_set_name):
+        def removeConfigSet(self, config_set_name) -> None:
             msg_ = "REMOVE_CONFIG_SET: "
             msg_ += config_set_name
             self._coc.updateStatus(OpenRTM.CONFIGURATION, msg_)
             return
 
         # void activateConfigSet(const char* config_set_name)
-        def activateConfigSet(self, config_set_name):
+        def activateConfigSet(self, config_set_name: str) -> None:
             msg_ = "ACTIVATE_CONFIG_SET: "
             msg_ += config_set_name
             self._coc.updateStatus(OpenRTM.CONFIGURATION, msg_)
             return
 
     class ConnectorDataAction:
-        def __init__(self, coc, portname):
+        def __init__(self, coc, portname) -> None:
             self.onBufferWriteListener = None
             self._coc = coc
             self._portname = portname
 
-        def onBufferWrite(self, info, cdrdata):
+        def onBufferWrite(self, info, cdrdata) -> None:
             msg_ = self._portname + ":" + info
             self._coc.updateStatus(OpenRTM.CONFIGURATION, msg_)
             return
 
 
-def ComponentObserverConsumerInit(mgr=None):
+def ComponentObserverConsumerInit(mgr=None) -> None:
     factory = OpenRTM_aist.SdoServiceConsumerFactory.instance()
     factory.addFactory(OpenRTM.ComponentObserver._NP_RepositoryId,
                        ComponentObserverConsumer)

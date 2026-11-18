@@ -96,7 +96,7 @@ class PluginRegistry:
     # @~english
     # @brief Constructor
     # @~
-    def __init__(self):
+    def __init__(self) -> None:
         self.conditions = {}
         self.actions = {}
         self.placements = {}
@@ -122,7 +122,7 @@ class PluginRegistry:
     # @param fn function
     # @param plugin name of the registering plugin
     # @~
-    def _put(self, table, kind, name, fn, plugin):
+    def _put(self, table: dict, kind: str, name: str, fn, plugin: str) -> None:
         if not callable(fn):
             raise PluginError(f"{plugin}: {kind} {name} is not callable")
         if name in table:
@@ -156,7 +156,7 @@ class PluginContext:
     # @param registry registry
     # @param plugin_name name of the plugin
     # @~
-    def __init__(self, host, registry, plugin_name="(core)"):
+    def __init__(self, host, registry: 'PluginRegistry', plugin_name: str = "(core)") -> None:
         self._host = host
         self._registry = registry
         self.plugin = plugin_name
@@ -174,7 +174,7 @@ class PluginContext:
     # @param name name
     # @param fn fn(ctx, args, now) -> bool
     # @~
-    def register_condition(self, name, fn):
+    def register_condition(self, name: str, fn) -> None:
         self._registry._put(self._registry.conditions, "condition", name, fn, self.plugin)
 
     ##
@@ -189,7 +189,7 @@ class PluginContext:
     # @param name name
     # @param fn fn(ctx, args) -> bool
     # @~
-    def register_action(self, name, fn):
+    def register_action(self, name, fn) -> None:
         self._registry._put(self._registry.actions, "action", name, fn, self.plugin)
 
     ##
@@ -204,7 +204,7 @@ class PluginContext:
     # @param name name
     # @param fn fn(ctx, items, robots, edges, primary, args) -> {RTC name: robot name}
     # @~
-    def register_placement(self, name, fn):
+    def register_placement(self, name, fn) -> None:
         self._registry._put(self._registry.placements, "placement", name, fn, self.plugin)
 
     ##
@@ -219,7 +219,7 @@ class PluginContext:
     # @param name name
     # @param fn fn(ctx, item, robot, state, args) -> float
     # @~
-    def register_objective(self, name, fn):
+    def register_objective(self, name, fn) -> None:
         self._registry._put(self._registry.objectives, "objective", name, fn, self.plugin)
 
     ##
@@ -234,7 +234,7 @@ class PluginContext:
     # @param kind event kind ("*" for all)
     # @param fn fn(ctx, event)
     # @~
-    def subscribe(self, kind, fn):
+    def subscribe(self, kind, fn) -> None:
         if not callable(fn):
             raise PluginError(f"{self.plugin}: subscriber is not callable")
         self._registry.subscribers.append((kind, fn, self.plugin))
@@ -264,7 +264,7 @@ class PluginContext:
     #
     # @param message message
     # @~
-    def log(self, message):
+    def log(self, message) -> None:
         self._host.log(f"[plugin {self.plugin}] {message}")
 
     ##
@@ -399,7 +399,7 @@ class PluginContext:
     # @param kind event kind
     # @param detail details
     # @~
-    def event(self, robot, kind, detail=""):
+    def event(self, robot, kind, detail="") -> None:
         self._host.event(robot, kind, detail)
 
 
@@ -422,7 +422,7 @@ class PluginManager:
     # @param host SNMPManager (provider of the functions)
     # @param paths list of directories to search for plugins
     # @~
-    def __init__(self, host, paths):
+    def __init__(self, host, paths: list) -> None:
         self.host = host
         self.paths = [p for p in paths if p]
         self.registry = PluginRegistry()
@@ -449,7 +449,7 @@ class PluginManager:
     # @param module module name (the extension .py may be omitted)
     # @return path of the file
     # @~
-    def find(self, module):
+    def find(self, module: str):
         name = module if module.endswith(".py") else module + ".py"
         if os.path.isabs(name) and os.path.isfile(name):
             return name
@@ -478,7 +478,7 @@ class PluginManager:
     #
     # @param specs [{"module": ..., "config": {...}}]
     # @~
-    def load_all(self, specs):
+    def load_all(self, specs: list) -> bool:
         signature = repr(specs)
         if signature == self._signature:
             return False
@@ -516,7 +516,7 @@ class PluginManager:
     #
     # @return description
     # @~
-    def describe(self):
+    def describe(self) -> str:
         r = self.registry
         return (f"plugins: {', '.join(n for n, _ in r.loaded) or '-'}; "
                 f"conditions: {', '.join(r.conditions) or '-'}; actions: {', '.join(r.actions) or '-'}; "
@@ -698,7 +698,7 @@ class PluginManager:
     #
     # @param event event
     # @~
-    def publish(self, event):
+    def publish(self, event) -> None:
         if not self.registry.subscribers:
             return
         if self._thread is None:
@@ -712,7 +712,7 @@ class PluginManager:
     # @~english
     # @brief Body of the thread that delivers events
     # @~
-    def _dispatch(self):
+    def _dispatch(self) -> None:
         while True:
             event = self._events.get()
             for kind, fn, plugin in list(self.registry.subscribers):

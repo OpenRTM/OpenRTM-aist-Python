@@ -16,13 +16,14 @@
 #
 # $Id$
 
+import typing as _typing
 import sys
 import os
 
 import OpenRTM_aist
 
 
-def main():
+def main() -> '_typing.Optional[OpenRTM_aist.Properties]':
 
     if len(sys.argv) != 2:
         print("usage: ")

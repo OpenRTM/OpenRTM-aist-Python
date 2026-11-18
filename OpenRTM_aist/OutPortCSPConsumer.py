@@ -65,7 +65,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     # self
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.OutPortCorbaConsumerBase.__init__(
             self, CSP.OutPortCsp, "csp_channel")
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OutPortCSPConsumer")
@@ -88,7 +88,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~OutPortCSPConsumer()")
         OpenRTM_aist.CorbaConsumer.__del__(self)
 
@@ -102,7 +102,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     # @brief Perform the init operation.
     # @param prop Properties used for initialization.
     # @endif
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("init()")
         self._properties = prop
 
@@ -138,7 +138,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     # @param info Value of info.
     # @param listeners Value of listeners.
     # @endif
-    def setListener(self, info, listeners):
+    def setListener(self, info, listeners) -> None:
         self._rtcout.RTC_TRACE("setListener()")
         self._listeners = listeners
         self._profile = info
@@ -152,7 +152,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     # @brief Set connector.
     # @param connector Value of connector.
     # @endif
-    def setConnector(self, connector):
+    def setConnector(self, connector) -> None:
         self._connector = connector
         return
 
@@ -230,7 +230,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     # @param retry Whether this query is a retry.
     # @param provider Reference to the receiver InPortCsp interface.
     # @endif
-    def isReadable(self, retry=False, provider=CSP.InPortCsp._nil):
+    def isReadable(self, retry: bool = False, provider=CSP.InPortCsp._nil):
         self._rtcout.RTC_PARANOID("isReadable()")
         self._query_state.value = CSP.NOT_READY
         try:
@@ -367,7 +367,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     # @else
     # @brief Handle the on Sender Empty notification.
     # @endif
-    def onSenderEmpty(self):
+    def onSenderEmpty(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
@@ -382,7 +382,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     # @else
     # @brief Handle the on Sender Timeout notification.
     # @endif
-    def onSenderTimeout(self):
+    def onSenderTimeout(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
@@ -397,7 +397,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     # @else
     # @brief Handle the on Sender Error notification.
     # @endif
-    def onSenderError(self):
+    def onSenderError(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
@@ -417,7 +417,7 @@ class OutPortCSPConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
 #
 
 
-def OutPortCSPConsumerInit():
+def OutPortCSPConsumerInit() -> None:
     factory = OpenRTM_aist.OutPortConsumerFactory.instance()
     factory.addFactory("csp_channel",
                        OpenRTM_aist.OutPortCSPConsumer)

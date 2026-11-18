@@ -22,6 +22,7 @@ import threading
 import OpenRTM_aist
 import SDOPackage
 import SDOPackage__POA
+import typing as _typing
 
 
 ##
@@ -59,7 +60,7 @@ class Organization_impl(SDOPackage__POA.Organization):
     # @else
     #
     # @endif
-    def __init__(self, sdo):
+    def __init__(self, sdo) -> None:
         self._pId = str(OpenRTM_aist.uuid1())
         self._org_mutex = threading.RLock()
 
@@ -256,7 +257,7 @@ class Organization_impl(SDOPackage__POA.Organization):
     #                          completely due to some internal error.
     # @endif
 
-    def add_organization_property(self, org_property):
+    def add_organization_property(self, org_property) -> bool:
         self.__rtcout.RTC_TRACE("add_organization_property()")
         if org_property is None:
             raise SDOPackage.InvalidParameter("org_property is Empty.")
@@ -311,7 +312,7 @@ class Organization_impl(SDOPackage__POA.Organization):
     #                          completely due to some internal error.
     # @endif
 
-    def set_organization_property_value(self, name, value):
+    def set_organization_property_value(self, name, value) -> bool:
         self.__rtcout.RTC_TRACE(
             "set_organization_property_value(name=%s)", name)
         if not name:
@@ -372,7 +373,7 @@ class Organization_impl(SDOPackage__POA.Organization):
     #                          completely due to some internal error.
     # @endif
 
-    def remove_organization_property(self, name):
+    def remove_organization_property(self, name) -> bool:
         self.__rtcout.RTC_TRACE("remove_organization_property(%s)", name)
         if not name:
             raise SDOPackage.InvalidParameter(
@@ -468,7 +469,7 @@ class Organization_impl(SDOPackage__POA.Organization):
     #                          completely due to some internal error.
     # @endif
 
-    def set_owner(self, sdo):
+    def set_owner(self, sdo) -> bool:
         self.__rtcout.RTC_TRACE("set_owner()")
         if CORBA.is_nil(sdo):
             raise SDOPackage.InvalidParameter("set_owner(): sdo is nil")
@@ -562,7 +563,7 @@ class Organization_impl(SDOPackage__POA.Organization):
     #                          completely due to some internal error.
     # @endif
 
-    def set_members(self, sdos):
+    def set_members(self, sdos) -> bool:
         self.__rtcout.RTC_TRACE("set_members()")
         if sdos is None:
             raise SDOPackage.InvalidParameter(
@@ -610,7 +611,7 @@ class Organization_impl(SDOPackage__POA.Organization):
     #                          completely due to some internal error.
     # @endif
 
-    def add_members(self, sdo_list):
+    def add_members(self, sdo_list) -> '_typing.Optional[bool]':
         self.__rtcout.RTC_TRACE("add_members()")
         if not sdo_list:
             raise SDOPackage.InvalidParameter(
@@ -662,7 +663,7 @@ class Organization_impl(SDOPackage__POA.Organization):
     #                          completely due to some internal error.
     # @endif
 
-    def remove_member(self, id):
+    def remove_member(self, id) -> bool:
         self.__rtcout.RTC_TRACE("remove_member(%s)", id)
         if not id:
             self.__rtcout.RTC_ERROR("remove_member(): Enpty name.")
@@ -769,7 +770,7 @@ class Organization_impl(SDOPackage__POA.Organization):
     #                          completely due to some internal error.
     # @endif
 
-    def set_dependency(self, dependency):
+    def set_dependency(self, dependency) -> bool:
         self.__rtcout.RTC_TRACE("set_dependency()")
         if dependency is None:
             raise SDOPackage.InvalidParameter(
@@ -793,10 +794,10 @@ class Organization_impl(SDOPackage__POA.Organization):
     # @endif
 
     class nv_name:
-        def __init__(self, name):
+        def __init__(self, name: str) -> None:
             self._name = name
 
-        def __call__(self, nv):
+        def __call__(self, nv: 'SDOPackage.NameValue'):
             return str(self._name) == str(nv.name)
 
     ##
@@ -807,7 +808,7 @@ class Organization_impl(SDOPackage__POA.Organization):
     #
     # @endif
     class sdo_id:
-        def __init__(self, id_):
+        def __init__(self, id_: str) -> None:
             self._id = id_
 
         def __call__(self, sdo):

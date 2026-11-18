@@ -67,7 +67,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     #
     # @endif
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortConsumer.__init__(self)
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("ROSOutPort")
         self._properties = None
@@ -99,7 +99,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~ROSOutPort()")
 
     ##
@@ -127,7 +127,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_PARANOID("init()")
 
         if not prop.propertyNames():
@@ -242,7 +242,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     #
     # @endif
     #
-    def connect(self, client_sock, header):
+    def connect(self, client_sock, header) -> None:
         self._rtcout.RTC_PARANOID("connect()")
 
         topic_name = header['topic']
@@ -338,7 +338,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     #
     # virtual ReturnCode put(const cdrMemoryStream& data);
 
-    def put(self, data):
+    def put(self, data: bytes):
         self._rtcout.RTC_PARANOID("put()")
 
         ret = self.PORT_OK
@@ -411,7 +411,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-    def subscribeInterface(self, properties):
+    def subscribeInterface(self, properties) -> bool:
         return True
 
     ##
@@ -432,7 +432,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
-    def unsubscribeInterface(self, properties):
+    def unsubscribeInterface(self, properties: list) -> None:
         if self._client is not None:
             try:
                 ret, _, __ = self._client.unregisterPublisher(
@@ -527,7 +527,7 @@ ros_pub_option = [
 #
 
 
-def ROSOutPortInit():
+def ROSOutPortInit() -> None:
     prop = OpenRTM_aist.Properties(defaults_str=ros_pub_option)
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("ros",

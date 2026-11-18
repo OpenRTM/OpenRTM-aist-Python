@@ -346,7 +346,7 @@ class ExecutionContextBase:
     """
     """
 
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("ec_base")
         self._activationTimeout = OpenRTM_aist.TimeValue(0.5)
         self._deactivationTimeout = OpenRTM_aist.TimeValue(0.5)
@@ -367,7 +367,7 @@ class ExecutionContextBase:
     # @endif
     # virtual void init(coil::Properties& props);
 
-    def init(self, props):
+    def init(self, props: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("init()")
         self._rtcout.RTC_DEBUG(props)
 
@@ -418,7 +418,7 @@ class ExecutionContextBase:
         self._rtcout.RTC_DEBUG("ExecutionContext's configurations:")
         self._rtcout.RTC_DEBUG("Exec rate   : %f [Hz]", self.getRate())
 
-        def toSTR_(x):
+        def toSTR_(x: bool):
             return "YES" if x else "NO"
 
         self._rtcout.RTC_DEBUG("Activation  : Sync = %s, Timeout = %f",
@@ -440,7 +440,7 @@ class ExecutionContextBase:
     #
     # @endif
     # virtual void exit();
-    def exit(self):
+    def exit(self) -> None:
         self._rtcout.RTC_TRACE("exit()")
         ret_ = self._worker.removeComponent(self._profile.getOwner())
         if ret_ != RTC.RTC_OK:
@@ -618,7 +618,7 @@ class ExecutionContextBase:
     # @endif
     # RTC::ReturnCode_t setRate(double rate)
 
-    def setRate(self, rate):
+    def setRate(self, rate: float):
         self._rtcout.RTC_TRACE("setRate(%f)", rate)
         ret_ = self._profile.setRate(self.onSettingRate(rate))
         if ret_ != RTC.RTC_OK:
@@ -647,7 +647,7 @@ class ExecutionContextBase:
     # @endif
     # RTC::ReturnCode_t ExecutionContextBase::
     # addComponent(RTC::LightweightRTObject_ptr comp)
-    def addComponent(self, comp):
+    def addComponent(self, comp: 'RTC._objref_LightweightRTObject'):
 
         self._rtcout.RTC_TRACE("addComponent()")
         ret_ = self.onAddingComponent(comp)  # Template
@@ -686,7 +686,7 @@ class ExecutionContextBase:
     # RTC::ReturnCode_t ExecutionContextBase::
     # removeComponent(RTC::LightweightRTObject_ptr comp)
 
-    def removeComponent(self, comp):
+    def removeComponent(self, comp: 'RTC._objref_LightweightRTObject'):
         self._rtcout.RTC_TRACE("removeComponent()")
         ret_ = self.onRemovingComponent(comp)  # Template
         if ret_ != RTC.RTC_OK:
@@ -724,7 +724,7 @@ class ExecutionContextBase:
     # RTC::ReturnCode_t ExecutionContextBase::
     # activateComponent(RTC::LightweightRTObject_ptr comp)
 
-    def activateComponent(self, comp):
+    def activateComponent(self, comp: 'RTC._objref_LightweightRTObject'):
         self._rtcout.RTC_TRACE("activateComponent()")
         ret_ = self.onActivating(comp)  # Template
         if ret_ != RTC.RTC_OK:
@@ -811,7 +811,7 @@ class ExecutionContextBase:
     # RTC::ReturnCode_t ExecutionContextBase::
     # deactivateComponent(RTC::LightweightRTObject_ptr comp)
 
-    def deactivateComponent(self, comp):
+    def deactivateComponent(self, comp: 'RTC._objref_LightweightRTObject'):
         self._rtcout.RTC_TRACE("deactivateComponent()")
         ret_ = self.onDeactivating(comp)  # Template
         if ret_ != RTC.RTC_OK:
@@ -898,7 +898,7 @@ class ExecutionContextBase:
     # RTC::ReturnCode_t ExecutionContextBase::
     # resetComponent(RTC::LightweightRTObject_ptr comp)
 
-    def resetComponent(self, comp):
+    def resetComponent(self, comp: 'RTC._objref_LightweightRTObject'):
         self._rtcout.RTC_TRACE("resetComponent()")
         ret_ = self.onResetting(comp)  # Template
         if ret_ != RTC.RTC_OK:
@@ -995,7 +995,7 @@ class ExecutionContextBase:
     # RTC::LifeCycleState ExecutionContextBase::
     # getComponentState(RTC::LightweightRTObject_ptr comp)
 
-    def getComponentState(self, comp):
+    def getComponentState(self, comp: 'RTC._objref_LightweightRTObject'):
         state_ = self._worker.getComponentState(comp)
         self._rtcout.RTC_TRACE(
             "getComponentState() = %s",
@@ -1098,7 +1098,7 @@ class ExecutionContextBase:
     # @endif
     # void setObjRef(RTC::ExecutionContextService_ptr ec_ptr)
 
-    def setObjRef(self, ec_ptr):
+    def setObjRef(self, ec_ptr: 'RTC._objref_ExecutionContextService') -> None:
         self._worker.setECRef(ec_ptr)
         self._profile.setObjRef(ec_ptr)
         return
@@ -1191,7 +1191,7 @@ class ExecutionContextBase:
     # @endif
     # RTC::ReturnCode_t setOwner(RTC::LightweightRTObject_ptr comp)
 
-    def setOwner(self, comp):
+    def setOwner(self, comp: 'RTC._objref_LightweightRTObject'):
         return self._profile.setOwner(comp)
 
     ##
@@ -1257,7 +1257,7 @@ class ExecutionContextBase:
     # @endif
     # void setProperties(coil::Properties& props)
 
-    def setProperties(self, props):
+    def setProperties(self, props: 'OpenRTM_aist.Properties') -> None:
         self._profile.setProperties(props)
         return
 
@@ -1333,28 +1333,28 @@ class ExecutionContextBase:
         return self._worker.isOneOfNextState(state)
 
     # void invokeWorker()       { m_worker.invokeWorker(); }
-    def invokeWorker(self):
+    def invokeWorker(self) -> None:
         self._worker.invokeWorker()
         return
 
     # void invokeWorkerPreDo()  { m_worker.invokeWorkerPreDo(); }
-    def invokeWorkerPreDo(self):
+    def invokeWorkerPreDo(self) -> None:
         self._worker.invokeWorkerPreDo()
         return
 
     # void invokeWorkerDo()     { m_worker.invokeWorkerDo(); }
-    def invokeWorkerDo(self):
+    def invokeWorkerDo(self) -> None:
         self._worker.invokeWorkerDo()
         return
 
     # void invokeWorkerPostDo() { m_worker.invokeWorkerPostDo(); }
-    def invokeWorkerPostDo(self):
+    def invokeWorkerPostDo(self) -> None:
         self._worker.invokeWorkerPostDo()
         return
 
     # template virtual functions related to start/stop
     # virtual bool onIsRunning(bool running) { return running; }
-    def onIsRunning(self, running):
+    def onIsRunning(self, running: bool):
         return running
 
     # virtual RTC::ReturnCode_t onStarting() { return RTC::RTC_OK; }
@@ -1375,11 +1375,11 @@ class ExecutionContextBase:
 
     # template virtual functions getting/setting execution rate
     # virtual double onGetRate(double rate) const { return rate; }
-    def onGetRate(self, rate):
+    def onGetRate(self, rate: float):
         return rate
 
     # virtual double onSettingRate(double rate) { return rate; }
-    def onSettingRate(self, rate):
+    def onSettingRate(self, rate: float):
         return rate
 
     # virtual RTC::ReturnCode_t onSetRate(double rate) { return RTC::RTC_OK; }
@@ -1421,7 +1421,7 @@ class ExecutionContextBase:
     # virtual RTC::ReturnCode_t
     # onActivated(RTC_impl::RTObjectStateMachine* comp,
     #             long int count)
-    def onActivated(self, comp, count):
+    def onActivated(self, comp, count: int):
         return RTC.RTC_OK
 
     # virtual RTC::ReturnCode_t
@@ -1437,7 +1437,7 @@ class ExecutionContextBase:
 
     # virtual RTC::ReturnCode_t
     # onDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count)
-    def onDeactivated(self, comp, count):
+    def onDeactivated(self, comp, count: int):
         return RTC.RTC_OK
 
     # virtual RTC::ReturnCode_t onResetting(RTC::LightweightRTObject_ptr comp)
@@ -1451,7 +1451,7 @@ class ExecutionContextBase:
 
     # virtual RTC::ReturnCode_t
     # onReset(RTC_impl::RTObjectStateMachine* comp, long int count)
-    def onReset(self, comp, count):
+    def onReset(self, comp, count: int):
         return RTC.RTC_OK
 
     # virtual RTC::LifeCycleState
@@ -1466,7 +1466,7 @@ class ExecutionContextBase:
 
     # virtual RTC::ExecutionContextProfile*
     # onGetProfile(RTC::ExecutionContextProfile*& profile)
-    def onGetProfile(self, profile):
+    def onGetProfile(self, profile: 'RTC.ExecutionContextProfile'):
         return profile
 
     # ============================================================
@@ -1480,7 +1480,7 @@ class ExecutionContextBase:
     # @endif
     # bool ExecutionContextBase::setExecutionRate(coil::Properties& props)
 
-    def setExecutionRate(self, props):
+    def setExecutionRate(self, props: 'OpenRTM_aist.Properties') -> bool:
         if props.findNode("rate"):
             rate_ = 0.0
             ret, rate_ = OpenRTM_aist.stringTo(
@@ -1499,10 +1499,10 @@ class ExecutionContextBase:
     # bool ExecutionContextBase::
     # setTransitionMode(coil::Properties& props, const char* key, bool& flag)
 
-    def setTransitionMode(self, props, key, flag=False):
+    def setTransitionMode(self, props: 'OpenRTM_aist.Properties', key: str, flag: bool = False):
         self._rtcout.RTC_TRACE("setTransitionMode(%s)", key)
 
-        def toSTR_(x):
+        def toSTR_(x: bool):
             return "YES" if x else "NO"
         if props.findNode(key):
             flag = OpenRTM_aist.toBool(
@@ -1524,7 +1524,7 @@ class ExecutionContextBase:
     # setTimeout(coil::Properties& props, const char* key,
     #            coil::TimeValue& timevalue)
 
-    def setTimeout(self, props, key, timevalue=0.0):
+    def setTimeout(self, props: 'OpenRTM_aist.Properties', key: str, timevalue=0.0):
         self._rtcout.RTC_TRACE("setTimeout(%s)", key)
         if props.findNode(key):
             timeout_ = 0.0
@@ -1576,11 +1576,11 @@ executioncontextfactory = None
 
 
 class ExecutionContextFactory(OpenRTM_aist.Factory, ExecutionContextBase):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
         return
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     def instance():

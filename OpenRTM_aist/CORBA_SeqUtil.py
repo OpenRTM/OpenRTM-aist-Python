@@ -14,7 +14,13 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 
+import typing as _typing
+
 import OpenRTM_aist
+
+
+_Element = _typing.TypeVar("_Element")
+_Function = _typing.TypeVar("_Function", bound=_typing.Callable)
 
 ##
 # @if jp
@@ -46,7 +52,7 @@ import OpenRTM_aist
 # @endif
 
 
-def for_each(seq, f):
+def for_each(seq: _typing.Iterable[_Element], f: _Function) -> _Function:
     for s in seq:
         f(s)
     return f
@@ -82,7 +88,7 @@ def for_each(seq, f):
 #          If no element found, it would return -1.
 #
 # @endif
-def find(seq, f):
+def find(seq: _typing.Iterable[_Element], f: _typing.Callable[[_Element], object]) -> int:
     for i, s in enumerate(seq):
         if f(s):
             return i
@@ -110,7 +116,7 @@ def find(seq, f):
 # @param elem The new element to be added to the CORBA sequence
 #
 # @endif
-def push_back(seq, elem):
+def push_back(seq: _typing.MutableSequence[_Element], elem: _Element) -> None:
     seq.append(elem)
 
 
@@ -126,7 +132,7 @@ def push_back(seq, elem):
 # @else
 #
 # @endif
-def push_back_list(seq1, seq2):
+def push_back_list(seq1: _typing.MutableSequence[_Element], seq2: _typing.Iterable[_Element]) -> None:
     for elem in seq2:
         seq1.append(elem)
 
@@ -158,7 +164,7 @@ def push_back_list(seq1, seq2):
 # @param index The inserting position
 #
 # @endif
-def insert(seq, elem, index):
+def insert(seq: _typing.MutableSequence[_Element], elem: _Element, index: int) -> None:
     len_ = len(seq)
     if index > len_:
         seq.append(elem)
@@ -186,7 +192,7 @@ def insert(seq, elem, index):
 # @param seq The CORBA sequence to be get the element
 #
 # @endif
-def front(seq):
+def front(seq: _typing.Sequence[_Element]) -> _Element:
     return seq[0]
 
 
@@ -210,7 +216,7 @@ def front(seq):
 # @param seq The CORBA sequence to be get the element
 #
 # @endif
-def back(seq):
+def back(seq: _typing.Sequence[_Element]) -> _Element:
     if seq:
         return seq[-1]
 
@@ -236,7 +242,7 @@ def back(seq):
 # @param index The index of the element to be removed
 #
 # @endif
-def erase(seq, index):
+def erase(seq: _typing.MutableSequence[_Element], index: int) -> None:
     if index > len(seq):
         return
 
@@ -258,7 +264,7 @@ def erase(seq, index):
 # @endif
 
 
-def erase_if(seq, f):
+def erase_if(seq: _typing.MutableSequence[_Element], f: _typing.Callable[[_Element], object]) -> None:
     index = find(seq, f)
     if index < 0:
         return
@@ -279,12 +285,12 @@ def erase_if(seq, f):
 # same as seq.length(0).
 #
 # @endif
-def clear(seq):
+def clear(seq: _typing.MutableSequence[_Element]) -> None:
     del seq[0:]
 
 
 # coil::vstring refToVstring(const CorbaRefSequence& objlist)
-def refToVstring(objlist):
+def refToVstring(objlist: list):
     iorlist = []
     orb = OpenRTM_aist.Manager.instance().getORB()
 

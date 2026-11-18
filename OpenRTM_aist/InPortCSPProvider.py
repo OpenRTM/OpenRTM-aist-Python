@@ -66,7 +66,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # self
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortProvider.__init__(self)
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("CSPOutPort")
 
@@ -102,7 +102,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -116,7 +116,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     #
     # @endif
     #
-    def exit(self):
+    def exit(self) -> None:
         oid = OpenRTM_aist.Manager.instance().getPOA().servant_to_id(self)
         OpenRTM_aist.Manager.instance().getPOA().deactivate_object(oid)
 
@@ -130,7 +130,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @brief Perform the init operation.
     # @param prop Properties used for initialization.
     # @endif
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties'):
         pass
 
     ##
@@ -141,7 +141,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @brief Set buffer.
     # @param buffer Value of buffer.
     # @endif
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._buffer = buffer
         return
 
@@ -155,7 +155,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @param info Value of info.
     # @param listeners Value of listeners.
     # @endif
-    def setListener(self, info, listeners):
+    def setListener(self, info, listeners) -> None:
         self._profile = info
         self._listeners = listeners
         return
@@ -168,7 +168,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @brief Set connector.
     # @param connector Value of connector.
     # @endif
-    def setConnector(self, connector):
+    def setConnector(self, connector) -> None:
         self._connector = connector
         return
     ##
@@ -192,7 +192,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # ::OpenRTM::PortStatus put()
     #  throw (CORBA::SystemException);
 
-    def put(self, data):
+    def put(self, data: bytes):
 
         try:
             self._rtcout.RTC_PARANOID("InPortCSPProvider.put()")
@@ -234,7 +234,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @endif
     #
 
-    def is_writable(self, retry, option):
+    def is_writable(self, retry: bool, option: list):
         self._rtcout.RTC_PARANOID("is_writable()")
         if self._connector:
             state_query = getattr(self._connector, "_isWritableState", None)
@@ -276,7 +276,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @brief Handle the on Buffer Write notification.
     # @param data Data to transmit or receive.
     # @endif
-    def onBufferWrite(self, data):
+    def onBufferWrite(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE, self._profile, data)
@@ -332,7 +332,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @brief Handle the on Received notification.
     # @param data Data to transmit or receive.
     # @endif
-    def onReceived(self, data):
+    def onReceived(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED, self._profile, data)
@@ -346,7 +346,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @brief Handle the on Receiver Full notification.
     # @param data Data to transmit or receive.
     # @endif
-    def onReceiverFull(self, data):
+    def onReceiverFull(self, data) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL, self._profile, data)
@@ -374,7 +374,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @brief Handle the on Receiver Error notification.
     # @param data Data to transmit or receive.
     # @endif
-    def onReceiverError(self, data):
+    def onReceiverError(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR, self._profile, data)
@@ -390,7 +390,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     # @param status Value of status.
     # @param data Data to transmit or receive.
     # @endif
-    def convertReturn(self, status, data):
+    def convertReturn(self, status: int, data: bytes):
         if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
             self.onBufferWrite(data)
             return RTC.PORT_OK
@@ -427,7 +427,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
 # @else
 # @brief Register the factory for InPortCSPProvider.
 # @endif
-def InPortCSPProviderInit():
+def InPortCSPProviderInit() -> None:
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("csp_channel",
                        OpenRTM_aist.InPortCSPProvider)

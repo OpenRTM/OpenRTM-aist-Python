@@ -49,7 +49,7 @@ if _SUPPORTED:
         # @~english
         # @brief Finalization of the callback
         # @~
-        def exit(self):
+        def exit(self) -> None:
             pass
 
         ##
@@ -64,7 +64,7 @@ if _SUPPORTED:
         # @param id exit code
         # @param options process information
         # @~
-        def callback(self, id, options):
+        def callback(self, id: int, options: dict) -> None:
             if id == 0:
                 return
             LOG.warning('RTC process event: id=%r options=%r', id, options)
@@ -84,7 +84,7 @@ if _SUPPORTED:
 #
 # @param manager manager
 # @~
-def TestPCBGenericInit(manager):
+def TestPCBGenericInit(manager) -> None:
     if not _SUPPORTED:
         LOG.warning('この OpenRTM-aist には ProcessCallback がないため TestPCBGeneric は登録しません '
                     '(プロセス終了は RTCFailover の liveness で検知します)')

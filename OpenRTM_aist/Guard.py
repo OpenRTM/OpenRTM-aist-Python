@@ -45,7 +45,7 @@ class ScopedLock:
     # @else
     #
     # @endif
-    def __init__(self, mutex, defer_lock=False):
+    def __init__(self, mutex, defer_lock: bool = False) -> None:
         self._mutex = mutex
         self._locked = False
         if not defer_lock:
@@ -63,7 +63,7 @@ class ScopedLock:
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.unlock()
 
     ##
@@ -79,7 +79,7 @@ class ScopedLock:
     #
     # @endif
 
-    def lock(self):
+    def lock(self) -> None:
         if not self._locked:
             self._locked = True
             self._mutex.acquire()
@@ -97,7 +97,7 @@ class ScopedLock:
     #
     # @endif
 
-    def unlock(self):
+    def unlock(self) -> None:
         if self._locked:
             self._locked = False
             self._mutex.release()
