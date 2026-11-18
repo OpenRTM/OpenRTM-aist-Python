@@ -51,6 +51,14 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     """
     """
 
+    def _inportPropertyPrefix(self, properties):
+        prefix = "dataport." + self._interfacetypestr
+        if (self._interfacetypestr == "shared_memory"
+                and OpenRTM_aist.NVUtil.find_index(properties, prefix + ".inport_ior") < 0
+                and OpenRTM_aist.NVUtil.find_index(properties, prefix + ".inport_ref") < 0):
+            return "dataport.corba_cdr"
+        return prefix
+
     ##
     # @if jp
     # @brief コンストラクタ
@@ -166,6 +174,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     # @endif
     #
     # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
+
     def subscribeInterface(self, properties):
         self._rtcout.RTC_TRACE("subscribeInterface()")
         # self._rtcout.RTC_DEBUG_STR(OpenRTM_aist.NVUtil.toString(properties))
@@ -225,8 +234,8 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     def subscribeFromIor(self, properties):
         self._rtcout.RTC_TRACE("subscribeFromIor()")
 
-        index = OpenRTM_aist.NVUtil.find_index(properties,
-                                               "dataport."+self._interfacetypestr+".inport_ior")
+        key = self._inportPropertyPrefix(properties) + ".inport_ior"
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
         if index < 0:
             self._rtcout.RTC_ERROR("inport_ior not found")
             return False
@@ -270,8 +279,8 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     # bool subscribeFromRef(const SDOPackage::NVList& properties);
     def subscribeFromRef(self, properties):
         self._rtcout.RTC_TRACE("subscribeFromRef()")
-        index = OpenRTM_aist.NVUtil.find_index(properties,
-                                               "dataport."+self._interfacetypestr+".inport_ref")
+        key = self._inportPropertyPrefix(properties) + ".inport_ref"
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
         if index < 0:
             self._rtcout.RTC_ERROR("inport_ref not found")
             return False
@@ -312,8 +321,8 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     # bool unsubscribeFromIor(const SDOPackage::NVList& properties);
     def unsubscribeFromIor(self, properties):
         self._rtcout.RTC_TRACE("unsubscribeFromIor()")
-        index = OpenRTM_aist.NVUtil.find_index(properties,
-                                               "dataport."+self._interfacetypestr+".inport_ior")
+        key = self._inportPropertyPrefix(properties) + ".inport_ior"
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
         if index < 0:
             self._rtcout.RTC_ERROR("inport_ior not found")
             return False
@@ -355,8 +364,8 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     # bool unsubscribeFromRef(const SDOPackage::NVList& properties);
     def unsubscribeFromRef(self, properties):
         self._rtcout.RTC_TRACE("unsubscribeFromRef()")
-        index = OpenRTM_aist.NVUtil.find_index(properties,
-                                               "dataport."+self._interfacetypestr+".inport_ref")
+        key = self._inportPropertyPrefix(properties) + ".inport_ref"
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
 
         if index < 0:
             return False
