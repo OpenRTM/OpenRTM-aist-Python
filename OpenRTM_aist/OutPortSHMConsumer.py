@@ -80,17 +80,46 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     #
     def __del__(self):
         self._rtcout.RTC_PARANOID("~OutPortSHMConsumer()")
+        self.releaseObject()
         OpenRTM_aist.OutPortCorbaConsumerBase.__del__(self)
-        try:
-            if not self._ptr():
-                self._ptr().close_memory(True)
-        except BaseException:
-            self._rtcout.RTC_WARN(
-                "Exception caught from PortSharedMemory.close_memory().")
-            self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
 
         oid = OpenRTM_aist.Manager.instance().getPOA().servant_to_id(self._shmem)
         OpenRTM_aist.Manager.instance().getPOA().deactivate_object(oid)
+
+    def releaseObject(self):
+        peer = self._ptr(True)
+        OpenRTM_aist.CorbaConsumer.releaseObject(self)
+        if peer is not None:
+            try:
+                peer.close_memory(True)
+            except Exception:
+                self._rtcout.RTC_WARN(
+                    "Exception caught from PortSharedMemory.close_memory().")
+                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+
+    ##
+    # @if jp
+    # @brief 設定初期化
+    #
+    # OutPortConsumerの各種設定を行う
+    #
+    # @param self
+    # @param prop コネクタプロパティ
+    #
+    # @else
+    # @brief Initializing configuration
+    #
+    #
+    # @endif
+    #
+    # virtual void init(coil::Properties& prop);
+
+    def init(self, prop):
+        self._rtcout.RTC_TRACE("init()")
+
+        self._properties = prop
+
+        return
 
     def setObject(self, obj):
         if OpenRTM_aist.CorbaConsumer.setObject(self, obj):

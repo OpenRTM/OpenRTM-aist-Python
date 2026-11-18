@@ -52,12 +52,7 @@ class InPortCorbaConsumerBase(OpenRTM_aist.InPortConsumer, OpenRTM_aist.CorbaCon
     """
 
     def _inportPropertyPrefix(self, properties):
-        prefix = "dataport." + self._interfacetypestr
-        if (self._interfacetypestr == "shared_memory"
-                and OpenRTM_aist.NVUtil.find_index(properties, prefix + ".inport_ior") < 0
-                and OpenRTM_aist.NVUtil.find_index(properties, prefix + ".inport_ref") < 0):
-            return "dataport.corba_cdr"
-        return prefix
+        return "dataport." + self._interfacetypestr
 
     ##
     # @if jp
