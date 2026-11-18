@@ -128,6 +128,11 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
         self._buffer = buffer
         self._directMode = False
 
+        self._sync_readwrite = False
+        if OpenRTM_aist.toBool(info.properties.getProperty(
+                "sync_readwrite"), "YES", "NO", False):
+            self._sync_readwrite = True
+
         if not self._buffer:
             self._buffer = self.createBuffer(info)
 
@@ -142,11 +147,6 @@ class OutPortPullConnector(OpenRTM_aist.OutPortConnector):
         self._provider.setConnector(self)
         self._provider.setListener(info, self._listeners)
         self.onConnect()
-
-        self._sync_readwrite = False
-        if OpenRTM_aist.toBool(info.properties.getProperty(
-                "sync_readwrite"), "YES", "NO", False):
-            self._sync_readwrite = True
 
         self._writecompleted_worker = OutPortPullConnector.WorkerThreadCtrl()
         self._readcompleted_worker = OutPortPullConnector.WorkerThreadCtrl()

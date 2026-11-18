@@ -361,7 +361,11 @@ class ConnectorDataListenerT(ConnectorDataListener):
             serializer.isLittleEndian(endian)
             ret, data = serializer.deserialize(cdrdata, data)
 
-            return data
+            if ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
+                return data
+            else:
+                if type(cdrdata) is type(data):
+                    return cdrdata
         return data
 
 

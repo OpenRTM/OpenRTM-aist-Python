@@ -16,6 +16,7 @@
 
 import types
 import OpenRTM_aist
+import copy
 
 import threading
 
@@ -1235,7 +1236,7 @@ def _createBox(place, B=None):
     if B:
         return B()
     else:
-        return _EmptyBox.theEmptyBox
+        return copy.deepcopy(_EmptyBox.theEmptyBox)
 
 
 def _deleteBox(box, place):

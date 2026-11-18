@@ -279,3 +279,72 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 
     def setDataType(self, data):
         self._dataType = data
+
+
+##
+# @if jp
+# @class ReadListenerBase
+# @brief ReadListenerBase クラス
+#
+# 読み込み時リスナのベースクラス
+#
+# @since 2.0.0
+#
+# @else
+# @class ReadListenerBase
+# @brief ReadListenerBase class
+#
+#
+# @since 2.0.0
+#
+# @endif
+#
+class ReadListenerBase(object):
+    ##
+    # @if jp
+    # @brief 仮想コールバック関数
+    # @param self
+    # @return 読み込んだデータ
+    # @else
+    # @brief
+    # @param self
+    # @return 読み込んだデータ
+    # @endif
+    def __call__(self):
+        return (OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, None)
+
+##
+# @if jp
+# @class IsReadableListenerBase
+# @brief IsReadableListenerBase クラス
+#
+# 読み込み確認時リスナのベースクラス
+#
+# @since 2.0.0
+#
+# @else
+# @class IsReadableListenerBase
+# @brief IsReadableListenerBase class
+#
+#
+# @since 2.0.0
+#
+# @endif
+#
+
+
+class IsReadableListenerBase(object):
+    ##
+    # @if jp
+    # @brief 仮想コールバック関数
+    # @param self
+    # @param con OutPortConnector
+    # @return True：読み込み可、False：読み込み不可
+    # @else
+    # @brief
+    # @param self
+    # @param con
+    # @return
+    # @endif
+    def __call__(self, con, retry=False):
+        return False
