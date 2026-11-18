@@ -205,7 +205,7 @@ class StateMachine:
     # @endif
 
     def setListener(self, listener):
-        assert(listener)
+        assert (listener)
         self._listener = listener
         return
 
@@ -379,7 +379,7 @@ class StateMachine:
     # @endif
 
     def getStates(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         return self._states
 
     ##
@@ -397,7 +397,7 @@ class StateMachine:
     # @endif
 
     def getState(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         return self._states.curr
 
     ##
@@ -416,7 +416,7 @@ class StateMachine:
     # @endif
 
     def isIn(self, state):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         if self._states.curr == state:
             return True
         else:
@@ -440,7 +440,7 @@ class StateMachine:
     # @endif
 
     def goTo(self, state):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._states.next = state
         if self._states.curr == state:
             self._selftrans = True
@@ -574,7 +574,7 @@ class StateMachine:
     # @endif
 
     def sync(self, states):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         states.prev = self._states.prev
         states.curr = self._states.curr
         states.next = self._states.next
@@ -591,7 +591,7 @@ class StateMachine:
     # @endif
 
     def need_trans(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         return (self._states.curr != self._states.next)
 
     ##
@@ -605,5 +605,5 @@ class StateMachine:
     # @endif
 
     def update_curr(self, curr):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._states.curr = curr

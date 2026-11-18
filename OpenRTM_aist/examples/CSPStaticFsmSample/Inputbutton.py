@@ -188,7 +188,7 @@ def MyModuleInit(manager):
     InputbuttonInit(manager)
 
     # Create a component
-    comp = manager.createComponent("Inputbutton")
+    _ = manager.createComponent("Inputbutton")
 
 
 ##

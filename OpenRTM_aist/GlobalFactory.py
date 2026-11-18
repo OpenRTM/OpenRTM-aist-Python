@@ -80,7 +80,7 @@ class Factory:
         return obj_
 
     def getProperties(self, id):
-        if not id in self._creators:
+        if id not in self._creators:
             print("Factory.getProperties return None id: ", id)
             return None
         return self._creators[id].prop

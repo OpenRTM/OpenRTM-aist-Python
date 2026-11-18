@@ -296,11 +296,11 @@ class MetricsStore:
     @staticmethod
     def _write(conn, kind, payload):
         if kind == "metrics":
-            conn.executemany("INSERT INTO metrics VALUES (%s)" % COLUMN_PLACEHOLDERS, payload)
+            conn.executemany("INSERT INTO metrics VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", payload)
         elif kind == "event":
             conn.execute("INSERT INTO events VALUES (?,?,?,?,?)", payload)
         elif kind == "measurements":
-            conn.executemany("INSERT INTO rtc_measurements VALUES (%s)" % ",".join("?" * 14), payload)
+            conn.executemany("INSERT INTO rtc_measurements VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", payload)
         elif kind == "custom":
             conn.executemany("INSERT INTO custom_metrics VALUES (?,?,?,?,?)", payload)
 
@@ -378,7 +378,7 @@ def main(argv):
         print("%-19s %-7s %6s %6s %8s %8s %6s" % ("time", "status", "cpu%", "mem%", "lat(ms)", "jit(ms)", "loss%"))
         for r in reversed(rows):
             print("%-19s %-7s %6s %6s %8s %8s %6s" % (_fmt_ts(r[0]), r[4], _fmt(r[5]), _fmt(r[6]),
-                                                       _fmt(r[10], 2), _fmt(r[11], 2), _fmt(r[12])))
+                                                      _fmt(r[10], 2), _fmt(r[11], 2), _fmt(r[12])))
     elif cmd == "measurements":
         import json
         n = int(argv[3]) if len(argv) > 3 else 20
@@ -393,9 +393,14 @@ def main(argv):
     elif cmd == "custom":
         robot = argv[3] if len(argv) > 3 and not argv[3].isdigit() else None
         n = int(argv[-1]) if len(argv) > 3 and argv[-1].isdigit() else 20
-        q = "SELECT ts, robot, name, value FROM custom_metrics" + (" WHERE robot = ?" if robot else "") + \
-            " ORDER BY ts DESC LIMIT ?"
-        rows = conn.execute(q, ((robot, n) if robot else (n,))).fetchall()
+        if robot:
+            rows = conn.execute(
+                "SELECT ts, robot, name, value FROM custom_metrics WHERE robot = ? ORDER BY ts DESC LIMIT ?",
+                (robot, n)).fetchall()
+        else:
+            rows = conn.execute(
+                "SELECT ts, robot, name, value FROM custom_metrics ORDER BY ts DESC LIMIT ?",
+                (n,)).fetchall()
         print("%-19s %-8s %-20s %10s" % ("time", "robot", "metric", "value"))
         for r in reversed(rows):
             print("%-19s %-8s %-20s %10s" % (_fmt_ts(r[0]), r[1], r[2], _fmt(r[3], 2)))

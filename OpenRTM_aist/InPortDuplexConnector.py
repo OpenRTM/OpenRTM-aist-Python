@@ -29,7 +29,6 @@
 #
 
 
-
 import OpenRTM_aist
 import CSP
 import threading
@@ -241,7 +240,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
         self.onDisconnect()
         # delete consumer
         if self._provider:
-            cfactory = OpenRTM_aist.InPortProviderFactory.instance()
+            _ = OpenRTM_aist.InPortProviderFactory.instance()
 
             self._provider.exit()
 
@@ -452,7 +451,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @endif
     def setIsWritableListener(self, listener):
         self._isWritableCallback = listener
-        
+
     #
     # @if jp
     # @brief ガード条件判定時のリスナ設定

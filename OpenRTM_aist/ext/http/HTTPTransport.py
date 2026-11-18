@@ -30,7 +30,7 @@ def HTTPTransportInit(manager):
 
     if not ("giop:http" in corba_args):
         corba_args += " -ORBendPoint giop:http:ws://127.0.0.1:8001/ws"
-        
+
     if not OpenRTM_aist.toBool(prop.getProperty(
             "manager.is_master"), "YES", "NO", True):
         if not prop.getProperty("corba.endpoints"):

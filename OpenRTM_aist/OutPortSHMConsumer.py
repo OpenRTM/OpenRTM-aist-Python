@@ -172,7 +172,7 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
         try:
             portshmem = self._ptr()
 
-            guard = OpenRTM_aist.ScopedLock(self._mutex)
+            _ = OpenRTM_aist.ScopedLock(self._mutex)
 
             try:
                 ret = portshmem.get()

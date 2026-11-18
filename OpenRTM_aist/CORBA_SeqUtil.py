@@ -83,8 +83,7 @@ def for_each(seq, f):
 #
 # @endif
 def find(seq, f):
-    len_ = len(seq)
-    for i,s in enumerate(seq):
+    for i, s in enumerate(seq):
         if f(s):
             return i
     return -1

@@ -126,7 +126,7 @@ def setup(ctx, config):
         plan = {"components": components, "connections": args.get("connections", []), "remove": remove}
         ctx.apply_plan(plan, "least_loaded_migration")
         ctx.event(ctx.name, "plugin_migration", ", ".join(f"{c['name']}@{c['manager']}" for c in components
-                                                           if c["name"] in moved))
+                                                          if c["name"] in moved))
         return True
 
     ctx.register_action("least_loaded_migration", migrate)

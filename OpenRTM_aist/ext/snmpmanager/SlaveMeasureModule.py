@@ -270,7 +270,7 @@ def render_placement(agg, environment, robot):
          + a("durationSec", round(agg["samples"] * (agg.get("interval") or 0), 1)) + '>',
          '      <plc:Resources' + a("cpu", round(agg["cpu_value"], 2)) + a("memoryMb", round(agg["memory_mb"]["max"], 2))
          + a("basis", f'measured by the manager: cpu={agg["cpu_stat"]} of the RTC share, '
-                      'memory=max USS - empty manager USS (RTC share)') + '/>',
+             'memory=max USS - empty manager USS (RTC share)') + '/>',
          '      <plc:Cpu' + a("avg", agg["cpu"]["avg"]) + a("max", agg["cpu"]["max"]) + a("p95", agg["cpu"]["p95"])
          + a("unit", "percent-of-one-core") + '/>',
          '      <plc:Memory plc:unit="MB">',

@@ -173,7 +173,7 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
             self._rtcout.RTC_WARN("Exception caught from InPort.isWritable().")
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
             return False
-        
+
     ##
     # @if jp
     # @brief ガード条件を満たすかをProviderに確認
@@ -202,7 +202,6 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
             self._rtcout.RTC_WARN("Exception caught from InPort.matchCondition().")
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
             return False
-        
 
     ##
     # @if jp

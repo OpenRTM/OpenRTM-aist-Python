@@ -128,7 +128,7 @@ def MyModuleInit(manager):
     ConsoleOutInit(manager)
 
     # Create a component
-    comp = manager.createComponent("ConsoleOut")
+    _ = manager.createComponent("ConsoleOut")
 
 
 def main():

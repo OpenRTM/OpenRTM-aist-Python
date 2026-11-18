@@ -129,7 +129,7 @@ class PeriodicFunction(object):
     # @endif
 
     def tick(self, interval):
-        guard = OpenRTM_aist.ScopedLock(self._lock)
+        _ = OpenRTM_aist.ScopedLock(self._lock)
         if self._isRemoved:
             return True
         self._remains -= interval
@@ -154,7 +154,7 @@ class PeriodicFunction(object):
     # @endif
 
     def stop(self):
-        guard = OpenRTM_aist.ScopedLock(self._lock)
+        _ = OpenRTM_aist.ScopedLock(self._lock)
         self._isRemoved = True
 
 ##
@@ -179,6 +179,8 @@ class PeriodicFunction(object):
 # @endif
 
 # TODO: The "object" class inheritance must be removed in Python3
+
+
 class Timer(object):
     """
     """
@@ -306,7 +308,7 @@ class DelayedTimer(Timer):
     #
     # @endif
     def emplace(self, fn, *args):
-        guard = OpenRTM_aist.ScopedLock(self._lock)
+        _ = OpenRTM_aist.ScopedLock(self._lock)
         funcobj = DelayedFunction(fn, *args)
         self._tasks.append(funcobj)
         return funcobj
@@ -362,7 +364,7 @@ class PeriodicTimer(Timer):
     #
     # @endif
     def emplace(self, fn, *args):
-        guard = OpenRTM_aist.ScopedLock(self._lock)
+        _ = OpenRTM_aist.ScopedLock(self._lock)
         funcobj = PeriodicFunction(fn, *args)
         self._tasks.append(funcobj)
         return funcobj

@@ -15,6 +15,7 @@
 #     All rights reserved.
 
 import hashlib
+import subprocess
 import sys
 
 RESERVED_NCS, RFC_4122, RESERVED_MICROSOFT, RESERVED_FUTURE = [
@@ -100,8 +101,7 @@ class UUID(object):
             if not 0 <= node < 1 << 48:
                 raise ValueError('field 6 out of range (need a 48-bit value)')
             clock_seq = (clock_seq_hi_variant << 8) | clock_seq_low
-            int_value = ((time_low << 96) | (time_mid << 80) |
-                         (time_hi_version << 64) | (clock_seq << 48) | node)
+            int_value = ((time_low << 96) | (time_mid << 80) | (time_hi_version << 64) | (clock_seq << 48) | node)
         if int_value:
             if not 0 <= int_value < 1 << 128:
                 raise ValueError('int is out of range (need a 128-bit value)')
@@ -118,7 +118,7 @@ class UUID(object):
 
     def __cmp__(self, other):
         if isinstance(other, UUID):
-            return cmp(self.int_value, other.int_value)
+            return (self.int_value > other.int_value) - (self.int_value < other.int_value)
         return NotImplemented
 
     def __hash__(self):
@@ -178,14 +178,12 @@ class UUID(object):
     clock_seq_low = property(get_clock_seq_low)
 
     def get_time(self):
-        return (((self.time_hi_version & 0x0fff) << 48) |
-                (self.time_mid << 32) | self.time_low)
+        return (((self.time_hi_version & 0x0fff) << 48) | (self.time_mid << 32) | self.time_low)
 
     time = property(get_time)
 
     def get_clock_seq(self):
-        return (((self.clock_seq_hi_variant & 0x3f) << 8) |
-                self.clock_seq_low)
+        return (((self.clock_seq_hi_variant & 0x3f) << 8) | self.clock_seq_low)
 
     clock_seq = property(get_clock_seq)
 
@@ -227,10 +225,14 @@ class UUID(object):
 def _ifconfig_getnode():
     """Get the hardware address on Unix by running ifconfig."""
     import os
-    dir = '/sbin/'
-    pipe = os.popen(os.path.join(dir, 'ifconfig'))
+    try:
+        result = subprocess.run(
+            ['/sbin/ifconfig'], capture_output=True, text=True,
+            errors='replace', check=False)
+    except OSError:
+        return None
 
-    for line in pipe:
+    for line in result.stdout.splitlines():
         words = line.lower().split()
         for i in range(len(words)):
             if words[i] in ['hwaddr', 'ether']:
@@ -251,10 +253,12 @@ def _ipconfig_getnode():
         pass
     for dir in dirs:
         try:
-            pipe = os.popen(os.path.join(dir, 'ipconfig') + ' /all')
-        except IOError:
+            result = subprocess.run(
+                [os.path.join(dir, 'ipconfig'), '/all'], capture_output=True,
+                text=True, errors='replace', check=False)
+        except OSError:
             continue
-        for line in pipe:
+        for line in result.stdout.splitlines():
             value = line.split(':')[-1].strip().lower()
             if re.match('([0-9a-f][0-9a-f]-){5}[0-9a-f][0-9a-f]', value):
                 return int(value.replace('-', ''), 16)
@@ -287,8 +291,7 @@ def _netbios_getnode():
             continue
         status._unpack()
         bytes = map(ord, status.adapter_address)
-        return ((bytes[0] << 40) + (bytes[1] << 32) + (bytes[2] << 24) +
-                (bytes[3] << 16) + (bytes[4] << 8) + bytes[5])
+        return ((bytes[0] << 40) + (bytes[1] << 32) + (bytes[2] << 24) + (bytes[3] << 16) + (bytes[4] << 8) + bytes[5])
 
 # Thanks to Thomas Heller for ctypes and for his help with its use here.
 
@@ -414,7 +417,7 @@ def _uuid_name_bytes(namespace, name):
 
 def uuid3(namespace, name):
     """Generate a UUID from the MD5 hash of a namespace UUID and a name."""
-    digest = hashlib.md5(_uuid_name_bytes(namespace, name)).hexdigest()
+    digest = hashlib.md5(_uuid_name_bytes(namespace, name), usedforsecurity=False).hexdigest()
     return UUID(hex=digest, version=3)
 
 
@@ -438,7 +441,7 @@ def uuid4():
 
 def uuid5(namespace, name):
     """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
-    digest = hashlib.sha1(_uuid_name_bytes(namespace, name)).hexdigest()
+    digest = hashlib.sha1(_uuid_name_bytes(namespace, name), usedforsecurity=False).hexdigest()
     return UUID(hex=digest[:32], version=5)
 
 # The following standard UUIDs are for use with uuid3() or uuid5().

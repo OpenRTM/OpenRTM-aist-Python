@@ -519,7 +519,8 @@ class RTObjectBase:
             return RTC.OUT_OF_RESOURCES
 
         # -- entering alive state --
-        def toSTR_(x): return " was" if len(x) == 1 else "s were"
+        def toSTR_(x):
+            return " was" if len(x) == 1 else "s were"
         self._rtcout.RTC_INFO("%d execution context%s created.",
                               (len(self._ecMine), toSTR_(self._ecMine)))
 
@@ -597,7 +598,7 @@ class RTObjectBase:
         if self._ecOther:
             # for ec in self._ecOther:
             # if not CORBA.is_nil(ec):
-              # return RTC.PRECONDITION_NOT_MET
+            # return RTC.PRECONDITION_NOT_MET
 
             self._ecOther = []
 
@@ -675,7 +676,7 @@ class RTObjectBase:
         for ec in self._ecOther:
             try:
                 if not CORBA.is_nil(ec) or not ec._non_existent():
-                  # ec.stop()
+                    # ec.stop()
                     ec.remove_component(self._this())
             except BaseException:
                 pass
@@ -786,7 +787,6 @@ class RTObjectBase:
     # virtual ExecutionContext_ptr get_context(UniqueId exec_handle)
 
     def get_context(self, ec_id):
-        global ECOTHER_OFFSET
 
         self._rtcout.RTC_TRACE("get_context(%d)", ec_id)
         # owned EC
@@ -1012,7 +1012,6 @@ class RTObjectBase:
     # UniqueId attach_context(ExecutionContext_ptr exec_context)
 
     def attach_context(self, exec_context):
-        global ECOTHER_OFFSET
         self._rtcout.RTC_TRACE("attach_context()")
         # ID: 0 - (offset-1) : owned ec
         # ID: offset -       : participating ec
@@ -1039,7 +1038,6 @@ class RTObjectBase:
     # UniqueId bindContext(ExecutionContext_ptr exec_context);
 
     def bindContext(self, exec_context):
-        global ECOTHER_OFFSET
         self._rtcout.RTC_TRACE("bindContext()")
         # ID: 0 - (offset-1) : owned ec
         # ID: offset -       : participating ec
@@ -1108,7 +1106,6 @@ class RTObjectBase:
     # ReturnCode_t detach_context(UniqueId exec_handle)
 
     def detach_context(self, ec_id):
-        global ECOTHER_OFFSET
         self._rtcout.RTC_TRACE("detach_context(%d)", ec_id)
         len_ = len(self._ecOther)
 
@@ -3053,7 +3050,6 @@ class RTObjectBase:
     # bool isOwnExecutionContext(RTC::UniqueId ec_id);
 
     def isOwnExecutionContext(self, ec_id):
-        global ECOTHER_OFFSET
         if ec_id < ECOTHER_OFFSET:
             return True
         return False
@@ -5180,7 +5176,6 @@ class RTObjectBase:
             default_prop = OpenRTM_aist.Properties()
             default_prop.setDefaults(OpenRTM_aist.default_config)
 
-            ec_ = [None]
             ec_type_ = default_prop.getProperty("exec_cxt.periodic.type")
             if ec_type_ not in avail_ec_:
                 self._rtcout.RTC_WARN("EC %s is not available.", ec_type_)
@@ -5223,7 +5218,7 @@ class RTObjectBase:
             if not ec:
                 self._rtcout.RTC_ERROR("EC (%s) creation failed.", ec_type_)
                 self._rtcout.RTC_DEBUG("Available EC list: %s",
-                                        OpenRTM_aist.flatten(avail_ec_))
+                                       OpenRTM_aist.flatten(avail_ec_))
                 return RTC.RTC_ERROR
 
             if self._manager:

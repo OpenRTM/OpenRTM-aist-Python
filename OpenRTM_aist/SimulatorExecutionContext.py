@@ -88,7 +88,7 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
     #
 
     def activate_component(self, comp):
-        guard = OpenRTM_aist.ScopedLock(self._tickmutex)
+        _ = OpenRTM_aist.ScopedLock(self._tickmutex)
         rtobj = self._worker.findComponent(comp)
         if not rtobj:
             return RTC.BAD_PARAMETER
@@ -128,7 +128,7 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
     #
 
     def deactivate_component(self, comp):
-        guard = OpenRTM_aist.ScopedLock(self._tickmutex)
+        _ = OpenRTM_aist.ScopedLock(self._tickmutex)
         rtobj = self._worker.findComponent(comp)
         if not rtobj:
             return RTC.BAD_PARAMETER
@@ -169,7 +169,7 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
     # @endif
     #
     def reset_component(self, comp):
-        guard = OpenRTM_aist.ScopedLock(self._tickmutex)
+        _ = OpenRTM_aist.ScopedLock(self._tickmutex)
         rtobj = self._worker.findComponent(comp)
         if not rtobj:
             return RTC.BAD_PARAMETER

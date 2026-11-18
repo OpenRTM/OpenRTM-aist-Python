@@ -15,6 +15,7 @@
 #     All rights reserved.
 
 import hashlib
+import subprocess
 import sys
 
 RESERVED_NCS, RFC_4122, RESERVED_MICROSOFT, RESERVED_FUTURE = [
@@ -112,7 +113,7 @@ class UUID(object):
 
     def __cmp__(self, other):
         if isinstance(other, UUID):
-            return cmp(self.int_value, other.int_value)
+            return (self.int_value > other.int_value) - (self.int_value < other.int_value)
         return NotImplemented
 
     def __hash__(self):
@@ -221,10 +222,14 @@ class UUID(object):
 def _ifconfig_getnode():
     """Get the hardware address on Unix by running ifconfig."""
     import os
-    dir = '/sbin/'
-    pipe = os.popen(os.path.join(dir, 'ifconfig'))
+    try:
+        result = subprocess.run(
+            ['/sbin/ifconfig'], capture_output=True, text=True,
+            errors='replace', check=False)
+    except OSError:
+        return None
 
-    for line in pipe:
+    for line in result.stdout.splitlines():
         words = line.lower().split()
         for i in range(len(words)):
             if words[i] in ['hwaddr', 'ether']:
@@ -245,10 +250,12 @@ def _ipconfig_getnode():
         pass
     for dir in dirs:
         try:
-            pipe = os.popen(os.path.join(dir, 'ipconfig') + ' /all')
-        except IOError:
+            result = subprocess.run(
+                [os.path.join(dir, 'ipconfig'), '/all'], capture_output=True,
+                text=True, errors='replace', check=False)
+        except OSError:
             continue
-        for line in pipe:
+        for line in result.stdout.splitlines():
             value = line.split(':')[-1].strip().lower()
             if re.match('([0-9a-f][0-9a-f]-){5}[0-9a-f][0-9a-f]', value):
                 return int(value.replace('-', ''), 16)
@@ -408,7 +415,7 @@ def _uuid_name_bytes(namespace, name):
 
 def uuid3(namespace, name):
     """Generate a UUID from the MD5 hash of a namespace UUID and a name."""
-    digest = hashlib.md5(_uuid_name_bytes(namespace, name)).hexdigest()
+    digest = hashlib.md5(_uuid_name_bytes(namespace, name), usedforsecurity=False).hexdigest()
     return UUID(hex=digest, version=3)
 
 
@@ -432,7 +439,7 @@ def uuid4():
 
 def uuid5(namespace, name):
     """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
-    digest = hashlib.sha1(_uuid_name_bytes(namespace, name)).hexdigest()
+    digest = hashlib.sha1(_uuid_name_bytes(namespace, name), usedforsecurity=False).hexdigest()
     return UUID(hex=digest[:32], version=5)
 
 # The following standard UUIDs are for use with uuid3() or uuid5().

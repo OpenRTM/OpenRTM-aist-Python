@@ -447,7 +447,6 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
             self._rtcHeartbeat = False
         return
 
-
     ##
     # @if jp
     # @brief ハートビートをオブザーバに伝える
@@ -464,8 +463,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
                 self.updateStatus(RTC.EC_HEARTBEAT, "HEARTBEAT:" + str(i))
             ecs = self._rtobj.get_participating_contexts()
             for i in range(len(ecs)):
-                self.updateStatus(RTC.EC_HEARTBEAT, "HEARTBEAT:" +
-                                  str(i + OpenRTM_aist.ECOTHER_OFFSET))
+                self.updateStatus(RTC.EC_HEARTBEAT, "HEARTBEAT:" + str(i + OpenRTM_aist.ECOTHER_OFFSET))
 
         return
 

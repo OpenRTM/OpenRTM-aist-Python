@@ -165,7 +165,7 @@ def MyModuleInit(manager):
     MicrowaveInit(manager)
 
     # Create a component
-    comp = manager.createComponent("Microwave")
+    _ = manager.createComponent("Microwave")
 
 
 ##

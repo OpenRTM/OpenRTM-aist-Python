@@ -53,7 +53,6 @@ from pysnmp.entity import config
 from pysnmp.entity.rfc3413 import ntfrcv
 import traceback
 
-import time
 import datetime
 import json
 import ipaddress
@@ -88,6 +87,8 @@ def seconds_since_midnight():
 # @~english
 # @brief Startup failure that retrying does not resolve (an RTC that cannot be loaded, cannot be placed within the limits, etc.)
 # @~
+
+
 class StartupFailure(Exception):
 
     ##
@@ -322,6 +323,7 @@ class SNMPManager:
     # @param conf settings of rtc.conf (Properties)
     # @param port SNMP port number
     # @~
+
     def __init__(self, manager, conf, port=161):
         self._conf = conf
         self._port = port
@@ -398,7 +400,9 @@ class SNMPManager:
         self._port_module = {}        # 計画の RTC 名 -> モジュール名 (この計画で生成した RTC)
         self._planned_instance = {}   # 計画の RTC 名 -> インスタンス名
         # マネージャによる実測値の計測と保存。slave の SlaveMeasureModule が書いた計測を集めて保存する
-        yes = lambda key, default: conf.getProperty(key, default).strip().upper() == "YES"
+
+        def yes(key, default):
+            return conf.getProperty(key, default).strip().upper() == "YES"
         self._measure_enabled = yes("snmp.measure.enabled", "NO")
         self._measure_runtime_dir = conf.getProperty("snmp.measure.runtime_dir", "/run/rtm/measure")
         self._measure_dir = conf.getProperty("snmp.measure.dir", "measured")
@@ -430,7 +434,7 @@ class SNMPManager:
 
         self._logfile = "snmpmgr.txt"
         with open(self._logfile, "w") as f:
-          f.write("seconds_since_midnight\tinfo\trtc_name\trtc_status\n")
+            f.write("seconds_since_midnight\tinfo\trtc_name\trtc_status\n")
 
     ##
     # @~japanese
@@ -491,7 +495,8 @@ class SNMPManager:
         self._verbose = self._conf.getProperty('snmp.verbose', 'YES').strip().upper() == 'YES'
 
         # 死活監視と通信品質 (アクティブ: sysUpTime の GET、パッシブ: ハートビートのトラップ)
-        yes = lambda key, default: self._conf.getProperty(key, default).strip().upper() == 'YES'
+        def yes(key, default):
+            return self._conf.getProperty(key, default).strip().upper() == 'YES'
         self._liveness_enabled = yes('snmp.liveness.enabled', 'YES')
         self._probe_interval = float(self._conf.getProperty('snmp.liveness.probe_interval', '1.0'))
         self._probe_timeout = float(self._conf.getProperty('snmp.liveness.probe_timeout', '1.0'))
@@ -630,7 +635,7 @@ class SNMPManager:
         self._trap_thread.join()
         self._polling_thread.join()
         self._trap_cheking_thread.join()
-        
+
     ##
     # @~japanese
     # @brief その IP アドレスのロボットが登録済みか
@@ -1076,7 +1081,6 @@ class SNMPManager:
             self._event(best, "executor_elected", f"{purpose} (candidates {detail}{excluded})")
         return best
 
-
     ##
     # @~japanese
     # @brief マイグレーションの条件のグループを確かめる
@@ -1087,6 +1091,7 @@ class SNMPManager:
     #
     # @param group condition group
     # @~
+
     def _validate_condition_group(self, group):
         if not isinstance(group, dict) or group.get("operator") not in ("AND", "OR"):
             raise ValueError("Condition group must use AND or OR")
@@ -1846,8 +1851,7 @@ class SNMPManager:
                 problems.append(f"{c['name']} ({mod.get('type_name')}): placement.xml に計測値がない")
                 continue
             cands = [r.name for r in robots if r.name in loadable and module in loadable[r.name]
-                     and (c.get("manager") is None or c["manager"] == r.name)
-                     and prof.requires <= r.tags]
+                     and (c.get("manager") is None or c["manager"] == r.name) and prof.requires <= r.tags]
             mem = prof.memory_mb
             if rcfg is not None:
                 # 置く RTC も予約量を確保する (見込みより予約が大きければ予約で数える)
@@ -2174,7 +2178,7 @@ class SNMPManager:
             if not robot.is_local and robot.status == "dead":
                 return where["robot"], where["instance"], "down"
             # 計画を適用する前に取った一覧では、生成したばかりの RTC がまだ載っていない (消えたとは言えない)
-            if robot.inventory is not None and                     (robot.inventory_time or 0) >= getattr(self, "_last_plan_applied", 0):
+            if robot.inventory is not None and (robot.inventory_time or 0) >= getattr(self, "_last_plan_applied", 0):
                 return where["robot"], where["instance"], "missing"
         return (where["robot"], where["instance"], None) if where else (None, None, None)
 
@@ -3982,10 +3986,10 @@ class SNMPManager:
             self._last_plan_applied = time.monotonic()
             end = time.perf_counter()
             with open(self._logfile, "a") as f:
-                f.write(f"{seconds_since_midnight():.6f}\t{label}Time:{end-start}:{create_finish-start}:{connect_finish-create_finish}:{end-activate_finish}\t\t\n")
+                f.write(f"{seconds_since_midnight():.6f}\t{label}Time:{end - start}:{create_finish - start}:{connect_finish - create_finish}:{end - activate_finish}\t\t\n")
             if plan.get("connections") or plan.get("remove"):
-                self._log(f"{label} timing: total {end-start:.3f}s (create {create_finish-start:.3f}s, "
-                          f"connect {connect_finish-create_finish:.3f}s, activate {activate_finish-connect_finish:.3f}s, "
+                self._log(f"{label} timing: total {end - start:.3f}s (create {create_finish - start:.3f}s, "
+                          f"connect {connect_finish - create_finish:.3f}s, activate {activate_finish - connect_finish:.3f}s, "
                           f"remove {remove_time:.3f}s{' in parallel' if parallel else ''}); "
                           f"port lookups {self._corba_calls - calls_before} CORBA calls"
                           f"{'' if self._port_cache_enabled else ' (port cache off)'}")
@@ -4242,7 +4246,7 @@ class SNMPManager:
                 if addr.family == socket.AF_INET and not addr.address.startswith('127.'):
                     local_ips.add(addr.address)
         return local_ips
-        
+
     ##
     # @~japanese
     # @brief トラップ受信用のループ上で使い回す SnmpEngine を返す
@@ -4456,7 +4460,7 @@ class SNMPManager:
 
     #def disconnect_own_comp(self):
     #    self._dnm1 = self.getComponent("DnmRtComponentRTC1", self.mgrref_r1)[0]
-        
+
     #def deactivate_own_comp(self):
     #    pass
 
@@ -4481,7 +4485,7 @@ class SNMPManager:
             self.check_migration_conditions()
             if self._verbose:
                 print("wifi_strength:" + str(self._robot.data.get("wifi_strength")))
-                print("count: "+str(count))
+                print("count: " + str(count))
             count += 1
             trap_count = int(self._conf.getProperty("snmp.trap_count", "-1"))
             wifi_value = self._robot.data.get('wifi_strength') if self._robot.last_data_update is not None else None
@@ -4510,7 +4514,7 @@ class SNMPManager:
                             with open(self._logfile, "a") as f:
                                 sec = seconds_since_midnight()
                                 f.write(f"{sec:.6f}\tShutdownTime:{difftime}\t\t\n")
-                            
+
                             #self.get_own_comps()
                             #self.disconnect_own_comp()
                             #self.deactivate_own_comp()
@@ -4519,8 +4523,7 @@ class SNMPManager:
                         self.send_wifi_trap(self._conf.getProperty("snmp.main_robot", "192.168.215.137"))
 
             time.sleep(self._trap_interval)
-            
-        
+
     ##
     # @~japanese
     # @brief snmpd の extend の出力 (nsExtendOutput1Line) の OID を返す
@@ -4533,6 +4536,7 @@ class SNMPManager:
     # @param token name of the extend
     # @return OID
     # @~
+
     @staticmethod
     def _extend_output_oid(token):
         # NET-SNMP-EXTEND-MIB::nsExtendOutput1Line."token"
@@ -5102,12 +5106,11 @@ class SNMPManager:
         try:
             engine = SnmpEngine()
             self._snmp_engine = engine
+            address = (self._conf.getProperty("snmp.trap_address", "").strip()
+                       or self._configured_own_ip or "127.0.0.1")
             config.add_transport(
                 engine, udp.DOMAIN_NAME,
-                udp.UdpAsyncioTransport().open_server_mode(
-                    (self._conf.getProperty('snmp.trap_address', '').strip() or self._configured_own_ip or '0.0.0.0',
-                     int(self._conf.getProperty('snmp.trap_port', '162')))
-                )
+                udp.UdpAsyncioTransport().open_server_mode((address, self._trap_port)),
             )
             config.add_v1_system(engine, 'my-area', self._community)
             ntfrcv.NotificationReceiver(engine, self.trap_callback)
@@ -5179,8 +5182,9 @@ class SNMPManager:
         #
         # @return string
         # @~
+
         def __str__(self):
-            return "[name="+self.name+", ipaddress="+self.ipaddress+"]"
+            return "[name=" + self.name + ", ipaddress=" + self.ipaddress + "]"
         ##
         # @~japanese
         # @brief 監視の値の初期値を返す
@@ -5191,44 +5195,45 @@ class SNMPManager:
         #
         # @return dictionary of monitoring values
         # @~
+
         def initData(self):
-            return {       
-                    "name": self.name,
-                    "ip_address": self.ipaddress,
-                    "os": platform.platform() if self.is_local else "unknown",
-                    "timestamp": str(time.time()),
-                    "cpu_usage": None,
-                    "memory_usage": "0",
-                    "network_in": "0",
-                    "network_out": "0",
-                    "wifi_strength": None,
-                    "wifi_signal_dbm": None,
-                    "wifi_signal_client_dbm": None,
-                    "wifi_signal_ap_dbm": None,
-                    "wifi_signal_source": None,
-                    "wifi_interface": None,
-                    "alive": 1 if self.is_local else None,
-                    "latency_ms": None,
-                    "jitter_ms": None,
-                    "packet_loss": None,
-                    "pose2d":
+            return {
+                "name": self.name,
+                "ip_address": self.ipaddress,
+                "os": platform.platform() if self.is_local else "unknown",
+                "timestamp": str(time.time()),
+                "cpu_usage": None,
+                "memory_usage": "0",
+                "network_in": "0",
+                "network_out": "0",
+                "wifi_strength": None,
+                "wifi_signal_dbm": None,
+                "wifi_signal_client_dbm": None,
+                "wifi_signal_ap_dbm": None,
+                "wifi_signal_source": None,
+                "wifi_interface": None,
+                "alive": 1 if self.is_local else None,
+                "latency_ms": None,
+                "jitter_ms": None,
+                "packet_loss": None,
+                "pose2d":
                     {
                         "position": [0.0, 0.0],
                         "heading": 0.0
-                    },
-                    "pose3d":
+                },
+                "pose3d":
                     {
                         "position": [0.0, 0.0, 0.0],
                         "quaternion": [0.0, 0.0, 0.0, 0.0]
-                    },
-                    "network":
+                },
+                "network":
                     {
-                    },
-                    "components":
+                },
+                "components":
                     [
-                    ]
-                   }
-        
+                ]
+            }
+
 
 ##
 # @~japanese

@@ -418,7 +418,8 @@ class ExecutionContextBase:
         self._rtcout.RTC_DEBUG("ExecutionContext's configurations:")
         self._rtcout.RTC_DEBUG("Exec rate   : %f [Hz]", self.getRate())
 
-        def toSTR_(x): return "YES" if x else "NO"
+        def toSTR_(x):
+            return "YES" if x else "NO"
 
         self._rtcout.RTC_DEBUG("Activation  : Sync = %s, Timeout = %f",
                                (toSTR_(self._syncActivation), float(self._activationTimeout.toDouble())))
@@ -758,8 +759,7 @@ class ExecutionContextBase:
             self._rtcout.RTC_ERROR("onWaitingActivated failed.")
             return ret_
 
-        cycle_ = int(float(self._activationTimeout.toDouble()) /
-                     float(self.getPeriod().toDouble()))
+        cycle_ = int(float(self._activationTimeout.toDouble()) / float(self.getPeriod().toDouble()))
         self._rtcout.RTC_DEBUG("Timeout is %f [s] (%f [s] in %d times)",
                                (float(self._activationTimeout.toDouble()), self.getRate(), cycle_))
         # Wating INACTIVE -> ACTIVE
@@ -847,8 +847,7 @@ class ExecutionContextBase:
 
         cycle_ = int(
             float(
-                self._deactivationTimeout.toDouble()) /
-            float(
+                self._deactivationTimeout.toDouble()) / float(
                 self.getPeriod().toDouble()))
         self._rtcout.RTC_DEBUG("Timeout is %f [s] (%f [s] in %d times)",
                                (float(self._deactivationTimeout.toDouble()), self.getRate(), cycle_))
@@ -932,8 +931,7 @@ class ExecutionContextBase:
             self._rtcout.RTC_ERROR("onWaitingReset() failed.")
             return ret_
 
-        cycle_ = int(float(self._resetTimeout.toDouble()) /
-                     float(self.getPeriod().toDouble()))
+        cycle_ = int(float(self._resetTimeout.toDouble()) / float(self.getPeriod().toDouble()))
         self._rtcout.RTC_DEBUG("Timeout is %f [s] (%f [s] in %d times)",
                                (float(self._resetTimeout.toDouble()), self.getRate(), cycle_))
         # Wating ERROR -> INACTIVE
@@ -1503,7 +1501,9 @@ class ExecutionContextBase:
 
     def setTransitionMode(self, props, key, flag=False):
         self._rtcout.RTC_TRACE("setTransitionMode(%s)", key)
-        def toSTR_(x): return "YES" if x else "NO"
+
+        def toSTR_(x):
+            return "YES" if x else "NO"
         if props.findNode(key):
             flag = OpenRTM_aist.toBool(
                 props.getProperty(key), "YES", "NO", "YES")

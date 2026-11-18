@@ -20,7 +20,6 @@
 import OpenRTM_aist
 import omniORB
 
-import struct
 import array
 import ROS2MessageInfo
 import RTC
@@ -251,8 +250,8 @@ def ROS2BasicDataInit(message_type, name):
                  RTC.TimedWStringSeq]
     for datatype in datatypes:
         OpenRTM_aist.SerializerFactories.instance().addSerializer(name,
-                                                         ros2_basic_data(
-                                                             message_type), datatype)
+                                                                  ros2_basic_data(
+                                                                      message_type), datatype)
     ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo(name,
                                                            ROS2MessageInfo.ROS2MessageInfo(
                                                                message_type))

@@ -6,10 +6,14 @@ import math
 import time
 import sys
 if sys.version_info[0] == 2:
-    from Tkinter import *
+    from Tkinter import (
+        Canvas, Frame, Toplevel,
+    )
     import thread
 else:
-    from tkinter import *
+    from tkinter import (
+        Canvas, Frame, Toplevel,
+    )
     import _thread as thread
 
 
@@ -87,7 +91,7 @@ def test():
     thread.start_new_thread(m.mainloop, ())
     thread.start_new_thread(n.mainloop, ())
     cnt = 0
-    while(1):
+    while (1):
         angle = [
             cnt %
             360, - cnt %

@@ -342,9 +342,7 @@ class ManagerConfig:
             if not self.fileExist(self._configFile):
                 # print(OpenRTM_aist.Logger.print_exception())
                 print(
-                    "Configuration file: " +
-                    self._configFile +
-                    " not found.")
+                    "Configuration file: " + self._configFile + " not found.")
                 if not self._ignoreNoConf:
                     sys.exit()
                 return False

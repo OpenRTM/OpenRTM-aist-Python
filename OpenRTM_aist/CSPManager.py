@@ -611,7 +611,6 @@ class CSPManager(object):
                 self._portList.append(port)
                 self._arbitration_stats['deferred'] += 1
             return CSP.SCANNING
-       
 
     ##
     # @if jp
@@ -619,6 +618,7 @@ class CSPManager(object):
     # @else
     # @brief Prepare a remote rescan using the fixed priorities exchanged at connection time.
     # @endif
+
     def _schedulePriorityRescan(self):
         """Retry only requests from lower-priority remote managers.
 

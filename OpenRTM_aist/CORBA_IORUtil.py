@@ -11,11 +11,9 @@
 import binascii
 import sys
 from omniORB import CORBA
-from omniORB import *
 from omniORB import any
 from omniORB import cdrMarshal
 from omniORB import cdrUnmarshal
-from IORProfile_idl import *
 from IORProfile_idl import _0__GlobalIDL
 endian = True
 
@@ -269,7 +267,6 @@ def toIOR(iorstr):
 
 
 def getEndpoints(ior):
-    global endian
     addr = []
     for p in ior.profiles:
         # TAG_INTERNET_IOP
@@ -298,7 +295,6 @@ def getEndpoints(ior):
 
 
 def extractAddrs(comps):
-    global endian
     addr = []
     for c in comps:
         # print("TAG component type: ", IOP.ComponentID[c.tag])
@@ -349,7 +345,6 @@ def extractAddrs(comps):
 
 
 def replaceEndpoint(iorstr, endpoint):
-    global endian
     ior = toIOR(iorstr)
     for p in ior.profiles:
         # TAG_INTERNET_IOP

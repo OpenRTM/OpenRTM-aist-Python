@@ -1092,7 +1092,7 @@ class PreFsmActionListenerHolder:
     #
 
     def addListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
 
     ##
@@ -1113,7 +1113,7 @@ class PreFsmActionListenerHolder:
     # @endif
     #
     def removeListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         len_ = len(self._listeners)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -1139,7 +1139,7 @@ class PreFsmActionListenerHolder:
     # @endif
     #
     def notify(self, state):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for listener in self._listeners:
             listener(state)
         return
@@ -1201,7 +1201,7 @@ class PostFsmActionListenerHolder:
     # @endif
     #
     def addListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
 
     ##
@@ -1222,7 +1222,7 @@ class PostFsmActionListenerHolder:
     # @endif
     #
     def removeListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         len_ = len(self._listeners)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -1248,7 +1248,7 @@ class PostFsmActionListenerHolder:
     # @endif
     #
     def notify(self, state, ret):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for listener in self._listeners:
             listener(state, ret)
         return
@@ -1311,7 +1311,7 @@ class FsmProfileListenerHolder:
     #
 
     def addListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
 
     ##
@@ -1332,7 +1332,7 @@ class FsmProfileListenerHolder:
     # @endif
     #
     def removeListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         len_ = len(self._listeners)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -1358,7 +1358,7 @@ class FsmProfileListenerHolder:
     # @endif
     #
     def notify(self, state):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for listener in self._listeners:
             listener(state)
         return
@@ -1422,7 +1422,7 @@ class FsmStructureListenerHolder:
     #
 
     def addListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
 
     ##
@@ -1443,7 +1443,7 @@ class FsmStructureListenerHolder:
     # @endif
     #
     def removeListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         len_ = len(self._listeners)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -1469,7 +1469,7 @@ class FsmStructureListenerHolder:
     # @endif
     #
     def notify(self, state):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for listener in self._listeners:
             listener(state)
         return
@@ -1787,7 +1787,7 @@ class FsmActionListeners:
     # @param self
     # @param ltype
     # @param ec_id
-    # @param ret 
+    # @param ret
     #
     # @endif
     def notifyPostAction(self, ltype, ec_id, ret):

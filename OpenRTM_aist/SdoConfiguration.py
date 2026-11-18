@@ -267,7 +267,7 @@ class Configuration_impl(SDOPackage__POA.Configuration):
         if dProfile is None:
             raise SDOPackage.InvalidParameter("dProfile is empty.")
 
-        guard = OpenRTM_aist.ScopedLock(self._dprofile_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._dprofile_mutex)
         self._deviceProfile = dProfile
 
         return True
@@ -478,7 +478,7 @@ class Configuration_impl(SDOPackage__POA.Configuration):
             raise SDOPackage.InvalidParameter("organization_id is empty.")
 
         try:
-            guard = OpenRTM_aist.ScopedLock(self._org_mutex)
+            _ = OpenRTM_aist.ScopedLock(self._org_mutex)
             OpenRTM_aist.CORBA_SeqUtil.erase_if(self._organizations,
                                                 self.org_id(organization_id))
         except BaseException:
@@ -525,7 +525,7 @@ class Configuration_impl(SDOPackage__POA.Configuration):
     def get_configuration_parameters(self):
         self._rtcout.RTC_TRACE("get_configuration_parameters()")
 
-        guard = OpenRTM_aist.ScopedLock(self._params_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._params_mutex)
         param = copy.copy(self._parameters)
         return param
 
@@ -564,7 +564,7 @@ class Configuration_impl(SDOPackage__POA.Configuration):
 
     def get_configuration_parameter_values(self):
         self._rtcout.RTC_TRACE("get_configuration_parameter_values()")
-        guard = OpenRTM_aist.ScopedLock(self._config_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._config_mutex)
         nvlist = []
         return nvlist
 
@@ -710,7 +710,7 @@ class Configuration_impl(SDOPackage__POA.Configuration):
     def get_configuration_sets(self):
         self._rtcout.RTC_TRACE("get_configuration_sets()")
         try:
-            guard = OpenRTM_aist.ScopedLock(self._config_mutex)
+            _ = OpenRTM_aist.ScopedLock(self._config_mutex)
 
             cf = self._configsets.getConfigurationSets()
             len_ = len(cf)
@@ -774,7 +774,7 @@ class Configuration_impl(SDOPackage__POA.Configuration):
         if not config_id:
             raise SDOPackage.InvalidParameter("ID is empty")
 
-        guard = OpenRTM_aist.ScopedLock(self._config_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._config_mutex)
 
         if not self._configsets.haveConfig(config_id):
             self._rtcout.RTC_ERROR("No such ConfigurationSet")
@@ -924,7 +924,7 @@ class Configuration_impl(SDOPackage__POA.Configuration):
                 "NotAvailable: Configuration.get_active_configuration_set()")
 
         try:
-            guard = OpenRTM_aist.ScopedLock(self._config_mutex)
+            _ = OpenRTM_aist.ScopedLock(self._config_mutex)
             config = SDOPackage.ConfigurationSet("", "", [])
             toConfigurationSet(
                 config, self._configsets.getActiveConfigurationSet())
@@ -982,7 +982,7 @@ class Configuration_impl(SDOPackage__POA.Configuration):
             raise SDOPackage.InvalidParameter("configuration_set is empty.")
 
         try:
-            guard = OpenRTM_aist.ScopedLock(self._config_mutex)
+            _ = OpenRTM_aist.ScopedLock(self._config_mutex)
             config_id = configuration_set.id
             config = OpenRTM_aist.Properties(key=config_id)
             toProperties(config, configuration_set)
@@ -1039,7 +1039,7 @@ class Configuration_impl(SDOPackage__POA.Configuration):
             raise SDOPackage.InvalidParameter("ID is empty.")
 
         try:
-            guard = OpenRTM_aist.ScopedLock(self._config_mutex)
+            _ = OpenRTM_aist.ScopedLock(self._config_mutex)
             return self._configsets.removeConfigurationSet(config_id)
         except BaseException:
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())

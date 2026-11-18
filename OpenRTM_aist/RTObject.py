@@ -522,7 +522,8 @@ class RTObject_impl:
             return RTC.OUT_OF_RESOURCES
 
         # -- entering alive state --
-        def toSTR_(x): return " was" if len(x) == 1 else "s were"
+        def toSTR_(x):
+            return " was" if len(x) == 1 else "s were"
         self._rtcout.RTC_INFO("%d execution context%s created.",
                               (len(self._ecMine), toSTR_(self._ecMine)))
 
@@ -790,7 +791,6 @@ class RTObject_impl:
     # virtual ExecutionContext_ptr get_context(UniqueId exec_handle)
 
     def get_context(self, ec_id):
-        global ECOTHER_OFFSET
 
         self._rtcout.RTC_TRACE("get_context(%d)", ec_id)
         # owned EC
@@ -1016,7 +1016,6 @@ class RTObject_impl:
     # UniqueId attach_context(ExecutionContext_ptr exec_context)
 
     def attach_context(self, exec_context):
-        global ECOTHER_OFFSET
         self._rtcout.RTC_TRACE("attach_context()")
         # ID: 0 - (offset-1) : owned ec
         # ID: offset -       : participating ec
@@ -1043,7 +1042,6 @@ class RTObject_impl:
     # UniqueId bindContext(ExecutionContext_ptr exec_context);
 
     def bindContext(self, exec_context):
-        global ECOTHER_OFFSET
         self._rtcout.RTC_TRACE("bindContext()")
         # ID: 0 - (offset-1) : owned ec
         # ID: offset -       : participating ec
@@ -1112,7 +1110,6 @@ class RTObject_impl:
     # ReturnCode_t detach_context(UniqueId exec_handle)
 
     def detach_context(self, ec_id):
-        global ECOTHER_OFFSET
         self._rtcout.RTC_TRACE("detach_context(%d)", ec_id)
         len_ = len(self._ecOther)
 
@@ -3059,7 +3056,6 @@ class RTObject_impl:
     # bool isOwnExecutionContext(RTC::UniqueId ec_id);
 
     def isOwnExecutionContext(self, ec_id):
-        global ECOTHER_OFFSET
         if ec_id < ECOTHER_OFFSET:
             return True
         return False
@@ -5251,11 +5247,11 @@ class RTObject_impl:
 
             ec = OpenRTM_aist.ExecutionContextFactory.instance(
             ).createObject(ec_type_)
-            
+
             if not ec:
                 self._rtcout.RTC_ERROR("EC (%s) creation failed.", ec_type_)
                 self._rtcout.RTC_DEBUG("Available EC list: %s",
-                                    OpenRTM_aist.flatten(avail_ec_))
+                                       OpenRTM_aist.flatten(avail_ec_))
                 return RTC.RTC_ERROR
 
             if self._manager:

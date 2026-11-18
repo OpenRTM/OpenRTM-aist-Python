@@ -1614,7 +1614,7 @@ class CorbaURI:
                          "inet:": "corbaloc:iiop:"}
 
         converted = False
-        
+
         for k, v in protocols_str.items():
             if uri.startswith(k):
                 uri = v + uri[len(k):]
@@ -1627,7 +1627,6 @@ class CorbaURI:
                            "shmiop:": "corbaloc:shmiop:",
                            "htiop:": "corbaloc:htiop:"}
 
-        
         if not converted:
             for k, v in protocols_o_str.items():
                 if uri.startswith(k):
@@ -1648,7 +1647,6 @@ class CorbaURI:
                 self._fragment = objkey
                 self._uri = uri + "/" + self._fragment
 
-    
             host_port = [s.strip() for s in rest.split(":")]
             if len(host_port) == 4:
                 self._host = host_port[2]
@@ -1664,14 +1662,12 @@ class CorbaURI:
             rest, sep, fragment = uri.partition("#")
             self._fragment = fragment if sep else ""
 
-
             if self._fragment:
                 self._uri = uri
             else:
                 self._fragment = objkey
                 self._uri = uri + "#" + self._fragment
 
-    
             host_port = [s.strip() for s in rest.split(":")]
             if len(host_port) == 4:
                 self._host = host_port[2]
@@ -1682,8 +1678,6 @@ class CorbaURI:
             elif len(host_port) == 3:
                 self._host = host_port[2]
 
-
-            
         elif "://" in uri:
             import urllib.parse
             ret = urllib.parse.urlparse(uri)
@@ -1727,7 +1721,7 @@ class CorbaURI:
                     pass
             elif len(host_port) == 1:
                 self._host = host_port[0]
-                
+
     ##
     # @if jp
     #
@@ -1889,7 +1883,7 @@ class RTCURIObject:
         pos = uri.find("://")
         if pos >= 0:
             ptype = uri[0:pos]
-            addrname = uri[pos+3:]
+            addrname = uri[pos + 3:]
             protocol = ""
 
             if ptype.find("rtcname") == 0:
@@ -1910,7 +1904,7 @@ class RTCURIObject:
             pos = ptype.find(".")
             seprtc = "/"
             if pos >= 0:
-                protocol = ptype[pos+1:]
+                protocol = ptype[pos + 1:]
                 if protocol == "http" or protocol == "https" or protocol == "ws" or protocol == "wss":
                     seprtc = "#"
 
@@ -1919,7 +1913,7 @@ class RTCURIObject:
 
             if pos >= 0:
                 hostport = addrname[0:pos]
-                self._rtcpath = addrname[pos+1:]
+                self._rtcpath = addrname[pos + 1:]
             else:
                 hostport = addrname
 

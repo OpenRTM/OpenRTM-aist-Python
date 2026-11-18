@@ -773,12 +773,11 @@ class Properties:
             pline += _str
             # if pline == "":
             # continue
-            
+
             end = len(_str.rstrip(" \t")) - 1
             if end >= 0 and _str[end] == "\\" and not OpenRTM_aist.isEscaped(_str, end):
                 if end != len(_str) - 1:
                     print(f"Warning: Trailing whitespace after '\\' prevents line continuation: {_str}")
-
 
             key = []
             value = []
@@ -1145,8 +1144,7 @@ class Properties:
         length = len(_str)
 
         while i < length:
-            if (_str[i] == ":" or _str[i] ==
-                    "=") and not OpenRTM_aist.isEscaped(_str, i):
+            if (_str[i] == ":" or _str[i] == "=") and not OpenRTM_aist.isEscaped(_str, i):
                 key.append(_str[0:i])
                 value.append(_str[i + 1:])
                 return

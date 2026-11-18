@@ -484,9 +484,9 @@ class ExecutionContextWorker:
               "ACTIVE_STATE",
               "ERROR_STATE"]
 
-        def f(
-            x): return st[x._v] if x._v >= RTC.CREATED_STATE._v and x._v <= RTC.ERROR_STATE._v else ""
-        return f(state)
+        if RTC.CREATED_STATE._v <= state._v <= RTC.ERROR_STATE._v:
+            return st[state._v]
+        return ""
 
     ##
     # @if jp

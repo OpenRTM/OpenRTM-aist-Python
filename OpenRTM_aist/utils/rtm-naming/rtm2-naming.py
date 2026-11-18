@@ -16,6 +16,7 @@
 
 import platform
 import os
+import subprocess
 import sys
 default_orb = "omniORB"
 orb = default_orb
@@ -63,12 +64,11 @@ def find_nscmd(ns_cmd, ns_env=""):
 
 
 def del_file(file_path):
-    if sys.platform == "win32":
-        delcmd = "del /F "
-    else:
-        delcmd = "rm -f "
-    delcmd += file_path
-    return os.system(delcmd)
+    try:
+        os.remove(file_path)
+    except FileNotFoundError:
+        pass
+    return 0
 
 
 def usage():
@@ -111,11 +111,9 @@ def omninames(port="", endpoint=""):
         print("Not found omniNames.")
         sys.exit()
 
-    cmd = omniNames
-    cmd += " -start " + str(port)
-    cmd += " -logdir \"" + str(log_path) + "\""
+    cmd = [omniNames, "-start", str(port), "-logdir", log_path]
     print(cmd)
-    os.system(cmd)
+    subprocess.call(cmd)
 
 
 if __name__ == "__main__":

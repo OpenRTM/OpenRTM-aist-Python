@@ -266,7 +266,7 @@ class PortBase(RTC__POA.PortService):
 
         self.updateConnectors()
 
-        guard = OpenRTM_aist.ScopedLock(self._profile_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._profile_mutex)
 
         prof = RTC.PortProfile(self._profile.name,
                                self._profile.interfaces,
@@ -354,7 +354,7 @@ class PortBase(RTC__POA.PortService):
 
         self.updateConnectors()
 
-        guard = OpenRTM_aist.ScopedLock(self._profile_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._profile_mutex)
         return self._profile.connector_profiles
 
     ##
@@ -389,7 +389,7 @@ class PortBase(RTC__POA.PortService):
 
         self.updateConnectors()
 
-        guard = OpenRTM_aist.ScopedLock(self._profile_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._profile_mutex)
         index = OpenRTM_aist.CORBA_SeqUtil.find(self._profile.connector_profiles,
                                                 self.find_conn_id(connector_id))
         if index < 0:
@@ -1079,7 +1079,7 @@ class PortBase(RTC__POA.PortService):
 
     def setName(self, name):
         self._rtcout.RTC_TRACE("setName(%s)", name)
-        guard = OpenRTM_aist.ScopedLock(self._profile_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._profile_mutex)
         self._profile.name = name
         return
 
@@ -1118,7 +1118,7 @@ class PortBase(RTC__POA.PortService):
 
     def getProfile(self):
         self._rtcout.RTC_TRACE("getProfile()")
-        guard = OpenRTM_aist.ScopedLock(self._profile_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._profile_mutex)
         return self._profile
 
     ##
@@ -1146,7 +1146,7 @@ class PortBase(RTC__POA.PortService):
 
     def setPortRef(self, port_ref):
         self._rtcout.RTC_TRACE("setPortRef()")
-        guard = OpenRTM_aist.ScopedLock(self._profile_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._profile_mutex)
         self._profile.port_ref = port_ref
 
     ##
@@ -1175,7 +1175,7 @@ class PortBase(RTC__POA.PortService):
 
     def getPortRef(self):
         self._rtcout.RTC_TRACE("getPortRef()")
-        guard = OpenRTM_aist.ScopedLock(self._profile_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._profile_mutex)
         return self._profile.port_ref
 
     ##
@@ -1204,7 +1204,7 @@ class PortBase(RTC__POA.PortService):
         self._ownerInstanceName = prof.instance_name
         self._rtcout.RTC_TRACE("setOwner(%s)", self._ownerInstanceName)
 
-        guard = OpenRTM_aist.ScopedLock(self._profile_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._profile_mutex)
         plist = self._profile.name.split(".")
         if not self._ownerInstanceName:
             self._rtcout.RTC_ERROR("Owner is not set.")
@@ -1913,7 +1913,7 @@ class PortBase(RTC__POA.PortService):
 
     def setUUID(self, connector_profile):
         connector_profile.connector_id = self.getUUID()
-        assert(connector_profile.connector_id != "")
+        assert (connector_profile.connector_id != "")
 
     ##
     # @if jp
@@ -2084,7 +2084,7 @@ class PortBase(RTC__POA.PortService):
     # bool eraseConnectorProfile(const char* id);
 
     def eraseConnectorProfile(self, id_):
-        guard = OpenRTM_aist.ScopedLock(self._profile_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._profile_mutex)
 
         index = OpenRTM_aist.CORBA_SeqUtil.find(self._profile.connector_profiles,
                                                 self.find_conn_id(id_))
@@ -2267,7 +2267,7 @@ class PortBase(RTC__POA.PortService):
     # void updateConnectors()
 
     def updateConnectors(self):
-        guard = OpenRTM_aist.ScopedLock(self._profile_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._profile_mutex)
 
         connector_ids = []
         clist = self._profile.connector_profiles
@@ -2440,7 +2440,7 @@ class PortBase(RTC__POA.PortService):
                                   for s in serializertypes.split(",")]
         if marshaling_type not in enabledSerializerTypes:
             self._rtcout.RTC_ERROR(
-                marshaling_type+" is illegal marshaling type.")
+                marshaling_type + " is illegal marshaling type.")
             return False
         return True
 

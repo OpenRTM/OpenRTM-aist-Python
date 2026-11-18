@@ -223,7 +223,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         self._cond = cond
         self._writable_listener.setGuard(cond)
         self._condition_listener.setGuard(cond)
-        
+
     ##
     # @if jp
     #
@@ -264,6 +264,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     # @endif
     #
+
     def init(self, prop):
         super(CSPEventPort, self).init(prop)
 
@@ -579,8 +580,8 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
 
     def notify_connect(self, connector_profile):
         ret, prof = super(CSPEventPort, self).notify_connect(connector_profile)
-        guard_con = OpenRTM_aist.ScopedLock(self._connector_mutex)
-        
+        _ = OpenRTM_aist.ScopedLock(self._connector_mutex)
+
         for con in self._connectors:
             from OpenRTM_aist.CSPArbitration import arbiter
             arbiter.connect(con, self)
@@ -791,7 +792,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     def getDataZeroMode(self, con, retry):
         ret = con.isReadable(retry)
-        
+
         if ret:
             #guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond, True)
             # if not self._syncmode:
@@ -829,7 +830,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     def dataPullZeroMode(self):
 
-        guard_con = OpenRTM_aist.ScopedLock(self._connector_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._connector_mutex)
         for con in self._connectors:
             ret, value = self.getDataZeroMode(con, False)
 
@@ -913,7 +914,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
             ret, value = self.dataPullZeroMode()
 
         guard.lock()
-        
+
         if ret:
             self._value = value
             self._selected_value_ready = True
@@ -1094,8 +1095,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
             with self._ctrl._cond:
                 # Do not advertise a push receiver while pulling. Recheck
                 # offers made during the probe before atomically waiting.
-                if (generation != self._ctrl._offer_generation
-                        and time.monotonic() < deadline):
+                if (generation != self._ctrl._offer_generation and time.monotonic() < deadline):
                     continue
                 self._ctrl._waiting = True
                 self._ctrl._cond.notify_all()
@@ -1253,7 +1253,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @endif
         #
         def setManager(self, manager):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = manager
 
         ##
@@ -1294,9 +1294,9 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @endif
         #
         def setGuard(self, cond):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._cond = cond
-            
+
         ##
         # @if jp
         #
@@ -1314,9 +1314,8 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @endif
         #
         def clearGuard(self):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._cond = None
-            
 
     ##
     # @if jp
@@ -1339,6 +1338,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     # @endif
     #
+
     class WriteListener(OpenRTM_aist.WriteListenerBase):
         ##
         # @if jp
@@ -1385,7 +1385,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         #
 
         def __call__(self, data):
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            _ = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             self._ctrl._writing = False
             self._ctrl._cond.notifyAll()
             return OpenRTM_aist.BufferStatus.BUFFER_OK
@@ -1496,7 +1496,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @endif
         #
         def setManager(self, manager):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = manager
 
         ##
@@ -1517,7 +1517,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         def releaseManager(self):
             with self._mutex:
                 self._manager = None
-            
+
         ##
         # @if jp
         #
@@ -1537,9 +1537,9 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @endif
         #
         def setGuard(self, cond):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._cond = cond
-            
+
         ##
         # @if jp
         #
@@ -1557,7 +1557,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # @endif
         #
         def clearGuard(self):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._cond = None
 
     ##
@@ -1627,11 +1627,10 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         #
 
         def __call__(self, data):
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            _ = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             self._ctrl._writing = False
             self._ctrl._cond.notifyAll()
             return OpenRTM_aist.BufferStatus.BUFFER_OK
-
 
     ##
     # @if jp
@@ -1654,6 +1653,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     #
     # @endif
     #
+
     class MatchConditionListener(OpenRTM_aist.MatchConditionListenerBase):
         ##
         # @if jp
@@ -1717,9 +1717,10 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         #
         # @endif
         #
+
         def setGuard(self, cond):
             self._cond = cond
-            
+
         ##
         # @if jp
         #
@@ -1739,14 +1740,13 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         def clearGuard(self):
             self._cond = None
 
-        
-
     ##
     # @if jp
     # @brief `WorkerThreadCtrl`の状態と操作をまとめる。
     # @else
     # @brief Encapsulate the state and operations of WorkerThreadCtrl.
     # @endif
+
     class WorkerThreadCtrl:
         ##
         # @if jp

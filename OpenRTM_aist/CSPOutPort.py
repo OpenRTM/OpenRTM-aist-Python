@@ -103,7 +103,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         marshaling_types = OpenRTM_aist.SerializerFactories.instance().getSerializerList(value)
         marshaling_types = OpenRTM_aist.flatten(marshaling_types).lstrip()
         self.addProperty("dataport.marshaling_types", marshaling_types)
-        
+
         self._option = []
 
     ##
@@ -279,7 +279,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     #
     def notify_connect(self, connector_profile):
         ret, prof = super(CSPOutPort, self).notify_connect(connector_profile)
-        guard_con = OpenRTM_aist.ScopedLock(self._connector_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._connector_mutex)
         for con in self._connectors:
             from OpenRTM_aist.CSPArbitration import arbiter
             arbiter.connect(con, self)
@@ -307,7 +307,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     # @endif
     #
     def dataWritable(self, option=[]):
-        guard = OpenRTM_aist.ScopedLock(self._connector_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._connector_mutex)
         for con in self._connectors:
             if con.isWritable(False, option):
                 self._ctrl._searched_connectors = []
@@ -503,7 +503,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
             self.clearGuard()
             return ret == OpenRTM_aist.DataPortStatus.PORT_OK
         return False
-            
+
     ##
     # @if jp
     #
@@ -667,7 +667,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     # @endif
     def setOnWriteConvert(self, on_wconvert):
         self._OnWriteConvert = on_wconvert
-        
+
     ##
     # @if jp
     #
@@ -686,7 +686,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     def setGuard(self, option):
         self._option = option
         self._readable_listener.setGuard(option)
-        
+
     ##
     # @if jp
     #
@@ -832,7 +832,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         # @endif
         #
         def setManager(self, manager):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = manager
 
         ##
@@ -851,9 +851,9 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         # @endif
         #
         def releaseManager(self):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = None
-            
+
         ##
         # @if jp
         #
@@ -871,7 +871,7 @@ class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
         #
         def setGuard(self, option):
             self._option = option
-            
+
         ##
         # @if jp
         #

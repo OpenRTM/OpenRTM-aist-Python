@@ -158,7 +158,7 @@ def MyModuleInit(manager):
     DataInOutInit(manager)
 
     # Create a component
-    comp = manager.createComponent("DataInOut")
+    _ = manager.createComponent("DataInOut")
 
 
 ##

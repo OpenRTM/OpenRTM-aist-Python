@@ -137,7 +137,7 @@ def MyModuleInit(manager):
     DataIn_port3Init(manager)
 
     # Create a component
-    comp = manager.createComponent("DataIn_port3")
+    _ = manager.createComponent("DataIn_port3")
 
 
 ##

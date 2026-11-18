@@ -175,10 +175,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
         if self._shmem is None:
             self._rtcout.RTC_TRACE(
-                "create():memory_size=" +
-                str(memory_size) +
-                ",shm_address=" +
-                str(shm_address))
+                "create():memory_size=" + str(memory_size) + ",shm_address=" + str(shm_address))
             self._memory_size = memory_size
             self._shm_address = shm_address
 
@@ -232,10 +229,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
     def open_memory(self, memory_size, shm_address):
         self._rtcout.RTC_TRACE(
-            "open():memory_size=" +
-            str(memory_size) +
-            ",shm_address=" +
-            str(shm_address))
+            "open():memory_size=" + str(memory_size) + ",shm_address=" + str(shm_address))
         self._memory_size = memory_size
         self._shm_address = shm_address
         if self._shmem is None:

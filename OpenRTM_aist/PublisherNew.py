@@ -120,7 +120,6 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
         self._buffer = None
         return
 
-
     ##
     # @if jp
     # @brief PushPolicy の設定
@@ -129,6 +128,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # void PublisherNew::setPushPolicy(const coil::Properties& prop)
+
     def setPushPolicy(self, prop):
         push_policy = prop.getProperty("publisher.push_policy", "new")
         self._rtcout.RTC_DEBUG("push_policy: %s", push_policy)
@@ -613,7 +613,7 @@ class PublisherNew(OpenRTM_aist.PublisherBase):
     #
     # int PublisherNew::svc(void)
     def svc(self):
-        guard = OpenRTM_aist.ScopedLock(self._retmutex)
+        _ = OpenRTM_aist.ScopedLock(self._retmutex)
 
         if self._pushPolicy == self.PUBLISHER_POLICY_ALL:
             self._retcode = self.pushAll()

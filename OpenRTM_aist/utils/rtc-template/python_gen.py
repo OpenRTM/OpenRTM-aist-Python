@@ -16,8 +16,8 @@
 #  $Id: python_gen.py 775 2008-07-28 16:14:45Z n-ando $
 #
 
-import re
 import os
+import subprocess
 import gen_base
 import string
 import sys
@@ -60,20 +60,20 @@ no_global_idl = ""
 
 module_spec = """\
 [l_name]_spec = ["implementation_id", "[basicInfo.name]",
-		 "type_name",         "[basicInfo.name]",
-		 "description",       "[basicInfo.description]",
-		 "version",           "[basicInfo.version]",
-		 "vendor",            "[basicInfo.vendor]",
-		 "category",          "[basicInfo.category]",
-		 "activity_type",     "[basicInfo.componentType]",
-		 "max_instance",      "[basicInfo.maxInstances]",
-		 "language",          "Python",
-		 "lang_type",         "SCRIPT",
+                 "type_name",         "[basicInfo.name]",
+                 "description",       "[basicInfo.description]",
+                 "version",           "[basicInfo.version]",
+                 "vendor",            "[basicInfo.vendor]",
+                 "category",          "[basicInfo.category]",
+                 "activity_type",     "[basicInfo.componentType]",
+                 "max_instance",      "[basicInfo.maxInstances]",
+                 "language",          "Python",
+                 "lang_type",         "SCRIPT",
 [if-any configurationSet.configuration]
 [for config in configurationSet.configuration]
-		 "conf.default.[config.name]", "[config.defaultValue]",
+                 "conf.default.[config.name]", "[config.defaultValue]",
 [endfor][endif]
-		 ""]
+                 ""]
 """
 
 data_ports = """\
@@ -286,7 +286,7 @@ class python_gen(gen_base.gen_base):
                         break
                     f.close()
                 except IOError:
-                    print("Can't find file:", file)
+                    print("Can't find file:", cons["idl_fname"])
         return
 
     def CreateDataPorts(self, dict):
@@ -331,7 +331,7 @@ class python_gen(gen_base.gen_base):
         if str(_type) == "int":
             return int
         elif str(_type) == "long":
-            return long
+            return int
         elif str(_type) == "float":
             return float
         elif str(_type) == "double":
@@ -352,9 +352,8 @@ class python_gen(gen_base.gen_base):
                 sys.exit(1)
 
             try:
-                cmd = "omniidl -bpython -Wbexample " + \
-                    sidl["idl_fname"]
-                os.system(cmd)
+                subprocess.run(["omniidl", "-bpython", "-Wbexample", os.path.abspath(sidl["idl_fname"])],
+                               check=True)
             except BaseException:
                 sys.stderr.write("Generate error: "
                                  + sidl["impl_py"] + "\n")
@@ -377,9 +376,8 @@ class python_gen(gen_base.gen_base):
                     sys.exit(1)
 
                 try:
-                    cmd = "omniidl -bpython " + \
-                        cons["idl_fname"]
-                    os.system(cmd)
+                    subprocess.run(["omniidl", "-bpython", os.path.abspath(cons["idl_fname"])],
+                                   check=True)
                 except BaseException:
                     sys.stderr.write(
                         "Generate error: omniidl -bpython " +

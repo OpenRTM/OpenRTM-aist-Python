@@ -363,7 +363,6 @@ class IsWritableListenerBase(object):
         return False
 
 
-
 ##
 # @if jp
 # @class MatchConditionListenerBase

@@ -17,7 +17,7 @@
 
 import OpenRTM__POA
 import OpenRTM
-from ComponentObserverConsumer import *
+from ComponentObserverConsumer import ComponentObserverConsumer
 import OpenRTM_aist
 import SDOPackage
 import RTC
@@ -200,6 +200,6 @@ class TestComponentObserverConsumer(unittest.TestCase):
         return
 
 
-############### test #################
+# test #################
 if __name__ == '__main__':
     unittest.main()

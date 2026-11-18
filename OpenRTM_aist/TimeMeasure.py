@@ -73,7 +73,6 @@ class Time:
     #
     # @endif
     def __init__(self):
-        global usec_per_sec
         tm = time.time()
         tm_f = float(tm - long(tm))     # 小数部の取り出し
         self.sec = long(tm - tm_f)   # 整数部の取り出し
@@ -98,7 +97,6 @@ class Time:
     #
     # @endif
     def __sub__(self, tm):
-        global usec_per_sec
 
         res = Time()
 
@@ -119,7 +117,6 @@ class Time:
         return res
 
     def gettimeofday(self):
-        global usec_per_sec
 
         tm = time.time()
         tm_f = float(tm - long(tm))     # 小数部の取り出し
@@ -151,8 +148,6 @@ class Time:
             class LARGE_INTEGER(Structure):
                 _fields_ = [('low', c_ulong),
                             ('high', c_long)]
-
-            global usec_per_sec
 
             tm = long(tv.tv_sec * 1e6) + long(tv.tv_usec)
             st = SYSTEMTIME(0, 0, 0, 0, 0, 0, 0, 0)
@@ -271,7 +266,6 @@ class TimeMeasure:
 
     def getStatistics(self, max_interval=None, min_interval=None,
                       mean_interval=None, stddev=None):
-        global ULLONG_MAX
 
         if not max_interval and not min_interval and not mean_interval and not stddev:
             max_i = [0.0]

@@ -35,7 +35,7 @@ import OpenRTM_aist.StaticFSM_pyfsm as StaticFSM
 import OpenRTM_aist.EventPort_pyfsm as EventPort
 
 
-import MicrowaveFsm_pyfsm
+import MicrowaveFsm_pyfsm as MicrowaveFsm
 
 microwave_spec = ["implementation_id", "Microwave",
                   "type_name", "Microwave",
@@ -149,7 +149,7 @@ def MyModuleInit(manager):
     MicrowaveInit(manager)
 
     # Create a component
-    comp = manager.createComponent("Microwave")
+    _ = manager.createComponent("Microwave")
 
 
 ##

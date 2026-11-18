@@ -120,7 +120,7 @@ class PeriodicTask(OpenRTM_aist.Task):
     # virtual void activate();
 
     def activate(self):
-        guard = OpenRTM_aist.ScopedLock(self._alive.mutex)
+        _ = OpenRTM_aist.ScopedLock(self._alive.mutex)
         if not self._func:
             return
 
@@ -147,7 +147,7 @@ class PeriodicTask(OpenRTM_aist.Task):
     # virtual void finalize();
 
     def finalize(self):
-        guard = OpenRTM_aist.ScopedLock(self._alive.mutex)
+        _ = OpenRTM_aist.ScopedLock(self._alive.mutex)
         self._alive.value = False
 
         self._suspend.cond.acquire()
@@ -334,7 +334,7 @@ class PeriodicTask(OpenRTM_aist.Task):
     # virtual TimeMeasure::Statistics getExecStat();
 
     def getExecStat(self):
-        guard = OpenRTM_aist.ScopedLock(self._execStat.mutex)
+        _ = OpenRTM_aist.ScopedLock(self._execStat.mutex)
         return self._execStat.stat
 
     ##
@@ -347,7 +347,7 @@ class PeriodicTask(OpenRTM_aist.Task):
     # virtual TimeMeasure::Statistics getPeriodStat();
 
     def getPeriodStat(self):
-        guard = OpenRTM_aist.ScopedLock(self._periodStat.mutex)
+        _ = OpenRTM_aist.ScopedLock(self._periodStat.mutex)
         return self._periodStat.stat
 
     # virtual int svc();
@@ -411,7 +411,7 @@ class PeriodicTask(OpenRTM_aist.Task):
 
     def updateExecStat(self):
         if self._execCount > self._execCountMax:
-            guard = OpenRTM_aist.ScopedLock(self._execStat.mutex)
+            _ = OpenRTM_aist.ScopedLock(self._execStat.mutex)
 
             self._execStat.stat = self._execTime.getStatistics()
             self._execCount = 0
@@ -423,7 +423,7 @@ class PeriodicTask(OpenRTM_aist.Task):
 
     def updatePeriodStat(self):
         if self._periodCount > self._periodCountMax:
-            guard = OpenRTM_aist.ScopedLock(self._periodStat.mutex)
+            _ = OpenRTM_aist.ScopedLock(self._periodStat.mutex)
             self._periodStat.stat = self._periodTime.getStatistics()
             self._periodCount = 0
 

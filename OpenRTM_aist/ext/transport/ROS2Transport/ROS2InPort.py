@@ -249,7 +249,7 @@ class ROS2InPort(OpenRTM_aist.InPortProvider):
     #
 
     def put(self, data):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         try:
             self._rtcout.RTC_PARANOID("ROS2InPort.put()")
             if not self._connector:

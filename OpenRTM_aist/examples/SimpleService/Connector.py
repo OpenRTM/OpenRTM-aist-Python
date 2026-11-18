@@ -38,7 +38,7 @@ def main():
             consobj = consumer.getObject()._narrow(RTC.RTObject)
             pcons = consobj.get_ports()
             break
-        except:
+        except BaseException:
             time.sleep(0.1)
 
     pcons[0].disconnect_all()
@@ -51,7 +51,7 @@ def main():
             provobj = provider.getObject()._narrow(RTC.RTObject)
             prov = provobj.get_ports()
             break
-        except:
+        except BaseException:
             time.sleep(0.1)
 
     prov[0].disconnect_all()

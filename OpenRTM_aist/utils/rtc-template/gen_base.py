@@ -18,10 +18,10 @@
 #
 
 import os
+from builtins import input as raw_input
 import re
 import time
 import yat
-import StringIO
 
 
 class gen_base:
@@ -34,20 +34,20 @@ class gen_base:
         if (os.access(fname, os.F_OK)):
             ans = raw_input("\"" + fname + "\"" + msg)
             if (ans == "y" or ans == "Y"):
-                return file(fname, wmode), None
+                return open(fname, wmode), None
             elif (ans == "m" or ans == "M"):
-                f = file(fname, "r")
+                f = open(fname, "r")
                 lines = []
                 for l in f.readlines():
                     lines.append(l.rstrip())
                 f.close()
                 oldfname = fname + ".old." + time.strftime("%y%m%d%H%M%S")
                 os.rename(fname, oldfname)
-                return file(fname, wmode), lines
+                return open(fname, wmode), lines
             else:
                 return None, None
         else:
-            return file(fname, wmode), None
+            return open(fname, wmode), None
         return
 
     def replace_tags(self, lines, data):
@@ -72,7 +72,7 @@ class gen_base:
                 tag_name = ""
                 continue
 
-            if in_tag != True:
+            if not in_tag:
                 ret_lines += l + "\n"
 
         return ret_lines

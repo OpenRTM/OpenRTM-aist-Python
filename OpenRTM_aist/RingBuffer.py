@@ -156,7 +156,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
 
     def length(self, n=None):
         if n is None:
-            guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+            _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
             return self._length
 
         if n < 1:
@@ -192,7 +192,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     # ReturnCode reset()
 
     def reset(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         self._fillcount = 0
         self._wcount = 0
         self._wpos = 0
@@ -222,7 +222,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     # DataType* wptr(long int n = 0)
 
     def wptr(self, n=0):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._buffer[(self._wpos + n + self._length) % self._length]
 
     ##
@@ -315,7 +315,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     # ReturnCode put(const DataType& value)
 
     def put(self, value):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         self._buffer[self._wpos] = value
         return OpenRTM_aist.BufferStatus.BUFFER_OK
 
@@ -431,7 +431,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     # size_t writable() const
 
     def writable(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._length - self._fillcount
 
     ##
@@ -456,7 +456,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     # bool full(void) const
 
     def full(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._length == self._fillcount
 
     ##
@@ -480,7 +480,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     # @endif
 
     def rptr(self, n=0):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._buffer[(self._rpos + n + self._length) % self._length]
 
     ##
@@ -567,7 +567,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     # ReturnCode get(DataType& value)
 
     def get(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return OpenRTM_aist.BufferStatus.BUFFER_OK, self._buffer[self._rpos]
 
     ##
@@ -686,7 +686,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     # size_t readable() const
 
     def readable(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._fillcount
 
     ##
@@ -711,7 +711,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     # bool empty(void) const
 
     def empty(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._fillcount == 0
 
     # void initLength(const coil::Properties& prop)

@@ -20,7 +20,6 @@
 import OpenRTM_aist
 import omniORB
 
-import struct
 import OpenSpliceMessageInfo
 import RTC
 import ddsutil

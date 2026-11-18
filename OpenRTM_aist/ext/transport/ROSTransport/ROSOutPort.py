@@ -20,10 +20,7 @@
 import OpenRTM_aist
 from ROSTopicManager import ROSTopicManager
 import ROSMessageInfo
-try:
-    import xmlrpclib
-except BaseException:
-    import xmlrpc.client as xmlrpclib
+import xmlrpc.client as xmlrpclib
 from rosgraph.network import write_ros_handshake_header
 import rosgraph.network
 try:
@@ -33,7 +30,6 @@ except ImportError:
 import socket
 import select
 import time
-import sys
 import threading
 import os
 
@@ -187,7 +183,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         if OpenRTM_aist.toBool(prop.getProperty(
                 "ros.node.anonymous"), "YES", "NO", False):
             self._callerid = self._callerid + "_" + \
-                str(os.getpid()) + "_" + str(int(time.time()*1000))
+                str(os.getpid()) + "_" + str(int(time.time() * 1000))
 
         self._rtcout.RTC_VERBOSE("caller id: %s", self._callerid)
 
@@ -302,7 +298,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         self._topicmgr = ROSTopicManager.instance()
         sub = self._topicmgr.getSubscriberLink(client_sock)
         if sub is not None:
-            guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
             sub.setTopic(topic_name)
             sub.setCallerID(caller_id)
             sub.setStatBytes(stat_bytes)
@@ -347,7 +343,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
 
         ret = self.PORT_OK
         self._message_data_sent += len(data)
-        guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
         for connector in self._tcp_connecters[:]:
             try:
                 connector.sendall(data)
@@ -357,8 +353,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
                     self._topicmgr.removeSubscriberLink(connector.getConnection())
                 except OSError as e:
                     self._rtcout.RTC_ERROR(e)
-                    
-                    
+
                 # connector.shutdown(socket.SHUT_RDWR)
 
                 #ret = self.CONNECTION_LOST

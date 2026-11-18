@@ -189,7 +189,6 @@ class LocalServiceAdmin:
     #                        ::RTM::LocalServiceProfile& prof);
 
     def getServiceProfile(self, name):
-        global services_mutex
         guard_ = OpenRTM_aist.ScopedLock(services_mutex)
         for svc_ in self._services:
             if name == svc_.getProfile().name:
@@ -247,7 +246,6 @@ class LocalServiceAdmin:
     # bool addLocalService(::RTM::LocalServiceBase* service);
 
     def addLocalService(self, service):
-        global services_mutex
         if not service:
             self._rtcout.RTC_ERROR(
                 "Invalid argument: addLocalService(service == NULL)")
@@ -274,7 +272,6 @@ class LocalServiceAdmin:
     # bool removeLocalService(const std::string name);
 
     def removeLocalService(self, name):
-        global services_mutex
         self._rtcout.RTC_TRACE("removeLocalService(%s)", name)
         guard_ = OpenRTM_aist.ScopedLock(services_mutex)
 
@@ -323,7 +320,6 @@ class LocalServiceAdmin:
 
     def instance():
         global localserviceadmin
-        global services_mutex
 
         if localserviceadmin is None:
             guard_ = OpenRTM_aist.ScopedLock(services_mutex)

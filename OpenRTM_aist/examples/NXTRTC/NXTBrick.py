@@ -4,8 +4,8 @@
 
 from __future__ import print_function
 import nxt.locator
-from nxt.sensor import *
-from nxt.motor import *
+from nxt.sensor import LightSensor, SoundSensor, TouchSensor, UltrasonicSensor, PORT_1, PORT_2, PORT_3, PORT_4
+from nxt.motor import MODE_MOTOR_ON, MODE_REGULATED, Motor, PORT_A, PORT_B, PORT_C, REGULATION_MOTOR_SYNC, RUN_STATE_RUNNING
 import time
 
 

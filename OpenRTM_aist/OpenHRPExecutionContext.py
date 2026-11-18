@@ -60,7 +60,7 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
         if not self.isRunning():
             return
 
-        guard = OpenRTM_aist.ScopedLock(self._tickmutex)
+        _ = OpenRTM_aist.ScopedLock(self._tickmutex)
 
         OpenRTM_aist.ExecutionContextBase.invokeWorkerPreDo(
             self)  # update state
@@ -270,12 +270,12 @@ class OpenHRPExecutionContext(OpenRTM_aist.ExecutionContextBase,
         return OpenRTM_aist.ExecutionContextBase.getProfile(self)
 
     def onAddedComponent(self, rtobj):
-        guard = OpenRTM_aist.ScopedLock(self._tickmutex)
+        _ = OpenRTM_aist.ScopedLock(self._tickmutex)
         self._worker.updateComponentList()
         return RTC.RTC_OK
 
     def onRemovedComponent(self, rtobj):
-        guard = OpenRTM_aist.ScopedLock(self._tickmutex)
+        _ = OpenRTM_aist.ScopedLock(self._tickmutex)
         self._worker.updateComponentList()
         return RTC.RTC_OK
 

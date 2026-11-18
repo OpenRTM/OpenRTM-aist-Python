@@ -118,4 +118,3 @@ default_config = ["config.version", OpenRTM_aist.openrtm_version,
                   "manager.modules.Docker.create_comp", "NO",
                   "manager.modules.Docker.build_comp", "YES"
                   ]
-

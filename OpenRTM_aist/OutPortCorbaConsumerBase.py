@@ -159,7 +159,6 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
     #
     # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
 
-
     def subscribeInterface(self, properties):
         self._rtcout.RTC_TRACE("subscribeInterface()")
         key = self._outportIorKey(properties)

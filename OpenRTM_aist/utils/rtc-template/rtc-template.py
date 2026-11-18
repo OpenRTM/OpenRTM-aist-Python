@@ -708,7 +708,7 @@ def FindIdlFile(opts, ifname):
                 print("IDL file not found: ", arg)
                 sys.exit(1)
             t = fd.read()
-            if None != re.compile(_re_text).search(t):
+            if re.compile(_re_text).search(t) is not None:
                 fd.close()
                 return fname
             fd.close()
@@ -923,7 +923,7 @@ def main():
     CreateId(data)
     PickupIDLFiles(data)
 
-    if not 'fname' in data:
+    if 'fname' not in data:
         data['fname'] = data['basicInfo']['name']
     backends.generate_code(data, opts)
 

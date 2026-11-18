@@ -9,7 +9,6 @@
 #
 
 
-import threading
 import os
 import multiprocessing
 import RTC
@@ -97,7 +96,7 @@ class TestSSLTransport(unittest.TestCase):
     def test_Connect(self):
 
         prop = OpenRTM_aist.Properties()
-        ret = OpenRTM_aist.connect(
+        _ = OpenRTM_aist.connect(
             "con1", prop, self.inport_obj, self.outport_obj)
 
         self.queue.put("")
@@ -108,6 +107,6 @@ class TestSSLTransport(unittest.TestCase):
         # self.outport_obj.disconnect_all()
 
 
-############### test #################
+# test #################
 if __name__ == '__main__':
     unittest.main()

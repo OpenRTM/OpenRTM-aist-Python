@@ -185,10 +185,9 @@ class ROS2TopicManager(object):
     # @endif
 
     def createPublisher(self, msgtype, topic, qos=None):
-        global mutex
         if qos is None:
             qos = QoSProfile(depth=10)
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        _ = OpenRTM_aist.ScopedLock(mutex)
         if self._node:
             return self._node.create_publisher(msgtype, topic, qos)
         return None
@@ -217,10 +216,9 @@ class ROS2TopicManager(object):
     #
     # @endif
     def createSubscriber(self, msgtype, topic, listener, qos=None):
-        global mutex
         if qos is None:
             qos = QoSProfile(depth=10)
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        _ = OpenRTM_aist.ScopedLock(mutex)
         if self._node:
             return self._node.create_subscription(msgtype, topic, listener, qos)
         return None
@@ -245,9 +243,8 @@ class ROS2TopicManager(object):
 
     def init(prop):
         global manager
-        global mutex
 
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        _ = OpenRTM_aist.ScopedLock(mutex)
         if manager is None:
             candidate = ROS2TopicManager()
             candidate.start(prop)
@@ -289,9 +286,8 @@ class ROS2TopicManager(object):
 
     def shutdown_global():
         global manager
-        global mutex
 
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        _ = OpenRTM_aist.ScopedLock(mutex)
         if manager is not None:
             manager.shutdown()
 
@@ -398,7 +394,7 @@ class ROS2TopicManager(object):
         try:
             history_depth = int(prop.getProperty(
                 "history.depth"))
-        except ValueError as error:
+        except ValueError:
             pass
             # self._rtcout.RTC_ERROR(error)
 
@@ -449,7 +445,7 @@ class ROS2TopicManager(object):
             sec = int(sec_str)
             nanosec = int(nanosec_str)
             return DDSDuration(seconds=sec, nanoseconds=nanosec)
-        except ValueError as error:
+        except ValueError:
             return None
             # self._rtcout.RTC_ERROR(error)
         return None

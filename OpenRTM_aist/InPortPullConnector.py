@@ -411,7 +411,6 @@ class InPortPullConnector(OpenRTM_aist.InPortConnector):
         if self._consumer:
             self._consumer.unsubscribeInterface(prop)
 
-
     def setDataType(self, data):
         OpenRTM_aist.InPortConnector.setDataType(self, data)
         self._serializer = OpenRTM_aist.SerializerFactories.instance(

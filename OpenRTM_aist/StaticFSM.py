@@ -49,7 +49,7 @@ def fsm_topstate(TOP):
 
         def on_init(self, *argv):
             ret.call_init(self, ret, *argv)
-            
+
     STATE.__qualname__ = f"STATE_{id(TOP)}_{id(object())}"
     return STATE
 
@@ -87,7 +87,7 @@ def fsm_substate(superstate):
 
             def on_init(self, *argv):
                 ret.call_init(self, cls, *argv)
-                
+
         STATE.__qualname__ = f"STATE_{id(cls)}_{id(object())}"
 
         return STATE

@@ -166,7 +166,9 @@
 # result:
 # [bracket]
 #
-import string
+import ast
+import json
+import operator
 import re
 import sys
 
@@ -244,9 +246,16 @@ class Template:
         return
 
     def generate(self, dict):
-        namespace = {}
-        exec(self.script, globals(), namespace)
-        return namespace["Generator"](self.token, dict).generate()
+        renderer = GeneratorBase(self.token, dict)
+        generated_class, = ast.parse(self.script).body
+        process = next(method for method in generated_class.body
+                       if isinstance(method, ast.FunctionDef) and method.name == "process")
+        try:
+            _TemplateProgram(renderer).run(process.body)
+        except YATException as exc:
+            renderer.print_error(exc)
+            sys.exit(-1)
+        return renderer.text
 
     def get_script(self):
         return self.script
@@ -295,7 +304,7 @@ class Template:
     def __proc_bracket(self):
         if self.token[self.index] is None:
             return
-        cmd_text = "self.write(\"" + self.begin_mark + "\")"
+        cmd_text = "self.write(%s)" % json.dumps(self.begin_mark, ensure_ascii=False)
         self.__write_cmd(cmd_text)
         return True
 
@@ -350,7 +359,7 @@ class Template:
         return True
 
     def __cmd(self, args):
-        cmd_text = "self.write_dict(\"%s\")" % (args[0])
+        cmd_text = "self.write_dict(%s)" % json.dumps(args[0], ensure_ascii=False)
         self.__write_cmd(cmd_text)
 
     # ------------------------------------------------------------
@@ -371,10 +380,12 @@ class Template:
         """
         key = args[1]
         directive = args[3]
+        if not key.isidentifier():
+            raise InvalidDirective(self.lineno(), "invalid loop key: " + key)
         # (key)     : variable string of index variable for [for] block
         # (key)_list: list value of specified directive
         # (key)_len : length of the list
-        cmd_text = "%s_list = self.get_list(\"%s\")" % (key, directive)
+        cmd_text = "%s_list = self.get_list(%s)" % (key, json.dumps(directive, ensure_ascii=False))
         self.__write_cmd(cmd_text)
         cmd_text = "%s_len = len(%s_list)" % (key, key)
         self.__write_cmd(cmd_text)
@@ -416,8 +427,10 @@ class Template:
         """
         directive = args[1]
         string = args[3]
-        cmd_text = "if self.get_text(\"%s\") == \"%s\":" % \
-            (directive, string)
+        if string.startswith(('"', "'")):
+            string = ast.literal_eval(string)
+        cmd_text = "if self.get_text(%s) == %s:" % (
+            json.dumps(directive, ensure_ascii=False), json.dumps(string, ensure_ascii=False))
         self.__write_cmd(cmd_text)
         self.__push_level()
         self.cmd_cxt.append("if")
@@ -428,8 +441,10 @@ class Template:
             raise UnmatchedBlock(self.lineno(), "elif")
         directive = args[1]
         string = args[3]
-        cmd_text = "elif self.get_text(\"%s\") == \"%s\":" % \
-            (directive, string)
+        if string.startswith(('"', "'")):
+            string = ast.literal_eval(string)
+        cmd_text = "elif self.get_text(%s) == %s:" % (
+            json.dumps(directive, ensure_ascii=False), json.dumps(string, ensure_ascii=False))
         self.__pop_level()
         self.__write_cmd_noindex(cmd_text)
         self.__push_level()
@@ -445,8 +460,10 @@ class Template:
                    "last": "if %s_index == %s_len - 1:"}
         key = args[1]
         cmd = args[3]
-        if len(self.re_number.findall(cmd)) == 1:
-            cmd_text = "if %s_index == %s:" % (key, cmd)
+        if not key.isidentifier():
+            raise InvalidDirective(self.lineno(), "invalid loop key: " + key)
+        if self.re_number.fullmatch(cmd):
+            cmd_text = "if %s_index == %s:" % (key, int(cmd))
         elif cmd in cmdlist:
             if cmd == "last":
                 cmd_text = cmdlist[cmd] % (key, key)
@@ -469,8 +486,10 @@ class Template:
                    "last": "elif %s_index == %s_len - 1:"}
         key = args[1]
         cmd = args[3]
-        if len(self.re_number.findall(cmd)) == 1:
-            cmd_text = "elif %s_index == %s:" % (key, cmd)
+        if not key.isidentifier():
+            raise InvalidDirective(self.lineno(), "invalid loop key: " + key)
+        if self.re_number.fullmatch(cmd):
+            cmd_text = "elif %s_index == %s:" % (key, int(cmd))
         elif cmd in cmdlist:
             if cmd == "last":
                 cmd_text = cmdlist[cmd] % (key, key)
@@ -485,7 +504,7 @@ class Template:
     # [if-any] command
     def __if_any_cmd(self, args):
         directive = args[1]
-        cmd_text = "if self.has_key(\"%s\"):" % (directive)
+        cmd_text = "if self.has_key(%s):" % json.dumps(directive, ensure_ascii=False)
         self.__write_cmd(cmd_text)
         self.__push_level()
         self.cmd_cxt.append("if-any")
@@ -495,7 +514,7 @@ class Template:
         if self.cmd_cxt[-1] != "if-any":
             raise UnmatchedBlock(self.lineno(), "elif-any")
         directive = args[1]
-        cmd_text = "if self.has_key(\"%s\"):" % (directive)
+        cmd_text = "if self.has_key(%s):" % json.dumps(directive, ensure_ascii=False)
         self.__pop_level()
         self.__write_cmd_noindex(cmd_text)
         self.__push_level()
@@ -583,6 +602,75 @@ class Generator(GeneratorBase):
 """
 
 
+class _TemplateProgram:
+    """Interpret the small set of operations emitted by the template parser."""
+
+    _operators = {ast.Mod: operator.mod, ast.Sub: operator.sub,
+                  ast.Eq: operator.eq, ast.NotEq: operator.ne}
+
+    def __init__(self, renderer):
+        self._variables = {}
+        self._functions = {"len": len, "range": range}
+        self._methods = {
+            "set_index": renderer.set_index, "write_token": renderer.write_token,
+            "write": renderer.write, "write_dict": renderer.write_dict,
+            "get_list": renderer.get_list, "get_text": renderer.get_text,
+            "has_key": renderer.has_key, "push_dict": renderer.push_dict,
+            "pop_dict": renderer.pop_dict,
+        }
+
+    def run(self, statements):
+        for statement in statements:
+            if isinstance(statement, ast.Expr):
+                self._value(statement.value)
+            elif isinstance(statement, ast.Assign) and len(statement.targets) == 1:
+                self._assign(statement.targets[0], self._value(statement.value))
+            elif isinstance(statement, ast.For) and not statement.orelse:
+                for value in self._value(statement.iter):
+                    self._assign(statement.target, value)
+                    self.run(statement.body)
+            elif isinstance(statement, ast.If):
+                self.run(statement.body if self._value(statement.test) else statement.orelse)
+            else:
+                raise ValueError("unsupported template statement: " + type(statement).__name__)
+
+    def _assign(self, target, value):
+        if not isinstance(target, ast.Name) or not target.id.endswith(("_list", "_len", "_index")):
+            raise ValueError("invalid template assignment")
+        self._variables[target.id] = value
+
+    def _value(self, expression):
+        if isinstance(expression, ast.Constant):
+            return expression.value
+        if isinstance(expression, ast.Name):
+            return self._variables[expression.id]
+        if isinstance(expression, ast.Dict):
+            return {self._value(key): self._value(value)
+                    for key, value in zip(expression.keys, expression.values)}
+        if isinstance(expression, ast.Subscript):
+            index = expression.slice
+            if isinstance(index, ast.Index):
+                index = index.value
+            return self._value(expression.value)[self._value(index)]
+        if isinstance(expression, ast.BinOp):
+            operation = self._operators[type(expression.op)]
+            return operation(self._value(expression.left), self._value(expression.right))
+        if isinstance(expression, ast.Compare) and len(expression.ops) == 1:
+            operation = self._operators[type(expression.ops[0])]
+            return operation(self._value(expression.left), self._value(expression.comparators[0]))
+        if isinstance(expression, ast.Call) and not expression.keywords:
+            target = expression.func
+            if isinstance(target, ast.Name) and target.id in self._functions:
+                function = self._functions[target.id]
+            elif (isinstance(target, ast.Attribute) and isinstance(target.value, ast.Name)
+                  and target.value.id == "self" and target.attr in self._methods):
+                function = self._methods[target.attr]
+            else:
+                raise ValueError("unsupported template call")
+            return function(*(self._value(arg) for arg in expression.args))
+        raise ValueError("unsupported template expression: " + type(expression).__name__)
+
+
 class GeneratorBase:
     def __init__(self, token, dict):
         self.token = token
@@ -663,7 +751,7 @@ class GeneratorBase:
         try:
             self.get_value(keytext)
             return True
-        except NotFound as e:
+        except NotFound:
             return False
 
     def get_value(self, keytext):
@@ -712,7 +800,7 @@ class UnexpectedData(YATException):
 
 class NotFinalElement(YATException):
     def __init__(self, dictkey, dictvalue):
-        self.value = "Specified key is not final element: ",\
+        self.value = "Specified key is not final element: ", \
             dictkey, "=>", dictvalue
 
 

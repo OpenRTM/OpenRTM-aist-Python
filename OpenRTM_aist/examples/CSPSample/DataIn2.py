@@ -115,7 +115,7 @@ def MyModuleInit(manager):
     DataIn2Init(manager)
 
     # Create a component
-    comp = manager.createComponent("DataIn2")
+    _ = manager.createComponent("DataIn2")
 
 
 ##

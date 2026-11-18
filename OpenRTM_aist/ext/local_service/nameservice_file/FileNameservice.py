@@ -48,9 +48,6 @@ class FileNameservice(OpenRTM_aist.LocalServiceBase):
     # @brief FileNameService ctor
     # @endif
     def __init__(self):
-        global service_name
-        global service_uuid
-        global default_config
 
         self._profile = OpenRTM_aist.LocalServiceProfile()
         self._profile.name = service_name
@@ -466,7 +463,6 @@ class NamingAction:
 #
 # @endif
 def FileNameserviceInit(manager):
-    global service_name
     factory_ = OpenRTM_aist.LocalServiceFactory.instance()
     factory_.addFactory(service_name,
                         FileNameservice)

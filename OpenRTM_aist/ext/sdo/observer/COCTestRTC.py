@@ -93,7 +93,7 @@ class COCTestRTC(OpenRTM_aist.DataFlowComponentBase):
 
     def onExecute(self, ec_id):
         print("Please input number: ")
-        self._data.data = long(sys.stdin.readline())
+        self._data.data = int(sys.stdin.readline())
         OpenRTM_aist.setTimestamp(self._data)
         print("Sending to subscriber: ", self._data.data)
         self._outport.write()
@@ -111,7 +111,7 @@ def MyModuleInit(manager):
     COCTestRTCInit(manager)
 
     # Create a component
-    comp = manager.createComponent("COCTestRTC")
+    _ = manager.createComponent("COCTestRTC")
 
 
 def main():

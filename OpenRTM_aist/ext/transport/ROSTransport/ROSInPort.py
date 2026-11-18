@@ -22,10 +22,7 @@ import rosgraph.xmlrpc
 import socket
 import threading
 import select
-try:
-    import xmlrpclib
-except BaseException:
-    import xmlrpc.client as xmlrpclib
+import xmlrpc.client as xmlrpclib
 
 from rosgraph.network import read_ros_handshake_header, write_ros_handshake_header
 from ROSTopicManager import ROSTopicManager
@@ -188,7 +185,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
     # @endif
     #
     def deleteSocket(self, sock):
-        guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
         for con in self._tcp_connecters[:]:
             try:
                 if con.getConnection() == sock:
@@ -242,21 +239,21 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
         try:
             self._tcp_keepcnt = int(prop.getProperty(
                 "ros.tcp_keepcnt"))
-        except ValueError as error:
+        except ValueError:
             pass
             # self._rtcout.RTC_ERROR(error)
 
         try:
             self._tcp_keepidle = int(prop.getProperty(
                 "ros.tcp_keepidle"))
-        except ValueError as error:
+        except ValueError:
             pass
             # self._rtcout.RTC_ERROR(error)
 
         try:
             self._tcp_keepintvl = int(prop.getProperty(
                 "ros.tcp_keepintvl"))
-        except ValueError as error:
+        except ValueError:
             pass
             # self._rtcout.RTC_ERROR(error)
 
@@ -266,7 +263,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
         try:
             self._sock_timeout = float(prop.getProperty(
                 "ros.sock.timeout"))
-        except ValueError as error:
+        except ValueError:
             pass
             # self._rtcout.RTC_ERROR(error)
 
@@ -305,7 +302,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
         if OpenRTM_aist.toBool(prop.getProperty(
                 "ros.node.anonymous"), "YES", "NO", False):
             self._callerid = self._callerid + "_" + \
-                str(os.getpid()) + "_" + str(int(time.time()*1000))
+                str(os.getpid()) + "_" + str(int(time.time() * 1000))
 
         factory = ROSMessageInfo.ROSMessageInfoList.instance()
         info = factory.getInfo(self._messageType)
@@ -462,7 +459,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
 
                 factory = ROSMessageInfo.ROSMessageInfoList.instance()
                 info = factory.getInfo(self._messageType)
-                if(info):
+                if (info):
                     info_type = info.datatype()
                     info_md5sum = info.md5sum()
                     info_message_definition = info.message_definition()
@@ -548,7 +545,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
     #
 
     def put(self, data):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         try:
             self._rtcout.RTC_PARANOID("ROSInPort.put()")
             if not self._connector:
@@ -848,7 +845,7 @@ class SubListener:
                         if left >= size:
                             start = 0
                             b.seek(start)
-                            data = b.read(size+4)
+                            data = b.read(size + 4)
                             self._sub.put(data)
                             b.seek(start)
                             pos += size
@@ -858,13 +855,13 @@ class SubListener:
                             b.truncate(start)
                         elif pos != start:
                             b.seek(pos)
-                            leftovers = b.read(btell-pos)
+                            leftovers = b.read(btell - pos)
                             b.truncate(start + len(leftovers))
                             b.seek(start)
                             b.write(leftovers)
                         else:
                             b.seek(btell)
-                if b.tell() <= size+4:
+                if b.tell() <= size + 4:
                     d = self._sock.recv(buff_size)
                     if d:
                         b.write(d)

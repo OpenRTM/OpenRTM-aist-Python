@@ -22,6 +22,7 @@
 
 import OpenRTM_aist
 import RTC
+import CSP
 import CSP__POA
 from contextlib import nullcontext
 
@@ -190,6 +191,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
     #
     # ::OpenRTM::PortStatus put()
     #  throw (CORBA::SystemException);
+
     def put(self, data):
 
         try:
@@ -241,7 +243,7 @@ class InPortCSPProvider(OpenRTM_aist.InPortProvider, CSP__POA.InPortCsp):
             return CSP.READY if self._connector.isWritable(retry, option) else CSP.NOT_READY
         self._rtcout.RTC_ERROR("self._connector is None")
         return CSP.NOT_READY
-    
+
     ##
     # @if jp
     # @brief ガード条件を満たすかを確認

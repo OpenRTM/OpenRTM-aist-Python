@@ -66,6 +66,35 @@ import glob
 import os
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
+from xml.parsers import expat
+
+
+def _read_profile_xml(path):
+    builder = ET.TreeBuilder()
+
+    def qualified(name):
+        return "{" + name if "}" in name else name
+
+    def start(name, attributes):
+        builder.start(qualified(name), {
+            qualified(key): value for key, value in attributes.items()
+        })
+
+    def reject_doctype(*args):
+        raise ET.ParseError("placement XML must not contain a DTD")
+
+    parser = expat.ParserCreate(namespace_separator="}")
+    parser.StartElementHandler = start
+    parser.EndElementHandler = lambda name: builder.end(qualified(name))
+    parser.CharacterDataHandler = builder.data
+    parser.StartDoctypeDeclHandler = reject_doctype
+    try:
+        with open(path, "rb") as stream:
+            parser.ParseFile(stream)
+    except expat.ExpatError as exc:
+        raise ET.ParseError(str(exc)) from exc
+    return builder.close()
+
 
 NS = "{urn:snmpmanager:placement:1}"
 SERVICE_WEIGHT = 1000.0      # サービスポート接続の重み (bytes/s 相当)
@@ -161,7 +190,7 @@ class ProfileDB:
         for r in roots:
             env_xml = os.path.join(r, "environments.xml")
             if os.path.exists(env_xml):
-                for e in ET.parse(env_xml).getroot():
+                for e in _read_profile_xml(env_xml):
                     try:
                         self.perf.setdefault(e.get(NS + "id"), float(e.get(NS + "perfScore")))
                     except (TypeError, ValueError):
@@ -170,7 +199,7 @@ class ProfileDB:
         paths = sorted(p for r in roots for p in glob.glob(os.path.join(r, "**", "placement.xml"), recursive=True))
         for path in paths:
             try:
-                root_el = ET.parse(path).getroot()
+                root_el = _read_profile_xml(path)
             except ET.ParseError:
                 continue
             key = (root_el.get(NS + "language"), root_el.get(NS + "rtc"))
@@ -631,13 +660,15 @@ def _exhaustive(items, robots, edges, primary):
             if u[0] + it.cpu > rmap[rn].cpu_free + 1e-9 or u[1] + it.memory_mb + extra > rmap[rn].mem_free_mb + 1e-9:
                 continue
             new_lang = it.language not in u[2]
-            u[0] += it.cpu; u[1] += it.memory_mb + extra
+            u[0] += it.cpu
+            u[1] += it.memory_mb + extra
             if new_lang:
                 u[2].add(it.language)
             assign[it.name] = rn
             rec(k + 1)
             del assign[it.name]
-            u[0] -= it.cpu; u[1] -= it.memory_mb + extra
+            u[0] -= it.cpu
+            u[1] -= it.memory_mb + extra
             if new_lang:
                 u[2].discard(it.language)
 

@@ -151,7 +151,7 @@ class Organization_impl(SDOPackage__POA.Organization):
 
     def get_organization_property(self):
         self.__rtcout.RTC_TRACE("get_organization_property()")
-        guard = OpenRTM_aist.ScopedLock(self._org_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._org_mutex)
         prop = SDOPackage.OrganizationProperty(self._orgProperty.properties)
         return prop
 
@@ -261,7 +261,7 @@ class Organization_impl(SDOPackage__POA.Organization):
         if org_property is None:
             raise SDOPackage.InvalidParameter("org_property is Empty.")
 
-        guard = OpenRTM_aist.ScopedLock(self._org_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._org_mutex)
         self._orgProperty = org_property
         return True
 

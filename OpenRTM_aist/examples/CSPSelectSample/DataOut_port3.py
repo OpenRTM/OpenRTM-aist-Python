@@ -141,7 +141,7 @@ def MyModuleInit(manager):
     DataOut_port3Init(manager)
 
     # Create a component
-    comp = manager.createComponent("DataOut_port3")
+    _ = manager.createComponent("DataOut_port3")
 
 
 ##

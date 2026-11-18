@@ -96,8 +96,6 @@ def handler(signum, frame):
         alarm.start()
 
 
-
-
 ##
 # @if jp
 # @class Manager
@@ -197,7 +195,6 @@ class Manager:
 
     def init(*arg):
         global manager
-        global mutex
         if len(arg) == 1:
             argv = arg[0]
         elif len(arg) == 2 and \
@@ -211,7 +208,7 @@ class Manager:
             return None
 
         if manager is None:
-            guard = OpenRTM_aist.ScopedLock(mutex)
+            _ = OpenRTM_aist.ScopedLock(mutex)
 
             manager = Manager()
             manager.initManager(argv)
@@ -251,10 +248,9 @@ class Manager:
 
     def instance():
         global manager
-        global mutex
 
         if manager is None:
-            guard = OpenRTM_aist.ScopedLock(mutex)
+            _ = OpenRTM_aist.ScopedLock(mutex)
             manager = Manager()
             manager.initManager(None)
             manager.initFactories()
@@ -450,7 +446,7 @@ class Manager:
     def runManager(self, no_block=False):
         self._rtcout.RTC_TRACE("Manager::runManager()")
         self._isRunning = True
-        
+
         if no_block:
             self._threadMain = threading.Thread(target=self.main)
             self._threadMain.start()
@@ -490,7 +486,7 @@ class Manager:
         period = OpenRTM_aist.TimeValue(0, 100000)
         if self._config.findNode("timer.tick"):
             tick = float(self._config.getProperty(
-                    "timer.tick"))
+                "timer.tick"))
             if tick:
                 period.set_time(tick)
 
@@ -531,7 +527,6 @@ class Manager:
         if self._threadMain:
             self._threadMain.join()
         manager = None
-        
 
     ##
     # @if jp
@@ -912,7 +907,7 @@ class Manager:
             exported_ports = OpenRTM_aist.split(comp_prop.getProperty("exported_ports"),
                                                 ",")
             exported_ports_str = ""
-            for i,exported_port in enumerate(exported_ports):
+            for i, exported_port in enumerate(exported_ports):
                 keyval = OpenRTM_aist.split(exported_port, ".")
                 if len(keyval) > 2:
                     exported_ports_str += (keyval[0] + "." + keyval[-1])
@@ -1496,11 +1491,10 @@ class Manager:
         self._module = OpenRTM_aist.ModuleManager(self._config)
 
         self._needsTimer = OpenRTM_aist.toBool(self._config.getProperty(
-                "timer.enable"), "YES", "NO", True)
-
+            "timer.enable"), "YES", "NO", True)
 
         if OpenRTM_aist.toBool(self._config.getProperty("manager.shutdown_auto"),
-                                   "YES", "NO", True) and \
+                               "YES", "NO", True) and \
                 not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
                                         "YES", "NO", False) and \
                 self._needsTimer:
@@ -1873,16 +1867,16 @@ class Manager:
     # @if jp
     # @brief giopからはじまるORBエンドポイントでの指定した場合にtrue、
     #       それ以外(例えばホスト名:ポート番号の指定)の場合はfalseを返す。
-    # 
+    #
     #
     # @param endpoint エンドポイント
     # @return エンドポイントの指定方法
     #
     # @else
-    # @brief 
+    # @brief
     #
-    # @param endpoint 
-    # @return 
+    # @param endpoint
+    # @return
     #
     # @endif
     #
@@ -2466,7 +2460,7 @@ class Manager:
                     mgr_name, self._mgrservant)
 
         if OpenRTM_aist.toBool(self._config.getProperty("corba.update_master_manager.enable"),
-                                   "YES", "NO", True) and \
+                               "YES", "NO", True) and \
                 not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
                                         "YES", "NO", False) and \
                 self._needsTimer:
@@ -2479,7 +2473,6 @@ class Manager:
 
             self.addTask(self._mgrservant.updateMasterManager, tm)
 
-        otherref = None
 
         return True
 
@@ -2873,7 +2866,6 @@ class Manager:
         name_ = naming_format
         str_ = ""
         count = 0
-        len_ = len(name_)
         it = iter(name_)
 
         try:
@@ -3531,7 +3523,6 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.getNaming()")
         return self._namingManager
 
-
     ##
     # @if jp
     # @brief 周期実行タスクの登録
@@ -3562,6 +3553,7 @@ class Manager:
     # @return PeriodicFunction
     # @endif
     #
+
     def addTask(self, fn, period):
         #self._rtcout.RTC_TRACE("Manager::addTask()")
         return self._scheduler.emplace(fn, period)
@@ -3631,7 +3623,7 @@ class Manager:
     #
     # @else
     #
-    # @brief 
+    # @brief
     #
     #
     # @param self
@@ -3657,12 +3649,12 @@ class Manager:
     #
     # @else
     #
-    # @brief 
+    # @brief
     #
     #
     # @param self
     # @param ec Execution context
-    # @return 
+    # @return
     #
     # @endif
     #
@@ -3682,17 +3674,16 @@ class Manager:
     #
     # @else
     #
-    # @brief 
+    # @brief
     #
     #
     # @param self
-    # @return 
+    # @return
     #
     # @endif
     #
     def createdExecutionContexts(self):
         return self._eclist
-
 
     # ============================================================
     # コンポーネントマネージャ
@@ -3705,6 +3696,7 @@ class Manager:
     # @else
     #
     # @endif
+
     class InstanceName:
         """
         """
@@ -3790,7 +3782,7 @@ class Manager:
             if self._version != "" and self._version != _prop.getProperty(
                     "version"):
                 return False
-            
+
             if self._language != "" and self._language != _prop.getProperty(
                     "language"):
                 return False
@@ -3832,7 +3824,7 @@ class Manager:
     # @endif
     class ModulePredicate:
 
-            # ModulePredicate(coil::Properties& prop)
+        # ModulePredicate(coil::Properties& prop)
         def __init__(self, prop):
             self._prop = prop
             return
@@ -3857,9 +3849,6 @@ class Manager:
                 return False
 
             return True
-
-
-
 
     class Finalized:
         def __init__(self):

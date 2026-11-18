@@ -69,7 +69,7 @@ def MyModuleInit(manager):
     MotorInit(manager)
 
     # Create a component
-    comp = manager.createComponent("Motor")
+    _ = manager.createComponent("Motor")
 
 
 def main():
