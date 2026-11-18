@@ -58,9 +58,10 @@ class OutPortSHMProvider(OpenRTM_aist.OutPortProvider,
         self._buffer = None
         orb = OpenRTM_aist.Manager.instance().getORB()
         ior = orb.object_to_string(self._objref)
-        for prefix in ("dataport.shared_memory", "dataport.corba_cdr"):
-            self._properties.append(OpenRTM_aist.NVUtil.newNV(prefix + ".outport_ior", ior))
-            self._properties.append(OpenRTM_aist.NVUtil.newNV(prefix + ".outport_ref", self._objref))
+        self._properties.append(OpenRTM_aist.NVUtil.newNV(
+            "dataport.shared_memory.outport_ior", ior))
+        self._properties.append(OpenRTM_aist.NVUtil.newNV(
+            "dataport.shared_memory.outport_ref", self._objref))
         self._listeners = None
         self._connector = None
         self._profile = None

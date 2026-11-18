@@ -67,9 +67,10 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider,
 
         orb = OpenRTM_aist.Manager.instance().getORB()
         ior = orb.object_to_string(self._objref)
-        for prefix in ("dataport.shared_memory", "dataport.corba_cdr"):
-            self._properties.append(OpenRTM_aist.NVUtil.newNV(prefix + ".inport_ior", ior))
-            self._properties.append(OpenRTM_aist.NVUtil.newNV(prefix + ".inport_ref", self._objref))
+        self._properties.append(OpenRTM_aist.NVUtil.newNV(
+            "dataport.shared_memory.inport_ior", ior))
+        self._properties.append(OpenRTM_aist.NVUtil.newNV(
+            "dataport.shared_memory.inport_ref", self._objref))
 
         return
 
