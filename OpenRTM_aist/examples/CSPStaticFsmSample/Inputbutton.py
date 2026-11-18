@@ -3,15 +3,29 @@
 
 ##
 # @file Inputbutton.py
-# @brief example StaticFSM
-# @date $Date: $
+# @if jp
+# @brief 電子レンジFSMへの入力イベントを送信するサンプルRTC。
+# @else
+# @brief Sample RTC sending input events to the microwave FSM.
+# @endif
+# @date $Date: 2026-11-13 15:32:20 $
 # @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
 #
+# Copyright (C) 2026
+#     Nobuhiko Miyamoto
+#     Intelligent Systems Research Institute,
+#     National Institute of
+#         Advanced Industrial Science and Technology (AIST), Japan
+#     All rights reserved.
+#
+# $Id$
+
 # Copyright (C) 2017
 #     Intelligent Systems Research Institute,
 #     National Institute of
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
+
 
 from __future__ import print_function
 import sys
@@ -33,11 +47,31 @@ inputbutton_spec = ["implementation_id", "Inputbutton",
                     ""]
 
 
+##
+# @if jp
+# @brief 電子レンジFSMへの入力イベントを送信するサンプルRTC。
+# @else
+# @brief Sample RTC sending input events to the microwave FSM.
+# @endif
 class Inputbutton(OpenRTM_aist.DataFlowComponentBase):
+    ##
+    # @if jp
+    # @brief インスタンスと内部状態を初期化する。
+    # @param manager 関連付けるManager。
+    # @else
+    # @brief Initialize the instance and its internal state.
+    # @param manager Manager to associate with the object.
+    # @endif
     def __init__(self, manager):
         OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
         return
 
+    ##
+    # @if jp
+    # @brief RTCのポート・設定・FSMを初期化する。
+    # @else
+    # @brief Initialize RTC ports, configuration and FSM state.
+    # @endif
     def onInitialize(self):
         self._open = RTC.TimedLong(RTC.Time(0, 0), 0)
         self._close = RTC.TimedLong(RTC.Time(0, 0), 0)
@@ -62,6 +96,14 @@ class Inputbutton(OpenRTM_aist.DataFlowComponentBase):
 
         return RTC.RTC_OK
 
+    ##
+    # @if jp
+    # @brief 周期実行に対応する通信・制御処理を行う。
+    # @param ec_id 実行コンテキストの識別子。
+    # @else
+    # @brief Perform communication and control for a periodic execution callback.
+    # @param ec_id Execution context identifier.
+    # @endif
     def onExecute(self, ec_id):
         print("")
         print("Please select action!!")
@@ -75,11 +117,11 @@ class Inputbutton(OpenRTM_aist.DataFlowComponentBase):
         print("  -> others are interpreted as tick commnad.")
         print(">> ", end="")
         #print(">> ",end="")
-        cmds = sys.stdin.readline()
-        cmds = cmds.split(" ")
-        OpenRTM_aist.StringUtil.eraseBlank(cmds)
-        cmds[0] = cmds[0].replace("\n", "")
-        cmds[0] = cmds[0].replace("\r", "")
+        line = sys.stdin.readline()
+        # EOFでは送信しない。 / Do not send an event at EOF.
+        if line == "":
+            return RTC.RTC_OK
+        cmds = line.split() or [""]
         print("[command]: ", cmds[0])
         #print("  [args]: ",end="")
         print("  [args]: ", end="")
@@ -96,13 +138,14 @@ class Inputbutton(OpenRTM_aist.DataFlowComponentBase):
             self._close.data = 0
             self._closeOut.write()
         elif cmds[0] == "minute":
-            min = [0]
-            if len(cmds) < 2 or not OpenRTM_aist.StringUtil.stringTo(
-                    min, cmds[1]):
+            # stringToは成功フラグと値を返す。 / stringTo returns success and value.
+            valid, minute_value = OpenRTM_aist.StringUtil.stringTo(
+                0, cmds[1] if len(cmds) > 1 else "")
+            if not valid:
                 print("minute command needs an integer arg.")
                 return RTC.RTC_OK
 
-            self._minute.data = min[0]
+            self._minute.data = minute_value
             self._minuteOut.write()
         elif cmds[0] == "start":
             self._start.data = 0
@@ -118,6 +161,14 @@ class Inputbutton(OpenRTM_aist.DataFlowComponentBase):
         return RTC.RTC_OK
 
 
+##
+# @if jp
+# @brief `Inputbutton`のFactoryを登録する。
+# @param manager 関連付けるManager。
+# @else
+# @brief Register the factory for Inputbutton.
+# @param manager Manager to associate with the object.
+# @endif
 def InputbuttonInit(manager):
     profile = OpenRTM_aist.Properties(defaults_str=inputbutton_spec)
     manager.registerFactory(profile,
@@ -125,6 +176,14 @@ def InputbuttonInit(manager):
                             OpenRTM_aist.Delete)
 
 
+##
+# @if jp
+# @brief サンプルのFactoryを登録して自RTCを生成する。
+# @param manager 関連付けるManager。
+# @else
+# @brief Register the sample factory and create its RTC.
+# @param manager Manager to associate with the object.
+# @endif
 def MyModuleInit(manager):
     InputbuttonInit(manager)
 
@@ -132,6 +191,12 @@ def MyModuleInit(manager):
     comp = manager.createComponent("Inputbutton")
 
 
+##
+# @if jp
+# @brief Managerを初期化してサンプルの実行ループを開始する。
+# @else
+# @brief Initialize the manager and start the sample execution loop.
+# @endif
 def main():
     # Initialize manager
     mgr = OpenRTM_aist.Manager.init(sys.argv)

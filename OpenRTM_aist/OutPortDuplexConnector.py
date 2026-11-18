@@ -1,13 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-
 ##
 # @file OutPortDuplexConnector.py
-# @brief Bidirectional type connector class
-# @date $Date$
+# @if jp
+# @brief `OutPortDuplexConnector`の状態と操作をまとめる。
+# @else
+# @brief Encapsulate the state and operations of OutPortDuplexConnector.
+# @endif
+# @date $Date: 2026-11-13 15:32:20 $
 # @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
 #
+# Copyright (C) 2026
+#     Nobuhiko Miyamoto
+#     Intelligent Systems Research Institute,
+#     National Institute of
+#         Advanced Industrial Science and Technology (AIST), Japan
+#     All rights reserved.
+#
+# $Id$
+
 # Copyright (C) 2019
 #     Noriaki Ando
 #     Robot Innovation Research Center,
@@ -16,7 +28,9 @@
 #     All rights reserved.
 #
 
+
 import OpenRTM_aist
+import CSP
 import threading
 
 
@@ -75,7 +89,6 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
                 "Exeption: in OutPortPullConnector.__init__().")
             raise
 
-        self._buffer = buffer
         self._info = info
         self._provider.init(info.properties)
         self._provider.setConnector(self)
@@ -121,13 +134,12 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # 設定したConsumerオブジェクトによりInPort側にデータを送信する
     # 戻り値は設定したConsumerオブジェクトに依存する
     #
-    # @param self
     # @param data 書き込むデータ
     # @return リターンコード
     #
     # @else
+    # @brief Send data to one ready connection.
     #
-    # @param self
     # @param data
     # @return
     #
@@ -145,6 +157,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
             else:
                 return ret
         else:
+            self._rtcout.RTC_ERROR("self._consumer is None")
             return self.PORT_ERROR
 
     ##
@@ -154,23 +167,25 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # 設定したConsumerオブジェクトによりInPort側にデー化書き込み可能かを確認する
     # 戻り値は設定したConsumerオブジェクトに依存する
     #
-    # @param self
     # @param retry True：再検索、False：通常の書き込み確認
     # @return True：書き込み可能、False：書き込み不可
     #
+    # @param option ガード照合に使用するオプション。
     # @else
     #
-    # @brief
+    # @brief Check whether the receiver is ready.
     #
-    # @param self
     # @param retry
     # @return
     #
+    # @param option Options used for guard matching.
     # @endif
     #
-    def isWritable(self, retry=False):
+    def isWritable(self, retry=False, option=[]):
+        self._rtcout.RTC_TRACE("isWritable()")
         if self._consumer:
-            return self._consumer.isWritable(retry)
+            return self._consumer.isWritable(retry, option)
+        self._rtcout.RTC_ERROR("self._consumer is None")
         return False
 
     ##
@@ -180,7 +195,6 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # 内部でデータ読み込み時のリスナが呼び出される
     # 戻り値はリスナに依存する
     #
-    # @param self
     # @param data 読み込んだデータを格納する変数
     # @return リターンコード
     # BUFFER_OK：正常完了
@@ -188,18 +202,19 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     #
     # @else
     #
-    # @brief
+    # @brief Receive data from a connection.
     #
-    # @param self
     # @param data
     # @return
     #
     # @endif
     #
     def read(self, data=None):
+        self._rtcout.RTC_TRACE("read()")
         if self._readCallback:
             ret, data = self._readCallback()
             return ret, data
+        self._rtcout.RTC_ERROR("self._readCallback is None")
         return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, data
 
     ##
@@ -209,62 +224,104 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # 内部でデータ読み込み確認時のリスナが呼び出される
     # 戻り値はリスナに依存する
     #
-    # @param self
     # @param retry True：再検索、False：通常の読み込み確認
     # @return True：読み込み可能、False：読み込み不可
     #
+    # @param option ガード照合に使用するオプション。
     # @else
     #
-    # @brief
+    # @brief Perform the is readable state operation.
     #
-    # @param self
     # @param retry
     # @return
     #
+    # @param option Options used for guard matching.
     # @endif
     #
-    def isReadable(self, retry=False):
+    def _isReadableState(self, retry=False, option=None):
+        """Return READY only after the existing callback made a reservation.
+
+        If notify ran, use its locked decision even if the manager advances
+        before the callback returns. Pre-notify rejection uses a phase snapshot.
+        """
+        manager = getattr(self._isReadableCallback, '_manager', None)
+        capture = getattr(manager, '_captureReadiness', None)
+        if capture is not None:
+            with capture(getattr(self._isReadableCallback, '_port', None), self.id()) as response:
+                if self.isReadable(retry, option):
+                    return CSP.READY
+                state = response['state']
+                if state is not None:
+                    return CSP.NOT_READY if state == CSP.READY else state
+                return manager._readinessState()
+        if self.isReadable(retry, option):
+            return CSP.READY
+        return manager._readinessState() if manager is not None else CSP.NOT_READY
+
+    ##
+    # @if jp
+    # @brief 直前の接続先問い合わせの応答を取得する。
+    # @else
+    # @brief Get the response from the most recent peer readiness query.
+    # @endif
+    def getPeerReadinessState(self):
+        consumer = self._consumer
+        return consumer.getReadinessState() if consumer is not None else CSP.NOT_READY
+
+    ##
+    # @if jp
+    # @brief 送信準備が整っているか確認する。
+    # @param retry 再試行の問い合わせかどうか。
+    # @param option ガード照合に使用するオプション。
+    # @else
+    # @brief Check whether the sender is ready.
+    # @param retry Whether this query is a retry.
+    # @param option Options used for guard matching.
+    # @endif
+    def isReadable(self, retry=False, option=[]):
+        self._rtcout.RTC_TRACE("isReadable(%d %s)", (retry, str(option)))
         if self._isReadableCallback:
-            return self._isReadableCallback(self, retry)
+            return self._isReadableCallback(self, retry, option)
+        self._rtcout.RTC_ERROR("self._isReadableCallback is None")
         return False
 
     ##
     # @if jp
     # @brief データ読み込み時のリスナを登録
     #
-    # @param self
     # @param listener リスナ
     #
     # @else
     #
-    # @brief
+    # @brief Set read listener.
     #
-    # @param self
     # @return
     #
+    # @param listener Value of listener.
     # @endif
     #
 
     def setReadListener(self, listener):
+        self._rtcout.RTC_TRACE("setReadListener()")
         self._readCallback = listener
 
     ##
     # @if jp
     # @brief データ読み込み確認時のリスナを登録
     #
-    # @param self
     # @param listener リスナ
     #
     # @else
     #
-    # @brief
+    # @brief Set is readable listener.
     #
-    # @param self
     # @return
     #
+    # @param listener Value of listener.
     # @endif
     #
     def setIsReadableListener(self, listener):
+        self._rtcout.RTC_TRACE("setIsReadableListener()")
         self._isReadableCallback = listener
 
     ##
@@ -297,8 +354,6 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
 
         if self._consumer:
             self._rtcout.RTC_DEBUG("delete consumer")
-            cfactory = OpenRTM_aist.InPortConsumerFactory.instance()
-
         self._consumer = None
 
         return self.PORT_OK
@@ -319,7 +374,7 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # virtual CdrBufferBase* getBuffer();
 
     def getBuffer(self):
-        return self._buffer
+        return None
 
     ##
     # @if jp
@@ -361,19 +416,6 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
 
     ##
     # @if jp
-    # @brief Bufferの生成
-    # @else
-    # @brief create buffer
-    # @endif
-    #
-    # CdrBufferBase* createBuffer(ConnectorInfo& info);
-
-    def createBuffer(self, info):
-        buf_type = info.properties.getProperty("buffer_type", "ring_buffer")
-        return OpenRTM_aist.CdrBufferFactory.instance().createObject(buf_type)
-
-    ##
-    # @if jp
     # @brief 接続確立時にコールバックを呼ぶ
     # @else
     # @brief Invoke callback when connection is established
@@ -382,7 +424,8 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
 
     def onConnect(self):
         if self._listeners and self._profile:
-            self._listeners.notify(OpenRTM_aist.ConnectorListenerType.ON_CONNECT, self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_CONNECT, self._profile)
         return
 
     ##
@@ -395,24 +438,25 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
 
     def onDisconnect(self):
         if self._listeners and self._profile:
-            self._listeners.notify(OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT, self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT, self._profile)
         return
 
     ##
     # @if jp
     # @brief コンシューマの設定
+    # @param consumer `consumer`の値。
     # @else
     # @brief set Consumer
+    # @param consumer Value of consumer.
     # @endif
     def setConsumer(self, consumer):
+        self._rtcout.RTC_TRACE("setConsumer()")
         self._consumer = consumer
-        self._consumer.setListener(self._info, self._listeners)
 
     ##
     # @if jp
     # @brief データの符号化
-    # @param self
-    # @param cdr 符号化前のデータ
     # @return ret, data
     # ret：リターンコード
     # PORT_OK：正常完了
@@ -420,11 +464,11 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # SERIALIZE_ERROR：符号化処理でエラー
     # PRECONDITION_NOT_MET：その他のエラー
     # data：符号化後のデータ
+    # @param data 送受信するデータ。
     # @else
-    # @brief
-    # @param self
-    # @param cdr
+    # @brief Serialize typed data into a CDR sequence.
     # @return
+    # @param data Data to transmit or receive.
     # @endif
 
     def serializeData(self, data):
@@ -451,83 +495,22 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @brief コンシューマのインターフェースの登録を取り消す
     # @param prop コネクタプロファイルのプロパティ
     # @else
-    # @brief
+    # @brief Release the peer CORBA interface reference.
     # @param prop
     # @endif
     def unsubscribeInterface(self, prop):
         if self._consumer:
             self._consumer.unsubscribeInterface(prop)
 
-
+    ##
+    # @if jp
+    # @brief `Data Type`を設定する。
+    # @param data 送受信するデータ。
+    # @else
+    # @brief Set data type.
+    # @param data Data to transmit or receive.
+    # @endif
     def setDataType(self, data):
         OpenRTM_aist.OutPortConnector.setDataType(self, data)
-        self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(self._marshaling_type, data)
-
-
-##
-# @if jp
-# @class ReadListenerBase
-# @brief ReadListenerBase クラス
-#
-# 読み込み時リスナのベースクラス
-#
-# @since 2.0.0
-#
-# @else
-# @class ReadListenerBase
-# @brief ReadListenerBase class
-#
-#
-# @since 2.0.0
-#
-# @endif
-#
-class ReadListenerBase(object):
-    ##
-    # @if jp
-    # @brief 仮想コールバック関数
-    # @param self
-    # @return 読み込んだデータ
-    # @else
-    # @brief
-    # @param self
-    # @return 読み込んだデータ
-    # @endif
-    def __call__(self):
-        return (OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET, None)
-
-##
-# @if jp
-# @class IsReadableListenerBase
-# @brief IsReadableListenerBase クラス
-#
-# 読み込み確認時リスナのベースクラス
-#
-# @since 2.0.0
-#
-# @else
-# @class IsReadableListenerBase
-# @brief IsReadableListenerBase class
-#
-#
-# @since 2.0.0
-#
-# @endif
-#
-
-
-class IsReadableListenerBase(object):
-    ##
-    # @if jp
-    # @brief 仮想コールバック関数
-    # @param self
-    # @param con OutPortConnector
-    # @return True：読み込み可、False：読み込み不可
-    # @else
-    # @brief
-    # @param self
-    # @param con
-    # @return
-    # @endif
-    def __call__(self, con):
-        return False
+        self._serializer = OpenRTM_aist.SerializerFactories.instance(
+        ).createSerializer(self._marshaling_type, data)

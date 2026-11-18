@@ -254,7 +254,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @param self
     # @return
     # @endif
-    def isWritable(self):
+    def isWritable(self, retry=False):
         return False
 
     #
@@ -270,7 +270,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @return
     # @endif
 
-    def isReadable(self, retry):
+    def isReadable(self, retry=False):
         return False
 
     ##
@@ -292,3 +292,110 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @endif
     def unsubscribeInterface(self, prop):
         pass
+
+
+##
+# @if jp
+# @class WriteListenerBase
+# @brief WriteListenerBase クラス
+#
+# 書き込み時リスナのベースクラス
+#
+# @since 2.0.0
+#
+# @else
+# @class WriteListenerBase
+# @brief WriteListenerBase class
+#
+#
+# @since 2.0.0
+#
+# @endif
+#
+class WriteListenerBase(object):
+    ##
+    # @if jp
+    # @brief 仮想コールバック関数
+    # @param self
+    # @param data 書き込むバイト列のデータ
+    # @else
+    # @brief Destructor
+    # @param self
+    # @param data 書き込むバイト列のデータ
+    # @endif
+    def __call__(self, data):
+        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
+
+##
+# @if jp
+# @class IsWritableListenerBase
+# @brief IsWritableListenerBase クラス
+#
+# 書き込み確認時リスナのベースクラス
+#
+# @since 2.0.0
+#
+# @else
+# @class IsWritableListenerBase
+# @brief IsWritableListenerBase class
+#
+#
+# @since 2.0.0
+#
+# @endif
+#
+
+
+class IsWritableListenerBase(object):
+    ##
+    # @if jp
+    # @brief 仮想コールバック関数
+    # @param self
+    # @param con InPortConnector
+    # @return True：書き込み可、False：書き込み不可
+    # @else
+    # @brief Destructor
+    # @param self
+    # @param con
+    # @return
+    # @endif
+    def __call__(self, con, retry=False):
+        return False
+
+
+
+##
+# @if jp
+# @class MatchConditionListenerBase
+# @brief MatchConditionListenerBase クラス
+#
+# ガード条件判定時リスナのベースクラス
+#
+# @since 2.1.0
+#
+# @else
+# @class MatchConditionListenerBase
+# @brief MatchConditionListenerBase class
+#
+#
+# @since 2.1.0
+#
+# @endif
+#
+
+
+class MatchConditionListenerBase(object):
+    ##
+    # @if jp
+    # @brief 仮想コールバック関数
+    # @param self
+    # @param option パラメータ
+    # @return True：書き込み可、False：書き込み不可
+    # @else
+    # @brief Destructor
+    # @param self
+    # @param con
+    # @return
+    # @endif
+    def __call__(self, option=[]):
+        return False

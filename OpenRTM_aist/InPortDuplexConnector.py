@@ -2,12 +2,24 @@
 # -*- coding: utf-8 -*-
 
 ##
-#
 # @file InPortDuplexConnector.py
-# @brief Bidirectional type connector class
-# @date $Date$
+# @if jp
+# @brief `InPortDuplexConnector`の状態と操作をまとめる。
+# @else
+# @brief Encapsulate the state and operations of InPortDuplexConnector.
+# @endif
+# @date $Date: 2026-11-13 15:32:20 $
 # @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
 #
+# Copyright (C) 2026
+#     Nobuhiko Miyamoto
+#     Intelligent Systems Research Institute,
+#     National Institute of
+#         Advanced Industrial Science and Technology (AIST), Japan
+#     All rights reserved.
+#
+# $Id$
+
 # Copyright (C) 2019
 #     Noriaki Ando
 #     Robot Innovation Research Center,
@@ -17,7 +29,9 @@
 #
 
 
+
 import OpenRTM_aist
+import CSP
 import threading
 
 
@@ -69,7 +83,6 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
         if not self._provider:
             raise
 
-        self._buffer = None
         self._info = info
         self._provider.init(info.properties)
         self._provider.setListener(info, self._listeners)
@@ -77,6 +90,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
 
         self._consumer = None
         self._isWritableCallback = None
+        self._isMatchConditionCallback = None
         self._writeCallback = None
 
         self._marshaling_type = info.properties.getProperty(
@@ -106,7 +120,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     def __del__(self):
         return
 
-    ##
+    #
     # @if jp
     # @brief バッファからデータを読み出す。
     # read関数と違い、アンマーシャリングを実行しない
@@ -121,6 +135,12 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     #
     # @endif
     #
+    ##
+    # @if jp
+    # @brief 受信バッファからデータを取得する。
+    # @else
+    # @brief Get data from the receive buffer.
+    # @endif
     def readBuff(self):
         self._rtcout.RTC_TRACE("readBuff()")
         if self._consumer:
@@ -144,6 +164,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     #         PRECONDITION_NOT_MET 事前条件を満たさない
     #         PORT_ERROR           その他のエラー
     #
+    # @param data 送受信するデータ。
     # @else
     #
     # @brief Reading data
@@ -159,13 +180,15 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     #         PRECONDITION_NOT_MET Preconditin not met
     #         PORT_ERROR           Other error
     #
+    # @param data Data to transmit or receive.
     # @endif
     #
     # virtual ReturnCode read(cdrMemoryStream& data);
     def read(self, data=None):
         self._rtcout.RTC_TRACE("read()")
         if not self._dataType:
-            return self.PRECONDITION_NOT_MET
+            self._rtcout.RTC_ERROR("self._dataType is not set.")
+            return self.PRECONDITION_NOT_MET, data
         ret, cdr = self.readBuff()
         if ret != self.PORT_OK:
             return ret, data
@@ -177,19 +200,19 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     #
     # @if jp
     # @brief データが読み込める状態かを判定
-    # @param self
     # @param retry True：再検索、False：通常の読み込み確認
     # @return True：読み込み可能
     # @else
-    # @brief
-    # @param self
+    # @brief Check whether the sender is ready.
     # @param retry
     # @return
     # @endif
 
     def isReadable(self, retry=False):
+        self._rtcout.RTC_TRACE("isReadable()")
         if self._consumer:
-            return self._consumer.isReadable(retry)
+            return self._consumer.isReadable(retry, getattr(self._provider, "_objref", self._provider))
+        self._rtcout.RTC_ERROR("self._consumer is None")
         return False
 
     ##
@@ -270,17 +293,17 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     #
     # 与えられた接続情報に基づきバッファを生成する。
     #
-    # @param info 接続情報
     # @return バッファへのポインタ
     #
+    # @param profile 接続プロファイル。
     # @else
     # @brief create buffer
     #
     # This function creates a buffer based on given information.
     #
-    # @param info Connector information
     # @return The poitner to the buffer
     #
+    # @param profile Connector profile.
     # @endif
     #
     # virtual CdrBufferBase* createBuffer(Profile& profile);
@@ -302,6 +325,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     #         PRECONDITION_NOT_MET 事前条件を満たさない
     #         BUFFER_ERROR           その他のエラー
     #
+    # @param data 送受信するデータ。
     # @else
     #
     # @brief Reading data
@@ -317,40 +341,102 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     #         PRECONDITION_NOT_MET Preconditin not met
     #         BUFFER_ERROR           Other error
     #
+    # @param data Data to transmit or receive.
     # @endif
     #
     # ReturnCode write(const OpenRTM::CdrData& data);
 
     def write(self, data):
+        self._rtcout.RTC_TRACE("write()")
         if self._writeCallback:
             return self._writeCallback(data)
+        self._rtcout.RTC_ERROR("self._writeCallback is None")
         return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
 
     #
     # @if jp
     # @brief データを書き込める状態かを判定
-    # @param self
     # @param retry True：再検索、False：通常の書き込み確認
     # @return True：書き込み可能
+    # @param option ガード照合に使用するオプション。
     # @else
-    # @brief
-    # @param self
+    # @brief Perform the is writable state operation.
     # @param retry
     # @return
+    # @param option Options used for guard matching.
     # @endif
-    def isWritable(self, retry=False):
+    def _isWritableState(self, retry=False, option=None):
+        """Return READY only after the existing callback made a reservation.
+
+        If notify ran, use its locked decision even if the manager advances
+        before the callback returns. Pre-notify rejection uses a phase snapshot.
+        """
+        manager = getattr(self._isWritableCallback, '_manager', None)
+        capture = getattr(manager, '_captureReadiness', None)
+        if capture is not None:
+            with capture(getattr(self._isWritableCallback, '_port', None), self.id()) as response:
+                if self.isWritable(retry, option):
+                    return CSP.READY
+                state = response['state']
+                if state is not None:
+                    return CSP.NOT_READY if state == CSP.READY else state
+                # Guards/closed ports can reject before reaching notify. There
+                # is no manager decision to retain in that case.
+                return manager._readinessState()
+        if self.isWritable(retry, option):
+            return CSP.READY
+        return manager._readinessState() if manager is not None else CSP.NOT_READY
+
+    ##
+    # @if jp
+    # @brief 直前の接続先問い合わせの応答を取得する。
+    # @else
+    # @brief Get the response from the most recent peer readiness query.
+    # @endif
+    def getPeerReadinessState(self):
+        consumer = self._consumer
+        return consumer.getReadinessState() if consumer is not None else CSP.NOT_READY
+
+    ##
+    # @if jp
+    # @brief 受信準備が整っているか確認する。
+    # @param retry 再試行の問い合わせかどうか。
+    # @param option ガード照合に使用するオプション。
+    # @else
+    # @brief Check whether the receiver is ready.
+    # @param retry Whether this query is a retry.
+    # @param option Options used for guard matching.
+    # @endif
+    def isWritable(self, retry=False, option=[]):
+        self._rtcout.RTC_TRACE("isWritable(%d %s)", (retry, str(option)))
         if self._isWritableCallback:
-            return self._isWritableCallback(self, retry)
+            return self._isWritableCallback(self, retry, option)
+        self._rtcout.RTC_ERROR("self._isWritableCallback is None")
+        return False
+
+    #
+    # @if jp
+    # @brief ガード条件を満たすかを判定
+    # @param option パラメータ
+    # @return True：条件一致、False：条件不一致
+    # @else
+    # @brief Match the sender options against the receiver guard.
+    # @param option
+    # @return
+    # @endif
+    def matchCondition(self, option=[]):
+        self._rtcout.RTC_TRACE("matchCondition(%s)", (str(option)))
+        if self._isMatchConditionCallback:
+            return self._isMatchConditionCallback(option)
+        self._rtcout.RTC_ERROR("self._isMatchConditionCallback is None")
         return False
 
     #
     # @if jp
     # @brief データ書き込み時のリスナ設定
-    # @param self
     # @param listener リスナ
     # @else
-    # @brief
-    # @param self
+    # @brief Set write listener.
     # @param listener
     # @endif
     def setWriteListener(self, listener):
@@ -359,15 +445,24 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     #
     # @if jp
     # @brief データ書き込み判定時のリスナ設定
-    # @param self
     # @param listener リスナ
     # @else
-    # @brief
-    # @param self
+    # @brief Set is writable listener.
     # @param listener
     # @endif
     def setIsWritableListener(self, listener):
         self._isWritableCallback = listener
+        
+    #
+    # @if jp
+    # @brief ガード条件判定時のリスナ設定
+    # @param listener リスナ
+    # @else
+    # @brief Set match condition listener.
+    # @param listener
+    # @endif
+    def setMatchConditionListener(self, listener):
+        self._isMatchConditionCallback = listener
 
     ##
     # @if jp
@@ -378,7 +473,8 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # void onConnect()
     def onConnect(self):
         if self._listeners and self._profile:
-            self._listeners.notify(OpenRTM_aist.ConnectorListenerType.ON_CONNECT, self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_CONNECT, self._profile)
         return
 
     ##
@@ -390,38 +486,67 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # void onDisconnect()
     def onDisconnect(self):
         if self._listeners and self._profile:
-            self._listeners.notify(OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT, self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT, self._profile)
         return
 
     ##
     # @if jp
     # @brief コンシューマの設定
+    # @param consumer `consumer`の値。
     # @else
     # @brief set Consumer
+    # @param consumer Value of consumer.
     # @endif
     def setConsumer(self, consumer):
         self._consumer = consumer
         self._consumer.setListener(self._info, self._listeners)
 
+    ##
+    # @if jp
+    # @brief `on Buffer Read`の通知を処理する。
+    # @param data 送受信するデータ。
+    # @else
+    # @brief Handle the on Buffer Read notification.
+    # @param data Data to transmit or receive.
+    # @endif
     def onBufferRead(self, data):
         if self._listeners and self._profile:
-            _, data = self._listeners.notifyData(OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ, self._profile, data)
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ, self._profile, data)
         return data
 
+    ##
+    # @if jp
+    # @brief `on Buffer Empty`の通知を処理する。
+    # @param data 送受信するデータ。
+    # @else
+    # @brief Handle the on Buffer Empty notification.
+    # @param data Data to transmit or receive.
+    # @endif
     def onBufferEmpty(self, data):
         if self._listeners and self._profile:
-            self._listeners.notify(OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
         return
 
+    ##
+    # @if jp
+    # @brief `on Buffer Read Timeout`の通知を処理する。
+    # @param data 送受信するデータ。
+    # @else
+    # @brief Handle the on Buffer Read Timeout notification.
+    # @param data Data to transmit or receive.
+    # @endif
     def onBufferReadTimeout(self, data):
         if self._listeners and self._profile:
-            self._listeners.notify(OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
         return
 
     ##
     # @if jp
     # @brief データの復号化
-    # @param self
     # @param cdr 復号化前のデータ
     # @return ret, data
     # ret：リターンコード
@@ -431,8 +556,7 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # PRECONDITION_NOT_MET：その他のエラー
     # data：復号化後のデータ
     # @else
-    # @brief
-    # @param self
+    # @brief Deserialize typed data from a CDR sequence.
     # @param cdr
     # @return
     # @endif
@@ -462,83 +586,22 @@ class InPortDuplexConnector(OpenRTM_aist.InPortConnector):
     # @brief コンシューマのインターフェースの登録を取り消す
     # @param prop コネクタプロファイルのプロパティ
     # @else
-    # @brief
+    # @brief Release the peer CORBA interface reference.
     # @param prop
     # @endif
     def unsubscribeInterface(self, prop):
         if self._consumer:
             self._consumer.unsubscribeInterface(prop)
 
-
+    ##
+    # @if jp
+    # @brief `Data Type`を設定する。
+    # @param data 送受信するデータ。
+    # @else
+    # @brief Set data type.
+    # @param data Data to transmit or receive.
+    # @endif
     def setDataType(self, data):
         OpenRTM_aist.InPortConnector.setDataType(self, data)
-        self._serializer = OpenRTM_aist.SerializerFactories.instance().createSerializer(self._marshaling_type, data)
-
-
-##
-# @if jp
-# @class WriteListenerBase
-# @brief WriteListenerBase クラス
-#
-# 書き込み時リスナのベースクラス
-#
-# @since 2.0.0
-#
-# @else
-# @class WriteListenerBase
-# @brief WriteListenerBase class
-#
-#
-# @since 2.0.0
-#
-# @endif
-#
-class WriteListenerBase(object):
-    ##
-    # @if jp
-    # @brief 仮想コールバック関数
-    # @param self
-    # @param data 書き込むバイト列のデータ
-    # @else
-    # @brief Destructor
-    # @param self
-    # @param data 書き込むバイト列のデータ
-    # @endif
-    def __call__(self, data):
-        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
-
-##
-# @if jp
-# @class IsWritableListenerBase
-# @brief IsWritableListenerBase クラス
-#
-# 書き込み確認時リスナのベースクラス
-#
-# @since 2.0.0
-#
-# @else
-# @class IsWritableListenerBase
-# @brief IsWritableListenerBase class
-#
-#
-# @since 2.0.0
-#
-# @endif
-#
-
-
-class IsWritableListenerBase(object):
-    ##
-    # @if jp
-    # @brief 仮想コールバック関数
-    # @param self
-    # @param con InPortConnector
-    # @return True：書き込み可、False：書き込み不可
-    # @else
-    # @brief Destructor
-    # @param self
-    # @param con
-    # @return
-    # @endif
-    def __call__(self, con):
-        return False
+        self._serializer = OpenRTM_aist.SerializerFactories.instance(
+        ).createSerializer(self._marshaling_type, data)
