@@ -80,6 +80,7 @@ from RTCUtil import *
 from OutPortBase import *
 from InPort import *
 from InPortProvider import *
+from InPortCorbaConsumerBase import *
 from InPortCorbaCdrConsumer import *
 from InPortCorbaCdrProvider import *
 from ConnectorBase import *
@@ -92,6 +93,7 @@ from PortCallBack import *
 from PortConnectListener import *
 from CorbaPort import *
 from OutPortConnector import *
+from OutPortCorbaConsumerBase import *
 from OutPortCorbaCdrConsumer import *
 from OutPortCorbaCdrProvider import *
 from OutPortPullConnector import *
