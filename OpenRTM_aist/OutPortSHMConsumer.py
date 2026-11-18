@@ -37,7 +37,7 @@ import threading
 #
 
 
-class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
+class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     """
     """
 
@@ -55,9 +55,8 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
     # @endif
     #
     def __init__(self):
-        OpenRTM_aist.OutPortCorbaCdrConsumer.__init__(self)
-        OpenRTM_aist.CorbaConsumer.__init__(
-            self, OpenRTM__POA.PortSharedMemory)
+        OpenRTM_aist.OutPortCorbaConsumerBase.__init__(
+            self, OpenRTM__POA.PortSharedMemory, "shared_memory")
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OutPortSHMConsumer")
 
         self._shmem = OpenRTM_aist.SharedMemory()
@@ -79,9 +78,9 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
     #
     # @endif
     #
-    def __del__(self, CorbaConsumer=OpenRTM_aist.CorbaConsumer):
+    def __del__(self):
         self._rtcout.RTC_PARANOID("~OutPortSHMConsumer()")
-        CorbaConsumer.__del__(self)
+        OpenRTM_aist.OutPortCorbaConsumerBase.__del__(self)
         try:
             if not self._ptr():
                 self._ptr().close_memory(True)
@@ -93,30 +92,6 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
         oid = OpenRTM_aist.Manager.instance().getPOA().servant_to_id(self._shmem)
         OpenRTM_aist.Manager.instance().getPOA().deactivate_object(oid)
 
-    ##
-    # @if jp
-    # @brief 設定初期化
-    #
-    # OutPortConsumerの各種設定を行う
-    #
-    # @param self
-    # @param prop コネクタプロパティ
-    #
-    # @else
-    # @brief Initializing configuration
-    #
-    #
-    # @endif
-    #
-    # virtual void init(coil::Properties& prop);
-
-    def init(self, prop):
-        self._rtcout.RTC_TRACE("init()")
-
-        self._properties = prop
-
-        return
-
     def setObject(self, obj):
         if OpenRTM_aist.CorbaConsumer.setObject(self, obj):
             portshmem = self._ptr()
@@ -124,6 +99,17 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
                 portshmem.setInterface(self._shmem._this())
                 return True
         return False
+
+    def setBuffer(self, buffer):
+        self._rtcout.RTC_TRACE("setBuffer()")
+        self._buffer = buffer
+        return
+
+    def setListener(self, info, listeners):
+        self._rtcout.RTC_TRACE("setListener()")
+        self._listeners = listeners
+        self._profile = info
+        return
 
     ##
     # @if jp
@@ -197,6 +183,114 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaCdrConsumer):
             self._rtcout.RTC_WARN("Exception caught from OutPort.get().")
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
             return self.CONNECTION_LOST, None
+
+    ##
+    # @if jp
+    # @brief リターンコード変換 (DataPortStatus -> BufferStatus)
+    # @else
+    # @brief Return codes conversion
+    # @endif
+    #
+    # ReturnCode convertReturn(::OpenRTM::PortStatus status,
+    #                          const cdrMemoryStream& data)
+
+    def convertReturn(self, status, data):
+        if status == OpenRTM.PORT_OK:
+            # never comes here
+            return self.PORT_OK, data
+
+        elif status == OpenRTM.PORT_ERROR:
+            self.onSenderError()
+            return self.PORT_ERROR, data
+
+        elif status == OpenRTM.BUFFER_FULL:
+            # never comes here
+            return self.BUFFER_FULL, data
+
+        elif status == OpenRTM.BUFFER_EMPTY:
+            self.onSenderEmpty()
+            return self.BUFFER_EMPTY, data
+
+        elif status == OpenRTM.BUFFER_TIMEOUT:
+            self.onSenderTimeout()
+            return self.BUFFER_TIMEOUT, data
+
+        elif status == OpenRTM.UNKNOWN_ERROR:
+            self.onSenderError()
+            return self.UNKNOWN_ERROR, data
+
+        else:
+            self.onSenderError()
+            return self.UNKNOWN_ERROR, data
+
+    ##
+    # @brief Connector data listener functions
+    #
+    # inline void onBufferWrite(const cdrMemoryStream& data)
+
+    def onBufferWrite(self, data):
+        if self._listeners is not None and self._profile is not None:
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE, self._profile, data)
+
+        return data
+
+    # inline void onBufferFull(const cdrMemoryStream& data)
+
+    def onBufferFull(self, data):
+        if self._listeners is not None and self._profile is not None:
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL, self._profile, data)
+
+        return data
+
+    # inline void onReceived(const cdrMemoryStream& data)
+
+    def onReceived(self, data):
+        if self._listeners is not None and self._profile is not None:
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED, self._profile, data)
+
+        return data
+
+    # inline void onReceiverFull(const cdrMemoryStream& data)
+
+    def onReceiverFull(self, data):
+        if self._listeners is not None and self._profile is not None:
+            _, data = self._listeners.notifyData(
+                OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL, self._profile, data)
+
+        return data
+
+    ##
+    # @brief Connector listener functions
+    #
+    # inline void onSenderEmpty()
+
+    def onSenderEmpty(self):
+        if self._listeners is not None and self._profile is not None:
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
+
+        return
+
+    # inline void onSenderTimeout()
+
+    def onSenderTimeout(self):
+        if self._listeners is not None and self._profile is not None:
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
+
+        return
+
+    # inline void onSenderError()
+
+    def onSenderError(self):
+        if self._listeners is not None and self._profile is not None:
+            self._listeners.notify(
+                OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
+
+        return
 
 
 def OutPortSHMConsumerInit():
