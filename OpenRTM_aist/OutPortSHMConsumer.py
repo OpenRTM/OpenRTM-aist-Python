@@ -97,12 +97,6 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
                     "Exception caught from PortSharedMemory.close_memory().")
                 self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
 
-    def _outportIorKey(self, properties):
-        key = "dataport.shared_memory.outport_ior"
-        if OpenRTM_aist.NVUtil.find_index(properties, key) >= 0:
-            return key
-        return super()._outportIorKey(properties)
-
     ##
     # @if jp
     # @brief 設定初期化

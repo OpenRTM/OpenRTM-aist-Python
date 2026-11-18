@@ -55,11 +55,7 @@ class OutPortCorbaConsumerBase(OpenRTM_aist.OutPortConsumer, OpenRTM_aist.CorbaC
     """
 
     def _outportIorKey(self, properties):
-        key = "dataport." + self._interfacetypestr + ".outport_ior"
-        if (self._interfacetypestr == "shared_memory"
-                and OpenRTM_aist.NVUtil.find_index(properties, key) < 0):
-            return "dataport.corba_cdr.outport_ior"
-        return key
+        return "dataport." + self._interfacetypestr + ".outport_ior"
 
     ##
     # @if jp
