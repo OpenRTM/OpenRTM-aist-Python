@@ -373,8 +373,8 @@ class SubListener(dds.Listener):
     # @endif
     #
     def on_data_available(self, entity):
-        l = entity.read(10)
-        for (sd, _) in l:
+        samples = entity.read(10)
+        for (sd, _) in samples:
             self._sub.put(sd)
 
 

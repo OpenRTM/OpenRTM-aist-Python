@@ -533,10 +533,7 @@ def CreateConfigurationSet(opts):
                 type = re.sub("@@", "::", type)
                 default = re.sub("@@", "::", default)
             except BaseException:
-                sys.stderr.write("Invalid option: "
-                                 + opt
-                                 + "="
-                                   + arg)
+                sys.stderr.write("Invalid option: " + opt + "=" + arg)
             tmp = copy.deepcopy(prof)
             tmp["name"] = name
             tmp["varname"] = name
@@ -588,10 +585,7 @@ def CreateDataPorts(opts):
                 name = re.sub("@@", "::", name)
                 type = re.sub("@@", "::", type)
             except BaseException:
-                sys.stderr.write("Invalid option: "
-                                 + opt
-                                 + "="
-                                   + arg)
+                sys.stderr.write("Invalid option: " + opt + "=" + arg)
             tmp = copy.deepcopy(prof)
             tmp["name"] = name
             tmp["portType"] = portType[opt]
@@ -670,10 +664,7 @@ def CreateServicePorts(opts):
                 name = re.sub("@@", "::", name)
                 type = re.sub("@@", "::", type)
             except BaseException:
-                sys.stderr.write("Invalid option: "
-                                 + opt
-                                 + "="
-                                   + arg)
+                sys.stderr.write("Invalid option: " + opt + "=" + arg)
             port = findport(prof_list, portname)
             if port is None:
                 port = copy.deepcopy(prof)

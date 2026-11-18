@@ -95,8 +95,7 @@ class UUID(object):
             if not 0 <= node < 1 << 48:
                 raise ValueError('field 6 out of range (need a 48-bit value)')
             clock_seq = (clock_seq_hi_variant << 8) | clock_seq_low
-            int_value = ((time_low << 96) | (time_mid << 80) |
-                         (time_hi_version << 64) | (clock_seq << 48) | node)
+            int_value = ((time_low << 96) | (time_mid << 80) | (time_hi_version << 64) | (clock_seq << 48) | node)
         if int_value:
             if not 0 <= int_value < 1 << 128:
                 raise ValueError('int is out of range (need a 128-bit value)')
@@ -173,14 +172,12 @@ class UUID(object):
     clock_seq_low = property(get_clock_seq_low)
 
     def get_time(self):
-        return (((self.time_hi_version & 0x0fff) << 48) |
-                (self.time_mid << 32) | self.time_low)
+        return (((self.time_hi_version & 0x0fff) << 48) | (self.time_mid << 32) | self.time_low)
 
     time = property(get_time)
 
     def get_clock_seq(self):
-        return (((self.clock_seq_hi_variant & 0x3f) << 8) |
-                self.clock_seq_low)
+        return (((self.clock_seq_hi_variant & 0x3f) << 8) | self.clock_seq_low)
 
     clock_seq = property(get_clock_seq)
 
@@ -288,8 +285,7 @@ def _netbios_getnode():
             continue
         status._unpack()
         bytes = map(ord, status.adapter_address)
-        return ((bytes[0] << 40) + (bytes[1] << 32) + (bytes[2] << 24) +
-                (bytes[3] << 16) + (bytes[4] << 8) + bytes[5])
+        return ((bytes[0] << 40) + (bytes[1] << 32) + (bytes[2] << 24) + (bytes[3] << 16) + (bytes[4] << 8) + bytes[5])
 
 # Thanks to Thomas Heller for ctypes and for his help with its use here.
 

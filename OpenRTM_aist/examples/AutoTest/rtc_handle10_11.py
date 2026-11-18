@@ -168,8 +168,7 @@ class Connector:
             else:
                 self.prop_dict_req[kk] = self.def_prop[kk]
             for pp in self.plist:
-                if not ((self.prop_dict_req[kk] in pp.prop[kk]) or
-                        ('Any' in pp.prop[kk])):
+                if not ((self.prop_dict_req[kk] in pp.prop[kk]) or ('Any' in pp.prop[kk])):
                     print(kk, self.prop_dict_req[kk])
                     self.prop_dict_req[kk] = ""
                     self.possible = False

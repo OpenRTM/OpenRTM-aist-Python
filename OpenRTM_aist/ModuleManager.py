@@ -568,8 +568,8 @@ class ModuleManager:
     # @endif
 
     def getModuleList(self, lang, modules):
-        l = "manager.modules." + lang
-        lprop = self._properties.getNode(l)
+        language_key = "manager.modules." + lang
+        lprop = self._properties.getNode(language_key)
 
         paths = lprop.getProperty("load_paths").split(",")
 
@@ -652,9 +652,8 @@ class ModuleManager:
     # @endif
 
     def getModuleProfiles(self, lang, modules, modprops):
-        l = "manager.modules." + lang
-        lprop = self._properties.getNode(l)
-
+        language_key = "manager.modules." + lang
+        lprop = self._properties.getNode(language_key)
 
         for mod_ in modules:
 

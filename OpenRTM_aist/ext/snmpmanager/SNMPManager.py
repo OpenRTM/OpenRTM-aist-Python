@@ -1831,8 +1831,7 @@ class SNMPManager:
         link_rules = plan.get("link_constraints") or {}
         robots = [self._robot_capacity(name, config_data, languages[name], rcfg, link_rules) for name in names]
         # 除外したロボット (移動元など) でも、生きていれば、そこで動き続ける既存の RTC は置ける (空き 0 で加える)
-        for name in sorted({c["manager"] for c in existing if c["manager"] not in names
-                            and c["manager"] in self._migration_managers}):
+        for name in sorted({c["manager"] for c in existing if c["manager"] not in names and c["manager"] in self._migration_managers}):
             robots.append(pl.Robot(name, 0.0, 0.0, set(), set()))
             self._log(f"capacity {name}: excluded from placement (keeps its existing RTCs only)")
 
@@ -1850,8 +1849,7 @@ class SNMPManager:
             if prof is None:
                 problems.append(f"{c['name']} ({mod.get('type_name')}): placement.xml に計測値がない")
                 continue
-            cands = [r.name for r in robots if r.name in loadable and module in loadable[r.name]
-                     and (c.get("manager") is None or c["manager"] == r.name) and prof.requires <= r.tags]
+            cands = [r.name for r in robots if r.name in loadable and module in loadable[r.name] and (c.get("manager") is None or c["manager"] == r.name) and prof.requires <= r.tags]
             mem = prof.memory_mb
             if rcfg is not None:
                 # 置く RTC も予約量を確保する (見込みより予約が大きければ予約で数える)
@@ -1860,8 +1858,7 @@ class SNMPManager:
                            self._slave_overhead(prof.language, prof), cands, prof)
             # 同じ名前の RTC が移動先の候補で既に動いている (別のロボットが一度実行した) なら、そのまま使う
             inst = self._instance_name(c)
-            where = next((r.name for r in robots if r.name in names
-                          and any(x["name"] == inst for x in (self._robot_inventory(r.name) or []))), None)
+            where = next((r.name for r in robots if r.name in names and any(x["name"] == inst for x in (self._robot_inventory(r.name) or []))), None)
             if not strict and where is not None:
                 item.candidates, item.cpu, item.memory_mb, item.slave_overhead_mb, item.fixed = [where], 0.0, 0.0, 0.0, True
             elif sb is not None and c.get("standby", True):
@@ -2271,8 +2268,7 @@ class SNMPManager:
             if first == now:
                 reason = "its slave manager exited abnormally" if cause == "missing" else \
                     "ERROR notified by the component observer"
-                self._log(f"recovery: {n} on {robot}: {cause} ({detail}); "
-                          + (f"{reason}, recovering now" if crashed else f"waiting {duration:g}s"))
+                self._log(f"recovery: {n} on {robot}: {cause} ({detail}); " + (f"{reason}, recovering now" if crashed else f"waiting {duration:g}s"))
             if now - first < duration and not crashed:
                 continue
             if self._recovery_cooldown.get(n, 0) > now or self._recovery_cooldown.get((robot, cause), 0) > now:
@@ -2893,8 +2889,7 @@ class SNMPManager:
         if not conf.getProperty("manager.process_callback"):
             conf.setProperty("manager.process_callback", "SNMPProcessCallback")
         self._observer_installed = True
-        self._log("process observer: slaves are launched with launch_type=observer, callback="
-                  + conf.getProperty("manager.process_callback"))
+        self._log("process observer: slaves are launched with launch_type=observer, callback=" + conf.getProperty("manager.process_callback"))
         return True
 
     ##
@@ -5106,8 +5101,7 @@ class SNMPManager:
         try:
             engine = SnmpEngine()
             self._snmp_engine = engine
-            address = (self._conf.getProperty("snmp.trap_address", "").strip()
-                       or self._configured_own_ip or "127.0.0.1")
+            address = (self._conf.getProperty("snmp.trap_address", "").strip() or self._configured_own_ip or "127.0.0.1")
             config.add_transport(
                 engine, udp.DOMAIN_NAME,
                 udp.UdpAsyncioTransport().open_server_mode((address, self._trap_port)),

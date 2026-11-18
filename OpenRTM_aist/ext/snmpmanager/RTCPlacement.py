@@ -270,8 +270,7 @@ class ProfileDB:
     # @return profile (None if there is no usable measurement)
     # @~
     def _from_element(self, path, el):
-        ms = [m for m in el.iter(NS + "Measurement") if m.get(NS + "status") == "ok"
-              and m.find(NS + "Resources") is not None]
+        ms = [m for m in el.iter(NS + "Measurement") if m.get(NS + "status") == "ok" and m.find(NS + "Resources") is not None]
         if not ms:
             return None
         m = next((x for x in ms if x.get(NS + "environment") == self.environment), None)
@@ -767,8 +766,7 @@ def objective_value(item, robot, state, weights=None):
             traffic += e.weight
     link = robot.link or {}
     badness = sum(float(link.get(k) or 0.0) / 10.0 for k in ("latency_ms", "jitter_ms", "packet_loss"))
-    return (w["cpu"] * cpu_left + w["memory"] * mem_left - w["traffic"] * traffic / 1000.0
-            + w["primary"] * (1.0 if robot.name == state["primary"] else 0.0) - w["link"] * badness)
+    return (w["cpu"] * cpu_left + w["memory"] * mem_left - w["traffic"] * traffic / 1000.0 + w["primary"] * (1.0 if robot.name == state["primary"] else 0.0) - w["link"] * badness)
 
 
 ##
@@ -884,12 +882,9 @@ def capacity_report(items, robots):
     total_mem = sum(i.memory_mb for i in items)
     lines = [f"必要量の合計: CPU {total_cpu:.1f}%, メモリ {total_mem:.1f}MB (slave マネージャの分を除く)"]
     for r in robots:
-        lines.append(f"{r.name}: 空き CPU {r.cpu_free:.1f}%, メモリ {r.mem_free_mb:.1f}MB"
-                     + (f" (予約 {r.reserved_mb:.1f}MB)" if r.reserved_mb else "")
-                     + ("" if r.link_ok else " 通信状態がロボット間の制約を満たさない"))
+        lines.append(f"{r.name}: 空き CPU {r.cpu_free:.1f}%, メモリ {r.mem_free_mb:.1f}MB" + (f" (予約 {r.reserved_mb:.1f}MB)" if r.reserved_mb else "") + ("" if r.link_ok else " 通信状態がロボット間の制約を満たさない"))
     for i in items:
-        fits = [r.name for r in robots if r.name in i.candidates and i.cpu <= r.cpu_free
-                and i.memory_mb + i.slave_overhead_mb <= r.mem_free_mb]
+        fits = [r.name for r in robots if r.name in i.candidates and i.cpu <= r.cpu_free and i.memory_mb + i.slave_overhead_mb <= r.mem_free_mb]
         if not fits:
             lines.append(f"{i.name} (CPU {i.cpu}%, メモリ {i.memory_mb}+{i.slave_overhead_mb}MB) は単独でもどのロボットにも入らない")
     return lines

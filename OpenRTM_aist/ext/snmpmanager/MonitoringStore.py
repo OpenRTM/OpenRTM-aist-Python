@@ -165,8 +165,8 @@ class MetricsStore:
     # @~
     def record_metrics(self, rows):
         now = time.time()
-        self._queue.put(("metrics", [(now, self.observer, r.get("robot"), r.get("ip"), r.get("status"))
-                                     + tuple(_num(r.get(c)) for c in METRIC_COLUMNS[1:]) for r in rows]))
+        self._queue.put(("metrics", [(now, self.observer, r.get("robot"), r.get("ip"), r.get(
+            "status")) + tuple(_num(r.get(c)) for c in METRIC_COLUMNS[1:]) for r in rows]))
 
     ##
     # @~japanese

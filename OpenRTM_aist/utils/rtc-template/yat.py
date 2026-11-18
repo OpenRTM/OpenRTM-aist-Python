@@ -547,11 +547,11 @@ class Template:
         length = len(lines)
         print("------------------------------------------------------------")
         for i in range(1, 10):
-            l = e.lineno - 6 + i
-            if l > 0 and l < length:
-                print(lines[l])
+            line_index = e.lineno - 6 + i
+            if line_index > 0 and line_index < length:
+                print(lines[line_index])
                 if i == 5:
-                    uline = '~' * len(lines[l])
+                    uline = '~' * len(lines[line_index])
                     print(uline)
         print("------------------------------------------------------------")
 
@@ -574,13 +574,13 @@ class Template:
             self.token[next] = text[2:]
 
     def lineno(self):
-        l = 1
+        line_number = 1
         for i in range(self.index):
             if isinstance(self.token[i], str):
-                l += self.token[i].count('\n')
+                line_number += self.token[i].count('\n')
         for i in range(1, self.index, 3):
-            l += 1
-        return l
+            line_number += 1
+        return line_number
 
 
 # ------------------------------------------------------------
@@ -662,8 +662,7 @@ class _TemplateProgram:
             target = expression.func
             if isinstance(target, ast.Name) and target.id in self._functions:
                 function = self._functions[target.id]
-            elif (isinstance(target, ast.Attribute) and isinstance(target.value, ast.Name)
-                  and target.value.id == "self" and target.attr in self._methods):
+            elif (isinstance(target, ast.Attribute) and isinstance(target.value, ast.Name) and target.value.id == "self" and target.attr in self._methods):
                 function = self._methods[target.attr]
             else:
                 raise ValueError("unsupported template call")
@@ -692,11 +691,11 @@ class GeneratorBase:
         length = len(lines)
         print("------------------------------------------------------------")
         for i in range(1, 10):
-            l = e.lineno - 6 + i
-            if l > 0 and l < length:
-                print(lines[l])
+            line_index = e.lineno - 6 + i
+            if line_index > 0 and line_index < length:
+                print(lines[line_index])
                 if i == 5:
-                    uline = '~' * len(lines[l])
+                    uline = '~' * len(lines[line_index])
                     print(uline)
         print("------------------------------------------------------------")
 
@@ -737,8 +736,7 @@ class GeneratorBase:
             return val
         if isinstance(val, (int, float)):
             return str(val)
-        raise UnexpectedData(self.lineno(), "\"" + keytext +
-                             "\" should have string, int or float value.")
+        raise UnexpectedData(self.lineno(), "\"" + keytext + "\" should have string, int or float value.")
 
     def get_list(self, keytext):
         val = self.get_value(keytext)

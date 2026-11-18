@@ -346,21 +346,16 @@ class python_gen(gen_base.gen_base):
     def print_impl(self):
         for sidl in self.data["service_idl"]:
             if not os.access(sidl["idl_fname"], os.F_OK):
-                sys.stderr.write("Error: IDL file \""
-                                 + sidl["idl_fname"]
-                                 + "\" not found.\n")
+                sys.stderr.write("Error: IDL file \"" + sidl["idl_fname"] + "\" not found.\n")
                 sys.exit(1)
 
             try:
                 subprocess.run(["omniidl", "-bpython", "-Wbexample", os.path.abspath(sidl["idl_fname"])],
                                check=True)
             except BaseException:
-                sys.stderr.write("Generate error: "
-                                 + sidl["impl_py"] + "\n")
+                sys.stderr.write("Generate error: " + sidl["impl_py"] + "\n")
 
-            print("  File \""
-                  + sidl["impl_py"]
-                  + "\" was generated.")
+            print("  File \"" + sidl["impl_py"] + "\" was generated.")
 
         for cons in self.data["consumer_idl"]:
             dup = False
@@ -370,9 +365,7 @@ class python_gen(gen_base.gen_base):
 
             if not dup:
                 if not os.access(cons["idl_fname"], os.F_OK):
-                    sys.stderr.write("Error: IDL file \""
-                                     + cons["idl_fname"]
-                                     + "\" not found.\n")
+                    sys.stderr.write("Error: IDL file \"" + cons["idl_fname"] + "\" not found.\n")
                     sys.exit(1)
 
                 try:
@@ -380,8 +373,7 @@ class python_gen(gen_base.gen_base):
                                    check=True)
                 except BaseException:
                     sys.stderr.write(
-                        "Generate error: omniidl -bpython " +
-                        cons["idl_fname"])
+                        "Generate error: omniidl -bpython " + cons["idl_fname"])
         return
 
     def print_pysrc(self):

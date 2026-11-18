@@ -261,27 +261,22 @@ def render_placement(agg, environment, robot):
     date = time.strftime("%Y-%m-%dT%H:%M:%S%z", time.localtime(agg["updated"] or time.time()))
     L = ['<?xml version="1.0" encoding="UTF-8"?>',
          f'<!-- SNMPManager が実行中に計測した値 (SlaveMeasureModule)。{robot} の RTC: {", ".join(agg["instances"])} -->',
-         '<plc:RtcPlacement xmlns:plc="urn:snmpmanager:placement:1"' + a("rtc", agg["type"])
-         + a("rtcId", agg.get("impl") or agg["type"]) + a("language", agg["language"])
-         + a("origin", "runtime") + a("robot", robot) + '>',
+         '<plc:RtcPlacement xmlns:plc="urn:snmpmanager:placement:1"' + a("rtc", agg["type"]) + a("rtcId", agg.get("impl") or agg["type"]) + a("language", agg["language"]) + a("origin", "runtime") + a("robot", robot) + '>',
          '  <plc:Measurements>',
-         '    <plc:Measurement' + a("environment", environment) + a("status", "ok") + a("date", date)
-         + a("samples", agg["samples"]) + a("runs", agg["runs"]) + a("intervalSec", agg.get("interval") or "")
-         + a("durationSec", round(agg["samples"] * (agg.get("interval") or 0), 1)) + '>',
-         '      <plc:Resources' + a("cpu", round(agg["cpu_value"], 2)) + a("memoryMb", round(agg["memory_mb"]["max"], 2))
-         + a("basis", f'measured by the manager: cpu={agg["cpu_stat"]} of the RTC share, '
-             'memory=max USS - empty manager USS (RTC share)') + '/>',
-         '      <plc:Cpu' + a("avg", agg["cpu"]["avg"]) + a("max", agg["cpu"]["max"]) + a("p95", agg["cpu"]["p95"])
-         + a("unit", "percent-of-one-core") + '/>',
+         '    <plc:Measurement' + a("environment", environment) + a("status", "ok") + a("date", date) + a("samples", agg["samples"]) + a("runs", agg["runs"]) + a("intervalSec", agg.get("interval") or "") + a("durationSec", round(agg["samples"] * (agg.get("interval") or 0), 1)) + '>',
+         '      <plc:Resources' + a("cpu", round(agg["cpu_value"], 2)) + a("memoryMb", round(agg["memory_mb"]["max"], 2)) + a(
+             "basis",
+             f'measured by the manager: cpu={agg["cpu_stat"]} of the RTC share, '
+             'memory=max USS - empty manager USS (RTC share)',
+         ) + '/>',
+         '      <plc:Cpu' + a("avg", agg["cpu"]["avg"]) + a("max", agg["cpu"]["max"]) + a("p95", agg["cpu"]["p95"]) + a("unit", "percent-of-one-core") + '/>',
          '      <plc:Memory plc:unit="MB">',
-         '        <plc:Uss' + a("avg", agg["memory_mb"]["avg"]) + a("max", agg["memory_mb"]["max"])
-         + a("baseline", round(agg["baseline_uss_mb"], 2)) + '/>',
+         '        <plc:Uss' + a("avg", agg["memory_mb"]["avg"]) + a("max", agg["memory_mb"]["max"]) + a("baseline", round(agg["baseline_uss_mb"], 2)) + '/>',
          '      </plc:Memory>']
     for name, p in sorted(agg["ports"].items()):
         if not p["msgs"]:
             continue
-        L.append('      <plc:PortObservation' + a("name", name) + a("bytesPerMsg", p["bytes_per_msg"])
-                 + a("bytesPerMsgMax", p["bytes_max"]) + a("hz", p["hz"]) + a("msgs", p["msgs"]) + '/>')
+        L.append('      <plc:PortObservation' + a("name", name) + a("bytesPerMsg", p["bytes_per_msg"]) + a("bytesPerMsgMax", p["bytes_max"]) + a("hz", p["hz"]) + a("msgs", p["msgs"]) + '/>')
     L += ['    </plc:Measurement>', '  </plc:Measurements>', '  <plc:Ports>']
     for name, p in sorted(agg["ports"].items()):
         size = a("bytesPerMsg", p["bytes_per_msg"]) if p["bytes_per_msg"] is not None else ""
@@ -857,8 +852,7 @@ def SNMPMeasureInit(manager):
     conf = manager.getConfig()
     if conf.getProperty("snmp.measure.enabled", "NO").strip().upper() != "YES":
         return
-    if (conf.getProperty("manager.is_master", "NO").strip().upper() == "YES"
-            and conf.getProperty("snmp.measure.master", "NO").strip().upper() != "YES"):
+    if (conf.getProperty("manager.is_master", "NO").strip().upper() == "YES" and conf.getProperty("snmp.measure.master", "NO").strip().upper() != "YES"):
         return
     if _measure is not None:
         return

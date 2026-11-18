@@ -38,8 +38,8 @@ class gen_base:
             elif (ans == "m" or ans == "M"):
                 f = open(fname, "r")
                 lines = []
-                for l in f.readlines():
-                    lines.append(l.rstrip())
+                for line in f.readlines():
+                    lines.append(line.rstrip())
                 f.close()
                 oldfname = fname + ".old." + time.strftime("%y%m%d%H%M%S")
                 os.rename(fname, oldfname)
@@ -55,25 +55,25 @@ class gen_base:
         tag_name = ""
         ret_lines = ""
 
-        for l in lines:
-            m = re.search("<rtc-template block=\"(.*?)\">", l)
+        for line in lines:
+            m = re.search("<rtc-template block=\"(.*?)\">", line)
             if m:
                 in_tag = True
                 tag_name = m.group(1)
-                ret_lines += l + "\n"
+                ret_lines += line + "\n"
                 continue
 
-            m = re.search("</rtc-template>", l)
+            m = re.search("</rtc-template>", line)
             if m:
                 in_tag = False
                 if tag_name in data:
                     ret_lines += data[tag_name] + "\n"
-                ret_lines += l + "\n"
+                ret_lines += line + "\n"
                 tag_name = ""
                 continue
 
             if not in_tag:
-                ret_lines += l + "\n"
+                ret_lines += line + "\n"
 
         return ret_lines
 

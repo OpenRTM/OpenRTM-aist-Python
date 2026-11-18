@@ -423,8 +423,7 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
         # Validate before ON_RECEIVED queues the event, and keep the lease
         # locked through enqueue + completion notification.
         with self._ctrl._cond:
-            allowed = (self._ctrl._reserved and self._ctrl._writing
-                       and self._writingConnector is con and not self._ctrl._write_admitted)
+            allowed = (self._ctrl._reserved and self._ctrl._writing and self._writingConnector is con and not self._ctrl._write_admitted)
             if allowed:
                 self._ctrl._write_admitted = True
             yield allowed

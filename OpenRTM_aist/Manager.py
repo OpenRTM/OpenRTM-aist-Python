@@ -1704,14 +1704,14 @@ class Manager:
 
         leaf0 = pp.getLeaf()
 
-        for l in leaf0:
-            lstype = l.getName()
+        for logstream_properties in leaf0:
+            lstype = logstream_properties.getName()
             logstream = factory.createObject(lstype)
             if logstream is None:
                 self._rtcout.RTC_WARN("Logstream %s creation failed." % lstype)
                 continue
             self._rtcout.RTC_INFO("Logstream %s created." % lstype)
-            if not logstream.init(l):
+            if not logstream.init(logstream_properties):
                 self._rtcout.RTC_WARN("Logstream %s init failed." % lstype)
 
                 self._rtcout.RTC_WARN("Logstream %s deleted." % lstype)
@@ -2472,7 +2472,6 @@ class Manager:
                     tm.set_time(duration)
 
             self.addTask(self._mgrservant.updateMasterManager, tm)
-
 
         return True
 

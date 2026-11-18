@@ -77,10 +77,8 @@ class TkMotor(Frame):
             a = a * math.pi / 180
             self.can.delete(self.line[i])
             self.line[i] = self.can.create_line(self.x[i], self.y[i],
-                                                self.x[i] + self.r *
-                                                math.cos(a),
-                                                self.y[i] + self.r *
-                                                math.sin(a),
+                                                self.x[i] + self.r * math.cos(a),
+                                                self.y[i] + self.r * math.sin(a),
                                                 fill="#700040", width=5)
             i = i + 1
 

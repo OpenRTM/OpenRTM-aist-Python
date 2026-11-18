@@ -142,8 +142,7 @@ class RescanArbiter:
                 return
             for priority, manager in sorted(list(self._managers.items())):
                 with manager._ctrl._cond:
-                    if not (manager._selection_active and manager._ctrl._waiting
-                            and manager._arbitration_parked and manager._portList):
+                    if not (manager._selection_active and manager._ctrl._waiting and manager._arbitration_parked and manager._portList):
                         continue
                     pending = list(manager._portList)
                 eligible = [port for port in pending if self._ready_peer(manager, port)]

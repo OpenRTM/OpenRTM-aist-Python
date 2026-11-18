@@ -439,10 +439,9 @@ class PropertyDialog:
         for i in range(len(t)):
             Label(master, text=t[i], anchor=W).grid(row=i, sticky=W,
                                                     padx=3, pady=3)
-        l = [self.name, self.type, self.description, self.vendor]
-        for i in range(len(l)):
-            Label(master, text=l[i], anchor=W).grid(row=i, column=1, sticky=W,
-                                                    padx=3, pady=3)
+        details = [self.name, self.type, self.description, self.vendor]
+        for i in range(len(details)):
+            Label(master, text=details[i], anchor=W).grid(row=i, column=1, sticky=W, padx=3, pady=3)
         return
 
     def label_entry(self, master, label0, var, label1):
