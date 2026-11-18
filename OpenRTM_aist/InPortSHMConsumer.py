@@ -143,6 +143,13 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
 
         return
 
+    def _inportPropertyPrefix(self, properties):
+        prefix = "dataport.shared_memory"
+        if any(OpenRTM_aist.NVUtil.find_index(properties, prefix + suffix) >= 0
+               for suffix in (".inport_ior", ".inport_ref")):
+            return prefix
+        return super()._inportPropertyPrefix(properties)
+
     def setObject(self, obj):
         if OpenRTM_aist.CorbaConsumer.setObject(self, obj):
             portshmem = self._ptr()
