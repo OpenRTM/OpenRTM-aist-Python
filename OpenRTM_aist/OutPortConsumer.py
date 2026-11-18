@@ -45,7 +45,7 @@ class OutPortConsumer(OpenRTM_aist.DataPortStatus):
     def get(self, data):
         return self.CONNECTION_LOST
 
-    def isReadable(self):
+    def isReadable(self, retry):
         return True
 
     ##

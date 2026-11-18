@@ -122,6 +122,11 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
         self._provider = provider
         self._listeners = listeners
 
+        self._sync_readwrite = False
+        if OpenRTM_aist.toBool(info.properties.getProperty(
+                "sync_readwrite"), "YES", "NO", False):
+            self._sync_readwrite = True
+
         if buffer:
             self._deleteBuffer = True
         else:
@@ -138,11 +143,6 @@ class InPortPushConnector(OpenRTM_aist.InPortConnector):
         self._provider.setBuffer(self._buffer)
         self._provider.setListener(info, self._listeners)
         self.onConnect()
-
-        self._sync_readwrite = False
-        if OpenRTM_aist.toBool(info.properties.getProperty(
-                "sync_readwrite"), "YES", "NO", False):
-            self._sync_readwrite = True
 
         self._writecompleted_worker = InPortPushConnector.WorkerThreadCtrl()
         self._readcompleted_worker = InPortPushConnector.WorkerThreadCtrl()

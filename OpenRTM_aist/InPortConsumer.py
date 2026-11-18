@@ -48,7 +48,7 @@ class InPortConsumer(OpenRTM_aist.DataPortStatus):
     def put(self, data):
         return self.CONNECTION_LOST
 
-    def isWritable(self):
+    def isWritable(self, retry):
         return True
 
     ##

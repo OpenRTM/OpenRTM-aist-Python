@@ -256,7 +256,7 @@ def toString(ior):
     result[10] = "0"
     result[11] = "0"
 
-    for i,datai in enumerate(data):
+    for i, datai in enumerate(data):
         d = ord(datai)
         j = 12 + i * 2
         v = (d & 0xf0)

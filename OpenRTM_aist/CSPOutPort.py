@@ -3,43 +3,61 @@
 
 ##
 # @file CSPOutPort.py
-# @brief CSPOutPort template class
-# @date $Date: $
+# @if jp
+# @brief 型付き出力と送信予約を管理する。
+# @else
+# @brief Manage typed output and send reservations.
+# @endif
+# @date $Date: 2026-11-13 15:32:20 $
 # @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
 #
+# Copyright (C) 2026
+#     Nobuhiko Miyamoto
+#     Intelligent Systems Research Institute,
+#     National Institute of
+#         Advanced Industrial Science and Technology (AIST), Japan
+#     All rights reserved.
+#
+# $Id$
+
 # Copyright (C) 2019
 #     Intelligent Systems Research Institute,
 #     National Institute of
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
+
+from omniORB import CORBA
 import OpenRTM_aist
+from OpenRTM_aist.CSPArbitration import CSPConnectionInfo
 import copy
+import CSP
 import threading
+import time
 
 
 ##
 # @if jp
 #
-# @class EventInPort
+# @class CSPOutPort
 #
-# @brief EventInPort テンプレートクラス
+# @brief CSPOutPort テンプレートクラス
 #
 #
 # @since 2.0.0
 #
 # @else
 #
-# @class EventInPort
+# @class CSPOutPort
 #
-# @brief EventInPort template class
+# @brief CSPOutPort template class
 #
 #
 # @since 2.0.0
 #
 # @endif
 #
-class CSPOutPort(OpenRTM_aist.OutPortBase):
+class CSPOutPort(CSPConnectionInfo, OpenRTM_aist.OutPortBase):
     ##
     # @if jp
     #
@@ -48,9 +66,10 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     # コンストラクタ。
     # パラメータとして与えられる T 型の変数にバインドされる。
     #
-    # @param name EventInPort 名。EventInPortBase:name() により参照される。
-    # @param value この EventInPort にバインドされる T 型の変数
+    # @param name CSPOutPort 名。CSPOutPortBase:name() により参照される。
+    # @param value この CSPOutPort にバインドされる T 型の変数
     #
+    # @param manager 関連付けるManager。
     # @else
     #
     # @brief A constructor.
@@ -58,10 +77,11 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     # constructor.
     # This is bound to type-T variable given as a parameter.
     #
-    # @param name A name of the EventInPort. This name is referred by
-    #             EventInPortBase::name().
-    # @param value type-T variable that is bound to this EventInPort.
+    # @param name A name of the CSPOutPort. This name is referred by
+    #             CSPOutPortBase::name().
+    # @param value type-T variable that is bound to this CSPOutPort.
     #
+    # @param manager Manager to associate with the object.
     # @endif
     #
     def __init__(self, name, value, manager=None):
@@ -79,6 +99,12 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         if manager:
             manager.addOutPort(self)
         self._syncmode = True
+
+        marshaling_types = OpenRTM_aist.SerializerFactories.instance().getSerializerList(value)
+        marshaling_types = OpenRTM_aist.flatten(marshaling_types).lstrip()
+        self.addProperty("dataport.marshaling_types", marshaling_types)
+        
+        self._option = []
 
     ##
     # @if jp
@@ -106,7 +132,6 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     #
     # ポート名称を取得する。
     #
-    # @param self
     # @return ポート名称
     #
     # @else
@@ -115,7 +140,6 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     #
     # Get port name.
     #
-    # @param self
     # @return The port name
     #
     # @endif
@@ -128,15 +152,13 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     #
     # @brief 初期化関数
     #
-    # @param self
     # @param prop 設定情報
     # channel_timeout：データ書き込み、読み込み時のタイムアウト
     #
     # @else
     #
-    # @brief
+    # @brief Perform the init operation.
     #
-    # @param self
     # @param prop
     #
     # @endif
@@ -155,26 +177,25 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         self._readable_listener = OpenRTM_aist.CSPOutPort.IsReadableListener(
             self._buffdata, self._ctrl, self._channeltimeout, self, self._manager)
         self._read_listener = OpenRTM_aist.CSPOutPort.ReadListener(
-            self._buffdata, self._ctrl, self._channeltimeout)
+            self._buffdata, self._ctrl, self._channeltimeout, self)
 
     ##
     # @if jp
     #
     # @brief CSPManagerの設定
     #
-    # @param self
     # @param manager CSPManager
     #
     # @else
     #
-    # @brief
+    # @brief Associate the port with a selection manager.
     #
-    # @param self
     # @param manager
     #
     # @endif
     #
     def setManager(self, manager):
+        self.beginSelection()
         self._readable_listener.setManager(manager)
         self._manager = manager
         if manager:
@@ -185,13 +206,11 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     #
     # @brief CSPManagerの設定解除
     #
-    # @param self
     #
     # @else
     #
-    # @brief
+    # @brief Remove the association between the port and its selection manager.
     #
-    # @param self
     #
     # @endif
     #
@@ -201,11 +220,47 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
 
     ##
     # @if jp
+    # @brief 新しい選択に必要な予約・走査状態を初期化する。
+    # @else
+    # @brief Initialize reservation and scan state for a new selection.
+    # @endif
+    def beginSelection(self):
+        with self._ctrl._cond:
+            self._ctrl._selection_closed = False
+
+    ##
+    # @if jp
+    # @brief 選択終了を通知し、未選択側の状態を解除する。
+    # @param selected `selected`の値。
+    # @else
+    # @brief Mark the end of selection and clear unselected state.
+    # @param selected Value of selected.
+    # @endif
+    def endSelection(self, selected):
+        with self._ctrl._cond:
+            self._ctrl._selection_closed = True
+
+    ##
+    # @if jp
+    # @brief `wait Previous Read`に対応する処理を行う。
+    # @else
+    # @brief Perform the wait previous read operation.
+    # @endif
+    def _waitPreviousRead(self):
+        deadline = time.monotonic() + self._channeltimeout
+        while self._ctrl._reserved and not self._ctrl._reading:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return False
+            self._ctrl._cond.wait(remaining)
+        return True
+
+    ##
+    # @if jp
     #
     # @brief コネクタ接続関数
     # OutPortBaseの接続処理のほかに、コネクタに読み込み確認時、読み込み時のコールバック関数を設定する
     #
-    # @param self
     # @param connector_profile コネクタプロファイル
     # @return ret, prof
     # ret：リターンコード
@@ -215,9 +270,8 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     #
     # @else
     #
-    # @brief
+    # @brief Process a connection notification and finalize connector information.
     #
-    # @param self
     # @param connector_profile
     # @return ret, prof
     #
@@ -227,6 +281,8 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         ret, prof = super(CSPOutPort, self).notify_connect(connector_profile)
         guard_con = OpenRTM_aist.ScopedLock(self._connector_mutex)
         for con in self._connectors:
+            from OpenRTM_aist.CSPArbitration import arbiter
+            arbiter.connect(con, self)
             con.setIsReadableListener(self._readable_listener)
             con.setReadListener(self._read_listener)
         return (ret, prof)
@@ -236,24 +292,24 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     #
     # @brief データが書き込み可能かを確認
     #
-    # @param self
     # @return ret, con
     # ret：True(書き込み可能)、False(書き込み不可)
     # con：書き込み可能なコネクタ。書き込み不可の場合はNone
     #
+    # @param option ガード照合に使用するオプション。
     # @else
     #
-    # @brief
+    # @brief Perform the data writable operation.
     #
-    # @param self
     # @return
     #
+    # @param option Options used for guard matching.
     # @endif
     #
-    def dataWritable(self):
+    def dataWritable(self, option=[]):
         guard = OpenRTM_aist.ScopedLock(self._connector_mutex)
         for con in self._connectors:
-            if con.isWritable(False):
+            if con.isWritable(False, option):
                 self._ctrl._searched_connectors = []
                 return True, con
             else:
@@ -266,25 +322,25 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     #
     # @brief データの再送信確認を行う
     #
-    # @param self
     # @return ret, con
     # ret：True(書き込み可能)、False(書き込み不可)
     # con：書き込み可能なコネクタ。書き込み不可の場合はNone
     #
     #
+    # @param option ガード照合に使用するオプション。
     # @else
     #
-    # @brief
+    # @brief Perform the data writable retry operation.
     #
-    # @param self
     # @return ret, con
     #
+    # @param option Options used for guard matching.
     # @endif
     #
-    def dataWritableRetry(self):
+    def dataWritableRetry(self, option=[]):
         cons = self._ctrl._connectors[:]
         for con in cons:
-            if con.isWritable(True):
+            if con.isWritable(True, option):
                 self._ctrl._connectors = []
                 self._ctrl._searched_connectors = []
                 return True, con
@@ -297,14 +353,12 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     #
     # @brief 書き込み可能なコネクタを選択してself._writableConnectorに格納する
     #
-    # @param self
     # @return True：書き込み可能、False：書き込み不可
     #
     # @else
     #
-    # @brief
+    # @brief Select one ready registered port.
     #
-    # @param self
     # @return
     #
     # @endif
@@ -317,16 +371,14 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         self._ctrl._connectors = []
         self._ctrl._searched_connectors = []
 
-        if self._ctrl._waiting:
+        if not self._waitPreviousRead():
+            return False
+        if self._ctrl._reserved and self._ctrl._reading:
             return True
-        if self._ctrl._reading:
-            self._ctrl._cond.wait(self._channeltimeout)
 
         if not self._syncmode:
-            del guard
-            guard = None
-
-        ret, self._writableConnector = self.dataWritable()
+            guard.unlock()
+        ret, self._writableConnector = self.dataWritable(self._option)
         return ret
 
     ##
@@ -336,15 +388,13 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     # self._writableConnectorに格納する
     #
     #
-    # @param self
     # @return True：書き込み可能、False：書き込み不可
     #
     #
     # @else
     #
-    # @brief
+    # @brief Rescan retained communication candidates.
     #
-    # @param self
     # @return
     #
     # @endif
@@ -353,15 +403,15 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         self._rtcout.RTC_TRACE("reselect()")
         guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
 
-        if self._ctrl._waiting:
+        if not self._waitPreviousRead():
+            return False
+        if self._ctrl._reserved and self._ctrl._reading:
             return True
-        if self._ctrl._reading:
-            self._ctrl._cond.wait(self._channeltimeout)
 
         if not self._syncmode:
-            del guard
+            guard.unlock()
 
-        ret, self._writableConnector = self.dataWritableRetry()
+        ret, self._writableConnector = self.dataWritableRetry(self._option)
         return ret
 
     ##
@@ -374,15 +424,13 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     # 再検索するコネクタのリストに追加して後で再検索する。
     #
     #
-    # @param self
     # @param mode True：ロックモード、False：非ロックモード
     #
     #
     # @else
     #
-    # @brief
+    # @brief Set sync mode.
     #
-    # @param self
     # @param mode
     #
     # @endif
@@ -396,15 +444,13 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     # @brief ロックモード、非ロックモードの取得
     #
     #
-    # @param self
     # @return True：ロックモード、False：非ロックモード
     #
     #
     # @else
     #
-    # @brief
+    # @brief Get sync mode.
     #
-    # @param self
     # @return
     #
     # @endif
@@ -418,14 +464,12 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     # @brief self._writableConnectorに格納したコネクタにデータを書き込む
     # このため、事前にselect関数を実行する必要がある
     #
-    # @param self
     # @param value データ
     #
     # @else
     #
-    # @brief
+    # @brief Send data through the selected output.
     #
-    # @param self
     # @param value
     #
     # @endif
@@ -441,31 +485,54 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
             value = self._OnWriteConvert(value)
 
         guard_con = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-        if self._ctrl._waiting:
+        if not self._waitPreviousRead():
+            return False
+        if self._ctrl._reading:
             ret, cdr_data = self._connectors[0].serializeData(value)
             if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
                 self.setData(cdr_data)
-                self._ctrl._waiting = False
-                self._ctrl._cond.notify()
+                self._ctrl._reading = False
+                self._ctrl._cond.notifyAll()
+                self.clearGuard()
                 return True
-
         if self._writableConnector:
-            del guard_con
-            self._writableConnector.write(value)
+            connector = self._writableConnector
+            self._writableConnector = None
+            guard_con.unlock()
+            ret = connector.write(value)
+            self.clearGuard()
+            return ret == OpenRTM_aist.DataPortStatus.PORT_OK
+        return False
+            
+    ##
+    # @if jp
+    #
+    # @brief self._writableConnectorにコネクタを格納する
+    #
+    # @param con コネクタ
+    #
+    # @else
+    #
+    # @brief Set writable connector.
+    #
+    # @param con
+    #
+    # @endif
+    #
+    def setWritableConnector(self, con):
+        self._writableConnector = con
 
     ##
     # @if jp
     #
     # @brief 待機状態時に移行した場合にデータを一時的に変数に格納する
     #
-    # @param self
     # @param data データ
     #
     # @else
     #
-    # @brief
+    # @brief Set data.
     #
-    # @param self
     # @param data
     #
     # @endif
@@ -480,30 +547,32 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     # 書き込み可能なコネクタが存在する場合は、データを書き込んで処理を終了する
     # 書き込み可能なコネクタが存在しない場合は、InPort側からデータを読み込むまで待機する
     #
-    # @param self
     # @param value データ
     # @return True：正常完了、False：エラー
     # データのマーシャリング、書き込みのタイムアウトでエラーが発生する
     #
     # @else
     #
-    # @brief
+    # @brief Send data to one ready connection.
     #
-    # @param self
     # @param value
     # @return
     #
     # @endif
     #
     def write(self, value=None):
+        if self._writableConnector is not None or self._ctrl._reading:
+            return self.writeData(value)
         guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+        if not self._waitPreviousRead():
+            return False
+        self._ctrl._selection_closed = False
 
         self._ctrl._connectors = []
         self._ctrl._searched_connectors = []
 
         if not self._syncmode:
-            del guard
-            guard = None
+            guard.unlock()
 
         if not value:
             value = self._value
@@ -517,7 +586,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
             value = self._OnWriteConvert(value)
 
         if not self._ctrl._waiting:
-            ret, con = self.dataWritable()
+            ret, con = self.dataWritable(self._option)
             if ret:
                 retcon = con.write(value)
                 if retcon == OpenRTM_aist.DataPortStatus.PORT_OK:
@@ -527,12 +596,13 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
                     return False
 
         if not self._syncmode:
-            guard_con = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            guard.lock()
 
-            ret, con = self.dataWritableRetry()
+            ret, con = self.dataWritableRetry(self._option)
             if ret:
                 retcon = con.write(value)
                 if retcon == OpenRTM_aist.DataPortStatus.PORT_OK:
+                    self.clearGuard()
                     return True
                 else:
                     self._rtcout.RTC_ERROR("write error %d", (retcon))
@@ -541,27 +611,98 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         ret, cdr_data = self._connectors[0].serializeData(value)
         if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
             self.setData(cdr_data)
+            self._ctrl._reading = False
             if self._ctrl._waiting:
                 self._ctrl._waiting = False
-                self._ctrl._cond.notify()
+                self._ctrl._cond.notifyAll()
+                self.clearGuard()
                 return True
             self._ctrl._readable = True
-            self._ctrl._cond.wait(self._channeltimeout)
+            # Publish before the final receiver probe, under the same lock
+            # used by IsReadableListener. A pull and a push cannot both win.
+            ret, con = self.dataWritable(self._option)
+            if ret:
+                self._ctrl._readable = False
+                self.setData(None)
+                retcon = con.write(value)
+                self.clearGuard()
+                return retcon == OpenRTM_aist.DataPortStatus.PORT_OK
+            self._ctrl._cond.notify_all()
+            deadline = time.monotonic() + self._channeltimeout
+            while self._ctrl._readable:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    break
+                self._ctrl._cond.wait(remaining)
 
             if self._ctrl._readable:
                 self._rtcout.RTC_ERROR("write timeout")
                 self._ctrl._readable = False
+                self.setData(None)
                 return False
+            self.clearGuard()
             return True
         else:
             self._rtcout.RTC_ERROR("serialize error")
             return False
 
+    ##
+    # @if jp
+    # @brief `On Write`を設定する。
+    # @param on_write `on_write`の値。
+    # @else
+    # @brief Set on write.
+    # @param on_write Value of on_write.
+    # @endif
     def setOnWrite(self, on_write):
         self._OnWrite = on_write
 
+    ##
+    # @if jp
+    # @brief `On Write Convert`を設定する。
+    # @param on_wconvert `on_wconvert`の値。
+    # @else
+    # @brief Set on write convert.
+    # @param on_wconvert Value of on_wconvert.
+    # @endif
     def setOnWriteConvert(self, on_wconvert):
         self._OnWriteConvert = on_wconvert
+        
+    ##
+    # @if jp
+    #
+    # @brief ガード条件判定用のパラメータを設定する
+    #
+    # @param option パラメータ
+    #
+    # @else
+    #
+    # @brief Set sender options used to match the peer input guard.
+    #
+    # @param option
+    #
+    # @endif
+    #
+    def setGuard(self, option):
+        self._option = option
+        self._readable_listener.setGuard(option)
+        
+    ##
+    # @if jp
+    #
+    # @brief ガード条件判定用のパラメータを初期化する
+    #
+    #
+    # @else
+    #
+    # @brief Clear guard.
+    #
+    #
+    # @endif
+    #
+    def clearGuard(self):
+        self._option = []
+        self._readable_listener.clearGuard()
 
     ##
     # @if jp
@@ -577,7 +718,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     #
     # @class IsReadableListener
     #
-    # @brief
+    # @brief Encapsulate the state and operations of IsReadableListener.
     #
     #
     # @since 2.0.0
@@ -591,7 +732,6 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         # @brief コンストラクタ
         #
         #
-        # @param self
         # @param control WorkerThreadCtrlオブジェクト
         # @param timeout 読み込み待機のタイムアウト時間
         # @param manager CSPチャネル管理マネージャ
@@ -599,15 +739,18 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         #
         #
         #
+        # @param data 送受信するデータ。
+        # @param port 操作対象のポート。
         # @else
         #
-        # @brief
+        # @brief Initialize the instance and its internal state.
         #
-        # @param self
         # @param control
         # @param timeout
         # @param manager
         #
+        # @param data Data to transmit or receive.
+        # @param port Port to operate on.
         # @endif
         #
         def __init__(self, data, control, timeout, port, manager=None):
@@ -617,6 +760,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
             self._port = port
             self._manager = manager
             self._mutex = threading.RLock()
+            self._option = []
         ##
         # @if jp
         #
@@ -626,64 +770,63 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         # このため、読み込み可能な場合は必ずデータを読み込み必要がある
         #
         #
-        # @param self
         # @param con OutPortConnector
         # @param retry True：再検索、False：通常の読み込み確認
         # @return True：読み込み可能、False：読み込み不可
         #
         #
         #
+        # @param provider 受信側のInPortCsp参照。
         # @else
         #
-        # @brief
+        # @brief Perform the call operation.
         #
-        # @param self
         # @param con
         # @param retry
         # @return
         #
+        # @param provider Reference to the receiver InPortCsp interface.
         # @endif
         #
 
-        def __call__(self, con, retry=False):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
-
-            if retry:
-                if con not in self._ctrl._searched_connectors:
+        def __call__(self, con, retry=False, provider=CSP.InPortCsp._nil):
+            with self._mutex:
+                if retry and con not in self._ctrl._searched_connectors:
                     return False
-
-            if self._manager:
-                if self._manager.notify(outport=self._port):
-                    guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-                    self._ctrl._reading = True
-                    return True
-            del guard_manager
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-            if self._ctrl._reading:
-                self._ctrl._cond.wait(self._channeltimeout)
-            if not self._ctrl._readable:
-                self._ctrl._reading = False
-                self._ctrl._connectors.append(con)
-                return False
-            else:
-                self._ctrl._reading = True
-                return True
+                if self._option and not provider.match_condition(self._option):
+                    return False
+                with self._ctrl._cond:
+                    if self._ctrl._reserved or self._ctrl._selection_closed:
+                        return False
+                    manager = self._manager
+                    if manager is not None:
+                        self._ctrl._reserved = True
+                        self._ctrl._reading = True
+                        if manager.notify(outport=self._port, connector_id=getattr(con, 'id', lambda: None)()):
+                            return True
+                        self._ctrl._reserved = False
+                        self._ctrl._reading = False
+                    elif self._ctrl._readable:
+                        self._ctrl._reserved = True
+                        self._ctrl._reading = True
+                        return True
+                    if con not in self._ctrl._connectors:
+                        self._ctrl._connectors.append(con)
+                    return False
 
         ##
         # @if jp
         #
         # @brief CSPManagerの設定
         #
-        # @param self
         # @param manager CSPManager
         #
         #
         #
         # @else
         #
-        # @brief
+        # @brief Associate the port with a selection manager.
         #
-        # @param self
         # @param manager
         #
         # @endif
@@ -697,21 +840,53 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         #
         # @brief CSPManagerの解除
         #
-        # @param self
         #
         #
         #
         # @else
         #
-        # @brief
+        # @brief Remove the association between the port and its selection manager.
         #
-        # @param self
         #
         # @endif
         #
         def releaseManager(self):
             guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = None
+            
+        ##
+        # @if jp
+        #
+        # @brief ガード条件判定用のパラメータを設定する
+        #
+        # @param option パラメータ
+        #
+        # @else
+        #
+        # @brief Set sender options used to match the peer input guard.
+        #
+        # @param option
+        #
+        # @endif
+        #
+        def setGuard(self, option):
+            self._option = option
+            
+        ##
+        # @if jp
+        #
+        # @brief ガード条件判定用のパラメータを初期化する
+        #
+        #
+        # @else
+        #
+        # @brief Clear guard.
+        #
+        #
+        # @endif
+        #
+        def clearGuard(self):
+            self._option = []
 
     ##
     # @if jp
@@ -727,7 +902,7 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
     #
     # @class ReadListener
     #
-    # @brief
+    # @brief Encapsulate the state and operations of ReadListener.
     #
     #
     # @since 2.0.0
@@ -741,26 +916,29 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         # @brief コンストラクタ
         #
         #
-        # @param self
         # @param data データを格納する変数
         # @param control WorkerThreadCtrlオブジェクト
         #
         #
         #
+        # @param timeout 待機期限。秒単位。
+        # @param port 操作対象のポート。
         # @else
         #
-        # @brief
+        # @brief Initialize the instance and its internal state.
         #
-        # @param self
         # @param data
         # @param control
         #
+        # @param timeout Wait timeout in seconds.
+        # @param port Port to operate on.
         # @endif
         #
-        def __init__(self, data, control, timeout):
+        def __init__(self, data, control, timeout, port=None):
             self._ctrl = control
             self._data = data
             self._channeltimeout = timeout
+            self._port = port
         ##
         # @if jp
         #
@@ -768,7 +946,6 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         # データを変数から取り出し、読み込み状態を解除する
         #
         #
-        # @param self
         # @return ret, data
         # ret：リターンコード
         # BUFFER_OK：正常完了
@@ -779,36 +956,54 @@ class CSPOutPort(OpenRTM_aist.OutPortBase):
         #
         # @else
         #
-        # @brief
+        # @brief Perform the call operation.
         #
-        # @param self
         # @return
         #
         # @endif
         #
 
         def __call__(self):
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-            if self._data[0] is None:
-                self._ctrl._waiting = True
-                self._ctrl._cond.wait(self._channeltimeout)
+            deadline = time.monotonic() + self._channeltimeout
+            with self._ctrl._cond:
+                try:
+                    while self._data[0] is None:
+                        self._ctrl._waiting = True
+                        remaining = deadline - time.monotonic()
+                        if remaining <= 0:
+                            return OpenRTM_aist.BufferStatus.BUFFER_ERROR, None
+                        self._ctrl._cond.wait(remaining)
+                    data = self._data[0]
+                    self._data[0] = None
+                    self._ctrl._readable = False
+                    return OpenRTM_aist.BufferStatus.BUFFER_OK, data
+                finally:
+                    self._ctrl._waiting = False
+                    self._ctrl._reading = False
+                    self._ctrl._readable = False
+                    self._ctrl._reserved = False
+                    self._ctrl._cond.notify_all()
 
-            self._ctrl._reading = False
-            data = self._data[0]
-            self._data[0] = None
-            self._ctrl._readable = False
-            self._ctrl._cond.notify()
-            if data is None:
-                return OpenRTM_aist.BufferStatus.BUFFER_ERROR, data
-            else:
-                return OpenRTM_aist.BufferStatus.BUFFER_OK, data
-
+    ##
+    # @if jp
+    # @brief `WorkerThreadCtrl`の状態と操作をまとめる。
+    # @else
+    # @brief Encapsulate the state and operations of WorkerThreadCtrl.
+    # @endif
     class WorkerThreadCtrl:
+        ##
+        # @if jp
+        # @brief インスタンスと内部状態を初期化する。
+        # @else
+        # @brief Initialize the instance and its internal state.
+        # @endif
         def __init__(self):
             self._mutex = threading.RLock()
             self._cond = threading.Condition(self._mutex)
             self._reading = False
             self._readable = False
             self._waiting = False
+            self._reserved = False
+            self._selection_closed = False
             self._connectors = []
             self._searched_connectors = []
