@@ -8,6 +8,7 @@
 #  @author Noriaki Ando
 #
 
+import binascii
 import sys
 from omniORB import CORBA
 from omniORB import *
@@ -235,44 +236,9 @@ TAGS = ("IOP::TAG_INTERNET_IOP",
 
 
 def toString(ior):
-    global endian
-
     data = cdrMarshal(any.to_any(ior).typecode(), ior, endian)
-    result = [0] * (12 + len(data) * 2)
-    result[0] = "I"
-    result[1] = "O"
-    result[2] = "R"
-    result[3] = ":"
-
-    result[4] = "0"
-    if endian:
-        result[5] = "1"
-    else:
-        result[5] = "0"
-    result[6] = "0"
-    result[7] = "0"
-    result[8] = "0"
-    result[9] = "0"
-    result[10] = "0"
-    result[11] = "0"
-
-    for i, datai in enumerate(data):
-        d = ord(datai)
-        j = 12 + i * 2
-        v = (d & 0xf0)
-        v = v >> 4
-        if v < 10:
-            result[j] = chr(ord('0') + v)
-        else:
-            result[j] = chr(ord('a') + (v - 10))
-        v = ((d & 0xf))
-        if v < 10:
-            result[j + 1] = chr(ord('0') + v)
-        else:
-            result[j + 1] = chr(ord('a') + (v - 10))
-
-    iorstr = "".join(result)
-    return iorstr
+    header = "IOR:01000000" if endian else "IOR:00000000"
+    return header + binascii.hexlify(data).decode("ascii")
 
 
 def toIOR(iorstr):

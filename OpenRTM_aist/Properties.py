@@ -381,15 +381,18 @@ class Properties:
     #
     # @endif
 
+    def _pathSegments(self, key):
+        segments = []
+        self.split(key, ".", segments)
+        if segments and all(segment.strip() for segment in segments):
+            return segments
+        return []
+
     def getProperty(self, key, default=None):
         if not key.strip():
             return self.empty
         if default is None:
-            keys = []
-            #keys = str.split(key, ".")
-            self.split(key, ".", keys)
-
-            node = self._getNode(keys, 0, self)
+            node = self.findNode(key)
             if node:
                 if node.value is not None:
                     return node.value
@@ -421,13 +424,7 @@ class Properties:
     # @endif
 
     def getDefault(self, key):
-        if not key.strip():
-            return self.empty
-        keys = []
-        #keys = str.split(key, ".")
-        self.split(key, ".", keys)
-
-        node = self._getNode(keys, 0, self)
+        node = self.findNode(key)
         if node:
             return node.default_value
 
@@ -463,12 +460,10 @@ class Properties:
     # @endif
 
     def setProperty(self, key, value=None):
-        if not key.strip():
-            return value
+        keys = self._pathSegments(key)
+        if not keys:
+            return value if not key.strip() else self.empty
         if value is not None:
-            keys = []
-            #keys = str.split(key, ".")
-            self.split(key, ".", keys)
             curr = self
             for _key in keys:
                 next = curr.hasKey(_key)
@@ -503,9 +498,9 @@ class Properties:
     # @endif
 
     def setDefault(self, key, value):
-        keys = []
-        self.split(key, ".", keys)
-        #keys = str.split(key, ".")
+        keys = self._pathSegments(key)
+        if not keys:
+            return self.empty
 
         curr = self
         for _key in keys:
@@ -976,12 +971,8 @@ class Properties:
     # Properties* const Properties::findNode(const std::string& key) const
 
     def findNode(self, key):
-        if not key.strip():
-            return None
-
-        keys = []
-        self.split(key, '.', keys)
-        return self._getNode(keys, 0, self)
+        keys = self._pathSegments(key)
+        return self._getNode(keys, 0, self) if keys else None
 
     ##
     # @if jp
@@ -999,14 +990,15 @@ class Properties:
     # @endif
 
     def getNode(self, key):
-        if not key.strip():
+        if key == "":
             return self
 
         leaf = self.findNode(key)
         if leaf:
             return leaf
 
-        self.createNode(key)
+        if not self.createNode(key):
+            raise ValueError("Invalid property key: " + key)
         return self.findNode(key)
 
     ##
@@ -1027,7 +1019,7 @@ class Properties:
     # @endif
 
     def createNode(self, key):
-        if not key.strip():
+        if not self._pathSegments(key):
             return False
 
         if self.findNode(key):

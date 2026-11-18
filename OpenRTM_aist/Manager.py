@@ -1570,6 +1570,7 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.shutdownManager()")
         self._listeners.manager_.preShutdown()
         self.shutdownComponents()
+        OpenRTM_aist.LocalServiceAdmin.shutdown()
         self.shutdownManagerServant()
         self.shutdownNaming()
         self.shutdownORB()
@@ -2712,8 +2713,11 @@ class Manager:
         type_name = comp.getTypeName()
         inst_name = comp.getInstanceName()
 
-        type_conf = category + "." + type_name + ".config_file"
-        name_conf = category + "." + inst_name + ".config_file"
+        prefix = category + "." if category else ""
+        type_key = prefix + type_name
+        instance_key = prefix + inst_name
+        type_conf = type_key + ".config_file"
+        name_conf = instance_key + ".config_file"
 
         type_prop = OpenRTM_aist.Properties()
 
@@ -2735,15 +2739,15 @@ class Manager:
                 name_prop.load(conff)
                 conff.close()
 
-        if self._config.findNode(category + "." + inst_name):
+        if self._config.findNode(instance_key):
             temp_ = OpenRTM_aist.Properties(
                 prop=self._config.getNode(
-                    category + "." + inst_name))
+                    instance_key))
             keys_ = temp_.propertyNames()
             if not (len(keys_) == 1 and keys_[-1] == "config_file"):
                 name_prop.mergeProperties(
                     self._config.getNode(
-                        category + "." + inst_name))
+                        instance_key))
                 self._rtcout.RTC_INFO(
                     "Component name conf exists in rtc.conf. Merged.")
                 self._rtcout.RTC_DEBUG(name_prop)
@@ -2766,15 +2770,15 @@ class Manager:
                 type_prop.load(conff)
                 conff.close()
 
-        if self._config.findNode(category + "." + type_name):
+        if self._config.findNode(type_key):
             temp_ = OpenRTM_aist.Properties(
                 prop=self._config.getNode(
-                    category + "." + type_name))
+                    type_key))
             keys_ = temp_.propertyNames()
             if not (len(keys_) == 1 and keys_[-1] == "config_file"):
                 type_prop.mergeProperties(
                     self._config.getNode(
-                        category + "." + type_name))
+                        type_key))
                 self._rtcout.RTC_INFO(
                     "Component type conf exists in rtc.conf. Merged.")
                 self._rtcout.RTC_DEBUG(type_prop)

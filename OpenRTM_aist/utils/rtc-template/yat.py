@@ -168,7 +168,6 @@
 #
 import string
 import re
-from types import StringType, IntType, FloatType, DictType, ListType, ClassType
 import sys
 
 
@@ -245,12 +244,9 @@ class Template:
         return
 
     def generate(self, dict):
-        # eval generated script
-        exec(self.script)
-        # script includes Generator class
-        gen = Generator(self.token, dict)
-        # execute generated script
-        return gen.generate()
+        namespace = {}
+        exec(self.script, globals(), namespace)
+        return namespace["Generator"](self.token, dict).generate()
 
     def get_script(self):
         return self.script
@@ -561,7 +557,7 @@ class Template:
     def lineno(self):
         l = 1
         for i in range(self.index):
-            if isinstance(self.token[i], StringType):
+            if isinstance(self.token[i], str):
                 l += self.token[i].count('\n')
         for i in range(1, self.index, 3):
             l += 1
@@ -578,7 +574,7 @@ class Generator(GeneratorBase):
     def generate(self):
         try:
             self.process()
-        except YATException, e:
+        except YATException as e:
             self.print_error(e)
             sys.exit(-1)
         return self.text
@@ -649,16 +645,16 @@ class GeneratorBase:
 
     def get_text(self, keytext):
         val = self.get_value(keytext)
-        if isinstance(val, StringType):
+        if isinstance(val, str):
             return val
-        if isinstance(val, IntType) or isinstance(val, FloatType):
+        if isinstance(val, (int, float)):
             return str(val)
         raise UnexpectedData(self.lineno(), "\"" + keytext +
                              "\" should have string, int or float value.")
 
     def get_list(self, keytext):
         val = self.get_value(keytext)
-        if not isinstance(val, ListType):
+        if not isinstance(val, list):
             raise UnexpectedData(self.lineno(),
                                  "\"" + keytext + "\" should have list value.")
         return val
@@ -678,11 +674,11 @@ class GeneratorBase:
                 return dict_value
         raise NotFound(self.lineno(), keytext)
 
-    def get_dict_value(self, keys, dict):
+    def get_dict_value(self, keys, data):
         length = len(keys)
-        d = dict
+        d = data
         for i in range(length):
-            if isinstance(d, DictType) and keys[i] in d:
+            if isinstance(d, dict) and keys[i] in d:
                 d = d[keys[i]]
             else:
                 return None

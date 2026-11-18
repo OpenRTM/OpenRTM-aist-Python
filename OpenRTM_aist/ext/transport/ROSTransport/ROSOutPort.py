@@ -197,7 +197,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
             'http://' + self._roscorehost + ":" + self._roscoreport)
         messageType = "std_msgs/Float32"
         messageTypeList = self._messageType.split(":")
-        if len(messageType) >= 2:
+        if len(messageTypeList) >= 2:
             messageType = messageTypeList[1]
 
         try:

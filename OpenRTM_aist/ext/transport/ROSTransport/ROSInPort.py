@@ -193,7 +193,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
             try:
                 if con.getConnection() == sock:
                     self._rtcout.RTC_VERBOSE("close socket")
-                self._tcp_connecters.remove(con)
+                    self._tcp_connecters.remove(con)
             except BaseException:
                 self._rtcout.RTC_ERROR("close socket error")
 
