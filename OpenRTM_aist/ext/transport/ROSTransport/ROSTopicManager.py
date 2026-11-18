@@ -123,6 +123,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
             (rosgraph.network.get_bind_address(), self._port))
         (self._addr, self._port) = self._server_sock.getsockname()[0:2]
         self._server_sock.listen(5)
+        self._server_sock.settimeout(0.2)
         self._thread = threading.Thread(target=self.run, args=())
         self._thread.daemon = True
         self._thread.start()
@@ -404,8 +405,13 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
                 if poller:
                     poller.unregister(fileno)
 
+            except socket.timeout:
+                continue
             except rosgraph.network.ROSHandshakeException:
                 print("read ROS handshake exception")
+            except OSError:
+                if not self._shutdownflag:
+                    print(OpenRTM_aist.Logger.print_exception())
             except BaseException:
                 print(OpenRTM_aist.Logger.print_exception())
 
@@ -425,7 +431,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     def shutdown(self):
         self._shutdownflag = True
         try:
-            self._server_sock.shutdown(socket.SHUT_WR)
+            self._server_sock.shutdown(socket.SHUT_RDWR)
         except BaseException:
             pass
         self._server_sock.close()

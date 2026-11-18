@@ -265,6 +265,9 @@ class InPortCorbaCdrConsumer(
         self.unsubscribeFromRef(properties)
         return
 
+    def _inportPropertyPrefix(self, properties):
+        return "dataport.corba_cdr"
+
     ##
     # @if jp
     # @brief IOR文字列からオブジェクト参照を取得する
@@ -282,8 +285,8 @@ class InPortCorbaCdrConsumer(
     def subscribeFromIor(self, properties):
         self._rtcout.RTC_TRACE("subscribeFromIor()")
 
-        index = OpenRTM_aist.NVUtil.find_index(properties,
-                                               "dataport.corba_cdr.inport_ior")
+        key = self._inportPropertyPrefix(properties) + ".inport_ior"
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
         if index < 0:
             self._rtcout.RTC_ERROR("inport_ior not found")
             return False
@@ -327,8 +330,8 @@ class InPortCorbaCdrConsumer(
     # bool subscribeFromRef(const SDOPackage::NVList& properties);
     def subscribeFromRef(self, properties):
         self._rtcout.RTC_TRACE("subscribeFromRef()")
-        index = OpenRTM_aist.NVUtil.find_index(properties,
-                                               "dataport.corba_cdr.inport_ref")
+        key = self._inportPropertyPrefix(properties) + ".inport_ref"
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
         if index < 0:
             self._rtcout.RTC_ERROR("inport_ref not found")
             return False
@@ -369,8 +372,8 @@ class InPortCorbaCdrConsumer(
     # bool unsubscribeFromIor(const SDOPackage::NVList& properties);
     def unsubscribeFromIor(self, properties):
         self._rtcout.RTC_TRACE("unsubscribeFromIor()")
-        index = OpenRTM_aist.NVUtil.find_index(properties,
-                                               "dataport.corba_cdr.inport_ior")
+        key = self._inportPropertyPrefix(properties) + ".inport_ior"
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
         if index < 0:
             self._rtcout.RTC_ERROR("inport_ior not found")
             return False
@@ -412,8 +415,8 @@ class InPortCorbaCdrConsumer(
     # bool unsubscribeFromRef(const SDOPackage::NVList& properties);
     def unsubscribeFromRef(self, properties):
         self._rtcout.RTC_TRACE("unsubscribeFromRef()")
-        index = OpenRTM_aist.NVUtil.find_index(properties,
-                                               "dataport.corba_cdr.inport_ref")
+        key = self._inportPropertyPrefix(properties) + ".inport_ref"
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
 
         if index < 0:
             return False

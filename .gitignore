@@ -1,0 +1,10 @@
+# Python bytecode
+*.pyc
+*.pyo
+__pycache__/
+
+# IDL generated Python files
+*_idl.py
+
+# IDL generated POA directories
+*__POA/
