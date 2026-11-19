@@ -59,7 +59,7 @@ class OpenSpliceTopicManager(object):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OpenSpliceTopicManager")
         self._qosProfile = None
         self._domainParticipant = None
@@ -84,7 +84,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -119,7 +119,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def start(self, prop):
+    def start(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_PARANOID("OpenSpliceManager::start()")
         self._rtcout.RTC_DEBUG("%s", prop)
         uri = prop.getProperty("uri")
@@ -127,7 +127,7 @@ class OpenSpliceTopicManager(object):
         domainid = -1
         try:
             domainid = int(prop.getProperty("domain.id"))
-        except ValueError as error:
+        except ValueError:
             pass
         if uri and profile:
             self._qosProfile = dds.QosProvider(uri, profile)
@@ -170,7 +170,7 @@ class OpenSpliceTopicManager(object):
     # @return
     #
     # @endif
-    def createPublisher(self, prop):
+    def createPublisher(self, prop: 'OpenRTM_aist.Properties') -> bool:
         self._rtcout.RTC_INFO("OpenSpliceManager::createPublisher()")
 
         if self._publisher:
@@ -233,7 +233,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def createSubscriber(self, prop):
+    def createSubscriber(self, prop: 'OpenRTM_aist.Properties') -> bool:
         self._rtcout.RTC_INFO("OpenSpliceManager::createSubscriber()")
 
         if self._subscriber:
@@ -293,7 +293,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         global manager
 
         manager = None
@@ -328,9 +328,8 @@ class OpenSpliceTopicManager(object):
     # @return
     #
     # @endif
-    def genInfo(self, datatype):
-        global mutex
-        guard = OpenRTM_aist.ScopedLock(mutex)
+    def genInfo(self, datatype: str):
+        _ = OpenRTM_aist.ScopedLock(mutex)
         if datatype in self._info:
             return self._info[datatype]
         datainfo = OpenSpliceMessageInfo.OpenSpliceMessageInfoList.instance().getInfo(datatype)
@@ -359,11 +358,10 @@ class OpenSpliceTopicManager(object):
     # @return
     #
     # @endif
-    def createWriter(self, topic, prop):
-        global mutex
+    def createWriter(self, topic, prop: 'OpenRTM_aist.Properties'):
         self._rtcout.RTC_INFO(
             "OpenSpliceManager::createWriter()")
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        _ = OpenRTM_aist.ScopedLock(mutex)
         if self._qosProfile:
             self._rtcout.RTC_INFO("QoSProvider set DataWriterQos")
             return self._publisher.create_datawriter(
@@ -462,7 +460,7 @@ class OpenSpliceTopicManager(object):
             try:
                 history_depth = int(prop.getProperty(
                     "writer_qos.history.depth"))
-            except ValueError as error:
+            except ValueError:
                 pass
                 # self._rtcout.RTC_ERROR(error)
 
@@ -479,7 +477,7 @@ class OpenSpliceTopicManager(object):
                     "writer_qos.resource_limits.max_instances"))
                 max_samples_per_instance = int(prop.getProperty(
                     "writer_qos.resource_limits.max_samples_per_instance"))
-            except ValueError as error:
+            except ValueError:
                 pass
                 # self._rtcout.RTC_ERROR(error)
 
@@ -490,7 +488,7 @@ class OpenSpliceTopicManager(object):
             try:
                 transport_priority = int(prop.getProperty(
                     "writer_qos.transport_priority.value"))
-            except ValueError as error:
+            except ValueError:
                 pass
                 # self._rtcout.RTC_ERROR(error)
 
@@ -519,7 +517,7 @@ class OpenSpliceTopicManager(object):
             try:
                 ownership_strength = int(prop.getProperty(
                     "writer_qos.ownership_strength.value"))
-            except ValueError as error:
+            except ValueError:
                 pass
                 # self._rtcout.RTC_ERROR(error)
 
@@ -601,11 +599,10 @@ class OpenSpliceTopicManager(object):
     # @return
     #
     # @endif
-    def createReader(self, topic, listener, prop):
-        global mutex
+    def createReader(self, topic, listener, prop: 'OpenRTM_aist.Properties'):
         self._rtcout.RTC_INFO(
             "OpenSpliceManager::createReader(topic)")
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        _ = OpenRTM_aist.ScopedLock(mutex)
         if self._qosProfile:
             self._rtcout.RTC_INFO("QoSProvider set DataReaderQos")
             return self._subscriber.create_datareader(
@@ -705,7 +702,7 @@ class OpenSpliceTopicManager(object):
             try:
                 history_depth = int(prop.getProperty(
                     "reader_qos.history.depth"))
-            except ValueError as error:
+            except ValueError:
                 pass
                 # self._rtcout.RTC_ERROR(error)
 
@@ -722,7 +719,7 @@ class OpenSpliceTopicManager(object):
                     "reader_qos.resource_limits.max_instances"))
                 max_samples_per_instance = int(prop.getProperty(
                     "reader_qos.resource_limits.max_samples_per_instance"))
-            except ValueError as error:
+            except ValueError:
                 pass
                 # self._rtcout.RTC_ERROR(error)
 
@@ -836,10 +833,9 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def createTopic(self, datatype, topicname, prop):
-        global mutex
+    def createTopic(self, datatype: str, topicname: str, prop: 'OpenRTM_aist.Properties'):
         self._rtcout.RTC_INFO("OpenSpliceManager")
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        _ = OpenRTM_aist.ScopedLock(mutex)
         if topicname in self._topic:
             return self._topic[topicname]
         else:
@@ -947,7 +943,7 @@ class OpenSpliceTopicManager(object):
                     try:
                         history_depth = int(prop.getProperty(
                             "topic_qos.history.depth"))
-                    except ValueError as error:
+                    except ValueError:
                         pass
                         # self._rtcout.RTC_ERROR(error)
 
@@ -964,7 +960,7 @@ class OpenSpliceTopicManager(object):
                             "topic_qos.resource_limits.max_instances"))
                         max_samples_per_instance = int(prop.getProperty(
                             "topic_qos.resource_limits.max_samples_per_instance"))
-                    except ValueError as error:
+                    except ValueError:
                         pass
                         # self._rtcout.RTC_ERROR(error)
 
@@ -975,7 +971,7 @@ class OpenSpliceTopicManager(object):
                     try:
                         transport_priority = int(prop.getProperty(
                             "topic_qos.transport_priority.value"))
-                    except ValueError as error:
+                    except ValueError:
                         pass
                         # self._rtcout.RTC_ERROR(error)
 
@@ -1006,7 +1002,7 @@ class OpenSpliceTopicManager(object):
                     try:
                         durability_service_history_depth = int(prop.getProperty(
                             "topic_qos.durability_service.history_depth"))
-                    except ValueError as error:
+                    except ValueError:
                         pass
                         # self._rtcout.RTC_ERROR(error)
 
@@ -1022,7 +1018,7 @@ class OpenSpliceTopicManager(object):
                     try:
                         durability_service_max_instances = int(prop.getProperty(
                             "topic_qos.durability_service.max_instances"))
-                    except ValueError as error:
+                    except ValueError:
                         pass
                         # self._rtcout.RTC_ERROR(error)
 
@@ -1030,7 +1026,7 @@ class OpenSpliceTopicManager(object):
                     try:
                         durability_service_max_samples = int(prop.getProperty(
                             "topic_qos.durability_service.max_samples"))
-                    except ValueError as error:
+                    except ValueError:
                         pass
                         # self._rtcout.RTC_ERROR(error)
 
@@ -1038,7 +1034,7 @@ class OpenSpliceTopicManager(object):
                     try:
                         durability_service_max_samples_per_instance = int(prop.getProperty(
                             "topic_qos.durability_service.max_samples_per_instance"))
-                    except ValueError as error:
+                    except ValueError:
                         pass
                         # self._rtcout.RTC_ERROR(error)
 
@@ -1141,7 +1137,7 @@ class OpenSpliceTopicManager(object):
     # @return
     #
     # @endif
-    def getDuration(self, prop):
+    def getDuration(self, prop: 'OpenRTM_aist.Properties'):
         sec_str = prop.getProperty("sec")
         nanosec_str = prop.getProperty("nanosec")
         if sec_str == "2147483647" and nanosec_str == "2147483647":
@@ -1150,7 +1146,7 @@ class OpenSpliceTopicManager(object):
             sec = int(sec_str)
             nanosec = int(nanosec_str)
             return dds.DDSDuration(sec=sec, nanosec=nanosec)
-        except ValueError as error:
+        except ValueError:
             return None
             # self._rtcout.RTC_ERROR(error)
 
@@ -1172,7 +1168,7 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def getTopic(self, topicname):
+    def getTopic(self, topicname: str):
         if topicname in self._topic:
             return self._topic[topicname]
         return None
@@ -1197,15 +1193,12 @@ class OpenSpliceTopicManager(object):
 
     def init(prop=OpenRTM_aist.Properties()):
         global manager
-        global mutex
 
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        _ = OpenRTM_aist.ScopedLock(mutex)
         if manager is None:
             manager = OpenSpliceTopicManager()
             manager.start(prop)
         return manager
-
-    instance = staticmethod(init)
 
     ##
     # @if jp
@@ -1223,9 +1216,8 @@ class OpenSpliceTopicManager(object):
 
     def instance(prop=OpenRTM_aist.Properties()):
         global manager
-        global mutex
 
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        _ = OpenRTM_aist.ScopedLock(mutex)
         if manager is None:
             manager = OpenSpliceTopicManager()
             manager.start(prop)
@@ -1245,11 +1237,10 @@ class OpenSpliceTopicManager(object):
     #
     # @endif
 
-    def shutdown_global():
+    def shutdown_global() -> None:
         global manager
-        global mutex
 
-        guard = OpenRTM_aist.ScopedLock(mutex)
+        _ = OpenRTM_aist.ScopedLock(mutex)
         if manager is not None:
             manager.shutdown()
 

@@ -86,7 +86,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # @endif
     #
     # InPortBase(const char* name, const char* data_type);
-    def __init__(self, name, data_type):
+    def __init__(self, name: str, data_type: str) -> None:
         OpenRTM_aist.PortBase.__init__(self, name)
         self._rtcout.RTC_DEBUG("Port name: %s", name)
         self._singlebuffer = True
@@ -123,7 +123,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # @endif
     #
 
-    def __del__(self, PortBase=OpenRTM_aist.PortBase):
+    def __del__(self, PortBase=OpenRTM_aist.PortBase) -> None:
         self._rtcout.RTC_TRACE("InPortBase destructor")
 
         if self._connectors:
@@ -164,7 +164,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     #
     # void init(coil::Properties& prop);
 
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("init()")
         self._properties.mergeProperties(prop)
         prop_list = []
@@ -377,7 +377,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # @endif
     #
     # InPortConnector* getConnectorById(const char* id);
-    def getConnectorById(self, id):
+    def getConnectorById(self, id: str):
         self._rtcout.RTC_TRACE("getConnectorById(id = %s)", id)
 
         for con in self._connectors:
@@ -409,7 +409,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # @endif
     #
     # InPortConnector* getConnectorByName(const char* name);
-    def getConnectorByName(self, name):
+    def getConnectorByName(self, name: str):
         self._rtcout.RTC_TRACE("getConnectorByName(name = %s)", name)
 
         for con in self._connectors:
@@ -515,7 +515,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # @endif
     #
 
-    def connect(self, connector_profile):
+    def connect(self, connector_profile: 'RTC.ConnectorProfile'):
         self._rtcout.RTC_TRACE("InPortBase.connect()")
 
         if OpenRTM_aist.NVUtil.find_index(connector_profile.properties,
@@ -548,7 +548,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     #
     # @endif
     #
-    def notify_connect(self, connector_profile):
+    def notify_connect(self, connector_profile: 'RTC.ConnectorProfile'):
 
         prop = OpenRTM_aist.Properties()
         OpenRTM_aist.NVUtil.copyToProperties(
@@ -595,7 +595,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     #
     # void activateInterfaces();
 
-    def activateInterfaces(self):
+    def activateInterfaces(self) -> None:
         self._rtcout.RTC_TRACE("activateInterfaces()")
 
         # guard = OpenRTM_aist.ScopedLock(self._connector_mutex)
@@ -624,7 +624,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     #
     # void deactivateInterfaces();
 
-    def deactivateInterfaces(self):
+    def deactivateInterfaces(self) -> None:
         self._rtcout.RTC_TRACE("deactivateInterfaces()")
 
         # guard = OpenRTM_aist.ScopedLock(self._connector_mutex)
@@ -711,7 +711,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # addConnectorDataListener(ConnectorDataListenerType type,
     #                          ConnectorDataListener* listener)
 
-    def addConnectorDataListener(self, listener_type, listener):
+    def addConnectorDataListener(self, listener_type: int, listener) -> None:
         self._rtcout.RTC_TRACE("addConnectorDataListener()")
 
         if self._listeners.addDataListener(listener_type, listener):
@@ -743,7 +743,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # void removeConnectorDataListener(ConnectorDataListenerType type,
     #                                  ConnectorDataListener* listener)
 
-    def removeConnectorDataListener(self, listener_type, listener):
+    def removeConnectorDataListener(self, listener_type: int, listener) -> None:
         self._rtcout.RTC_TRACE("removeConnectorDataListener()")
 
         if self._listeners.removeDataListener(listener_type, listener):
@@ -806,7 +806,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # void addConnectorListener(ConnectorListenerType type,
     #                           ConnectorListener* listener)
 
-    def addConnectorListener(self, listener_type, listener):
+    def addConnectorListener(self, listener_type: int, listener) -> None:
         self._rtcout.RTC_TRACE("addConnectorListener()")
 
         if listener_type < OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM:
@@ -839,7 +839,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # void removeConnectorListener(ConnectorListenerType type,
     #                              ConnectorListener* listener)
 
-    def removeConnectorListener(self, listener_type, listener):
+    def removeConnectorListener(self, listener_type: int, listener) -> None:
         self._rtcout.RTC_TRACE("removeConnectorListener()")
 
         if listener_type < OpenRTM_aist.ConnectorListenerType.CONNECTOR_LISTENER_NUM:
@@ -880,7 +880,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     #
     # ReturnCode_t publishInterfaces(ConnectorProfile& connector_profile);
 
-    def publishInterfaces(self, cprof):
+    def publishInterfaces(self, cprof: 'RTC.ConnectorProfile'):
         self._rtcout.RTC_TRACE("publishInterfaces()")
 
         retval = self._publishInterfaces()
@@ -996,7 +996,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # ReturnCode_t subscribeInterfaces(const ConnectorProfile&
     # connector_profile);
 
-    def subscribeInterfaces(self, cprof):
+    def subscribeInterfaces(self, cprof: 'RTC.ConnectorProfile'):
         self._rtcout.RTC_TRACE("subscribeInterfaces()")
 
         # prop: [port.outport].
@@ -1115,7 +1115,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     #
     # void unsubscribeInterfaces(const ConnectorProfile& connector_profile);
 
-    def unsubscribeInterfaces(self, connector_profile):
+    def unsubscribeInterfaces(self, connector_profile: 'RTC.ConnectorProfile') -> None:
         self._rtcout.RTC_TRACE("unsubscribeInterfaces()")
 
         id = connector_profile.connector_id
@@ -1147,7 +1147,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     #
     # void initProviders();
 
-    def initProviders(self):
+    def initProviders(self) -> None:
         self._rtcout.RTC_TRACE("initProviders()")
 
         # create InPort providers
@@ -1207,7 +1207,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     #
     # void initConsumers();
 
-    def initConsumers(self):
+    def initConsumers(self) -> None:
         self._rtcout.RTC_TRACE("initConsumers()")
 
         # create OuPort consumers
@@ -1271,7 +1271,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # InPortProvider*
     # createProvider(ConnectorProfile& cprof, coil::Properties& prop);
 
-    def createProvider(self, cprof, prop):
+    def createProvider(self, cprof: 'RTC.ConnectorProfile', prop: 'OpenRTM_aist.Properties'):
         if not prop.getProperty("interface_type") or \
                 not OpenRTM_aist.includes(self._providerTypes, prop.getProperty("interface_type")):
             self._rtcout.RTC_ERROR("no provider found")
@@ -1319,7 +1319,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # OutPortConsumer*
     # createConsumer(const ConnectorProfile& cprof, coil::Properties& prop);
 
-    def createConsumer(self, cprof, prop):
+    def createConsumer(self, cprof: 'RTC.ConnectorProfile', prop: 'OpenRTM_aist.Properties'):
         if not prop.getProperty("interface_type") or \
                 not OpenRTM_aist.includes(self._consumerTypes, prop.getProperty("interface_type")):
             self._rtcout.RTC_ERROR("no consumer found")
@@ -1367,7 +1367,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     #  createConnector(ConnectorProfile& cprof, coil::Properties& prop,
     #                  InPortProvider* provider);
 
-    def createConnector(self, cprof, prop, provider_=None, consumer_=None):
+    def createConnector(self, cprof: 'RTC.ConnectorProfile', prop: 'OpenRTM_aist.Properties', provider_=None, consumer_=None):
         profile = OpenRTM_aist.ConnectorInfo(cprof.name,
                                              cprof.connector_id,
                                              OpenRTM_aist.CORBA_SeqUtil.refToVstring(
@@ -1454,7 +1454,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     #
     # @endif
     #
-    def createDuplexConnector(self, cprof, prop, provider_):
+    def createDuplexConnector(self, cprof: 'RTC.ConnectorProfile', prop: 'OpenRTM_aist.Properties', provider_):
         profile = OpenRTM_aist.ConnectorInfo(cprof.name,
                                              cprof.connector_id,
                                              OpenRTM_aist.CORBA_SeqUtil.refToVstring(
@@ -1499,7 +1499,7 @@ class InPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
     # OutPortBase*
     # getLocalOutPort(const ConnectorInfo& profile)
 
-    def getLocalOutPort(self, profile):
+    def getLocalOutPort(self, profile: 'OpenRTM_aist.ConnectorInfo'):
         self._rtcout.RTC_DEBUG("Trying direct port connection.")
         orb = OpenRTM_aist.Manager.instance().getORB()
         self._rtcout.RTC_DEBUG(

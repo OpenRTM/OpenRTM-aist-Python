@@ -92,7 +92,7 @@ class BufferBase(OpenRTM_aist.BufferStatus):
     # @else
     #
     # @endif
-    def init(self, prop):
+    def init(self, prop: int):
         pass
 
     ##
@@ -163,7 +163,7 @@ class BufferBase(OpenRTM_aist.BufferStatus):
     #
     # @endif
 
-    def wptr(self, n=0):
+    def wptr(self, n: int = 0):
         pass
 
     ##
@@ -188,7 +188,7 @@ class BufferBase(OpenRTM_aist.BufferStatus):
     #
     # @endif
 
-    def advanceWptr(self, n=1, unlock_enable=True):
+    def advanceWptr(self, n=1, unlock_enable: bool = True):
         pass
 
     ##
@@ -208,7 +208,7 @@ class BufferBase(OpenRTM_aist.BufferStatus):
     #
     # @endif
 
-    def put(self, data):
+    def put(self, data: str):
         pass
 
     ##
@@ -302,7 +302,7 @@ class BufferBase(OpenRTM_aist.BufferStatus):
     #
     # @endif
 
-    def rptr(self, n=0):
+    def rptr(self, n: int = 0):
         pass
 
     ##
@@ -326,7 +326,7 @@ class BufferBase(OpenRTM_aist.BufferStatus):
     # @return buffer length
     #
     # @endif
-    def advanceRptr(self, n=1, unlock_enable=True):
+    def advanceRptr(self, n=1, unlock_enable: bool = True):
         pass
 
     ##
@@ -370,7 +370,7 @@ class BufferBase(OpenRTM_aist.BufferStatus):
     #
     # @endif
 
-    def read(self, sec=-1, nsec=-1):
+    def read(self, sec: int = -1, nsec: int = -1):
         pass
 
     ##
@@ -455,7 +455,7 @@ class NullBuffer(BufferBase):
     # @else
     #
     # @endif
-    def __init__(self, size=None):
+    def __init__(self, size=None) -> None:
         self._length = 1
         self._data = None
         self._is_new = False
@@ -480,7 +480,7 @@ class NullBuffer(BufferBase):
     #
     # @endif
 
-    def length(self):
+    def length(self) -> int:
         return 1
 
     ##
@@ -501,7 +501,7 @@ class NullBuffer(BufferBase):
     #
     # @endif
 
-    def write(self, value, sec=-1, nsec=-1):
+    def write(self, value, sec: int = -1, nsec: int = -1) -> bool:
         self.put(value)
         return True
 
@@ -547,7 +547,7 @@ class NullBuffer(BufferBase):
     #
     # @endif
 
-    def isFull(self):
+    def isFull(self) -> bool:
         return False
 
     ##
@@ -568,7 +568,7 @@ class NullBuffer(BufferBase):
     #
     # @endif
 
-    def isEmpty(self):
+    def isEmpty(self) -> bool:
         return False
 
     ##
@@ -607,7 +607,7 @@ class NullBuffer(BufferBase):
     #
     # @endif
 
-    def put(self, data):
+    def put(self, data) -> None:
         self._data = data
         self._is_new = True
         self._inited = True

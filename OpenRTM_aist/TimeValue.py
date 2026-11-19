@@ -17,6 +17,7 @@
 
 
 import sys
+import typing as _typing
 
 TIMEVALUE_ONE_SECOND_IN_USECS = 1000000  # 1 [sec] = 1000000 [usec]
 
@@ -57,8 +58,8 @@ class TimeValue:
     # @else
     #
     # @endif
-    def __init__(self, sec=None, usec=None):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
+    def __init__(self, sec: _typing.Optional[_typing.Union[float, str]] = None,
+                 usec: _typing.Optional[_typing.Union[float, str]] = None) -> None:
 
         if isinstance(sec, str):
             sec = float(sec)
@@ -73,8 +74,7 @@ class TimeValue:
                 dbHalfAdj_ = -0.5
 
             self.tv_sec = long(sec)
-            self.tv_usec = long((sec - float(self.tv_sec)) *
-                                float(TIMEVALUE_ONE_SECOND_IN_USECS) + dbHalfAdj_)
+            self.tv_usec = long((sec - float(self.tv_sec)) * float(TIMEVALUE_ONE_SECOND_IN_USECS) + dbHalfAdj_)
             self.normalize()
             return
 
@@ -106,8 +106,7 @@ class TimeValue:
     #
     # @endif
 
-    def __sub__(self, tm):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
+    def __sub__(self, tm: "TimeValue") -> "TimeValue":
 
         res = TimeValue()
 
@@ -153,8 +152,7 @@ class TimeValue:
     #
     # @endif
 
-    def __add__(self, tm):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
+    def __add__(self, tm: "TimeValue") -> "TimeValue":
         res = TimeValue()
         res.tv_sec = self.tv_sec + tm.tv_sec
         res.tv_usec = self.tv_usec + tm.tv_usec
@@ -165,10 +163,10 @@ class TimeValue:
         res.normalize()
         return res
 
-    def sec(self):
+    def sec(self) -> int:
         return self.tv_sec
 
-    def usec(self):
+    def usec(self) -> int:
         return self.tv_usec
 
     ##
@@ -187,12 +185,10 @@ class TimeValue:
     #
     # @endif
 
-    def set_time(self, time):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
+    def set_time(self, time: float) -> "TimeValue":
 
         self.tv_sec = long(time)
-        self.tv_usec = long((time - float(self.tv_sec)) *
-                            float(TIMEVALUE_ONE_SECOND_IN_USECS))
+        self.tv_usec = long((time - float(self.tv_sec)) * float(TIMEVALUE_ONE_SECOND_IN_USECS))
         return self
 
     ##
@@ -208,10 +204,8 @@ class TimeValue:
     # @else
     #
     # @endif
-    def toDouble(self):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
-        return float(self.tv_sec) + float(self.tv_usec /
-                                          float(TIMEVALUE_ONE_SECOND_IN_USECS))
+    def toDouble(self) -> float:
+        return float(self.tv_sec) + float(self.tv_usec / float(TIMEVALUE_ONE_SECOND_IN_USECS))
 
     ##
     # @if jp
@@ -227,10 +221,8 @@ class TimeValue:
     #
     # @endif
 
-    def __str__(self):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
-        return str(self.tv_sec + self.tv_usec /
-                   float(TIMEVALUE_ONE_SECOND_IN_USECS))
+    def __str__(self) -> str:
+        return str(self.tv_sec + self.tv_usec / float(TIMEVALUE_ONE_SECOND_IN_USECS))
 
     ##
     # @if jp
@@ -245,7 +237,7 @@ class TimeValue:
     # @else
     #
     # @endif
-    def sign(self):
+    def sign(self) -> int:
         if self.tv_sec > 0:
             return 1
         if self.tv_sec < 0:
@@ -264,8 +256,7 @@ class TimeValue:
     # @endif
     #
 
-    def normalize(self):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
+    def normalize(self) -> None:
         if self.tv_usec >= TIMEVALUE_ONE_SECOND_IN_USECS:
             self.tv_sec += 1
             self.tv_usec -= TIMEVALUE_ONE_SECOND_IN_USECS

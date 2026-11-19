@@ -3,17 +3,32 @@
 
 ##
 # @file CSPInPort.py
-# @brief CSPInPort template class
-# @date $Date: $
+# @if jp
+# @brief 型付き入力と受信予約を管理する。
+# @else
+# @brief Manage typed input and receive reservations.
+# @endif
+# @date $Date: 2026-11-13 15:32:20 $
 # @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
 #
+# Copyright (C) 2026
+#     Nobuhiko Miyamoto
+#     Intelligent Systems Research Institute,
+#     National Institute of
+#         Advanced Industrial Science and Technology (AIST), Japan
+#     All rights reserved.
+#
+# $Id$
+
 # Copyright (C) 2019
 #     Intelligent Systems Research Institute,
 #     National Institute of
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
+
 import OpenRTM_aist
+from OpenRTM_aist.CSPArbitration import CSPConnectionInfo
 import copy
 import threading
 
@@ -39,7 +54,7 @@ import threading
 #
 # @endif
 #
-class CSPInPort(OpenRTM_aist.InPortBase):
+class CSPInPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
     SUCCESSFUL_GET_DATA = 0
     FAILED_DESERIALIZE = 1
     FAILED_TIMEOUT = 2
@@ -57,6 +72,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # @param name EventInPort 名。EventInPortBase:name() により参照される。
     # @param value この EventInPort にバインドされる T 型の変数
     #
+    # @param manager 関連付けるManager。
     # @else
     #
     # @brief A constructor.
@@ -67,12 +83,12 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # @param name A name of the EventInPort. This name is referred by
     #             EventInPortBase::name().
     # @param value type-T variable that is bound to this EventInPort.
-    # @param bufsize Buffer length of internal ring buffer of EventInPort
     #                (The default value:64)
     #
+    # @param manager Manager to associate with the object.
     # @endif
     #
-    def __init__(self, name, value, manager=None):
+    def __init__(self, name: str, value, manager=None) -> None:
         super(CSPInPort, self).__init__(name, "any")
         self._ctrl = OpenRTM_aist.CSPInPort.WorkerThreadCtrl()
         self._name = name
@@ -81,8 +97,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         self._OnRead = None
         self._OnReadConvert = None
 
-        self._singlebuffer = True
-
         self._channeltimeout = 10
         self._bufferzeromode = False
         self._manager = manager
@@ -90,6 +104,10 @@ class CSPInPort(OpenRTM_aist.InPortBase):
             manager.addInPort(self)
         self._writingConnector = None
         self._syncmode = False
+
+        marshaling_types = OpenRTM_aist.SerializerFactories.instance().getSerializerList(value)
+        marshaling_types = OpenRTM_aist.flatten(marshaling_types).lstrip()
+        self.addProperty("dataport.marshaling_types", marshaling_types)
 
     ##
     # @if jp
@@ -107,7 +125,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         super(CSPInPort, self).__del__()
 
     ##
@@ -117,7 +135,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # ポート名称を取得する。
     #
-    # @param self
     # @return ポート名称
     #
     # @else
@@ -126,7 +143,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # Get port name.
     #
-    # @param self
     # @return The port name
     #
     # @endif
@@ -139,7 +155,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @brief 初期化関数
     #
-    # @param self
     # @param prop 設定情報
     # channel_timeout：データ書き込み、読み込み時のタイムアウト
     # buffer.lengthが0の場合は非リングバッファモードに設定
@@ -149,21 +164,20 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @else
     #
-    # @brief
+    # @brief Perform the init operation.
     #
-    # @param self
     # @param prop
     #
     # @endif
     #
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         super(CSPInPort, self).init(prop)
 
-        num = 10
-        ret, num = OpenRTM_aist.stringTo(
-            num, self._properties.getProperty("channel_timeout", "10"))
+        channeltimeout = 10
+        ret, channeltimeout = OpenRTM_aist.stringTo(
+            channeltimeout, self._properties.getProperty("channel_timeout", "10"))
         if ret:
-            self._channeltimeout = num
+            self._channeltimeout = channeltimeout
 
         buff_prop = prop.getNode("buffer")
         length = 8
@@ -195,19 +209,17 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @brief CSPManagerの設定
     #
-    # @param self
     # @param manager CSPManager
     #
     # @else
     #
-    # @brief
+    # @brief Associate the port with a selection manager.
     #
-    # @param self
     # @param manager
     #
     # @endif
     #
-    def setManager(self, manager):
+    def setManager(self, manager) -> None:
         self._writable_listener.setManager(manager)
         self._manager = manager
         if manager:
@@ -218,17 +230,15 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @brief CSPManagerの設定解除
     #
-    # @param self
     #
     # @else
     #
-    # @brief
+    # @brief Remove the association between the port and its selection manager.
     #
-    # @param self
     #
     # @endif
     #
-    def releaseManager(self):
+    def releaseManager(self) -> None:
         self._writable_listener.releaseManager()
         self._manager = None
 
@@ -237,20 +247,18 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @brief 書き込み処理を開始したコネクタを登録
     #
-    # @param self
     # @param con InPortConnector
     #
     #
     # @else
     #
-    # @brief
+    # @brief Set writing connector.
     #
-    # @param self
     # @param con
     #
     # @endif
     #
-    def setWritingConnector(self, con):
+    def setWritingConnector(self, con) -> None:
         self._writingConnector = con
 
     ##
@@ -260,24 +268,25 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # バッファがフルになる、もしくは待機中のOutPortがなくなるまで、接続先のコネクタのデータを読み込む
     # バッファからデータを読み込んだ場合は、この関数を呼び出す必要がある
     #
-    # @param self
     #
     #
     # @else
     #
-    # @brief
+    # @brief Notify the manager of a request and determine selection admission.
     #
-    # @param self
     #
     # @endif
     #
-    def notify(self):
+    def notify(self) -> None:
         for con in self._connectors:
-            guard_ctrl = None
+            guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             if not self._syncmode:
-                guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-            if self._ctrl._writing:
-                self._ctrl._cond.wait(self._channeltimeout)
+                if self._ctrl._writing:
+                    self._ctrl._cond.wait(self._channeltimeout)
+            else:
+                if self._ctrl._writing:
+                    self._ctrl._cond.wait(self._channeltimeout)
+                guard_ctrl.unlock()
             if not self._thebuffer.full():
                 if con.isReadable(False):
                     ret, cdr = con.readBuff()
@@ -293,7 +302,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # @brief コネクタ接続関数
     # InPortBaseの接続処理のほかに、コネクタに書き込み確認時、書き込み時のコールバック関数を設定する
     #
-    # @param self
     # @param connector_profile コネクタプロファイル
     # @return ret, prof
     # ret：リターンコード
@@ -303,17 +311,17 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @else
     #
-    # @brief
+    # @brief Process a connection notification and finalize connector information.
     #
-    # @param self
     # @param connector_profile
     # @return ret, prof
     #
     # @endif
     #
+
     def notify_connect(self, connector_profile):
         ret, prof = super(CSPInPort, self).notify_connect(connector_profile)
-        guard_con = OpenRTM_aist.ScopedLock(self._connector_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._connector_mutex)
         for con in self._connectors:
             con.setIsWritableListener(self._writable_listener)
             con.setWriteListener(self._write_listener)
@@ -324,7 +332,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @brief リングバッファ使用モード時に指定コネクタの読み込み確認、データの読み込みを行う
     #
-    # @param self
     # @param con コネクタ
     # @param retry True：再検索、False：通常の書き込み確認
     # @return ret, data
@@ -335,23 +342,21 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @else
     #
-    # @brief
+    # @brief Get data buffer mode.
     #
-    # @param self
-    # @param con 
-    # @param retry 
+    # @param con
+    # @param retry
     # @return ret, data
     #
     # @endif
     #
-    def getDataBufferMode(self, con, retry):
-        guard_ctrl = None
+    def getDataBufferMode(self, con, retry: bool):
+        guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond, True)
         if not self._syncmode:
-            guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            guard_ctrl.lock()
         if not self._thebuffer.empty():
             _, value = self._thebuffer.read()
-            if guard_ctrl is not None:
-                del guard_ctrl
+            guard_ctrl.unlock()
             self.notify()
             ret, data = con.deserializeData(value)
             if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
@@ -362,10 +367,9 @@ class CSPInPort(OpenRTM_aist.InPortBase):
             self._ctrl._cond.wait(self._channeltimeout)
             if not self._thebuffer.empty():
                 _, value = self._thebuffer.read()
-                if guard_ctrl is not None:
-                    del guard_ctrl
+                guard_ctrl.unlock()
                 self.notify()
-                ret, data = con.deserializeData(value[0])
+                ret, data = con.deserializeData(value)
                 if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
                     return CSPInPort.SUCCESSFUL_GET_DATA, data
                 else:
@@ -375,10 +379,8 @@ class CSPInPort(OpenRTM_aist.InPortBase):
                 self._rtcout.RTC_ERROR("read timeout")
                 return CSPInPort.FAILED_TIMEOUT, None
         else:
-            if guard_ctrl is not None:
-                del guard_ctrl
+            guard_ctrl.unlock()
             readable = con.isReadable(retry)
-            guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             if readable:
                 ret, value = con.read()
                 if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
@@ -394,7 +396,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @brief リングバッファ使用モード時にデータの受信を行う
     #
-    # @param self
     # @return ret, data
     # ret：True：読み込み成功、False：バッファがemptyでかつ読み込み可能なコネクタが存在しない
     # data：データ
@@ -402,17 +403,13 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @else
     #
-    # @brief
+    # @brief Perform the data pull buffer mode operation.
     #
-    # @param self
     # @return ret, data
     #
     # @endif
     #
     def dataPullBufferMode(self):
-
-        guard_ctrl = None
-
         guard_con = OpenRTM_aist.ScopedLock(self._connector_mutex)
         if not self._connectors:
             self._rtcout.RTC_DEBUG("no connectors")
@@ -431,12 +428,13 @@ class CSPInPort(OpenRTM_aist.InPortBase):
                     self._ctrl._searched_connectors.append(con)
 
         else:
+            guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond, True)
             if not self._syncmode:
-                guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+                guard_ctrl.lock()
 
             if not self._thebuffer.empty():
                 _, value = self._thebuffer.read()
-                del guard_ctrl
+                guard_ctrl.unlock()
                 self.notify()
                 ret, data = self._connectors[0].deserializeData(value)
                 if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
@@ -445,9 +443,8 @@ class CSPInPort(OpenRTM_aist.InPortBase):
                     self._rtcout.RTC_ERROR("deserialize error")
                     return False, None
             else:
-                self._rtcout.RTC_ERROR("value read error:%s",
-                                       (OpenRTM_aist.BufferStatus.toString(ret)))
-                del guard_ctrl
+                self._rtcout.RTC_ERROR("value read error")
+                guard_ctrl.unlock()
                 self.notify()
                 return False, None
         return False, None
@@ -461,7 +458,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # 非ロックモードの場合はデータ選択時にis_writable、is_readable関数が呼ばれた場合、
     # 再検索するコネクタのリストに追加して後で再検索する。
     #
-    # @param self
     # @return ret, data
     # ret：True：読み込み成功、False：バッファがemptyでかつ読み込み可能なコネクタが存在しない
     # data：データ
@@ -469,9 +465,8 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @else
     #
-    # @brief
+    # @brief Perform the data pull buffer mode retry operation.
     #
-    # @param self
     # @return ret, data
     #
     # @endif
@@ -491,8 +486,13 @@ class CSPInPort(OpenRTM_aist.InPortBase):
             self._ctrl._searched_connectors = []
 
         else:
+            guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond, True)
+            if not self._syncmode:
+                guard_ctrl.lock()
+
             if not self._thebuffer.empty():
                 _, value = self._thebuffer.read()
+                guard_ctrl.unlock()
                 self.notify()
                 ret, data = self._connectors[0].deserializeData(value)
                 if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
@@ -501,8 +501,8 @@ class CSPInPort(OpenRTM_aist.InPortBase):
                     self._rtcout.RTC_ERROR("deserialize error")
                     return False, None
             else:
-                self._rtcout.RTC_ERROR("value read error:%s",
-                                       (OpenRTM_aist.BufferStatus.toString(ret)))
+                self._rtcout.RTC_ERROR("value read error")
+                guard_ctrl.unlock()
                 self.notify()
                 return False, None
         return False, None
@@ -512,7 +512,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @brief 非リングバッファ使用モード時に指定コネクタの読み込み確認、データの読み込みを行う
     #
-    # @param self
     # @param con コネクタ
     # @param retry True：再検索、False：通常の書き込み確認
     # @return ret, data
@@ -522,19 +521,21 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @else
     #
-    # @brief
+    # @brief Get data zero mode.
     #
-    # @param self
     # @param con
     # @param retry
     # @return ret, data
     #
     # @endif
     #
-    def getDataZeroMode(self, con, retry):
+    def getDataZeroMode(self, con, retry: bool):
         if con.isReadable(retry):
+            #import time
+            # time.sleep(1)
+            guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond, True)
             if not self._syncmode:
-                guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+                guard_ctrl.lock()
             ret, value = con.read()
             if ret == OpenRTM_aist.DataPortStatus.PORT_OK:
                 return CSPInPort.SUCCESSFUL_GET_DATA, value
@@ -549,7 +550,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @brief 非リングバッファ使用モード時にデータの受信を行う
     #
-    # @param self
     # @return ret, data
     # ret：True：読み込み成功、False：読み込み可能なコネクタが存在しない
     # data：データ
@@ -557,25 +557,25 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @else
     #
-    # @brief
+    # @brief Perform the data pull zero mode operation.
     #
-    # @param self
     # @return ret, data
     #
     # @endif
     #
     def dataPullZeroMode(self):
-        guard_con = OpenRTM_aist.ScopedLock(self._connector_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._connector_mutex)
         for con in self._connectors:
             ret, value = self.getDataZeroMode(con, False)
             if ret == CSPInPort.SUCCESSFUL_GET_DATA:
                 self._ctrl._connectors = []
                 self._ctrl._searched_connectors = []
                 return True, value
-            elif ret != CSPInPort.FAILED_GET_DATA:
-                return False, value
-            else:
+            elif ret == CSPInPort.FAILED_GET_DATA:
                 self._ctrl._searched_connectors.append(con)
+
+            else:
+                return False, value
 
         return False, None
 
@@ -584,7 +584,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @brief 非リングバッファ使用モード時にデータの再受信確認を行う
     #
-    # @param self
     # @return ret, data
     # ret：True：読み込み成功、False：バッファがemptyでかつ読み込み可能なコネクタが存在しない
     # data：データ
@@ -592,9 +591,8 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @else
     #
-    # @brief
+    # @brief Perform the data pull zero mode retry operation.
     #
-    # @param self
     # @return ret, data
     #
     # @endif
@@ -623,15 +621,13 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # self._valueに読み込んだデータを格納する
     #
     #
-    # @param self
     # @return True：読み込み成功、False：読み込み不可
     #
     #
     # @else
     #
-    # @brief
+    # @brief Select one ready registered port.
     #
-    # @param self
     # @return
     #
     # @endif
@@ -639,21 +635,20 @@ class CSPInPort(OpenRTM_aist.InPortBase):
 
     def select(self):
         self._rtcout.RTC_TRACE("select()")
-        guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+        guard_ctrl = OpenRTM_aist.ScopedLock(self._ctrl._cond)
 
         self._ctrl._connectors = []
         self._ctrl._searched_connectors = []
 
         if not self._syncmode:
-            del guard
-            guard = None
+            guard_ctrl.unlock()
 
         if not self._bufferzeromode:
             ret, value = self.dataPullBufferMode()
         else:
             ret, value = self.dataPullZeroMode()
-        if not self._syncmode:
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+
+        guard_ctrl.lock()
         if ret:
             self._value = value
         return ret
@@ -665,31 +660,29 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # self._valueに読み込んだデータを格納する
     #
     #
-    # @param self
     # @return True：読み込み成功、False：読み込み不可
     #
     #
     # @else
     #
-    # @brief
+    # @brief Rescan retained communication candidates.
     #
-    # @param self
     # @return
     #
     # @endif
     #
     def reselect(self):
         self._rtcout.RTC_TRACE("reselect()")
-        guard = None
+        guard = OpenRTM_aist.ScopedLock(self._ctrl._cond, True)
         if self._syncmode:
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            guard.lock()
 
         if not self._bufferzeromode:
             ret, value = self.dataPullBufferModeRetry()
         else:
             ret, value = self.dataPullZeroModeRetry()
         if not self._syncmode:
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            guard.lock()
         if ret:
             self._value = value
         return ret
@@ -704,20 +697,18 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # 再検索するコネクタのリストに追加して後で再検索する。
     #
     #
-    # @param self
     # @param mode True：ロックモード、False：非ロックモード
     #
     #
     # @else
     #
-    # @brief
+    # @brief Set sync mode.
     #
-    # @param self
     # @param mode
     #
     # @endif
     #
-    def setSyncMode(self, mode):
+    def setSyncMode(self, mode: bool) -> None:
         self._syncmode = mode
 
     ##
@@ -726,15 +717,13 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # @brief ロックモード、非ロックモードの取得
     #
     #
-    # @param self
     # @return True：ロックモード、False：非ロックモード
     #
     #
     # @else
     #
-    # @brief
+    # @brief Get sync mode.
     #
-    # @param self
     # @return
     #
     # @endif
@@ -748,15 +737,13 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # @brief select関数で格納したデータの取得
     #
     #
-    # @param self
     # @return データ
     #
     #
     # @else
     #
-    # @brief
+    # @brief Get the data or event of the selected input.
     #
-    # @param self
     # @return
     #
     # @endif
@@ -789,15 +776,13 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # 読み込み可能なコネクタが存在しない場合は待機する
     #
     #
-    # @param self
     # @return データ(タイムアウトした場合はNone)
     #
     #
     # @else
     #
-    # @brief
+    # @brief Receive data from a connection.
     #
-    # @param self
     # @return
     #
     # @endif
@@ -824,15 +809,13 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # 読み込み可能なコネクタが存在しない場合は待機する
     #
     #
-    # @param self
     # @return データ(タイムアウトした場合はNone)
     #
     #
     # @else
     #
-    # @brief
+    # @brief Perform the read buffer mode operation.
     #
-    # @param self
     # @return
     #
     # @endif
@@ -843,15 +826,14 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         self._ctrl._connectors = []
         self._ctrl._searched_connectors = []
         if not self._syncmode:
-            del guard
-            guard = None
+            guard.unlock()
 
         ret, data = self.dataPullBufferMode()
         if ret:
             return data
         else:
+            guard.lock()
             if not self._syncmode:
-                guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
                 ret, data = self.dataPullBufferModeRetry()
                 if ret:
                     return data
@@ -877,15 +859,13 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     # 読み込み可能なコネクタが存在しない場合は待機する
     #
     #
-    # @param self
     # @return データ(タイムアウトした場合はNone)
     #
     #
     # @else
     #
-    # @brief
+    # @brief Perform the read zero mode operation.
     #
-    # @param self
     # @return
     #
     # @endif
@@ -895,16 +875,14 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         self._ctrl._connectors = []
         self._ctrl._searched_connectors = []
         if not self._syncmode:
-            del guard
-            guard = None
+            guard.unlock()
 
         ret, data = self.dataPullZeroMode()
         if ret:
             return data
         else:
+            guard.lock()
             if not self._syncmode:
-                guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
-
                 ret, data = self.dataPullZeroModeRetry()
                 if ret:
                     return data
@@ -923,10 +901,26 @@ class CSPInPort(OpenRTM_aist.InPortBase):
                 self._rtcout.RTC_ERROR("read timeout")
                 return None
 
-    def setOnRead(self, on_read):
+    ##
+    # @if jp
+    # @brief `On Read`を設定する。
+    # @param on_read `on_read`の値。
+    # @else
+    # @brief Set on read.
+    # @param on_read Value of on_read.
+    # @endif
+    def setOnRead(self, on_read) -> None:
         self._OnRead = on_read
 
-    def setOnReadConvert(self, on_rconvert):
+    ##
+    # @if jp
+    # @brief `On Read Convert`を設定する。
+    # @param on_rconvert `on_rconvert`の値。
+    # @else
+    # @brief Set on read convert.
+    # @param on_rconvert Value of on_rconvert.
+    # @endif
+    def setOnReadConvert(self, on_rconvert) -> None:
         self._OnReadConvert = on_rconvert
 
     ##
@@ -943,7 +937,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @class IsWritableListener
     #
-    # @brief
+    # @brief Encapsulate the state and operations of IsWritableListener.
     #
     #
     # @since 2.0.0
@@ -958,7 +952,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         # @brief コンストラクタ
         #
         #
-        # @param self
         # @param buff リングバッファ
         # @param control WorkerThreadCtrlオブジェクト
         # @param timeout 書き込み待機のタイムアウト時間
@@ -967,19 +960,20 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         #
         #
+        # @param port 操作対象のポート。
         # @else
         #
-        # @brief
+        # @brief Initialize the instance and its internal state.
         #
-        # @param self
         # @param buff
         # @param control
         # @param timeout
         # @param manager
         #
+        # @param port Port to operate on.
         # @endif
         #
-        def __init__(self, buff, control, timeout, port, manager=None):
+        def __init__(self, buff, control, timeout: int, port: 'CSPInPort', manager=None) -> None:
             self._ctrl = control
             self._buffer = buff
             self._channeltimeout = timeout
@@ -995,26 +989,26 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         # このため、書き込み可能な場合は必ずデータを書き込む必要がある
         #
         #
-        # @param self
         # @param con InPortConnector
         # @param retry True：再検索、False：通常の書き込み確認
         # @return True：書き込み可能、False：書き込み不可
         #
         #
         #
+        # @param option ガード照合に使用するオプション。
         # @else
         #
-        # @brief
+        # @brief Perform the call operation.
         #
-        # @param self
         # @param con
         # @param retry
         # @return
         #
+        # @param option Options used for guard matching.
         # @endif
         #
 
-        def __call__(self, con, retry=False):
+        def __call__(self, con, retry: bool = False, option=None) -> bool:
             guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
 
             if retry:
@@ -1022,12 +1016,12 @@ class CSPInPort(OpenRTM_aist.InPortBase):
                     return False
 
             if self._manager:
-                if self._manager.notify(inport=self._port):
+                if self._manager.notify(inport=self._port, connector_id=getattr(con, 'id', lambda: None)()):
                     guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
                     self._ctrl._writing = True
                     self._port.setWritingConnector(con)
                     return True
-            del guard_manager
+            guard_manager.unlock()
             guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             if self._ctrl._writing:
                 self._ctrl._cond.wait(self._channeltimeout)
@@ -1044,22 +1038,20 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @brief CSPManagerの設定
         #
-        # @param self
         # @param manager CSPManager
         #
         #
         #
         # @else
         #
-        # @brief
+        # @brief Associate the port with a selection manager.
         #
-        # @param self
         # @param manager
         #
         # @endif
         #
-        def setManager(self, manager):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        def setManager(self, manager) -> None:
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = manager
 
         ##
@@ -1067,20 +1059,18 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @brief CSPManagerの解除
         #
-        # @param self
         #
         #
         #
         # @else
         #
-        # @brief
+        # @brief Remove the association between the port and its selection manager.
         #
-        # @param self
         #
         # @endif
         #
-        def releaseManager(self):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        def releaseManager(self) -> None:
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = None
 
     ##
@@ -1097,7 +1087,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @class WriteListener
     #
-    # @brief
+    # @brief Encapsulate the state and operations of WriteListener.
     #
     #
     # @since 2.0.0
@@ -1111,7 +1101,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         # @brief コンストラクタ
         #
         #
-        # @param self
         # @param buff リングバッファ
         # @param control WorkerThreadCtrlオブジェクト
         #
@@ -1119,15 +1108,14 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @else
         #
-        # @brief
+        # @brief Initialize the instance and its internal state.
         #
-        # @param self
         # @param buff
         # @param control
         #
         # @endif
         #
-        def __init__(self, buff, control):
+        def __init__(self, buff, control) -> None:
             self._ctrl = control
             self._buffer = buff
         ##
@@ -1137,7 +1125,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         # データをバッファに追加し、書き込み状態を解除する
         #
         #
-        # @param self
         # @param data データ
         # @return リターンコード
         # BUFFER_OK：正常完了
@@ -1146,20 +1133,19 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @else
         #
-        # @brief
+        # @brief Perform the call operation.
         #
-        # @param self
         # @param data
         # @return
         #
         # @endif
         #
 
-        def __call__(self, data):
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+        def __call__(self, data: bytes):
+            _ = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             self._buffer.write(data)
             self._ctrl._writing = False
-            self._ctrl._cond.notify()
+            self._ctrl._cond.notifyAll()
             return OpenRTM_aist.BufferStatus.BUFFER_OK
 
     ##
@@ -1176,7 +1162,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @class IsWritableZeroModeListener
     #
-    # @brief
+    # @brief Encapsulate the state and operations of IsWritableZeroModeListener.
     #
     #
     # @since 2.0.0
@@ -1190,7 +1176,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         # @brief コンストラクタ
         #
         #
-        # @param self
         # @param buff リングバッファ
         # @param control WorkerThreadCtrlオブジェクト
         # @param timeout 書き込み待機のタイムアウト時間
@@ -1199,19 +1184,20 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         #
         #
+        # @param port 操作対象のポート。
         # @else
         #
-        # @brief
+        # @brief Initialize the instance and its internal state.
         #
-        # @param self
         # @param buff
         # @param control
         # @param timeout
         # @param manager
         #
+        # @param port Port to operate on.
         # @endif
         #
-        def __init__(self, buff, control, timeout, port, manager=None):
+        def __init__(self, buff, control, timeout: int, port: 'CSPInPort', manager=None) -> None:
             self._ctrl = control
             self._buffer = buff
             self._channeltimeout = timeout
@@ -1227,37 +1213,37 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         # このため、書き込み可能な場合は必ずデータを書き込む必要がある
         #
         #
-        # @param self
         # @param con InPortConnector
         # @param retry True：再検索、False：通常の書き込み確認
         # @return True：書き込み可能、False：書き込み不可
         #
         #
         #
+        # @param option ガード照合に使用するオプション。
         # @else
         #
-        # @brief
+        # @brief Perform the call operation.
         #
-        # @param self
         # @param con
-        # @param retry 
+        # @param retry
         # @return
         #
+        # @param option Options used for guard matching.
         # @endif
         #
 
-        def __call__(self, con, retry=False):
+        def __call__(self, con, retry: bool = False, option=None) -> bool:
             guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             if retry:
                 if con not in self._ctrl._searched_connectors:
                     return False
             if self._manager:
-                if self._manager.notify(inport=self._port):
+                if self._manager.notify(inport=self._port, connector_id=getattr(con, 'id', lambda: None)()):
                     guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
                     self._ctrl._writing = True
                     self._port.setWritingConnector(con)
                     return True
-            del guard_manager
+            guard_manager.unlock()
             guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             if self._ctrl._waiting and self._ctrl._writing:
                 self._ctrl._cond.wait(self._channeltimeout)
@@ -1274,22 +1260,20 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @brief CSPManagerの設定
         #
-        # @param self
         # @param manager CSPManager
         #
         #
         #
         # @else
         #
-        # @brief
+        # @brief Associate the port with a selection manager.
         #
-        # @param self
         # @param manager
         #
         # @endif
         #
-        def setManager(self, manager):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        def setManager(self, manager) -> None:
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = manager
 
         ##
@@ -1297,20 +1281,18 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @brief CSPManagerの解除
         #
-        # @param self
         #
         #
         #
         # @else
         #
-        # @brief
+        # @brief Remove the association between the port and its selection manager.
         #
-        # @param self
         #
         # @endif
         #
-        def releaseManager(self):
-            guard_manager = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        def releaseManager(self) -> None:
+            _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
             self._manager = None
 
     ##
@@ -1327,7 +1309,7 @@ class CSPInPort(OpenRTM_aist.InPortBase):
     #
     # @class WriteZeroModeListener
     #
-    # @brief
+    # @brief Encapsulate the state and operations of WriteZeroModeListener.
     #
     #
     # @since 2.0.0
@@ -1341,7 +1323,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         # @brief コンストラクタ
         #
         #
-        # @param self
         # @param buff リングバッファ
         # @param control WorkerThreadCtrlオブジェクト
         #
@@ -1349,15 +1330,14 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @else
         #
-        # @brief
+        # @brief Initialize the instance and its internal state.
         #
-        # @param self
         # @param buff
         # @param control
         #
         # @endif
         #
-        def __init__(self, buff, control):
+        def __init__(self, buff, control) -> None:
             self._ctrl = control
             self._buffer = buff
         ##
@@ -1367,7 +1347,6 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         # 書き込み状態を解除しバッファにデータを追加する。
         #
         #
-        # @param self
         # @param data データ
         # @return リターンコード
         # BUFFER_OK：正常完了
@@ -1376,9 +1355,8 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
         # @else
         #
-        # @brief
+        # @brief Perform the call operation.
         #
-        # @param self
         # @param data
         # @return
         #
@@ -1386,14 +1364,26 @@ class CSPInPort(OpenRTM_aist.InPortBase):
         #
 
         def __call__(self, data):
-            guard = OpenRTM_aist.ScopedLock(self._ctrl._cond)
+            _ = OpenRTM_aist.ScopedLock(self._ctrl._cond)
             self._ctrl._writing = False
             self._buffer.write(data)
-            self._ctrl._cond.notify()
+            self._ctrl._cond.notifyAll()
             return OpenRTM_aist.BufferStatus.BUFFER_OK
 
+    ##
+    # @if jp
+    # @brief `WorkerThreadCtrl`の状態と操作をまとめる。
+    # @else
+    # @brief Encapsulate the state and operations of WorkerThreadCtrl.
+    # @endif
     class WorkerThreadCtrl:
-        def __init__(self):
+        ##
+        # @if jp
+        # @brief インスタンスと内部状態を初期化する。
+        # @else
+        # @brief Initialize the instance and its internal state.
+        # @endif
+        def __init__(self) -> None:
             self._mutex = threading.RLock()
             self._cond = threading.Condition(self._mutex)
             self._writing = False

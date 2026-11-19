@@ -141,7 +141,7 @@ def MyModuleInit(manager):
     DisplayInit(manager)
 
     # Create a component
-    comp = manager.createComponent("Display")
+    _ = manager.createComponent("Display")
 
 
 def main():

@@ -46,7 +46,7 @@ class OutPortDirectProvider(OpenRTM_aist.OutPortProvider):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.OutPortProvider.__init__(self)
         self.setInterfaceType("direct")
 
@@ -73,7 +73,7 @@ class OutPortDirectProvider(OpenRTM_aist.OutPortProvider):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
 
         return
 
@@ -92,32 +92,32 @@ class OutPortDirectProvider(OpenRTM_aist.OutPortProvider):
         pass
 
     # void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties'):
         pass
 
     # virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
 
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._buffer = buffer
         return
 
     # virtual void setListener(ConnectorInfo& info,
     #                          ConnectorListeners* listeners);
 
-    def setListener(self, info, listeners):
+    def setListener(self, info: 'OpenRTM_aist.ConnectorInfo', listeners) -> None:
         self._profile = info
         self._listeners = listeners
         return
 
     # virtual void setConnector(OutPortConnector* connector);
 
-    def setConnector(self, connector):
+    def setConnector(self, connector) -> None:
         self._connector = connector
         return
 
     # inline void onBufferRead(const cdrMemoryStream& data)
 
-    def onBufferRead(self, data):
+    def onBufferRead(self, data: int):
         if self._listeners and self._profile:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ, self._profile, data)
@@ -125,7 +125,7 @@ class OutPortDirectProvider(OpenRTM_aist.OutPortProvider):
 
     # inline void onSend(const cdrMemoryStream& data)
 
-    def onSend(self, data):
+    def onSend(self, data: int):
         if self._listeners and self._profile:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_SEND, self._profile, data)
@@ -133,7 +133,7 @@ class OutPortDirectProvider(OpenRTM_aist.OutPortProvider):
 
     # inline void onBufferEmpty()
 
-    def onBufferEmpty(self):
+    def onBufferEmpty(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
@@ -141,7 +141,7 @@ class OutPortDirectProvider(OpenRTM_aist.OutPortProvider):
 
     # inline void onBufferReadTimeout()
 
-    def onBufferReadTimeout(self):
+    def onBufferReadTimeout(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
@@ -149,7 +149,7 @@ class OutPortDirectProvider(OpenRTM_aist.OutPortProvider):
 
     # inline void onSenderEmpty()
 
-    def onSenderEmpty(self):
+    def onSenderEmpty(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
@@ -157,7 +157,7 @@ class OutPortDirectProvider(OpenRTM_aist.OutPortProvider):
 
     # inline void onSenderTimeout()
 
-    def onSenderTimeout(self):
+    def onSenderTimeout(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
@@ -165,14 +165,14 @@ class OutPortDirectProvider(OpenRTM_aist.OutPortProvider):
 
     # inline void onSenderError()
 
-    def onSenderError(self):
+    def onSenderError(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
         return
 
 
-def OutPortDirectProviderInit():
+def OutPortDirectProviderInit() -> None:
     factory = OpenRTM_aist.OutPortProviderFactory.instance()
     factory.addFactory("direct",
                        OpenRTM_aist.OutPortDirectProvider)

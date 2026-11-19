@@ -2,16 +2,30 @@
 # -*- coding: utf-8 -*-
 
 ##
-# @file StaticFSM.py
-# @brief Static FSM framework based on Macho
-# @date $Date: $
+# @file CSPMachine.py
+# @if jp
+# @brief CSP通信とStaticFSMの実行を連携する。
+# @else
+# @brief Integrate CSP communication with StaticFSM execution.
+# @endif
+# @date $Date: 2026-11-13 15:32:20 $
 # @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
 #
+# Copyright (C) 2026
+#     Nobuhiko Miyamoto
+#     Intelligent Systems Research Institute,
+#     National Institute of
+#         Advanced Industrial Science and Technology (AIST), Japan
+#     All rights reserved.
+#
+# $Id$
+
 # Copyright (C) 2017
 #     Intelligent Systems Research Institute,
 #     National Institute of
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
+
 
 import OpenRTM_aist
 import OpenRTM_aist.Macho
@@ -33,7 +47,7 @@ import RTC
 #
 # @class CSPMachine
 #
-# @brief
+# @brief Integrate CSP communication with StaticFSM execution.
 #
 #
 # @since 2.0.0
@@ -46,17 +60,21 @@ class CSPMachine(OpenRTM_aist.StaticFSM.Machine):
     #
     # @brief コンストラクタ
     #
-    # @param self
     #
+    # @param TOP `TOP`の値。
+    # @param comp `comp`の値。
+    # @param cspmgr `cspmgr`の値。
     # @else
     #
     # @brief A constructor.
     #
-    # @param self
     #
+    # @param TOP Value of TOP.
+    # @param comp Value of comp.
+    # @param cspmgr Value of cspmgr.
     # @endif
     #
-    def __init__(self, TOP, comp, cspmgr):
+    def __init__(self, TOP, comp, cspmgr) -> None:
         OpenRTM_aist.StaticFSM.Machine.__init__(self, TOP, comp)
         self._manager = cspmgr
         #self._ctrl = OpenRTM_aist.CSPManager.CSPThreadCtrl()
@@ -66,22 +84,36 @@ class CSPMachine(OpenRTM_aist.StaticFSM.Machine):
     #
     # @brief デストラクタ
     #
-    # @param self
     #
     # @else
     #
     # @brief Destructor
     #
-    # @param self
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
+    ##
+    # @if jp
+    # @brief `init other`に対応する処理を行う。
+    # @param other `other`の値。
+    # @else
+    # @brief Perform the init other operation.
+    # @param other Value of other.
+    # @endif
     def init_other(self, other):
         pass
 
+    ##
+    # @if jp
+    # @brief `equal`に対応する処理を行う。
+    # @param snapshot `snapshot`の値。
+    # @else
+    # @brief Perform the equal operation.
+    # @param snapshot Value of snapshot.
+    # @endif
     def equal(self, snapshot):
         pass
     ##
@@ -89,14 +121,12 @@ class CSPMachine(OpenRTM_aist.StaticFSM.Machine):
     #
     # @brief RTC取得
     #
-    # @param self
     # @return RTC
     #
     # @else
     #
-    # @brief
+    # @brief Get the RTC owned by the FSM context.
     #
-    # @param self
     # @return
     #
     # @endif
@@ -114,21 +144,19 @@ class CSPMachine(OpenRTM_aist.StaticFSM.Machine):
     # イベント実行可能なポートがない場合はタイムアウトまで待機する
     # この時、送信するデータは事前に設定しておく必要がある
     #
-    # @param self
     # @param timeout タイムアウトまでの時間
     # @return イベント実行したポート。イベントを実行できなかった場合はNoneを返す。
     #
     # @else
     #
-    # @brief
+    # @brief Select communication and perform I/O or execute the FSM event.
     #
-    # @param self
     # @param timeout
     # @return
     #
     # @endif
     #
-    def run_event(self, timeout=10):
+    def run_event(self, timeout: int = 10):
         ret, outport, inport = self._manager.select(timeout)
         if ret:
             if inport:

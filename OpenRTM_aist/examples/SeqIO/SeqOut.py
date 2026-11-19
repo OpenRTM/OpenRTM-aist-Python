@@ -136,7 +136,7 @@ def MyModuleInit(manager):
     SeqOutInit(manager)
 
     # Create a component
-    comp = manager.createComponent("SeqOut")
+    _ = manager.createComponent("SeqOut")
 
     print("Component created")
 

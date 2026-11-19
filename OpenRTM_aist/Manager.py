@@ -62,12 +62,12 @@ mutex = threading.RLock()
 
 
 class Alarm (threading.Thread):
-    def __init__(self, timeout):
+    def __init__(self, timeout) -> None:
         threading.Thread.__init__(self)
         self.timeout = timeout
         self.setDaemon(True)
 
-    def run(self):
+    def run(self) -> None:
         time.sleep(self.timeout)
         os._exit(1)
 
@@ -85,7 +85,7 @@ class Alarm (threading.Thread):
 # @endif
 
 
-def handler(signum, frame):
+def handler(signum, frame) -> None:
     mgr = OpenRTM_aist.Manager.instance()
     mgr.terminate()
     import os
@@ -94,8 +94,6 @@ def handler(signum, frame):
     else:
         alarm = Alarm(2)
         alarm.start()
-
-
 
 
 ##
@@ -130,7 +128,7 @@ class Manager:
     # @brief Protected Copy Constructor
     #
     # @endif
-    def __init__(self, _manager=None):
+    def __init__(self, _manager=None) -> None:
         self._initProc = None
         self._compManager = OpenRTM_aist.ObjectManager(self.InstanceName)
         self._factory = OpenRTM_aist.ObjectManager(self.FactoryPredicate)
@@ -141,6 +139,7 @@ class Manager:
         self._needsTimer = False
         self._orb = None
         self._poa = None
+        self._rootPOA = None
         self._poaManager = None
         self._finalized = self.Finalized()
         self._listeners = OpenRTM_aist.ManagerActionListeners()
@@ -196,7 +195,6 @@ class Manager:
 
     def init(*arg):
         global manager
-        global mutex
         if len(arg) == 1:
             argv = arg[0]
         elif len(arg) == 2 and \
@@ -210,7 +208,7 @@ class Manager:
             return None
 
         if manager is None:
-            guard = OpenRTM_aist.ScopedLock(mutex)
+            _ = OpenRTM_aist.ScopedLock(mutex)
 
             manager = Manager()
             manager.initManager(argv)
@@ -250,10 +248,9 @@ class Manager:
 
     def instance():
         global manager
-        global mutex
 
         if manager is None:
-            guard = OpenRTM_aist.ScopedLock(mutex)
+            _ = OpenRTM_aist.ScopedLock(mutex)
             manager = Manager()
             manager.initManager(None)
             manager.initFactories()
@@ -281,7 +278,7 @@ class Manager:
     #
     # @endif
 
-    def terminate(self):
+    def terminate(self) -> None:
         self._isRunning = False
 
     ##
@@ -297,7 +294,7 @@ class Manager:
     #
     # @endif
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         self._rtcout.RTC_TRACE("Manager.shutdown()")
         self.terminate()
         self.join()
@@ -327,7 +324,7 @@ class Manager:
     #
     # @endif
 
-    def setModuleInitProc(self, proc):
+    def setModuleInitProc(self, proc) -> None:
         self._initProc = proc
         return
 
@@ -362,7 +359,7 @@ class Manager:
     #
     # @endif
 
-    def activateManager(self):
+    def activateManager(self) -> bool:
         self._rtcout.RTC_TRACE("Manager.activateManager()")
 
         try:
@@ -446,10 +443,10 @@ class Manager:
     #
     # @endif
 
-    def runManager(self, no_block=False):
+    def runManager(self, no_block: bool = False) -> None:
         self._rtcout.RTC_TRACE("Manager::runManager()")
         self._isRunning = True
-        
+
         if no_block:
             self._threadMain = threading.Thread(target=self.main)
             self._threadMain.start()
@@ -472,10 +469,10 @@ class Manager:
     # @param self
     #
     # @endif
-    def main(self):
+    def main(self) -> None:
         self._rtcout.RTC_TRACE("Manager::main()")
 
-        def orbrun():
+        def orbrun() -> None:
             try:
                 self._orb.run()
             except BaseException:
@@ -489,7 +486,7 @@ class Manager:
         period = OpenRTM_aist.TimeValue(0, 100000)
         if self._config.findNode("timer.tick"):
             tick = float(self._config.getProperty(
-                    "timer.tick"))
+                "timer.tick"))
             if tick:
                 period.set_time(tick)
 
@@ -525,12 +522,11 @@ class Manager:
     # @param self
     #
     # @endif
-    def join(self):
+    def join(self) -> None:
         global manager
         if self._threadMain:
             self._threadMain.join()
         manager = None
-        
 
     ##
     # @if jp
@@ -565,7 +561,7 @@ class Manager:
     #
     # @endif
 
-    def load(self, fname, initfunc):
+    def load(self, fname: str, initfunc: str):
         self._rtcout.RTC_TRACE("Manager.load(fname = %s, initfunc = %s)",
                                (fname, initfunc))
         prop = OpenRTM_aist.Properties()
@@ -573,7 +569,7 @@ class Manager:
 
         return self.load_prop(prop, initfunc)
 
-    def load_prop(self, prop, initfunc):
+    def load_prop(self, prop: 'OpenRTM_aist.Properties', initfunc: str):
         self._rtcout.RTC_TRACE("Manager.load(module_file_name = %s, module_file_path = %s, language = %s, initfunc = %s)",
                                (prop.getProperty("module_file_name"),
                                 prop.getProperty("module_file_path"),
@@ -639,7 +635,7 @@ class Manager:
     #
     # @endif
 
-    def unload(self, fname):
+    def unload(self, fname: str) -> None:
         self._rtcout.RTC_TRACE("Manager.unload()")
         fname = self._listeners.module_.preUnload(fname)
         self._module.unload(fname)
@@ -663,7 +659,7 @@ class Manager:
     #
     # @endif
 
-    def unloadAll(self):
+    def unloadAll(self) -> None:
         self._rtcout.RTC_TRACE("Manager.unloadAll()")
         self._module.unloadAll()
         return
@@ -728,7 +724,7 @@ class Manager:
     # @brief Register RT-Component Factory
     # @endif
 
-    def registerFactory(self, profile, new_func, delete_func):
+    def registerFactory(self, profile: 'OpenRTM_aist.Properties', new_func, delete_func):
         self._rtcout.RTC_TRACE(
             "Manager.registerFactory(%s)",
             profile.getProperty("type_name"))
@@ -793,7 +789,7 @@ class Manager:
     # @brief Register ExecutionContext Factory
     # @endif
 
-    def registerECFactory(self, name, new_func, delete_func):
+    def registerECFactory(self, name: str, new_func, delete_func) -> bool:
         self._rtcout.RTC_TRACE("Manager.registerECFactory(%s)", name)
         # try:
         ret = OpenRTM_aist.ExecutionContextFactory.instance().addFactory(name,
@@ -891,7 +887,7 @@ class Manager:
     # @endif
     #
 
-    def createComponent(self, comp_args):
+    def createComponent(self, comp_args: str):
         self._rtcout.RTC_TRACE("Manager.createComponent(%s)", comp_args)
 
         comp_prop = OpenRTM_aist.Properties()
@@ -911,7 +907,7 @@ class Manager:
             exported_ports = OpenRTM_aist.split(comp_prop.getProperty("exported_ports"),
                                                 ",")
             exported_ports_str = ""
-            for i,exported_port in enumerate(exported_ports):
+            for i, exported_port in enumerate(exported_ports):
                 keyval = OpenRTM_aist.split(exported_port, ".")
                 if len(keyval) > 2:
                     exported_ports_str += (keyval[0] + "." + keyval[-1])
@@ -1084,7 +1080,7 @@ class Manager:
     # @brief Register RT-Component directly without Factory
     # @endif
 
-    def registerComponent(self, comp):
+    def registerComponent(self, comp) -> bool:
         self._rtcout.RTC_TRACE(
             "Manager.registerComponent(%s)",
             comp.getInstanceName())
@@ -1130,7 +1126,7 @@ class Manager:
     # @brief Register RT-Component directly without Factory
     # @endif
 
-    def unregisterComponent(self, comp):
+    def unregisterComponent(self, comp) -> bool:
         self._rtcout.RTC_TRACE(
             "Manager.unregisterComponent(%s)",
             comp.getInstanceName())
@@ -1160,7 +1156,7 @@ class Manager:
     #
     # ExecutionContextBase* createContext(const char* ec_args);
 
-    def createContext(self, ec_args):
+    def createContext(self, ec_args: str):
         self._rtcout.RTC_TRACE("Manager.createContext()")
         self._rtcout.RTC_TRACE("ExecutionContext type: %s",
                                self._config.getProperty("exec_cxt.periodic.type"))
@@ -1194,7 +1190,7 @@ class Manager:
     # @brief Unregister RT-Component that is registered in the Manager
     # @endif
 
-    def deleteComponent(self, instance_name=None, comp=None):
+    def deleteComponent(self, instance_name=None, comp=None) -> None:
         if instance_name:
             self._rtcout.RTC_TRACE(
                 "Manager.deleteComponent(%s)", instance_name)
@@ -1248,7 +1244,7 @@ class Manager:
     # @brief Get RT-Component's pointer
     # @endif
 
-    def getComponent(self, instance_name):
+    def getComponent(self, instance_name: str):
         self._rtcout.RTC_TRACE("Manager.getComponent(%s)", instance_name)
         return self._compManager.find(instance_name)
 
@@ -1273,35 +1269,35 @@ class Manager:
     # void Manager::
     # addManagerActionListener(RTM::ManagerActionListener* listener)
 
-    def addManagerActionListener(self, listener):
+    def addManagerActionListener(self, listener) -> None:
         self._listeners.manager_.addListener(listener)
         return
 
     # void Manager::
     # removeManagerActionListener(RTM::ManagerActionListener* listener)
 
-    def removeManagerActionListener(self, listener):
+    def removeManagerActionListener(self, listener) -> None:
         self._listeners.manager_.removeListener(listener)
         return
 
     # void Manager::
     # addModuleActionListener(RTM::ModuleActionListener* listener)
 
-    def addModuleActionListener(self, listener):
+    def addModuleActionListener(self, listener) -> None:
         self._listeners.module_.addListener(listener)
         return
 
     # void Manager::
     # removeModuleActionListener(RTM::ModuleActionListener* listener)
 
-    def removeModuleActionListener(self, listener):
+    def removeModuleActionListener(self, listener) -> None:
         self._listeners.module_.removeListener(listener)
         return
 
     # void Manager::
     # addRtcLifecycleActionListener(RTM::RtcLifecycleActionListener* listener)
 
-    def addRtcLifecycleActionListener(self, listener):
+    def addRtcLifecycleActionListener(self, listener) -> None:
         self._listeners.rtclifecycle_.addListener(listener)
         return
 
@@ -1309,28 +1305,28 @@ class Manager:
     # removeRtcLifecycleActionListener(RTM::RtcLifecycleActionListener*
     # listener)
 
-    def removeRtcLifecycleActionListener(self, listener):
+    def removeRtcLifecycleActionListener(self, listener) -> None:
         self._listeners.rtclifecycle_.removeListener(listener)
         return
 
     # void Manager::
     # addNamingActionListener(RTM::NamingActionListener* listener)
 
-    def addNamingActionListener(self, listener):
+    def addNamingActionListener(self, listener) -> None:
         self._listeners.naming_.addListener(listener)
         return
 
     # void Manager::
     # removeNamingActionListener(RTM::NamingActionListener* listener)
 
-    def removeNamingActionListener(self, listener):
+    def removeNamingActionListener(self, listener) -> None:
         self._listeners.naming_.removeListener(listener)
         return
 
     # void Manager::
     # addLocalServiceActionListener(RTM::LocalServiceActionListener* listener)
 
-    def addLocalServiceActionListener(self, listener):
+    def addLocalServiceActionListener(self, listener) -> None:
         self._listeners.localservice_.addListener(listener)
         return
 
@@ -1338,7 +1334,7 @@ class Manager:
     # removeLocalServiceActionListener(RTM::LocalServiceActionListener*
     # listener)
 
-    def removeLocalServiceActionListener(self, listener):
+    def removeLocalServiceActionListener(self, listener) -> None:
         self._listeners.localservice_.removeListener(listener)
         return
 
@@ -1400,6 +1396,71 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.getPOAManager()")
         return self._poaManager
 
+    ##
+    # @if jp
+    # @brief Bi-Directional GIOP を使うか
+    #
+    # corba.bidirectional_giop が YES なら、Manager の POA (getPOA()) は
+    # BiDirectional ポリシー (BOTH) を持つ POA になる。ORB の Bi-Directional
+    # GIOP のオプション (-ORBofferBiDirectionalGIOP など) は、corba.args に書く。
+    # 相手が開いた接続で呼び返せるので、
+    # NAT やコンテナの中など、外から接続できないプロセスの RTC を使える。
+    #
+    # @return 使うなら True
+    #
+    # @else
+    # @brief Whether Bi-Directional GIOP is used
+    #
+    # If corba.bidirectional_giop is YES, the POA of the Manager (getPOA())
+    # has the BiDirectional policy (BOTH). The ORB options for Bi-Directional
+    # GIOP (-ORBofferBiDirectionalGIOP etc.) are given in corba.args.
+    # Callbacks use the connection that the
+    # other side opened, so RTCs in a process that cannot be connected to
+    # from outside (behind NAT, in a container, etc.) can be used.
+    #
+    # @return True if used
+    # @endif
+    def isBiDirectionalGIOP(self):
+        return OpenRTM_aist.toBool(
+            self._config.getProperty("corba.bidirectional_giop"),
+            "YES", "NO", False)
+
+    ##
+    # @if jp
+    # @brief BiDirectional ポリシーを持つ POA を作る
+    #
+    # RootPOA の子として、BiDirectional (BOTH) と IMPLICIT_ACTIVATION の
+    # ポリシーを持つ POA "bidir" を作る。_this() で暗黙に活性化される
+    # サーバントもこの POA に置くため、サーバントの既定の POA
+    # (_default_POA) をこの POA にする。
+    #
+    # @param root RootPOA
+    # @return 作った POA
+    #
+    # @else
+    # @brief Creates a POA with the BiDirectional policy
+    #
+    # Creates the POA "bidir" with the BiDirectional (BOTH) and
+    # IMPLICIT_ACTIVATION policies as a child of the RootPOA. The default
+    # POA of servants (_default_POA) becomes this POA, so that servants
+    # implicitly activated by _this() are also placed in it.
+    #
+    # @param root RootPOA
+    # @return the created POA
+    # @endif
+    def createBiDirectionalPOA(self, root):
+        from omniORB import BiDirPolicy
+        policies = [
+            self._orb.create_policy(
+                BiDirPolicy.BIDIRECTIONAL_POLICY_TYPE,
+                CORBA.Any(CORBA.TC_ushort, BiDirPolicy.BOTH)),
+            root.create_implicit_activation_policy(
+                PortableServer.IMPLICIT_ACTIVATION)]
+        poa = root.create_POA("bidir", self._poaManager, policies)
+        PortableServer.Servant._default_POA = lambda servant: poa
+        self._rtcout.RTC_INFO("Bi-Directional GIOP is enabled.")
+        return poa
+
     # ============================================================
     # Manager initialize and finalization
     # ============================================================
@@ -1421,7 +1482,7 @@ class Manager:
     # @brief Manager internal initialization
     # @endif
 
-    def initManager(self, argv):
+    def initManager(self, argv) -> None:
         config = OpenRTM_aist.ManagerConfig(argv)
         self._config = OpenRTM_aist.Properties()
         config.configure(self._config)
@@ -1430,11 +1491,10 @@ class Manager:
         self._module = OpenRTM_aist.ModuleManager(self._config)
 
         self._needsTimer = OpenRTM_aist.toBool(self._config.getProperty(
-                "timer.enable"), "YES", "NO", True)
-
+            "timer.enable"), "YES", "NO", True)
 
         if OpenRTM_aist.toBool(self._config.getProperty("manager.shutdown_auto"),
-                                   "YES", "NO", True) and \
+                               "YES", "NO", True) and \
                 not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
                                         "YES", "NO", False) and \
                 self._needsTimer:
@@ -1477,7 +1537,7 @@ class Manager:
     # @else
     #
     # @endif
-    def shutdownManagerServant(self):
+    def shutdownManagerServant(self) -> None:
         self._rtcout.RTC_TRACE("Manager.shutdownManagerServant()")
         if self._mgrservant:
             self._mgrservant.exit()
@@ -1500,10 +1560,11 @@ class Manager:
     # @else
     #
     # @endif
-    def shutdownManager(self):
+    def shutdownManager(self) -> None:
         self._rtcout.RTC_TRACE("Manager.shutdownManager()")
         self._listeners.manager_.preShutdown()
         self.shutdownComponents()
+        OpenRTM_aist.LocalServiceAdmin.shutdown()
         self.shutdownManagerServant()
         self.shutdownNaming()
         self.shutdownORB()
@@ -1535,7 +1596,7 @@ class Manager:
     #
     # void shutdownOnNoRtcs();
 
-    def shutdownOnNoRtcs(self):
+    def shutdownOnNoRtcs(self) -> None:
         self._rtcout.RTC_TRACE("Manager::shutdownOnNoRtcs()")
         if OpenRTM_aist.toBool(self._config.getProperty("manager.shutdown_on_nortcs"),
                                "YES", "NO", True):
@@ -1571,7 +1632,7 @@ class Manager:
     #
     #
     # @endif
-    def initLogstreamFile(self):
+    def initLogstreamFile(self) -> None:
 
         logprop = self._config.getNode("logger")
         logstream = OpenRTM_aist.LogstreamFactory.instance().createObject("file")
@@ -1605,7 +1666,7 @@ class Manager:
     #
     # @endif
 
-    def initLogstreamPlugins(self):
+    def initLogstreamPlugins(self) -> None:
         lmod_ = [s.strip()
                  for s in self._config.getProperty("logger.plugins").split(",")]
         for mod_ in lmod_:
@@ -1637,20 +1698,20 @@ class Manager:
     #
     #
     # @endif
-    def initLogstreamOthers(self):
+    def initLogstreamOthers(self) -> None:
         factory = OpenRTM_aist.LogstreamFactory.instance()
         pp = self._config.getNode("logger.logstream")
 
         leaf0 = pp.getLeaf()
 
-        for l in leaf0:
-            lstype = l.getName()
+        for logstream_properties in leaf0:
+            lstype = logstream_properties.getName()
             logstream = factory.createObject(lstype)
             if logstream is None:
                 self._rtcout.RTC_WARN("Logstream %s creation failed." % lstype)
                 continue
             self._rtcout.RTC_INFO("Logstream %s created." % lstype)
-            if not logstream.init(l):
+            if not logstream.init(logstream_properties):
                 self._rtcout.RTC_WARN("Logstream %s init failed." % lstype)
 
                 self._rtcout.RTC_WARN("Logstream %s deleted." % lstype)
@@ -1675,7 +1736,7 @@ class Manager:
     # @brief System logger initialization
     # @endif
 
-    def initLogger(self):
+    def initLogger(self) -> bool:
         # self._rtcout = OpenRTM_aist.LogStream()
         self._rtcout = self.getLogbuf()
         if not OpenRTM_aist.toBool(self._config.getProperty(
@@ -1715,7 +1776,7 @@ class Manager:
     # @brief System Logger finalization
     # @endif
 
-    def shutdownLogger(self):
+    def shutdownLogger(self) -> None:
         self._rtcout.RTC_TRACE("Manager.shutdownLogger()")
         self._rtcout.shutdown()
         return
@@ -1738,7 +1799,7 @@ class Manager:
     # @brief CORBA ORB initialization
     # @endif
 
-    def initORB(self):
+    def initORB(self) -> bool:
         self._rtcout.RTC_TRACE("Manager.initORB()")
         try:
             args = OpenRTM_aist.parseArgs(self.createORBOptions())
@@ -1755,6 +1816,10 @@ class Manager:
                 return False
 
             self._poaManager = self._poa._get_the_POAManager()
+
+            if self.isBiDirectionalGIOP():
+                self._rootPOA = self._poa
+                self._poa = self.createBiDirectionalPOA(self._rootPOA)
 
         except BaseException:
             self._rtcout.RTC_ERROR(
@@ -1783,6 +1848,14 @@ class Manager:
         opt = self._config.getProperty("corba.args")
         self._rtcout.RTC_DEBUG("corba.args: %s", opt)
 
+        if self.isBiDirectionalGIOP() and "BiDirectionalGIOP" not in opt:
+            # The ORB options for Bi-Directional GIOP are not added here;
+            # they are given in corba.args (or the omniORB configuration).
+            self._rtcout.RTC_WARN(
+                "corba.bidirectional_giop is YES, but corba.args has no "
+                "-ORBofferBiDirectionalGIOP / -ORBacceptBiDirectionalGIOP "
+                "(see the omniORB options for Bi-Directional GIOP).")
+
         endpoints = self.createORBEndpoints()
         opt = self.createORBEndpointOption(opt, endpoints)
 
@@ -1794,23 +1867,23 @@ class Manager:
     # @if jp
     # @brief giopからはじまるORBエンドポイントでの指定した場合にtrue、
     #       それ以外(例えばホスト名:ポート番号の指定)の場合はfalseを返す。
-    # 
+    #
     #
     # @param endpoint エンドポイント
     # @return エンドポイントの指定方法
     #
     # @else
-    # @brief 
+    # @brief
     #
-    # @param endpoint 
-    # @return 
+    # @param endpoint
+    # @return
     #
     # @endif
     #
     # static bool isORBEndPoint(const std::string& endpoint);
 
     @staticmethod
-    def isORBEndPoint(endpoint):
+    def isORBEndPoint(endpoint: str) -> bool:
         headers = ["giop:", "iiop://",
                    "diop://", "uiop://",
                    "ssliop://", "shmiop://",
@@ -1899,7 +1972,7 @@ class Manager:
     # @endif
     # void createORBEndpointOption(std::string& opt, coil::vstring& endpoints);
 
-    def createORBEndpointOption(self, opt, endpoints):
+    def createORBEndpointOption(self, opt: str, endpoints: list):
         corba = self._config.getProperty("corba.id")
         self._rtcout.RTC_DEBUG("corba.id: %s", corba)
 
@@ -1953,7 +2026,7 @@ class Manager:
     # @brief ORB finalization
     # @endif
 
-    def shutdownORB(self):
+    def shutdownORB(self) -> None:
         self._rtcout.RTC_TRACE("Manager.shutdownORB()")
         if not self._orb:
             return
@@ -2026,7 +2099,7 @@ class Manager:
     #
     # @endif
 
-    def initNaming(self):
+    def initNaming(self) -> bool:
         self._rtcout.RTC_TRACE("Manager.initNaming()")
         self._namingManager = OpenRTM_aist.NamingManager(self)
 
@@ -2072,7 +2145,7 @@ class Manager:
     #
     # @endif
 
-    def shutdownNaming(self):
+    def shutdownNaming(self) -> None:
         self._rtcout.RTC_TRACE("Manager.shutdownNaming()")
         comps = self.getComponents()
 
@@ -2102,7 +2175,7 @@ class Manager:
     #
     # @endif
 
-    def initExecContext(self):
+    def initExecContext(self) -> bool:
         self._rtcout.RTC_TRACE("Manager.initExecContext()")
         OpenRTM_aist.PeriodicExecutionContextInit(self)
         OpenRTM_aist.ExtTrigExecutionContextInit(self)
@@ -2127,7 +2200,7 @@ class Manager:
     # @param self
     #
     # @endif
-    def initCpuAffinity(self):
+    def initCpuAffinity(self) -> None:
         self._rtcout.RTC_TRACE("Manager.initCpuAffinity()")
 
         if not self._config.findNode("manager.cpu_affinity"):
@@ -2173,7 +2246,7 @@ class Manager:
     # @endif
     #
 
-    def initComposite(self):
+    def initComposite(self) -> bool:
         self._rtcout.RTC_TRACE("Manager.initComposite()")
         OpenRTM_aist.PeriodicECSharedCompositeInit(self)
         return True
@@ -2200,7 +2273,7 @@ class Manager:
     # @endif
     #
 
-    def initFactories(self):
+    def initFactories(self) -> bool:
         # self._rtcout.RTC_TRACE("Manager.initFactories()")
         OpenRTM_aist.FactoryInit()
         return True
@@ -2220,7 +2293,7 @@ class Manager:
     #
     # @endif
 
-    def initTimer(self):
+    def initTimer(self) -> bool:
         return True
 
     ##
@@ -2234,7 +2307,7 @@ class Manager:
     # @else
     #
     # @endif
-    def shutdownTimer(self):
+    def shutdownTimer(self) -> None:
         self._rtcout.RTC_TRACE("Manager.shutdownTimer()")
         if self._timer:
             self._timer.stop()
@@ -2319,7 +2392,7 @@ class Manager:
     #
     # @endif
     #
-    def setEndpointProperty(self, objref):
+    def setEndpointProperty(self, objref: 'CORBA.Object') -> None:
         import re
         (ipv4, ipv4_list, ipv6, ipv6_list) = self.endpointPropertySwitch()
         re_ipv4 = r"((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))"
@@ -2367,7 +2440,7 @@ class Manager:
     #
     # @endif
     #
-    def initManagerServant(self):
+    def initManagerServant(self) -> bool:
         self._rtcout.RTC_TRACE("Manager.initManagerServant()")
         if not OpenRTM_aist.toBool(
                 self._config.getProperty("manager.corba_servant"), "YES", "NO", True):
@@ -2387,7 +2460,7 @@ class Manager:
                     mgr_name, self._mgrservant)
 
         if OpenRTM_aist.toBool(self._config.getProperty("corba.update_master_manager.enable"),
-                                   "YES", "NO", True) and \
+                               "YES", "NO", True) and \
                 not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
                                         "YES", "NO", False) and \
                 self._needsTimer:
@@ -2400,13 +2473,11 @@ class Manager:
 
             self.addTask(self._mgrservant.updateMasterManager, tm)
 
-        otherref = None
-
         return True
 
     # bool Manager::initLocalService()
 
-    def initLocalService(self):
+    def initLocalService(self) -> bool:
         self._rtcout.RTC_TRACE("Manager::initLocalService()")
         admin_ = OpenRTM_aist.LocalServiceAdmin.instance()
         prop_ = OpenRTM_aist.Properties(
@@ -2434,7 +2505,7 @@ class Manager:
     #
     # @endif
 
-    def shutdownComponents(self):
+    def shutdownComponents(self) -> None:
         self._rtcout.RTC_TRACE("Manager.shutdownComponents()")
         comps = self._namingManager.getObjects()
         for comp in comps:
@@ -2467,7 +2538,7 @@ class Manager:
     #
     # @endif
 
-    def cleanupComponent(self, comp):
+    def cleanupComponent(self, comp) -> None:
         self._rtcout.RTC_TRACE("Manager.cleanupComponent()")
         self.unregisterComponent(comp)
 
@@ -2488,7 +2559,7 @@ class Manager:
     #
     # void cleanupComponents();
 
-    def cleanupComponents(self):
+    def cleanupComponents(self) -> None:
         self._rtcout.RTC_VERBOSE("Manager.cleanupComponents()")
         guard = OpenRTM_aist.ScopedLock(self._finalized.mutex)
         self._rtcout.RTC_VERBOSE("%d components are marked as finalized.",
@@ -2520,7 +2591,7 @@ class Manager:
     #
     # void notifyFinalized(RTObject_impl* comp);
 
-    def notifyFinalized(self, comp):
+    def notifyFinalized(self, comp) -> None:
         self._rtcout.RTC_TRACE("Manager.notifyFinalized()")
         guard = OpenRTM_aist.ScopedLock(self._finalized.mutex)
         self._finalized.comps.append(comp)
@@ -2543,7 +2614,7 @@ class Manager:
     #                        coil::Properties& comp_id,
     #                        coil::Properties& comp_conf)
 
-    def procComponentArgs(self, comp_arg, comp_id, comp_conf):
+    def procComponentArgs(self, comp_arg: str, comp_id: 'OpenRTM_aist.Properties', comp_conf: 'OpenRTM_aist.Properties') -> bool:
         id_and_conf = [s.strip() for s in comp_arg.split("?")]
 
         if len(id_and_conf) != 1 and len(id_and_conf) != 2:
@@ -2627,15 +2698,18 @@ class Manager:
     # void configureComponent(RTObject_impl* comp, const coil::Properties&
     # prop);
 
-    def configureComponent(self, comp, prop):
+    def configureComponent(self, comp, prop: 'OpenRTM_aist.Properties') -> None:
         comp.setProperties(prop)
 
         category = comp.getCategory()
         type_name = comp.getTypeName()
         inst_name = comp.getInstanceName()
 
-        type_conf = category + "." + type_name + ".config_file"
-        name_conf = category + "." + inst_name + ".config_file"
+        prefix = category + "." if category else ""
+        type_key = prefix + type_name
+        instance_key = prefix + inst_name
+        type_conf = type_key + ".config_file"
+        name_conf = instance_key + ".config_file"
 
         type_prop = OpenRTM_aist.Properties()
 
@@ -2657,15 +2731,15 @@ class Manager:
                 name_prop.load(conff)
                 conff.close()
 
-        if self._config.findNode(category + "." + inst_name):
+        if self._config.findNode(instance_key):
             temp_ = OpenRTM_aist.Properties(
                 prop=self._config.getNode(
-                    category + "." + inst_name))
+                    instance_key))
             keys_ = temp_.propertyNames()
             if not (len(keys_) == 1 and keys_[-1] == "config_file"):
                 name_prop.mergeProperties(
                     self._config.getNode(
-                        category + "." + inst_name))
+                        instance_key))
                 self._rtcout.RTC_INFO(
                     "Component name conf exists in rtc.conf. Merged.")
                 self._rtcout.RTC_DEBUG(name_prop)
@@ -2688,15 +2762,15 @@ class Manager:
                 type_prop.load(conff)
                 conff.close()
 
-        if self._config.findNode(category + "." + type_name):
+        if self._config.findNode(type_key):
             temp_ = OpenRTM_aist.Properties(
                 prop=self._config.getNode(
-                    category + "." + type_name))
+                    type_key))
             keys_ = temp_.propertyNames()
             if not (len(keys_) == 1 and keys_[-1] == "config_file"):
                 type_prop.mergeProperties(
                     self._config.getNode(
-                        category + "." + type_name))
+                        type_key))
                 self._rtcout.RTC_INFO(
                     "Component type conf exists in rtc.conf. Merged.")
                 self._rtcout.RTC_DEBUG(type_prop)
@@ -2740,7 +2814,7 @@ class Manager:
     #
     # @endif
 
-    def mergeProperty(self, prop, file_name):
+    def mergeProperty(self, prop: 'OpenRTM_aist.Properties', file_name: str) -> bool:
         if file_name == "":
             self._rtcout.RTC_ERROR("Invalid configuration file name.")
             return False
@@ -2787,17 +2861,16 @@ class Manager:
     #
     # @endif
 
-    def formatString(self, naming_format, prop):
+    def formatString(self, naming_format: str, prop: 'OpenRTM_aist.Properties'):
         name_ = naming_format
         str_ = ""
         count = 0
-        len_ = len(name_)
         it = iter(name_)
 
         try:
             while True:
                 if sys.version_info[0] == 2:
-                    n = it.next()
+                    n = next(it)
                 else:
                     n = it.__next__()
                 if n == '%':
@@ -2807,18 +2880,18 @@ class Manager:
                 elif n == '$':
                     count = 0
                     if sys.version_info[0] == 2:
-                        n = it.next()
+                        n = next(it)
                     else:
                         n = it.__next__()
                     if n == '{' or n == '(':
-                        n = it.next()
+                        n = next(it)
                         env = ""
                         while True:
                             if n == '}' or n == ')':
                                 break
                             env += n
                             if sys.version_info[0] == 2:
-                                n = it.next()
+                                n = next(it)
                             else:
                                 n = it.__next__()
                         envval = os.getenv(env)
@@ -2871,7 +2944,7 @@ class Manager:
     # @else
     #
     # @endif
-    def getLogbuf(self, name="manager"):
+    def getLogbuf(self, name: str = "manager"):
         if not OpenRTM_aist.toBool(self._config.getProperty(
                 "logger.enable"), "YES", "NO", True):
             return OpenRTM_aist.LogStream().getLogger(name)
@@ -2915,7 +2988,7 @@ class Manager:
     #
     # @endif
 
-    def __try_direct_load(self, file_name):
+    def __try_direct_load(self, file_name: str) -> None:
         try:
             # pathChanged=False
             splitted_name = os.path.split(file_name)
@@ -2954,7 +3027,7 @@ class Manager:
     # @endif
     # void publishPorts(RTObject_impl* comp)
 
-    def publishPorts(self, comp):
+    def publishPorts(self, comp) -> None:
         ports = comp.get_ports()
         for p in ports:
             prof = p.get_port_profile()
@@ -3011,7 +3084,7 @@ class Manager:
     #
     # @endif
     # void subscribePorts(RTObject_impl* comp)
-    def subscribePorts(self, comp):
+    def subscribePorts(self, comp) -> None:
         ports = comp.get_ports()
 
         for p in ports:
@@ -3066,7 +3139,7 @@ class Manager:
     # @endif
     # PortServiceList_var getPortsOnNameServers(std::string nsname,std::string
     # kind)
-    def getPortsOnNameServers(self, nsname, kind):
+    def getPortsOnNameServers(self, nsname: str, kind: str):
         ports = []
         ns = self._namingManager.getNameServices()
         for n in ns:
@@ -3117,7 +3190,7 @@ class Manager:
     # @endif
     # void connectDataPorts(PortService_ptr port,PortServiceList_var&
     # target_ports)
-    def connectDataPorts(self, port, target_ports):
+    def connectDataPorts(self, port, target_ports) -> None:
         for p in target_ports:
             if port._is_equivalent(p):
                 continue
@@ -3152,7 +3225,7 @@ class Manager:
     # void connectServicePorts(PortService_ptr port,PortServiceList_var&
     # target_ports)
 
-    def connectServicePorts(self, port, target_ports):
+    def connectServicePorts(self, port, target_ports) -> None:
         for p in target_ports:
             if port._is_equivalent(p):
                 continue
@@ -3184,7 +3257,7 @@ class Manager:
     # @endif
     # void initPreConnection()
 
-    def initPreConnection(self):
+    def initPreConnection(self) -> None:
         self._rtcout.RTC_TRACE("Connection pre-creation: %s" %
                                str(self._config.getProperty("manager.components.preconnect")))
         connectors = str(self._config.getProperty(
@@ -3341,7 +3414,7 @@ class Manager:
     # @param self
     # @endif
     # void initPreActivation()
-    def initPreActivation(self):
+    def initPreActivation(self) -> None:
 
         self._rtcout.RTC_TRACE("Components pre-activation: %s" %
                                str(self._config.getProperty("manager.components.preactivation")))
@@ -3389,7 +3462,7 @@ class Manager:
     # @endif
     # void initPreCreation()
 
-    def initPreCreation(self):
+    def initPreCreation(self) -> None:
         comps = [s.strip() for s in self._config.getProperty(
             "manager.components.precreate").split(",")]
         for comp in comps:
@@ -3408,7 +3481,7 @@ class Manager:
     # @endif
     # void invokeInitProc()
 
-    def invokeInitProc(self):
+    def invokeInitProc(self) -> None:
         if self._initProc:
             self._initProc(self)
 
@@ -3449,7 +3522,6 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.getNaming()")
         return self._namingManager
 
-
     ##
     # @if jp
     # @brief 周期実行タスクの登録
@@ -3480,7 +3552,8 @@ class Manager:
     # @return PeriodicFunction
     # @endif
     #
-    def addTask(self, fn, period):
+
+    def addTask(self, fn, period: 'OpenRTM_aist.TimeValue'):
         #self._rtcout.RTC_TRACE("Manager::addTask()")
         return self._scheduler.emplace(fn, period)
 
@@ -3534,7 +3607,7 @@ class Manager:
     #
     # @endif
     #
-    def removeTask(self, task):
+    def removeTask(self, task) -> None:
         task.stop()
 
     ##
@@ -3549,7 +3622,7 @@ class Manager:
     #
     # @else
     #
-    # @brief 
+    # @brief
     #
     #
     # @param self
@@ -3558,7 +3631,7 @@ class Manager:
     #
     # @endif
     #
-    def addExecutionContext(self, ec):
+    def addExecutionContext(self, ec) -> bool:
         if ec in self._eclist:
             return False
         self._eclist.append(ec)
@@ -3575,16 +3648,16 @@ class Manager:
     #
     # @else
     #
-    # @brief 
+    # @brief
     #
     #
     # @param self
     # @param ec Execution context
-    # @return 
+    # @return
     #
     # @endif
     #
-    def removeExecutionContext(self, ec):
+    def removeExecutionContext(self, ec) -> bool:
         if ec in self._eclist:
             self._eclist.remove(ec)
             return True
@@ -3600,17 +3673,16 @@ class Manager:
     #
     # @else
     #
-    # @brief 
+    # @brief
     #
     #
     # @param self
-    # @return 
+    # @return
     #
     # @endif
     #
     def createdExecutionContexts(self):
         return self._eclist
-
 
     # ============================================================
     # コンポーネントマネージャ
@@ -3623,6 +3695,7 @@ class Manager:
     # @else
     #
     # @endif
+
     class InstanceName:
         """
         """
@@ -3640,7 +3713,7 @@ class Manager:
         # @else
         #
         # @endif
-        def __init__(self, name=None, factory=None, prop=None):
+        def __init__(self, name=None, factory=None, prop=None) -> None:
             if prop:
                 self._name = prop.getProperty("instance_name")
             elif factory:
@@ -3668,7 +3741,7 @@ class Manager:
     # @endif
     class FactoryPredicate:
 
-        def __init__(self, name=None, prop=None, factory=None):
+        def __init__(self, name=None, prop=None, factory=None) -> None:
             if name:
                 self._vendor = ""
                 self._category = ""
@@ -3688,7 +3761,7 @@ class Manager:
                 self._version = factory.profile().getProperty("version")
                 self._language = factory.profile().getProperty("language")
 
-        def __call__(self, factory):
+        def __call__(self, factory) -> bool:
             if self._impleid == "":
                 return False
 
@@ -3708,7 +3781,7 @@ class Manager:
             if self._version != "" and self._version != _prop.getProperty(
                     "version"):
                 return False
-            
+
             if self._language != "" and self._language != _prop.getProperty(
                     "language"):
                 return False
@@ -3728,7 +3801,7 @@ class Manager:
     # @endif
     class ECFactoryPredicate:
 
-        def __init__(self, name=None, factory=None):
+        def __init__(self, name=None, factory=None) -> None:
             if name:
                 self._name = name
             elif factory:
@@ -3750,13 +3823,13 @@ class Manager:
     # @endif
     class ModulePredicate:
 
-            # ModulePredicate(coil::Properties& prop)
-        def __init__(self, prop):
+        # ModulePredicate(coil::Properties& prop)
+        def __init__(self, prop: 'OpenRTM_aist.Properties') -> None:
             self._prop = prop
             return
 
         # bool operator()(coil::Properties& prop)
-        def __call__(self, prop):
+        def __call__(self, prop) -> bool:
 
             if self._prop.getProperty(
                     "implementation_id") != prop.getProperty("implementation_id"):
@@ -3776,10 +3849,7 @@ class Manager:
 
             return True
 
-
-
-
     class Finalized:
-        def __init__(self):
+        def __init__(self) -> None:
             self.mutex = threading.RLock()
             self.comps = []

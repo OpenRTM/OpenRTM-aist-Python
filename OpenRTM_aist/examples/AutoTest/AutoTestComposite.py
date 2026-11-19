@@ -6,9 +6,9 @@ import sys
 import time
 import socket
 
-from rtc_handle10_11 import *
+from rtc_handle10_11 import RtmEnv
 import OpenRTM_aist
-from OpenRTM_aist.CorbaNaming import *
+from OpenRTM_aist.CorbaNaming import CorbaNaming
 import RTM
 
 

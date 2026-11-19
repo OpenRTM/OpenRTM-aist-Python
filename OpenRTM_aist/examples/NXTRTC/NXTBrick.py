@@ -4,8 +4,8 @@
 
 from __future__ import print_function
 import nxt.locator
-from nxt.sensor import *
-from nxt.motor import *
+from nxt.sensor import LightSensor, SoundSensor, TouchSensor, UltrasonicSensor, PORT_1, PORT_2, PORT_3, PORT_4
+from nxt.motor import MODE_MOTOR_ON, MODE_REGULATED, Motor, PORT_A, PORT_B, PORT_C, REGULATION_MOTOR_SYNC, RUN_STATE_RUNNING
 import time
 
 
@@ -110,23 +110,22 @@ It gives appropriate values to motors, and angles of motors are
 obtained and shown.  Sensor data are also obtained and shown.
 """
 if __name__ == "__main__":
-    import time
-    nxt = NXTBrick()
+    brick = NXTBrick()
     print("connected")
 
     # Testing motors
     for i in range(0):
-        nxt.setMotors([80, -80, 80])
+        brick.setMotors([80, -80, 80])
         print("Motor: ")
-        mstat = nxt.getMotors()
+        mstat = brick.getMotors()
         for i, m in enumerate(mstat):
             print("(", i, "): ", m)
         time.sleep(0.1)
-    nxt.setMotors([0, 0, 0])
+    brick.setMotors([0, 0, 0])
 
     # Testing sensors
     for i in range(100):
         sensors = ["Touch", "Sound", "Light", "USonic"]
-        sval = nxt.getSensors()
+        sval = brick.getSensors()
         print(sval)
         time.sleep(0.1)

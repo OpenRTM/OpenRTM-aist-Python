@@ -33,7 +33,7 @@ def main():
             inobj = tkm.getObject()._narrow(RTC.RTObject)
             pin = inobj.get_ports()
             break
-        except:
+        except BaseException:
             time.sleep(0.1)
 
     pin[0].disconnect_all()
@@ -46,7 +46,7 @@ def main():
             outobj = sl.getObject()._narrow(RTC.RTObject)
             pout = outobj.get_ports()
             break
-        except:
+        except BaseException:
             time.sleep(0.1)
 
     pout[0].disconnect_all()

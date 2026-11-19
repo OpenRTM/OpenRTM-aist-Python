@@ -113,7 +113,7 @@ def MyModuleInit(manager):
     ConsoleInShortInit(manager)
 
     # Create a component
-    comp = manager.createComponent("ConsoleInShort")
+    _ = manager.createComponent("ConsoleInShort")
 
 
 def main():

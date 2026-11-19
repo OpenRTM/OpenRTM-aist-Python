@@ -27,9 +27,13 @@ import math
 import time
 import sys
 if sys.version_info[0] == 2:
-    from Tix import *
+    from Tix import (
+        BooleanVar, Button, Canvas, Checkbutton, DoubleVar, Frame, GROOVE, HORIZONTAL, LEFT, Label, Scale, StringVar, TOP, Tk, W, X,
+    )
 else:
-    from tkinter.tix import *
+    from tkinter.tix import (
+        BooleanVar, Button, Canvas, Checkbutton, DoubleVar, Frame, GROOVE, HORIZONTAL, LEFT, Label, Scale, StringVar, TOP, Tk, W, X,
+    )
 
 # Import RTM module
 # This module's spesification
@@ -150,7 +154,7 @@ class CanvasText(ToggleItem):
         return
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         self.id = self.canvas.create_text(self.x, self.y, text=self.text)
@@ -186,7 +190,7 @@ class CanvasGrid(ToggleItem):
         return
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
 
@@ -243,7 +247,7 @@ class CanvasAxis(ToggleItem):
         return
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         self.id[0] = self.canvas.create_line(0, self.height / 2,
@@ -434,7 +438,7 @@ class LRFrange(ScaledObject):
         pos = []
         pre_d = 0
         scale_adj = 100.0  # change from 1 dot/m to 100 dot/m (dot/cm)
-        scale_threshold = 0.01 # change threshold value from m unit to cm unit
+        scale_threshold = 0.01  # change threshold value from m unit to cm unit
         tfilter = self.tfilter_check.get()
         sfilter = self.sfilter_check.get()
         thresh = self.threshold_check.get()

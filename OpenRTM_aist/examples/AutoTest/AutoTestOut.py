@@ -5,7 +5,7 @@
 """
  \file AutoTestOut.py
  \\brief ModuleDescription
- \date $Date$
+ \\date $Date$
 
 
 """
@@ -16,7 +16,6 @@ from omniORB import CORBA
 import OpenRTM_aist
 import RTC
 import sys
-import string
 import time
 sys.path.append(".")
 
@@ -54,7 +53,7 @@ AutoTestOut_spec = ["implementation_id", "AutoTestOut",
 class AutoTestOut(OpenRTM_aist.DataFlowComponentBase):
 
     """
-    \class AutoTestOut
+    \\class AutoTestOut
     \\brief ModuleDescription
     """
 
@@ -126,7 +125,7 @@ class AutoTestOut(OpenRTM_aist.DataFlowComponentBase):
                         self._SeqOutOut.write()
 
                         # invoking echo operation
-                        retmsg = self._myservice0_var._ptr().echo(str3.rstrip('\r\n'))
+                        _ = self._myservice0_var._ptr().echo(str3.rstrip('\r\n'))
 
         return RTC.RTC_OK
 
@@ -142,7 +141,7 @@ def MyModuleInit(manager):
     AutoTestOutInit(manager)
 
     # Create a component
-    comp = manager.createComponent("AutoTestOut")
+    _ = manager.createComponent("AutoTestOut")
 
 
 def main():

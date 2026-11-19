@@ -29,9 +29,13 @@ import sys
 
 
 if sys.version_info[0] == 2:
-    from Tkinter import *
+    from Tkinter import (
+        BOTTOM, Button, Canvas, Checkbutton, DoubleVar, Entry, Frame, GROOVE, HORIZONTAL, LEFT, Label, RIGHT, Scale, StringVar, TOP, W, X, Y,
+    )
 else:
-    from tkinter import *
+    from tkinter import (
+        BOTTOM, Button, Canvas, Checkbutton, DoubleVar, Entry, Frame, GROOVE, HORIZONTAL, LEFT, Label, RIGHT, Scale, StringVar, TOP, W, X, Y,
+    )
 
 
 class ToggleItem:
@@ -65,7 +69,7 @@ class CanvasText(ToggleItem):
         self.draw_text(x, y, text)
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         self.id = self.canvas.create_text(self.x, self.y, text=self.text,
@@ -94,7 +98,7 @@ class CanvasAxis(ToggleItem):
         self.draw()
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         self.id[0] = self.canvas.create_line(0, self.height / 2,
@@ -126,7 +130,7 @@ class CanvasCircle(ToggleItem):
         self.draw()
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         if self.pitch == 0:
@@ -179,7 +183,7 @@ class CanvasLine(ToggleItem):
         self.draw()
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         self.id = self.canvas.create_line(self.x0, self.y0, self.x1, self.y1,
