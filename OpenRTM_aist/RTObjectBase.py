@@ -2578,12 +2578,10 @@ class RTObjectBase:
         self._rtcout.RTC_TRACE("addPort()")
         if isinstance(port, OpenRTM_aist.CorbaPort):
             self._rtcout.RTC_TRACE("addPort(CorbaPort)")
-            propkey = "port.corbaport."
-            prop = self._properties.getNode(propkey)
-            if prop:
-                self._properties.getNode(propkey).mergeProperties(
-                    self._properties.getNode("port.corba"))
-            port.init(self._properties.getNode(propkey))
+            port_name = port.getName().rsplit(".", 1)[-1]
+            prop = self._properties.getNode("port.corbaport." + port_name)
+            prop.mergeProperties(self._properties.getNode("port.corba"))
+            port.init(prop)
             port.setOwner(self.getObjRef())
 
         elif isinstance(port, OpenRTM_aist.PortBase):
