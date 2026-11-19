@@ -56,7 +56,7 @@ class CorbaConsumerBase:
     # @param self
     #
     # @endif
-    def __init__(self, consumer=None):
+    def __init__(self, consumer=None) -> None:
         if consumer:
             self._objref = consumer._objref
         else:
@@ -81,7 +81,7 @@ class CorbaConsumerBase:
     #
     # @endif
 
-    def equal(self, consumer):
+    def equal(self, consumer: 'CorbaConsumerBase'):
         self._objref = consumer._objref
         return self
 
@@ -111,7 +111,7 @@ class CorbaConsumerBase:
     #
     # @endif
 
-    def setObject(self, obj):
+    def setObject(self, obj) -> bool:
         if CORBA.is_nil(obj):
             return False
 
@@ -157,7 +157,7 @@ class CorbaConsumerBase:
     #
     # @endif
 
-    def releaseObject(self):
+    def releaseObject(self) -> None:
         self._objref = CORBA.Object._nil
 
 
@@ -203,7 +203,7 @@ class CorbaConsumer(CorbaConsumerBase):
     # @brief Consructor
     #
     # @endif
-    def __init__(self, interfaceType=None, consumer=None):
+    def __init__(self, interfaceType=None, consumer=None) -> None:
         if interfaceType:
             self._interfaceType = interfaceType
         else:
@@ -237,10 +237,10 @@ class CorbaConsumer(CorbaConsumerBase):
     #
     # @endif
 
-    def equal(self, consumer):
+    def equal(self, consumer: 'CorbaConsumer') -> None:
         self._var = consumer._var
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -268,7 +268,7 @@ class CorbaConsumer(CorbaConsumerBase):
     #
     # @endif
 
-    def setObject(self, obj):
+    def setObject(self, obj) -> bool:
         if not CorbaConsumerBase.setObject(self, obj):
             self.releaseObject()
             return False
@@ -316,7 +316,7 @@ class CorbaConsumer(CorbaConsumerBase):
     #
     # @endif
 
-    def _ptr(self, get_ref=False):
+    def _ptr(self, get_ref: bool = False):
         if get_ref:
             return self._var
         if self._sev is not None:
@@ -342,7 +342,7 @@ class CorbaConsumer(CorbaConsumerBase):
     #
     # @endif
 
-    def releaseObject(self):
+    def releaseObject(self) -> None:
         CorbaConsumerBase.releaseObject(self)
         self._var = CORBA.Object._nil
         self._sev = None

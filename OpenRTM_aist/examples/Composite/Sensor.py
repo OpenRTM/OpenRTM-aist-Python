@@ -62,7 +62,7 @@ def MyModuleInit(manager):
     SensorInit(manager)
 
     # Create a component
-    comp = manager.createComponent("Sensor")
+    _ = manager.createComponent("Sensor")
 
 
 def main():

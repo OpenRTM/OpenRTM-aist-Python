@@ -48,7 +48,7 @@ def MyModuleInit(manager):
                             OpenRTM_aist.Delete)
 
     # Create a component
-    comp = manager.createComponent("ConsoleIn")
+    _ = manager.createComponent("ConsoleIn")
     return
 
 

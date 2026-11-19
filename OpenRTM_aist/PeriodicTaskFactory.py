@@ -22,11 +22,11 @@ periodictaskfactory = None
 
 
 class PeriodicTaskFactory(OpenRTM_aist.Factory, OpenRTM_aist.PeriodicTask):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
         pass
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     def instance():

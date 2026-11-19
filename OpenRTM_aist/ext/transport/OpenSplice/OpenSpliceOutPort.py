@@ -53,7 +53,7 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortConsumer.__init__(self)
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OpenSpliceOutPort")
         self._properties = None
@@ -79,7 +79,7 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~OpenSpliceOutPort()")
 
     ##
@@ -105,7 +105,7 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_PARANOID("init()")
 
         if not prop.propertyNames():
@@ -164,7 +164,7 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual ReturnCode put(const cdrMemoryStream& data);
-    def put(self, data):
+    def put(self, data: str):
         self._rtcout.RTC_PARANOID("put()")
 
         if self._writer:
@@ -228,7 +228,7 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-    def subscribeInterface(self, properties):
+    def subscribeInterface(self, properties) -> bool:
         return True
 
     ##
@@ -249,7 +249,7 @@ class OpenSpliceOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
-    def unsubscribeInterface(self, properties):
+    def unsubscribeInterface(self, properties) -> None:
         if self._writer:
             self._writer.close()
             self._rtcout.RTC_VERBOSE("remove writer")
@@ -430,7 +430,7 @@ opensplice_pub_option = [
 #
 
 
-def OpenSpliceOutPortInit():
+def OpenSpliceOutPortInit() -> None:
     prop = OpenRTM_aist.Properties(defaults_str=opensplice_pub_option)
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("opensplice",

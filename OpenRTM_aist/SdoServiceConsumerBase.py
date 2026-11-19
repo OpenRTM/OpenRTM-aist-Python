@@ -36,10 +36,10 @@ class SdoServiceConsumerBase:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -152,11 +152,11 @@ sdoserviceconsumerfactory = None
 
 
 class SdoServiceConsumerFactory(OpenRTM_aist.Factory, SdoServiceConsumerBase):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
         return
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     def instance():

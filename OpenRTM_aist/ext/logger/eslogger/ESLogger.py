@@ -63,7 +63,7 @@ class ECS_Handler(logging.Handler):
     #
     # @endif
     #
-    def __init__(self, hosts="http://localhost:9200", index="fluentbit", **kwargs):
+    def __init__(self, hosts: str = "http://localhost:9200", index: str = "fluentbit", **kwargs) -> None:
         self._index = index
         logging.Handler.__init__(self)
         self._es = Elasticsearch(hosts, **kwargs)
@@ -85,7 +85,7 @@ class ECS_Handler(logging.Handler):
     # @endif
     #
 
-    def emit(self, record):
+    def emit(self, record) -> None:
         data = self.format(record)
         self._es.index(index=self._index, body=data)
 
@@ -137,7 +137,7 @@ class ECS_Formatter(ecs_logging.StdlibFormatter):
     #
     # @endif
     #
-    def __init__(self, fmt=None, datefmt=None, style="%", validate=None, stack_trace_limit=None, exclude_fields=()):
+    def __init__(self, fmt=None, datefmt=None, style: str = "%", validate=None, stack_trace_limit=None, exclude_fields: tuple = ()) -> None:
         ecs_logging.StdlibFormatter.__init__(
             self, fmt=fmt, datefmt=datefmt, style=style, validate=validate, stack_trace_limit=stack_trace_limit, exclude_fields=exclude_fields)
 
@@ -201,7 +201,7 @@ class ESLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.LogstreamBase.__init__(self)
     ##
     # @if jp
@@ -217,7 +217,7 @@ class ESLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
     ##
     # @if jp
@@ -244,7 +244,7 @@ class ESLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def init(self, prop):
+    def init(self, prop) -> bool:
         self.logger = logging.getLogger("esrtm")
         self.handlers = []
 
@@ -326,7 +326,7 @@ class ESLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def log(self, msg, level, name):
+    def log(self, msg: str, level: int, name: str) -> bool:
         log = self.getLogger(name)
         if level == OpenRTM_aist.Logger.FATAL:
             log.log(logging.FATAL, msg)
@@ -369,7 +369,7 @@ class ESLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def setLogLevel(self, level):
+    def setLogLevel(self, level: int) -> None:
         if level == OpenRTM_aist.Logger.INFO:
             self.logger.setLevel(logging.INFO)
         elif level == OpenRTM_aist.Logger.FATAL:
@@ -409,7 +409,7 @@ class ESLogger(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def shutdown(self):
+    def shutdown(self) -> bool:
         for h in self.handlers:
             logging.Handler.close(h)
             self.logger.removeHandler(h)
@@ -436,7 +436,7 @@ class ESLogger(OpenRTM_aist.LogstreamBase):
     #
     # @endif
     #
-    def getLogger(self, name):
+    def getLogger(self, name: str):
         if name:
             return logging.getLogger("esrtm." + name)
         else:
@@ -475,7 +475,7 @@ class ManagerNameFilter(logging.Filter):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         logging.Filter.__init__(self)
         conf = OpenRTM_aist.Manager.instance().getConfig()
         self._managername = conf.getProperty("manager.instance_name")
@@ -492,11 +492,11 @@ class ManagerNameFilter(logging.Filter):
     # @endif
     #
 
-    def filter(self, record):
+    def filter(self, record) -> bool:
         record.manager = self._managername
         return True
 
 
-def ESLoggerInit(mgr):
+def ESLoggerInit(mgr) -> None:
     OpenRTM_aist.LogstreamFactory.instance().addFactory("elasticsearch",
                                                         ESLogger)

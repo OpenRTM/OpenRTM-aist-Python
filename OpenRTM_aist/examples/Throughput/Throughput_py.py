@@ -153,74 +153,74 @@ class Throughput_py(OpenRTM_aist.DataFlowComponentBase):
         # initialize of configuration-data.
         # <rtc-template block="init_conf_param">
         """
-		データ型
-		 - Name: datatype datatype
-		 - DefaultValue: double
-		 - Constraint: (octet,short,long,float,double)
-		"""
+                データ型
+                 - Name: datatype datatype
+                 - DefaultValue: double
+                 - Constraint: (octet,short,long,float,double)
+                """
         self._datatype = ['double']
         """
-		出力ファイル名。onActivated時、またはデータ受信時にファイルがオープンされるの
-		で、それ以降にパラメータを設定した場合は反映されない。
-		 - Name: outputfile outputfile
-		 - DefaultValue: test.dat
-		"""
+                出力ファイル名。onActivated時、またはデータ受信時にファイルがオープンされるの
+                で、それ以降にパラメータを設定した場合は反映されない。
+                 - Name: outputfile outputfile
+                 - DefaultValue: test.dat
+                """
         self._outputfile = ['test.dat']
         """
-		データ増分。mode が incr の場合のデータ増分を byte で指定する。
-		 - Name: increment increment
-		 - DefaultValue: 100
-		 - Unit: byte
-		"""
+                データ増分。mode が incr の場合のデータ増分を byte で指定する。
+                 - Name: increment increment
+                 - DefaultValue: 100
+                 - Unit: byte
+                """
         self._increment = [100]
         """
-		onExecute内で待機する時間
-		 - Name: sleep_time sleep_time
-		 - DefaultValue: 0.1
-		 - Unit: s
-		"""
+                onExecute内で待機する時間
+                 - Name: sleep_time sleep_time
+                 - DefaultValue: 0.1
+                 - Unit: s
+                """
         self._sleep_time = [0.1]
         """
-		- mode: 計測モード名。logincr, incr, const から選択可能。
-		- logincr: logスケールでデータ数を増加させ計測。実際には、1, 2, 5,
-		10, .. といった間隔でデータ数を増加させ、logスケールでプ
-		ロットした際にほぼ等間隔となるように計測する。
-		- incr: incrementパラメータで指定されたバイト数で、一定間隔でデータ
-		数を増加させる。
-		- const: データは増加させず一定サイズでスループットを計測する。
-		 - Name: mode mode
-		 - DefaultValue: logincr
-		 - Constraint: (logincr,incr,const)
-		"""
+                - mode: 計測モード名。logincr, incr, const から選択可能。
+                - logincr: logスケールでデータ数を増加させ計測。実際には、1, 2, 5,
+                10, .. といった間隔でデータ数を増加させ、logスケールでプ
+                ロットした際にほぼ等間隔となるように計測する。
+                - incr: incrementパラメータで指定されたバイト数で、一定間隔でデータ
+                数を増加させる。
+                - const: データは増加させず一定サイズでスループットを計測する。
+                 - Name: mode mode
+                 - DefaultValue: logincr
+                 - Constraint: (logincr,incr,const)
+                """
         self._mode = ['logincr']
         """
-		最大データ個数を指定する。送信するシーケンスデータのサイズを指定する。実際の
-		データサイズは、この個数に1データ当たりのバイト数をかけたものとなる。
-		 - Name: maxsize maxsize
-		 - DefaultValue: 1000000
-		"""
+                最大データ個数を指定する。送信するシーケンスデータのサイズを指定する。実際の
+                データサイズは、この個数に1データ当たりのバイト数をかけたものとなる。
+                 - Name: maxsize maxsize
+                 - DefaultValue: 1000000
+                """
         self._maxsize = [1000000]
         """
-		最大送信数。データ送信回数の最大値を指定する。モードがlogincr, incr
-		の場合、データサイズ毎に maxsend 回数データを送信する。
-		 - Name: maxsend maxsend
-		 - DefaultValue: 1000
-		"""
+                最大送信数。データ送信回数の最大値を指定する。モードがlogincr, incr
+                の場合、データサイズ毎に maxsend 回数データを送信する。
+                 - Name: maxsend maxsend
+                 - DefaultValue: 1000
+                """
         self._maxsend = [1000]
         """
-		最大サンプリング数。データを受信し、統計情報を計算する際の最大サンプル数を指
-		定する。データ送信側の送信数がサンプル数より少ない場合、受信したサンプル数で
-		統計情報を計算する。データ送信側の送信数がサンプル数より多い場合、古い情報は
-		破棄され、最新の maxsample 個の計測データから統計情報を計算する。
-		 - Name: maxsample maxsample
-		 - DefaultValue: 100
-		"""
+                最大サンプリング数。データを受信し、統計情報を計算する際の最大サンプル数を指
+                定する。データ送信側の送信数がサンプル数より少ない場合、受信したサンプル数で
+                統計情報を計算する。データ送信側の送信数がサンプル数より多い場合、古い情報は
+                破棄され、最新の maxsample 個の計測データから統計情報を計算する。
+                 - Name: maxsample maxsample
+                 - DefaultValue: 100
+                """
         self._maxsample = [100]
         """
-		ファイル識別子
-		 - Name: filesuffix filesuffix
-		 - DefaultValue: -test
-		"""
+                ファイル識別子
+                 - Name: filesuffix filesuffix
+                 - DefaultValue: -test
+                """
         self._filesuffix = ['-test']
 
         # </rtc-template>
@@ -330,8 +330,7 @@ class Throughput_py(OpenRTM_aist.DataFlowComponentBase):
             mean_latency = sum / record_len
             variance = (sq_sum / record_len) - (mean_latency * mean_latency)
             stddev = math.sqrt(variance)
-            throughput = ((((self._size * self._varsize) + 8)
-                           * 8) / mean_latency) / (1024 * 1024)
+            throughput = ((((self._size * self._varsize) + 8) * 8) / mean_latency) / (1024 * 1024)
 
             self._fs.write(str(self._size) + "\t")
             self._fs.write(str(min_latency) + "\t" + str(max_latency) + "\t")
@@ -366,8 +365,7 @@ class Throughput_py(OpenRTM_aist.DataFlowComponentBase):
         for prop in propv:
             self._fs.write("# " + prop + "\n")
         self._fs.write(
-            "size[byte]\tmin[s]\tmax[s]\tmean[s]\tstddev[s]\tthroughpiut[Mbps]" +
-            "\n")
+            "size[byte]\tmin[s]\tmax[s]\tmean[s]\tstddev[s]\tthroughpiut[Mbps]" + "\n")
 
         # print outputfile
         # print "setConnectorProfile"
@@ -589,7 +587,7 @@ def MyModuleInit(manager):
     Throughput_pyInit(manager)
 
     # Create a component
-    comp = manager.createComponent("Throughput_py")
+    _ = manager.createComponent("Throughput_py")
 
 
 def main():

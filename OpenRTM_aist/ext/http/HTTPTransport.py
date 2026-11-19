@@ -14,7 +14,7 @@ from omniORB import httpTP
 import OpenRTM_aist
 
 
-def HTTPTransportInit(manager):
+def HTTPTransportInit(manager) -> None:
 
     #os.environ['ORBtraceLevel'] = '25'
     #os.environ['ORBendPoint'] = 'giop:http:ws://127.0.0.1:2810/ws'
@@ -30,7 +30,7 @@ def HTTPTransportInit(manager):
 
     if not ("giop:http" in corba_args):
         corba_args += " -ORBendPoint giop:http:ws://127.0.0.1:8001/ws"
-        
+
     if not OpenRTM_aist.toBool(prop.getProperty(
             "manager.is_master"), "YES", "NO", True):
         if not prop.getProperty("corba.endpoints"):

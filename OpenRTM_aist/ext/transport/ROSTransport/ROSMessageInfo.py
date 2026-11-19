@@ -47,7 +47,7 @@ class ROSMessageInfoBase(object):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
     ##
     # @if jp
@@ -67,7 +67,7 @@ class ROSMessageInfoBase(object):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -86,7 +86,7 @@ class ROSMessageInfoBase(object):
     #
     # @endif
     #
-    def datatype(self):
+    def datatype(self) -> str:
         return ""
 
     ##
@@ -105,7 +105,7 @@ class ROSMessageInfoBase(object):
     #
     # @endif
     #
-    def md5sum(self):
+    def md5sum(self) -> str:
         return ""
 
     ##
@@ -124,7 +124,7 @@ class ROSMessageInfoBase(object):
     #
     # @endif
     #
-    def message_definition(self):
+    def message_definition(self) -> str:
         return ""
 
 
@@ -158,7 +158,7 @@ class ROSMessageInfo(ROSMessageInfoBase):
     #
     # @endif
 
-    def __init__(self, data_class):
+    def __init__(self, data_class) -> None:
         super(ROSMessageInfo, self).__init__()
         self._data_class = data_class
     ##
@@ -174,7 +174,7 @@ class ROSMessageInfo(ROSMessageInfoBase):
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
     ##
     # @if jp
@@ -264,7 +264,7 @@ class ROSMessageInfoList:
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._data = {}
 
     ##
@@ -284,7 +284,7 @@ class ROSMessageInfoList:
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -329,7 +329,7 @@ class ROSMessageInfoList:
     #
     # @endif
     #
-    def addInfo(self, id, info):
+    def addInfo(self, id: str, info: 'ROSMessageInfo') -> None:
         self._data[id] = info
 
     ##
@@ -349,7 +349,7 @@ class ROSMessageInfoList:
     #
     # @endif
     #
-    def removeInfo(self, id):
+    def removeInfo(self, id: str) -> bool:
         if id in self._data:
             del self._data[id]
             return True
@@ -370,7 +370,7 @@ class ROSMessageInfoList:
     #
     # @endif
     #
-    def getInfo(self, id):
+    def getInfo(self, id: str):
         if id in self._data:
             return self._data[id]
         return None

@@ -16,18 +16,19 @@
 #  $Id: python_gen.py 775 2008-07-28 16:14:45Z n-ando $
 #
 
-import re
+import typing as _typing
 import os
+import subprocess
 import gen_base
 import string
 import sys
 
 
-def description():
+def description() -> str:
     return "Python component code generator"
 
 
-def usage():
+def usage() -> str:
     """
     Python generator specific usage
     """
@@ -44,7 +45,7 @@ No additional options are available for Python code generator.
 """
 
 
-def get_opt_fmt():
+def get_opt_fmt() -> '_typing.List[str]':
     return []
 
 
@@ -60,20 +61,20 @@ no_global_idl = ""
 
 module_spec = """\
 [l_name]_spec = ["implementation_id", "[basicInfo.name]",
-		 "type_name",         "[basicInfo.name]",
-		 "description",       "[basicInfo.description]",
-		 "version",           "[basicInfo.version]",
-		 "vendor",            "[basicInfo.vendor]",
-		 "category",          "[basicInfo.category]",
-		 "activity_type",     "[basicInfo.componentType]",
-		 "max_instance",      "[basicInfo.maxInstances]",
-		 "language",          "Python",
-		 "lang_type",         "SCRIPT",
+                 "type_name",         "[basicInfo.name]",
+                 "description",       "[basicInfo.description]",
+                 "version",           "[basicInfo.version]",
+                 "vendor",            "[basicInfo.vendor]",
+                 "category",          "[basicInfo.category]",
+                 "activity_type",     "[basicInfo.componentType]",
+                 "max_instance",      "[basicInfo.maxInstances]",
+                 "language",          "Python",
+                 "lang_type",         "SCRIPT",
 [if-any configurationSet.configuration]
 [for config in configurationSet.configuration]
-		 "conf.default.[config.name]", "[config.defaultValue]",
+                 "conf.default.[config.name]", "[config.defaultValue]",
 [endfor][endif]
-		 ""]
+                 ""]
 """
 
 data_ports = """\
@@ -210,7 +211,7 @@ class python_gen(gen_base.gen_base):
     Python component source code generation class
     """
 
-    def __init__(self, data, opts):
+    def __init__(self, data: '_typing.Dict[str, _typing.Any]', opts: list) -> None:
         self.data = data
         self.data['fname'] = self.data['basicInfo']['name']
         self.data['fname_py'] = self.data['fname'] + ".py"
@@ -236,7 +237,7 @@ class python_gen(gen_base.gen_base):
         self.gen_tags(self.tags)
         return
 
-    def CreateActivityFuncs(self, dict):
+    def CreateActivityFuncs(self, dict: '_typing.Dict[str, _typing.Any]') -> None:
         acts = (("onFinalize", None),
                 ("onStartup", "ec_id"),
                 ("onShutdown", "ec_id"),
@@ -258,7 +259,7 @@ class python_gen(gen_base.gen_base):
         dict["activity"] = actlist
         return
 
-    def CreateService(self, dict):
+    def CreateService(self, dict: '_typing.Dict[str, _typing.Any]') -> None:
         if dict["service_idl"]:
             for svc in dict["service_idl"]:
                 svc["impl_py"] = svc["idl_basename"] + \
@@ -286,10 +287,10 @@ class python_gen(gen_base.gen_base):
                         break
                     f.close()
                 except IOError:
-                    print("Can't find file:", file)
+                    print("Can't find file:", cons["idl_fname"])
         return
 
-    def CreateDataPorts(self, dict):
+    def CreateDataPorts(self, dict: '_typing.Dict[str, _typing.Any]') -> None:
         if dict["dataPorts"] is None:
             return
         for dport in dict["dataPorts"]:
@@ -299,7 +300,7 @@ class python_gen(gen_base.gen_base):
                 dport["data_type_args"] = "RTC.Time(0,0),0"
         return
 
-    def CreateConfiguration(self, dict):
+    def CreateConfiguration(self, dict: '_typing.Dict[str, _typing.Any]') -> None:
         config = dict["configurationSet"]["configuration"]
         if config:
             for i, conf in enumerate(config):
@@ -316,7 +317,7 @@ class python_gen(gen_base.gen_base):
                         str([_type(conf["defaultValue"])])
         return
 
-    def check_data_type(self, _type):
+    def check_data_type(self, _type: str) -> '_typing.Optional[str]':
         if str(_type) in ["TimedShortSeq", "TimedLongSeq",
                           "TimedUShortSeq", "TimedULongSeq",
                           "TimedFloatSeq", "TimedDoubleSeq",
@@ -327,11 +328,11 @@ class python_gen(gen_base.gen_base):
             return None
         return None
 
-    def get_type(self, _type):
+    def get_type(self, _type: str) -> '_typing.Type[_typing.Union[int, float, str]]':
         if str(_type) == "int":
             return int
         elif str(_type) == "long":
-            return long
+            return int
         elif str(_type) == "float":
             return float
         elif str(_type) == "double":
@@ -343,25 +344,19 @@ class python_gen(gen_base.gen_base):
 
         return str
 
-    def print_impl(self):
+    def print_impl(self) -> None:
         for sidl in self.data["service_idl"]:
             if not os.access(sidl["idl_fname"], os.F_OK):
-                sys.stderr.write("Error: IDL file \""
-                                 + sidl["idl_fname"]
-                                 + "\" not found.\n")
+                sys.stderr.write("Error: IDL file \"" + sidl["idl_fname"] + "\" not found.\n")
                 sys.exit(1)
 
             try:
-                cmd = "omniidl -bpython -Wbexample " + \
-                    sidl["idl_fname"]
-                os.system(cmd)
+                subprocess.run(["omniidl", "-bpython", "-Wbexample", os.path.abspath(sidl["idl_fname"])],
+                               check=True)
             except BaseException:
-                sys.stderr.write("Generate error: "
-                                 + sidl["impl_py"] + "\n")
+                sys.stderr.write("Generate error: " + sidl["impl_py"] + "\n")
 
-            print("  File \""
-                  + sidl["impl_py"]
-                  + "\" was generated.")
+            print("  File \"" + sidl["impl_py"] + "\" was generated.")
 
         for cons in self.data["consumer_idl"]:
             dup = False
@@ -371,29 +366,25 @@ class python_gen(gen_base.gen_base):
 
             if not dup:
                 if not os.access(cons["idl_fname"], os.F_OK):
-                    sys.stderr.write("Error: IDL file \""
-                                     + cons["idl_fname"]
-                                     + "\" not found.\n")
+                    sys.stderr.write("Error: IDL file \"" + cons["idl_fname"] + "\" not found.\n")
                     sys.exit(1)
 
                 try:
-                    cmd = "omniidl -bpython " + \
-                        cons["idl_fname"]
-                    os.system(cmd)
+                    subprocess.run(["omniidl", "-bpython", os.path.abspath(cons["idl_fname"])],
+                                   check=True)
                 except BaseException:
                     sys.stderr.write(
-                        "Generate error: omniidl -bpython " +
-                        cons["idl_fname"])
+                        "Generate error: omniidl -bpython " + cons["idl_fname"])
         return
 
-    def print_pysrc(self):
+    def print_pysrc(self) -> None:
         """
         Generate component class script
         """
         self.gen(self.data["fname_py"], py_source, self.data, self.tags)
         return
 
-    def print_all(self):
+    def print_all(self) -> None:
         self.print_impl()
         self.print_pysrc()
         return

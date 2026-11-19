@@ -48,7 +48,7 @@ class OpenSpliceMessageInfoBase(object):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
     ##
     # @if jp
@@ -68,7 +68,7 @@ class OpenSpliceMessageInfoBase(object):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -87,7 +87,7 @@ class OpenSpliceMessageInfoBase(object):
     #
     # @endif
     #
-    def datatype(self):
+    def datatype(self) -> str:
         return ""
 
     ##
@@ -106,7 +106,7 @@ class OpenSpliceMessageInfoBase(object):
     #
     # @endif
     #
-    def idlFile(self):
+    def idlFile(self) -> str:
         return ""
 
 
@@ -140,7 +140,7 @@ class OpenSpliceMessageInfo(OpenSpliceMessageInfoBase):
     #
     # @endif
 
-    def __init__(self, datatype, idlfile):
+    def __init__(self, datatype: str, idlfile: str) -> None:
         super(OpenSpliceMessageInfo, self).__init__()
         self._datatype = datatype
         self._idlfile = idlfile
@@ -157,7 +157,7 @@ class OpenSpliceMessageInfo(OpenSpliceMessageInfoBase):
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
     ##
     # @if jp
@@ -228,7 +228,7 @@ class OpenSpliceMessageInfoList:
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._data = {}
 
     ##
@@ -248,7 +248,7 @@ class OpenSpliceMessageInfoList:
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -293,7 +293,7 @@ class OpenSpliceMessageInfoList:
     #
     # @endif
     #
-    def addInfo(self, id, info):
+    def addInfo(self, id: str, info: 'OpenSpliceMessageInfo') -> None:
         self._data[id] = info
 
     ##
@@ -313,7 +313,7 @@ class OpenSpliceMessageInfoList:
     #
     # @endif
     #
-    def removeInfo(self, id):
+    def removeInfo(self, id: str) -> bool:
         if id in self._data:
             del self._data[id]
             return True
@@ -334,7 +334,7 @@ class OpenSpliceMessageInfoList:
     #
     # @endif
     #
-    def getInfo(self, id):
+    def getInfo(self, id: str):
         if id in self._data:
             return self._data[id]
         return None

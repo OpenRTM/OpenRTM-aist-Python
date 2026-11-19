@@ -47,6 +47,9 @@
 #
 # @endif
 #
+import RTC as _RTC
+
+
 class ConnectionCallback:
     """
     """
@@ -75,7 +78,7 @@ class ConnectionCallback:
     # @endif
     #
     # virtual void operator()(RTC::ConnectorProfile& profile) = 0;
-    def __call__(self, profile):
+    def __call__(self, profile: "_RTC.ConnectorProfile") -> None:
         pass
 
 
@@ -129,7 +132,7 @@ class DisconnectCallback:
     # @endif
     #
     # virtual void operator()(const char* connector_id) = 0;
-    def __call__(self, connector_id):
+    def __call__(self, connector_id: str) -> None:
         pass
 
 
@@ -174,7 +177,7 @@ class OnWrite:
     #
     # @endif
     #
-    def __call__(self, value):
+    def __call__(self, value: int):
         pass
 
 
@@ -223,7 +226,7 @@ class OnWriteConvert:
     #
     # @endif
     #
-    def __call__(self, value):
+    def __call__(self, value: int):
         pass
 
 
@@ -262,7 +265,7 @@ class OnRead:
     # from the buffer.
     #
     # @endif
-    def __call__(self):
+    def __call__(self) -> None:
         pass
 
 
@@ -315,5 +318,5 @@ class OnReadConvert:
     #
     # @endif
     #
-    def __call__(self, value):
+    def __call__(self, value: int):
         pass

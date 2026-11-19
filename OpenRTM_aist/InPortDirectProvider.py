@@ -50,7 +50,7 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortProvider.__init__(self)
 
         # PortProfile setting
@@ -81,7 +81,7 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
 
         return
     ##
@@ -100,24 +100,24 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
         pass
 
     # void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties'):
         pass
 
     # void setBuffer(BufferBase<cdrMemoryStream>* buffer);
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._buffer = buffer
         return
 
     # void setListener(ConnectorInfo& info,
     #                  ConnectorListeners* listeners);
-    def setListener(self, info, listeners):
+    def setListener(self, info: 'OpenRTM_aist.ConnectorInfo', listeners) -> None:
         self._profile = info
         self._listeners = listeners
         return
 
     # void onBufferWrite(const cdrMemoryStream& data)
 
-    def onBufferWrite(self, data):
+    def onBufferWrite(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE, self._profile, data)
@@ -125,7 +125,7 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
 
     # inline void onBufferFull(const cdrMemoryStream& data)
 
-    def onBufferFull(self, data):
+    def onBufferFull(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL, self._profile, data)
@@ -133,14 +133,14 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
 
     # inline void onBufferWriteTimeout(const cdrMemoryStream& data)
 
-    def onBufferWriteTimeout(self, data):
+    def onBufferWriteTimeout(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT, self._profile, data)
         return data
 
     # inline void onBufferWriteOverwrite(const cdrMemoryStream& data)
-    def onBufferWriteOverwrite(self, data):
+    def onBufferWriteOverwrite(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_OVERWRITE, self._profile, data)
@@ -148,7 +148,7 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
 
     # inline void onReceived(const cdrMemoryStream& data)
 
-    def onReceived(self, data):
+    def onReceived(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED, self._profile, data)
@@ -156,7 +156,7 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
 
     # inline void onReceiverFull(const cdrMemoryStream& data)
 
-    def onReceiverFull(self, data):
+    def onReceiverFull(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL, self._profile, data)
@@ -164,7 +164,7 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
 
     # inline void onReceiverTimeout(const cdrMemoryStream& data)
 
-    def onReceiverTimeout(self, data):
+    def onReceiverTimeout(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT, self._profile, data)
@@ -172,14 +172,14 @@ class InPortDirectProvider(OpenRTM_aist.InPortProvider):
 
     # inline void onReceiverError(const cdrMemoryStream& data)
 
-    def onReceiverError(self, data):
+    def onReceiverError(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR, self._profile, data)
         return data
 
 
-def InPortDirectProviderInit():
+def InPortDirectProviderInit() -> None:
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("direct",
                        OpenRTM_aist.InPortDirectProvider)

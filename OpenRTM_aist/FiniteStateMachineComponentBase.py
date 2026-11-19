@@ -49,7 +49,7 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
     #
     #
     # @endif
-    def __init__(self, manager):
+    def __init__(self, manager) -> None:
         OpenRTM_aist.RTObject_impl.__init__(self, manager)
         self._rtcout = self._manager.getLogbuf(
             "FiniteStateMachineComponentBase")
@@ -282,7 +282,7 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
     # @endif
     # virtual ExecutionContext_ptr get_context(UniqueId exec_handle)
 
-    def get_context(self, ec_id):
+    def get_context(self, ec_id: int):
         return OpenRTM_aist.RTObject_impl.get_context(self, ec_id)
 
     ##
@@ -463,7 +463,7 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
     # @endif
     # ReturnCode_t detach_context(UniqueId exec_handle)
 
-    def detach_context(self, ec_id):
+    def detach_context(self, ec_id: int):
         return OpenRTM_aist.RTObject_impl.detach_context(self, ec_id)
 
     ##
@@ -550,7 +550,7 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
     #
     # @endif
 
-    def on_startup(self, ec_id):
+    def on_startup(self, ec_id: int):
         return OpenRTM_aist.RTObject_impl.on_startup(self, ec_id)
 
     ##
@@ -581,7 +581,7 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
     #
     # @endif
 
-    def on_shutdown(self, ec_id):
+    def on_shutdown(self, ec_id: int):
         return OpenRTM_aist.RTObject_impl.on_shutdown(self, ec_id)
 
     ##
@@ -610,7 +610,7 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
     #
     # @endif
 
-    def on_activated(self, ec_id):
+    def on_activated(self, ec_id: int):
         return OpenRTM_aist.RTObject_impl.on_activated(self, ec_id)
 
     ##
@@ -639,7 +639,7 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
     #
     # @endif
 
-    def on_deactivated(self, ec_id):
+    def on_deactivated(self, ec_id: int):
         return OpenRTM_aist.RTObject_impl.on_deactivated(self, ec_id)
 
     ##
@@ -774,5 +774,5 @@ class FiniteStateMachineComponentBase(OpenRTM_aist.RTObject_impl):
     #
     # @endif
 
-    def on_action(self, ec_id):
+    def on_action(self, ec_id: int):
         return RTC.RTC_OK
