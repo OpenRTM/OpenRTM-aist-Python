@@ -1301,11 +1301,19 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
                 provider.init(prop.getNode("provider"))
             except BaseException:
                 self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+                OpenRTM_aist.PortBase._cleanupFailedConnector(self, None, provider)
                 return None
 
-            if not provider.publishInterface(cprof.properties):
+            try:
+                published = provider.publishInterface(cprof.properties)
+            except BaseException:
+                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+                OpenRTM_aist.PortBase._cleanupFailedConnector(self, None, provider)
+                return None
+            if not published:
                 self._rtcout.RTC_ERROR(
                     "publishing interface information error")
+                OpenRTM_aist.PortBase._cleanupFailedConnector(self, None, provider)
                 return None
 
             return provider
@@ -1410,7 +1418,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
                         self._rtcout.RTC_TRACE("interface_type is direct, ")
                         self._rtcout.RTC_TRACE(
                             "but a peer InPort servant could not be obtained.")
-                        del connector
+                        OpenRTM_aist.PortBase._cleanupFailedConnector(self, connector, provider_)
                         return None
 
                     connector.setInPort(inport)
@@ -1431,6 +1439,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
             self._rtcout.RTC_ERROR(
                 "Exeption: OutPortPushConnector creation failed")
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+            OpenRTM_aist.PortBase._cleanupFailedConnector(self, connector, provider_)
             return None
 
     ##
@@ -1477,6 +1486,7 @@ class OutPortBase(OpenRTM_aist.PortBase, OpenRTM_aist.DataPortStatus):
         except BaseException:
             self._rtcout.RTC_ERROR("OutPortDuplexConnector creation failed")
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+            OpenRTM_aist.PortBase._cleanupFailedConnector(self, connector, provider_)
             return None
 
     ##
