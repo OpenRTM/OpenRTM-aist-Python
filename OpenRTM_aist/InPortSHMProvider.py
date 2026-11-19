@@ -52,7 +52,7 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider,
     # self
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortProvider.__init__(self)
         OpenRTM_aist.SharedMemory.__init__(self)
 
@@ -66,10 +66,11 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider,
         self._listeners = None
 
         orb = OpenRTM_aist.Manager.instance().getORB()
-        self._properties.append(OpenRTM_aist.NVUtil.newNV("dataport.corba_cdr.inport_ior",
-                                                          orb.object_to_string(self._objref)))
-        self._properties.append(OpenRTM_aist.NVUtil.newNV("dataport.corba_cdr.inport_ref",
-                                                          self._objref))
+        ior = orb.object_to_string(self._objref)
+        self._properties.append(OpenRTM_aist.NVUtil.newNV(
+            "dataport.shared_memory.inport_ior", ior))
+        self._properties.append(OpenRTM_aist.NVUtil.newNV(
+            "dataport.shared_memory.inport_ref", self._objref))
 
         return
 
@@ -90,7 +91,7 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider,
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -104,20 +105,20 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider,
     #
     # @endif
     #
-    def exit(self):
+    def exit(self) -> None:
         oid = OpenRTM_aist.Manager.instance().getPOA().servant_to_id(self)
         OpenRTM_aist.Manager.instance().getPOA().deactivate_object(oid)
 
     # void init(coil::Properties& prop)
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties'):
 
         pass
 
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._buffer = buffer
         return
 
-    def setListener(self, info, listeners):
+    def setListener(self, info, listeners) -> None:
         self._profile = info
         self._listeners = listeners
         return
@@ -183,7 +184,7 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider,
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT, self._profile, data)
         return data
 
-    def onBufferWriteOverwrite(self, data):
+    def onBufferWriteOverwrite(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_OVERWRITE, self._profile, data)
@@ -213,7 +214,7 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider,
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_ERROR, self._profile, data)
         return data
 
-    def convertReturn(self, status, data):
+    def convertReturn(self, status: int, data: bytes):
         if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
             self.onBufferWrite(data)
             return OpenRTM.PORT_OK
@@ -244,7 +245,7 @@ class InPortSHMProvider(OpenRTM_aist.InPortProvider,
             return OpenRTM.UNKNOWN_ERROR
 
 
-def InPortSHMProviderInit():
+def InPortSHMProviderInit() -> None:
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("shared_memory",
                        OpenRTM_aist.InPortSHMProvider)

@@ -31,7 +31,7 @@ import shlex
 # int launch_shell(std::string command)
 
 
-def launch_shell(command):
+def launch_shell(command: str) -> int:
     #args = command.split(" ")
     args = shlex.split(command, " ")
 
@@ -90,7 +90,7 @@ def fork():
 # string popen(string command)
 
 
-def popen(command):
+def popen(command: str):
     args = shlex.split(command, " ")
     sp = subprocess.Popen(args, stdout=subprocess.PIPE)
     return sp.communicate()[0].decode("utf-8")

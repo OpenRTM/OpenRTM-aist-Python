@@ -56,7 +56,7 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.LogstreamBase.__init__(self)
         self.handlers = []
 
@@ -73,7 +73,7 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -101,7 +101,7 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> bool:
         self.logger = logging.getLogger("file")
 
         if LogstreamFile.s_logger is None:
@@ -148,7 +148,7 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def addHandler(self, f):
+    def addHandler(self, f: str) -> bool:
         formatter = logging.Formatter(
             '%(asctime)s %(name)s %(levelname)s %(message)s')
         f = OpenRTM_aist.eraseHeadBlank(f)
@@ -207,7 +207,7 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
     #
     # @endif
     #
-    def log(self, msg, level, name):
+    def log(self, msg: str, level: int, name: str) -> bool:
         log = self.getLogger(name)
         if level == OpenRTM_aist.Logger.FATAL:
             log.log(logging.FATAL, msg)
@@ -249,7 +249,7 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def setLogLevel(self, level):
+    def setLogLevel(self, level: int) -> None:
         if level == OpenRTM_aist.Logger.INFO:
             self.logger.setLevel(logging.INFO)
         elif level == OpenRTM_aist.Logger.FATAL:
@@ -289,7 +289,7 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
     # @endif
     #
 
-    def shutdown(self):
+    def shutdown(self) -> bool:
         for h in self.handlers:
             logging.Handler.close(h)
             self.logger.removeHandler(h)
@@ -317,13 +317,13 @@ class LogstreamFile(OpenRTM_aist.LogstreamBase):
     #
     # @endif
     #
-    def getLogger(self, name):
+    def getLogger(self, name: str):
         if name:
             return logging.getLogger("file." + name)
         else:
             return self.logger
 
 
-def LogstreamFileInit():
+def LogstreamFileInit() -> None:
     OpenRTM_aist.LogstreamFactory.instance().addFactory("file",
                                                         OpenRTM_aist.LogstreamFile)

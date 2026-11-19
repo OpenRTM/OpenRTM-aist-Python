@@ -4,7 +4,6 @@
 
 from __future__ import print_function
 import sys
-import string
 
 import RTC
 import SimpleService
@@ -87,7 +86,6 @@ class MyServiceConsumer(OpenRTM_aist.DataFlowComponentBase):
 
         if argv[0] == "echo" and len(argv) > 1:
             if not self._async_echo:
-                retmsg = ""
                 func = echo_functor(argv[1], self._result)
                 self._async_echo = OpenRTM_aist.Async_tInvoker(self._myservice0._ptr(),
                                                                func)
@@ -146,7 +144,7 @@ def MyModuleInit(manager):
     MyServiceConsumerInit(manager)
 
     # Create a component
-    comp = manager.createComponent("MyServiceConsumer")
+    _ = manager.createComponent("MyServiceConsumer")
     return
 
 

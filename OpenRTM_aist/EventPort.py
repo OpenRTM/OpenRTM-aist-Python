@@ -58,7 +58,7 @@ class Event0:
     #
     # @endif
     #
-    def __init__(self, eb):
+    def __init__(self, eb) -> None:
         self._eb = eb
     ##
     # @if jp
@@ -76,7 +76,7 @@ class Event0:
     # @endif
     #
 
-    def __call__(self):
+    def __call__(self) -> None:
         self._eb.run()
 
 ##
@@ -123,7 +123,7 @@ class Event1(Event0):
     #
     # @endif
     #
-    def __init__(self, eb, data):
+    def __init__(self, eb: 'EventBinder1', data) -> None:
         Event0.__init__(self, eb)
         self._data = data
     ##
@@ -142,7 +142,7 @@ class Event1(Event0):
     # @endif
     #
 
-    def __call__(self):
+    def __call__(self) -> None:
         self._eb.run(self._data)
 
 ##
@@ -194,7 +194,7 @@ class EventBinder0(OpenRTM_aist.ConnectorDataListener):
     #
     # @endif
     #
-    def __init__(self, fsm, event_name, handler, buffer):
+    def __init__(self, fsm, event_name: str, handler, buffer) -> None:
         self._fsm = fsm
         self._eventName = event_name
         self._handler = handler
@@ -215,7 +215,7 @@ class EventBinder0(OpenRTM_aist.ConnectorDataListener):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
     ##
     # @if jp
@@ -240,7 +240,7 @@ class EventBinder0(OpenRTM_aist.ConnectorDataListener):
     # @endif
     #
 
-    def __call__(self, info, cdrdata):
+    def __call__(self, info, cdrdata: bytes):
         if info.properties.getProperty(
                 "fsm_event_name") == self._eventName or info.name == self._eventName:
             self._buffer.write(Event0(self))
@@ -264,7 +264,7 @@ class EventBinder0(OpenRTM_aist.ConnectorDataListener):
     #
     # @endif
     #
-    def run(self):
+    def run(self) -> None:
         self._fsm.dispatch(OpenRTM_aist.Macho.Event(self._handler))
 
 
@@ -317,7 +317,7 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListener):
     #
     # @endif
     #
-    def __init__(self, fsm, event_name, handler, data_type, buffer):
+    def __init__(self, fsm, event_name: str, handler, data_type, buffer) -> None:
         self._fsm = fsm
         self._eventName = event_name
         self._handler = handler
@@ -339,7 +339,7 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListener):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -364,7 +364,7 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListener):
     #
     # @endif
     #
-    def __call__(self, info, cdrdata):
+    def __call__(self, info, cdrdata: bytes):
         data_ = OpenRTM_aist.ConnectorDataListenerT.__call__(
             self, info, cdrdata, self._data_type, OpenRTM_aist.PortType.InPortType)
         if info.properties.getProperty(
@@ -391,7 +391,7 @@ class EventBinder1(OpenRTM_aist.ConnectorDataListener):
     #
     # @endif
     #
-    def run(self, data):
+    def run(self, data) -> None:
         self._fsm.dispatch(OpenRTM_aist.Macho.Event(self._handler, data))
 
 
@@ -441,7 +441,7 @@ class EventConnListener(OpenRTM_aist.ConnectorListener):
     #
     # @endif
     #
-    def __init__(self, buffer, thebuffer):
+    def __init__(self, buffer, thebuffer) -> None:
         self._buffer = buffer
         self._thebuffer = thebuffer
 
@@ -460,7 +460,7 @@ class EventConnListener(OpenRTM_aist.ConnectorListener):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -567,7 +567,7 @@ class EventInPort(OpenRTM_aist.InPortBase):
     #
     # @endif
     #
-    def __init__(self, name, fsm):
+    def __init__(self, name: str, fsm) -> None:
         super(EventInPort, self).__init__(name, "any")
         self._name = name
         self._fsm = fsm
@@ -589,7 +589,7 @@ class EventInPort(OpenRTM_aist.InPortBase):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         super(EventInPort, self).__del__()
     ##
     # @if jp
@@ -632,7 +632,7 @@ class EventInPort(OpenRTM_aist.InPortBase):
     # @endif
     #
 
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         OpenRTM_aist.InPortBase.init(self, prop)
         self.addConnectorListener(OpenRTM_aist.ConnectorListenerType.ON_CONNECT,
                                   EventConnListener(self._buffer, self._thebuffer))
@@ -657,7 +657,7 @@ class EventInPort(OpenRTM_aist.InPortBase):
     # @endif
     #
 
-    def bindEvent0(self, name, handler):
+    def bindEvent0(self, name: str, handler) -> None:
         self.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED,
                                       EventBinder0(self._fsm, name, handler, self._buffer))
     ##
@@ -684,6 +684,6 @@ class EventInPort(OpenRTM_aist.InPortBase):
     # @endif
     #
 
-    def bindEvent1(self, name, handler, data_type):
+    def bindEvent1(self, name: str, handler, data_type) -> None:
         self.addConnectorDataListener(OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED,
                                       EventBinder1(self._fsm, name, handler, data_type, self._buffer))

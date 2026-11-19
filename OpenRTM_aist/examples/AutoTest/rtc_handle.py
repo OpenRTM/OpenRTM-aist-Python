@@ -3,7 +3,6 @@
 # -*- Python -*-
 
 from __future__ import print_function
-import sys
 from omniORB import CORBA, URI
 from omniORB import any
 
@@ -11,7 +10,7 @@ import OpenRTM_aist
 import RTC
 
 
-from OpenRTM_aist.CorbaNaming import *
+from OpenRTM_aist.CorbaNaming import CorbaNaming, CosNaming, string
 import SDOPackage
 
 # class RtmEnv :
@@ -165,8 +164,7 @@ class Connector:
             else:
                 self.prop_dict[kk] = self.def_prop[kk]
             for pp in self.plist:
-                if not ((self.prop_dict[kk] in pp.prop[kk]) or
-                        ('Any' in pp.prop[kk])):
+                if not ((self.prop_dict[kk] in pp.prop[kk]) or ('Any' in pp.prop[kk])):
                     self.prop_dict[kk] = ""
                     self.possible = False
         self.prop_nvlist = dict2nvlist(self.prop_dict)
@@ -241,9 +239,13 @@ class CorbaServer:
 
     def narrow_ref(self, gls):
         if self.type.find('::') == -1:
-            self.narrow_sym = eval('_GlobalIDL.' + self.type, gls)
+            self.narrow_sym = getattr(gls['_GlobalIDL'], self.type)
         else:
-            self.narrow_sym = eval(self.type.replace('::', '.'), gls)
+            module_name, *attributes = self.type.split('::')
+            symbol = gls[module_name]
+            for name in attributes:
+                symbol = getattr(symbol, name)
+            self.narrow_sym = symbol
         self.ref = self.ref._narrow(self.narrow_sym)
 
 
@@ -281,8 +283,8 @@ class RtcInport(Port):
         self.get_info()
 #       self.ref = self.con.prop_dict['dataport.corba_any.inport_ref']
         self.ref = self.con.prop_dict['dataport.corba_cdr.inport_ref']
-        self.data_class = eval('RTC.' + self.prop['dataport.data_type'])
-        self.data_tc = eval('RTC._tc_' + self.prop['dataport.data_type'])
+        self.data_class = getattr(RTC, self.prop['dataport.data_type'])
+        self.data_tc = getattr(RTC, '_tc_' + self.prop['dataport.data_type'])
 
     def write(self, data):
         self.ref.put(CORBA.Any(self.data_tc,
@@ -299,8 +301,8 @@ class RtcOutport(Port):
 #          self.ref = self.con.prop_dict['dataport.corba_any.outport_ref']
         else:
             self.ref = None
-        self.data_class = eval('RTC.' + self.prop['dataport.data_type'])
-        self.data_tc = eval('RTC._tc_' + self.prop['dataport.data_type'])
+        self.data_class = getattr(RTC, self.prop['dataport.data_type'])
+        self.data_tc = getattr(RTC, '_tc_' + self.prop['dataport.data_type'])
 
     def read(self):
         if self.ref:

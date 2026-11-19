@@ -44,7 +44,7 @@ class Singleton(object):
     def __new__(self, *args, **kargs):
         return self.instance(*args, **kargs)
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kargs) -> None:
         self.instance(*args, **kargs)
 
     def instance(self, *args, **kargs):

@@ -8,9 +8,13 @@ import time
 import threading
 import sys
 if sys.version_info[0] == 2:
-    from Tkinter import *
+    from Tkinter import (
+        DoubleVar, Frame, LEFT, Scale, VERTICAL,
+    )
 else:
-    from tkinter import *
+    from tkinter import (
+        DoubleVar, Frame, LEFT, Scale, VERTICAL,
+    )
 #import thread
 
 

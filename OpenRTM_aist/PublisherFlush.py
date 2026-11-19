@@ -49,7 +49,7 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("PublisherFlush")
         self._consumer = None
         self._active = False
@@ -69,7 +69,7 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
     # @else
     # @brief Destructor
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         # "consumer" should be deleted in the Connector
         self._rtcout.RTC_TRACE("~PublisherFlush()")
         self._consumer = None
@@ -200,7 +200,7 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
     # virtual ::RTC::DataPortStatus::Enum
     # setListener(ConnectorInfo& info,
     #             RTC::ConnectorListeners* listeners);
-    def setListener(self, info, listeners):
+    def setListener(self, info: 'OpenRTM_aist.ConnectorInfo', listeners):
         self._rtcout.RTC_TRACE("setListeners()")
 
         if not listeners:
@@ -274,7 +274,7 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
     # PublisherBase::ReturnCode PublisherFlush::write(const cdrMemoryStream& data,
     # unsigned long sec,
     # unsigned long usec)
-    def write(self, data, sec, usec):
+    def write(self, data, sec: int, usec: int):
         self._rtcout.RTC_PARANOID("write()")
         if not self._consumer or not self._listeners:
             return self.PRECONDITION_NOT_MET
@@ -452,7 +452,7 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onReceiverFull(const cdrMemoryStream& data)
-    def onReceiverFull(self, data):
+    def onReceiverFull(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL, self._profile, data)
@@ -468,7 +468,7 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
     # @endif
     #
     # inline void onReceiverTimeout(const cdrMemoryStream& data)
-    def onReceiverTimeout(self, data):
+    def onReceiverTimeout(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT, self._profile, data)
@@ -491,7 +491,7 @@ class PublisherFlush(OpenRTM_aist.PublisherBase):
         return data
 
 
-def PublisherFlushInit():
+def PublisherFlushInit() -> None:
     OpenRTM_aist.PublisherFactory.instance().addFactory("flush",
                                                         OpenRTM_aist.PublisherFlush)
     OpenRTM_aist.PublisherFactory.instance().addFactory("block",

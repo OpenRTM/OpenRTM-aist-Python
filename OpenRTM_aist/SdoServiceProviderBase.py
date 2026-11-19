@@ -112,7 +112,7 @@ class SdoServiceProviderBase(SDOPackage__POA.SDOService):
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
     ##
     # @if jp
@@ -121,7 +121,7 @@ class SdoServiceProviderBase(SDOPackage__POA.SDOService):
     # @brief virtual destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -210,7 +210,7 @@ class SdoServiceProviderBase(SDOPackage__POA.SDOService):
     # @endif
     # virtual void finalize() = 0;
 
-    def finalize(self):
+    def finalize(self) -> None:
         poa = OpenRTM_aist.Manager.instance().getPOA()
         poa.deactivate_object(poa.servant_to_id(self))
 
@@ -228,11 +228,11 @@ sdoserviceproviderfactory = None
 
 
 class SdoServiceProviderFactory(OpenRTM_aist.Factory, SdoServiceProviderBase):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
         return
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     def instance():

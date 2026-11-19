@@ -50,7 +50,7 @@ class ManagerActionListener(OpenRTM_aist.ManagerActionListener):
     # @brief self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def preShutdown(self):
@@ -68,7 +68,7 @@ class ManagerActionListener(OpenRTM_aist.ManagerActionListener):
     #
     # @endif
 
-    def postShutdown(self):
+    def postShutdown(self) -> None:
         ROS2TopicManager.shutdown_global()
 
     def preReinit(self):
@@ -89,7 +89,7 @@ class ManagerActionListener(OpenRTM_aist.ManagerActionListener):
 #
 # @endif
 #
-def ROS2TransportInit(mgr):
+def ROS2TransportInit(mgr) -> None:
     ddstype_env = os.getenv("RMW_IMPLEMENTATION")
     ddstype = "fast-rtps"
     if ddstype_env == "rmw_fastrtps_cpp" or ddstype_env == "rmw_fastrtps_dynamic_cpp":

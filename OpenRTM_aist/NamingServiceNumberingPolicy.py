@@ -41,7 +41,7 @@ class NamingServiceNumberingPolicy(OpenRTM_aist.NumberingPolicy):
     # @brief virtual destractor
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._num = 0
         self._objects = []
         self._mgr = OpenRTM_aist.Manager.instance()
@@ -107,7 +107,7 @@ class NamingServiceNumberingPolicy(OpenRTM_aist.NumberingPolicy):
     #
     # @endif
 
-    def find(self, name):
+    def find(self, name: str) -> bool:
         rtcs = []
         rtc_name = "rtcname://*/*/"
         rtc_name += name
@@ -119,6 +119,6 @@ class NamingServiceNumberingPolicy(OpenRTM_aist.NumberingPolicy):
             return False
 
 
-def NamingServiceNumberingPolicyInit():
+def NamingServiceNumberingPolicyInit() -> None:
     OpenRTM_aist.NumberingPolicyFactory.instance().addFactory("ns_unique",
                                                               OpenRTM_aist.NamingServiceNumberingPolicy)

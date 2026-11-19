@@ -165,7 +165,7 @@ class Properties:
     #
     # @endif
     def __init__(self, key=None, value=None, defaults_map=None,
-                 defaults_str=None, num=None, prop=None):
+                 defaults_str=None, num=None, prop=None) -> None:
         self.default_value = ""
         self.root = None
         self.empty = ""
@@ -228,7 +228,7 @@ class Properties:
     # @param prop OpenRTM_aist.Properties
     # @endif
 
-    def assigmentOperator(self, prop):
+    def assigmentOperator(self, prop: 'OpenRTM_aist.Properties'):
         self.clear()
         self.name = prop.name
         self.value = prop.value
@@ -257,7 +257,7 @@ class Properties:
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.clear()
         if self.root:
             self.root.removeNode(self.name)
@@ -381,15 +381,18 @@ class Properties:
     #
     # @endif
 
-    def getProperty(self, key, default=None):
+    def _pathSegments(self, key: str):
+        segments = []
+        self.split(key, ".", segments)
+        if segments and all(segment.strip() for segment in segments):
+            return segments
+        return []
+
+    def getProperty(self, key: str, default=None):
         if not key.strip():
             return self.empty
         if default is None:
-            keys = []
-            #keys = str.split(key, ".")
-            self.split(key, ".", keys)
-
-            node = self._getNode(keys, 0, self)
+            node = self.findNode(key)
             if node:
                 if node.value is not None:
                     return node.value
@@ -420,14 +423,8 @@ class Properties:
     # @brief Set value as the default value to specified key's property
     # @endif
 
-    def getDefault(self, key):
-        if not key.strip():
-            return self.empty
-        keys = []
-        #keys = str.split(key, ".")
-        self.split(key, ".", keys)
-
-        node = self._getNode(keys, 0, self)
+    def getDefault(self, key: str):
+        node = self.findNode(key)
         if node:
             return node.default_value
 
@@ -462,13 +459,11 @@ class Properties:
     #
     # @endif
 
-    def setProperty(self, key, value=None):
-        if not key.strip():
-            return value
+    def setProperty(self, key: str, value=None):
+        keys = self._pathSegments(key)
+        if not keys:
+            return value if not key.strip() else self.empty
         if value is not None:
-            keys = []
-            #keys = str.split(key, ".")
-            self.split(key, ".", keys)
             curr = self
             for _key in keys:
                 next = curr.hasKey(_key)
@@ -502,10 +497,10 @@ class Properties:
     # @brief Sets a default value associated with key in the property list
     # @endif
 
-    def setDefault(self, key, value):
-        keys = []
-        self.split(key, ".", keys)
-        #keys = str.split(key, ".")
+    def setDefault(self, key: str, value: str):
+        keys = self._pathSegments(key)
+        if not keys:
+            return self.empty
 
         curr = self
         for _key in keys:
@@ -537,7 +532,7 @@ class Properties:
     # @brief Sets a default value associated with key in the property list
     # @endif
 
-    def setDefaults(self, defaults, num=None):
+    def setDefaults(self, defaults: list, num=None) -> None:
         if num is None:
             num = maxint
 
@@ -586,7 +581,7 @@ class Properties:
     #
     # @endif
 
-    def list(self, out):
+    def list(self, out) -> None:
         self._store(out, "", self)
         return
 
@@ -753,7 +748,7 @@ class Properties:
     #
     # @endif
 
-    def load(self, inStream):
+    def load(self, inStream) -> None:
         pline = ""
         for readStr in inStream:
             if not readStr:
@@ -778,12 +773,11 @@ class Properties:
             pline += _str
             # if pline == "":
             # continue
-            
+
             end = len(_str.rstrip(" \t")) - 1
             if end >= 0 and _str[end] == "\\" and not OpenRTM_aist.isEscaped(_str, end):
                 if end != len(_str) - 1:
                     print(f"Warning: Trailing whitespace after '\\' prevents line continuation: {_str}")
-
 
             key = []
             value = []
@@ -821,7 +815,7 @@ class Properties:
     #
     # @endif
 
-    def save(self, out, header):
+    def save(self, out, header: str) -> None:
         self.store(out, header)
         return
 
@@ -909,7 +903,7 @@ class Properties:
     #
     # @endif
 
-    def store(self, out, header):
+    def store(self, out, header: str) -> None:
         out.write("#" + header + "\n")
         self._store(out, "", self)
 
@@ -975,13 +969,9 @@ class Properties:
     # @endif
     # Properties* const Properties::findNode(const std::string& key) const
 
-    def findNode(self, key):
-        if not key.strip():
-            return None
-
-        keys = []
-        self.split(key, '.', keys)
-        return self._getNode(keys, 0, self)
+    def findNode(self, key: str):
+        keys = self._pathSegments(key)
+        return self._getNode(keys, 0, self) if keys else None
 
     ##
     # @if jp
@@ -998,15 +988,16 @@ class Properties:
     # @brief Get node of Properties
     # @endif
 
-    def getNode(self, key):
-        if not key.strip():
+    def getNode(self, key: str):
+        if key == "":
             return self
 
         leaf = self.findNode(key)
         if leaf:
             return leaf
 
-        self.createNode(key)
+        if not self.createNode(key):
+            raise ValueError("Invalid property key: " + key)
         return self.findNode(key)
 
     ##
@@ -1026,8 +1017,8 @@ class Properties:
     #
     # @endif
 
-    def createNode(self, key):
-        if not key.strip():
+    def createNode(self, key: str) -> bool:
+        if not self._pathSegments(key):
             return False
 
         if self.findNode(key):
@@ -1052,7 +1043,7 @@ class Properties:
     # @brief Get node of Properties
     # @endif
 
-    def removeNode(self, leaf_name):
+    def removeNode(self, leaf_name: str):
         len_ = len(self.leaf)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -1078,7 +1069,7 @@ class Properties:
     # @brief If key exists in the children
     # @endif
 
-    def hasKey(self, key):
+    def hasKey(self, key: str):
         for leaf in self.leaf:
             if leaf.name == key:
                 return leaf
@@ -1095,7 +1086,7 @@ class Properties:
     # @brief If key exists in the children
     # @endif
 
-    def clear(self):
+    def clear(self) -> None:
         len_ = len(self.leaf)
         for i in range(len_):
             if self.leaf[-1]:
@@ -1118,7 +1109,7 @@ class Properties:
     # @brief Merge properties
     # @endif
 
-    def mergeProperties(self, prop):
+    def mergeProperties(self, prop: 'Properties'):
         keys = prop.propertyNames()
 
         for i in range(prop.size()):
@@ -1148,13 +1139,12 @@ class Properties:
     #
     # @endif
 
-    def splitKeyValue(self, _str, key, value):
+    def splitKeyValue(self, _str: str, key: list, value: list) -> None:
         i = 0
         length = len(_str)
 
         while i < length:
-            if (_str[i] == ":" or _str[i] ==
-                    "=") and not OpenRTM_aist.isEscaped(_str, i):
+            if (_str[i] == ":" or _str[i] == "=") and not OpenRTM_aist.isEscaped(_str, i):
                 key.append(_str[0:i])
                 value.append(_str[i + 1:])
                 return
@@ -1193,7 +1183,7 @@ class Properties:
     #
     # @endif
 
-    def split(self, _str, delim, value):
+    def split(self, _str: str, delim: str, value) -> bool:
         if not _str.strip():
             return False
 
@@ -1231,7 +1221,7 @@ class Properties:
     #
     # @endif
 
-    def _getNode(self, keys, index, curr):
+    def _getNode(self, keys: list, index: int, curr: 'Properties'):
         next = curr.hasKey(keys[index])
         if next is None:
             return None
@@ -1257,11 +1247,11 @@ class Properties:
     #
     # @endif
 
-    def _propertyNames(self, names, curr_name, curr):
+    def _propertyNames(self, names: list, curr_name: str, curr: 'Properties') -> None:
         if curr.leaf:
-            for l in curr.leaf:
-                next_name = curr_name + "." + l.name
-                self._propertyNames(names, next_name, l)
+            for child in curr.leaf:
+                next_name = curr_name + "." + child.name
+                self._propertyNames(names, next_name, child)
         else:
             names.append(curr_name)
 
@@ -1282,14 +1272,14 @@ class Properties:
     #
     # @endif
 
-    def _store(self, out, curr_name, curr):
+    def _store(self, out, curr_name: str, curr: 'OpenRTM_aist.Properties') -> None:
         if curr.leaf:
-            for l in curr.leaf:
+            for child in curr.leaf:
                 if curr_name == "":
-                    next_name = l.name
+                    next_name = child.name
                 else:
-                    next_name = curr_name + "." + l.name
-                self._store(out, next_name, l)
+                    next_name = curr_name + "." + child.name
+                self._store(out, next_name, child)
 
         else:
             val = curr.value
@@ -1315,7 +1305,7 @@ class Properties:
     #
     # @endif
 
-    def indent(self, index):
+    def indent(self, index: int):
         space = ""
 
         for i in range(index - 1):
@@ -1340,7 +1330,7 @@ class Properties:
     #
     # @endif
 
-    def _dump(self, out, curr, index):
+    def _dump(self, out: list, curr: 'Properties', index: int):
         if index != 0:
             #ut.write(self.indent(index)+"- "+curr.name)
             out[0] += self.indent(index) + "- " + curr.name
@@ -1358,8 +1348,8 @@ class Properties:
             # out.write("\n")
             out[0] += "\n"
 
-        for l in curr.leaf:
-            self._dump(out, l, index + 1)
+        for child in curr.leaf:
+            self._dump(out, child, index + 1)
 
         return out[0]
 

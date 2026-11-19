@@ -42,7 +42,7 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.OpenHRPExecutionContext.__init__(self)
         return
 
@@ -62,7 +62,7 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
     # @param self
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -88,7 +88,7 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
     #
 
     def activate_component(self, comp):
-        guard = OpenRTM_aist.ScopedLock(self._tickmutex)
+        _ = OpenRTM_aist.ScopedLock(self._tickmutex)
         rtobj = self._worker.findComponent(comp)
         if not rtobj:
             return RTC.BAD_PARAMETER
@@ -128,7 +128,7 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
     #
 
     def deactivate_component(self, comp):
-        guard = OpenRTM_aist.ScopedLock(self._tickmutex)
+        _ = OpenRTM_aist.ScopedLock(self._tickmutex)
         rtobj = self._worker.findComponent(comp)
         if not rtobj:
             return RTC.BAD_PARAMETER
@@ -169,7 +169,7 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
     # @endif
     #
     def reset_component(self, comp):
-        guard = OpenRTM_aist.ScopedLock(self._tickmutex)
+        _ = OpenRTM_aist.ScopedLock(self._tickmutex)
         rtobj = self._worker.findComponent(comp)
         if not rtobj:
             return RTC.BAD_PARAMETER
@@ -196,7 +196,7 @@ class SimulatorExecutionContext(OpenRTM_aist.OpenHRPExecutionContext):
 # @brief Initialization function to register to ECFactory
 # @endif
 #
-def SimulatorExecutionContextInit(manager):
+def SimulatorExecutionContextInit(manager: 'OpenRTM_aist.Manager') -> None:
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("SimulatorExecutionContext",
                                                                OpenRTM_aist.SimulatorExecutionContext)
     return

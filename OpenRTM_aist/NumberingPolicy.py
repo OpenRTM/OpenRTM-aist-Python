@@ -119,7 +119,7 @@ class ProcessUniquePolicy(NumberingPolicy):
     # @brief virtual destractor
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._num = 0
         self._objects = []
 
@@ -167,7 +167,7 @@ class ProcessUniquePolicy(NumberingPolicy):
     #
     # @endif
 
-    def onDelete(self, obj):
+    def onDelete(self, obj) -> None:
         pos = 0
         try:
             pos = self.find(obj)
@@ -204,7 +204,7 @@ class ProcessUniquePolicy(NumberingPolicy):
         raise NumberingPolicy.ObjectNotFound()
 
 
-def ProcessUniquePolicyInit():
+def ProcessUniquePolicyInit() -> None:
     OpenRTM_aist.NumberingPolicyFactory.instance().addFactory("default",
                                                               OpenRTM_aist.ProcessUniquePolicy)
     OpenRTM_aist.NumberingPolicyFactory.instance().addFactory("process_unique",
