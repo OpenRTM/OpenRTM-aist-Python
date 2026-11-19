@@ -49,7 +49,7 @@ class ManagerActionListener(OpenRTM_aist.ManagerActionListener):
     # @brief self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def preShutdown(self):
@@ -67,7 +67,7 @@ class ManagerActionListener(OpenRTM_aist.ManagerActionListener):
     #
     # @endif
 
-    def postShutdown(self):
+    def postShutdown(self) -> None:
         ROSTopicManager.shutdown_global()
 
     def preReinit(self):
@@ -88,7 +88,7 @@ class ManagerActionListener(OpenRTM_aist.ManagerActionListener):
 #
 # @endif
 #
-def ROSTransportInit(mgr):
+def ROSTransportInit(mgr) -> None:
     ROSInPort.ROSInPortInit()
     ROSOutPort.ROSOutPortInit()
     ROSSerializer.ROSSerializerInit()

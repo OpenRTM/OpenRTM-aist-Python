@@ -16,7 +16,6 @@
 #     All rights reserved.
 
 import os
-import sys
 import traceback
 import subprocess
 import shlex
@@ -31,7 +30,7 @@ import shlex
 # int launch_shell(std::string command)
 
 
-def launch_shell(command):
+def launch_shell(command: str) -> int:
     #args = command.split(" ")
     args = shlex.split(command, " ")
 
@@ -55,11 +54,7 @@ def launch_shell(command):
         subprocess.Popen(args, **subproc_args)
     except OSError:
         # fork failed
-        if sys.version_info[0:3] >= (2, 4, 0):
-            print(traceback.format_exc())
-        else:
-            _exc_list = traceback.format_exception(*sys.exc_info())
-            print("".join(_exc_list))
+        print(traceback.format_exc())
 
         return -1
     return 0
@@ -90,7 +85,7 @@ def fork():
 # string popen(string command)
 
 
-def popen(command):
+def popen(command: str):
     args = shlex.split(command, " ")
     sp = subprocess.Popen(args, stdout=subprocess.PIPE)
     return sp.communicate()[0].decode("utf-8")

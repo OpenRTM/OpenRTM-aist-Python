@@ -7,15 +7,12 @@
 # @date $Date$
 #
 
-from __future__ import print_function
 import AutoTest__POA
 import AutoTest
 import os.path
-import math
 import OpenRTM_aist
 import RTC
 import sys
-import string
 import time
 sys.path.append(".")
 
@@ -82,7 +79,7 @@ class MyServiceSVC_impl(AutoTest__POA.MyService):
 class AutoTestIn(OpenRTM_aist.DataFlowComponentBase):
 
     """
-    \class AutoTestIn
+    \\class AutoTestIn
     \\brief ModuleDescription
 
     """
@@ -174,7 +171,7 @@ def MyModuleInit(manager):
     AutoTestInInit(manager)
 
     # Create a component
-    comp = manager.createComponent("AutoTestIn")
+    _ = manager.createComponent("AutoTestIn")
 
 
 def main():

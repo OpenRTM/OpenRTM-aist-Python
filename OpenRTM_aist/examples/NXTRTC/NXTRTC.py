@@ -2,7 +2,6 @@
 # -*- coding:utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import NXTBrick
 import OpenRTM_aist
 import RTC
@@ -136,7 +135,7 @@ def MyModuleInit(manager):
     NXTRTCInit(manager)
 
     # Create a component
-    comp = manager.createComponent("NXTRTC")
+    _ = manager.createComponent("NXTRTC")
 
 
 def main():

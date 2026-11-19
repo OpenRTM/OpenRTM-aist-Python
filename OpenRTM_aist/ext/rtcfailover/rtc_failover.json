@@ -1,0 +1,43 @@
+{
+  "managers": [
+    {"id": "robot_a", "host": "192.168.11.12", "port": 2810, "name": "manager"},
+    {"id": "robot_b", "host": "192.168.11.9", "port": 2810, "name": "manager"}
+  ],
+  "liveness_interval": 2.0,
+  "observer": {"enabled": true, "heartbeat": false},
+  "groups": [
+    {
+      "id": "robot_system",
+      "activate": true,
+      "on_failure": "reset",
+      "alternatives": [
+        {
+          "manager": "robot_a", "priority": 1,
+          "roles": {
+            "camera": {"type": "OpenCVCamera", "instance": "OpenCVCamera0"},
+            "drive": {"type": "RaspberryPiMouseRTC", "instance": "RaspberryPiMouseRTC0"}
+          }
+        },
+        {
+          "manager": "robot_b", "priority": 2,
+          "roles": {
+            "camera": {"type": "OpenCVCamera"},
+            "drive": {"type": "RaspberryPiMouseRTC"}
+          }
+        }
+      ],
+      "connections": [
+        {
+          "name": "testconnector", "role": "camera", "port": "out", "direction": "output",
+          "external": {"url": "rtcname://192.168.11.52:2809/*/CameraViewer0.in"},
+          "properties": {}
+        },
+        {
+          "name": "testconnector2", "role": "drive", "port": "target_velocity_in", "direction": "input",
+          "external": {"url": "rtcname://192.168.11.52:2809/*/FloatSeqToVelocity0.out"},
+          "properties": {}
+        }
+      ]
+    }
+  ]
+}

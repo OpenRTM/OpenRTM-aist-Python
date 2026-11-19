@@ -58,7 +58,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
 
         OpenRTM_aist.PeriodicExecutionContext.__init__(self)
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf(
@@ -82,7 +82,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
     # @param self　
     # @param Task　
     # @endif
-    def exit(self, Task=OpenRTM_aist.Task):
+    def exit(self, Task=OpenRTM_aist.Task) -> None:
         OpenRTM_aist.PeriodicExecutionContext.exit(self)
         for task in self._tasklist:
             task.finalize()
@@ -100,7 +100,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
     # @param self　
     # @param props
     # @endif
-    def init(self, props):
+    def init(self, props: 'OpenRTM_aist.Properties') -> None:
         OpenRTM_aist.PeriodicExecutionContext.init(self, props)
         #prop.getProperty("thread_type", "default")
 
@@ -170,7 +170,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
         # @else
         # @brief Constructor
         # @endif
-        def __init__(self):
+        def __init__(self) -> None:
             self._mutex = threading.RLock()
             self._cond = threading.Condition(self._mutex)
             self._running = False
@@ -201,7 +201,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
         # @param ec
         #
         # @endif
-        def __init__(self, task, ec):
+        def __init__(self, task, ec) -> None:
             self._rtcs = []
             self._task = task
             self._ec = ec
@@ -224,7 +224,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
         # @param rtc RTC
         #
         # @endif
-        def addComponent(self, rtc):
+        def addComponent(self, rtc) -> None:
             self._rtcs.append(rtc)
 
         ##
@@ -242,7 +242,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
         # @param return
         #
         # @endif
-        def updateCompList(self):
+        def updateCompList(self) -> None:
             for rtc in self._rtcs[:]:
                 comp = self._ec.findComponent(rtc)
                 if comp:
@@ -264,7 +264,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
         # @param return
         #
         # @endif
-        def svc(self):
+        def svc(self) -> int:
             self._worker._running = True
 
             self._signal_worker._cond.acquire()
@@ -304,7 +304,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
         # @param self
         #
         # @endif
-        def signal(self):
+        def signal(self) -> None:
 
             while not self._worker._running:
                 self._task.signal()
@@ -327,7 +327,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
         # @param self
         #
         # @endif
-        def join(self):
+        def join(self) -> None:
 
             self._worker._cond.acquire()
             while self._worker._running:
@@ -390,7 +390,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
         # @param self
         #
         # @endif
-        def finalize(self):
+        def finalize(self) -> None:
             self._task.resume()
             self._task.finalize()
 
@@ -410,7 +410,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
     # @param rtcs
     #
     # @endif
-    def addTask(self, rtcs):
+    def addTask(self, rtcs: list) -> None:
         prop = self._profile.getProperties().getNode("ec" + str(len(self._tasklist)))
         factory = OpenRTM_aist.PeriodicTaskFactory.instance()
 
@@ -490,7 +490,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
     # @param rtobj
     #
     # @endif
-    def addRTCToTask(self, task, rtobj):
+    def addRTCToTask(self, task, rtobj: 'RTC._objref_LightweightRTObject') -> None:
         #comp = self._worker.findComponent(rtobj)
         orglist = rtobj.get_owned_organizations()
         if not orglist:
@@ -518,7 +518,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
     #
     # @endif
 
-    def svc(self):
+    def svc(self) -> int:
         self._rtcout.RTC_TRACE("svc()")
         count_ = 0
         owner = self.getOwner()
@@ -614,7 +614,7 @@ class MultilayerCompositeEC(OpenRTM_aist.PeriodicExecutionContext):
 # @else
 #
 # @endif
-def MultilayerCompositeECInit(manager):
+def MultilayerCompositeECInit(manager: 'OpenRTM_aist.Manager') -> None:
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("MultilayerCompositeEC",
                                                                OpenRTM_aist.MultilayerCompositeEC)
     return

@@ -78,7 +78,7 @@ class ListenerObject(ListenerBase):
     # @else
     #
     # @endif
-    def __init__(self, obj, cbf):
+    def __init__(self, obj, cbf) -> None:
         self.obj = obj
         self.cbf = cbf
 
@@ -94,7 +94,7 @@ class ListenerObject(ListenerBase):
     #
     # @endif
 
-    def invoke(self):
+    def invoke(self) -> None:
         self.cbf(self.obj)
 
 
@@ -127,7 +127,7 @@ class ListenerFunc(ListenerBase):
     # @else
     #
     # @endif
-    def __init__(self, cbf):
+    def __init__(self, cbf) -> None:
         self.cbf = cbf
 
     ##
@@ -142,5 +142,5 @@ class ListenerFunc(ListenerBase):
     #
     # @endif
 
-    def invoke(self):
+    def invoke(self) -> None:
         self.cbf()

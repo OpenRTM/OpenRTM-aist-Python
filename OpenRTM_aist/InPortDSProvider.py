@@ -77,7 +77,7 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortProvider.__init__(self)
 
         # PortProfile setting
@@ -114,7 +114,7 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -128,22 +128,22 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
     #
     # @endif
     #
-    def exit(self):
+    def exit(self) -> None:
         oid = OpenRTM_aist.Manager.instance().getPOA().servant_to_id(self)
         OpenRTM_aist.Manager.instance().getPOA().deactivate_object(oid)
 
     # virtual void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties'):
         pass
 
     # virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._buffer = buffer
         return
 
     # void setListener(ConnectorInfo& info,
     #                  ConnectorListeners* listeners);
-    def setListener(self, info, listeners):
+    def setListener(self, info, listeners) -> None:
         self._profile = info
         self._listeners = listeners
         return
@@ -171,7 +171,7 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
     # virtual ::OpenRTM::PortStatus push(const ::RTC::CdrData& data)
     #  throw (CORBA::SystemException);
 
-    def push(self, data):
+    def push(self, data: bytes):
         try:
             self._rtcout.RTC_PARANOID("InPortDSProvider.push()")
 
@@ -191,7 +191,7 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
             self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
             return RTC.UNKNOWN_ERROR
 
-    def convertReturn(self, status, data):
+    def convertReturn(self, status: int, data: bytes):
         if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
             self.onBufferWrite(data)
             return RTC.PORT_OK
@@ -234,7 +234,7 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
 
     # inline void onBufferFull(const cdrMemoryStream& data)
 
-    def onBufferFull(self, data):
+    def onBufferFull(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL, self._profile, data)
@@ -242,7 +242,7 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
 
     # inline void onBufferWriteTimeout(const cdrMemoryStream& data)
 
-    def onBufferWriteTimeout(self, data):
+    def onBufferWriteTimeout(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE_TIMEOUT, self._profile, data)
@@ -257,7 +257,7 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
 
     # inline void onReceived(const cdrMemoryStream& data)
 
-    def onReceived(self, data):
+    def onReceived(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED, self._profile, data)
@@ -265,7 +265,7 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
 
     # inline void onReceiverFull(const cdrMemoryStream& data)
 
-    def onReceiverFull(self, data):
+    def onReceiverFull(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL, self._profile, data)
@@ -273,7 +273,7 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
 
     # inline void onReceiverTimeout(const cdrMemoryStream& data)
 
-    def onReceiverTimeout(self, data):
+    def onReceiverTimeout(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_TIMEOUT, self._profile, data)
@@ -288,7 +288,7 @@ class InPortDSProvider(OpenRTM_aist.InPortProvider,
         return data
 
 
-def InPortDSProviderInit():
+def InPortDSProviderInit() -> None:
     factory = OpenRTM_aist.InPortProviderFactory.instance()
     factory.addFactory("data_service",
                        OpenRTM_aist.InPortDSProvider)

@@ -4,13 +4,10 @@
 
 import math
 import time
-import sys
-if sys.version_info[0] == 2:
-    from Tkinter import *
-    import thread
-else:
-    from tkinter import *
-    import _thread as thread
+from tkinter import (
+    Canvas, Frame, Toplevel,
+)
+import _thread as thread
 
 
 class TkMotor(Frame):
@@ -73,10 +70,8 @@ class TkMotor(Frame):
             a = a * math.pi / 180
             self.can.delete(self.line[i])
             self.line[i] = self.can.create_line(self.x[i], self.y[i],
-                                                self.x[i] + self.r *
-                                                math.cos(a),
-                                                self.y[i] + self.r *
-                                                math.sin(a),
+                                                self.x[i] + self.r * math.cos(a),
+                                                self.y[i] + self.r * math.sin(a),
                                                 fill="#700040", width=5)
             i = i + 1
 
@@ -87,7 +82,7 @@ def test():
     thread.start_new_thread(m.mainloop, ())
     thread.start_new_thread(n.mainloop, ())
     cnt = 0
-    while(1):
+    while (1):
         angle = [
             cnt %
             360, - cnt %

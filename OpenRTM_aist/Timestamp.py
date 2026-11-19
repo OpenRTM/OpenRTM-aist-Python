@@ -17,10 +17,10 @@ import OpenRTM_aist
 
 
 class Timestamp(OpenRTM_aist.ConnectorDataListenerT):
-    def __init__(self, ts_type):
+    def __init__(self, ts_type: str) -> None:
         self._ts_type = ts_type
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     def __call__(self, info, data):

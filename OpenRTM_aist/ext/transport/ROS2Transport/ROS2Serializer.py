@@ -20,8 +20,10 @@
 import OpenRTM_aist
 import omniORB
 
-import struct
 import array
+import re
+import sys
+import typing as _typing
 import ROS2MessageInfo
 import RTC
 import rclpy
@@ -95,7 +97,7 @@ def ros2_basic_data(message_type):
         # @param self
         #
         # @endif
-        def __init__(self):
+        def __init__(self) -> None:
             pass
 
         ##
@@ -110,7 +112,7 @@ def ros2_basic_data(message_type):
         # @brief self
         #
         # @endif
-        def __del__(self):
+        def __del__(self) -> None:
             pass
 
         ##
@@ -239,7 +241,7 @@ def ros2_basic_data(message_type):
 #
 
 
-def ROS2BasicDataInit(message_type, name):
+def ROS2BasicDataInit(message_type, name) -> None:
     datatypes = [RTC.TimedState, RTC.TimedShort, RTC.TimedLong,
                  RTC.TimedUShort, RTC.TimedULong, RTC.TimedFloat,
                  RTC.TimedDouble, RTC.TimedChar, RTC.TimedWChar,
@@ -251,8 +253,8 @@ def ROS2BasicDataInit(message_type, name):
                  RTC.TimedWStringSeq]
     for datatype in datatypes:
         OpenRTM_aist.SerializerFactories.instance().addSerializer(name,
-                                                         ros2_basic_data(
-                                                             message_type), datatype)
+                                                                  ros2_basic_data(
+                                                                      message_type), datatype)
     ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo(name,
                                                            ROS2MessageInfo.ROS2MessageInfo(
                                                                message_type))
@@ -287,7 +289,7 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -302,7 +304,7 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -397,7 +399,7 @@ class ROS2Point3DData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROS2Point3DInit():
+def ROS2Point3DInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros2:geometry_msgs/PointStamped",
                                                               ROS2Point3DData, RTC.TimedPoint3D)
     ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:geometry_msgs/PointStamped",
@@ -434,7 +436,7 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -449,7 +451,7 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -546,7 +548,7 @@ class ROS2QuaternionData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROS2QuaternionInit():
+def ROS2QuaternionInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros2:geometry_msgs/QuaternionStamped",
                                                               ROS2QuaternionData, RTC.TimedQuaternion)
     ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:geometry_msgs/QuaternionStamped",
@@ -583,7 +585,7 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -598,7 +600,7 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -693,12 +695,39 @@ class ROS2Vector3DData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROS2Vector3DInit():
+def ROS2Vector3DInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros2:geometry_msgs/Vector3Stamped",
                                                               ROS2Vector3DData, RTC.TimedVector3D)
     ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:geometry_msgs/Vector3Stamped",
                                                            ROS2MessageInfo.ROS2MessageInfo(
                                                                Vector3Stamped))
+
+
+def _imageEncodingLayout(encoding: str) -> '_typing.Tuple[int, int]':
+    layouts = {
+        "rgb8": (8, 3), "bgr8": (8, 3),
+        "rgba8": (8, 4), "bgra8": (8, 4),
+        "rgb16": (16, 3), "bgr16": (16, 3),
+        "rgba16": (16, 4), "bgra16": (16, 4),
+        "mono8": (8, 1), "mono16": (16, 1),
+        "yuv422": (8, 2), "yuv422_yuy2": (8, 2),
+    }
+    if encoding in layouts:
+        return layouts[encoding]
+    if re.fullmatch(r"bayer_(rggb|bggr|gbrg|grbg)(8|16)", encoding):
+        return (16 if encoding.endswith("16") else 8), 1
+    match = re.fullmatch(r"(8[US]|16[US]|32[SF]|64F)C([1-9][0-9]*)", encoding)
+    if match:
+        return int(match.group(1)[:-1]), int(match.group(2))
+    raise ValueError("unsupported image encoding: " + encoding)
+
+
+def _imageNativeBytes(pixels: bytes, bit_depth: int, big_endian: bool) -> bytes:
+    sample_size = bit_depth // 8
+    if sample_size <= 1 or bool(big_endian) == (sys.byteorder == "big"):
+        return pixels
+    return b"".join(pixels[index:index + sample_size][::-1]
+                    for index in range(0, len(pixels), sample_size))
 
 
 ##
@@ -730,7 +759,7 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -745,7 +774,7 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -788,19 +817,28 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
     # @endif
 
     def serialize(self, data):
-        msg = Image()
-        msg.header.stamp.sec = data.tm.sec
-        msg.header.stamp.nanosec = data.tm.nsec
-        msg.height = data.height
-        msg.width = data.width
-        if not data.format:
-            msg.encoding = "rgb8"
-        else:
-            msg.encoding = data.format
-        msg.step = 1920
-        msg.data = data.pixels
-
-        return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, msg
+        try:
+            encoding = data.format or "rgb8"
+            bit_depth, channels = _imageEncodingLayout(encoding)
+            bpp = bit_depth * channels
+            if data.bpp not in (0, bpp):
+                raise ValueError("bits per pixel do not match image encoding")
+            step = data.width * (bpp // 8)
+            pixels = bytes(data.pixels)
+            if len(pixels) != step * data.height:
+                raise ValueError("pixel data length does not match image dimensions")
+            msg = Image()
+            msg.header.stamp.sec = data.tm.sec
+            msg.header.stamp.nanosec = data.tm.nsec
+            msg.height = data.height
+            msg.width = data.width
+            msg.encoding = encoding
+            msg.is_bigendian = int(sys.byteorder == "big")
+            msg.step = step
+            msg.data = pixels
+            return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, msg
+        except Exception:
+            return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR, None
 
     ##
     # @if jp
@@ -824,15 +862,27 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
     # @endif
     def deserialize(self, bdata, data_type):
         try:
-            data_type.tm.sec = bdata.header.stamp.sec
-            data_type.tm.nsec = bdata.header.stamp.nanosec
-            data_type.height = bdata.height
-            data_type.width = bdata.width
-            data_type.format = bdata.encoding
-            data_type.pixels = bdata.data.tobytes()
+            message = bdata
+            bit_depth, channels = _imageEncodingLayout(message.encoding)
+            bpp = bit_depth * channels
+            row_size = message.width * (bpp // 8)
+            pixels = bytes(message.data)
+            if message.step < row_size or len(pixels) != message.step * message.height:
+                raise ValueError("invalid image row size or pixel data length")
+            if message.step != row_size:
+                pixels = b"".join(pixels[index:index + row_size]
+                                  for index in range(0, len(pixels), message.step))
+            pixels = _imageNativeBytes(pixels, bit_depth, message.is_bigendian)
+            data_type.tm.sec = message.header.stamp.sec
+            data_type.tm.nsec = message.header.stamp.nanosec
+            data_type.height = message.height
+            data_type.width = message.width
+            data_type.bpp = bpp
+            data_type.format = message.encoding
+            data_type.pixels = pixels
             return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, data_type
-        except BaseException:
-            return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, data_type
+        except Exception:
+            return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR, data_type
 
 
 ##
@@ -846,7 +896,7 @@ class ROS2CameraImageData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROS2CameraImageInit():
+def ROS2CameraImageInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros2:sensor_msgs/Image",
                                                               ROS2CameraImageData, RTC.CameraImage)
     ROS2MessageInfo.ROS2MessageInfoList.instance().addInfo("ros2:sensor_msgs/Image",
@@ -865,7 +915,7 @@ def ROS2CameraImageInit():
 #
 # @endif
 #
-def ROS2SerializerInit():
+def ROS2SerializerInit() -> None:
     ROS2BasicDataInit(Float32, "ros2:std_msgs/Float32")
     ROS2BasicDataInit(Float64, "ros2:std_msgs/Float64")
     ROS2BasicDataInit(Int8, "ros2:std_msgs/Int8")

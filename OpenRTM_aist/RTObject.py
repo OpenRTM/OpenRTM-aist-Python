@@ -84,7 +84,7 @@ class RTObject_impl:
     # @param poa POA
     #
     # @endif
-    def __init__(self, manager=None, orb=None, poa=None):
+    def __init__(self, manager=None, orb=None, poa=None) -> None:
         if manager:
             self._manager = manager
             self._orb = self._manager.getORB()
@@ -150,7 +150,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     # ============================================================
@@ -223,7 +223,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def onStartup(self, ec_id):
+    def onStartup(self, ec_id: int):
         self._rtcout.RTC_TRACE("onStartup(%d)", ec_id)
         return RTC.RTC_OK
 
@@ -247,7 +247,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def onShutdown(self, ec_id):
+    def onShutdown(self, ec_id: int):
         self._rtcout.RTC_TRACE("onShutdown(%d)", ec_id)
         return RTC.RTC_OK
 
@@ -271,7 +271,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def onActivated(self, ec_id):
+    def onActivated(self, ec_id: int):
         self._rtcout.RTC_TRACE("onActivated(%d)", ec_id)
         return RTC.RTC_OK
 
@@ -295,7 +295,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def onDeactivated(self, ec_id):
+    def onDeactivated(self, ec_id: int):
         self._rtcout.RTC_TRACE("onDeactivated(%d)", ec_id)
         return RTC.RTC_OK
 
@@ -321,7 +321,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def onExecute(self, ec_id):
+    def onExecute(self, ec_id: int):
         self._rtcout.RTC_TRACE("onExecute(%d)", ec_id)
         return RTC.RTC_OK
 
@@ -345,7 +345,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def onAborting(self, ec_id):
+    def onAborting(self, ec_id: int):
         self._rtcout.RTC_TRACE("onAborting(%d)", ec_id)
         return RTC.RTC_OK
 
@@ -368,7 +368,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def onError(self, ec_id):
+    def onError(self, ec_id: int):
         self._rtcout.RTC_TRACE("onError(%d)", ec_id)
         return RTC.RTC_OK
 
@@ -391,7 +391,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def onReset(self, ec_id):
+    def onReset(self, ec_id: int):
         self._rtcout.RTC_TRACE("onReset(%d)", ec_id)
         return RTC.RTC_OK
 
@@ -417,7 +417,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def onStateUpdate(self, ec_id):
+    def onStateUpdate(self, ec_id: int):
         self._rtcout.RTC_TRACE("onStateupdate(%d)", ec_id)
         return RTC.RTC_OK
 
@@ -443,7 +443,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def onRateChanged(self, ec_id):
+    def onRateChanged(self, ec_id: int):
         self._rtcout.RTC_TRACE("onRatechanged(%d)", ec_id)
         return RTC.RTC_OK
 
@@ -522,7 +522,8 @@ class RTObject_impl:
             return RTC.OUT_OF_RESOURCES
 
         # -- entering alive state --
-        def toSTR_(x): return " was" if len(x) == 1 else "s were"
+        def toSTR_(x: list):
+            return " was" if len(x) == 1 else "s were"
         self._rtcout.RTC_INFO("%d execution context%s created.",
                               (len(self._ecMine), toSTR_(self._ecMine)))
 
@@ -724,7 +725,7 @@ class RTObject_impl:
     # @endif
     # virtual CORBA::Boolean is_alive(ExecutionContext_ptr exec_context)
 
-    def is_alive(self, exec_context):
+    def is_alive(self, exec_context) -> bool:
         self._rtcout.RTC_TRACE("is_alive()")
         for ec in self._ecMine:
             if exec_context._is_equivalent(ec):
@@ -790,7 +791,6 @@ class RTObject_impl:
     # virtual ExecutionContext_ptr get_context(UniqueId exec_handle)
 
     def get_context(self, ec_id):
-        global ECOTHER_OFFSET
 
         self._rtcout.RTC_TRACE("get_context(%d)", ec_id)
         # owned EC
@@ -1016,7 +1016,6 @@ class RTObject_impl:
     # UniqueId attach_context(ExecutionContext_ptr exec_context)
 
     def attach_context(self, exec_context):
-        global ECOTHER_OFFSET
         self._rtcout.RTC_TRACE("attach_context()")
         # ID: 0 - (offset-1) : owned ec
         # ID: offset -       : participating ec
@@ -1043,7 +1042,6 @@ class RTObject_impl:
     # UniqueId bindContext(ExecutionContext_ptr exec_context);
 
     def bindContext(self, exec_context):
-        global ECOTHER_OFFSET
         self._rtcout.RTC_TRACE("bindContext()")
         # ID: 0 - (offset-1) : owned ec
         # ID: offset -       : participating ec
@@ -1111,8 +1109,7 @@ class RTObject_impl:
     # @endif
     # ReturnCode_t detach_context(UniqueId exec_handle)
 
-    def detach_context(self, ec_id):
-        global ECOTHER_OFFSET
+    def detach_context(self, ec_id: int):
         self._rtcout.RTC_TRACE("detach_context(%d)", ec_id)
         len_ = len(self._ecOther)
 
@@ -1262,7 +1259,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def on_startup(self, ec_id):
+    def on_startup(self, ec_id: int):
         self._rtcout.RTC_TRACE("on_startup(%d)", ec_id)
         ret = RTC.RTC_ERROR
         try:
@@ -1302,7 +1299,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def on_shutdown(self, ec_id):
+    def on_shutdown(self, ec_id: int):
         self._rtcout.RTC_TRACE("on_shutdown(%d)", ec_id)
         ret = RTC.RTC_ERROR
         try:
@@ -1340,7 +1337,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def on_activated(self, ec_id):
+    def on_activated(self, ec_id: int):
         self._rtcout.RTC_TRACE("on_activated(%d)", ec_id)
         ret = RTC.RTC_ERROR
         try:
@@ -1380,7 +1377,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def on_deactivated(self, ec_id):
+    def on_deactivated(self, ec_id: int):
         self._rtcout.RTC_TRACE("on_deactivated(%d)", ec_id)
         ret = RTC.RTC_ERROR
         try:
@@ -1425,7 +1422,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def on_aborting(self, ec_id):
+    def on_aborting(self, ec_id: int):
         self._rtcout.RTC_TRACE("on_aborting(%d)", ec_id)
         ret = RTC.RTC_ERROR
         try:
@@ -1480,7 +1477,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def on_error(self, ec_id):
+    def on_error(self, ec_id: int):
         self._rtcout.RTC_TRACE("on_error(%d)", ec_id)
         ret = RTC.RTC_ERROR
         try:
@@ -1526,7 +1523,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def on_reset(self, ec_id):
+    def on_reset(self, ec_id: int):
         self._rtcout.RTC_TRACE("on_reset(%d)", ec_id)
         ret = RTC.RTC_ERROR
         try:
@@ -1995,7 +1992,7 @@ class RTObject_impl:
     # @endif
     # virtual SDOPackage::Monitoring_ptr get_monitoring()
 
-    def get_monitoring(self):
+    def get_monitoring(self) -> None:
         self._rtcout.RTC_TRACE("get_monitoring()")
         raise SDOPackage.InterfaceNotImplemented("Exception: get_monitoring")
 
@@ -2173,7 +2170,7 @@ class RTObject_impl:
     # @endif
     # void setInstanceName(const char* instance_name);
 
-    def setInstanceName(self, instance_name):
+    def setInstanceName(self, instance_name: str) -> None:
         self._rtcout.RTC_TRACE("setInstanceName(%s)", instance_name)
         self._properties.setProperty("instance_name", instance_name)
         self._profile.instance_name = self._properties.getProperty(
@@ -2315,7 +2312,7 @@ class RTObject_impl:
     # @endif
     # void setObjRef(const RTObject_ptr rtobj);
 
-    def setObjRef(self, rtobj):
+    def setObjRef(self, rtobj) -> None:
         self._rtcout.RTC_TRACE("setObjRef()")
         self._objref = rtobj
         return
@@ -2367,7 +2364,7 @@ class RTObject_impl:
     # @endif
     # void setProperties(const coil::Properties& prop);
 
-    def setProperties(self, prop):
+    def setProperties(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("setProperties()")
         self._properties.mergeProperties(prop)
         self._profile.instance_name = self._properties.getProperty(
@@ -2430,8 +2427,8 @@ class RTObject_impl:
     #                     const char* def_val,
     # bool (*trans)(VarType&, const char*) = coil::stringTo)
 
-    def bindParameter(self, param_name, var,
-                      def_val, trans=None):
+    def bindParameter(self, param_name: str, var: list,
+                      def_val: str, trans=None) -> bool:
         self._rtcout.RTC_TRACE("bindParameter()")
         if trans is None:
             trans_ = OpenRTM_aist.stringTo
@@ -2527,7 +2524,7 @@ class RTObject_impl:
     #
     # @endif
     # void updateParameters(const char* config_set);
-    def updateParameters(self, config_set):
+    def updateParameters(self, config_set) -> None:
         self._rtcout.RTC_TRACE("updateParameters(%s)", config_set)
         self._configsets.update(config_set)
         return
@@ -2567,7 +2564,7 @@ class RTObject_impl:
     # @endif
     # void registerPort(PortBase& port);
 
-    def registerPort(self, port):
+    def registerPort(self, port) -> None:
         self._rtcout.RTC_TRACE("registerPort()")
         if not self.addPort(port):
             self._rtcout.RTC_ERROR("addPort(PortBase&) failed.")
@@ -2585,12 +2582,10 @@ class RTObject_impl:
         self._rtcout.RTC_TRACE("addPort()")
         if isinstance(port, OpenRTM_aist.CorbaPort):
             self._rtcout.RTC_TRACE("addPort(CorbaPort)")
-            propkey = "port.corbaport."
-            prop = self._properties.getNode(propkey)
-            if prop:
-                self._properties.getNode(propkey).mergeProperties(
-                    self._properties.getNode("port.corba"))
-            port.init(self._properties.getNode(propkey))
+            port_name = port.getName().rsplit(".", 1)[-1]
+            prop = self._properties.getNode("port.corbaport." + port_name)
+            prop.mergeProperties(self._properties.getNode("port.corba"))
+            port.init(prop)
             port.setOwner(self.getObjRef())
             port.setPortConnectListenerHolder(self._portconnListeners)
             self.onAddPort(port.getPortProfile())
@@ -2630,14 +2625,14 @@ class RTObject_impl:
     #
     # @endif
 
-    def registerInPort(self, name, inport):
+    def registerInPort(self, name, inport) -> None:
         self._rtcout.RTC_TRACE("registerInPort(%s)", name)
         if not self.addInPort(name, inport):
             self._rtcout.RTC_ERROR("addInPort(%s) failed.", name)
         return
 
     # new interface. since 1.0.0-RELEASE
-    def addInPort(self, name, inport):
+    def addInPort(self, name: str, inport):
         self._rtcout.RTC_TRACE("addInPort(%s)", name)
 
         propkey = "port.inport." + name
@@ -2673,7 +2668,7 @@ class RTObject_impl:
     # @endif
     # void registerOutPort(const char* name, OutPortBase& outport);
 
-    def registerOutPort(self, name, outport):
+    def registerOutPort(self, name, outport) -> None:
         self._rtcout.RTC_TRACE("registerOutPort(%s)", name)
         if not self.addOutPort(name, outport):
             self._rtcout.RTC_ERROR("addOutPort(%s) failed.", name)
@@ -2681,7 +2676,7 @@ class RTObject_impl:
 
     # new interface. since 1.0.0-RELEASE
     # void addOutPort(const char* name, OutPortBase& outport);
-    def addOutPort(self, name, outport):
+    def addOutPort(self, name: str, outport):
         self._rtcout.RTC_TRACE("addOutPort(%s)", name)
 
         propkey = "port.outport." + name
@@ -2722,7 +2717,7 @@ class RTObject_impl:
     #
     # bool removeInPort(InPortBase& port);
 
-    def removeInPort(self, port):
+    def removeInPort(self, port) -> bool:
         self._rtcout.RTC_TRACE("removeInPort()")
         ret = self.removePort(port)
 
@@ -2759,7 +2754,7 @@ class RTObject_impl:
     #
     # bool removeOutPort(OutPortBase& port);
 
-    def removeOutPort(self, port):
+    def removeOutPort(self, port) -> bool:
         self._rtcout.RTC_TRACE("removeOutPort()")
         ret = self.removePort(port)
 
@@ -2794,7 +2789,7 @@ class RTObject_impl:
     # @endif
     # void RTObject_impl::deletePort(PortBase& port)
 
-    def deletePort(self, port):
+    def deletePort(self, port) -> None:
         self._rtcout.RTC_TRACE("deletePort()")
         if not self.removePort(port):
             self._rtcout.RTC_ERROR("removePort() failed.")
@@ -2822,7 +2817,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def deletePortByName(self, port_name):
+    def deletePortByName(self, port_name) -> None:
         self._rtcout.RTC_TRACE("deletePortByName(%s)", port_name)
         self._portAdmin.deletePortByName(port_name)
         return
@@ -3058,8 +3053,7 @@ class RTObject_impl:
     #
     # bool isOwnExecutionContext(RTC::UniqueId ec_id);
 
-    def isOwnExecutionContext(self, ec_id):
-        global ECOTHER_OFFSET
+    def isOwnExecutionContext(self, ec_id) -> bool:
         if ec_id < ECOTHER_OFFSET:
             return True
         return False
@@ -3254,14 +3248,14 @@ class RTObject_impl:
     #
     # bool removeSdoServiceConsumer(const char* id);
 
-    def removeSdoServiceConsumerStartThread(self, id):
+    def removeSdoServiceConsumerStartThread(self, id) -> None:
         class remove_Task(OpenRTM_aist.Task):
-            def __init__(self, sdoservice, id):
+            def __init__(self, sdoservice, id) -> None:
                 OpenRTM_aist.Task.__init__(self)
                 self._sdoservice = sdoservice
                 self._id = id
 
-            def svc(self):
+            def svc(self) -> None:
                 self._sdoservice.removeSdoServiceConsumer(self._id)
 
         self._sdoservice.removeSdoServiceConsumer(id)
@@ -3370,7 +3364,7 @@ class RTObject_impl:
     #
     # void setReadAll(bool read=true, bool completion=false);
 
-    def setReadAll(self, read=True, completion=False):
+    def setReadAll(self, read: bool = True, completion: bool = False) -> None:
         self._readAll = read
         self._readAllCompletion = completion
 
@@ -3407,7 +3401,7 @@ class RTObject_impl:
     #
     # void setWriteAll(bool write=true, bool completion=false);
 
-    def setWriteAll(self, write=True, completion=False):
+    def setWriteAll(self, write: bool = True, completion: bool = False) -> None:
         self._writeAll = write
         self._writeAllCompletion = completion
 
@@ -3429,14 +3423,14 @@ class RTObject_impl:
     #
     # @endif
 
-    def finalizePorts(self):
+    def finalizePorts(self) -> None:
         self._rtcout.RTC_TRACE("finalizePorts()")
         self._portAdmin.finalizePorts()
         self._inports = []
         self._outports = []
         return
 
-    def finalizeContexts(self):
+    def finalizeContexts(self) -> None:
         self._rtcout.RTC_TRACE("finalizeContexts()")
         for ec in self._eclist:
             ec.stop()
@@ -3533,10 +3527,10 @@ class RTObject_impl:
     def addPreComponentActionListener(self, listener_type,
                                       memfunc):
         class Noname(OpenRTM_aist.PreComponentActionListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
 
-            def __call__(self, ec_id):
+            def __call__(self, ec_id) -> None:
                 self._memfunc(ec_id)
                 return
 
@@ -3567,7 +3561,7 @@ class RTObject_impl:
     # removePreComponentActionListener(PreComponentActionListenerType listener_type,
     #                                  PreComponentActionListener* listener);
 
-    def removePreComponentActionListener(self, listener_type, listener):
+    def removePreComponentActionListener(self, listener_type, listener) -> None:
         self._actionListeners.removePreActionListener(listener_type, listener)
         return
 
@@ -3647,14 +3641,14 @@ class RTObject_impl:
     #                                void (Listener::*memfunc)(UniqueId ec_id,
     # ReturnCode_t ret))
 
-    def addPostComponentActionListener(self, listener_type,
+    def addPostComponentActionListener(self, listener_type: int,
                                        memfunc):
         class Noname(OpenRTM_aist.PostComponentActionListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, ec_id, ret):
+            def __call__(self, ec_id: int, ret) -> None:
                 self._memfunc(ec_id, ret)
                 return
 
@@ -3685,7 +3679,7 @@ class RTObject_impl:
     # removePostComponentActionListener(PostComponentActionListenerType listener_type,
     #                                   PostComponentActionListener* listener);
 
-    def removePostComponentActionListener(self, listener_type, listener):
+    def removePostComponentActionListener(self, listener_type: int, listener) -> None:
         self._actionListeners.removePostActionListener(listener_type, listener)
         return
 
@@ -3745,14 +3739,14 @@ class RTObject_impl:
     # addPortActionListener(PortActionListenerType listener_type,
     #                       void (Listener::*memfunc)(const RTC::PortProfile&))
 
-    def addPortActionListener(self, listener_type,
+    def addPortActionListener(self, listener_type: int,
                               memfunc):
         class Noname(OpenRTM_aist.PortActionListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, pprofile):
+            def __call__(self, pprofile: 'RTC.PortProfile') -> None:
                 self._memfunc(pprofile)
                 return
 
@@ -3783,7 +3777,7 @@ class RTObject_impl:
     # removePortActionListener(PortActionListenerType listener_type,
     #                          PortActionListener* listener);
 
-    def removePortActionListener(self, listener_type, listener):
+    def removePortActionListener(self, listener_type: int, listener) -> None:
         self._actionListeners.removePortActionListener(listener_type, listener)
         return
 
@@ -3843,14 +3837,14 @@ class RTObject_impl:
     # addExecutionContextActionListener(ECActionListenerType listener_type,
     #                                   void (Listener::*memfunc)(UniqueId));
 
-    def addExecutionContextActionListener(self, listener_type,
+    def addExecutionContextActionListener(self, listener_type: int,
                                           memfunc):
         class Noname(OpenRTM_aist.ExecutionContextActionListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, ec_id):
+            def __call__(self, ec_id: int) -> None:
                 self._memfunc(ec_id)
                 return
 
@@ -3881,7 +3875,7 @@ class RTObject_impl:
     # removeExecutionContextActionListener(ECActionListenerType listener_type,
     #                                      ECActionListener* listener);
 
-    def removeExecutionContextActionListener(self, listener_type, listener):
+    def removeExecutionContextActionListener(self, listener_type: int, listener) -> None:
         self._actionListeners.removeECActionListener(listener_type, listener)
         return
 
@@ -3943,14 +3937,14 @@ class RTObject_impl:
     #                        void (Listener::*memfunc)(const char*,
     #                                                  ConnectorProfile&))
 
-    def addPortConnectListener(self, listener_type,
+    def addPortConnectListener(self, listener_type: int,
                                memfunc):
         class Noname(OpenRTM_aist.PortConnectListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, portname, cprofile):
+            def __call__(self, portname: str, cprofile: 'RTC.ConnectorProfile') -> None:
                 self._memfunc(portname, cprofile)
                 return
 
@@ -3981,7 +3975,7 @@ class RTObject_impl:
     # removePortConnectListener(PortConnectListenerType listener_type,
     #                           PortConnectListener* listener);
 
-    def removePortConnectListener(self, listener_type, listener):
+    def removePortConnectListener(self, listener_type: int, listener) -> None:
         self._portconnListeners.removeListener(listener_type, listener)
         return
 
@@ -4048,14 +4042,14 @@ class RTObject_impl:
     #                                                     ConnectorProfile&,
     #                                                     ReturnCode_t))
 
-    def addPortConnectRetListener(self, listener_type,
+    def addPortConnectRetListener(self, listener_type: int,
                                   memfunc):
         class Noname(OpenRTM_aist.PortConnectRetListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, portname, cprofile, ret):
+            def __call__(self, portname: str, cprofile: 'RTC.ConnectorProfile', ret) -> None:
                 self._memfunc(portname, cprofile, ret)
                 return
 
@@ -4086,7 +4080,7 @@ class RTObject_impl:
     # removePortConnectRetListener(PortConnectRetListenerType listener_type,
     #                              PortConnectRetListener* listener);
 
-    def removePortConnectRetListener(self, listener_type, listener):
+    def removePortConnectRetListener(self, listener_type: int, listener) -> None:
         self._portconnListeners.removeRetListener(listener_type, listener)
         return
 
@@ -4126,14 +4120,14 @@ class RTObject_impl:
     #                               void (Listener::*memfunc)(const char*,
     #                                                         const char*))
 
-    def addConfigurationParamListener(self, type,
+    def addConfigurationParamListener(self, type: int,
                                       memfunc):
         class Noname(OpenRTM_aist.ConfigurationParamListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, config_set_name, config_param_name):
+            def __call__(self, config_set_name: str, config_param_name: str) -> None:
                 self._memfunc(config_set_name, config_param_name)
                 return
 
@@ -4168,7 +4162,7 @@ class RTObject_impl:
     # void removeConfigurationParamListener(ConfigurationParamListenerType type,
     # ConfigurationParamListener* listener);
 
-    def removeConfigurationParamListener(self, type, listener):
+    def removeConfigurationParamListener(self, type: int, listener) -> None:
         self._configsets.removeConfigurationParamListener(type, listener)
         return
 
@@ -4207,14 +4201,14 @@ class RTObject_impl:
     #                             void (Listener::*memfunc)
     #                             (const coil::Properties& config_set))
 
-    def addConfigurationSetListener(self, listener_type,
+    def addConfigurationSetListener(self, listener_type: int,
                                     memfunc):
         class Noname(OpenRTM_aist.ConfigurationSetListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, config_set):
+            def __call__(self, config_set: 'OpenRTM_aist.Properties') -> None:
                 self._memfunc(config_set)
                 return
 
@@ -4247,7 +4241,7 @@ class RTObject_impl:
     # void removeConfigurationSetListener(ConfigurationSetListenerType type,
     #                                     ConfigurationSetListener* listener);
 
-    def removeConfigurationSetListener(self, type, listener):
+    def removeConfigurationSetListener(self, type: int, listener) -> None:
         self._configsets.removeConfigurationSetListener(type, listener)
         return
 
@@ -4288,13 +4282,13 @@ class RTObject_impl:
     # addConfigurationSetNameListener(ConfigurationSetNameListenerType type,
     #                                 void (Listener::*memfunc)(const char*))
 
-    def addConfigurationSetNameListener(self, type, memfunc):
+    def addConfigurationSetNameListener(self, type: int, memfunc):
         class Noname(OpenRTM_aist.ConfigurationSetNameListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, config_set_name):
+            def __call__(self, config_set_name: str) -> None:
                 self._memfunc(config_set_name)
                 return
 
@@ -4331,7 +4325,7 @@ class RTObject_impl:
     # removeConfigurationSetNameListener(ConfigurationSetNameListenerType type,
     # ConfigurationSetNameListener* listener);
 
-    def removeConfigurationSetNameListener(self, type, listener):
+    def removeConfigurationSetNameListener(self, type: int, listener) -> None:
         self._configsets.removeConfigurationSetNameListener(type, listener)
         return
 
@@ -4405,14 +4399,14 @@ class RTObject_impl:
     #
     # @endif
     #
-    def addPreFsmActionListener(self, listener_type,
+    def addPreFsmActionListener(self, listener_type: int,
                                 memfunc):
         class Noname(OpenRTM_aist.PreFsmActionListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, state):
+            def __call__(self, state: str) -> None:
                 self._memfunc(state)
                 return
 
@@ -4439,7 +4433,7 @@ class RTObject_impl:
     #
     # @endif
     #
-    def removePreFsmActionListener(self, listener_type, listener):
+    def removePreFsmActionListener(self, listener_type: int, listener) -> None:
         self._fsmActionListeners.removePreActionListener(listener_type, listener)
         return
 
@@ -4514,14 +4508,14 @@ class RTObject_impl:
     # @endif
     #
 
-    def addPostFsmActionListener(self, listener_type,
+    def addPostFsmActionListener(self, listener_type: int,
                                  memfunc):
         class Noname(OpenRTM_aist.PostFsmActionListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, state, ret):
+            def __call__(self, state: str, ret: str) -> None:
                 self._memfunc(state, ret)
                 return
 
@@ -4549,7 +4543,7 @@ class RTObject_impl:
     # @endif
     #
 
-    def removePostFsmActionListener(self, listener_type, listener):
+    def removePostFsmActionListener(self, listener_type: int, listener) -> None:
         self._fsmActionListeners.removePostActionListener(listener_type, listener)
         return
 
@@ -4620,14 +4614,14 @@ class RTObject_impl:
     # @endif
     #
 
-    def addFsmProfileListener(self, listener_type,
+    def addFsmProfileListener(self, listener_type: int,
                               memfunc):
         class Noname(OpenRTM_aist.FsmProfileListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, pprofile):
+            def __call__(self, pprofile) -> None:
                 self._memfunc(pprofile)
                 return
 
@@ -4655,7 +4649,7 @@ class RTObject_impl:
     # @endif
     #
 
-    def removeFsmProfileListener(self, listener_type, listener):
+    def removeFsmProfileListener(self, listener_type: int, listener) -> None:
         self._fsmActionListeners.removeProfileListener(listener_type, listener)
         return
 
@@ -4712,14 +4706,14 @@ class RTObject_impl:
     #
     # @endif
     #
-    def addFsmStructureListener(self, listener_type,
+    def addFsmStructureListener(self, listener_type: int,
                                 memfunc):
         class Noname(OpenRTM_aist.FsmStructureListener):
-            def __init__(self, memfunc):
+            def __init__(self, memfunc) -> None:
                 self._memfunc = memfunc
                 return
 
-            def __call__(self, pprofile):
+            def __call__(self, pprofile) -> None:
                 self._memfunc(pprofile)
                 return
 
@@ -4747,7 +4741,7 @@ class RTObject_impl:
     # @endif
     #
 
-    def removeFsmStructureListener(self, listener_type, listener):
+    def removeFsmStructureListener(self, listener_type: int, listener) -> None:
         self._fsmActionListeners.removeStructureListener(listener_type, listener)
         return
 
@@ -4766,7 +4760,7 @@ class RTObject_impl:
     #
     # @endif
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         self._rtcout.RTC_TRACE("shutdown()")
         try:
             self.finalizePorts()
@@ -4792,221 +4786,221 @@ class RTObject_impl:
         return
 
     # inline void preOnInitialize(UniqueId ec_id)
-    def preOnInitialize(self, ec_id):
+    def preOnInitialize(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_INITIALIZE, ec_id)
         return
 
     # inline void preOnFinalize(UniqueId ec_id)
-    def preOnFinalize(self, ec_id):
+    def preOnFinalize(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_FINALIZE, ec_id)
         return
 
     # inline void preOnStartup(UniqueId ec_id)
-    def preOnStartup(self, ec_id):
+    def preOnStartup(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_STARTUP, ec_id)
         return
 
     # inline void preOnShutdown(UniqueId ec_id)
-    def preOnShutdown(self, ec_id):
+    def preOnShutdown(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_SHUTDOWN, ec_id)
         return
 
     # inline void preOnActivated(UniqueId ec_id)
-    def preOnActivated(self, ec_id):
+    def preOnActivated(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_ACTIVATED, ec_id)
         return
 
     # inline void preOnDeactivated(UniqueId ec_id)
-    def preOnDeactivated(self, ec_id):
+    def preOnDeactivated(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_DEACTIVATED, ec_id)
         return
 
     # inline void preOnAborting(UniqueId ec_id)
-    def preOnAborting(self, ec_id):
+    def preOnAborting(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_ABORTING, ec_id)
         return
 
     # inline void preOnError(UniqueId ec_id)
-    def preOnError(self, ec_id):
+    def preOnError(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_ERROR, ec_id)
         return
 
     # inline void preOnReset(UniqueId ec_id)
-    def preOnReset(self, ec_id):
+    def preOnReset(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_RESET, ec_id)
         return
 
     # inline void preOnExecute(UniqueId ec_id)
-    def preOnExecute(self, ec_id):
+    def preOnExecute(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_EXECUTE, ec_id)
         return
 
     # inline void preOnStateUpdate(UniqueId ec_id)
-    def preOnStateUpdate(self, ec_id):
+    def preOnStateUpdate(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_STATE_UPDATE, ec_id)
         return
 
     # inline void preOnRateChanged(UniqueId ec_id)
 
-    def preOnRateChanged(self, ec_id):
+    def preOnRateChanged(self, ec_id: int) -> None:
         self._actionListeners.notifyPreAction(OpenRTM_aist.PreComponentActionListenerType.PRE_ON_RATE_CHANGED, ec_id)
         return
 
     # inline void postOnInitialize(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnInitialize(self, ec_id, ret):
+    def postOnInitialize(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_INITIALIZE, ec_id, ret)
         return
 
     # inline void postOnFinalize(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnFinalize(self, ec_id, ret):
+    def postOnFinalize(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_FINALIZE, ec_id, ret)
         return
 
     # inline void postOnStartup(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnStartup(self, ec_id, ret):
+    def postOnStartup(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_STARTUP, ec_id, ret)
         return
 
     # inline void postOnShutdown(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnShutdown(self, ec_id, ret):
+    def postOnShutdown(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_SHUTDOWN, ec_id, ret)
         return
 
     # inline void postOnActivated(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnActivated(self, ec_id, ret):
+    def postOnActivated(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_ACTIVATED, ec_id, ret)
         return
 
     # inline void postOnDeactivated(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnDeactivated(self, ec_id, ret):
+    def postOnDeactivated(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_DEACTIVATED, ec_id, ret)
         return
 
     # inline void postOnAborting(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnAborting(self, ec_id, ret):
+    def postOnAborting(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_ABORTING, ec_id, ret)
         return
 
     # inline void postOnError(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnError(self, ec_id, ret):
+    def postOnError(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_ERROR, ec_id, ret)
         return
 
     # inline void postOnReset(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnReset(self, ec_id, ret):
+    def postOnReset(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_RESET, ec_id, ret)
         return
 
     # inline void postOnExecute(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnExecute(self, ec_id, ret):
+    def postOnExecute(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_EXECUTE, ec_id, ret)
         return
 
     # inline void postOnStateUpdate(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnStateUpdate(self, ec_id, ret):
+    def postOnStateUpdate(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_STATE_UPDATE, ec_id, ret)
         return
 
     # inline void postOnRateChanged(UniqueId ec_id, ReturnCode_t ret)
 
-    def postOnRateChanged(self, ec_id, ret):
+    def postOnRateChanged(self, ec_id: int, ret) -> None:
         self._actionListeners.notifyPostAction(
             OpenRTM_aist.PostComponentActionListenerType.POST_ON_RATE_CHANGED, ec_id, ret)
         return
 
     # inline void onAddPort(const PortProfile& pprof)
 
-    def onAddPort(self, pprof):
+    def onAddPort(self, pprof: 'RTC.PortProfile') -> None:
         self._actionListeners.notifyPortAction(OpenRTM_aist.PortActionListenerType.ADD_PORT, pprof)
         return
 
     # inline void onRemovePort(const PortProfile& pprof)
 
-    def onRemovePort(self, pprof):
+    def onRemovePort(self, pprof: 'RTC.PortProfile') -> None:
         self._actionListeners.notifyPortAction(OpenRTM_aist.PortActionListenerType.REMOVE_PORT, pprof)
         return
 
     # inline void onAttachExecutionContext(UniqueId ec_id)
 
-    def onAttachExecutionContext(self, ec_id):
+    def onAttachExecutionContext(self, ec_id: int) -> None:
         self._actionListeners.notifyECAction(OpenRTM_aist.ExecutionContextActionListenerType.EC_ATTACHED, ec_id)
         return
 
     # inline void onDetachExecutionContext(UniqueId ec_id)
 
-    def onDetachExecutionContext(self, ec_id):
+    def onDetachExecutionContext(self, ec_id: int) -> None:
         self._actionListeners.notifyECAction(OpenRTM_aist.ExecutionContextActionListenerType.EC_DETACHED, ec_id)
         return
 
-    def preOnFsmInit(self, state):
+    def preOnFsmInit(self, state: str) -> None:
         self._fsmActionListeners.notifyPreAction(OpenRTM_aist.PreFsmActionListenerType.PRE_ON_INIT, state)
         return
 
-    def preOnFsmEntry(self, state):
+    def preOnFsmEntry(self, state: str) -> None:
         self._fsmActionListeners.notifyPreAction(OpenRTM_aist.PreFsmActionListenerType.PRE_ON_ENTRY, state)
         return
 
-    def preOnFsmDo(self, state):
+    def preOnFsmDo(self, state: str) -> None:
         self._fsmActionListeners.notifyPreAction(OpenRTM_aist.PreFsmActionListenerType.PRE_ON_DO, state)
         return
 
-    def preOnFsmExit(self, state):
+    def preOnFsmExit(self, state: str) -> None:
         self._fsmActionListeners.notifyPreAction(OpenRTM_aist.PreFsmActionListenerType.PRE_ON_EXIT, state)
         return
 
-    def preOnFsmStateChange(self, state):
+    def preOnFsmStateChange(self, state: str) -> None:
         self._fsmActionListeners.notifyPreAction(OpenRTM_aist.PreFsmActionListenerType.PRE_ON_STATE_CHANGE, state)
         return
 
-    def postOnFsmInit(self, state, ret):
+    def postOnFsmInit(self, state: str, ret) -> None:
         self._fsmActionListeners.notifyPostAction(
             OpenRTM_aist.PostFsmActionListenerType.POST_ON_INIT, state, ret)
         return
 
-    def postOnFsmEntry(self, state, ret):
+    def postOnFsmEntry(self, state: str, ret) -> None:
         self._fsmActionListeners.notifyPostAction(
             OpenRTM_aist.PostFsmActionListenerType.POST_ON_ENTRY, state, ret)
         return
 
-    def postOnFsmDo(self, state, ret):
+    def postOnFsmDo(self, state: str, ret: str) -> None:
         self._fsmActionListeners.notifyPostAction(OpenRTM_aist.PostFsmActionListenerType.POST_ON_DO, state, ret)
         return
 
-    def postOnFsmExit(self, state, ret):
+    def postOnFsmExit(self, state: str, ret) -> None:
         self._fsmActionListeners.notifyPostAction(
             OpenRTM_aist.PostFsmActionListenerType.POST_ON_EXIT, state, ret)
         return
 
-    def postOnFsmStateChange(self, state, ret):
+    def postOnFsmStateChange(self, state: str, ret) -> None:
         self._fsmActionListeners.notifyPostAction(
             OpenRTM_aist.PostFsmActionListenerType.POST_ON_STATE_CHANGE, state, ret)
         return
 
     # ReturnCode_t getInheritedECOptions(coil::Properties& default_opts);
 
-    def getInheritedECOptions(self, default_opts):
+    def getInheritedECOptions(self, default_opts: 'OpenRTM_aist.Properties'):
         inherited_opts_ = ["sync_transition",
                            "sync_activation",
                            "sync_deactivation",
@@ -5036,7 +5030,7 @@ class RTObject_impl:
     # ReturnCode_t
     # getPrivateContextOptions(std::vector<coil::Properties>& ec_args);
 
-    def getPrivateContextOptions(self, ec_args):
+    def getPrivateContextOptions(self, ec_args: list):
         self._rtcout.RTC_TRACE("getPrivateContextOptions()")
         # Component specific multiple EC option available
         if not self._properties.findNode("execution_contexts"):
@@ -5109,7 +5103,7 @@ class RTObject_impl:
     # ReturnCode_t
     # getGlobalContextOptions(coil::Properties& global_ec_props);
 
-    def getGlobalContextOptions(self, global_ec_props):
+    def getGlobalContextOptions(self, global_ec_props: 'OpenRTM_aist.Properties'):
         # exec_cxt option is obsolete
         self._rtcout.RTC_TRACE("getGlobalContextOptions()")
 
@@ -5130,7 +5124,7 @@ class RTObject_impl:
     # ReturnCode_t
     # getContextOptions(std::vector<coil::Properties>& ec_args);
 
-    def getContextOptions(self, ec_args):
+    def getContextOptions(self, ec_args: list):
         self._rtcout.RTC_DEBUG("getContextOptions()")
         global_props_ = OpenRTM_aist.Properties()
         ret_global_, global_props_ = self.getGlobalContextOptions(global_props_)
@@ -5154,7 +5148,7 @@ class RTObject_impl:
     # ReturnCode_t findExistingEC(coil::Properties& ec_arg,
     #                             RTC::ExecutionContextBase*& ec);
 
-    def findExistingEC(self, ec_arg):
+    def findExistingEC(self, ec_arg: 'OpenRTM_aist.Properties'):
         if self._manager:
             eclist_ = self._manager.createdExecutionContexts()
             for ec in eclist_:
@@ -5169,7 +5163,7 @@ class RTObject_impl:
     #
     # ReturnCode_t createContexts(std::vector<coil::Properties>& ec_args);
 
-    def createContexts(self, ec_args):
+    def createContexts(self, ec_args: list):
         ret_ = RTC.RTC_OK
         avail_ec_ = OpenRTM_aist.ExecutionContextFactory.instance().getIdentifiers()
 
@@ -5251,11 +5245,11 @@ class RTObject_impl:
 
             ec = OpenRTM_aist.ExecutionContextFactory.instance(
             ).createObject(ec_type_)
-            
+
             if not ec:
                 self._rtcout.RTC_ERROR("EC (%s) creation failed.", ec_type_)
                 self._rtcout.RTC_DEBUG("Available EC list: %s",
-                                    OpenRTM_aist.flatten(avail_ec_))
+                                       OpenRTM_aist.flatten(avail_ec_))
                 return RTC.RTC_ERROR
 
             if self._manager:
@@ -5279,7 +5273,7 @@ class RTObject_impl:
     # @param self
     # @param obj
 
-    def setINSObjRef(self, obj):
+    def setINSObjRef(self, obj) -> None:
         self._insref = obj
 
     ##
@@ -5292,7 +5286,7 @@ class RTObject_impl:
     # @endif
 
     class svc_name:
-        def __init__(self, _id):
+        def __init__(self, _id) -> None:
             self._id = _id
 
         def __call__(self, prof):
@@ -5311,7 +5305,7 @@ class RTObject_impl:
     # @endif
 
     class nv_name:
-        def __init__(self, _name):
+        def __init__(self, _name) -> None:
             self._name = _name
 
         def __call__(self, nv):
@@ -5326,7 +5320,7 @@ class RTObject_impl:
     # @endif
 
     class ec_find:
-        def __init__(self, _ec):
+        def __init__(self, _ec) -> None:
             self._ec = _ec
 
         def __call__(self, ecs):
@@ -5349,10 +5343,10 @@ class RTObject_impl:
     # @endif
 
     class ec_copy:
-        def __init__(self, eclist):
+        def __init__(self, eclist: list) -> None:
             self._eclist = eclist
 
-        def __call__(self, ecs):
+        def __call__(self, ecs) -> None:
             if not CORBA.is_nil(ecs):
                 self._eclist.append(ecs)
 
@@ -5365,10 +5359,10 @@ class RTObject_impl:
     # @endif
 
     class deactivate_comps:
-        def __init__(self, comp):
+        def __init__(self, comp) -> None:
             self._comp = comp
 
-        def __call__(self, ec):
+        def __call__(self, ec) -> None:
             try:
                 if not CORBA.is_nil(ec) and not ec._non_existent():
                     if ec.get_component_state(self._comp) == RTC.ACTIVE_STATE:

@@ -93,7 +93,7 @@ class SystemClock(IClock):
         return OpenRTM_aist.Time().getTime()
 
     # virtual bool settime(coil::TimeValue clocktime);
-    def settime(self, clocktime):
+    def settime(self, clocktime: 'OpenRTM_aist.TimeValue'):
         return OpenRTM_aist.Time().settimeofday(clocktime, 0)
 
 
@@ -115,19 +115,19 @@ class LogicalClock(IClock):
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._currentTime = OpenRTM_aist.TimeValue(0.0)
         self._currentTimeMutex = threading.RLock()
         return
 
     # virtual coil::TimeValue gettime() const;
     def gettime(self):
-        guard = OpenRTM_aist.ScopedLock(self._currentTimeMutex)
+        _ = OpenRTM_aist.ScopedLock(self._currentTimeMutex)
         return self._currentTime
 
     # virtual bool settime(coil::TimeValue clocktime);
-    def settime(self, clocktime):
-        guard = OpenRTM_aist.ScopedLock(self._currentTimeMutex)
+    def settime(self, clocktime: 'OpenRTM_aist.TimeValue') -> bool:
+        _ = OpenRTM_aist.ScopedLock(self._currentTimeMutex)
         self._currentTime = clocktime
         return True
 
@@ -150,7 +150,7 @@ class AdjustedClock(IClock):
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._offset = OpenRTM_aist.TimeValue(0.0)
         self._offsetMutex = threading.RLock()
         return
@@ -158,12 +158,12 @@ class AdjustedClock(IClock):
     # virtual coil::TimeValue gettime() const;
 
     def gettime(self):
-        guard = OpenRTM_aist.ScopedLock(self._offsetMutex)
+        _ = OpenRTM_aist.ScopedLock(self._offsetMutex)
         return OpenRTM_aist.Time().getTime() - self._offset
 
     # virtual bool settime(coil::TimeValue clocktime);
-    def settime(self, clocktime):
-        guard = OpenRTM_aist.ScopedLock(self._offsetMutex)
+    def settime(self, clocktime: 'OpenRTM_aist.TimeValue') -> bool:
+        _ = OpenRTM_aist.ScopedLock(self._offsetMutex)
         self._offset = OpenRTM_aist.Time().getTime() - clocktime
         return True
 
@@ -195,13 +195,13 @@ class ClockManager:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._systemClock = SystemClock()
         self._logicalClock = LogicalClock()
         self._adjustedClock = AdjustedClock()
         return
 
-    def getClock(self, clocktype):
+    def getClock(self, clocktype: str):
         if clocktype == "logical":
             return self._logicalClock
         elif clocktype == "adjusted":
@@ -213,10 +213,9 @@ class ClockManager:
 
     def instance():
         global clockmgr
-        global clockmgr_mutex
 
         if not clockmgr:
-            guard = OpenRTM_aist.ScopedLock(clockmgr_mutex)
+            _ = OpenRTM_aist.ScopedLock(clockmgr_mutex)
             clockmgr = ClockManager()
 
         return clockmgr

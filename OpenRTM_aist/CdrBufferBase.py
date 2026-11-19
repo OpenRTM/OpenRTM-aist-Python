@@ -20,7 +20,7 @@ import OpenRTM_aist
 
 
 class CdrBufferBase(OpenRTM_aist.BufferBase):
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
 
@@ -28,7 +28,7 @@ cdrbufferfactory = None
 
 
 class CdrBufferFactory(OpenRTM_aist.Factory):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
         pass
 

@@ -54,10 +54,10 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
     # @endif
     #
     class publishInterfaceProfileFunc:
-        def __init__(self, prop):
+        def __init__(self, prop: 'OpenRTM_aist.Properties') -> None:
             self._prop = prop
 
-        def __call__(self, provider):
+        def __call__(self, provider) -> None:
             provider.publishInterfaceProfile(self._prop)
 
     ##
@@ -72,7 +72,7 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
     # @brief Constructor
     # @endif
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._properties = []
         self._portType = ""
         self._dataType = ""
@@ -111,7 +111,7 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
     #
     # @endif
     # virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
-    def publishInterfaceProfile(self, prop):
+    def publishInterfaceProfile(self, prop: list) -> None:
         OpenRTM_aist.NVUtil.appendStringValue(
             prop, "dataport.interface_type", self._interfaceType)
         OpenRTM_aist.NVUtil.append(prop, self._properties)
@@ -133,7 +133,7 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
     #
     # @endif
     # virtual bool publishInterface(SDOPackage::NVList& properties);
-    def publishInterface(self, prop):
+    def publishInterface(self, prop: list) -> bool:
         if not OpenRTM_aist.NVUtil.isStringValue(
                 prop, "dataport.interface_type", self._interfaceType):
             return False
@@ -154,7 +154,7 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
     #
     # @endif
 
-    def setPortType(self, port_type):
+    def setPortType(self, port_type: str) -> None:
         self._portType = port_type
 
     ##
@@ -170,7 +170,7 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
     #
     # @endif
 
-    def setDataType(self, data_type):
+    def setDataType(self, data_type: str) -> None:
         self._dataType = data_type
 
     ##
@@ -186,7 +186,7 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
     #
     # @endif
 
-    def setInterfaceType(self, interface_type):
+    def setInterfaceType(self, interface_type: str) -> None:
         self._interfaceType = interface_type
 
     ##
@@ -202,7 +202,7 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
     #
     # @endif
 
-    def setDataFlowType(self, dataflow_type):
+    def setDataFlowType(self, dataflow_type: str) -> None:
         self._dataflowType = dataflow_type
 
     ##
@@ -218,7 +218,7 @@ class OutPortProvider(OpenRTM_aist.DataPortStatus):
     #
     # @endif
 
-    def setSubscriptionType(self, subs_type):
+    def setSubscriptionType(self, subs_type: str) -> None:
         self._subscriptionType = subs_type
 
 
@@ -226,11 +226,11 @@ outportproviderfactory = None
 
 
 class OutPortProviderFactory(OpenRTM_aist.Factory, OutPortProvider):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
         pass
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     def instance():
