@@ -22,16 +22,16 @@ def fsm_topstate(TOP):
     ret = pyfsm.topstate(TOP)
 
     class STATE(ret):
-        def __init__(self, instance):
+        def __init__(self, instance: int) -> None:
             ret.__init__(self, instance)
 
-        def on_entry(self, *argv):
+        def on_entry(self, *argv) -> None:
             ret.call_entry(self, ret, *argv)
 
-        def on_exit(self, *argv):
+        def on_exit(self, *argv) -> None:
             ret.call_exit(self, ret, *argv)
 
-        def on_init(self, *argv):
+        def on_init(self, *argv) -> None:
             ret.call_init(self, ret, *argv)
     return STATE
 
@@ -41,16 +41,16 @@ def fsm_substate(superstate):
         ret = pyfsm.substate(superstate)(cls)
 
         class STATE(ret):
-            def __init__(self, instance):
+            def __init__(self, instance: int) -> None:
                 ret.__init__(self, instance)
 
-            def on_entry(self, *argv):
+            def on_entry(self, *argv) -> None:
                 ret.call_entry(self, cls, *argv)
 
-            def on_exit(self, *argv):
+            def on_exit(self, *argv) -> None:
                 ret.call_exit(self, cls, *argv)
 
-            def on_init(self, *argv):
+            def on_init(self, *argv) -> None:
                 ret.call_init(self, cls, *argv)
 
         return STATE
@@ -66,12 +66,12 @@ def FSM_SUBSTATE(SUPERSTATE):
 
 
 class Machine(pyfsm.Machine):
-    def __init__(self, TOP, comp):
+    def __init__(self, TOP, comp) -> None:
         self._rtComponent = comp
         super(Machine, self).__init__(TOP)
         self._buffer = OpenRTM_aist.CdrBufferFactory.instance().createObject("ring_buffer")
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     def getBuffer(self):
@@ -86,7 +86,7 @@ class Machine(pyfsm.Machine):
     def getComp(self):
         return self._rtComponent
 
-    def run_event(self):
+    def run_event(self) -> None:
         while self._buffer.readable() > 0:
             _, event = self._buffer.get()
             event()
@@ -94,21 +94,21 @@ class Machine(pyfsm.Machine):
 
 
 class Link(pyfsm.StateDef):
-    def __init__(self):
+    def __init__(self) -> None:
         super(Link, self).__init__()
         self._rtComponent = None
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
-    def setrtc(self):
+    def setrtc(self) -> None:
         if self._rtComponent:
             return
         machine = self._myStateInstance.machine()
         if machine:
             self._rtComponent = machine.getComp()
 
-    def call_entry(self, cls, *argv):
+    def call_entry(self, cls, *argv) -> None:
         self.setrtc()
         if not self._rtComponent:
             self.onEntry(*argv)
@@ -119,7 +119,7 @@ class Link(pyfsm.StateDef):
             self._rtComponent.postOnFsmEntry(
                 self._state_name(), cls.onEntry(self, *argv))
 
-    def call_init(self, cls, *argv):
+    def call_init(self, cls, *argv) -> None:
         self.setrtc()
         if not self._rtComponent:
             self.onInit(*argv)
@@ -128,7 +128,7 @@ class Link(pyfsm.StateDef):
             self._rtComponent.postOnFsmInit(
                 self._state_name(), cls.onInit(self, *argv))
 
-    def call_exit(self, cls, *argv):
+    def call_exit(self, cls, *argv) -> None:
         self.setrtc()
         if not self._rtComponent:
             self.onExit(*argv)

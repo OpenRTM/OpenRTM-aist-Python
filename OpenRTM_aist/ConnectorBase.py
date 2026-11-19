@@ -58,7 +58,7 @@ class ConnectorInfo:
     # ConnectorInfo(const char* name_, const char* id_,
     #               coil::vstring ports_, coil::Properties properties_)
 
-    def __init__(self, name_, id_, ports_, properties_):
+    def __init__(self, name_: str, id_: str, ports_, properties_: 'OpenRTM_aist.Properties') -> None:
         self.name = name_        # str
         self.id = id_          # str
         self.ports = ports_       # [str,...]
@@ -115,7 +115,7 @@ class ConnectorBase(OpenRTM_aist.DataPortStatus):
     # @else
     # @brief Destructor
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##

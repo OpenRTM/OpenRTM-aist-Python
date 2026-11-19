@@ -13,7 +13,6 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
-from __future__ import print_function
 import sys
 
 import RTC
@@ -141,7 +140,7 @@ def MyModuleInit(manager):
     DisplayInit(manager)
 
     # Create a component
-    comp = manager.createComponent("Display")
+    _ = manager.createComponent("Display")
 
 
 def main():

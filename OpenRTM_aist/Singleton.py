@@ -17,13 +17,8 @@
 #
 
 
-import sys
-if sys.version_info[0] == 2:
-    import thread
-    allocate_lock = thread.allocate_lock
-else:
-    import threading
-    allocate_lock = threading.Lock
+import threading
+allocate_lock = threading.Lock
 
 ##
 # @if jp
@@ -37,14 +32,14 @@ else:
 #     pass
 
 
-class Singleton(object):
+class Singleton:
     __lockObj = allocate_lock()
     __instance = None
 
     def __new__(self, *args, **kargs):
         return self.instance(*args, **kargs)
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kargs) -> None:
         self.instance(*args, **kargs)
 
     def instance(self, *args, **kargs):

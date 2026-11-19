@@ -47,7 +47,7 @@ class EventDrivenExecutionContext(OpenRTM_aist.PeriodicExecutionContext):
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.PeriodicExecutionContext.__init__(self)
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("rtobject.eventdriven_ec")
         self.setKind(RTC.EVENT_DRIVEN)
@@ -66,7 +66,7 @@ class EventDrivenExecutionContext(OpenRTM_aist.PeriodicExecutionContext):
 # @else
 #
 # @endif
-def EventDrivenExecutionContextInit(manager):
+def EventDrivenExecutionContextInit(manager) -> None:
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("EventDrivenExecutionContext",
                                                                OpenRTM_aist.EventDrivenExecutionContext)
     return

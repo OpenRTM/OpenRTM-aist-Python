@@ -26,10 +26,9 @@ import RTC
 import math
 import time
 import sys
-if sys.version_info[0] == 2:
-    from Tix import *
-else:
-    from tkinter.tix import *
+from tkinter.tix import (
+    BOTH, Button, Canvas, Checkbutton, DoubleVar, E, END, Entry, Frame, GROOVE, HORIZONTAL, LEFT, Label, LabelFrame, Listbox, N, OptionMenu, RIGHT, S, Scale, Scrollbar, StringVar, TOP, TRUE, Tk, Toplevel, VERTICAL, W, X,
+)
 
 # Import RTM module
 # This module's spesification
@@ -132,7 +131,7 @@ class CanvasText(ToggleItem):
         return
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         self.id = self.canvas.create_text(self.x, self.y, text=self.text)
@@ -167,7 +166,7 @@ class RobotTitle(ToggleItem):
         return
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         rx, ry, rt = self.robot.get_pos()
@@ -235,7 +234,7 @@ class CanvasGrid(ToggleItem):
         return
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
 
@@ -287,7 +286,7 @@ class CanvasAxis(ToggleItem):
         return
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         self.id[0] = self.canvas.create_line(0, self.height / 2,
@@ -323,10 +322,7 @@ class SimulatedObject:
         return self.simulator.get_tick()
 
 
-if sys.version_info[0] == 2:
-    import tkSimpleDialog
-else:
-    import tkinter.simpledialog as tkSimpleDialog
+import tkinter.simpledialog as tkSimpleDialog
 
 
 class PropertyDialog:
@@ -435,10 +431,9 @@ class PropertyDialog:
         for i in range(len(t)):
             Label(master, text=t[i], anchor=W).grid(row=i, sticky=W,
                                                     padx=3, pady=3)
-        l = [self.name, self.type, self.description, self.vendor]
-        for i in range(len(l)):
-            Label(master, text=l[i], anchor=W).grid(row=i, column=1, sticky=W,
-                                                    padx=3, pady=3)
+        details = [self.name, self.type, self.description, self.vendor]
+        for i in range(len(details)):
+            Label(master, text=details[i], anchor=W).grid(row=i, column=1, sticky=W, padx=3, pady=3)
         return
 
     def label_entry(self, master, label0, var, label1):
@@ -832,15 +827,12 @@ class TkMobileRobot(Frame):
     # Robot creator control set
 
     def create_robotcreator(self, frame):
-        lb = Label(frame, text="Robot Type", anchor=W, justify=LEFT)
+        _ = Label(frame, text="Robot Type", anchor=W, justify=LEFT)
 
         om = OptionMenu(frame, label="Type: ", variable=self.robot_kind_var)
         for opt in self.robot_factory.keys():
             om.add_command(opt, label=opt)
-        if sys.version_info[0] == 2:
-            self.robot_kind_var.set(self.robot_factory.keys()[0])
-        else:
-            self.robot_kind_var.set(list(self.robot_factory.keys())[0])
+        self.robot_kind_var.set(list(self.robot_factory.keys())[0])
 
         creater = Button(frame, text="Create", command=self.create_robot)
         deleter = Button(frame, text="Delete", command=self.delete_robot)
@@ -894,9 +886,9 @@ class TkMobileRobot(Frame):
         if len(index) > 0:
             robot_name = self.rlistbox.get(index[0])
             r = self.rnames.pop(robot_name)
-            del(r)
+            del (r)
             r = self.robots.pop(robot_name)
-            del(r)
+            del (r)
         self.rlistbox.delete(index)
         return
 

@@ -38,17 +38,19 @@ def fsm_topstate(TOP):
     ret = OpenRTM_aist.Macho.topstate(TOP)
 
     class STATE(ret):
-        def __init__(self, instance):
+        def __init__(self, instance) -> None:
             ret.__init__(self, instance)
 
-        def on_entry(self, *argv):
+        def on_entry(self, *argv) -> None:
             ret.call_entry(self, ret, *argv)
 
-        def on_exit(self, *argv):
+        def on_exit(self, *argv) -> None:
             ret.call_exit(self, ret, *argv)
 
-        def on_init(self, *argv):
+        def on_init(self, *argv) -> None:
             ret.call_init(self, ret, *argv)
+
+    STATE.__qualname__ = f"STATE_{id(TOP)}_{id(object())}"
     return STATE
 
 ##
@@ -74,17 +76,19 @@ def fsm_substate(superstate):
         ret = OpenRTM_aist.Macho.substate(superstate)(cls)
 
         class STATE(ret):
-            def __init__(self, instance):
+            def __init__(self, instance) -> None:
                 ret.__init__(self, instance)
 
-            def on_entry(self, *argv):
+            def on_entry(self, *argv) -> None:
                 ret.call_entry(self, cls, *argv)
 
-            def on_exit(self, *argv):
+            def on_exit(self, *argv) -> None:
                 ret.call_exit(self, cls, *argv)
 
-            def on_init(self, *argv):
+            def on_init(self, *argv) -> None:
                 ret.call_init(self, cls, *argv)
+
+        STATE.__qualname__ = f"STATE_{id(cls)}_{id(object())}"
 
         return STATE
     return _fsm_substate
@@ -186,7 +190,7 @@ class Machine(OpenRTM_aist.Macho.Machine):
     #
     # @endif
     #
-    def __init__(self, TOP, comp):
+    def __init__(self, TOP, comp) -> None:
         #super(Machine,self).__init__(TOP, OpenRTM_aist.Macho.TopBase(TOP))
         self._rtComponent = comp
         super(Machine, self).__init__(TOP)
@@ -207,7 +211,7 @@ class Machine(OpenRTM_aist.Macho.Machine):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
     ##
     # @if jp
@@ -272,7 +276,7 @@ class Machine(OpenRTM_aist.Macho.Machine):
     # @endif
     #
 
-    def run_event(self):
+    def run_event(self) -> None:
         while self._buffer.readable() > 0:
             _, event = self._buffer.get()
             event()
@@ -318,7 +322,7 @@ class Link(OpenRTM_aist.Macho.StateDef):
     #
     # @endif
     #
-    def __init__(self, instance):
+    def __init__(self, instance) -> None:
         super(Link, self).__init__(instance)
         self._rtComponent = None
     ##
@@ -337,7 +341,7 @@ class Link(OpenRTM_aist.Macho.StateDef):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
     ##
     # @if jp
@@ -355,7 +359,7 @@ class Link(OpenRTM_aist.Macho.StateDef):
     # @endif
     #
 
-    def setrtc(self):
+    def setrtc(self) -> None:
         if self._rtComponent:
             return
         machine = self._myStateInstance.machine()
@@ -382,7 +386,7 @@ class Link(OpenRTM_aist.Macho.StateDef):
     #
     # @endif
     #
-    def call_entry(self, cls, *argv):
+    def call_entry(self, cls, *argv) -> None:
         self.setrtc()
         if not self._rtComponent:
             cls.onEntry(self, *argv)
@@ -413,7 +417,7 @@ class Link(OpenRTM_aist.Macho.StateDef):
     #
     # @endif
     #
-    def call_init(self, cls, *argv):
+    def call_init(self, cls, *argv) -> None:
         self.setrtc()
         if not self._rtComponent:
             cls.onInit(self, *argv)
@@ -442,7 +446,7 @@ class Link(OpenRTM_aist.Macho.StateDef):
     #
     # @endif
     #
-    def call_exit(self, cls, *argv):
+    def call_exit(self, cls, *argv) -> None:
         self.setrtc()
         if not self._rtComponent:
             cls.onExit(self, *argv)

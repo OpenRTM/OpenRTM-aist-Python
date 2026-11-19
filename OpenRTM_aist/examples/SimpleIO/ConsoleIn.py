@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import sys
 
 import RTC
@@ -115,7 +114,7 @@ def MyModuleInit(manager):
     ConsoleInInit(manager)
 
     # Create a component
-    comp = manager.createComponent("ConsoleIn")
+    _ = manager.createComponent("ConsoleIn")
 
 
 def main():

@@ -123,7 +123,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     #                      InPortConsumer* consumer,
     #                      ConnectorListeners& listeners,
     #                      CdrBufferBase* buffer = 0);
-    def __init__(self, info, consumer, listeners, buffer=None):
+    def __init__(self, info: 'OpenRTM_aist.ConnectorInfo', consumer, listeners, buffer=None) -> None:
         OpenRTM_aist.OutPortConnector.__init__(self, info)
 
         self._buffer = buffer
@@ -194,7 +194,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -348,7 +348,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     #
     # virtual void activate();
 
-    def activate(self):
+    def activate(self) -> None:
         self._publisher.activate()
         return
 
@@ -368,7 +368,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     #
     # virtual void deactivate();
 
-    def deactivate(self):
+    def deactivate(self) -> None:
         self._publisher.deactivate()
         return
 
@@ -411,7 +411,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     #
     # virtual PublisherBase* createPublisher(ConnectorInfo& info);
 
-    def createPublisher(self, info):
+    def createPublisher(self, info: 'OpenRTM_aist.ConnectorInfo'):
         pub_type = info.properties.getProperty("io_mode")
         if not pub_type:
             pub_type = info.properties.getProperty(
@@ -447,7 +447,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     #
     # virtual CdrBufferBase* createBuffer(ConnectorInfo& info);
 
-    def createBuffer(self, info):
+    def createBuffer(self, info: 'OpenRTM_aist.ConnectorInfo'):
         buf_type = info.properties.getProperty("buffer_type",
                                                "ring_buffer")
 
@@ -461,7 +461,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     # @endif
     # void onConnect()
 
-    def onConnect(self):
+    def onConnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_CONNECT, self._profile)
@@ -474,7 +474,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     # @brief Invoke callback when connection is destroied
     # @endif
     # void onDisconnect()
-    def onDisconnect(self):
+    def onDisconnect(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_DISCONNECT, self._profile)
@@ -496,7 +496,7 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     # @endif
     #
     # bool setInPort(InPortBase* directInPort);
-    def setInPort(self, directInPort):
+    def setInPort(self, directInPort) -> bool:
         if self._directInPort is not None:
             return False
         self._directInPort = directInPort
@@ -511,11 +511,11 @@ class OutPortPushConnector(OpenRTM_aist.OutPortConnector):
     # @brief
     # @param prop
     # @endif
-    def unsubscribeInterface(self, prop):
+    def unsubscribeInterface(self, prop: list) -> None:
         if self._consumer:
             self._consumer.unsubscribeInterface(prop)
 
-    def setDataType(self, data):
+    def setDataType(self, data) -> None:
         OpenRTM_aist.OutPortConnector.setDataType(self, data)
         self._serializer = OpenRTM_aist.SerializerFactories.instance(
         ).createSerializer(self._marshaling_type, data)

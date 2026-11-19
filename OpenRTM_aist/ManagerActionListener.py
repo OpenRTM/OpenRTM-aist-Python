@@ -95,11 +95,11 @@ class ManagerActionListenerHolder(OpenRTM_aist.ListenerHolder):
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.ListenerHolder.__init__(self)
         return
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -112,7 +112,7 @@ class ManagerActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void preShutdown();
 
-    def preShutdown(self):
+    def preShutdown(self) -> None:
         self.LISTENERHOLDER_CALLBACK("preShutdown")
         return
 
@@ -126,7 +126,7 @@ class ManagerActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void postShutdown();
 
-    def postShutdown(self):
+    def postShutdown(self) -> None:
         self.LISTENERHOLDER_CALLBACK("postShutdown")
         return
 
@@ -140,7 +140,7 @@ class ManagerActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void preReinit();
 
-    def preReinit(self):
+    def preReinit(self) -> None:
         self.LISTENERHOLDER_CALLBACK("preReinit")
         return
 
@@ -154,7 +154,7 @@ class ManagerActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void postReinit();
 
-    def postReinit(self):
+    def postReinit(self) -> None:
         self.LISTENERHOLDER_CALLBACK("postReinit")
         return
 
@@ -250,7 +250,7 @@ class ModuleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.ListenerHolder.__init__(self)
         return
 
@@ -261,7 +261,7 @@ class ModuleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -275,7 +275,7 @@ class ModuleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void preLoad(std::string& modname,
     #                      std::string& funcname);
 
-    def preLoad(self, modname, funcname):
+    def preLoad(self, modname: str, funcname: str):
         return self.LISTENERHOLDER_CALLBACK("preLoad", modname, funcname)
 
     ##
@@ -289,7 +289,7 @@ class ModuleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void postLoad(std::string& modname,
     #                       std::string& funcname);
 
-    def postLoad(self, modname, funcname):
+    def postLoad(self, modname: str, funcname: str):
         return self.LISTENERHOLDER_CALLBACK("postLoad", modname, funcname)
 
     ##
@@ -302,7 +302,7 @@ class ModuleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void preUnload(std::string& modname);
 
-    def preUnload(self, modname):
+    def preUnload(self, modname: str):
         return self.LISTENERHOLDER_CALLBACK("preUnload", modname)
 
     ##
@@ -315,7 +315,7 @@ class ModuleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void postUnload(std::string& modname);
 
-    def postUnload(self, modname):
+    def postUnload(self, modname: str):
         return self.LISTENERHOLDER_CALLBACK("postUnload", modname)
 
 
@@ -447,7 +447,7 @@ class RtcLifecycleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.ListenerHolder.__init__(self)
         return
 
@@ -458,7 +458,7 @@ class RtcLifecycleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -471,7 +471,7 @@ class RtcLifecycleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void preCreate(std::string& args);
 
-    def preCreate(self, args):
+    def preCreate(self, args: str):
         return self.LISTENERHOLDER_CALLBACK("preCreate", args)
 
     ##
@@ -484,7 +484,7 @@ class RtcLifecycleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void postCreate(RTC::RTObject_impl* rtobj);
 
-    def postCreate(self, rtobj):
+    def postCreate(self, rtobj) -> None:
         self.LISTENERHOLDER_CALLBACK("postCreate", rtobj)
         return
 
@@ -498,7 +498,7 @@ class RtcLifecycleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void preConfigure(coil::Properties& prop);
 
-    def preConfigure(self, prop):
+    def preConfigure(self, prop) -> None:
         self.LISTENERHOLDER_CALLBACK("preConfigure", prop)
         return
 
@@ -512,7 +512,7 @@ class RtcLifecycleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void postConfigure(coil::Properties& prop);
 
-    def postConfigure(self, prop):
+    def postConfigure(self, prop) -> None:
         self.LISTENERHOLDER_CALLBACK("postConfigure", prop)
         return
 
@@ -526,7 +526,7 @@ class RtcLifecycleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void preInitialize(void);
 
-    def preInitialize(self):
+    def preInitialize(self) -> None:
         self.LISTENERHOLDER_CALLBACK("preInitialize")
         return
 
@@ -540,7 +540,7 @@ class RtcLifecycleActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void postInitialize(void);
 
-    def postInitialize(self):
+    def postInitialize(self) -> None:
         self.LISTENERHOLDER_CALLBACK("postInitialize")
         return
 
@@ -646,7 +646,7 @@ class NamingActionListenerHolder(OpenRTM_aist.ListenerHolder):
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.ListenerHolder.__init__(self)
         return
 
@@ -657,7 +657,7 @@ class NamingActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -671,7 +671,7 @@ class NamingActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void preBind(RTC::RTObject_impl# rtobj,
     #                      coil::vstring& name);
 
-    def preBind(self, rtobj, name):
+    def preBind(self, rtobj, name) -> None:
         self.LISTENERHOLDER_CALLBACK("preBind", rtobj, name)
         return
 
@@ -686,7 +686,7 @@ class NamingActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void postBind(RTC::RTObject_impl* rtobj,
     #                       coil::vstring& name);
 
-    def postBind(self, rtobj, name):
+    def postBind(self, rtobj, name) -> None:
         self.LISTENERHOLDER_CALLBACK("postBind", rtobj, name)
         return
 
@@ -701,7 +701,7 @@ class NamingActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void preUnbind(RTC::RTObject_impl* rtobj,
     #                        coil::vstring& name);
 
-    def preUnbind(self, rtobj, name):
+    def preUnbind(self, rtobj, name) -> None:
         self.LISTENERHOLDER_CALLBACK("preUnbind", rtobj, name)
         return
 
@@ -716,7 +716,7 @@ class NamingActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void postUnbind(RTC::RTObject_impl* rtobj,
     #                         coil::vstring& name);
 
-    def postUnbind(self, rtobj, name):
+    def postUnbind(self, rtobj, name) -> None:
         self.LISTENERHOLDER_CALLBACK("postUnbind", rtobj, name)
         return
 
@@ -871,7 +871,7 @@ class LocalServiceActionListenerHolder(OpenRTM_aist.ListenerHolder):
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.ListenerHolder.__init__(self)
         return
 
@@ -882,7 +882,7 @@ class LocalServiceActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     # registration instance of service to svc admin
@@ -896,7 +896,7 @@ class LocalServiceActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # @endif
     # virtual void preServiceRegister(std::string service_name);
 
-    def preServiceRegister(self, service_name):
+    def preServiceRegister(self, service_name: str) -> None:
         self.LISTENERHOLDER_CALLBACK("preServiceRegister", service_name)
         return
 
@@ -911,7 +911,7 @@ class LocalServiceActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void postServiceRegister(std::string service_name,
     #                                  RTM::LocalServiceBase* service);
 
-    def postServiceRegister(self, service_name, service):
+    def postServiceRegister(self, service_name: str, service) -> None:
         self.LISTENERHOLDER_CALLBACK(
             "postServiceRegister", service_name, service)
         return
@@ -927,7 +927,7 @@ class LocalServiceActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void preServiceInit(coil::Properties& prop,
     #                             RTM::LocalServiceBase* service);
 
-    def preServiceInit(self, prop, service):
+    def preServiceInit(self, prop, service: str) -> None:
         self.LISTENERHOLDER_CALLBACK("preServiceInit", prop, service)
         return
 
@@ -942,7 +942,7 @@ class LocalServiceActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void postServiceInit(coil::Properties& prop,
     #                              RTM::LocalServiceBase* service);
 
-    def postServiceInit(self, prop, service):
+    def postServiceInit(self, prop, service: str) -> None:
         self.LISTENERHOLDER_CALLBACK("postServiceInit", prop, service)
         return
 
@@ -957,7 +957,7 @@ class LocalServiceActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void preServiceReinit(coil::Properties& prop,
     #                               RTM::LocalServiceBase* service);
 
-    def preServiceReinit(self, prop, service):
+    def preServiceReinit(self, prop, service: str) -> None:
         self.LISTENERHOLDER_CALLBACK("preServiceReinit", prop, service)
         return
 
@@ -972,7 +972,7 @@ class LocalServiceActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void postServiceReinit(coil::Properties& prop,
     #                                RTM::LocalServiceBase* service);
 
-    def postServiceReinit(self, prop, service):
+    def postServiceReinit(self, prop, service: str) -> None:
         self.LISTENERHOLDER_CALLBACK("postServiceReinit", prop, service)
         return
 
@@ -987,7 +987,7 @@ class LocalServiceActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void preServiceFinalize(std::string service_name,
     #                                 RTM::LocalServiceBase* service);
 
-    def preServiceFinalize(self, service_name, service):
+    def preServiceFinalize(self, service_name, service: str) -> None:
         self.LISTENERHOLDER_CALLBACK(
             "preServiceFinalize", service_name, service)
         return
@@ -1003,7 +1003,7 @@ class LocalServiceActionListenerHolder(OpenRTM_aist.ListenerHolder):
     # virtual void postServiceFinalize(std::string service_name,
     #                                  RTM::LocalServiceBase* service);
 
-    def postServiceFinalize(self, service_name, service):
+    def postServiceFinalize(self, service_name, service: str) -> None:
         self.LISTENERHOLDER_CALLBACK(
             "postServiceFinalize", service_name, service)
         return
@@ -1025,7 +1025,7 @@ class ManagerActionListeners:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.manager_ = ManagerActionListenerHolder()
         self.module_ = ModuleActionListenerHolder()
         self.rtclifecycle_ = RtcLifecycleActionListenerHolder()
