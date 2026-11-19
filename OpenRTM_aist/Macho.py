@@ -358,11 +358,11 @@ class _StateInstance(object):
         if original.myBox:
             self.cloneBox(original.myBox)
 
-    def clone(self, newMachine) -> None:
+    def clone(self, newMachine) -> '_StateInstance':
         parent = None
         if self.myParent:
             parent = newMachine.createClone(self.myParent.id(), self.myParent)
-        _ = self.create(newMachine, parent)
+        return self.create(newMachine, parent)
 
     def shutdown(self) -> None:
         self.mySpecification._shutdown()
@@ -469,8 +469,8 @@ class _SubstateInstance(_StateInstance):
     def name(self):
         return self.SUPER._state_name()
 
-    def create(self, machine, parent) -> None:
-        _SubstateInstance(machine, parent, self.SUPER)
+    def create(self, machine, parent) -> '_SubstateInstance':
+        return _SubstateInstance(machine, parent, self.SUPER)
 
     def createBox(self) -> None:
         if not self.myBox:
@@ -937,6 +937,9 @@ class _MachineBase(object):
     def getInstances(self):
         return self.myInstances
 
+    def getInstance(self, id):
+        return self.myInstances[id]
+
     def start(self, instance, *args) -> None:
         #global _theDefaultInitializer
         self.myCurrentState = _StateSpecification._getInstance(self)
@@ -969,12 +972,14 @@ class _MachineBase(object):
 
     def copy(self, other, count) -> None:
         for i in range(count):
+            self.createClone(i, other[i])
+        for i in range(count):
             state = self.myInstances[i]
             if state:
                 state.copy(other[i])
 
     def createClone(self, id, original):
-        clone = self.getInstances
+        clone = self.getInstances()
         if not clone[id] and original:
             clone[id] = original.clone(self)
         return clone[id]
@@ -1070,8 +1075,8 @@ class Snapshot(_MachineBase):
     def __init__(self, machine) -> None:
         super(Snapshot, self).__init__()
         self.allocate(Machine.theStateCount)
-        self.copy(machine.myInstances, Machine.theStateCounta)
-        self.myCurrentState = self.getInstances[machine.myCurrentState.id()]
+        self.copy(machine.myInstances, Machine.theStateCount)
+        self.myCurrentState = self.getInstances()[machine.myCurrentState.id()]
 
     def __del__(self) -> None:
         self.free(Machine.theStateCount)
@@ -1236,7 +1241,9 @@ def _deleteBox(box, place):
 
 
 def _cloneBox(other):
-    return _EmptyBox.theEmptyBox
+    if other is _EmptyBox.theEmptyBox:
+        return other
+    return copy.deepcopy(other)
 
 
 def TopBase(TOP):
