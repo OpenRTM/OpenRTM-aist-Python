@@ -1355,27 +1355,25 @@ class ManagerServant(RTM__POA.Manager):
     # @endif
     # std::string getParameterByModulename(string param_name, string
     # &module_name)
-    def getParameterByModulename(self, param_name: str, module_name: str):
-        param_start = module_name.find(param_name + "=")
 
-        if param_start < 0:
+    def getParameterByModulename(self, param_name: str, module_name: str):
+        base, separator, query = module_name.partition("?")
+        if not separator:
+            base, separator, query = module_name.partition("&")
+        if not separator:
             return "", module_name
 
-        param_end = module_name.find("&", param_start)
-
-        if param_end < 0:
-            param_end = len(module_name)
-
-        param_value = module_name[param_start + len(param_name) + 1:param_end]
-
-        self._rtcout.RTC_DEBUG("%s is %s", (param_name, param_value))
-
-        if module_name[param_start - 1] == "?":
-            module_name = module_name[:param_start] + module_name[param_end:]
-        elif module_name[param_start - 1] == "&":
-            module_name = module_name[:param_start - 1] + module_name[param_end:]
-
-        return param_value, module_name
+        parameters = query.split("&")
+        for index, parameter in enumerate(parameters):
+            key, equals, value = parameter.partition("=")
+            if equals and key == param_name:
+                remaining = parameters[:index] + parameters[index + 1:]
+                suffix = separator + "&".join(remaining) if remaining else ""
+                if not remaining and separator == "?":
+                    suffix = "?"
+                self._rtcout.RTC_DEBUG("%s is %s", (param_name, value))
+                return value, base + suffix
+        return "", module_name
 
     ##
     # @if jp
