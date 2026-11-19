@@ -26,14 +26,9 @@ import RTC
 import math
 import time
 import sys
-if sys.version_info[0] == 2:
-    from Tix import (
-        BOTH, Button, Canvas, Checkbutton, DoubleVar, E, END, Entry, Frame, GROOVE, HORIZONTAL, LEFT, Label, LabelFrame, Listbox, N, OptionMenu, RIGHT, S, Scale, Scrollbar, StringVar, TOP, TRUE, Tk, Toplevel, VERTICAL, W, X,
-    )
-else:
-    from tkinter.tix import (
-        BOTH, Button, Canvas, Checkbutton, DoubleVar, E, END, Entry, Frame, GROOVE, HORIZONTAL, LEFT, Label, LabelFrame, Listbox, N, OptionMenu, RIGHT, S, Scale, Scrollbar, StringVar, TOP, TRUE, Tk, Toplevel, VERTICAL, W, X,
-    )
+from tkinter.tix import (
+    BOTH, Button, Canvas, Checkbutton, DoubleVar, E, END, Entry, Frame, GROOVE, HORIZONTAL, LEFT, Label, LabelFrame, Listbox, N, OptionMenu, RIGHT, S, Scale, Scrollbar, StringVar, TOP, TRUE, Tk, Toplevel, VERTICAL, W, X,
+)
 
 # Import RTM module
 # This module's spesification
@@ -327,10 +322,7 @@ class SimulatedObject:
         return self.simulator.get_tick()
 
 
-if sys.version_info[0] == 2:
-    import tkSimpleDialog
-else:
-    import tkinter.simpledialog as tkSimpleDialog
+import tkinter.simpledialog as tkSimpleDialog
 
 
 class PropertyDialog:
@@ -840,10 +832,7 @@ class TkMobileRobot(Frame):
         om = OptionMenu(frame, label="Type: ", variable=self.robot_kind_var)
         for opt in self.robot_factory.keys():
             om.add_command(opt, label=opt)
-        if sys.version_info[0] == 2:
-            self.robot_kind_var.set(self.robot_factory.keys()[0])
-        else:
-            self.robot_kind_var.set(list(self.robot_factory.keys())[0])
+        self.robot_kind_var.set(list(self.robot_factory.keys())[0])
 
         creater = Button(frame, text="Create", command=self.create_robot)
         deleter = Button(frame, text="Delete", command=self.delete_robot)

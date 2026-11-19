@@ -19,10 +19,7 @@
 import OpenRTM_aist
 import sys
 
-if sys.version_info[0] == 2:
-    maxint = sys.maxsize
-else:
-    maxint = sys.maxsize
+maxint = sys.maxsize
 
 
 ##

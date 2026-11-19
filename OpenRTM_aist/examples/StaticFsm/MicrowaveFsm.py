@@ -13,8 +13,6 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
-from __future__ import print_function
-
 
 import RTC
 import OpenRTM_aist.StaticFSM as StaticFSM

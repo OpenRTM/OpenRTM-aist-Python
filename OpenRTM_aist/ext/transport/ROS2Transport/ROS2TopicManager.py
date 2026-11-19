@@ -45,7 +45,7 @@ mutex = threading.RLock()
 # @endif
 
 
-class ROS2TopicManager(object):
+class ROS2TopicManager:
     """
     """
 

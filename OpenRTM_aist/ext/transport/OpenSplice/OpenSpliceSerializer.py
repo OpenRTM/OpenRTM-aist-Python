@@ -25,7 +25,6 @@ import RTC
 import ddsutil
 import os
 import site
-import sys
 
 
 ##
@@ -69,10 +68,6 @@ def OmniDataToDDSData(data, gen_info):
         return arg
 
 
-if sys.version_info[0] == 3:
-    long = int
-
-
 ##
 # @if jp
 # @brief OpenSpliceのデータからomniORBのデータに変換
@@ -96,8 +91,6 @@ def DDSDataToOmniData(ddsdata, omnidata) -> None:
     for k in ddsdata._members.keys():
         v = ddsdata.__dict__[k]
         if isinstance(v, int):
-            omnidata.__dict__[k] = v
-        elif isinstance(v, long):
             omnidata.__dict__[k] = v
         elif isinstance(v, float):
             omnidata.__dict__[k] = v

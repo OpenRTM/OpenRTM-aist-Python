@@ -17,7 +17,6 @@
 # $Id$
 #
 
-import sys
 import OpenRTM_aist
 from omniORB import cdrMarshal
 from omniORB import cdrUnmarshal
@@ -139,15 +138,9 @@ class CORBA_CdrMemoryStream(OpenRTM_aist.ByteDataStreamBase):
                     any.to_any(data).typecode(), data, self._endian)
                 return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, cdr
             except BaseException:
-                if sys.version_info[0] == 3:
-                    return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR, b""
-                else:
-                    return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR, ""
+                return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_ERROR, b""
         else:
-            if sys.version_info[0] == 3:
-                return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, b""
-            else:
-                return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, ""
+            return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_NOT_SUPPORT_ENDIAN, b""
 
     ##
     # @if jp

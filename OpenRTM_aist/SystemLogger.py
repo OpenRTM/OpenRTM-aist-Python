@@ -14,7 +14,6 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
-import sys
 import traceback
 
 import threading
@@ -130,12 +129,7 @@ class Logger:
     # @endif
 
     def print_exception():
-        if sys.version_info[0:3] >= (2, 4, 0):
-            return traceback.format_exc()
-        else:
-            _exc_list = traceback.format_exception(*sys.exc_info())
-            _exc_str = "".join(_exc_list)
-            return _exc_str
+        return traceback.format_exc()
 
     print_exception = staticmethod(print_exception)
 

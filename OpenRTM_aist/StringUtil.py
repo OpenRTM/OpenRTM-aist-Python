@@ -15,12 +15,8 @@
 #     All rights reserved.
 
 import os
-import sys
 import glob
 import typing as _typing
-
-if sys.version_info[0] == 3:
-    long = int
 
 
 ##
@@ -494,8 +490,7 @@ def isURL(str: str) -> bool:
 # @brief Convert the given object to st::string.
 # @endif
 def otos(n):
-    if isinstance(n, int) or isinstance(n, str) or isinstance(
-            n, long) or isinstance(n, float):
+    if isinstance(n, (int, str, float)):
         return str(n)
 
 
@@ -532,8 +527,6 @@ def _stringToList(_type: list, _str: str):
     for i, l in enumerate(list_):
         if isinstance(_type[i], int):
             _type[i] = int(l)
-        elif isinstance(_type[i], long):
-            _type[i] = long(l)
         elif isinstance(_type[i], float):
             _type[i] = float(l)
         elif isinstance(_type[i], str):
@@ -565,9 +558,6 @@ def stringTo(_type, _str: str):
     try:
         if isinstance(_type, int):
             _type = int(_str)
-            return True, _type
-        elif isinstance(_type, long):
-            _type = long(_str)
             return True, _type
         elif isinstance(_type, float):
             _type = float(_str)

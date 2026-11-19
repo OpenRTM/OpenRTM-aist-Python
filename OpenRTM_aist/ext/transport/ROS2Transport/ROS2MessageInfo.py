@@ -33,7 +33,7 @@ import OpenRTM_aist
 # @endif
 
 
-class ROS2MessageInfoBase(object):
+class ROS2MessageInfoBase:
     ##
     # @if jp
     # @brief コンストラクタ

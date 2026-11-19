@@ -38,7 +38,7 @@ class _KeyData:
         self.id = 0
 
 
-class _StateSpecification(object):
+class _StateSpecification:
     HISTORY = False
 
     def __init__(self, instance) -> None:
@@ -301,7 +301,7 @@ class StateID:
     value = 0
 
 
-class _StateInstance(object):
+class _StateInstance:
     def __init__(self, machine, parent) -> None:
         self.myMachine = machine
         self.mySpecification = None
@@ -876,7 +876,7 @@ _theDefaultInitializer = _DefaultInitializer()
 _theHistoryInitializer = _HistoryInitializer()
 
 
-class _MachineBase(object):
+class _MachineBase:
     def __init__(self) -> None:
         self.myCurrentState = None
         self.myPendingState = None
@@ -1179,7 +1179,7 @@ class Machine(_MachineBase):
     def getCurrent(self):
         spec = self.myCurrentState.specification()
 
-        class EventDelegator(object):
+        class EventDelegator:
             def __init__(self) -> None:
                 pass
         ed = EventDelegator()
@@ -1191,7 +1191,7 @@ class Machine(_MachineBase):
             if not isinstance(getattr(spec, name), types.MethodType):
                 continue
 
-            class Spec_Func(object):
+            class Spec_Func:
                 def __init__(self, spec, name: str, machine) -> None:
                     self._spec = spec
                     self._name = name
@@ -1398,7 +1398,7 @@ def State(S):
     return S
 
 
-class logger(object):
+class logger:
     rtcout = None
 
     def __init__(self) -> None:

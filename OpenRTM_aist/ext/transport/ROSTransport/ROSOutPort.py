@@ -23,10 +23,6 @@ import ROSMessageInfo
 import xmlrpc.client as xmlrpclib
 from rosgraph.network import write_ros_handshake_header
 import rosgraph.network
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO, BytesIO
 import socket
 import select
 import time

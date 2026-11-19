@@ -37,7 +37,7 @@ import OpenRTM_aist
 # @endif
 
 
-class DelayedFunction(object):
+class DelayedFunction:
     ##
     # @if jp
     # @brief コンストラクタ
@@ -93,7 +93,7 @@ class DelayedFunction(object):
 # @endif
 
 
-class PeriodicFunction(object):
+class PeriodicFunction:
     ##
     # @if jp
     # @brief コンストラクタ
@@ -181,7 +181,7 @@ class PeriodicFunction(object):
 # TODO: The "object" class inheritance must be removed in Python3
 
 
-class Timer(object):
+class Timer:
     """
     """
 

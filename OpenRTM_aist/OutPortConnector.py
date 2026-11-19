@@ -299,7 +299,7 @@ class OutPortConnector(OpenRTM_aist.ConnectorBase):
 #
 # @endif
 #
-class ReadListenerBase(object):
+class ReadListenerBase:
     ##
     # @if jp
     # @brief 仮想コールバック関数
@@ -333,7 +333,7 @@ class ReadListenerBase(object):
 #
 
 
-class IsReadableListenerBase(object):
+class IsReadableListenerBase:
     ##
     # @if jp
     # @brief 仮想コールバック関数

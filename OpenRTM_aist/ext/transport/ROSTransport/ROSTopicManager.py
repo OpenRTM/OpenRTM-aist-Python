@@ -23,14 +23,10 @@ from rosgraph.network import read_ros_handshake_header
 import time
 import socket
 import select
-import sys
 import os
 import typing as _typing
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import BytesIO
+from io import BytesIO
 
 
 manager = None
@@ -370,12 +366,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
                 (client_sock, _) = self._server_sock.accept()
                 self.addSubscriberLink(client_sock)
 
-                if sys.version_info[0] == 3:
-                    header = read_ros_handshake_header(
-                        client_sock, BytesIO(), 65536)
-                else:
-                    header = read_ros_handshake_header(
-                        client_sock, StringIO(), 65536)
+                header = read_ros_handshake_header(
+                    client_sock, BytesIO(), 65536)
 
                 fileno = client_sock.fileno()
                 poller = None

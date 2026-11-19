@@ -21,12 +21,8 @@ import OpenRTM_aist
 import RTC
 import typing as _typing
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO, BytesIO
+from io import BytesIO
 
-import sys
 import struct
 import ROSMessageInfo
 
@@ -75,10 +71,7 @@ from sensor_msgs.msg import Image
 # @endif
 #
 def ros_serialize(msg):
-    if sys.version_info[0] == 3:
-        buf = BytesIO()
-    else:
-        buf = StringIO()
+    buf = BytesIO()
 
     start = buf.tell()
     buf.seek(start + 4)
@@ -114,10 +107,7 @@ def ros_serialize(msg):
 # @endif
 #
 def ros_deserialize(bdata, message_type: '_typing.Callable[..., object]'):
-    if sys.version_info[0] == 3:
-        buf = BytesIO()
-    else:
-        buf = StringIO()
+    buf = BytesIO()
 
     buf.write(bdata)
     buf.seek(0)

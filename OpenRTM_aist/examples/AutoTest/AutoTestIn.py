@@ -7,7 +7,6 @@
 # @date $Date$
 #
 
-from __future__ import print_function
 import AutoTest__POA
 import AutoTest
 import os.path

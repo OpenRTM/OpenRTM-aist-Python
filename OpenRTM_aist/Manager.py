@@ -2869,20 +2869,14 @@ class Manager:
 
         try:
             while True:
-                if sys.version_info[0] == 2:
-                    n = next(it)
-                else:
-                    n = it.__next__()
+                n = next(it)
                 if n == '%':
                     count += 1
                     if not (count % 2):
                         str_ += n
                 elif n == '$':
                     count = 0
-                    if sys.version_info[0] == 2:
-                        n = next(it)
-                    else:
-                        n = it.__next__()
+                    n = next(it)
                     if n == '{' or n == '(':
                         n = next(it)
                         env = ""
@@ -2890,10 +2884,7 @@ class Manager:
                             if n == '}' or n == ')':
                                 break
                             env += n
-                            if sys.version_info[0] == 2:
-                                n = next(it)
-                            else:
-                                n = it.__next__()
+                            n = next(it)
                         envval = os.getenv(env)
                         if envval:
                             str_ += envval

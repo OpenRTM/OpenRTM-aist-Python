@@ -20,7 +20,6 @@
 #
 
 import typing as _typing
-import sys
 import time
 import math
 import os
@@ -29,8 +28,6 @@ import OpenRTM_aist
 
 ULLONG_MAX = 0xffffffffffffffff
 
-if sys.version_info[0] == 3:
-    long = int
 
 ##
 # @if jp
@@ -75,9 +72,9 @@ class Time:
     # @endif
     def __init__(self) -> None:
         tm = time.time()
-        tm_f = float(tm - long(tm))     # 小数部の取り出し
-        self.sec = long(tm - tm_f)   # 整数部の取り出し
-        self.usec = long(float(tm_f) * float(usec_per_sec)
+        tm_f = float(tm - int(tm))     # 小数部の取り出し
+        self.sec = int(tm - tm_f)   # 整数部の取り出し
+        self.usec = int(float(tm_f) * float(usec_per_sec)
                          )  # sec -> usec (micro second)
         self._timevalue = OpenRTM_aist.TimeValue(self.sec, self.usec)
         return
@@ -120,9 +117,9 @@ class Time:
     def gettimeofday(self):
 
         tm = time.time()
-        tm_f = float(tm - long(tm))     # 小数部の取り出し
-        self.sec = long(float(tm) - float(tm_f))   # 整数部の取り出し
-        self.usec = long(float(tm_f) * float(usec_per_sec)
+        tm_f = float(tm - int(tm))     # 小数部の取り出し
+        self.sec = int(float(tm) - float(tm_f))   # 整数部の取り出し
+        self.usec = int(float(tm_f) * float(usec_per_sec)
                          )  # sec -> usec (micro second)
         return OpenRTM_aist.TimeValue(self.sec, self.usec)
 
@@ -150,7 +147,7 @@ class Time:
                 _fields_ = [('low', c_ulong),
                             ('high', c_long)]
 
-            tm = long(tv.tv_sec * 1e6) + long(tv.tv_usec)
+            tm = int(tv.tv_sec * 1e6) + int(tv.tv_usec)
             st = SYSTEMTIME(0, 0, 0, 0, 0, 0, 0, 0)
             ft = LARGE_INTEGER(tm & 0xFFFFFFFF, tm >> 32)
             # 100 nanosecond units (since 16010101)
