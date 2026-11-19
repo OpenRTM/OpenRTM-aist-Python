@@ -20,13 +20,11 @@
 import OpenRTM_aist
 import omniORB
 
-import struct
 import OpenSpliceMessageInfo
 import RTC
 import ddsutil
 import os
 import site
-import sys
 
 
 ##
@@ -70,10 +68,6 @@ def OmniDataToDDSData(data, gen_info):
         return arg
 
 
-if sys.version_info[0] == 3:
-    long = int
-
-
 ##
 # @if jp
 # @brief OpenSpliceのデータからomniORBのデータに変換
@@ -93,12 +87,10 @@ if sys.version_info[0] == 3:
 # @param omnidata
 #
 # @endif
-def DDSDataToOmniData(ddsdata, omnidata):
+def DDSDataToOmniData(ddsdata, omnidata) -> None:
     for k in ddsdata._members.keys():
         v = ddsdata.__dict__[k]
         if isinstance(v, int):
-            omnidata.__dict__[k] = v
-        elif isinstance(v, long):
             omnidata.__dict__[k] = v
         elif isinstance(v, float):
             omnidata.__dict__[k] = v
@@ -137,7 +129,7 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -152,7 +144,7 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -232,7 +224,7 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
     # @return
     #
     # @endif
-    def deserialize(self, bdata, data_type):
+    def deserialize(self, bdata, data_type: 'RTC.TimedLong'):
         try:
             DDSDataToOmniData(bdata, data_type)
             return OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK, data_type
@@ -259,7 +251,7 @@ class OpenSpliceSerializer(OpenRTM_aist.ByteDataStreamBase):
 # @endif
 
 
-def addDataType(datatype, idlfile):
+def addDataType(datatype, idlfile) -> None:
     name = datatype._NP_RepositoryId
     data_name = name.split(":")[1]
     data_name = data_name.replace("/", "::")
@@ -279,7 +271,7 @@ def addDataType(datatype, idlfile):
 #
 # @endif
 #
-def OpenSpliceSerializerInit():
+def OpenSpliceSerializerInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializerGlobal("opensplice",
                                                                     OpenSpliceSerializer)
 

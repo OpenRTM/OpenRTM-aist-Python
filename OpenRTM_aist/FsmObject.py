@@ -50,7 +50,7 @@ class FsmObject_impl(RTC__POA.FsmObject):
     #
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -83,5 +83,5 @@ class FsmObject_impl(RTC__POA.FsmObject):
     #
     #
     # @endif
-    def send_stimulus(self, ids, id):
+    def send_stimulus(self, ids: str, id: int):
         return RTC.RTC_OK

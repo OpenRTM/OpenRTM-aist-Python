@@ -48,7 +48,7 @@ class DataPortStatus:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -175,7 +175,7 @@ class DataPortStatus:
     #
     # @endif
     #
-    def toString(status):
+    def toString(status: int):
         typeString = ["PORT_OK",
                       "PORT_ERROR",
                       "BUFFER_ERROR",

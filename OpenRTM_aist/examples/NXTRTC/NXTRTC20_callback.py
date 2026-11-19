@@ -2,7 +2,6 @@
 # -*- coding:utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import NXTBrick20
 import OpenRTM_aist
 import RTC
@@ -84,7 +83,7 @@ class NXTRTC(OpenRTM_aist.DataFlowComponentBase):
         # create NXTBrick object
         try:
             print("Connecting to NXT brick ....")
-            self._nxtbrick = NXTBrick.NXTBrick()
+            self._nxtbrick = NXTBrick20.NXTBrick()
             print("Connection established.")
         except BaseException:
             print("NXTBrick connection failed.")
@@ -140,7 +139,7 @@ def MyModuleInit(manager):
     NXTRTC_callbackInit(manager)
 
     # Create a component
-    comp = manager.createComponent("NXTRTC")
+    _ = manager.createComponent("NXTRTC")
 
 
 def main():

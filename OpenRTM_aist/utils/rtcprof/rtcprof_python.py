@@ -16,13 +16,14 @@
 #
 # $Id$
 
+import typing as _typing
 import sys
 import os
 
 import OpenRTM_aist
 
 
-def main():
+def main() -> '_typing.Optional[OpenRTM_aist.Properties]':
 
     if len(sys.argv) != 2:
         print("usage: ")
@@ -101,7 +102,7 @@ def main():
 
     # loaded component profile have to be one
     if not profs:
-        print("Load failed. file name: ", fname)
+        print("Load failed. file name: ", basename)
         sys.path = tmp_path
         return OpenRTM_aist.Properties()
 

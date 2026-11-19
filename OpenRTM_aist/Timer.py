@@ -37,7 +37,7 @@ import OpenRTM_aist
 # @endif
 
 
-class DelayedFunction(object):
+class DelayedFunction:
     ##
     # @if jp
     # @brief コンストラクタ
@@ -50,7 +50,7 @@ class DelayedFunction(object):
     # @return delay: the delay until function call
     #
     # @endif
-    def __init__(self, function, delay):
+    def __init__(self, function, delay: 'OpenRTM_aist.TimeValue') -> None:
         self._fn = function
         self._remains = delay
     ##
@@ -69,7 +69,7 @@ class DelayedFunction(object):
     #              false: The function is unexpired.
     # @endif
 
-    def tick(self, interval):
+    def tick(self, interval: 'OpenRTM_aist.TimeValue'):
         self._remains -= interval
         is_expired = (self._remains.toDouble() <= 0.0)
         if is_expired:
@@ -93,7 +93,7 @@ class DelayedFunction(object):
 # @endif
 
 
-class PeriodicFunction(object):
+class PeriodicFunction:
     ##
     # @if jp
     # @brief コンストラクタ
@@ -107,7 +107,7 @@ class PeriodicFunction(object):
     #
     #
     # @endif
-    def __init__(self, function, period):
+    def __init__(self, function, period: 'OpenRTM_aist.TimeValue') -> None:
         self._fn = function
         self._remains = period
         self._period = period
@@ -128,8 +128,8 @@ class PeriodicFunction(object):
     # @return
     # @endif
 
-    def tick(self, interval):
-        guard = OpenRTM_aist.ScopedLock(self._lock)
+    def tick(self, interval: 'OpenRTM_aist.TimeValue') -> bool:
+        _ = OpenRTM_aist.ScopedLock(self._lock)
         if self._isRemoved:
             return True
         self._remains -= interval
@@ -153,8 +153,8 @@ class PeriodicFunction(object):
     #
     # @endif
 
-    def stop(self):
-        guard = OpenRTM_aist.ScopedLock(self._lock)
+    def stop(self) -> None:
+        _ = OpenRTM_aist.ScopedLock(self._lock)
         self._isRemoved = True
 
 ##
@@ -179,7 +179,9 @@ class PeriodicFunction(object):
 # @endif
 
 # TODO: The "object" class inheritance must be removed in Python3
-class Timer(object):
+
+
+class Timer:
     """
     """
 
@@ -203,7 +205,7 @@ class Timer(object):
     #
     # @endif
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._lock = threading.RLock()
         self._tasks = []
         return
@@ -225,7 +227,7 @@ class Timer(object):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -243,7 +245,7 @@ class Timer(object):
     # @return bool true only
     #
     # @endif
-    def tick(self, interval):
+    def tick(self, interval: 'OpenRTM_aist.TimeValue') -> None:
         guard = OpenRTM_aist.ScopedLock(self._lock)
         tasks = self._tasks[:]
         del guard
@@ -285,7 +287,7 @@ class DelayedTimer(Timer):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         super(DelayedTimer, self).__init__()
 
     ##
@@ -306,7 +308,7 @@ class DelayedTimer(Timer):
     #
     # @endif
     def emplace(self, fn, *args):
-        guard = OpenRTM_aist.ScopedLock(self._lock)
+        _ = OpenRTM_aist.ScopedLock(self._lock)
         funcobj = DelayedFunction(fn, *args)
         self._tasks.append(funcobj)
         return funcobj
@@ -341,7 +343,7 @@ class PeriodicTimer(Timer):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         super(PeriodicTimer, self).__init__()
 
     ##
@@ -362,7 +364,7 @@ class PeriodicTimer(Timer):
     #
     # @endif
     def emplace(self, fn, *args):
-        guard = OpenRTM_aist.ScopedLock(self._lock)
+        _ = OpenRTM_aist.ScopedLock(self._lock)
         funcobj = PeriodicFunction(fn, *args)
         self._tasks.append(funcobj)
         return funcobj

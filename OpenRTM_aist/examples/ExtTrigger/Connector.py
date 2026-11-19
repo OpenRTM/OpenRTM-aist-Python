@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import sys
 
 from omniORB import CORBA
@@ -45,7 +44,7 @@ def main():
             inobj = conin.getObject()._narrow(RTC.RTObject)
             pin = inobj.get_ports()
             break
-        except:
+        except BaseException:
             time.sleep(0.1)
 
     pin[0].disconnect_all()
@@ -63,7 +62,7 @@ def main():
             outobj = conout.getObject()._narrow(RTC.RTObject)
             pout = outobj.get_ports()
             break
-        except:
+        except BaseException:
             time.sleep(0.1)
 
     pout[0].disconnect_all()

@@ -3,7 +3,6 @@
 # -*- Python -*-
 
 
-from __future__ import print_function
 import sys
 import time
 
@@ -126,7 +125,7 @@ def MyModuleInit(manager):
     ConsoleOutDoubleInit(manager)
 
     # Create a component
-    comp = manager.createComponent("ConsoleOutDouble")
+    _ = manager.createComponent("ConsoleOutDouble")
 
 
 def main():

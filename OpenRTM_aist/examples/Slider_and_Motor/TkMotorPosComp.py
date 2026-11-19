@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import time
 import tkmotor
 import OpenRTM_aist
@@ -81,7 +80,7 @@ def MyModuleInit(manager):
     TkMotorPosCompInit(manager)
 
     # Create a component
-    comp = manager.createComponent("TkMotorPosComp")
+    _ = manager.createComponent("TkMotorPosComp")
 
     print("Componet created")
 

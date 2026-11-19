@@ -16,6 +16,7 @@
 #  $Id: rtc-template 1815 2010-01-27 20:26:57Z n-ando $
 #
 
+import typing as _typing
 import getopt
 import sys
 import time
@@ -204,7 +205,7 @@ rtcProfile:
 
 
 class Struct:
-    def __init__(self):
+    def __init__(self) -> None:
         return
 
 
@@ -240,7 +241,7 @@ opt_args_fmt = ["help",
                 "backend="]
 
 
-def usage_short():
+def usage_short() -> None:
     """
     Help message
     """
@@ -273,7 +274,7 @@ Options:
 """)
 
 
-def usage_long():
+def usage_long() -> None:
     """
     Help message
     """
@@ -381,7 +382,7 @@ Example:
     return
 
 
-def usage():
+def usage() -> None:
     usage_short()
     usage_long()
     return
@@ -533,10 +534,7 @@ def CreateConfigurationSet(opts):
                 type = re.sub("@@", "::", type)
                 default = re.sub("@@", "::", default)
             except BaseException:
-                sys.stderr.write("Invalid option: "
-                                 + opt
-                                 + "="
-                                   + arg)
+                sys.stderr.write("Invalid option: " + opt + "=" + arg)
             tmp = copy.deepcopy(prof)
             tmp["name"] = name
             tmp["varname"] = name
@@ -588,10 +586,7 @@ def CreateDataPorts(opts):
                 name = re.sub("@@", "::", name)
                 type = re.sub("@@", "::", type)
             except BaseException:
-                sys.stderr.write("Invalid option: "
-                                 + opt
-                                 + "="
-                                   + arg)
+                sys.stderr.write("Invalid option: " + opt + "=" + arg)
             tmp = copy.deepcopy(prof)
             tmp["name"] = name
             tmp["portType"] = portType[opt]
@@ -644,13 +639,13 @@ def CreateServicePorts(opts):
         }
     }
 
-    def findport(prof_list, port_name):
+    def findport(prof_list, port_name: str):
         for p in prof_list:
             if p["name"] == port_name:
                 return p
         return None
 
-    def lr(port):
+    def lr(port: dict) -> str:
         cnt = {"Provided": 0, "Required": 0}
         for ifprof in port["serviceInterface"]:
             cnt[ifprof["direction"]] += 1
@@ -670,10 +665,7 @@ def CreateServicePorts(opts):
                 name = re.sub("@@", "::", name)
                 type = re.sub("@@", "::", type)
             except BaseException:
-                sys.stderr.write("Invalid option: "
-                                 + opt
-                                 + "="
-                                   + arg)
+                sys.stderr.write("Invalid option: " + opt + "=" + arg)
             port = findport(prof_list, portname)
             if port is None:
                 port = copy.deepcopy(prof)
@@ -698,7 +690,7 @@ def CreateServicePorts(opts):
     return prof_list
 
 
-def FindIdlFile(opts, ifname):
+def FindIdlFile(opts, ifname: str) -> '_typing.Optional[str]':
     _re_text = r"interface\s+" + ifname
     for opt, arg in opts:
         if opt == "--service-idl" or opt == "--consumer-idl":
@@ -708,14 +700,14 @@ def FindIdlFile(opts, ifname):
                 print("IDL file not found: ", arg)
                 sys.exit(1)
             t = fd.read()
-            if None != re.compile(_re_text).search(t):
+            if re.compile(_re_text).search(t) is not None:
                 fd.close()
                 return fname
             fd.close()
     return None
 
 
-def PickupIDLFiles(dict):
+def PickupIDLFiles(dict: '_typing.Dict[str, _typing.Any]') -> None:
     svcidls = {}
     cnsidls = {}
     for svc in dict["servicePorts"]:
@@ -740,7 +732,7 @@ def PickupIDLFiles(dict):
     return
 
 
-def CreateId(dict):
+def CreateId(dict: '_typing.Dict[str, _typing.Any]') -> None:
     dict["id"] = "RTC:" + \
         dict["basicInfo"]["vendor"] + "." + \
         dict["basicInfo"]["category"] + "." + \
@@ -748,7 +740,7 @@ def CreateId(dict):
         dict["basicInfo"]["version"]
 
 
-def find_opt(opts, value, default):
+def find_opt(opts, value: str, default: str):
     for opt, arg in opts:
         if opt.find(value) == 0:
             return arg
@@ -756,7 +748,7 @@ def find_opt(opts, value, default):
     return default
 
 
-def find_opt_list(opts, value, default):
+def find_opt_list(opts, value: str, default) -> '_typing.List[str]':
     list = []
     if len(default) > 0:
         list += default
@@ -767,14 +759,14 @@ def find_opt_list(opts, value, default):
 
 
 class Backend:
-    def __init__(self, mod_name, mod):
+    def __init__(self, mod_name: str, mod) -> None:
         self.mod = mod
         self.obj = getattr(mod, mod_name)
         self.mod_name = mod_name
 
 
 class BackendLoader:
-    def __init__(self):
+    def __init__(self) -> None:
         self.backends = {}
         self.opts = []
         self.available()
@@ -815,13 +807,13 @@ class BackendLoader:
                     sys.exit(-1)
         return self.opts
 
-    def get_opt_fmts(self):
+    def get_opt_fmts(self) -> '_typing.List[str]':
         fmts = []
         for be in self.opts:
             fmts += self.backends[be].mod.get_opt_fmt()
         return fmts
 
-    def usage_available(self):
+    def usage_available(self) -> None:
         print("The following backends are available.")
         space = 10
         for key in self.backends:
@@ -833,25 +825,25 @@ Backend [xxx] specific help can be available by the following options.
         """)
         return
 
-    def usage(self):
+    def usage(self) -> None:
         for be in self.opts:
             print(self.backends[be].mod.usage())
             print("")
         return
 
-    def usage_short(self):
+    def usage_short(self) -> None:
         for be in self.opts:
             print(self.backends[be].mod.usage_short())
             print("")
         return
 
-    def generate_code(self, data, opts):
+    def generate_code(self, data, opts) -> None:
         for be in self.opts:
             self.backends[be].obj(data, opts).print_all()
         return
 
 
-def fmtd_args(width, args):
+def fmtd_args(width: int, args) -> str:
     arg_fmt = [""]
     w = 0
     line = 0
@@ -865,7 +857,7 @@ def fmtd_args(width, args):
     return arg_fmt
 
 
-def main():
+def main() -> None:
     global opt_args_fmt
 
     backends = BackendLoader()
@@ -923,7 +915,7 @@ def main():
     CreateId(data)
     PickupIDLFiles(data)
 
-    if not 'fname' in data:
+    if 'fname' not in data:
         data['fname'] = data['basicInfo']['name']
     backends.generate_code(data, opts)
 

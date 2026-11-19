@@ -31,7 +31,7 @@ import OpenRTM_aist
 # @else
 #
 # @endif
-def Delete(rtc):
+def Delete(rtc) -> None:
     del rtc
 
 
@@ -80,7 +80,7 @@ class FactoryBase:
     # @param profile component profile
     #
     # @endif
-    def __init__(self, profile):
+    def __init__(self, profile) -> None:
         # self._Profile Component profile
         self._Profile = profile
         # self._Number Number of current component instances.
@@ -232,7 +232,7 @@ class FactoryPython(FactoryBase):
     # @param policy Pointer to component delete function
     #
     # @endif
-    def __init__(self, profile, new_func, delete_func, policy=None):
+    def __init__(self, profile, new_func, delete_func, policy=None) -> None:
         FactoryBase.__init__(self, profile)
 
         if policy is None:
@@ -305,7 +305,7 @@ class FactoryPython(FactoryBase):
     #
     # @endif
 
-    def destroy(self, comp):
+    def destroy(self, comp) -> None:
         self._Number -= 1
         self._policy.onDelete(comp)
         self._Delete(comp)

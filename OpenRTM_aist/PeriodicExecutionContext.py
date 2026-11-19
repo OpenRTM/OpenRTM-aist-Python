@@ -57,7 +57,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("rtobject.periodic_ec")
         self._rtcout.RTC_TRACE("PeriodicExecutionContext.__init__()")
         OpenRTM_aist.ExecutionContextBase.__init__(self, "periodic_ec")
@@ -68,7 +68,6 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
         self._svcmutex = threading.RLock()
         self._workerthread = self.WorkerThreadCtrl()
 
-        global DEFAULT_PERIOD
         self.setObjRef(self._this())
         self.setKind(RTC.PERIODIC)
         self.setRate(1.0 / DEFAULT_PERIOD)
@@ -91,7 +90,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # @param self　
     # @param Task　
     # @endif
-    def exit(self, Task=OpenRTM_aist.Task):
+    def exit(self, Task=OpenRTM_aist.Task) -> None:
         import OpenRTM_aist.Guard
         self._rtcout.RTC_TRACE("PeriodicExecutionContext.__del__()")
         guard = OpenRTM_aist.Guard.ScopedLock(self._svcmutex)
@@ -122,7 +121,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # @param props
     # @endif
 
-    def init(self, props):
+    def init(self, props: 'OpenRTM_aist.Properties') -> None:
         OpenRTM_aist.ExecutionContextBase.init(self, props)
         self.setCpuAffinity(props)
         self._rtcout.RTC_DEBUG("init() done")
@@ -143,7 +142,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     #
     # @endif
 
-    def svc(self):
+    def svc(self) -> int:
         self._rtcout.RTC_TRACE("svc()")
         count_ = 0
 
@@ -151,7 +150,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
             ret = OpenRTM_aist.setThreadAffinity(self._cpu)
             if ret is False:
                 self._rtcout.RTC_ERROR("CPU affinity mask setting failed")
-                
+
         while self.threadRunning():
             OpenRTM_aist.ExecutionContextBase.invokeWorkerPreDo(self)
             # Thread will stopped when all RTCs are INACTIVE.
@@ -201,7 +200,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     #
     # int PeriodicExecutionContext::open(void *args)
 
-    def open(self, *args):
+    def open(self, *args) -> int:
         self._rtcout.RTC_TRACE("open()")
         self.activate()
         return 0
@@ -229,7 +228,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     #
     # @endif
 
-    def close(self, flags):
+    def close(self, flags: int) -> int:
         self._rtcout.RTC_TRACE("close()")
         return 0
 
@@ -370,7 +369,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     #
     # @endif
 
-    def set_rate(self, rate):
+    def set_rate(self, rate: int):
         return OpenRTM_aist.ExecutionContextBase.setRate(self, rate)
 
     ##
@@ -403,7 +402,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     #
     # @endif
 
-    def activate_component(self, comp):
+    def activate_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.activateComponent(self, comp)
 
     ##
@@ -436,7 +435,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     #
     # @endif
 
-    def deactivate_component(self, comp):
+    def deactivate_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.deactivateComponent(
             self, comp)
 
@@ -469,7 +468,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     #
     # @endif
 
-    def reset_component(self, comp):
+    def reset_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.resetComponent(self, comp)
 
     ##
@@ -494,7 +493,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     #
     # @endif
 
-    def get_component_state(self, comp):
+    def get_component_state(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.getComponentState(self, comp)
 
     ##
@@ -545,7 +544,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     #
     # @endif
 
-    def add_component(self, comp):
+    def add_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.addComponent(self, comp)
 
     ##
@@ -573,7 +572,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     #
     # @endif
 
-    def remove_component(self, comp):
+    def remove_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.removeComponent(self, comp)
 
     ##
@@ -625,25 +624,25 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
     def onStopping(self):
         # stop thread
-        guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
         self._workerthread._running = False
         return RTC.RTC_OK
 
-    def onAddedComponent(self, rtobj):
-        guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
+    def onAddedComponent(self, rtobj: 'RTC._objref_LightweightRTObject'):
+        _ = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
         if self._workerthread._running is False:
             self._worker.updateComponentList()
         return RTC.RTC_OK
 
-    def onRemovedComponent(self, rtobj):
-        guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
+    def onRemovedComponent(self, rtobj: 'RTC._objref_LightweightRTObject'):
+        _ = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
         if self._workerthread._running is False:
             self._worker.updateComponentList()
         return RTC.RTC_OK
 
     # virtual RTC::ReturnCode_t
     # onWaitingActivated(RTC_impl::RTObjectStateMachine* comp, long int count);
-    def onWaitingActivated(self, comp, count):
+    def onWaitingActivated(self, comp, count: int):
         self._rtcout.RTC_TRACE("onWaitingActivated(count = %d)", count)
         self._rtcout.RTC_PARANOID("curr: %s, next: %s",
                                   (self.getStateString(comp.getStates().curr),
@@ -663,7 +662,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # virtual RTC::ReturnCode_t
     # onActivated(RTC_impl::RTObjectStateMachine* comp, long int count);
 
-    def onActivated(self, comp, count):
+    def onActivated(self, comp, count: int):
         self._rtcout.RTC_TRACE("onActivated(count = %d)", count)
         self._rtcout.RTC_PARANOID("curr: %s, next: %s",
                                   (self.getStateString(comp.getStates().curr),
@@ -689,7 +688,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # onWaitingDeactivated(RTC_impl::RTObjectStateMachine* comp, long int
     # count);
 
-    def onWaitingDeactivated(self, comp, count):
+    def onWaitingDeactivated(self, comp, count: int):
         self._rtcout.RTC_TRACE("onWaitingDeactivated(count = %d)", count)
         self._rtcout.RTC_PARANOID("curr: %s, next: %s",
                                   (self.getStateString(comp.getStates().curr),
@@ -707,7 +706,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # virtual RTC::ReturnCode_t
     # onDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count);
 
-    def onDeactivated(self, comp, count):
+    def onDeactivated(self, comp, count: int):
         self._rtcout.RTC_TRACE("onDeactivated(count = %d)", count)
         self._rtcout.RTC_PARANOID("curr: %s, next: %s",
                                   (self.getStateString(comp.getStates().curr),
@@ -743,7 +742,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # virtual RTC::ReturnCode_t
     # onReset(RTC_impl::RTObjectStateMachine* comp, long int count);
 
-    def onReset(self, comp, count):
+    def onReset(self, comp, count: int):
         self._rtcout.RTC_TRACE("onReset(count = %d)", count)
         self._rtcout.RTC_PARANOID("curr: %s, next: %s",
                                   (self.getStateString(comp.getStates().curr),
@@ -761,10 +760,10 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # bool threadRunning()
 
     def threadRunning(self):
-        guard = OpenRTM_aist.ScopedLock(self._svcmutex)
+        _ = OpenRTM_aist.ScopedLock(self._svcmutex)
         return self._svc
 
-    def setCpuAffinity(self, props):
+    def setCpuAffinity(self, props: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("setCpuAffinity()")
 
         affinity_str = props.getProperty("cpu_affinity")
@@ -803,7 +802,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
         # @else
         # @brief Constructor
         # @endif
-        def __init__(self):
+        def __init__(self) -> None:
             self._mutex = threading.RLock()
             self._cond = threading.Condition(self._mutex)
             self._running = False
@@ -821,7 +820,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 # @endif
 
 
-def PeriodicExecutionContextInit(manager):
+def PeriodicExecutionContextInit(manager: 'OpenRTM_aist.Manager') -> None:
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("PeriodicExecutionContext",
                                                                OpenRTM_aist.PeriodicExecutionContext)
     return

@@ -15,6 +15,7 @@
 #     All rights reserved.
 
 
+import typing as _typing
 import copy
 
 
@@ -83,7 +84,7 @@ class InPort(OpenRTM_aist.InPortBase):
     # @param value A channel value related with the channel.
     #
     # @endif
-    def __init__(self, name, value):
+    def __init__(self, name: str, value) -> None:
         OpenRTM_aist.InPortBase.__init__(
             self, name, OpenRTM_aist.toTypename(value))
         self._name = name
@@ -108,7 +109,7 @@ class InPort(OpenRTM_aist.InPortBase):
             OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ,
             OpenRTM_aist.Timestamp("on_read"))
 
-    def __del__(self, InPortBase=OpenRTM_aist.InPortBase):
+    def __del__(self, InPortBase=OpenRTM_aist.InPortBase) -> None:
         InPortBase.__del__(self)
         return
 
@@ -148,7 +149,7 @@ class InPort(OpenRTM_aist.InPortBase):
     #
     # bool isNew()
 
-    def isNew(self, names=None):
+    def isNew(self, names: _typing.Optional[_typing.Union[_typing.List[str], str]] = None) -> bool:
         self._rtcout.RTC_TRACE("isNew()")
 
         guard = OpenRTM_aist.ScopedLock(self._valueMutex)
@@ -224,7 +225,7 @@ class InPort(OpenRTM_aist.InPortBase):
     #
     # bool isEmpty()
 
-    def isEmpty(self, names=None):
+    def isEmpty(self, names: _typing.Optional[_typing.Union[_typing.List[str], str]] = None) -> bool:
         self._rtcout.RTC_TRACE("isEmpty()")
         if self._directNewData is True:
             return False
@@ -339,7 +340,7 @@ class InPort(OpenRTM_aist.InPortBase):
     #
     #  DataType read()
 
-    def read(self, name=None):
+    def read(self, name: _typing.Optional[str] = None):
         self._rtcout.RTC_TRACE("DataType read()")
 
         if self._OnRead is not None:
@@ -413,7 +414,7 @@ class InPort(OpenRTM_aist.InPortBase):
     #
     # @endif
 
-    def update(self):
+    def update(self) -> None:
         self.read()
 
     ##
@@ -431,7 +432,7 @@ class InPort(OpenRTM_aist.InPortBase):
     #
     # @endif
 
-    def setOnRead(self, on_read):
+    def setOnRead(self, on_read) -> None:
         self._OnRead = on_read
 
     ##
@@ -450,7 +451,7 @@ class InPort(OpenRTM_aist.InPortBase):
     #
     # @endif
 
-    def setOnReadConvert(self, on_rconvert):
+    def setOnReadConvert(self, on_rconvert) -> None:
         self._OnReadConvert = on_rconvert
 
     ##
@@ -468,7 +469,7 @@ class InPort(OpenRTM_aist.InPortBase):
     # @param data
     # @endif
     # void write(const DataType& data)
-    def write(self, data):
+    def write(self, data) -> None:
         guard = OpenRTM_aist.ScopedLock(self._valueMutex)
         self._value = data
         self._directNewData = True

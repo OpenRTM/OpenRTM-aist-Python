@@ -52,7 +52,7 @@ class LogstreamBase:
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -68,7 +68,7 @@ class LogstreamBase:
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -96,7 +96,7 @@ class LogstreamBase:
     # @endif
     #
 
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> bool:
         return False
 
     ##
@@ -121,7 +121,7 @@ class LogstreamBase:
     # @endif
     #
 
-    def log(self, msg, level, name):
+    def log(self, msg: str, level: int, name: str) -> bool:
         return False
 
     ##
@@ -144,7 +144,7 @@ class LogstreamBase:
     # @endif
     #
 
-    def setLogLevel(self, level):
+    def setLogLevel(self, level: int):
         pass
 
     ##
@@ -165,7 +165,7 @@ class LogstreamBase:
     # @endif
     #
 
-    def shutdown(self):
+    def shutdown(self) -> bool:
         return True
 
 
@@ -173,7 +173,7 @@ logstreamfactory = None
 
 
 class LogstreamFactory(OpenRTM_aist.Factory):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
 
     def instance():
