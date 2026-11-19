@@ -14,115 +14,39 @@
 #          All rights reserved.
 #
 
-from __future__ import print_function
-import sys
 import os
-import platform
-import time
+import shutil
 import subprocess
+import sys
+import time
 
-nsport = "2809"
-sysinfo = platform.uname()
-hostname = sysinfo[1]
-plat = sys.platform
 
-if plat == "win32":
-    subprocess.call(
-        'cd \"%RTM_ROOT%\\bin\\\" & start \"\" rtm-naming.bat',
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    time.sleep(5)
-    subprocess.call(
-        "start python ConsoleIn.py",
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    subprocess.call(
-        "start python Consoleout.py",
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    subprocess.call("python Connector.py", shell=True)
+def main():
+    components = ('ConsoleIn.py', 'ConsoleOut.py')
+    if sys.platform == "win32":
+        subprocess.Popen(
+            [os.environ.get("COMSPEC", "cmd.exe"), "/c", "rtm-naming.bat"],
+            cwd=os.path.join(os.environ["RTM_ROOT"], "bin"),
+            creationflags=subprocess.CREATE_NEW_CONSOLE,
+        )
+        time.sleep(5)
+        for component in components:
+            subprocess.Popen([sys.executable, component], creationflags=subprocess.CREATE_NEW_CONSOLE)
+    else:
+        terminal = None
+        for name, option in (("xterm", "-e"), ("kterm", "-e"), ("uxterm", "-e"), ("gnome-terminal", "--")):
+            executable = shutil.which(name)
+            if executable:
+                terminal = [executable, option]
+                break
+        if terminal is None:
+            print("No terminal program (xterm/kterm/uxterm/gnome-terminal) exists.")
+            return
+        subprocess.Popen(["rtm-naming"])
+        for component in components:
+            subprocess.Popen([*terminal, sys.executable, component])
+    subprocess.call([sys.executable, "Connector.py"])
 
-else:
-    p = subprocess.Popen(
-        "which xterm",
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    term, stderr = p.communicate()
-    status = p.returncode
-    term = term.decode('utf-8')
-    term = term.replace("\n", "")
-    term += " -e"
-    if status != 0:
-        p = subprocess.Popen(
-            "which kterm",
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        term, stderr = p.communicate()
-        status = p.returncode
-        term = term.decode('utf-8')
-        term = term.replace("\n", "")
-        term += " -e"
 
-    if status != 0:
-        p = subprocess.Popen(
-            "which uxterm",
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        term, stderr = p.communicate()
-        status = p.returncode
-        term = term.decode('utf-8')
-        term = term.replace("\n", "")
-        term += " -e"
-
-    if status != 0:
-        p = subprocess.Popen(
-            "which gnome-terminal",
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        term, stderr = p.communicate()
-        status = p.returncode
-        term = term.decode('utf-8')
-        term = term.replace("\n", "")
-        term += " -x"
-
-    if status != 0:
-        print("No terminal program (kterm/xterm/gnome-terminal) exists.")
-        sys.exit(0)
-
-    """
-    path = None
-    for p in sys.path:
-      if os.path.exists(os.path.join(p,"OpenRTM_aist")):
-        path = os.path.join(p,"OpenRTM_aist","utils","rtm-naming")
-        break
-    if path is None:
-      print("rtm-naming directory not exist.")
-      sys.exit(0)
-    os.system('python3 %s/rtm-naming.py &'%path)
-    """
-    cmd = 'rtm-naming&'
-    subprocess.call(
-        cmd,
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    cmd = '%s python3 ConsoleIn.py&' % term
-    subprocess.call(
-        cmd,
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    cmd = '%s python3 ConsoleOut.py&' % term
-    subprocess.call(
-        cmd,
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    subprocess.call("python3 Connector.py", shell=True)
+if __name__ == "__main__":
+    main()

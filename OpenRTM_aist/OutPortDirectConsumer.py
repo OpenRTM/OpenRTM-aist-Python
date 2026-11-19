@@ -51,7 +51,7 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.OutPortConsumer.__init__(self)
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OutPortDirectConsumer")
         self._listeners = None
@@ -76,7 +76,7 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
     #
     # @endif
     #
-    def __del__(self, CorbaConsumer=OpenRTM_aist.CorbaConsumer):
+    def __del__(self, CorbaConsumer=OpenRTM_aist.CorbaConsumer) -> None:
         self._rtcout.RTC_PARANOID("~OutPortDirectConsumer()")
 
         pass
@@ -98,7 +98,7 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
     #
     # virtual void init(coil::Properties& prop);
 
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("init()")
         self._properties = prop
         return
@@ -121,20 +121,20 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
     # @endif
     #
     # virtual ReturnCode put(const cdrMemoryStream& data);
-    def get(self, data):
+    def get(self, data: list):
         self._rtcout.RTC_PARANOID("get()")
         return self.UNKNOWN_ERROR
 
     # virtual void setBuffer(CdrBufferBase* buffer);
 
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._rtcout.RTC_TRACE("setBuffer()")
         return
 
     # void OutPortCorbaCdrConsumer::setListener(ConnectorInfo& info,
     #                                           ConnectorListeners* listeners)
 
-    def setListener(self, info, listeners):
+    def setListener(self, info: 'OpenRTM_aist.ConnectorInfo', listeners) -> None:
         self._rtcout.RTC_TRACE("setListener()")
         self._listeners = listeners
         self._profile = info
@@ -159,7 +159,7 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
     #
     # virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
 
-    def subscribeInterface(self, properties):
+    def subscribeInterface(self, properties: list) -> bool:
         self._rtcout.RTC_TRACE("subscribeInterface()")
 
         return True
@@ -185,13 +185,13 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
     #
     # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
 
-    def unsubscribeInterface(self, properties):
+    def unsubscribeInterface(self, properties: list) -> None:
         self._rtcout.RTC_TRACE("unsubscribeInterface()")
         return
 
     # inline void onBufferWrite(const cdrMemoryStream& data)
 
-    def onBufferWrite(self, data):
+    def onBufferWrite(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE, self._profile, data)
@@ -200,7 +200,7 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
 
     # inline void onBufferFull(const cdrMemoryStream& data)
 
-    def onBufferFull(self, data):
+    def onBufferFull(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_FULL, self._profile, data)
@@ -209,7 +209,7 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
 
     # inline void onReceived(const cdrMemoryStream& data)
 
-    def onReceived(self, data):
+    def onReceived(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED, self._profile, data)
@@ -218,7 +218,7 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
 
     # inline void onReceiverFull(const cdrMemoryStream& data)
 
-    def onReceiverFull(self, data):
+    def onReceiverFull(self, data: int):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVER_FULL, self._profile, data)
@@ -230,7 +230,7 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
     #
     # inline void onSenderEmpty()
 
-    def onSenderEmpty(self):
+    def onSenderEmpty(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
@@ -239,7 +239,7 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
 
     # inline void onSenderTimeout()
 
-    def onSenderTimeout(self):
+    def onSenderTimeout(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
@@ -248,7 +248,7 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
 
     # inline void onSenderError()
 
-    def onSenderError(self):
+    def onSenderError(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
@@ -256,7 +256,7 @@ class OutPortDirectConsumer(OpenRTM_aist.OutPortConsumer):
         return
 
 
-def OutPortDirectConsumerInit():
+def OutPortDirectConsumerInit() -> None:
     factory = OpenRTM_aist.OutPortConsumerFactory.instance()
     factory.addFactory("direct",
                        OpenRTM_aist.OutPortDirectConsumer)

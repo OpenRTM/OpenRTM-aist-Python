@@ -21,17 +21,14 @@
 # $Log$
 #
 
-from __future__ import print_function
 
 import time
 import math
-import sys
 
 
-if sys.version_info[0] == 2:
-    from Tkinter import *
-else:
-    from tkinter import *
+from tkinter import (
+    BOTTOM, Button, Canvas, Checkbutton, DoubleVar, Entry, Frame, GROOVE, HORIZONTAL, LEFT, Label, RIGHT, Scale, StringVar, TOP, W, X, Y,
+)
 
 
 class ToggleItem:
@@ -65,7 +62,7 @@ class CanvasText(ToggleItem):
         self.draw_text(x, y, text)
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         self.id = self.canvas.create_text(self.x, self.y, text=self.text,
@@ -94,7 +91,7 @@ class CanvasAxis(ToggleItem):
         self.draw()
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         self.id[0] = self.canvas.create_line(0, self.height / 2,
@@ -126,7 +123,7 @@ class CanvasCircle(ToggleItem):
         self.draw()
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         if self.pitch == 0:
@@ -134,10 +131,7 @@ class CanvasCircle(ToggleItem):
         else:
             circnum = max(self.width, self.height) / self.pitch
         circrange = range(int(circnum))
-        if sys.version_info[0] == 2:
-            circrange.reverse()
-        else:
-            circrange = list(reversed(circrange))
+        circrange = list(reversed(circrange))
         for i in circrange:
             x0 = self.x - self.pitch * i
             y0 = self.y - self.pitch * i
@@ -179,7 +173,7 @@ class CanvasLine(ToggleItem):
         self.draw()
 
     def draw(self):
-        if self.active == False:
+        if not self.active:
             return
         self.delete()
         self.id = self.canvas.create_line(self.x0, self.y0, self.x1, self.y1,

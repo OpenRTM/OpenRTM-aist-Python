@@ -14,7 +14,7 @@ from omniORB import sslTP
 import OpenRTM_aist
 
 
-def SSLTransportInit(manager):
+def SSLTransportInit(manager) -> None:
 
     #os.environ['ORBtraceLevel'] = '25'
     #os.environ['ORBendPoint'] = 'giop:ssl::'

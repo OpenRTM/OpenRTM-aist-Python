@@ -111,7 +111,7 @@ def MyModuleInit(manager):
     AutoControlInit(manager)
 
     # Create a component
-    comp = manager.createComponent("AutoControl")
+    _ = manager.createComponent("AutoControl")
 
 
 def main():

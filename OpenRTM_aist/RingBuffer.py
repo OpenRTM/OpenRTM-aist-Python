@@ -15,8 +15,8 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
-import sys
 import threading
+import typing as _typing
 import OpenRTM_aist
 
 
@@ -39,7 +39,10 @@ import OpenRTM_aist
 # @else
 #
 # @endif
-class RingBuffer(OpenRTM_aist.BufferBase):
+_Element = _typing.TypeVar("_Element")
+
+
+class RingBuffer(OpenRTM_aist.BufferBase, _typing.Generic[_Element]):
     """
     """
 
@@ -69,7 +72,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     # @endif
     #
     # @endif
-    def __init__(self, length=RINGBUFFER_DEFAULT_LENGTH):
+    def __init__(self, length: int = RINGBUFFER_DEFAULT_LENGTH) -> None:
         self._overwrite = True
         self._readback = True
         self._timedwrite = False
@@ -81,7 +84,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
         self._rpos = 0
         self._fillcount = 0
         self._wcount = 0
-        self._buffer = [None for i in range(self._length)]
+        self._buffer: _typing.List[_typing.Optional[_Element]] = [None for i in range(self._length)]
         self._pos_mutex = threading.RLock()
         self._full_mutex = threading.RLock()
         self._empty_mutex = threading.RLock()
@@ -131,7 +134,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # void init(const coil::Properties& prop)
 
-    def init(self, prop):
+    def init(self, prop: "OpenRTM_aist.Properties") -> None:
         self.__initLength(prop)
         self.__initWritePolicy(prop)
         self.__initReadPolicy(prop)
@@ -155,9 +158,9 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # size_t length(void) const
 
-    def length(self, n=None):
+    def length(self, n: _typing.Optional[int] = None) -> int:
         if n is None:
-            guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+            _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
             return self._length
 
         if n < 1:
@@ -192,8 +195,8 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # ReturnCode reset()
 
-    def reset(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+    def reset(self) -> int:
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         self._fillcount = 0
         self._wcount = 0
         self._wpos = 0
@@ -222,8 +225,8 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # DataType* wptr(long int n = 0)
 
-    def wptr(self, n=0):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+    def wptr(self, n: int = 0) -> _typing.Optional[_Element]:
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._buffer[(self._wpos + n + self._length) % self._length]
 
     ##
@@ -255,7 +258,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # ReturnCode advanceWptr(long int n = 1)
 
-    def advanceWptr(self, n=1, unlock_enable=True):
+    def advanceWptr(self, n: int = 1, unlock_enable: bool = True) -> int:
         empty = False
         if unlock_enable and n > 0:
             self._empty_cond.acquire()
@@ -315,8 +318,8 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # ReturnCode put(const DataType& value)
 
-    def put(self, value):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+    def put(self, value: _Element) -> int:
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         self._buffer[self._wpos] = value
         return OpenRTM_aist.BufferStatus.BUFFER_OK
 
@@ -363,7 +366,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # ReturnCode write(const DataType& value,
     #                  long int sec = -1, long int nsec = 0)
-    def write(self, value, sec=-1, nsec=0):
+    def write(self, value: _Element, sec: float = -1, nsec: float = 0) -> int:
         try:
             self._full_cond.acquire()
             if self.full():
@@ -387,20 +390,13 @@ class RingBuffer(OpenRTM_aist.BufferBase):
                         sec = self._wtimeout.sec()
                         nsec = self._wtimeout.usec() * 1000
 
-                    # true: signaled, false: timeout
                     if sec != 0 or nsec != 0:
                         wait_time = sec + (nsec / 1000000000.0)
                     else:
                         wait_time = None
-                    ret = self._full_cond.wait(wait_time)
-                    if sys.version_info[0] == 3:
-                        if not ret:
-                            self._full_cond.release()
-                            return OpenRTM_aist.BufferStatus.TIMEOUT
-                    else:
-                        if self.full():
-                            self._full_cond.release()
-                            return OpenRTM_aist.BufferStatus.TIMEOUT
+                    if not self._full_cond.wait_for(lambda: not self.full(), wait_time):
+                        self._full_cond.release()
+                        return OpenRTM_aist.BufferStatus.TIMEOUT
 
                 else:  # unknown condition
                     self._full_cond.release()
@@ -438,8 +434,8 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # size_t writable() const
 
-    def writable(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+    def writable(self) -> int:
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._length - self._fillcount
 
     ##
@@ -463,8 +459,8 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # bool full(void) const
 
-    def full(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+    def full(self) -> bool:
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._length == self._fillcount
 
     ##
@@ -487,8 +483,8 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # @endif
 
-    def rptr(self, n=0):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+    def rptr(self, n: int = 0) -> _typing.Optional[_Element]:
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._buffer[(self._rpos + n + self._length) % self._length]
 
     ##
@@ -518,7 +514,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # DataType* rptr(long int n = 0)
 
-    def advanceRptr(self, n=1, unlock_enable=True):
+    def advanceRptr(self, n: int = 1, unlock_enable: bool = True) -> int:
         full_ = False
         if unlock_enable and n > 0:
             self._full_cond.acquire()
@@ -574,8 +570,8 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # ReturnCode get(DataType& value)
 
-    def get(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+    def get(self) -> _typing.Tuple[int, _typing.Optional[_Element]]:
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return OpenRTM_aist.BufferStatus.BUFFER_OK, self._buffer[self._rpos]
 
     ##
@@ -622,7 +618,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     # ReturnCode read(DataType& value,
     #                 long int sec = -1, long int nsec = 0)
 
-    def read(self, sec=-1, nsec=0):
+    def read(self, sec: float = -1, nsec: float = 0) -> _typing.Tuple[int, _typing.Optional[_Element]]:
         self._empty_cond.acquire()
 
         if self.empty():
@@ -632,8 +628,6 @@ class RingBuffer(OpenRTM_aist.BufferBase):
             if not (sec < 0):  # if second arg is set -> block mode
                 timedread = True
                 readback = False
-                sec = self._rtimeout.sec()
-                nsec = self._rtimeout.usec() * 1000
 
             if readback and not timedread:      # "readback" mode
                 if not self._wcount > 0:
@@ -649,20 +643,13 @@ class RingBuffer(OpenRTM_aist.BufferBase):
                 if sec < 0:
                     sec = self._rtimeout.sec()
                     nsec = self._rtimeout.usec() * 1000
-                #  true: signaled, false: timeout
                 if sec != 0 or nsec != 0:
                     wait_time = sec + (nsec / 1000000000.0)
                 else:
                     wait_time = None
-                ret = self._empty_cond.wait(wait_time)
-                if sys.version_info[0] == 3:
-                    if not ret:
-                        self._empty_cond.release()
-                        return OpenRTM_aist.BufferStatus.TIMEOUT, None
-                else:
-                    if self.empty():
-                        self._empty_cond.release()
-                        return OpenRTM_aist.BufferStatus.TIMEOUT, None
+                if not self._empty_cond.wait_for(lambda: not self.empty(), wait_time):
+                    self._empty_cond.release()
+                    return OpenRTM_aist.BufferStatus.TIMEOUT, None
 
             else:                              # unknown condition
                 self._empty_cond.release()
@@ -702,8 +689,8 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # size_t readable() const
 
-    def readable(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+    def readable(self) -> int:
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._fillcount
 
     ##
@@ -727,13 +714,13 @@ class RingBuffer(OpenRTM_aist.BufferBase):
     #
     # bool empty(void) const
 
-    def empty(self):
-        guard = OpenRTM_aist.ScopedLock(self._pos_mutex)
+    def empty(self) -> bool:
+        _ = OpenRTM_aist.ScopedLock(self._pos_mutex)
         return self._fillcount == 0
 
     # void initLength(const coil::Properties& prop)
 
-    def __initLength(self, prop):
+    def __initLength(self, prop: 'OpenRTM_aist.Properties') -> None:
         if prop.getProperty("length"):
             n = 0
             ret, n = OpenRTM_aist.stringTo(n, prop.getProperty("length"))
@@ -743,7 +730,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
 
     # void initWritePolicy(const coil::Properties& prop)
 
-    def __initWritePolicy(self, prop):
+    def __initWritePolicy(self, prop: 'OpenRTM_aist.Properties') -> None:
         policy = OpenRTM_aist.normalize(prop.getProperty("write.full_policy"))
 
         if policy == "overwrite":
@@ -767,7 +754,7 @@ class RingBuffer(OpenRTM_aist.BufferBase):
 
     # void initReadPolicy(const coil::Properties& prop)
 
-    def __initReadPolicy(self, prop):
+    def __initReadPolicy(self, prop: 'OpenRTM_aist.Properties') -> None:
         policy = prop.getProperty("read.empty_policy")
 
         if policy == "readback":

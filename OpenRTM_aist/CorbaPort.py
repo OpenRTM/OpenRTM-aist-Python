@@ -617,7 +617,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
     # @param name The name of Port
     #
     # @endif
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         OpenRTM_aist.PortBase.__init__(self, name)
         self.addProperty("port.port_type", "CorbaPort")
         self._properties = OpenRTM_aist.Properties()
@@ -625,7 +625,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
         self._consumers = []
         return
 
-    def __del__(self, PortBase=OpenRTM_aist.PortBase):
+    def __del__(self, PortBase=OpenRTM_aist.PortBase) -> None:
         PortBase.__del__(self)
 
     ##
@@ -657,7 +657,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
     #
     # void init(coil::Properties& prop);
 
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("init()")
 
         self._properties.mergeProperties(prop)
@@ -715,7 +715,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
     # bool registerProvider(const char* instance_name, const char* type_name,
     #                       PortableServer::RefCountServantBase& provider);
 
-    def registerProvider(self, instance_name, type_name, provider):
+    def registerProvider(self, instance_name: str, type_name: str, provider) -> bool:
         self._rtcout.RTC_TRACE("registerProvider(instance=%s, type_name=%s)",
                                (instance_name, type_name))
 
@@ -777,7 +777,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
     # bool registerConsumer(const char* instance_name, const char* type_name,
     #                       CorbaConsumerBase& consumer);
 
-    def registerConsumer(self, instance_name, type_name, consumer):
+    def registerConsumer(self, instance_name: str, type_name: str, consumer) -> bool:
         self._rtcout.RTC_TRACE("registerConsumer()")
 
         if not self.appendInterface(instance_name, type_name, RTC.REQUIRED):
@@ -807,7 +807,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
     #
     # void CorbaPort::activateInterfaces()
 
-    def activateInterfaces(self):
+    def activateInterfaces(self) -> None:
         for provider in self._providers:
             provider.activate()
 
@@ -831,7 +831,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
     #
     # void CorbaPort::deactivateInterfaces()
 
-    def deactivateInterfaces(self):
+    def deactivateInterfaces(self) -> None:
         for provider in self._providers:
             provider.deactivate()
 
@@ -1151,7 +1151,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
     #  virtual void
     #    unsubscribeInterfaces(const ConnectorProfile& connector_profile);
 
-    def unsubscribeInterfaces(self, connector_profile):
+    def unsubscribeInterfaces(self, connector_profile) -> None:
         self._rtcout.RTC_TRACE("unsubscribeInterfaces()")
         nv = connector_profile.properties
 
@@ -1322,7 +1322,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
     #
     # bool setObject(const std::string& ior, CorbaConsumerHolder& cons);
 
-    def setObject(self, ior, cons):
+    def setObject(self, ior: str, cons) -> bool:
         # if ior string is "null" or "nil", ignore it.
         if "null" == ior:
             return True
@@ -1369,7 +1369,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
     # @endif
     #
     # bool releaseObject(const std::string& ior, CorbaConsumerHolder& cons);
-    def releaseObject(self, ior, cons):
+    def releaseObject(self, ior: str, cons) -> bool:
         if ior == cons.getIor():
             cons.releaseObject()
             self._rtcout.RTC_DEBUG("Consumer %s released.", cons.descriptor())
@@ -1397,7 +1397,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
         # CorbaProviderHolder(const char* type_name,
         #                     const char* instance_name,
         #                     PortableServer::RefCountServantBase* servant)
-        def __init__(self, type_name, instance_name, servant):
+        def __init__(self, type_name: str, instance_name: str, servant) -> None:
             self._typeName = type_name
             self._instanceName = instance_name
             self._servant = servant
@@ -1409,7 +1409,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
             self.deactivate()
             return
 
-        def __del__(self):
+        def __del__(self) -> None:
             self.deactivate()
 
         # std::string instanceName() { return m_instanceName; }
@@ -1430,7 +1430,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
             return self._typeName + "." + self._instanceName
 
         # void activate()
-        def activate(self):
+        def activate(self) -> None:
             try:
                 OpenRTM_aist.Manager.instance().getPOA(
                 ).activate_object_with_id(self._oid, self._servant)
@@ -1439,7 +1439,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
             return
 
         # void deactivate()
-        def deactivate(self):
+        def deactivate(self) -> None:
             try:
                 OpenRTM_aist.Manager.instance().getPOA().deactivate_object(self._oid)
             except BaseException:
@@ -1460,7 +1460,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
         #                     const char* instance_name,
         #                     CorbaConsumerBase* consumer,
         #                     string& owner)
-        def __init__(self, type_name, instance_name, consumer, owner):
+        def __init__(self, type_name: str, instance_name: str, consumer, owner: 'CorbaPort') -> None:
             self._typeName = type_name
             self._instanceName = instance_name
             self._consumer = consumer
@@ -1506,7 +1506,7 @@ class CorbaPort(OpenRTM_aist.PortBase):
         # @endif
         #
         # void releaseObject()
-        def releaseObject(self):
+        def releaseObject(self) -> None:
             self._consumer.releaseObject()
             return
 
@@ -1523,10 +1523,10 @@ class CorbaPort(OpenRTM_aist.PortBase):
     # @endif
 
     class subscribe:
-        def __init__(self, cons):
+        def __init__(self, cons) -> None:
             self._cons = cons
 
-        def __call__(self, nv):
+        def __call__(self, nv) -> None:
             for con in self._cons:
                 name_ = nv.name
                 if con.descriptor() == name_:
@@ -1544,10 +1544,10 @@ class CorbaPort(OpenRTM_aist.PortBase):
     # @endif
 
     class unsubscribe:
-        def __init__(self, cons):
+        def __init__(self, cons) -> None:
             self._cons = cons
 
-        def __call__(self, nv):
+        def __call__(self, nv) -> None:
             for con in self._cons:
                 name_ = nv.name
                 if con.descriptor() == name_:

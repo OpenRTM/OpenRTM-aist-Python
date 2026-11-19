@@ -20,6 +20,6 @@
 import OpenRTM_aist
 
 
-def DefaultPeriodicTaskInit():
+def DefaultPeriodicTaskInit() -> None:
     OpenRTM_aist.PeriodicTaskFactory.instance().addFactory("default",
                                                            OpenRTM_aist.PeriodicTask)

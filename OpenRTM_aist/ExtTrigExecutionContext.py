@@ -54,7 +54,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("rtobject.exttrig_async_ec")
         self._rtcout.RTC_TRACE("ExtTrigExecutionContext.__init__()")
         OpenRTM_aist.ExecutionContextBase.__init__(self, "exttrig_async_ec")
@@ -74,7 +74,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
         self._svcmutex = threading.RLock()
         return
 
-    def exit(self, Task=OpenRTM_aist.Task):
+    def exit(self, Task=OpenRTM_aist.Task) -> None:
         self._rtcout.RTC_TRACE("exit")
         guard = OpenRTM_aist.ScopedLock(self._svcmutex)
         self._svc = False
@@ -104,7 +104,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # @endif
     # int ExtTrigExecutionContext::open(void *args)
 
-    def open(self, *args):
+    def open(self, *args) -> int:
         self._rtcout.RTC_TRACE("open()")
         self.activate()
         return 0
@@ -117,10 +117,11 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # @endif
     # int ExtTrigExecutionContext::svc(void)
 
-    def svc(self):
+    def svc(self) -> int:
         self._rtcout.RTC_TRACE("svc()")
 
-        def toSTR_(x): return "True" if x else "False"
+        def toSTR_(x: bool):
+            return "True" if x else "False"
 
         while self.threadRunning():
             guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
@@ -173,7 +174,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # @endif
     # int ExtTrigExecutionContext::close(unsigned long flags)
 
-    def close(self, flags):
+    def close(self, flags: bool) -> int:
         self._rtcout.RTC_TRACE("close()")
         # At this point, this component have to be finished.
         # Current state and Next state should be RTC_EXITING.
@@ -192,7 +193,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # void ExtTrigExecutionContext::tick()
     #   throw (CORBA::SystemException)
 
-    def tick(self):
+    def tick(self) -> None:
         self._rtcout.RTC_TRACE("tick()")
         if not self.isRunning():
             self._rtcout.RTC_DEBUG("EC is not running. do nothing.")
@@ -269,7 +270,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # RTC::ReturnCode_t ExtTrigExecutionContext::set_rate(CORBA::Double rate)
     #   throw (CORBA::SystemException)
 
-    def set_rate(self, rate):
+    def set_rate(self, rate: int):
         return OpenRTM_aist.ExecutionContextBase.setRate(self, rate)
 
     ##
@@ -282,7 +283,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # ExtTrigExecutionContext::add_component(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def add_component(self, comp):
+    def add_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.addComponent(self, comp)
 
     ##
@@ -295,7 +296,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # remove_component(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def remove_component(self, comp):
+    def remove_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.removeComponent(self, comp)
 
     ##
@@ -308,7 +309,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # activate_component(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def activate_component(self, comp):
+    def activate_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.activateComponent(self, comp)
 
     ##
@@ -321,7 +322,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # deactivate_component(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def deactivate_component(self, comp):
+    def deactivate_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.deactivateComponent(
             self, comp)
 
@@ -335,7 +336,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # reset_component(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def reset_component(self, comp):
+    def reset_component(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.resetComponent(self, comp)
 
     ##
@@ -348,7 +349,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # get_component_state(RTC::LightweightRTObject_ptr comp)
     #   throw (CORBA::SystemException)
 
-    def get_component_state(self, comp):
+    def get_component_state(self, comp: 'RTC._objref_LightweightRTObject'):
         return OpenRTM_aist.ExecutionContextBase.getComponentState(self, comp)
 
     ##
@@ -389,7 +390,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
     def onStarted(self):
         # change EC thread state
-        guard = OpenRTM_aist.ScopedLock(self._svcmutex)
+        _ = OpenRTM_aist.ScopedLock(self._svcmutex)
         if not self._svc:
             # If start() is called first time, start the worker thread.
             self._svc = True
@@ -408,14 +409,14 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
         return RTC.RTC_OK
 
-    def onAddedComponent(self, rtobj):
-        guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
+    def onAddedComponent(self, rtobj: 'RTC._objref_LightweightRTObject'):
+        _ = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
         if self._workerthread._ticked is False:
             self._worker.updateComponentList()
         return RTC.RTC_OK
 
-    def onRemovedComponent(self, rtobj):
-        guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
+    def onRemovedComponent(self, rtobj: 'RTC._objref_LightweightRTObject'):
+        _ = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
         if self._workerthread._ticked is False:
             self._worker.updateComponentList()
         return RTC.RTC_OK
@@ -424,14 +425,14 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # @brief onWaitingActivated() template function
     # RTC::ReturnCode_t ExtTrigExecutionContext::
     # onWaitingActivated(RTC_impl::RTObjectStateMachine* comp, long int count)
-    def onWaitingActivated(self, comp, count):
+    def onWaitingActivated(self, comp, count: int):
         self._rtcout.RTC_TRACE("onWaitingActivated(count = %d)", count)
         self._rtcout.RTC_PARANOID("curr: %s, next: %s",
                                   (self.getStateString(comp.getStates().curr),
                                    self.getStateString(comp.getStates().next)))
         # Now comp's next state must be ACTIVE state
         # If worker thread is stopped, restart worker thread.
-        guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
         self._workerthread._ticked = True
         self._workerthread._cond.acquire()
         self._workerthread._cond.notify()
@@ -444,12 +445,12 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # onWaitingDeactivated(RTC_impl::RTObjectStateMachine* comp, long int
     # count)
 
-    def onWaitingDeactivated(self, comp, count):
+    def onWaitingDeactivated(self, comp, count: int):
         self._rtcout.RTC_TRACE("onWaitingDeactivated(count = %d)", count)
         self._rtcout.RTC_PARANOID("curr: %s, next: %s",
                                   (self.getStateString(comp.getStates().curr),
                                    self.getStateString(comp.getStates().next)))
-        guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
         self._workerthread._ticked = True
         self._workerthread._cond.acquire()
         self._workerthread._cond.notify()
@@ -461,12 +462,12 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # RTC::ReturnCode_t ExtTrigExecutionContext::
     # onWaitingReset(RTC_impl::RTObjectStateMachine* comp, long int count)
 
-    def onWaitingReset(self, comp, count):
+    def onWaitingReset(self, comp, count: int):
         self._rtcout.RTC_TRACE("onWaitingReset(count = %d)", count)
         self._rtcout.RTC_PARANOID("curr: %s, next: %s",
                                   (self.getStateString(comp.getStates().curr),
                                    self.getStateString(comp.getStates().next)))
-        guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
         self._workerthread._ticked = True
         self._workerthread._cond.acquire()
         self._workerthread._cond.notify()
@@ -476,7 +477,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # bool threadRunning()
 
     def threadRunning(self):
-        guard = OpenRTM_aist.ScopedLock(self._svcmutex)
+        _ = OpenRTM_aist.ScopedLock(self._svcmutex)
         return self._svc
 
     ##
@@ -507,7 +508,7 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
         # @else
         # @brief Constructor
         # @endif
-        def __init__(self):
+        def __init__(self) -> None:
             self._mutex = threading.RLock()
             self._cond = threading.Condition(self._mutex)
             self._ticked = False
@@ -523,6 +524,6 @@ class ExtTrigExecutionContext(OpenRTM_aist.ExecutionContextBase,
 # @else
 #
 # @endif
-def ExtTrigExecutionContextInit(manager):
+def ExtTrigExecutionContextInit(manager: 'OpenRTM_aist.Manager') -> None:
     OpenRTM_aist.ExecutionContextFactory.instance().addFactory("ExtTrigExecutionContext",
                                                                OpenRTM_aist.ExtTrigExecutionContext)

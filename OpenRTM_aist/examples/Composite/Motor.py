@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import OpenRTM_aist
 import RTC
 import sys
@@ -69,7 +68,7 @@ def MyModuleInit(manager):
     MotorInit(manager)
 
     # Create a component
-    comp = manager.createComponent("Motor")
+    _ = manager.createComponent("Motor")
 
 
 def main():

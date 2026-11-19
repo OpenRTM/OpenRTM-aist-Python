@@ -62,14 +62,13 @@ class LocalServiceAdmin:
     # Constructor
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._services = []
-        self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("LocalServiceAdmin")
-        self._rtcout.RTC_TRACE("LocalServiceAdmin.__init__()")
+        self._rtcout = OpenRTM_aist.LogStream()
         self._factory = OpenRTM_aist.LocalServiceFactory.instance()
         return
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.finalize()
         return
 
@@ -89,7 +88,8 @@ class LocalServiceAdmin:
     # @endif
     # void init(coil::Properties& props);
 
-    def init(self, props):
+    def init(self, props: 'OpenRTM_aist.Properties') -> None:
+        self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("LocalServiceAdmin")
         self._rtcout.RTC_TRACE("LocalServiceAdmin.init()")
         svcs_ = props.getProperty("enabled_services").split(",")
         svcs_lower_ = [s.lower() for s in svcs_]
@@ -128,10 +128,13 @@ class LocalServiceAdmin:
     # @endif
     # void finalize();
 
-    def finalize(self):
-        for svc_ in self._services:
-            svc_.finalize()
-        self._services = []
+    def finalize(self) -> None:
+        services, self._services = self._services, []
+        try:
+            for service in services:
+                service.finalize()
+        finally:
+            self._rtcout = OpenRTM_aist.LogStream()
 
         return
 
@@ -185,8 +188,7 @@ class LocalServiceAdmin:
     # bool getServiceProfile(std::string name,
     #                        ::RTM::LocalServiceProfile& prof);
 
-    def getServiceProfile(self, name):
-        global services_mutex
+    def getServiceProfile(self, name: str):
         guard_ = OpenRTM_aist.ScopedLock(services_mutex)
         for svc_ in self._services:
             if name == svc_.getProfile().name:
@@ -223,7 +225,7 @@ class LocalServiceAdmin:
     # @endif
     # ::RTM::LocalServiceBase* getService(const char* id);
 
-    def getService(self, id):
+    def getService(self, id: str):
         for svc_ in self._services:
             if svc_.getProfile().name == id:
                 return svc_
@@ -243,8 +245,7 @@ class LocalServiceAdmin:
     # @endif
     # bool addLocalService(::RTM::LocalServiceBase* service);
 
-    def addLocalService(self, service):
-        global services_mutex
+    def addLocalService(self, service) -> bool:
         if not service:
             self._rtcout.RTC_ERROR(
                 "Invalid argument: addLocalService(service == NULL)")
@@ -270,8 +271,7 @@ class LocalServiceAdmin:
     # @endif
     # bool removeLocalService(const std::string name);
 
-    def removeLocalService(self, name):
-        global services_mutex
+    def removeLocalService(self, name: str) -> bool:
         self._rtcout.RTC_TRACE("removeLocalService(%s)", name)
         guard_ = OpenRTM_aist.ScopedLock(services_mutex)
 
@@ -295,7 +295,7 @@ class LocalServiceAdmin:
     # @endif
     # bool isEnabled(const std::string& id, const coil::vstring& enabled);
 
-    def isEnabled(self, id, enabled):
+    def isEnabled(self, id: str, enabled: list) -> bool:
         if id in enabled:
             self._rtcout.RTC_DEBUG("Local service %s is enabled.", id)
             return True
@@ -310,7 +310,7 @@ class LocalServiceAdmin:
     # @endif
     # bool notExisting(const std::string& id);
 
-    def notExisting(self, id):
+    def notExisting(self, id: str) -> bool:
         for svc_ in self._services:
             if svc_.getProfile().name == id:
                 self._rtcout.RTC_WARN("Local service %s already exists.", id)
@@ -320,7 +320,6 @@ class LocalServiceAdmin:
 
     def instance():
         global localserviceadmin
-        global services_mutex
 
         if localserviceadmin is None:
             guard_ = OpenRTM_aist.ScopedLock(services_mutex)
@@ -330,3 +329,8 @@ class LocalServiceAdmin:
         return localserviceadmin
 
     instance = staticmethod(instance)
+
+    @staticmethod
+    def shutdown() -> None:
+        if localserviceadmin is not None:
+            localserviceadmin.finalize()

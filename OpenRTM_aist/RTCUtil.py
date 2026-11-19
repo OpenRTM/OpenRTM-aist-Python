@@ -41,7 +41,7 @@ import OpenRTM
 # @endif
 
 
-def isDataFlowComponent(obj):
+def isDataFlowComponent(obj: 'CORBA.Object') -> bool:
     dfp = obj._narrow(OpenRTM.DataFlowComponent)
     return not CORBA.is_nil(dfp)
 
@@ -65,7 +65,7 @@ def isDataFlowComponent(obj):
 # @else
 #
 # @endif
-def isFsmParticipant(obj):
+def isFsmParticipant(obj: 'CORBA.Object') -> bool:
     fsmp = obj._narrow(RTC.FsmParticipant)
     return not CORBA.is_nil(fsmp)
 
@@ -88,7 +88,7 @@ def isFsmParticipant(obj):
 # @else
 #
 # @endif
-def isFsmObject(obj):
+def isFsmObject(obj: 'CORBA.Object') -> bool:
     fsm = obj._narrow(RTC.FsmObject)
     return not CORBA.is_nil(fsm)
 
@@ -111,7 +111,7 @@ def isFsmObject(obj):
 # @else
 #
 # @endif
-def isMultiModeObject(obj):
+def isMultiModeObject(obj: 'CORBA.Object') -> bool:
     mmc = obj._narrow(RTC.MultiModeObject)
     return not CORBA.is_nil(mmc)
 
@@ -142,30 +142,29 @@ def instantiateDataType(dtype):
                    omniORB.tcInternal.tv_longlong,
                    omniORB.tcInternal.tv_enum
                    ]:
-                      return 0
+        return 0
 
     if desc[0] in [omniORB.tcInternal.tv_float,
                    omniORB.tcInternal.tv_double,
                    omniORB.tcInternal.tv_longdouble
                    ]:
-                      return 0.0
+        return 0.0
 
     if desc[0] in [omniORB.tcInternal.tv_sequence,
                    omniORB.tcInternal.tv_array,
                    ]:
-                      return []
+        return []
 
     if desc[0] in [omniORB.tcInternal.tv_string]:
         return ""
     if desc[0] in [omniORB.tcInternal.tv_wstring,
                    omniORB.tcInternal.tv_wchar
                    ]:
-                      return u""
+        return u""
 
     if desc[0] == omniORB.tcInternal.tv_struct:
         arg = []
         for i in range(4, len(desc), 2):
-            attr = desc[i]
             attr_type = desc[i + 1]
             arg.append(instantiateDataType(attr_type))
         return desc[1](*arg)

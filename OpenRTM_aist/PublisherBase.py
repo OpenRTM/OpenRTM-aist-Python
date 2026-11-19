@@ -72,7 +72,7 @@ class PublisherBase(OpenRTM_aist.DataPortStatus):
     #
     # @endif
     # virtual ReturnCode init(coil::Properties& prop) = 0;
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties'):
         pass
 
     def exit(self):
@@ -88,13 +88,13 @@ class PublisherBase(OpenRTM_aist.DataPortStatus):
 
     # virtual ReturnCode setListener(ConnectorInfo& info,
     #                                ConnectorListeners* listeners) = 0;
-    def setListener(self, info, listeners):
+    def setListener(self, info: 'OpenRTM_aist.ConnectorInfo', listeners):
         pass
 
     # virtual ReturnCode write(const cdrMemoryStream& data,
     #                          unsigned long sec,
     #                          unsigned long usec) = 0;
-    def write(self, data, sec, usec):
+    def write(self, data: bytes, sec: int, usec: int):
         pass
 
     # virtual bool isActive() = 0;
@@ -136,11 +136,11 @@ publisherfactory = None
 
 
 class PublisherFactory(OpenRTM_aist.Factory, PublisherBase):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
         pass
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     def instance():

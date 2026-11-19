@@ -8,9 +8,10 @@
 # コンポーネント接続テスト
 ##
 
-from __future__ import print_function
-from rtc_handle import *
-from BasicDataType_idl import *
+import sys
+
+import RTC
+from rtc_handle import RtmEnv, recv_file, send_file
 import time
 import SDOPackage
 import os
@@ -61,7 +62,7 @@ def main():
     g_port2 = 1
     g_port3 = 2
 
-    ## ConnectorProfile(name, connector_id, ports, properties)
+    # ConnectorProfile(name, connector_id, ports, properties)
     # String name
     # String connector_id
     # RTC.PortService ports[]
@@ -139,7 +140,7 @@ def main():
     # --------------------------------------------------------------------
     def make_connecter_profile(
             subscription_type, push_policy, connect_direction):
-        global g_conprof1, g_conprof2, g_conprof3
+        global g_conprof1, g_conprof2
 
         if connect_direction == 0:
             # outport -> inport Set
@@ -210,7 +211,7 @@ def main():
 
     def delete_recv_file():
         # ファイルが存在する場合
-        if os.path.isfile(g_diff_recv_file) == True:
+        if os.path.isfile(g_diff_recv_file):
             os.remove(g_diff_recv_file)
         return
 
@@ -228,12 +229,12 @@ def main():
         # if connect_direction == 0:
         # else:
         # 送信ファイル有無判定
-        if os.path.isfile(g_diff_send_file) == False:
+        if not os.path.isfile(g_diff_send_file):
             print("send_file (%s) not found." % send_file)
             return False
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             print("recv_file (%s) not found." % recv_file)
             return False
 
@@ -241,7 +242,7 @@ def main():
         f_send = open(g_diff_send_file, 'r')
         f_recv = open(g_diff_recv_file, 'r')
 
-        while(1):
+        while (1):
             str_send = f_send.readline()
             str_recv = f_recv.readline()
             if len(str_send) == 0:
@@ -434,7 +435,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -454,7 +455,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -467,7 +468,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -525,7 +526,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -545,7 +546,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -558,7 +559,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -660,7 +661,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -680,7 +681,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -693,7 +694,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -751,7 +752,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -771,7 +772,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -784,7 +785,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -842,7 +843,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -862,7 +863,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -875,7 +876,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -933,7 +934,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -953,7 +954,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -966,7 +967,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -1025,7 +1026,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -1045,7 +1046,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -1058,7 +1059,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -1117,7 +1118,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -1137,7 +1138,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -1150,7 +1151,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -1209,7 +1210,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -1229,7 +1230,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -1242,7 +1243,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -1301,7 +1302,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -1321,7 +1322,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -1334,7 +1335,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -1748,7 +1749,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -1768,7 +1769,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -1781,7 +1782,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -1839,7 +1840,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -1859,7 +1860,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -1872,7 +1873,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -1930,7 +1931,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -1950,7 +1951,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -1963,7 +1964,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -2021,7 +2022,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -2041,7 +2042,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -2054,7 +2055,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -2112,7 +2113,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -2132,7 +2133,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -2145,7 +2146,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -2203,7 +2204,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -2223,7 +2224,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -2236,7 +2237,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -2294,7 +2295,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -2314,7 +2315,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -2327,7 +2328,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -2385,7 +2386,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -2405,7 +2406,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -2418,7 +2419,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -2481,7 +2482,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -2501,7 +2502,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -2514,7 +2515,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -2572,7 +2573,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -2592,7 +2593,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -2605,7 +2606,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -2663,7 +2664,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -2683,7 +2684,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -2696,7 +2697,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -2754,7 +2755,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -2774,7 +2775,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -2787,7 +2788,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -2845,7 +2846,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -2865,7 +2866,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -2878,7 +2879,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -2936,7 +2937,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -2956,7 +2957,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -2969,7 +2970,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -3027,7 +3028,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -3047,7 +3048,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -3060,7 +3061,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -3118,7 +3119,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -3138,7 +3139,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -3151,7 +3152,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -3565,7 +3566,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -3585,7 +3586,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -3598,7 +3599,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -3656,7 +3657,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -3676,7 +3677,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -3689,7 +3690,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -3747,7 +3748,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -3767,7 +3768,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -3780,7 +3781,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -3838,7 +3839,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -3858,7 +3859,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -3871,7 +3872,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -3929,7 +3930,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -3949,7 +3950,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -3962,7 +3963,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -4020,7 +4021,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -4040,7 +4041,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -4053,7 +4054,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -4111,7 +4112,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -4131,7 +4132,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -4144,7 +4145,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -4202,7 +4203,7 @@ def main():
         ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -4222,7 +4223,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -4235,7 +4236,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -4298,7 +4299,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -4318,7 +4319,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -4331,7 +4332,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -4389,7 +4390,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -4409,7 +4410,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -4422,7 +4423,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -4480,7 +4481,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -4500,7 +4501,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -4513,7 +4514,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -4571,7 +4572,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -4591,7 +4592,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -4604,7 +4605,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -4662,7 +4663,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -4682,7 +4683,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -4695,7 +4696,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -4753,7 +4754,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -4773,7 +4774,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -4786,7 +4787,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -4844,7 +4845,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -4864,7 +4865,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -4877,7 +4878,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break
@@ -4935,7 +4936,7 @@ def main():
         g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
         # 受信ファイル有無判定
-        if os.path.isfile(g_diff_recv_file) == False:
+        if not os.path.isfile(g_diff_recv_file):
             fout = open(g_test_result_file, 'a')
             message = g_mess_header + g_test_case + \
                 str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
@@ -4955,7 +4956,7 @@ def main():
         message = g_mess_header + g_test_case + \
             str(case_no) + " " + g_test_cnt + str(i + 1) + g_mess_footer
         # bret==True なら送受信データ一致
-        if bret == True:
+        if bret:
             # テスト結果 OK
             message = message + g_test_ok
             print(message)
@@ -4968,7 +4969,7 @@ def main():
             fout.write(message + '\n')
             # 受信データをテスト結果ファイルへコピー
             fin2 = open(g_diff_recv_file, 'r')
-            while(1):
+            while (1):
                 s2 = fin2.readline()
                 if len(s2) == 0:
                     break

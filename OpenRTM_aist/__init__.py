@@ -1,6 +1,7 @@
 # Add path to OpenRTM_aist/RTM_IDL if need be 2008/06/06
-import sys,os
-_openrtm_idl_path = os.path.join(os.path.dirname(__file__), "RTM_IDL")
+import sys
+import os
+_openrtm_idl_path = os.path.join(os.path.dirname(__file__), "RTM_IDL")  # type: str
 if _openrtm_idl_path not in sys.path:
     sys.path.append(_openrtm_idl_path)
 del _openrtm_idl_path
@@ -80,6 +81,7 @@ from RTCUtil import *
 from OutPortBase import *
 from InPort import *
 from InPortProvider import *
+from InPortCorbaConsumerBase import *
 from InPortCorbaCdrConsumer import *
 from InPortCorbaCdrProvider import *
 from ConnectorBase import *
@@ -92,6 +94,7 @@ from PortCallBack import *
 from PortConnectListener import *
 from CorbaPort import *
 from OutPortConnector import *
+from OutPortCorbaConsumerBase import *
 from OutPortCorbaCdrConsumer import *
 from OutPortCorbaCdrProvider import *
 from OutPortPullConnector import *
