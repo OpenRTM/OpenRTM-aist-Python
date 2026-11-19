@@ -81,7 +81,7 @@ def MyModuleInit(manager):
     TkMotorCompInit(manager)
 
     # Create a component
-    comp = manager.createComponent("TkMotorComp")
+    _ = manager.createComponent("TkMotorComp")
 
     print("Componet created")
 

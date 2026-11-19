@@ -147,7 +147,7 @@ class ComponentObserverConsumer(OpenRTM_aist.SdoServiceConsumerBase):
     # virtual void finalize();
 
     def finalize(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self.unsetComponentProfileListeners()
         self.unsetComponentStatusListeners()
         self.unsetPortProfileListeners()

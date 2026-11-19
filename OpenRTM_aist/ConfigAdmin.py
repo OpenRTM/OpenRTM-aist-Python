@@ -509,9 +509,9 @@ class ConfigAdmin:
 
         # configsets
         leaf = self._configsets.getLeaf()
-        for l in leaf:
-            if l.hasKey(param_name):
-                l.removeNode(param_name)
+        for configset in leaf:
+            if configset.hasKey(param_name):
+                configset.removeNode(param_name)
 
         return True
 

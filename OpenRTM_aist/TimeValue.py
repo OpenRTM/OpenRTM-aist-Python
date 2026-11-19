@@ -58,7 +58,6 @@ class TimeValue:
     #
     # @endif
     def __init__(self, sec=None, usec=None):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
 
         if isinstance(sec, str):
             sec = float(sec)
@@ -73,8 +72,7 @@ class TimeValue:
                 dbHalfAdj_ = -0.5
 
             self.tv_sec = long(sec)
-            self.tv_usec = long((sec - float(self.tv_sec)) *
-                                float(TIMEVALUE_ONE_SECOND_IN_USECS) + dbHalfAdj_)
+            self.tv_usec = long((sec - float(self.tv_sec)) * float(TIMEVALUE_ONE_SECOND_IN_USECS) + dbHalfAdj_)
             self.normalize()
             return
 
@@ -107,7 +105,6 @@ class TimeValue:
     # @endif
 
     def __sub__(self, tm):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
 
         res = TimeValue()
 
@@ -154,7 +151,6 @@ class TimeValue:
     # @endif
 
     def __add__(self, tm):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
         res = TimeValue()
         res.tv_sec = self.tv_sec + tm.tv_sec
         res.tv_usec = self.tv_usec + tm.tv_usec
@@ -188,11 +184,9 @@ class TimeValue:
     # @endif
 
     def set_time(self, time):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
 
         self.tv_sec = long(time)
-        self.tv_usec = long((time - float(self.tv_sec)) *
-                            float(TIMEVALUE_ONE_SECOND_IN_USECS))
+        self.tv_usec = long((time - float(self.tv_sec)) * float(TIMEVALUE_ONE_SECOND_IN_USECS))
         return self
 
     ##
@@ -209,9 +203,7 @@ class TimeValue:
     #
     # @endif
     def toDouble(self):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
-        return float(self.tv_sec) + float(self.tv_usec /
-                                          float(TIMEVALUE_ONE_SECOND_IN_USECS))
+        return float(self.tv_sec) + float(self.tv_usec / float(TIMEVALUE_ONE_SECOND_IN_USECS))
 
     ##
     # @if jp
@@ -228,9 +220,7 @@ class TimeValue:
     # @endif
 
     def __str__(self):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
-        return str(self.tv_sec + self.tv_usec /
-                   float(TIMEVALUE_ONE_SECOND_IN_USECS))
+        return str(self.tv_sec + self.tv_usec / float(TIMEVALUE_ONE_SECOND_IN_USECS))
 
     ##
     # @if jp
@@ -265,7 +255,6 @@ class TimeValue:
     #
 
     def normalize(self):
-        global TIMEVALUE_ONE_SECOND_IN_USECS
         if self.tv_usec >= TIMEVALUE_ONE_SECOND_IN_USECS:
             self.tv_sec += 1
             self.tv_usec -= TIMEVALUE_ONE_SECOND_IN_USECS

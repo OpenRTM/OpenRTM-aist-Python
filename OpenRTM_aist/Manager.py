@@ -96,8 +96,6 @@ def handler(signum, frame):
         alarm.start()
 
 
-
-
 ##
 # @if jp
 # @class Manager
@@ -141,6 +139,7 @@ class Manager:
         self._needsTimer = False
         self._orb = None
         self._poa = None
+        self._rootPOA = None
         self._poaManager = None
         self._finalized = self.Finalized()
         self._listeners = OpenRTM_aist.ManagerActionListeners()
@@ -196,7 +195,6 @@ class Manager:
 
     def init(*arg):
         global manager
-        global mutex
         if len(arg) == 1:
             argv = arg[0]
         elif len(arg) == 2 and \
@@ -210,7 +208,7 @@ class Manager:
             return None
 
         if manager is None:
-            guard = OpenRTM_aist.ScopedLock(mutex)
+            _ = OpenRTM_aist.ScopedLock(mutex)
 
             manager = Manager()
             manager.initManager(argv)
@@ -250,10 +248,9 @@ class Manager:
 
     def instance():
         global manager
-        global mutex
 
         if manager is None:
-            guard = OpenRTM_aist.ScopedLock(mutex)
+            _ = OpenRTM_aist.ScopedLock(mutex)
             manager = Manager()
             manager.initManager(None)
             manager.initFactories()
@@ -449,7 +446,7 @@ class Manager:
     def runManager(self, no_block=False):
         self._rtcout.RTC_TRACE("Manager::runManager()")
         self._isRunning = True
-        
+
         if no_block:
             self._threadMain = threading.Thread(target=self.main)
             self._threadMain.start()
@@ -489,7 +486,7 @@ class Manager:
         period = OpenRTM_aist.TimeValue(0, 100000)
         if self._config.findNode("timer.tick"):
             tick = float(self._config.getProperty(
-                    "timer.tick"))
+                "timer.tick"))
             if tick:
                 period.set_time(tick)
 
@@ -530,7 +527,6 @@ class Manager:
         if self._threadMain:
             self._threadMain.join()
         manager = None
-        
 
     ##
     # @if jp
@@ -911,7 +907,7 @@ class Manager:
             exported_ports = OpenRTM_aist.split(comp_prop.getProperty("exported_ports"),
                                                 ",")
             exported_ports_str = ""
-            for i,exported_port in enumerate(exported_ports):
+            for i, exported_port in enumerate(exported_ports):
                 keyval = OpenRTM_aist.split(exported_port, ".")
                 if len(keyval) > 2:
                     exported_ports_str += (keyval[0] + "." + keyval[-1])
@@ -1400,6 +1396,71 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.getPOAManager()")
         return self._poaManager
 
+    ##
+    # @if jp
+    # @brief Bi-Directional GIOP を使うか
+    #
+    # corba.bidirectional_giop が YES なら、Manager の POA (getPOA()) は
+    # BiDirectional ポリシー (BOTH) を持つ POA になる。ORB の Bi-Directional
+    # GIOP のオプション (-ORBofferBiDirectionalGIOP など) は、corba.args に書く。
+    # 相手が開いた接続で呼び返せるので、
+    # NAT やコンテナの中など、外から接続できないプロセスの RTC を使える。
+    #
+    # @return 使うなら True
+    #
+    # @else
+    # @brief Whether Bi-Directional GIOP is used
+    #
+    # If corba.bidirectional_giop is YES, the POA of the Manager (getPOA())
+    # has the BiDirectional policy (BOTH). The ORB options for Bi-Directional
+    # GIOP (-ORBofferBiDirectionalGIOP etc.) are given in corba.args.
+    # Callbacks use the connection that the
+    # other side opened, so RTCs in a process that cannot be connected to
+    # from outside (behind NAT, in a container, etc.) can be used.
+    #
+    # @return True if used
+    # @endif
+    def isBiDirectionalGIOP(self):
+        return OpenRTM_aist.toBool(
+            self._config.getProperty("corba.bidirectional_giop"),
+            "YES", "NO", False)
+
+    ##
+    # @if jp
+    # @brief BiDirectional ポリシーを持つ POA を作る
+    #
+    # RootPOA の子として、BiDirectional (BOTH) と IMPLICIT_ACTIVATION の
+    # ポリシーを持つ POA "bidir" を作る。_this() で暗黙に活性化される
+    # サーバントもこの POA に置くため、サーバントの既定の POA
+    # (_default_POA) をこの POA にする。
+    #
+    # @param root RootPOA
+    # @return 作った POA
+    #
+    # @else
+    # @brief Creates a POA with the BiDirectional policy
+    #
+    # Creates the POA "bidir" with the BiDirectional (BOTH) and
+    # IMPLICIT_ACTIVATION policies as a child of the RootPOA. The default
+    # POA of servants (_default_POA) becomes this POA, so that servants
+    # implicitly activated by _this() are also placed in it.
+    #
+    # @param root RootPOA
+    # @return the created POA
+    # @endif
+    def createBiDirectionalPOA(self, root):
+        from omniORB import BiDirPolicy
+        policies = [
+            self._orb.create_policy(
+                BiDirPolicy.BIDIRECTIONAL_POLICY_TYPE,
+                CORBA.Any(CORBA.TC_ushort, BiDirPolicy.BOTH)),
+            root.create_implicit_activation_policy(
+                PortableServer.IMPLICIT_ACTIVATION)]
+        poa = root.create_POA("bidir", self._poaManager, policies)
+        PortableServer.Servant._default_POA = lambda servant: poa
+        self._rtcout.RTC_INFO("Bi-Directional GIOP is enabled.")
+        return poa
+
     # ============================================================
     # Manager initialize and finalization
     # ============================================================
@@ -1430,11 +1491,10 @@ class Manager:
         self._module = OpenRTM_aist.ModuleManager(self._config)
 
         self._needsTimer = OpenRTM_aist.toBool(self._config.getProperty(
-                "timer.enable"), "YES", "NO", True)
-
+            "timer.enable"), "YES", "NO", True)
 
         if OpenRTM_aist.toBool(self._config.getProperty("manager.shutdown_auto"),
-                                   "YES", "NO", True) and \
+                               "YES", "NO", True) and \
                 not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
                                         "YES", "NO", False) and \
                 self._needsTimer:
@@ -1504,6 +1564,7 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.shutdownManager()")
         self._listeners.manager_.preShutdown()
         self.shutdownComponents()
+        OpenRTM_aist.LocalServiceAdmin.shutdown()
         self.shutdownManagerServant()
         self.shutdownNaming()
         self.shutdownORB()
@@ -1643,14 +1704,14 @@ class Manager:
 
         leaf0 = pp.getLeaf()
 
-        for l in leaf0:
-            lstype = l.getName()
+        for logstream_properties in leaf0:
+            lstype = logstream_properties.getName()
             logstream = factory.createObject(lstype)
             if logstream is None:
                 self._rtcout.RTC_WARN("Logstream %s creation failed." % lstype)
                 continue
             self._rtcout.RTC_INFO("Logstream %s created." % lstype)
-            if not logstream.init(l):
+            if not logstream.init(logstream_properties):
                 self._rtcout.RTC_WARN("Logstream %s init failed." % lstype)
 
                 self._rtcout.RTC_WARN("Logstream %s deleted." % lstype)
@@ -1756,6 +1817,10 @@ class Manager:
 
             self._poaManager = self._poa._get_the_POAManager()
 
+            if self.isBiDirectionalGIOP():
+                self._rootPOA = self._poa
+                self._poa = self.createBiDirectionalPOA(self._rootPOA)
+
         except BaseException:
             self._rtcout.RTC_ERROR(
                 "Exception: Caught unknown exception in initORB().")
@@ -1783,6 +1848,14 @@ class Manager:
         opt = self._config.getProperty("corba.args")
         self._rtcout.RTC_DEBUG("corba.args: %s", opt)
 
+        if self.isBiDirectionalGIOP() and "BiDirectionalGIOP" not in opt:
+            # The ORB options for Bi-Directional GIOP are not added here;
+            # they are given in corba.args (or the omniORB configuration).
+            self._rtcout.RTC_WARN(
+                "corba.bidirectional_giop is YES, but corba.args has no "
+                "-ORBofferBiDirectionalGIOP / -ORBacceptBiDirectionalGIOP "
+                "(see the omniORB options for Bi-Directional GIOP).")
+
         endpoints = self.createORBEndpoints()
         opt = self.createORBEndpointOption(opt, endpoints)
 
@@ -1794,16 +1867,16 @@ class Manager:
     # @if jp
     # @brief giopからはじまるORBエンドポイントでの指定した場合にtrue、
     #       それ以外(例えばホスト名:ポート番号の指定)の場合はfalseを返す。
-    # 
+    #
     #
     # @param endpoint エンドポイント
     # @return エンドポイントの指定方法
     #
     # @else
-    # @brief 
+    # @brief
     #
-    # @param endpoint 
-    # @return 
+    # @param endpoint
+    # @return
     #
     # @endif
     #
@@ -2387,7 +2460,7 @@ class Manager:
                     mgr_name, self._mgrservant)
 
         if OpenRTM_aist.toBool(self._config.getProperty("corba.update_master_manager.enable"),
-                                   "YES", "NO", True) and \
+                               "YES", "NO", True) and \
                 not OpenRTM_aist.toBool(self._config.getProperty("manager.is_master"),
                                         "YES", "NO", False) and \
                 self._needsTimer:
@@ -2399,8 +2472,6 @@ class Manager:
                     tm.set_time(duration)
 
             self.addTask(self._mgrservant.updateMasterManager, tm)
-
-        otherref = None
 
         return True
 
@@ -2634,8 +2705,11 @@ class Manager:
         type_name = comp.getTypeName()
         inst_name = comp.getInstanceName()
 
-        type_conf = category + "." + type_name + ".config_file"
-        name_conf = category + "." + inst_name + ".config_file"
+        prefix = category + "." if category else ""
+        type_key = prefix + type_name
+        instance_key = prefix + inst_name
+        type_conf = type_key + ".config_file"
+        name_conf = instance_key + ".config_file"
 
         type_prop = OpenRTM_aist.Properties()
 
@@ -2657,15 +2731,15 @@ class Manager:
                 name_prop.load(conff)
                 conff.close()
 
-        if self._config.findNode(category + "." + inst_name):
+        if self._config.findNode(instance_key):
             temp_ = OpenRTM_aist.Properties(
                 prop=self._config.getNode(
-                    category + "." + inst_name))
+                    instance_key))
             keys_ = temp_.propertyNames()
             if not (len(keys_) == 1 and keys_[-1] == "config_file"):
                 name_prop.mergeProperties(
                     self._config.getNode(
-                        category + "." + inst_name))
+                        instance_key))
                 self._rtcout.RTC_INFO(
                     "Component name conf exists in rtc.conf. Merged.")
                 self._rtcout.RTC_DEBUG(name_prop)
@@ -2688,15 +2762,15 @@ class Manager:
                 type_prop.load(conff)
                 conff.close()
 
-        if self._config.findNode(category + "." + type_name):
+        if self._config.findNode(type_key):
             temp_ = OpenRTM_aist.Properties(
                 prop=self._config.getNode(
-                    category + "." + type_name))
+                    type_key))
             keys_ = temp_.propertyNames()
             if not (len(keys_) == 1 and keys_[-1] == "config_file"):
                 type_prop.mergeProperties(
                     self._config.getNode(
-                        category + "." + type_name))
+                        type_key))
                 self._rtcout.RTC_INFO(
                     "Component type conf exists in rtc.conf. Merged.")
                 self._rtcout.RTC_DEBUG(type_prop)
@@ -2791,7 +2865,6 @@ class Manager:
         name_ = naming_format
         str_ = ""
         count = 0
-        len_ = len(name_)
         it = iter(name_)
 
         try:
@@ -3449,7 +3522,6 @@ class Manager:
         self._rtcout.RTC_TRACE("Manager.getNaming()")
         return self._namingManager
 
-
     ##
     # @if jp
     # @brief 周期実行タスクの登録
@@ -3480,6 +3552,7 @@ class Manager:
     # @return PeriodicFunction
     # @endif
     #
+
     def addTask(self, fn, period):
         #self._rtcout.RTC_TRACE("Manager::addTask()")
         return self._scheduler.emplace(fn, period)
@@ -3549,7 +3622,7 @@ class Manager:
     #
     # @else
     #
-    # @brief 
+    # @brief
     #
     #
     # @param self
@@ -3575,12 +3648,12 @@ class Manager:
     #
     # @else
     #
-    # @brief 
+    # @brief
     #
     #
     # @param self
     # @param ec Execution context
-    # @return 
+    # @return
     #
     # @endif
     #
@@ -3600,17 +3673,16 @@ class Manager:
     #
     # @else
     #
-    # @brief 
+    # @brief
     #
     #
     # @param self
-    # @return 
+    # @return
     #
     # @endif
     #
     def createdExecutionContexts(self):
         return self._eclist
-
 
     # ============================================================
     # コンポーネントマネージャ
@@ -3623,6 +3695,7 @@ class Manager:
     # @else
     #
     # @endif
+
     class InstanceName:
         """
         """
@@ -3708,7 +3781,7 @@ class Manager:
             if self._version != "" and self._version != _prop.getProperty(
                     "version"):
                 return False
-            
+
             if self._language != "" and self._language != _prop.getProperty(
                     "language"):
                 return False
@@ -3750,7 +3823,7 @@ class Manager:
     # @endif
     class ModulePredicate:
 
-            # ModulePredicate(coil::Properties& prop)
+        # ModulePredicate(coil::Properties& prop)
         def __init__(self, prop):
             self._prop = prop
             return
@@ -3775,9 +3848,6 @@ class Manager:
                 return False
 
             return True
-
-
-
 
     class Finalized:
         def __init__(self):

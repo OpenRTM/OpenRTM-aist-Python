@@ -135,7 +135,7 @@ def MyModuleInit(manager):
     NXTRTCInit(manager)
 
     # Create a component
-    comp = manager.createComponent("NXTRTC")
+    _ = manager.createComponent("NXTRTC")
 
 
 def main():

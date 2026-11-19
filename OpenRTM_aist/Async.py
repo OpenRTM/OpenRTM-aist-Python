@@ -36,7 +36,7 @@ class Async_t(OpenRTM_aist.Task):
         self.activate()
 
     def finished(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         return self._finished
 
     def svc(self):
@@ -45,7 +45,7 @@ class Async_t(OpenRTM_aist.Task):
         else:
             self._func(self._obj)
 
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._finished = True
         return 0
 

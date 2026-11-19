@@ -361,7 +361,11 @@ class ConnectorDataListenerT(ConnectorDataListener):
             serializer.isLittleEndian(endian)
             ret, data = serializer.deserialize(cdrdata, data)
 
-            return data
+            if ret == OpenRTM_aist.ByteDataStreamBase.SERIALIZE_OK:
+                return data
+            else:
+                if type(cdrdata) is type(data):
+                    return cdrdata
         return data
 
 
@@ -722,7 +726,7 @@ class ConnectorDataListenerHolder:
     # void addListener(ConnectorDataListener* listener);
 
     def addListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
         return
 
@@ -748,7 +752,7 @@ class ConnectorDataListenerHolder:
     # void removeListener(ConnectorDataListener* listener);
 
     def removeListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for (i, _listener) in enumerate(self._listeners):
             if self._listeners[i] == listener:
                 del self._listeners[i]
@@ -779,7 +783,7 @@ class ConnectorDataListenerHolder:
     #             const cdrMemoryStream& cdrdata);
 
     def notify(self, info, cdrdata):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         ret = ConnectorListenerStatus.NO_CHANGE
 
         endian = info.properties.getProperty(
@@ -915,7 +919,7 @@ class ConnectorListenerHolder:
     # void addListener(ConnectorListener* listener);
 
     def addListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         self._listeners.append(listener)
         return
 
@@ -941,7 +945,7 @@ class ConnectorListenerHolder:
     # void removeListener(ConnectorListener* listener);
 
     def removeListener(self, listener):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         for (i, _listener) in enumerate(self._listeners):
             if self._listeners[i] == listener:
                 del self._listeners[i]
@@ -971,7 +975,7 @@ class ConnectorListenerHolder:
     # void notify(const ConnectorInfo& info);
 
     def notify(self, info):
-        guard = OpenRTM_aist.Guard.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._mutex)
         ret = ConnectorListenerStatus.NO_CHANGE
         for listener in self._listeners:
             ret = ret | listener(info)

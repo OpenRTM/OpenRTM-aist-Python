@@ -63,7 +63,7 @@ def MyModuleInit(manager):
     ControllerInit(manager)
 
     # Create a component
-    comp = manager.createComponent("Controller")
+    _ = manager.createComponent("Controller")
 
 
 def main():

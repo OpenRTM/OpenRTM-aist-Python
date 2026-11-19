@@ -277,7 +277,7 @@ class SdoServiceAdmin:
 
     def getServiceProviderProfiles(self):
         prof = []
-        guard = OpenRTM_aist.ScopedLock(self._provider_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._provider_mutex)
         for provider in self._providers:
             prof.append(provider.getProfile())
         return prof
@@ -294,7 +294,7 @@ class SdoServiceAdmin:
 
     def getServiceProviderProfile(self, id):
         idstr = id
-        guard = OpenRTM_aist.ScopedLock(self._provider_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._provider_mutex)
         for provider in self._providers:
             if idstr == str(provider.getProfile().id):
                 return provider.getProfile()
@@ -329,7 +329,7 @@ class SdoServiceAdmin:
     def addSdoServiceProvider(self, prof, provider):
         self._rtcout.RTC_TRACE("SdoServiceAdmin::addSdoServiceProvider(if=%s)",
                                prof.interface_type)
-        guard = OpenRTM_aist.ScopedLock(self._provider_mutex)
+        _ = OpenRTM_aist.ScopedLock(self._provider_mutex)
         id = prof.id
         for p in self._providers:
             if id == str(p.getProfile().id):

@@ -15,7 +15,6 @@
 #     All rights reserved.
 #
 
-import sys
 
 from omniORB import CORBA, PortableServer
 import RTC
@@ -33,26 +32,6 @@ class ExtendedFsmServiceProvider(
         self._rtobj = None
         self._profile = None
         self._fsmState = ""
-        structure = """
-<scxml xmlns=\"http://www.w3.org/2005/07/scxml\
-           version=\"1.0\"
-           initial=\"airline-ticket\">
-  <state id=\"state0\">
-    <datamodel>
-      <data id=\"data0\">
-      </data>
-    </datamodel>
-    <transition event=\"toggle\" target=\"state1\" />
-  </state>
-  <state id=\"state1\">
-    <datamodel>"
-      <data id=\"data1\">
-      </data>
-    </datamodel>
-    <transition event=\"toggle\" target=\"state0\" />
-  </state>
-</scxml>
-    """
         event_profile = RTC.FsmEventProfile("toggle", "TimedShort")
         nv = OpenRTM_aist.NVUtil.newNV("fsm_structure.format", "scxml")
         self._fsmStructure = RTC.FsmStructure(

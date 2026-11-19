@@ -142,30 +142,29 @@ def instantiateDataType(dtype):
                    omniORB.tcInternal.tv_longlong,
                    omniORB.tcInternal.tv_enum
                    ]:
-                      return 0
+        return 0
 
     if desc[0] in [omniORB.tcInternal.tv_float,
                    omniORB.tcInternal.tv_double,
                    omniORB.tcInternal.tv_longdouble
                    ]:
-                      return 0.0
+        return 0.0
 
     if desc[0] in [omniORB.tcInternal.tv_sequence,
                    omniORB.tcInternal.tv_array,
                    ]:
-                      return []
+        return []
 
     if desc[0] in [omniORB.tcInternal.tv_string]:
         return ""
     if desc[0] in [omniORB.tcInternal.tv_wstring,
                    omniORB.tcInternal.tv_wchar
                    ]:
-                      return u""
+        return u""
 
     if desc[0] == omniORB.tcInternal.tv_struct:
         arg = []
         for i in range(4, len(desc), 2):
-            attr = desc[i]
             attr_type = desc[i + 1]
             arg.append(instantiateDataType(attr_type))
         return desc[1](*arg)

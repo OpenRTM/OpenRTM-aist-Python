@@ -107,7 +107,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     # @param self
     #
     # @else
-    # @brief 
+    # @brief
     # @endif
     def exit(self):
         self._rtcout.RTC_TRACE("exit()")
@@ -639,7 +639,7 @@ class PublisherPeriodic(OpenRTM_aist.PublisherBase):
     #
     # int PublisherPeriodic::svc(void)
     def svc(self):
-        guard = OpenRTM_aist.ScopedLock(self._retmutex)
+        _ = OpenRTM_aist.ScopedLock(self._retmutex)
 
         if self._pushPolicy == self.PUBLISHER_POLICY_ALL:
             self._retcode = self.pushAll()

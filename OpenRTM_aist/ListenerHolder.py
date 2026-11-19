@@ -178,7 +178,7 @@ class ListenerHolder:
     # @endif
     # virtual void removeListener(ListenerClass* listener)
     def removeListener(self, listener):
-        guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
+        _ = OpenRTM_aist.ScopedLock(self.listener_mutex)
         for (i, listener_) in enumerate(self.listeners):
             if self.listeners[i] == listener:
                 del self.listeners[i]
@@ -186,7 +186,7 @@ class ListenerHolder:
         return
 
     def LISTENERHOLDER_CALLBACK(self, func, *args):
-        guard = OpenRTM_aist.ScopedLock(self.listener_mutex)
+        _ = OpenRTM_aist.ScopedLock(self.listener_mutex)
         for listener in self.listeners:
             func_ = getattr(listener, func, None)
             if len(args) == 1:

@@ -18,6 +18,7 @@
 import copy
 import threading
 import time
+import omniORB
 from omniORB import CORBA
 import OpenRTM_aist
 import OpenRTM_aist.CORBA_RTCUtil
@@ -211,6 +212,7 @@ class ManagerServant(RTM__POA.Manager):
         self._masterMutex = threading.RLock()
         self._slaveMutex = threading.RLock()
         self._objref = RTM.Manager._nil
+        self._insServant = None
 
         config = copy.deepcopy(self._mgr.getConfig())
 
@@ -293,7 +295,14 @@ class ManagerServant(RTM__POA.Manager):
         del guard_master
         if not CORBA.is_nil(self._objref):
             poa = self._mgr.getORB().resolve_initial_references("omniINSPOA")
-            poa.deactivate_object(poa.servant_to_id(self))
+            ins = self._insServant if self._insServant else self
+            poa.deactivate_object(poa.servant_to_id(ins))
+            if self._insServant:
+                try:
+                    bidir = self._mgr.getPOA()
+                    bidir.deactivate_object(bidir.servant_to_id(self))
+                except BaseException:
+                    pass
             # self._objref._release()
 
         return
@@ -415,7 +424,7 @@ class ManagerServant(RTM__POA.Manager):
                 cprof[i].properties, p)
 
         if self._isMaster:
-            guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
+            _ = OpenRTM_aist.ScopedLock(self._slaveMutex)
             for slave in self._slaves[:]:
                 try:
                     profs = slave.get_loaded_modules()
@@ -459,7 +468,7 @@ class ManagerServant(RTM__POA.Manager):
                 cprof[i].properties, p)
 
         if self._isMaster:
-            guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
+            _ = OpenRTM_aist.ScopedLock(self._slaveMutex)
             for slave in self._slaves[:]:
                 try:
                     profs = slave.get_factory_profiles()
@@ -502,7 +511,6 @@ class ManagerServant(RTM__POA.Manager):
             self._rtcout.RTC_ERROR("Module name is empty.")
             return RTC.RTObject._nil
 
-
         rtc, module_name, manager_address = self.createComponentByAddress(
             module_name)
 
@@ -544,7 +552,7 @@ class ManagerServant(RTM__POA.Manager):
                             OpenRTM_aist.Logger.print_exception())
                         self._slaves.remove(slave)
                 del guard
-            
+
             if not manager_name:
                 if "?" not in module_name:
                     module_name += "?"
@@ -835,7 +843,7 @@ class ManagerServant(RTM__POA.Manager):
 
     def get_master_managers(self):
         self._rtcout.RTC_TRACE("get_master_managers()")
-        guard = OpenRTM_aist.ScopedLock(self._masterMutex)
+        _ = OpenRTM_aist.ScopedLock(self._masterMutex)
 
         return self._masters
 
@@ -948,7 +956,7 @@ class ManagerServant(RTM__POA.Manager):
     # RTM::ManagerList* get_slave_managers();
 
     def get_slave_managers(self):
-        guard = OpenRTM_aist.ScopedLock(self._slaveMutex)
+        _ = OpenRTM_aist.ScopedLock(self._slaveMutex)
         self._rtcout.RTC_TRACE(
             "get_slave_managers(), %d slaves", len(
                 self._slaves))
@@ -1154,9 +1162,23 @@ class ManagerServant(RTM__POA.Manager):
             poa = self._mgr.getORB().resolve_initial_references("omniINSPOA")
             poa._get_the_POAManager().activate()
             id = self._mgr.getConfig().getProperty("manager.name")
-            poa.activate_object_with_id(id, self)
-            mgrobj = poa.id_to_reference(id)
-            self._objref = mgrobj._narrow(RTM.Manager)
+            if self._mgr.isBiDirectionalGIOP():
+                # Bi-Directional GIOP: this servant lives in the POA with
+                # the BiDirectional policy, because omniORB lets a callback
+                # use the connection only for references received by such
+                # a POA. The INS object (corbaloc) forwards every request
+                # to it (LOCATION_FORWARD), so that this manager can still
+                # be found by corbaloc.
+                bidir = self._mgr.getPOA()
+                bidir.activate_object(self)
+                self._objref = bidir.servant_to_reference(
+                    self)._narrow(RTM.Manager)
+                self._insServant = ManagerForwarder(self._objref)
+                poa.activate_object_with_id(id, self._insServant)
+            else:
+                poa.activate_object_with_id(id, self)
+                mgrobj = poa.id_to_reference(id)
+                self._objref = mgrobj._narrow(RTM.Manager)
         except BaseException:
             self._rtcout.RTC_DEBUG(OpenRTM_aist.Logger.print_exception())
             return False
@@ -1179,6 +1201,12 @@ class ManagerServant(RTM__POA.Manager):
         try:
             config = copy.deepcopy(self._mgr.getConfig())
             mgrloc = OpenRTM_aist.CORBA_RTCUtil.CorbaURI(host_port, config.getProperty("manager.name")).toString()
+            if self._mgr.isBiDirectionalGIOP():
+                # Bi-Directional GIOP needs GIOP 1.2 (corbaloc is 1.0 by
+                # default), so that the other manager can call back
+                # through this connection.
+                mgrloc = re.sub(r"^corbaloc:(iiop)?:(?!\d+\.\d+@)",
+                                r"corbaloc:\1:1.2@", mgrloc)
 
             self._rtcout.RTC_DEBUG("corbaloc: %s", mgrloc)
 
@@ -1328,28 +1356,26 @@ class ManagerServant(RTM__POA.Manager):
     # std::string getParameterByModulename(string param_name, string
     # &module_name)
     def getParameterByModulename(self, param_name, module_name):
-        param_start = module_name.find(param_name+"=")
+        param_start = module_name.find(param_name + "=")
 
         if param_start < 0:
             return "", module_name
-        
+
         param_end = module_name.find("&", param_start)
 
         if param_end < 0:
             param_end = len(module_name)
 
-        param_value = module_name[param_start+len(param_name)+1:param_end]
+        param_value = module_name[param_start + len(param_name) + 1:param_end]
 
         self._rtcout.RTC_DEBUG("%s is %s", (param_name, param_value))
 
-        if module_name[param_start-1] == "?":
+        if module_name[param_start - 1] == "?":
             module_name = module_name[:param_start] + module_name[param_end:]
-        elif module_name[param_start-1] == "&":
-            module_name = module_name[:param_start-1] + module_name[param_end:]
+        elif module_name[param_start - 1] == "&":
+            module_name = module_name[:param_start - 1] + module_name[param_end:]
 
         return param_value, module_name
-            
-
 
     ##
     # @if jp
@@ -1367,6 +1393,7 @@ class ManagerServant(RTM__POA.Manager):
     # @return
     # @endif
     # RTC::RTObject_ptr createComponentByManagerName(string module_name)
+
     def createComponentByManagerName(self, module_name):
 
         arg = module_name
@@ -1392,26 +1419,22 @@ class ManagerServant(RTM__POA.Manager):
         lang_create_flag = "manager.modules."
         lang_create_flag += lang + ".create_comp"
         create_comp = OpenRTM_aist.toBool(prop.getProperty(
-                lang_create_flag), "YES", "NO", True)
+            lang_create_flag), "YES", "NO", True)
         lang_build_flag = "manager.modules."
         lang_build_flag += lang + ".build_comp"
         build_comp = OpenRTM_aist.toBool(prop.getProperty(
-                lang_build_flag), "YES", "NO", True)
+            lang_build_flag), "YES", "NO", True)
 
         if CORBA.is_nil(mgrobj):
             self._rtcout.RTC_WARN("%s cannot be found.", mgrstr)
             config = copy.deepcopy(prop)
             rtcd_cmd = config.getProperty(
-                "manager.modules." +
-                comp_param.language() +
-                ".manager_cmd")
+                "manager.modules." + comp_param.language() + ".manager_cmd")
 
             if not rtcd_cmd:
                 lang = config.getProperty("manager.language")
                 rtcd_cmd = config.getProperty(
-                    "manager.modules." +
-                    lang +
-                    ".manager_cmd")
+                    "manager.modules." + lang + ".manager_cmd")
 
             load_path = config.getProperty("manager.modules.load_path")
             lang_path_key = "manager.modules." + comp_param.language() + ".load_paths"
@@ -1430,13 +1453,18 @@ class ManagerServant(RTM__POA.Manager):
             if create_comp:
                 cmd += " -o " + "\"manager.modules.load_path:" + load_path + "\""
             else:
+                # The launcher (e.g. rtcd2_docker) creates the component
+                # (the same as the C++ version)
                 tmp = arg.split("?")
-                rtcd_cmd += " -o \"module_name:" +  tmp[0] + "\""
-                rtcd_cmd += " -o \"module_option:" +  param["module.options"] + "\""
+                cmd += " -o \"module_name:" + tmp[0] + "\""
+                cmd += " -o \"module_option:" + param.get("module.options", "") + "\""
+                # options of the launcher itself (e.g. "docker run" options
+                # for rtcd2_docker): <module name>?docker.options=<options>
+                if "docker.options" in param:
+                    cmd += " -o \"docker_option:" + param["docker.options"] + "\""
                 if not build_comp:
-                    rtcd_cmd += " -o \"module_build:NO\""
+                    cmd += " -o \"module_build:NO\""
 
-            
             cmd += " -o " + "manager.is_master:NO"
             cmd += " -o " + "manager.corba_servant:YES"
             cmd += " -o " + "corba.master_manager:" + \
@@ -1444,7 +1472,7 @@ class ManagerServant(RTM__POA.Manager):
             cmd += " -o " + "manager.name:" + \
                 config.getProperty("manager.name")
             cmd += " -o " + "manager.instance_name:" + mgrstr
-            
+
             cmd += " -o " + "\"" + lang_path_key + ":" + load_path_language + "\""
             cmd += " -o " + "manager.supported_languages:" + comp_param.language()
             if create_comp:
@@ -1536,9 +1564,9 @@ class ManagerServant(RTM__POA.Manager):
                                 rtc_list = mgrobj.get_components_by_name(instance_name)
                                 if rtc_list:
                                     return rtc_list[0], arg, mgrstr
-                            except CORBA.SystemException as e:
+                            except CORBA.SystemException:
                                 self._rtcout.RTC_ERROR("Exception was caught while creating component.")
-                            except BaseException as e:
+                            except BaseException:
                                 self._rtcout.RTC_ERROR("Unknown non-CORBA exception cought.")
                     time.sleep(0.01)
             return RTC.RTObject._nil, arg, mgrstr
@@ -1594,20 +1622,16 @@ class ManagerServant(RTM__POA.Manager):
         lang_create_flag = "manager.modules."
         lang_create_flag += lang + ".create_comp"
         create_comp = OpenRTM_aist.toBool(prop.getProperty(
-                lang_create_flag), "YES", "NO", True)
+            lang_create_flag), "YES", "NO", True)
 
         if CORBA.is_nil(mgrobj):
             config = copy.deepcopy(prop)
             rtcd_cmd = config.getProperty(
-                "manager.modules." +
-                lang +
-                ".manager_cmd")
+                "manager.modules." + lang + ".manager_cmd")
             if not rtcd_cmd:
                 lang = config.getProperty("manager.language")
                 rtcd_cmd = config.getProperty(
-                    "manager.modules." +
-                    lang +
-                    ".manager_cmd")
+                    "manager.modules." + lang + ".manager_cmd")
 
             load_path = config.getProperty("manager.modules.load_path")
             load_path_language = config.getProperty(
@@ -1671,9 +1695,9 @@ class ManagerServant(RTM__POA.Manager):
                             rtc_list = mgrobj.get_components_by_name(instance_name)
                             if rtc_list:
                                 return rtc_list[0], arg, mgrstr
-                        except CORBA.SystemException as e:
+                        except CORBA.SystemException:
                             self._rtcout.RTC_ERROR("Exception was caught while creating component.")
-                        except BaseException as e:
+                        except BaseException:
                             self._rtcout.RTC_ERROR("Unknown non-CORBA exception cought.")
             self._rtcout.RTC_ERROR("Component creatiion failed.")
             return RTC.RTObject._nil, arg, mgrstr
@@ -1738,3 +1762,38 @@ class ManagerServant(RTM__POA.Manager):
                 return self._mgr == mgr
 
             return self._mgr._is_equivalent(mgr)
+
+
+##
+# @if jp
+# @class ManagerForwarder
+# @brief INS (corbaloc) で見つけたマネージャへの要求を、本体の参照へ転送するサーバント
+#
+# Bi-Directional GIOP を使うとき (corba.bidirectional_giop: YES)、
+# マネージャの本体は BiDirectional ポリシーを持つ POA にある。omniINSPOA
+# にはこのサーバントを置き、すべての操作で LOCATION_FORWARD を返す。
+#
+# @else
+# @class ManagerForwarder
+# @brief Servant that forwards requests to the manager found by INS
+#        (corbaloc) to the reference of the manager itself
+#
+# With Bi-Directional GIOP (corba.bidirectional_giop: YES), the manager
+# itself lives in the POA with the BiDirectional policy. This servant is
+# placed in the omniINSPOA and returns LOCATION_FORWARD for every
+# operation.
+# @endif
+class ManagerForwarder(RTM__POA.Manager):
+    def __init__(self, target):
+        self._target = target
+
+
+def _make_forward(name):
+    def forward(self, *args):
+        raise omniORB.LOCATION_FORWARD(self._target, False)
+    forward.__name__ = name
+    return forward
+
+
+for _op in RTM__POA.Manager._omni_op_d:
+    setattr(ManagerForwarder, _op, _make_forward(_op))

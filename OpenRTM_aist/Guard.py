@@ -45,9 +45,11 @@ class ScopedLock:
     # @else
     #
     # @endif
-    def __init__(self, mutex):
-        self.mutex = mutex
-        self.mutex.acquire()
+    def __init__(self, mutex, defer_lock=False):
+        self._mutex = mutex
+        self._locked = False
+        if not defer_lock:
+            self.lock()
 
     ##
     # @if jp
@@ -62,4 +64,40 @@ class ScopedLock:
     # @endif
 
     def __del__(self):
-        self.mutex.release()
+        self.unlock()
+
+    ##
+    # @if jp
+    # @brief ミューテックスをする
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    #
+    # @endif
+
+    def lock(self):
+        if not self._locked:
+            self._locked = True
+            self._mutex.acquire()
+
+    ##
+    # @if jp
+    # @brief ミューテックスのロックを解除する
+    #
+    #
+    # @param self
+    #
+    # @else
+    #
+    # @param self
+    #
+    # @endif
+
+    def unlock(self):
+        if self._locked:
+            self._locked = False
+            self._mutex.release()

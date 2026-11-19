@@ -175,10 +175,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
         if self._shmem is None:
             self._rtcout.RTC_TRACE(
-                "create():memory_size=" +
-                str(memory_size) +
-                ",shm_address=" +
-                str(shm_address))
+                "create():memory_size=" + str(memory_size) + ",shm_address=" + str(shm_address))
             self._memory_size = memory_size
             self._shm_address = shm_address
 
@@ -196,7 +193,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
                 S_IROTH = 4
 
                 self.fd = self.rt.shm_open(
-                    self._shm_address,
+                    os.fsencode(self._shm_address),
                     O_RDWR | O_CREAT,
                     S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH)
                 if self.fd < 0:
@@ -232,10 +229,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
     def open_memory(self, memory_size, shm_address):
         self._rtcout.RTC_TRACE(
-            "open():memory_size=" +
-            str(memory_size) +
-            ",shm_address=" +
-            str(shm_address))
+            "open():memory_size=" + str(memory_size) + ",shm_address=" + str(shm_address))
         self._memory_size = memory_size
         self._shm_address = shm_address
         if self._shmem is None:
@@ -244,7 +238,7 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
                     0, self._memory_size, self._shm_address, mmap.ACCESS_WRITE)
             else:
                 O_RDWR = 2
-                self.fd = self.rt.shm_open(self._shm_address, O_RDWR, 0)
+                self.fd = self.rt.shm_open(os.fsencode(self._shm_address), O_RDWR, 0)
                 if self.fd < 0:
                     return
                 self.rt.ftruncate(self.fd, self._memory_size)
@@ -279,11 +273,11 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
                 pass
             else:
                 if unlink:
-                    self.rt.shm_unlink(self._shm_address)
+                    self.rt.shm_unlink(os.fsencode(self._shm_address))
             self._shmem = None
 
             try:
-                if self._smInterface is not None and self._smInterface._non_existent():
+                if self._smInterface is not None:
                     self._smInterface.close_memory(False)
             except BaseException:
                 pass
@@ -318,9 +312,6 @@ class SharedMemory(OpenRTM__POA.PortSharedMemory):
 
             if data_size + SharedMemory.default_size > self._memory_size:
                 self._memory_size = data_size + SharedMemory.default_size
-
-                if self._smInterface is not None:
-                    self._smInterface.close_memory(False)
 
                 self.close_memory(True)
                 self.create_memory(self._memory_size, self._shm_address)

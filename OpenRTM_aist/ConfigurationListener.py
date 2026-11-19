@@ -744,6 +744,7 @@ class ConfigurationListeners:
     # @param self
     #
     # @endif
+
     def __init__(self):
         ##
         # @if jp

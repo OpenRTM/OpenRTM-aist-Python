@@ -253,7 +253,7 @@ class ModuleManager:
         return self.load_prop(prop, init_func)
 
     def load_prop(self, prop, init_func=None):
-        self._rtcout.RTC_TRACE("load(module_file_name = %s, module_file_path = %s, language = %s)", 
+        self._rtcout.RTC_TRACE("load(module_file_name = %s, module_file_path = %s, language = %s)",
                                (prop.getProperty("module_file_name"),
                                 prop.getProperty("module_file_path"),
                                 prop.getProperty("language")))
@@ -522,11 +522,11 @@ class ModuleManager:
 
         try:
             imp_file = __import__(basename.split(".")[0])
-        except:
+        except BaseException:
             self._rtcout.RTC_WARN("Module import failed %s", fullname)
             self._rtcout.RTC_DEBUG(OpenRTM_aist.Logger.print_exception())
             return None
-        
+
         comp_spec = getattr(imp_file, comp_spec_name, None)
         if not comp_spec:
             return None
@@ -568,8 +568,8 @@ class ModuleManager:
     # @endif
 
     def getModuleList(self, lang, modules):
-        l = "manager.modules." + lang
-        lprop = self._properties.getNode(l)
+        language_key = "manager.modules." + lang
+        lprop = self._properties.getNode(language_key)
 
         paths = lprop.getProperty("load_paths").split(",")
 
@@ -626,7 +626,6 @@ class ModuleManager:
     # @endif
 
     def addNewFile(self, fpath, modules, lang):
-        exists = False
         for modprof in self._modprofs:
             if modprof.getProperty("module_file_path") == fpath:
                 self._rtcout.RTC_DEBUG(
@@ -653,10 +652,8 @@ class ModuleManager:
     # @endif
 
     def getModuleProfiles(self, lang, modules, modprops):
-        l = "manager.modules." + lang
-        lprop = self._properties.getNode(l)
-
-        paths = lprop.getProperty("load_paths").split(",")
+        language_key = "manager.modules." + lang
+        lprop = self._properties.getNode(language_key)
 
         for mod_ in modules:
 
@@ -873,7 +870,7 @@ class ModuleManager:
         file_name = fname
         for path in load_path:
             suffix = self._properties.getProperty(
-                "manager.modules."+self._managerLanguage+".suffixes")
+                "manager.modules." + self._managerLanguage + ".suffixes")
             if fname.find("." + suffix) == -1:
                 f = str(path) + os.sep + str(file_name) + "." + suffix
             else:
@@ -907,7 +904,7 @@ class ModuleManager:
     def fileExist(self, filename):
         fname = filename
         suffix = self._properties.getProperty(
-            "manager.modules."+self._managerLanguage+".suffixes")
+            "manager.modules." + self._managerLanguage + ".suffixes")
         if fname.find("." + suffix) == -1:
             fname = str(filename) + "." + suffix
 

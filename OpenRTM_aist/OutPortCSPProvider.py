@@ -2,14 +2,27 @@
 # -*- coding: utf-8 -*-
 
 ##
-# @file  OutPortCSPProvider.py
-# @brief OutPortCSPProvider class
-# @date  $Date: 2019/03/12 $
-# @author Nobuhiko Miyamoto
-
+# @file OutPortCSPProvider.py
+# @if jp
+# @brief `OutPortCSPProvider`の状態と操作をまとめる。
+# @else
+# @brief Encapsulate the state and operations of OutPortCSPProvider.
+# @endif
+# @date $Date: 2026-11-13 15:32:20 $
+# @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
+#
+# Copyright (C) 2026
+#     Nobuhiko Miyamoto
+#     Intelligent Systems Research Institute,
+#     National Institute of
+#         Advanced Industrial Science and Technology (AIST), Japan
+#     All rights reserved.
+#
+# $Id$
 
 import OpenRTM_aist
-import OpenRTM
+import RTC
+import CSP
 import CSP__POA
 
 
@@ -60,9 +73,9 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
         self._objref = self._this()
         self._buffer = None
         orb = OpenRTM_aist.Manager.instance().getORB()
-        self._properties.append(OpenRTM_aist.NVUtil.newNV("dataport.corba_cdr.outport_ior",
+        self._properties.append(OpenRTM_aist.NVUtil.newNV("dataport.csp_channel.outport_ior",
                                                           orb.object_to_string(self._objref)))
-        self._properties.append(OpenRTM_aist.NVUtil.newNV("dataport.corba_cdr.outport_ref",
+        self._properties.append(OpenRTM_aist.NVUtil.newNV("dataport.csp_channel.outport_ref",
                                                           self._objref))
         self._listeners = None
         self._connector = None
@@ -76,14 +89,12 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     #
     # デストラクタ
     #
-    # @param self
     #
     # @else
     # @brief Destructor
     #
     # Destructor
     #
-    # @param self
     #
     # @endif
     #
@@ -95,7 +106,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @brief 終了処理
     #
     # @else
-    # @brief
+    # @brief Perform the exit operation.
     #
     #
     #
@@ -106,19 +117,53 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
         OpenRTM_aist.Manager.instance().getPOA().deactivate_object(oid)
 
     # void init(coil::Properties& prop)
+    ##
+    # @if jp
+    # @brief `init`に対応する処理を行う。
+    # @param prop 初期化に使用するプロパティ。
+    # @else
+    # @brief Perform the init operation.
+    # @param prop Properties used for initialization.
+    # @endif
     def init(self, prop):
 
         pass
 
+    ##
+    # @if jp
+    # @brief `Buffer`を設定する。
+    # @param buffer `buffer`の値。
+    # @else
+    # @brief Set buffer.
+    # @param buffer Value of buffer.
+    # @endif
     def setBuffer(self, buffer):
         self._buffer = buffer
         return
 
+    ##
+    # @if jp
+    # @brief `Listener`を設定する。
+    # @param info `info`の値。
+    # @param listeners `listeners`の値。
+    # @else
+    # @brief Set listener.
+    # @param info Value of info.
+    # @param listeners Value of listeners.
+    # @endif
     def setListener(self, info, listeners):
         self._profile = info
         self._listeners = listeners
         return
 
+    ##
+    # @if jp
+    # @brief `Connector`を設定する。
+    # @param connector `connector`の値。
+    # @else
+    # @brief Set connector.
+    # @param connector Value of connector.
+    # @endif
     def setConnector(self, connector):
         self._connector = connector
         return
@@ -127,7 +172,6 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @if jp
     # @brief バッファからデータを取得する
     #
-    # @param self
     # @return (リターンコード、取得データ)
     # PORT_OK：正常完了
     # PORT_ERROR：バッファ読み出しエラー、通常は発生しない
@@ -140,7 +184,6 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @else
     # @brief Get data from the buffer
     #
-    # @param self
     # @return
     #
     # @endif
@@ -150,7 +193,7 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
 
         if not self._connector:
             self.onSenderError()
-            return (OpenRTM.UNKNOWN_ERROR, "")
+            return (RTC.UNKNOWN_ERROR, "")
 
         try:
             ret, cdr = self._connector.read()
@@ -158,11 +201,11 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
             if ret == OpenRTM_aist.BufferStatus.BUFFER_OK:
                 if cdr is None:
                     self._rtcout.RTC_ERROR("buffer is empty.")
-                    return (OpenRTM.BUFFER_EMPTY, "")
+                    return (RTC.BUFFER_EMPTY, "")
 
         except BaseException:
             self._rtcout.RTC_TRACE(OpenRTM_aist.Logger.print_exception())
-            return (OpenRTM.UNKNOWN_ERROR, "")
+            return (RTC.UNKNOWN_ERROR, "")
 
         return self.convertReturn(ret, cdr)
 
@@ -170,101 +213,167 @@ class OutPortCSPProvider(OpenRTM_aist.OutPortProvider, CSP__POA.OutPortCsp):
     # @if jp
     # @brief データ読み込み可能かを確認
     #
-    # @param self
     # @param retry True：再検索、False：通常の読み込み確認
     # @return True：読み込み可能、False：読み込み不可
     #
     #
+    # @param provider 受信側のInPortCsp参照。
     # @else
-    # @brief
+    # @brief Return send-side admission as a Readiness value.
     #
-    # @param self
     # @param retry
     # @return
     #
+    # @param provider Reference to the receiver InPortCsp interface.
     # @endif
     #
 
-    def is_readable(self, retry):
-        self._rtcout.RTC_PARANOID("is_readable()")
+    def is_readable(self, retry, provider):
+        self._rtcout.RTC_PARANOID("is_readable(%d %s)", (retry, str(provider)))
         if self._connector:
-            return self._connector.isReadable(retry)
-        return False
+            state_query = getattr(self._connector, "_isReadableState", None)
+            if state_query is not None:
+                return state_query(retry, provider)
+            return CSP.READY if self._connector.isReadable(retry, provider) else CSP.NOT_READY
+        self._rtcout.RTC_ERROR("self._connector is None.")
+        return CSP.NOT_READY
 
+    ##
+    # @if jp
+    # @brief `on Buffer Read`の通知を処理する。
+    # @param data 送受信するデータ。
+    # @else
+    # @brief Handle the on Buffer Read notification.
+    # @param data Data to transmit or receive.
+    # @endif
     def onBufferRead(self, data):
         if self._listeners and self._profile:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_READ, self._profile, data)
         return data
 
+    ##
+    # @if jp
+    # @brief `on Send`の通知を処理する。
+    # @param data 送受信するデータ。
+    # @else
+    # @brief Handle the on Send notification.
+    # @param data Data to transmit or receive.
+    # @endif
     def onSend(self, data):
         if self._listeners and self._profile:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_SEND, self._profile, data)
         return data
 
+    ##
+    # @if jp
+    # @brief `on Buffer Empty`の通知を処理する。
+    # @else
+    # @brief Handle the on Buffer Empty notification.
+    # @endif
     def onBufferEmpty(self):
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
         return
 
+    ##
+    # @if jp
+    # @brief `on Buffer Read Timeout`の通知を処理する。
+    # @else
+    # @brief Handle the on Buffer Read Timeout notification.
+    # @endif
     def onBufferReadTimeout(self):
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
         return
 
+    ##
+    # @if jp
+    # @brief `on Sender Empty`の通知を処理する。
+    # @else
+    # @brief Handle the on Sender Empty notification.
+    # @endif
     def onSenderEmpty(self):
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
         return
 
+    ##
+    # @if jp
+    # @brief `on Sender Timeout`の通知を処理する。
+    # @else
+    # @brief Handle the on Sender Timeout notification.
+    # @endif
     def onSenderTimeout(self):
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
         return
 
+    ##
+    # @if jp
+    # @brief `on Sender Error`の通知を処理する。
+    # @else
+    # @brief Handle the on Sender Error notification.
+    # @endif
     def onSenderError(self):
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
         return
 
+    ##
+    # @if jp
+    # @brief `convert Return`に対応する処理を行う。
+    # @param status `status`の値。
+    # @param data 送受信するデータ。
+    # @else
+    # @brief Perform the convert return operation.
+    # @param status Value of status.
+    # @param data Data to transmit or receive.
+    # @endif
     def convertReturn(self, status, data):
         if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
             data = self.onBufferRead(data)
             data = self.onSend(data)
-            return (OpenRTM.PORT_OK, data)
+            return (RTC.PORT_OK, data)
 
         elif status == OpenRTM_aist.BufferStatus.BUFFER_ERROR:
             self.onSenderError()
-            return (OpenRTM.PORT_ERROR, data)
+            return (RTC.PORT_ERROR, data)
 
         elif status == OpenRTM_aist.BufferStatus.BUFFER_FULL:
             # never come here
-            return (OpenRTM.BUFFER_FULL, data)
+            return (RTC.BUFFER_FULL, data)
 
         elif status == OpenRTM_aist.BufferStatus.BUFFER_EMPTY:
             self.onBufferEmpty()
             self.onSenderEmpty()
-            return (OpenRTM.BUFFER_EMPTY, data)
+            return (RTC.BUFFER_EMPTY, data)
 
         elif status == OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET:
             self.onSenderError()
-            return (OpenRTM.PORT_ERROR, data)
+            return (RTC.PORT_ERROR, data)
 
         elif status == OpenRTM_aist.BufferStatus.TIMEOUT:
             self.onBufferReadTimeout()
             self.onSenderTimeout()
-            return (OpenRTM.BUFFER_TIMEOUT, data)
+            return (RTC.BUFFER_TIMEOUT, data)
 
         else:
-            return (OpenRTM.UNKNOWN_ERROR, data)
+            return (RTC.UNKNOWN_ERROR, data)
 
 
+##
+# @if jp
+# @brief `OutPortCSPProvider`のFactoryを登録する。
+# @else
+# @brief Register the factory for OutPortCSPProvider.
+# @endif
 def OutPortCSPProviderInit():
     factory = OpenRTM_aist.OutPortProviderFactory.instance()
     factory.addFactory("csp_channel",

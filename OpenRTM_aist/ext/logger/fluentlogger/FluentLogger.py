@@ -148,16 +148,16 @@ class FluentLogger(OpenRTM_aist.LogstreamBase):
             logging.addLevelName(logging.FATAL, "FATAL")
 
         leaf0 = prop.getLeaf()
-        for l in leaf0:
-            key = l.getName()
+        for output_properties in leaf0:
+            key = output_properties.getName()
             if key.find("output") != -1:
-                tag = l.getProperty("tag")
+                tag = output_properties.getProperty("tag")
                 if tag == "":
                     return False
-                host = l.getProperty("host")
+                host = output_properties.getProperty("host")
                 if host == "":
                     host = "127.0.0.1"
-                port = l.getProperty("port")
+                port = output_properties.getProperty("port")
                 try:
                     port = int(port)
                 except BaseException:

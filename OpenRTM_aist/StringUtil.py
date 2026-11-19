@@ -278,8 +278,7 @@ def eraseTailBlank(_str):
     if _str == "":
         return _str
 
-    while (_str[-1] == " " or _str[-1] ==
-           '\t') and not isEscaped(_str, len(_str) - 1):
+    while (_str[-1] == " " or _str[-1] == '\t') and not isEscaped(_str, len(_str) - 1):
         _str = _str[:-1]
     return _str
 

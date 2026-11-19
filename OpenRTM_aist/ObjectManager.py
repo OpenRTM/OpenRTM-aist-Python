@@ -82,7 +82,7 @@ class ObjectManager:
     # @endif
 
     def registerObject(self, obj):
-        guard = OpenRTM_aist.ScopedLock(self._objects._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._objects._mutex)
         predi = self._predicate(factory=obj)
 
         for _obj in self._objects._obj:
@@ -110,7 +110,7 @@ class ObjectManager:
     # @endif
 
     def unregisterObject(self, id):
-        guard = OpenRTM_aist.ScopedLock(self._objects._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._objects._mutex)
         predi = self._predicate(name=id)
         i = 0
         for _obj in self._objects._obj:
@@ -141,7 +141,7 @@ class ObjectManager:
     # @endif
 
     def find(self, id):
-        guard = OpenRTM_aist.ScopedLock(self._objects._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._objects._mutex)
         if isinstance(id, str):
             predi = self._predicate(name=id)
         else:
@@ -169,7 +169,7 @@ class ObjectManager:
     # @endif
 
     def getObjects(self):
-        guard = OpenRTM_aist.ScopedLock(self._objects._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._objects._mutex)
         return self._objects._obj
 
     ##
@@ -186,7 +186,7 @@ class ObjectManager:
     # @endif
 
     def for_each(self, p):
-        guard = OpenRTM_aist.ScopedLock(self._objects._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._objects._mutex)
         predi = p()
 
         for _obj in self._objects._obj:

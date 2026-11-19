@@ -54,7 +54,6 @@ def main():
                                       properties, provider)
 
     ret = config.add_service_profile(sprof)
-    flag = True
     print("If you exit program, please input 'q'.")
     sys.stdin.readline()
     ret = config.remove_service_profile("test_id")
@@ -62,6 +61,6 @@ def main():
     return
 
 
-############### test #################
+# test #################
 if __name__ == '__main__':
     main()

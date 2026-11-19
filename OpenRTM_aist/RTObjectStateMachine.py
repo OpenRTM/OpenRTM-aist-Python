@@ -32,8 +32,7 @@ class RTObjectStateMachine:
     # RTObjectStateMachine(RTC::ExecutionContextHandle_t id,
     #                      RTC::LightweightRTObject_ptr comp);
     def __init__(self, id, comp):
-        global NUM_OF_LIFECYCLESTATE
-        
+
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("RTObjectStateMachine")
         self._id = id
         self._rtobj = comp

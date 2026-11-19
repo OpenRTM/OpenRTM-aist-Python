@@ -2,15 +2,28 @@
 # -*- coding: utf-8 -*-
 
 ##
-# @file  InPortCSPConsumer.py
-# @brief InPortCSPConsumer class
-# @date  $Date: 2016/01/08 $
-# @author Nobuhiko Miyamoto
-
+# @file InPortCSPConsumer.py
+# @if jp
+# @brief `InPortCSPConsumer`の状態と操作をまとめる。
+# @else
+# @brief Encapsulate the state and operations of InPortCSPConsumer.
+# @endif
+# @date $Date: 2026-11-13 15:32:20 $
+# @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
+#
+# Copyright (C) 2026
+#     Nobuhiko Miyamoto
+#     Intelligent Systems Research Institute,
+#     National Institute of
+#         Advanced Industrial Science and Technology (AIST), Japan
+#     All rights reserved.
+#
+# $Id$
 
 import OpenRTM_aist
-import OpenRTM
+import RTC
 import CSP
+import threading
 
 
 ##
@@ -29,7 +42,7 @@ import CSP
 #
 # @endif
 #
-class InPortCSPConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
+class InPortCSPConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
 
     """
     """
@@ -53,10 +66,10 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
     # @endif
     #
     def __init__(self):
-        OpenRTM_aist.InPortCorbaCdrConsumer.__init__(self)
-        OpenRTM_aist.CorbaConsumer.__init__(self, CSP.InPortCsp)
+        OpenRTM_aist.InPortCorbaConsumerBase.__init__(
+            self, CSP.InPortCsp, "csp_channel")
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortCSPConsumer")
-        self._properties = None
+        self._query_state = threading.local()
         return
 
     ##
@@ -65,65 +78,26 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
     #
     # デストラクタ
     #
-    # @param self
     #
+    # @param CorbaConsumer `CorbaConsumer`の値。
     # @else
     # @brief Destructor
     #
     # Destructor
     #
-    # @param self
     #
+    # @param CorbaConsumer Value of CorbaConsumer.
     # @endif
     #
     def __del__(self, CorbaConsumer=OpenRTM_aist.CorbaConsumer):
         self._rtcout.RTC_PARANOID("~InPortCSPConsumer()")
-        CorbaConsumer.__del__(self)
-
-    # void init(coil::Properties& prop)
-
-    def init(self, prop):
-        self._rtcout.RTC_TRACE("init()")
-        self._properties = prop
-
-    ##
-    # @if jp
-    # @brief バッファをセットする
-    #
-    #
-    # @param buffer OutPortProviderがデータを取り出すバッファへのポインタ
-    #
-    # @else
-    # @brief Setting outside buffer's pointer
-    #
-    # @param buffer A pointer to a data buffer to be used by OutPortProvider
-    #
-    # @endif
-    #
-    # virtual void setBuffer(CdrBufferBase* buffer);
-
-    def setBuffer(self, buffer):
-        pass
-
-    # void OutPortCorbaCdrConsumer::setListener(ConnectorInfo& info,
-    #                                           ConnectorListeners* listeners)
-
-    def setListener(self, info, listeners):
-        self._rtcout.RTC_TRACE("setListener()")
-        self._listeners = listeners
-        self._profile = info
-        return
-
-    def setConnector(self, connector):
-        self._connector = connector
-        return
+        OpenRTM_aist.InPortCorbaConsumerBase.__del__(self)
 
     ##
     # @if jp
     # @brief バッファにデータを書き込む
     #
     #
-    # @param self
     # @param data 書込対象データ
     # @return リターンコード
     # PORT_OK：正常完了
@@ -134,17 +108,17 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
     # CONNECTION_LOST：通信エラー
     #
     # @else
-    # @brief
+    # @brief Deliver CDR data to the receiver.
     #
     #
-    # @param self
     # @param data
     # @return
     #
     # @endif
     #
+
     def put(self, data):
-        self._rtcout.RTC_PARANOID("get()")
+        self._rtcout.RTC_PARANOID("put()")
 
         try:
             outportcsp = self._ptr()
@@ -161,33 +135,111 @@ class InPortCSPConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
     # @brief 書き込み可能かを接続先のProviderに確認
     #
     #
-    # @param self
-    # @param retry True：再検索、False：通常の書き込み確認
     # @return True：書き込み可能、False：書き込み不可
     #
     # @else
-    # @brief
+    # @brief Get the local admission state.
     #
     #
-    # @param self
-    # @param retry
     # @return
     #
     # @endif
     #
-    def isWritable(self, retry=False):
+
+    def getReadinessState(self):
+        """Read the result of this thread's last readiness RPC without an RPC."""
+        return getattr(self._query_state, 'value', CSP.NOT_READY)
+
+    ##
+    # @if jp
+    # @brief 受信準備が整っているか確認する。
+    # @param retry 再試行の問い合わせかどうか。
+    # @param option ガード照合に使用するオプション。
+    # @else
+    # @brief Check whether the receiver is ready.
+    # @param retry Whether this query is a retry.
+    # @param option Options used for guard matching.
+    # @endif
+    def isWritable(self, retry=False, option=[]):
         self._rtcout.RTC_PARANOID("isWritable()")
+        self._query_state.value = CSP.NOT_READY
         try:
-            outportcsp = self._ptr()
-            if outportcsp:
-                return outportcsp.is_writable(retry)
+            inportcsp = self._ptr()
+            if inportcsp:
+                self._query_state.value = inportcsp.is_writable(retry, option)
+                return self._query_state.value == CSP.READY
             return False
         except BaseException:
             self._rtcout.RTC_WARN("Exception caught from InPort.isWritable().")
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
             return False
 
+    ##
+    # @if jp
+    # @brief ガード条件を満たすかをProviderに確認
+    #
+    #
+    # @param option パラメータ
+    # @return True：条件一致、False：条件不一致
+    #
+    # @else
+    # @brief Match the sender options against the receiver guard.
+    #
+    #
+    # @param option
+    # @return
+    #
+    # @endif
+    #
+    def matchCondition(self, option=[]):
+        self._rtcout.RTC_PARANOID("matchCondition()")
+        try:
+            inportcsp = self._ptr()
+            if inportcsp:
+                return inportcsp.match_condition(option)
+            return False
+        except BaseException:
+            self._rtcout.RTC_WARN("Exception caught from InPort.matchCondition().")
+            self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+            return False
 
+    ##
+    # @if jp
+    # @brief リターンコード変換
+    # @param ret `ret`の値。
+    # @else
+    # @brief Return codes conversion
+    # @param ret Value of ret.
+    # @endif
+    #
+    # ReturnCode convertReturnCode(OpenRTM::PortStatus ret)
+
+    def convertReturnCode(self, ret):
+        if ret == RTC.PORT_OK:
+            return self.PORT_OK
+
+        elif ret == RTC.PORT_ERROR:
+            return self.PORT_ERROR
+
+        elif ret == RTC.BUFFER_FULL:
+            return self.SEND_FULL
+
+        elif ret == RTC.BUFFER_TIMEOUT:
+            return self.SEND_TIMEOUT
+
+        elif ret == RTC.UNKNOWN_ERROR:
+            return self.UNKNOWN_ERROR
+
+        else:
+            return self.UNKNOWN_ERROR
+
+
+##
+# @if jp
+# @brief `InPortCSPConsumer`のFactoryを登録する。
+# @else
+# @brief Register the factory for InPortCSPConsumer.
+# @endif
 def InPortCSPConsumerInit():
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("csp_channel",

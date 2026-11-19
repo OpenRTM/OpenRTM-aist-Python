@@ -677,7 +677,7 @@ class NamingManager:
 
     def bindObject(self, name, rtobj):
         self._rtcout.RTC_TRACE("NamingManager::bindObject(%s)", name)
-        guard = OpenRTM_aist.ScopedLock(self._namesMutex)
+        _ = OpenRTM_aist.ScopedLock(self._namesMutex)
         for n in self._names:
             if n.ns:
                 try:
@@ -692,7 +692,7 @@ class NamingManager:
 
     def bindManagerObject(self, name, mgr):
         self._rtcout.RTC_TRACE("NamingManager::bindManagerObject(%s)", name)
-        guard = OpenRTM_aist.ScopedLock(self._namesMutex)
+        _ = OpenRTM_aist.ScopedLock(self._namesMutex)
         for n in self._names:
             if n.ns:
                 try:
@@ -724,7 +724,7 @@ class NamingManager:
     # void bindPortObject(const char* name, PortBase* port)
     def bindPortObject(self, name, port):
         self._rtcout.RTC_TRACE("NamingManager::bindPortObject(%s)", name)
-        guard = OpenRTM_aist.ScopedLock(self._namesMutex)
+        _ = OpenRTM_aist.ScopedLock(self._namesMutex)
         for n in self._names:
             if n.ns:
                 try:
@@ -752,7 +752,7 @@ class NamingManager:
 
     def update(self):
         self._rtcout.RTC_TRACE("NamingManager::update()")
-        guard = OpenRTM_aist.ScopedLock(self._namesMutex)
+        _ = OpenRTM_aist.ScopedLock(self._namesMutex)
         rebind = OpenRTM_aist.toBool(self._manager.getConfig().getProperty("naming.update.rebind"),
                                      "YES", "NO", False)
         for i, name in enumerate(self._names):
@@ -799,7 +799,7 @@ class NamingManager:
 
     def unbindObject(self, name):
         self._rtcout.RTC_TRACE("NamingManager::unbindObject(%s)", name)
-        guard = OpenRTM_aist.ScopedLock(self._namesMutex)
+        _ = OpenRTM_aist.ScopedLock(self._namesMutex)
         for n in self._names:
             if n.ns:
                 try:
@@ -862,7 +862,7 @@ class NamingManager:
 
     def getObjects(self):
         comps = []
-        guard = OpenRTM_aist.ScopedLock(self._compNamesMutex)
+        _ = OpenRTM_aist.ScopedLock(self._compNamesMutex)
         for comp in self._compNames:
             comps.append(comp.rtobj)
         return comps

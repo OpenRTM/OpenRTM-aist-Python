@@ -16,6 +16,7 @@
 
 import types
 import OpenRTM_aist
+import copy
 
 import threading
 
@@ -67,7 +68,6 @@ class _StateSpecification(object):
         m.setPendingState(instance, _Initializer(*args))
 
     def setState0(self, S):
-        global _theDefaultInitializer
         m = self._myStateInstance.machine()
         instance = S._getInstance(m, S.SUPER, S)
         m.setPendingState(instance, _theDefaultInitializer)
@@ -103,7 +103,6 @@ class _StateSpecification(object):
         m.setPendingState(instance, _Initializer6(p1, p2, p3, p4, p5, p6))
 
     def setStateHistory(self, S):
-        global _theHistoryInitializer
         m = self._myStateInstance.machine()
         instance = S._getInstance(m, S.SUPER, S)
         m.setPendingState(instance, _theHistoryInitializer)
@@ -182,8 +181,8 @@ class Link(_StateSpecification):
         return k
     key = staticmethod(key)
 
-    def alias():
-        return Alias(Link.key(self))
+    def alias(instance):
+        return Alias(Link.key(instance))
     alias = staticmethod(alias)
 
     def isChild(other, SUPER):
@@ -232,7 +231,7 @@ class Link(_StateSpecification):
         if history:
             return history.key()
         else:
-            return Link.key(self)
+            return instance.key() if instance else None
     history = staticmethod(history)
 
     def on_entry(self):
@@ -268,7 +267,7 @@ class Link(_StateSpecification):
         if isinstance(class_, str):
             if self.__class__.__name__ == class_:
                 return self
-        elif type(self) == class_:
+        elif type(self) is class_:
             return self
         obj = self
         while hasattr(obj, "super_obj"):
@@ -277,7 +276,7 @@ class Link(_StateSpecification):
             if isinstance(class_, str):
                 if obj.__class__.__name__ == class_:
                     return obj
-            elif type(obj) == class_:
+            elif type(obj) is class_:
                 return obj
 
         return None
@@ -362,7 +361,7 @@ class _StateInstance(object):
         parent = None
         if self.myParent:
             parent = newMachine.createClone(self.myParent.id(), self.myParent)
-        clone = self.create(newMachine, parent)
+        _ = self.create(newMachine, parent)
 
     def shutdown(self):
         self.mySpecification._shutdown()
@@ -432,7 +431,7 @@ class _RootInstance(_StateInstance):
         return 0
 
     def name(self):
-        return ""
+        return "Root"
 
     def createBox(self):
         pass
@@ -442,9 +441,6 @@ class _RootInstance(_StateInstance):
 
     def cloneBox(self, box):
         pass
-
-    def name(self):
-        return "Root"
 
     def create(self, machine, parent):
         return _RootInstance(machine, parent)
@@ -992,8 +988,6 @@ class Alias:
         self.myInitializer.destroy()
 
     def init_history(self, key, history=False):
-        global _theHistoryInitializer
-        global _theDefaultInitializer
         self.myStateKey = key
         if history:
             self.myInitializer = _theHistoryInitializer
@@ -1005,7 +999,7 @@ class Alias:
         self.myInitializer = init
 
     def init_Alias(self, other):
-        self.myStateKey = key
+        self.myStateKey = other.myStateKey
         self.myInitializer = other.myInitializer.clone()
 
     def equal(self, other):
@@ -1114,7 +1108,7 @@ class Machine(_MachineBase):
         pass
 
     def shutdown(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self.myCurrentState.shutdown()
         self.free(Machine.theStateCount)
         Machine.theStateCount = 1
@@ -1156,7 +1150,7 @@ class Machine(_MachineBase):
         return AfterAdvice(self)
 
     def dispatch(self, event, destroy=True):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         event.dispatch(self.myCurrentState)
         if destroy:
             del event
@@ -1174,8 +1168,6 @@ class Machine(_MachineBase):
     def setCurrentState(self, S):
         self.myCurrentState = S
 
-    def _current_state(self):
-        return self.myCurrentState
     _current_state = property(getCurrentState, setCurrentState)
 
     def getCurrent(self):
@@ -1235,7 +1227,7 @@ def _createBox(place, B=None):
     if B:
         return B()
     else:
-        return _EmptyBox.theEmptyBox
+        return copy.deepcopy(_EmptyBox.theEmptyBox)
 
 
 def _deleteBox(box, place):

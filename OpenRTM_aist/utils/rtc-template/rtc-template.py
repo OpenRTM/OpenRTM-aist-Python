@@ -533,10 +533,7 @@ def CreateConfigurationSet(opts):
                 type = re.sub("@@", "::", type)
                 default = re.sub("@@", "::", default)
             except BaseException:
-                sys.stderr.write("Invalid option: "
-                                 + opt
-                                 + "="
-                                   + arg)
+                sys.stderr.write("Invalid option: " + opt + "=" + arg)
             tmp = copy.deepcopy(prof)
             tmp["name"] = name
             tmp["varname"] = name
@@ -588,10 +585,7 @@ def CreateDataPorts(opts):
                 name = re.sub("@@", "::", name)
                 type = re.sub("@@", "::", type)
             except BaseException:
-                sys.stderr.write("Invalid option: "
-                                 + opt
-                                 + "="
-                                   + arg)
+                sys.stderr.write("Invalid option: " + opt + "=" + arg)
             tmp = copy.deepcopy(prof)
             tmp["name"] = name
             tmp["portType"] = portType[opt]
@@ -670,10 +664,7 @@ def CreateServicePorts(opts):
                 name = re.sub("@@", "::", name)
                 type = re.sub("@@", "::", type)
             except BaseException:
-                sys.stderr.write("Invalid option: "
-                                 + opt
-                                 + "="
-                                   + arg)
+                sys.stderr.write("Invalid option: " + opt + "=" + arg)
             port = findport(prof_list, portname)
             if port is None:
                 port = copy.deepcopy(prof)
@@ -708,7 +699,7 @@ def FindIdlFile(opts, ifname):
                 print("IDL file not found: ", arg)
                 sys.exit(1)
             t = fd.read()
-            if None != re.compile(_re_text).search(t):
+            if re.compile(_re_text).search(t) is not None:
                 fd.close()
                 return fname
             fd.close()
@@ -923,7 +914,7 @@ def main():
     CreateId(data)
     PickupIDLFiles(data)
 
-    if not 'fname' in data:
+    if 'fname' not in data:
         data['fname'] = data['basicInfo']['name']
     backends.generate_code(data, opts)
 

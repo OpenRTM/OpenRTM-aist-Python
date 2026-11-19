@@ -12,6 +12,7 @@ import omniORB
 from omniORB import CORBA
 import OpenRTM_aist
 import OpenRTM__POA
+import OpenRTM
 
 import threading
 
@@ -36,7 +37,7 @@ import threading
 #
 
 
-class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
+class InPortSHMConsumer(OpenRTM_aist.InPortCorbaConsumerBase):
     """
     """
 
@@ -58,11 +59,9 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
     # @endif
     #
     def __init__(self):
-        OpenRTM_aist.InPortCorbaCdrConsumer.__init__(self)
-        OpenRTM_aist.CorbaConsumer.__init__(
-            self, OpenRTM__POA.PortSharedMemory)
+        OpenRTM_aist.InPortCorbaConsumerBase.__init__(
+            self, OpenRTM__POA.PortSharedMemory, "shared_memory")
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortSHMConsumer")
-        self._properties = None
 
         self._shm_address = str(OpenRTM_aist.uuid1())
 
@@ -91,9 +90,9 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
     #
     # @endif
     #
-    def __del__(self, CorbaConsumer=OpenRTM_aist.CorbaConsumer):
+    def __del__(self):
         self._rtcout.RTC_PARANOID("~InPortSHMConsumer()")
-        CorbaConsumer.__del__(self)
+        OpenRTM_aist.InPortCorbaConsumerBase.__del__(self)
         self._shmem.close_memory(True)
 
         oid = OpenRTM_aist.Manager.instance().getPOA().servant_to_id(self._shmem)
@@ -143,6 +142,13 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
             self._endian = True
 
         return
+
+    def _inportPropertyPrefix(self, properties):
+        prefix = "dataport.shared_memory"
+        if any(OpenRTM_aist.NVUtil.find_index(properties, prefix + suffix) >= 0
+               for suffix in (".inport_ior", ".inport_ref")):
+            return prefix
+        return super()._inportPropertyPrefix(properties)
 
     def setObject(self, obj):
         if OpenRTM_aist.CorbaConsumer.setObject(self, obj):
@@ -209,6 +215,34 @@ class InPortSHMConsumer(OpenRTM_aist.InPortCorbaCdrConsumer):
         except BaseException:
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
             return self.CONNECTION_LOST
+
+    ##
+    # @if jp
+    # @brief リターンコード変換
+    # @else
+    # @brief Return codes conversion
+    # @endif
+    #
+    # ReturnCode convertReturnCode(OpenRTM::PortStatus ret)
+
+    def convertReturnCode(self, ret):
+        if ret == OpenRTM.PORT_OK:
+            return self.PORT_OK
+
+        elif ret == OpenRTM.PORT_ERROR:
+            return self.PORT_ERROR
+
+        elif ret == OpenRTM.BUFFER_FULL:
+            return self.SEND_FULL
+
+        elif ret == OpenRTM.BUFFER_TIMEOUT:
+            return self.SEND_TIMEOUT
+
+        elif ret == OpenRTM.UNKNOWN_ERROR:
+            return self.UNKNOWN_ERROR
+
+        else:
+            return self.UNKNOWN_ERROR
 
 
 def InPortSHMConsumerInit():

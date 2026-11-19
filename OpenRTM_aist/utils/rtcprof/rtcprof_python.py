@@ -101,7 +101,7 @@ def main():
 
     # loaded component profile have to be one
     if not profs:
-        print("Load failed. file name: ", fname)
+        print("Load failed. file name: ", basename)
         sys.path = tmp_path
         return OpenRTM_aist.Properties()
 

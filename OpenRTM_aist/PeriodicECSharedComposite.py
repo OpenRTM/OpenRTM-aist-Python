@@ -225,7 +225,6 @@ class PeriodicECOrganization(OpenRTM_aist.Organization_impl):
 
     def remove_member(self, id):
         self._rtcout.RTC_DEBUG("remove_member(id = %s)", id)
-        rm_rtc = []
         for member in self._rtcMembers:
             if str(id) != str(member._profile.instance_name):
                 continue
@@ -894,7 +893,6 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
 
     def onDeactivated(self, exec_handle):
         self._rtcout.RTC_TRACE("onDeactivated(%d)", exec_handle)
-        ecs = self.get_owned_contexts()
         sdos = self._org.get_members()
 
         for sdo in sdos:
@@ -963,7 +961,6 @@ class PeriodicECSharedComposite(OpenRTM_aist.DataFlowComponentBase):
     #
     def onReset(self, exec_handle):
         self._rtcout.RTC_TRACE("onReset(%d)", exec_handle)
-        ecs = self.get_owned_contexts()
         sdos = self._org.get_members()
 
         for sdo in sdos:

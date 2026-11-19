@@ -68,7 +68,6 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
         self._svcmutex = threading.RLock()
         self._workerthread = self.WorkerThreadCtrl()
 
-        global DEFAULT_PERIOD
         self.setObjRef(self._this())
         self.setKind(RTC.PERIODIC)
         self.setRate(1.0 / DEFAULT_PERIOD)
@@ -151,7 +150,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
             ret = OpenRTM_aist.setThreadAffinity(self._cpu)
             if ret is False:
                 self._rtcout.RTC_ERROR("CPU affinity mask setting failed")
-                
+
         while self.threadRunning():
             OpenRTM_aist.ExecutionContextBase.invokeWorkerPreDo(self)
             # Thread will stopped when all RTCs are INACTIVE.
@@ -625,18 +624,18 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
 
     def onStopping(self):
         # stop thread
-        guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
         self._workerthread._running = False
         return RTC.RTC_OK
 
     def onAddedComponent(self, rtobj):
-        guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
         if self._workerthread._running is False:
             self._worker.updateComponentList()
         return RTC.RTC_OK
 
     def onRemovedComponent(self, rtobj):
-        guard = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._workerthread._mutex)
         if self._workerthread._running is False:
             self._worker.updateComponentList()
         return RTC.RTC_OK
@@ -761,7 +760,7 @@ class PeriodicExecutionContext(OpenRTM_aist.ExecutionContextBase,
     # bool threadRunning()
 
     def threadRunning(self):
-        guard = OpenRTM_aist.ScopedLock(self._svcmutex)
+        _ = OpenRTM_aist.ScopedLock(self._svcmutex)
         return self._svc
 
     def setCpuAffinity(self, props):
