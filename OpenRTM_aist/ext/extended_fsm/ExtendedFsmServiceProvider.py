@@ -15,7 +15,6 @@
 #     All rights reserved.
 #
 
-import sys
 
 from omniORB import CORBA, PortableServer
 import RTC
@@ -29,30 +28,10 @@ import OpenRTM_aist.NVUtil
 
 class ExtendedFsmServiceProvider(
         RTC__POA.ExtendedFsmService, OpenRTM_aist.SdoServiceProviderBase):
-    def __init__(self):
+    def __init__(self) -> None:
         self._rtobj = None
         self._profile = None
         self._fsmState = ""
-        structure = """
-<scxml xmlns=\"http://www.w3.org/2005/07/scxml\
-           version=\"1.0\"
-           initial=\"airline-ticket\">
-  <state id=\"state0\">
-    <datamodel>
-      <data id=\"data0\">
-      </data>
-    </datamodel>
-    <transition event=\"toggle\" target=\"state1\" />
-  </state>
-  <state id=\"state1\">
-    <datamodel>"
-      <data id=\"data1\">
-      </data>
-    </datamodel>
-    <transition event=\"toggle\" target=\"state0\" />
-  </state>
-</scxml>
-    """
         event_profile = RTC.FsmEventProfile("toggle", "TimedShort")
         nv = OpenRTM_aist.NVUtil.newNV("fsm_structure.format", "scxml")
         self._fsmStructure = RTC.FsmStructure(
@@ -65,7 +44,7 @@ class ExtendedFsmServiceProvider(
     # @brief Initialization
     # @endif
     #
-    def init(self, rtobj, profile):
+    def init(self, rtobj, profile) -> bool:
         self._rtobj = rtobj
         self._profile = profile
         return True
@@ -77,7 +56,7 @@ class ExtendedFsmServiceProvider(
     # @brief Re-initialization
     # @endif
     #
-    def reinit(self, profile):
+    def reinit(self, profile) -> bool:
         self._profile = profile
         return True
 
@@ -156,7 +135,7 @@ class ExtendedFsmServiceProvider(
     #
     # @endif
     #
-    def set_fsm_structure(self, fsm_structure):
+    def set_fsm_structure(self, fsm_structure: 'RTC.FsmStructure'):
         self._fsmStructure = fsm_structure
         return RTC.RTC_OK
 
@@ -209,7 +188,7 @@ class ExtendedFsmServiceProvider(
     # @endif
     #
 
-    def setListeners(self, prop):
+    def setListeners(self, prop: 'OpenRTM_aist.Properties'):
         pass
 
     ##
@@ -219,7 +198,7 @@ class ExtendedFsmServiceProvider(
     # @brief FSM status change
     # @endif
     #
-    def changeStatus(self, state):
+    def changeStatus(self, state: str) -> None:
         self._fsmState = state
 
     ##
@@ -229,7 +208,7 @@ class ExtendedFsmServiceProvider(
     # @brief Unsetting heartbeat
     # @endif
     #
-    def changeStructure(self, fsm_structure):
+    def changeStructure(self, fsm_structure: str) -> None:
         self._fsmStructure.structure = fsm_structure
 
     ##
@@ -293,7 +272,7 @@ class ExtendedFsmServiceProvider(
         pass
 
 
-def ExtendedFsmServiceProviderInit(mgr=None):
+def ExtendedFsmServiceProviderInit(mgr=None) -> None:
     factory = OpenRTM_aist.SdoServiceProviderFactory.instance()
     factory.addFactory(RTC.ExtendedFsmService._NP_RepositoryId,
                        ExtendedFsmServiceProvider)

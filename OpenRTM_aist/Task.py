@@ -19,12 +19,12 @@ import threading
 
 
 class Task:
-    def __init__(self):
+    def __init__(self) -> None:
         self._count = 0
         self._thread = None
         return
 
-    def __del__(self):
+    def __del__(self) -> None:
         self._count = 0
         # if self._thread:
         #  if self._thread.isAlive():
@@ -32,42 +32,42 @@ class Task:
         self._thread = None
         return
 
-    def open(self, args=None):
+    def open(self, args=None) -> int:
         return 0
 
-    def close(self, flags=0):
+    def close(self, flags: int = 0) -> int:
         return 0
 
-    def svc(self):
+    def svc(self) -> int:
         return 0
 
-    def activate(self):
+    def activate(self) -> None:
         if self._count == 0:
             self._thread = threading.Thread(target=self.svc_run)
             self._count += 1
             self._thread.start()
         return
 
-    def wait(self):
+    def wait(self) -> None:
         if self._count > 0:
             self._thread.join()
         return
 
-    def suspend(self):
+    def suspend(self) -> int:
         return 0
 
-    def resume(self):
+    def resume(self) -> int:
         return 0
 
-    def reset(self):
+    def reset(self) -> None:
         self._count = 0
         return
 
-    def finalize(self):
+    def finalize(self) -> None:
         self.reset()
         return
 
-    def svc_run(self):
+    def svc_run(self) -> None:
         self.svc()
         self.finalize()
         return

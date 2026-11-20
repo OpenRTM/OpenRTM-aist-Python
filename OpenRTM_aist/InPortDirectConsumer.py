@@ -51,7 +51,7 @@ class InPortDirectConsumer(OpenRTM_aist.InPortConsumer):
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortConsumer.__init__(self)
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortDirectConsumer")
         self._properties = None
@@ -74,7 +74,7 @@ class InPortDirectConsumer(OpenRTM_aist.InPortConsumer):
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~InPortDirectConsumer()")
 
         return
@@ -95,7 +95,7 @@ class InPortDirectConsumer(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("init()")
         self._properties = prop
         return
@@ -118,7 +118,7 @@ class InPortDirectConsumer(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual ReturnCode put(const cdrMemoryStream& data);
-    def put(self, data):
+    def put(self, data: list):
         self._rtcout.RTC_PARANOID("put()")
 
         return self.UNKNOWN_ERROR
@@ -141,7 +141,7 @@ class InPortDirectConsumer(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
-    def publishInterfaceProfile(self, properties):
+    def publishInterfaceProfile(self, properties: list) -> None:
         return
 
     ##
@@ -164,7 +164,7 @@ class InPortDirectConsumer(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-    def subscribeInterface(self, properties):
+    def subscribeInterface(self, properties: list) -> bool:
         self._rtcout.RTC_TRACE("subscribeInterface()")
 
         return True
@@ -186,13 +186,13 @@ class InPortDirectConsumer(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
-    def unsubscribeInterface(self, properties):
+    def unsubscribeInterface(self, properties: list) -> None:
         self._rtcout.RTC_TRACE("unsubscribeInterface()")
 
         return
 
 
-def InPortDirectConsumerInit():
+def InPortDirectConsumerInit() -> None:
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("direct",
                        OpenRTM_aist.InPortDirectConsumer)

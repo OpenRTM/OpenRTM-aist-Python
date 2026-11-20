@@ -57,7 +57,7 @@ class ByteDataStreamBase:
     # @endif
     # virtual ReturnCode init(coil::Properties& prop) = 0;
 
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties'):
         pass
 
     ##
@@ -77,7 +77,7 @@ class ByteDataStreamBase:
     # @endif
     # virtual void isLittleEndian(bool little_endian) = 0;
 
-    def isLittleEndian(self, little_endian):
+    def isLittleEndian(self, little_endian: bool):
         pass
 
     ##
@@ -99,7 +99,7 @@ class ByteDataStreamBase:
     # @endif
     # virtual bool serialize(const DataType& data) = 0;
 
-    def serialize(self, data):
+    def serialize(self, data: int):
         return ByteDataStreamBase.SERIALIZE_NOTFOUND, ""
 
     ##
@@ -123,7 +123,7 @@ class ByteDataStreamBase:
     # @endif
     # virtual bool deserialize(DataType& data) = 0;
 
-    def deserialize(self, cdr, data_type):
+    def deserialize(self, cdr: int, data_type: int):
         return ByteDataStreamBase.SERIALIZE_NOTFOUND, data_type
 
 
@@ -160,7 +160,7 @@ class SerializerFactory(OpenRTM_aist.Factory, ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
         pass
 
@@ -176,7 +176,7 @@ class SerializerFactory(OpenRTM_aist.Factory, ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
 ##
@@ -208,7 +208,7 @@ class SerializerFactories:
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._factories = {}
 
     ##
@@ -223,7 +223,7 @@ class SerializerFactories:
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -246,7 +246,7 @@ class SerializerFactories:
     # @param datatype
     #
     # @endif
-    def addSerializer(self, marshalingtype, serializer, datatype):
+    def addSerializer(self, marshalingtype: str, serializer, datatype) -> None:
         mtype = OpenRTM_aist.toTypename(datatype)
         if not (mtype in self._factories):
             self._factories[mtype] = SerializerFactory()
@@ -278,7 +278,7 @@ class SerializerFactories:
     # @param serializer
     #
     # @endif
-    def addSerializerGlobal(self, marshalingtype, serializer):
+    def addSerializerGlobal(self, marshalingtype: str, serializer) -> None:
         globalserializerfactories.addFactory(marshalingtype,
                                              serializer)
     ##
@@ -300,7 +300,7 @@ class SerializerFactories:
     #
     # @endif
 
-    def removeSerializer(self, marshalingtype, datatype):
+    def removeSerializer(self, marshalingtype: str, datatype) -> None:
         mtype = OpenRTM_aist.toTypename(datatype)
         if mtype in self._factories:
             self._factories[mtype].removeFactory(marshalingtype)
@@ -321,7 +321,7 @@ class SerializerFactories:
     # @param marshalingtype
     #
     # @endif
-    def removeSerializerGlobal(self, marshalingtype):
+    def removeSerializerGlobal(self, marshalingtype: str) -> None:
         globalserializerfactories.removeFactory(marshalingtype)
 
     ##
@@ -342,7 +342,7 @@ class SerializerFactories:
     # @param datatype
     #
     # @endif
-    def createSerializer(self, marshalingtype, datatype=None):
+    def createSerializer(self, marshalingtype: str, datatype=None):
         if datatype is not None:
             mtype = OpenRTM_aist.toTypename(datatype)
             if mtype in self._factories:

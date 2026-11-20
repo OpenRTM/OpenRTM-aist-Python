@@ -54,7 +54,7 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortConsumer.__init__(self)
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("ROS2OutPort")
         self._properties = None
@@ -80,7 +80,7 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~ROS2OutPort()")
 
     ##
@@ -106,7 +106,7 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop) -> None:
         self._rtcout.RTC_PARANOID("init()")
 
         if not prop.propertyNames():
@@ -253,7 +253,7 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-    def subscribeInterface(self, properties):
+    def subscribeInterface(self, properties) -> bool:
         return True
 
     ##
@@ -291,7 +291,7 @@ class ROS2OutPort(OpenRTM_aist.InPortConsumer):
 #
 # @endif
 class ROS2OutPortB(ROS2OutPort):
-    def __init__(self):
+    def __init__(self) -> None:
         self.ddstype = "ros2"
         ROS2OutPort.__init__(self)
 
@@ -351,7 +351,7 @@ ros2_pub_option = [
 #
 
 
-def ROS2OutPortInit(ddstype="fast-rtps"):
+def ROS2OutPortInit(ddstype="fast-rtps") -> None:
     prop = OpenRTM_aist.Properties(defaults_str=ros2_pub_option)
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory(ddstype,

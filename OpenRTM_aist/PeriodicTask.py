@@ -19,6 +19,7 @@
 
 import threading
 import time
+import typing as _typing
 import OpenRTM_aist
 
 ##
@@ -56,11 +57,11 @@ class PeriodicTask(OpenRTM_aist.Task):
     # @brief ctor
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Task.__init__(self)
         self._period = OpenRTM_aist.TimeValue(0.0)
         self._nowait = False
-        self._func = None
+        self._func: _typing.Optional[_typing.Callable[[], object]] = None
         self._deleteInDtor = True
         self._alive = self.alive_t(False)
         self._suspend = self.suspend_t(False)
@@ -89,9 +90,10 @@ class PeriodicTask(OpenRTM_aist.Task):
     # @endif
     #
 
-    def __del__(self, Task=OpenRTM_aist.Task):
+    def __del__(self, Task=OpenRTM_aist.Task) -> None:
         self.finalize()
-        self.wait()
+        if self._thread is not threading.current_thread():
+            self.wait()
         Task.__del__(self)
 
     ##
@@ -118,8 +120,8 @@ class PeriodicTask(OpenRTM_aist.Task):
     #
     # virtual void activate();
 
-    def activate(self):
-        guard = OpenRTM_aist.ScopedLock(self._alive.mutex)
+    def activate(self) -> None:
+        _ = OpenRTM_aist.ScopedLock(self._alive.mutex)
         if not self._func:
             return
 
@@ -145,8 +147,8 @@ class PeriodicTask(OpenRTM_aist.Task):
     #
     # virtual void finalize();
 
-    def finalize(self):
-        guard = OpenRTM_aist.ScopedLock(self._alive.mutex)
+    def finalize(self) -> None:
+        _ = OpenRTM_aist.ScopedLock(self._alive.mutex)
         self._alive.value = False
 
         self._suspend.cond.acquire()
@@ -170,7 +172,7 @@ class PeriodicTask(OpenRTM_aist.Task):
     #
     # virtual int suspend(void);
 
-    def suspend(self):
+    def suspend(self) -> int:
         self._suspend.cond.acquire()
         self._suspend.suspend = True
         self._suspend.cond.release()
@@ -191,10 +193,9 @@ class PeriodicTask(OpenRTM_aist.Task):
     #
     # virtual int resume(void);
 
-    def resume(self):
-        self._periodTime.reset()
-        self._execTime.reset()
+    def resume(self) -> int:
         self._suspend.cond.acquire()
+        self._suspend.reset_measurements = True
         self._suspend.suspend = False
         self._suspend.cond.notify()
         self._suspend.cond.release()
@@ -215,7 +216,7 @@ class PeriodicTask(OpenRTM_aist.Task):
     #
     # virtual void signal();
 
-    def signal(self):
+    def signal(self) -> None:
         self._suspend.cond.acquire()
         self._suspend.cond.notify()
         self._suspend.cond.release()
@@ -236,7 +237,8 @@ class PeriodicTask(OpenRTM_aist.Task):
     #
     # virtual bool setTask(TaskFuncBase* func, bool delete_in_dtor = true);
 
-    def setTask(self, func, delete_in_dtor=True):
+    def setTask(self, func: _typing.Optional[_typing.Callable[[], object]],
+                delete_in_dtor: bool = True) -> bool:
         if not func:
             return False
 
@@ -260,7 +262,7 @@ class PeriodicTask(OpenRTM_aist.Task):
     # virtual void setPeriod(double period);
     # virtual void setPeriod(TimeValue& period);
 
-    def setPeriod(self, period):
+    def setPeriod(self, period: _typing.Union[float, "OpenRTM_aist.TimeValue"]) -> None:
         if isinstance(period, float):
             self._period = OpenRTM_aist.TimeValue(period)
         else:
@@ -282,7 +284,7 @@ class PeriodicTask(OpenRTM_aist.Task):
     #
     # virtual void executionMeasure(bool value);
 
-    def executionMeasure(self, value):
+    def executionMeasure(self, value: bool) -> None:
         self._execMeasure = value
         return
 
@@ -295,7 +297,7 @@ class PeriodicTask(OpenRTM_aist.Task):
     #
     # virtual void executionMeasureCount(int n);
 
-    def executionMeasureCount(self, n):
+    def executionMeasureCount(self, n: int) -> None:
         self._execCountMax = n
         return
 
@@ -308,7 +310,7 @@ class PeriodicTask(OpenRTM_aist.Task):
     #
     # virtual void periodicMeasure(bool value);
 
-    def periodicMeasure(self, value):
+    def periodicMeasure(self, value: bool) -> None:
         self._periodMeasure = value
         return
 
@@ -320,7 +322,7 @@ class PeriodicTask(OpenRTM_aist.Task):
     # @endif
     #
     # virtual void periodicMeasureCount(int n);
-    def periodicMeasureCount(self, n):
+    def periodicMeasureCount(self, n: int) -> None:
         self._periodCountMax = n
         return
 
@@ -333,8 +335,8 @@ class PeriodicTask(OpenRTM_aist.Task):
     #
     # virtual TimeMeasure::Statistics getExecStat();
 
-    def getExecStat(self):
-        guard = OpenRTM_aist.ScopedLock(self._execStat.mutex)
+    def getExecStat(self) -> "OpenRTM_aist.TimeMeasure.Statistics":
+        _ = OpenRTM_aist.ScopedLock(self._execStat.mutex)
         return self._execStat.stat
 
     ##
@@ -346,36 +348,42 @@ class PeriodicTask(OpenRTM_aist.Task):
     #
     # virtual TimeMeasure::Statistics getPeriodStat();
 
-    def getPeriodStat(self):
-        guard = OpenRTM_aist.ScopedLock(self._periodStat.mutex)
+    def getPeriodStat(self) -> "OpenRTM_aist.TimeMeasure.Statistics":
+        _ = OpenRTM_aist.ScopedLock(self._periodStat.mutex)
         return self._periodStat.stat
 
     # virtual int svc();
-    def svc(self):
-
-        while self._alive.value:  # needs lock?
-            if self._periodMeasure:
-                self._periodTime.tack()
-
-            # wait if suspended
-            self._suspend.cond.acquire()
-            if self._suspend.suspend:
-                self._suspend.cond.wait()
-                # break if finalized
+    def svc(self) -> int:
+        period_started = False
+        while self._alive.value:
+            with self._suspend.cond:
+                if self._suspend.suspend:
+                    period_started = False
+                    self._suspend.cond.wait()
                 if not self._alive.value:
-                    self._suspend.cond.release()
                     return 0
-            self._suspend.cond.release()
+                if self._suspend.reset_measurements:
+                    self._periodTime.reset()
+                    self._execTime.reset()
+                    self._periodCount = 0
+                    self._execCount = 0
+                    period_started = False
+                    self._suspend.reset_measurements = False
 
-            if self._periodMeasure:
+            measure_period = self._periodMeasure
+            if measure_period:
+                if period_started:
+                    self._periodTime.tack()
                 self._periodTime.tick()
+            period_started = measure_period
 
             # task execution
-            if self._execMeasure:
+            measure_execution = self._execMeasure
+            if measure_execution:
                 self._execTime.tick()
 
             self._func()
-            if self._execMeasure:
+            if measure_execution:
                 self._execTime.tack()
 
             # wait for next period
@@ -387,11 +395,13 @@ class PeriodicTask(OpenRTM_aist.Task):
 
     # virtual void sleep();
 
-    def sleep(self):
+    def sleep(self) -> None:
         if self._nowait:
             return
 
-        sleep_sec = self._period - self._execTime.interval()
+        sleep_sec = self._period
+        if self._execMeasure:
+            sleep_sec = sleep_sec - self._execTime.interval()
 
         if sleep_sec.toDouble() < 0:
             return
@@ -401,9 +411,9 @@ class PeriodicTask(OpenRTM_aist.Task):
 
     # virtual void updateExecStat();
 
-    def updateExecStat(self):
+    def updateExecStat(self) -> None:
         if self._execCount > self._execCountMax:
-            guard = OpenRTM_aist.ScopedLock(self._execStat.mutex)
+            _ = OpenRTM_aist.ScopedLock(self._execStat.mutex)
 
             self._execStat.stat = self._execTime.getStatistics()
             self._execCount = 0
@@ -413,9 +423,9 @@ class PeriodicTask(OpenRTM_aist.Task):
 
     # virtual void updatePeriodStat();
 
-    def updatePeriodStat(self):
+    def updatePeriodStat(self) -> None:
         if self._periodCount > self._periodCountMax:
-            guard = OpenRTM_aist.ScopedLock(self._periodStat.mutex)
+            _ = OpenRTM_aist.ScopedLock(self._periodStat.mutex)
             self._periodStat.stat = self._periodTime.getStatistics()
             self._periodCount = 0
 
@@ -425,15 +435,16 @@ class PeriodicTask(OpenRTM_aist.Task):
     # alive flag
 
     class alive_t:
-        def __init__(self, val):
+        def __init__(self, val: bool) -> None:
             self.value = val
             self.mutex = threading.RLock()
             return
 
     # suspend flag
     class suspend_t:
-        def __init__(self, sus):
+        def __init__(self, sus: bool) -> None:
             self.suspend = sus
+            self.reset_measurements = False
             self.mutex = threading.RLock()
             self.cond = threading.Condition(self.mutex)
             return
@@ -441,6 +452,6 @@ class PeriodicTask(OpenRTM_aist.Task):
     # time measurement statistics struct
 
     class statistics_t:
-        def __init__(self):
+        def __init__(self) -> None:
             self.stat = OpenRTM_aist.TimeMeasure.Statistics()
             self.mutex = threading.RLock()

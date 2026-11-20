@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import sys
 import time
 
@@ -146,7 +145,6 @@ def MyModuleInit(manager):
     comp = manager.createComponent("ConfigSample")
 
     # Activate component
-    poa = manager.getPOA()
     obj = comp._default_POA().servant_to_reference(comp)
     rtobj = obj._narrow(RTC.RTObject)
 

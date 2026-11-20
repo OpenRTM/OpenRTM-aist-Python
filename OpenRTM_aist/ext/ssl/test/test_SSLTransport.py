@@ -9,7 +9,6 @@
 #
 
 
-import threading
 import os
 import multiprocessing
 import RTC
@@ -27,7 +26,7 @@ except (ImportError):
 #from Manager import *
 
 
-def RunOutPort(q):
+def RunOutPort(q) -> None:
 
     argv = sys.argv[:]
     #argv.extend(['-o', 'corba.endpoint::2810'])
@@ -59,7 +58,7 @@ def RunOutPort(q):
 
 class TestSSLTransport(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.queue = multiprocessing.Queue()
 
         sys.argv.extend(['-o', 'manager.preload.modules:SSLTransport.py'])
@@ -90,14 +89,14 @@ class TestSSLTransport(unittest.TestCase):
         oobj = orb.string_to_object(outport_name)
         self.outport_obj = oobj._narrow(RTC.PortService)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.manager.shutdownManager()
         self.queue.put("")
 
-    def test_Connect(self):
+    def test_Connect(self) -> None:
 
         prop = OpenRTM_aist.Properties()
-        ret = OpenRTM_aist.connect(
+        _ = OpenRTM_aist.connect(
             "con1", prop, self.inport_obj, self.outport_obj)
 
         self.queue.put("")
@@ -108,6 +107,6 @@ class TestSSLTransport(unittest.TestCase):
         # self.outport_obj.disconnect_all()
 
 
-############### test #################
+# test #################
 if __name__ == '__main__':
     unittest.main()

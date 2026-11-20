@@ -46,7 +46,7 @@ class PortProfileHelper:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._mutex = threading.RLock()
         self._name = ""
         self._ifProfiles = []
@@ -78,8 +78,8 @@ class PortProfileHelper:
     # @endif
     #
     # void setPortProfile(const PortProfile& profile);
-    def setPortProfile(self, profile):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def setPortProfile(self, profile: 'RTC.PortProfile') -> None:
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._name = profile.name
         self._ifProfiles = profile.interfaces
         self._portRef = profile.port_ref
@@ -109,7 +109,7 @@ class PortProfileHelper:
     #
     # PortProfile* getPortProfile();
     def getPortProfile(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         prof = RTC.PortProfile(self._name,
                                self._ifProfiles,
                                self._portRef,
@@ -140,8 +140,8 @@ class PortProfileHelper:
     #
     # void setName(const char* name);
 
-    def setName(self, name):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def setName(self, name: str) -> None:
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._name = name
         return
 
@@ -166,7 +166,7 @@ class PortProfileHelper:
     #
     # const char* getName() const;
     def getName(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         return self._name
 
     ##
@@ -190,8 +190,8 @@ class PortProfileHelper:
     #
     # void appendPortInterfaceProfile(PortInterfaceProfile if_prof);
 
-    def appendPortInterfaceProfile(self, if_prof):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def appendPortInterfaceProfile(self, if_prof: 'RTC.PortInterfaceProfile') -> None:
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._ifProfiles.append(if_prof)
         return
 
@@ -216,7 +216,7 @@ class PortProfileHelper:
     #
     # const PortInterfaceProfileList& getPortInterfaceProfiles() const;
     def getPortInterfaceProfiles(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         return self._ifProfiles
 
     ##
@@ -245,8 +245,8 @@ class PortProfileHelper:
     # const PortInterfaceProfile getPortInterfaceProfile(const char*
     # instance_name) const;
 
-    def getPortInterfaceProfile(self, instance_name):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def getPortInterfaceProfile(self, instance_name: str):
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         index = OpenRTM_aist.CORBA_SeqUtil.find(self._ifProfiles,
                                                 self.if_name(instance_name))
         if index < 0:
@@ -278,8 +278,8 @@ class PortProfileHelper:
     #
     # void erasePortInterfaceProfile(const char* instance_name);
 
-    def erasePortInterfaceProfile(self, instance_name):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def erasePortInterfaceProfile(self, instance_name: str) -> None:
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         index = OpenRTM_aist.CORBA_SeqUtil.find(self._ifProfiles,
                                                 self.if_name(instance_name))
         if index < 0:
@@ -309,8 +309,8 @@ class PortProfileHelper:
     #
     # void setPortRef(PortService_ptr port);
 
-    def setPortRef(self, port):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def setPortRef(self, port) -> None:
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._portRef = port
         return
 
@@ -337,7 +337,7 @@ class PortProfileHelper:
     # PortService_ptr getPortRef() const;
 
     def getPortRef(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         return self._portRef
 
     ##
@@ -361,8 +361,8 @@ class PortProfileHelper:
     #
     # void appendConnectorProfile(ConnectorProfile conn_profile);
 
-    def appendConnectorProfile(self, conn_profile):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def appendConnectorProfile(self, conn_profile: 'RTC.ConnectorProfile') -> None:
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._connProfiles.append(conn_profile)
         return
 
@@ -388,7 +388,7 @@ class PortProfileHelper:
     #
     # const ConnectorProfileList getConnectorProfiles() const;
     def getConnectorProfiles(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         return self._connProfiles
 
     ##
@@ -414,8 +414,8 @@ class PortProfileHelper:
     #
     # const ConnectorProfile getConnectorProfile(const char* name) const;
 
-    def getConnectorProfile(self, name):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def getConnectorProfile(self, name: str):
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         index = OpenRTM_aist.CORBA_SeqUtil.find(self._connProfiles,
                                                 self.conn_name(name))
         if index < 0:
@@ -446,8 +446,8 @@ class PortProfileHelper:
     #
     # const ConnectorProfile getConnectorProfileById(const char* id) const;
 
-    def getConnectorProfileById(self, id):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def getConnectorProfileById(self, id: str):
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         index = OpenRTM_aist.CORBA_SeqUtil.find(self._connProfiles,
                                                 self.conn_id(id))
         if index < 0:
@@ -477,8 +477,8 @@ class PortProfileHelper:
     #
     # void eraseConnectorProfile(const char* name);
 
-    def eraseConnectorProfile(self, name):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def eraseConnectorProfile(self, name: str) -> None:
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         index = OpenRTM_aist.CORBA_SeqUtil.find(self._connProfiles,
                                                 self.conn_name(name))
         if index < 0:
@@ -510,8 +510,8 @@ class PortProfileHelper:
     #
     # void eraseConnectorProfileById(const char* id);
 
-    def eraseConnectorProfileById(self, id):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def eraseConnectorProfileById(self, id: str) -> None:
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         index = OpenRTM_aist.CORBA_SeqUtil.find(self._connProfiles,
                                                 self.conn_id(id))
         if index < 0:
@@ -541,8 +541,8 @@ class PortProfileHelper:
     # @endif
     #
     # void setOwner(RTObject_ptr owner);
-    def setOwner(self, owner):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def setOwner(self, owner) -> None:
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._owner = owner
         return
 
@@ -567,7 +567,7 @@ class PortProfileHelper:
     #
     # RTObject_ptr getOwner() const;
     def getOwner(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         return self._owner
 
     ##
@@ -591,8 +591,8 @@ class PortProfileHelper:
     #
     # void setProperties(NVList& prop);
 
-    def setProperties(self, prop):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+    def setProperties(self, prop: list) -> None:
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         self._properties = prop
         return
 
@@ -617,7 +617,7 @@ class PortProfileHelper:
     #
     # const NVList& getProperties() const;
     def getProperties(self):
-        guard = OpenRTM_aist.ScopedLock(self._mutex)
+        _ = OpenRTM_aist.ScopedLock(self._mutex)
         return self._properties
 
     ##
@@ -629,29 +629,29 @@ class PortProfileHelper:
     # @endif
 
     class if_name:
-        def __init__(self, name):
+        def __init__(self, name: str) -> None:
             self._name = name
             return
 
-        def __call__(self, prof):
+        def __call__(self, prof: 'RTC.PortInterfaceProfile'):
             return str(self._name) == str(prof.instance_name)
 
     # Functor to find ConnectorProfile by name
 
     class conn_name:
-        def __init__(self, name):
+        def __init__(self, name: str) -> None:
             self._name = name
             return
 
-        def __call__(self, cprof):
+        def __call__(self, cprof: 'RTC.ConnectorProfile'):
             return str(self._name) == str(cprof.name)
 
     # Functor to find ConnectorProfile by id
 
     class conn_id:
-        def __init__(self, id_):
+        def __init__(self, id_: str) -> None:
             self._id = id_
             return
 
-        def __call__(self, cprof):
+        def __call__(self, cprof: 'RTC.ConnectorProfile'):
             return str(self._id) == str(cprof.connector_id)

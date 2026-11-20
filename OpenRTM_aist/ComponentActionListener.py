@@ -41,7 +41,7 @@ class PreComponentActionListenerType:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     PRE_ON_INITIALIZE = 0
@@ -108,7 +108,7 @@ class PreComponentActionListener:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -159,7 +159,7 @@ class PreComponentActionListener:
     # @else
     # @brief Destructor
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -208,7 +208,7 @@ class PostComponentActionListenerType:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     POST_ON_INITIALIZE = 0
@@ -275,7 +275,7 @@ class PostComponentActionListener:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -326,7 +326,7 @@ class PostComponentActionListener:
     # @else
     # @brief Destructor
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -365,7 +365,7 @@ class PortActionListenerType:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ADD_PORT = 0
@@ -396,7 +396,7 @@ class PortActionListener:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -438,7 +438,7 @@ class PortActionListener:
     # @brief Destructor
     # @endif
     # virtual ~PortActionListener();
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -476,7 +476,7 @@ class ExecutionContextActionListenerType:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     EC_ATTACHED = 0
@@ -508,7 +508,7 @@ class ExecutionContextActionListener:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -551,7 +551,7 @@ class ExecutionContextActionListener:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -599,7 +599,7 @@ class PreComponentActionListenerHolder:
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         return
 
@@ -610,7 +610,7 @@ class PreComponentActionListenerHolder:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -630,7 +630,7 @@ class PreComponentActionListenerHolder:
     # @param listener Added listener
     # @endif
     # void addListener(PreComponentActionListener* listener);
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         self._listeners.append(listener)
         return
 
@@ -651,7 +651,7 @@ class PreComponentActionListenerHolder:
     # @param listener Removed listener
     # @endif
     # void removeListener(PreComponentActionListener* listener);
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         len_ = len(self._listeners)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -677,7 +677,7 @@ class PreComponentActionListenerHolder:
     # @param info ConnectorInfo
     # @endif
     # void notify(UniqueId ec_id);
-    def notify(self, ec_id):
+    def notify(self, ec_id: int) -> None:
         for listener in self._listeners:
             listener(ec_id)
         return
@@ -708,7 +708,7 @@ class PostComponentActionListenerHolder:
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         return
 
@@ -719,7 +719,7 @@ class PostComponentActionListenerHolder:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -739,7 +739,7 @@ class PostComponentActionListenerHolder:
     # @param listener Added listener
     # @endif
     # void addListener(PostComponentActionListener* listener);
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         self._listeners.append(listener)
         return
 
@@ -760,7 +760,7 @@ class PostComponentActionListenerHolder:
     # @param listener Removed listener
     # @endif
     # void removeListener(PostComponentActionListener* listener);
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         len_ = len(self._listeners)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -789,7 +789,7 @@ class PostComponentActionListenerHolder:
     # @endif
     # void notify(UniqueId ec_id, ReturnCode_t ret);
 
-    def notify(self, ec_id, ret):
+    def notify(self, ec_id: int, ret) -> None:
         for listener in self._listeners:
             listener(ec_id, ret)
         return
@@ -821,7 +821,7 @@ class PortActionListenerHolder:
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         return
 
@@ -832,7 +832,7 @@ class PortActionListenerHolder:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -852,7 +852,7 @@ class PortActionListenerHolder:
     # @param listener Added listener
     # @endif
     # void addListener(PortActionListener* listener);
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         self._listeners.append(listener)
         return
 
@@ -874,7 +874,7 @@ class PortActionListenerHolder:
     # @endif
     # void removeListener(PortActionListener* listener);
 
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         len_ = len(self._listeners)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -902,7 +902,7 @@ class PortActionListenerHolder:
     # @param cdrdata Data
     # @endif
     # void notify(const RTC::PortProfile& pprofile);
-    def notify(self, pprofile):
+    def notify(self, pprofile) -> None:
         for listener in self._listeners:
             listener(pprofile)
         return
@@ -933,7 +933,7 @@ class ExecutionContextActionListenerHolder:
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         return
 
@@ -944,7 +944,7 @@ class ExecutionContextActionListenerHolder:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -965,7 +965,7 @@ class ExecutionContextActionListenerHolder:
     # @endif
     # void addListener(ExecutionContextActionListener* listener);
 
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         self._listeners.append(listener)
         return
 
@@ -987,7 +987,7 @@ class ExecutionContextActionListenerHolder:
     # @endif
     # void removeListener(ExecutionContextActionListener* listener);
 
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         len_ = len(self._listeners)
         for i in range(len_):
             idx = (len_ - 1) - i
@@ -1016,7 +1016,7 @@ class ExecutionContextActionListenerHolder:
     # @endif
     # void notify(UniqueId ec_id);
 
-    def notify(self, ec_id):
+    def notify(self, ec_id: int) -> None:
         for listener in self._listeners:
             listener(ec_id)
         return
@@ -1050,7 +1050,7 @@ class ComponentActionListeners:
     #
     # @endif
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         ##
         # @if jp
@@ -1119,7 +1119,7 @@ class ComponentActionListeners:
     # @return
     #
     # @endif
-    def addPreActionListener(self, ltype, listener):
+    def addPreActionListener(self, ltype, listener) -> bool:
         if ltype < len(self.preaction_):
             self.preaction_[ltype].addListener(listener)
             return True
@@ -1144,7 +1144,7 @@ class ComponentActionListeners:
     # @return
     #
     # @endif
-    def addPostActionListener(self, ltype, listener):
+    def addPostActionListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.postaction_):
             self.postaction_[ltype].addListener(listener)
             return True
@@ -1169,7 +1169,7 @@ class ComponentActionListeners:
     # @return
     #
     # @endif
-    def addPortActionListener(self, ltype, listener):
+    def addPortActionListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.portaction_):
             self.portaction_[ltype].addListener(listener)
             return True
@@ -1194,7 +1194,7 @@ class ComponentActionListeners:
     # @return
     #
     # @endif
-    def addECActionListener(self, ltype, listener):
+    def addECActionListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.ecaction_):
             self.ecaction_[ltype].addListener(listener)
             return True
@@ -1219,7 +1219,7 @@ class ComponentActionListeners:
     # @return
     #
     # @endif
-    def removePreActionListener(self, ltype, listener):
+    def removePreActionListener(self, ltype, listener) -> bool:
         if ltype < len(self.preaction_):
             self.preaction_[ltype].removeListener(listener)
             return True
@@ -1244,7 +1244,7 @@ class ComponentActionListeners:
     # @return
     #
     # @endif
-    def removePostActionListener(self, ltype, listener):
+    def removePostActionListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.postaction_):
             self.postaction_[ltype].removeListener(listener)
             return True
@@ -1269,7 +1269,7 @@ class ComponentActionListeners:
     # @return
     #
     # @endif
-    def removePortActionListener(self, ltype, listener):
+    def removePortActionListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.portaction_):
             self.portaction_[ltype].removeListener(listener)
             return True
@@ -1294,7 +1294,7 @@ class ComponentActionListeners:
     # @return
     #
     # @endif
-    def removeECActionListener(self, ltype, listener):
+    def removeECActionListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.ecaction_):
             self.ecaction_[ltype].removeListener(listener)
             return True
@@ -1317,7 +1317,7 @@ class ComponentActionListeners:
     # @param ec_id
     #
     # @endif
-    def notifyPreAction(self, ltype, ec_id):
+    def notifyPreAction(self, ltype: int, ec_id: int) -> None:
         if ltype < len(self.preaction_):
             self.preaction_[ltype].notify(ec_id)
 
@@ -1340,7 +1340,7 @@ class ComponentActionListeners:
     # @param ret
     #
     # @endif
-    def notifyPostAction(self, ltype, ec_id, ret):
+    def notifyPostAction(self, ltype: int, ec_id: int, ret) -> None:
         if ltype < len(self.postaction_):
             self.postaction_[ltype].notify(ec_id, ret)
 
@@ -1361,7 +1361,7 @@ class ComponentActionListeners:
     # @param pprofile
     #
     # @endif
-    def notifyPortAction(self, ltype, pprofile):
+    def notifyPortAction(self, ltype: int, pprofile) -> None:
         if ltype < len(self.portaction_):
             self.portaction_[ltype].notify(pprofile)
 
@@ -1382,6 +1382,6 @@ class ComponentActionListeners:
     # @param ec_id
     #
     # @endif
-    def notifyECAction(self, ltype, ec_id):
+    def notifyECAction(self, ltype: int, ec_id: int) -> None:
         if ltype < len(self.ecaction_):
             self.ecaction_[ltype].notify(ec_id)

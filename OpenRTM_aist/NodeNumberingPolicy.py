@@ -43,7 +43,7 @@ class NodeNumberingPolicy(OpenRTM_aist.NumberingPolicy):
     # @brief virtual destractor
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._mgr = OpenRTM_aist.Manager.instance()
 
     ##
@@ -108,7 +108,7 @@ class NodeNumberingPolicy(OpenRTM_aist.NumberingPolicy):
     #
     # @endif
 
-    def find(self, name):
+    def find(self, name: str) -> bool:
         rtcs = []
         rtc_name = "rtcloc://*/*/"
         rtc_name += name
@@ -121,6 +121,6 @@ class NodeNumberingPolicy(OpenRTM_aist.NumberingPolicy):
             return False
 
 
-def NodeNumberingPolicyInit():
+def NodeNumberingPolicyInit() -> None:
     OpenRTM_aist.NumberingPolicyFactory.instance().addFactory("node_unique",
                                                               OpenRTM_aist.NodeNumberingPolicy)

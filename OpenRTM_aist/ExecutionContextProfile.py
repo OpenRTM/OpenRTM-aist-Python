@@ -17,6 +17,7 @@
 # $Id$
 #
 
+import typing as _typing
 import threading
 from omniORB import CORBA
 
@@ -64,8 +65,7 @@ class ExecutionContextProfile:
     #
     # @endif
     # ExecutionContextProfile(RTC::ExecutionKind kind = RTC::PERIODIC);
-    def __init__(self, kind=RTC.PERIODIC):
-        global DEFAULT_PERIOD
+    def __init__(self, kind=RTC.PERIODIC) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("periodic_ecprofile")
         self._period = OpenRTM_aist.TimeValue(DEFAULT_PERIOD)
         self._rtcout.RTC_TRACE("ExecutionContextProfile.__init__()")
@@ -91,7 +91,7 @@ class ExecutionContextProfile:
     #
     # @endif
 
-    def exit(self):
+    def exit(self) -> None:
         self._rtcout.RTC_TRACE("exit")
 
         # cleanup EC's profile
@@ -121,9 +121,9 @@ class ExecutionContextProfile:
     # @endif
     # void setObjRef(RTC::ExecutionContextService_ptr ec_ptr);
 
-    def setObjRef(self, ec_ptr):
+    def setObjRef(self, ec_ptr: '_typing.Optional[RTC._objref_ExecutionContextService]') -> None:
         self._rtcout.RTC_TRACE("setObjRef()")
-        assert(not CORBA.is_nil(ec_ptr))
+        assert (not CORBA.is_nil(ec_ptr))
         guard = OpenRTM_aist.ScopedLock(self._profileMutex)
         self._ref = ec_ptr
         del guard
@@ -151,7 +151,7 @@ class ExecutionContextProfile:
 
     def getObjRef(self):
         self._rtcout.RTC_TRACE("getObjRef()")
-        guard = OpenRTM_aist.ScopedLock(self._profileMutex)
+        _ = OpenRTM_aist.ScopedLock(self._profileMutex)
         return self._ref
 
     ##
@@ -188,12 +188,12 @@ class ExecutionContextProfile:
     # @endif
     # RTC::ReturnCode_t setRate(double rate);
 
-    def setRate(self, rate):
+    def setRate(self, rate: float):
         self._rtcout.RTC_TRACE("setRate(%f)", rate)
         if rate <= 0.0:
             return RTC.BAD_PARAMETER
 
-        guard = OpenRTM_aist.ScopedLock(self._profileMutex)
+        _ = OpenRTM_aist.ScopedLock(self._profileMutex)
         self._profile.rate = rate
         self._period = OpenRTM_aist.TimeValue(1.0 / rate)
         return RTC.RTC_OK
@@ -245,13 +245,13 @@ class ExecutionContextProfile:
     # double getRate(void) const;
 
     def getRate(self):
-        guard = OpenRTM_aist.ScopedLock(self._profileMutex)
+        _ = OpenRTM_aist.ScopedLock(self._profileMutex)
         return self._profile.rate
 
     # coil::TimeValue getPeriod(void) const;
 
     def getPeriod(self):
-        guard = OpenRTM_aist.ScopedLock(self._profileMutex)
+        _ = OpenRTM_aist.ScopedLock(self._profileMutex)
         return self._period
 
     ##
@@ -340,7 +340,7 @@ class ExecutionContextProfile:
     # RTC::ExecutionKind getKind(void) const;
 
     def getKind(self):
-        guard = OpenRTM_aist.ScopedLock(self._profileMutex)
+        _ = OpenRTM_aist.ScopedLock(self._profileMutex)
         self._rtcout.RTC_TRACE(
             "%s = getKind()",
             self.getKindString(
@@ -365,7 +365,7 @@ class ExecutionContextProfile:
     # @endif
     # RTC::ReturnCode_t setOwner(RTC::LightweightRTObject_ptr comp);
 
-    def setOwner(self, comp):
+    def setOwner(self, comp: '_typing.Optional[RTC._objref_LightweightRTObject]'):
         self._rtcout.RTC_TRACE("setOwner()")
         if CORBA.is_nil(comp):
             return RTC.BAD_PARAMETER
@@ -398,7 +398,7 @@ class ExecutionContextProfile:
 
     def getOwner(self):
         self._rtcout.RTC_TRACE("getOwner()")
-        guard = OpenRTM_aist.ScopedLock(self._profileMutex)
+        _ = OpenRTM_aist.ScopedLock(self._profileMutex)
         return self._profile.owner
 
     ##
@@ -433,7 +433,7 @@ class ExecutionContextProfile:
     # @endif
     # RTC::ReturnCode_t addComponent(RTC::LightweightRTObject_ptr comp);
 
-    def addComponent(self, comp):
+    def addComponent(self, comp: '_typing.Optional[RTC._objref_LightweightRTObject]'):
         self._rtcout.RTC_TRACE("addComponent()")
         if CORBA.is_nil(comp):
             self._rtcout.RTC_ERROR("A nil reference was given.")
@@ -481,7 +481,7 @@ class ExecutionContextProfile:
     # @endif
     # RTC::ReturnCode_t removeComponent(RTC::LightweightRTObject_ptr comp);
 
-    def removeComponent(self, comp):
+    def removeComponent(self, comp: '_typing.Optional[RTC._objref_LightweightRTObject]'):
         self._rtcout.RTC_TRACE("removeComponent()")
         if CORBA.is_nil(comp):
             self._rtcout.RTC_ERROR("A nil reference was given.")
@@ -492,7 +492,7 @@ class ExecutionContextProfile:
             self._rtcout.RTC_ERROR("Narrowing was failed.")
             return RTC.RTC_ERROR
 
-        guard = OpenRTM_aist.ScopedLock(self._profileMutex)
+        _ = OpenRTM_aist.ScopedLock(self._profileMutex)
 
         index_ = OpenRTM_aist.CORBA_SeqUtil.find(self._profile.participants,
                                                  self.find_participant(rtobj_))
@@ -549,7 +549,7 @@ class ExecutionContextProfile:
     # @endif
     # void setProperties(coil::Properties& props);
 
-    def setProperties(self, props):
+    def setProperties(self, props: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_TRACE("setProperties()")
         self._rtcout.RTC_DEBUG(props)
         guard = OpenRTM_aist.ScopedLock(self._profileMutex)
@@ -611,7 +611,7 @@ class ExecutionContextProfile:
 
     def getProfile(self):
         self._rtcout.RTC_TRACE("getProfile()")
-        guard = OpenRTM_aist.ScopedLock(self._profileMutex)
+        _ = OpenRTM_aist.ScopedLock(self._profileMutex)
         return self._profile
 
     ##
@@ -630,7 +630,7 @@ class ExecutionContextProfile:
     # @endif
     # void lock() const;
 
-    def lock(self):
+    def lock(self) -> None:
         self._profileMutex.acquire()
         return
 
@@ -650,12 +650,12 @@ class ExecutionContextProfile:
     # @endif
     # void unlock() const;
 
-    def unlock(self):
+    def unlock(self) -> None:
         self._profileMutex.release()
         return
 
     class find_participant:
-        def __init__(self, comp):
+        def __init__(self, comp) -> None:
             self._comp = comp
             return
 

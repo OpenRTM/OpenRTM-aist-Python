@@ -19,13 +19,10 @@
 
 import OpenRTM_aist
 import RTC
+import typing as _typing
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO, BytesIO
+from io import BytesIO
 
-import sys
 import struct
 import ROSMessageInfo
 
@@ -74,10 +71,7 @@ from sensor_msgs.msg import Image
 # @endif
 #
 def ros_serialize(msg):
-    if sys.version_info[0] == 3:
-        buf = BytesIO()
-    else:
-        buf = StringIO()
+    buf = BytesIO()
 
     start = buf.tell()
     buf.seek(start + 4)
@@ -112,11 +106,8 @@ def ros_serialize(msg):
 #
 # @endif
 #
-def ros_deserialize(bdata, message_type):
-    if sys.version_info[0] == 3:
-        buf = BytesIO()
-    else:
-        buf = StringIO()
+def ros_deserialize(bdata, message_type: '_typing.Callable[..., object]'):
+    buf = BytesIO()
 
     buf.write(bdata)
     buf.seek(0)
@@ -171,7 +162,7 @@ def ros_basic_data(message_type):
         # @param self
         #
         # @endif
-        def __init__(self):
+        def __init__(self) -> None:
             pass
 
         ##
@@ -186,7 +177,7 @@ def ros_basic_data(message_type):
         # @brief self
         #
         # @endif
-        def __del__(self):
+        def __del__(self) -> None:
             pass
 
         ##
@@ -294,7 +285,7 @@ def ros_basic_data(message_type):
 #
 
 
-def ROSBasicDataInit(message_type, name):
+def ROSBasicDataInit(message_type, name) -> None:
     datatypes = [RTC.TimedState, RTC.TimedShort, RTC.TimedLong,
                  RTC.TimedUShort, RTC.TimedULong, RTC.TimedFloat,
                  RTC.TimedDouble, RTC.TimedChar, RTC.TimedWChar,
@@ -342,7 +333,7 @@ class ROSPoint3DData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -357,7 +348,7 @@ class ROSPoint3DData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -456,7 +447,7 @@ class ROSPoint3DData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROSPoint3DInit():
+def ROSPoint3DInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros:geometry_msgs/PointStamped",
                                                               ROSPoint3DData, RTC.TimedPoint3D)
     ROSMessageInfo.ROSMessageInfoList.instance().addInfo("ros:geometry_msgs/PointStamped",
@@ -493,7 +484,7 @@ class ROSQuaternionData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -508,7 +499,7 @@ class ROSQuaternionData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -609,7 +600,7 @@ class ROSQuaternionData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROSQuaternionInit():
+def ROSQuaternionInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros:geometry_msgs/QuaternionStamped",
                                                               ROSQuaternionData, RTC.TimedQuaternion)
     ROSMessageInfo.ROSMessageInfoList.instance().addInfo("ros:geometry_msgs/QuaternionStamped",
@@ -646,7 +637,7 @@ class ROSVector3DData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -661,7 +652,7 @@ class ROSVector3DData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -760,7 +751,7 @@ class ROSVector3DData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROSVector3DInit():
+def ROSVector3DInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros:geometry_msgs/Vector3Stamped",
                                                               ROSVector3DData, RTC.TimedVector3D)
     ROSMessageInfo.ROSMessageInfoList.instance().addInfo("ros:geometry_msgs/Vector3Stamped",
@@ -797,7 +788,7 @@ class ROSCameraImageData(OpenRTM_aist.ByteDataStreamBase):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -812,7 +803,7 @@ class ROSCameraImageData(OpenRTM_aist.ByteDataStreamBase):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -918,7 +909,7 @@ class ROSCameraImageData(OpenRTM_aist.ByteDataStreamBase):
 #
 # @endif
 #
-def ROSCameraImageInit():
+def ROSCameraImageInit() -> None:
     OpenRTM_aist.SerializerFactories.instance().addSerializer("ros:sensor_msgs/Image",
                                                               ROSCameraImageData, RTC.CameraImage)
     ROSMessageInfo.ROSMessageInfoList.instance().addInfo("ros:sensor_msgs/Image",
@@ -937,7 +928,7 @@ def ROSCameraImageInit():
 #
 # @endif
 #
-def ROSSerializerInit():
+def ROSSerializerInit() -> None:
     ROSBasicDataInit(Float32, "ros:std_msgs/Float32")
     ROSBasicDataInit(Float64, "ros:std_msgs/Float64")
     ROSBasicDataInit(Int8, "ros:std_msgs/Int8")

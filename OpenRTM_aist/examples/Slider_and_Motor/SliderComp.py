@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import slider
 import OpenRTM_aist
 import RTC
@@ -72,7 +71,7 @@ def MyModuleInit(manager):
     SliderCompInit(manager)
 
     # Create a component
-    comp = manager.createComponent("SliderComp")
+    _ = manager.createComponent("SliderComp")
 
     print("Componet created")
 

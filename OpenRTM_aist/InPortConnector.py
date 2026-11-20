@@ -53,7 +53,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     #
     # InPortConnector(ConnectorInfo& info,
     #                 CdrBufferBase* buffer);
-    def __init__(self, info, buffer):
+    def __init__(self, info, buffer) -> None:
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("InPortConnector")
         self._profile = info
         self._buffer = buffer
@@ -68,7 +68,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -212,7 +212,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # template<class DataType>
     # void setDataTyep(DataType data);
 
-    def setDataType(self, data):
+    def setDataType(self, data) -> None:
         self._dataType = data
 
     def write(self, data):
@@ -244,6 +244,19 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     def setIsWritableListener(self, listener):
         pass
 
+    ##
+    # @if jp
+    # @brief ガード条件判定時のリスナを設定する。
+    # この機能を使用しないコネクターでは何もしない。
+    # @param listener リスナ。
+    # @else
+    # @brief Set a guard matching listener.
+    # Connectors that do not use guard matching ignore this callback.
+    # @param listener Listener to install.
+    # @endif
+    def setMatchConditionListener(self, listener) -> None:
+        pass
+
     #
     # @if jp
     # @brief データを書き込める状態かを判定
@@ -254,7 +267,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @param self
     # @return
     # @endif
-    def isWritable(self):
+    def isWritable(self, retry: bool = False) -> bool:
         return False
 
     #
@@ -270,7 +283,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @return
     # @endif
 
-    def isReadable(self, retry):
+    def isReadable(self, retry: bool = False) -> bool:
         return False
 
     ##
@@ -290,5 +303,111 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     # @brief
     # @param prop
     # @endif
-    def unsubscribeInterface(self, prop):
+    def unsubscribeInterface(self, prop: list):
         pass
+
+
+##
+# @if jp
+# @class WriteListenerBase
+# @brief WriteListenerBase クラス
+#
+# 書き込み時リスナのベースクラス
+#
+# @since 2.0.0
+#
+# @else
+# @class WriteListenerBase
+# @brief WriteListenerBase class
+#
+#
+# @since 2.0.0
+#
+# @endif
+#
+class WriteListenerBase:
+    ##
+    # @if jp
+    # @brief 仮想コールバック関数
+    # @param self
+    # @param data 書き込むバイト列のデータ
+    # @else
+    # @brief Destructor
+    # @param self
+    # @param data 書き込むバイト列のデータ
+    # @endif
+    def __call__(self, data):
+        return OpenRTM_aist.BufferStatus.PRECONDITION_NOT_MET
+
+##
+# @if jp
+# @class IsWritableListenerBase
+# @brief IsWritableListenerBase クラス
+#
+# 書き込み確認時リスナのベースクラス
+#
+# @since 2.0.0
+#
+# @else
+# @class IsWritableListenerBase
+# @brief IsWritableListenerBase class
+#
+#
+# @since 2.0.0
+#
+# @endif
+#
+
+
+class IsWritableListenerBase:
+    ##
+    # @if jp
+    # @brief 仮想コールバック関数
+    # @param self
+    # @param con InPortConnector
+    # @return True：書き込み可、False：書き込み不可
+    # @else
+    # @brief Destructor
+    # @param self
+    # @param con
+    # @return
+    # @endif
+    def __call__(self, con, retry: bool = False) -> bool:
+        return False
+
+
+##
+# @if jp
+# @class MatchConditionListenerBase
+# @brief MatchConditionListenerBase クラス
+#
+# ガード条件判定時リスナのベースクラス
+#
+# @since 2.1.0
+#
+# @else
+# @class MatchConditionListenerBase
+# @brief MatchConditionListenerBase class
+#
+#
+# @since 2.1.0
+#
+# @endif
+#
+
+
+class MatchConditionListenerBase:
+    ##
+    # @if jp
+    # @brief 仮想コールバック関数
+    # @param self
+    # @param option パラメータ
+    # @return True：書き込み可、False：書き込み不可
+    # @else
+    # @brief Destructor
+    # @param self
+    # @param con
+    # @return
+    # @endif
+    def __call__(self, option=[]) -> bool:
+        return False

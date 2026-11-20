@@ -19,7 +19,7 @@
 #
 #
 
-import sys
+import typing as _typing
 import time
 import math
 import os
@@ -28,8 +28,6 @@ import OpenRTM_aist
 
 ULLONG_MAX = 0xffffffffffffffff
 
-if sys.version_info[0] == 3:
-    long = int
 
 ##
 # @if jp
@@ -72,12 +70,11 @@ class Time:
     # @param self
     #
     # @endif
-    def __init__(self):
-        global usec_per_sec
+    def __init__(self) -> None:
         tm = time.time()
-        tm_f = float(tm - long(tm))     # 小数部の取り出し
-        self.sec = long(tm - tm_f)   # 整数部の取り出し
-        self.usec = long(float(tm_f) * float(usec_per_sec)
+        tm_f = float(tm - int(tm))     # 小数部の取り出し
+        self.sec = int(tm - tm_f)   # 整数部の取り出し
+        self.usec = int(float(tm_f) * float(usec_per_sec)
                          )  # sec -> usec (micro second)
         self._timevalue = OpenRTM_aist.TimeValue(self.sec, self.usec)
         return
@@ -97,8 +94,7 @@ class Time:
     # @else
     #
     # @endif
-    def __sub__(self, tm):
-        global usec_per_sec
+    def __sub__(self, tm: 'Time'):
 
         res = Time()
 
@@ -119,12 +115,11 @@ class Time:
         return res
 
     def gettimeofday(self):
-        global usec_per_sec
 
         tm = time.time()
-        tm_f = float(tm - long(tm))     # 小数部の取り出し
-        self.sec = long(float(tm) - float(tm_f))   # 整数部の取り出し
-        self.usec = long(float(tm_f) * float(usec_per_sec)
+        tm_f = float(tm - int(tm))     # 小数部の取り出し
+        self.sec = int(float(tm) - float(tm_f))   # 整数部の取り出し
+        self.usec = int(float(tm_f) * float(usec_per_sec)
                          )  # sec -> usec (micro second)
         return OpenRTM_aist.TimeValue(self.sec, self.usec)
 
@@ -134,7 +129,7 @@ class Time:
     # inline int settimeofday(const struct timeval *tv , const struct timezone
     # *tz)
 
-    def settimeofday(self, tv, tz):
+    def settimeofday(self, tv: 'OpenRTM_aist.TimeValue', tz: int) -> int:
         if os.name == "nt":
             from ctypes import windll, Structure, c_ushort, byref, c_ulong, c_long
 
@@ -152,9 +147,7 @@ class Time:
                 _fields_ = [('low', c_ulong),
                             ('high', c_long)]
 
-            global usec_per_sec
-
-            tm = long(tv.tv_sec * 1e6) + long(tv.tv_usec)
+            tm = int(tv.tv_sec * 1e6) + int(tv.tv_usec)
             st = SYSTEMTIME(0, 0, 0, 0, 0, 0, 0, 0)
             ft = LARGE_INTEGER(tm & 0xFFFFFFFF, tm >> 32)
             # 100 nanosecond units (since 16010101)
@@ -200,7 +193,7 @@ class TimeMeasure:
     #
     # Constructor
     #
-    def __init__(self, buflen=100):
+    def __init__(self, buflen: int = 100) -> None:
         self._countMax = buflen + 1
         self._record = [
             OpenRTM_aist.TimeValue(
@@ -219,7 +212,7 @@ class TimeMeasure:
     #
     # Begin time measurement for time statistics
     #
-    def tick(self):
+    def tick(self) -> None:
         self._begin = Time().gettimeofday()
         return
 
@@ -228,7 +221,7 @@ class TimeMeasure:
     #
     # End of time measurement for time statistics
     #
-    def tack(self):
+    def tack(self) -> None:
         if self._begin.sec() == 0:
             return
 
@@ -244,7 +237,7 @@ class TimeMeasure:
     def interval(self):
         return self._interval
 
-    def reset(self):
+    def reset(self) -> None:
         self._count = 0
         self._recurred = False
         self._begin = OpenRTM_aist.TimeValue(0.0)
@@ -269,9 +262,8 @@ class TimeMeasure:
     # max_interval, min_interval, mean_interval [ns]
     #
 
-    def getStatistics(self, max_interval=None, min_interval=None,
-                      mean_interval=None, stddev=None):
-        global ULLONG_MAX
+    def getStatistics(self, max_interval: _typing.Optional[_typing.List[float]] = None, min_interval: _typing.Optional[_typing.List[float]] = None,
+                      mean_interval: _typing.Optional[_typing.List[float]] = None, stddev: _typing.Optional[_typing.List[float]] = None):
 
         if not max_interval and not min_interval and not mean_interval and not stddev:
             max_i = [0.0]
@@ -304,13 +296,14 @@ class TimeMeasure:
                 min_interval[0] = trecord_
 
         mean_interval[0] = sum_ / len_
-        stddev[0] = math.sqrt(
-            sq_sum_ / len_ - (mean_interval[0] * mean_interval[0]))
+        # Floating-point rounding can make the variance slightly negative.
+        variance = sq_sum_ / len_ - (mean_interval[0] * mean_interval[0])
+        stddev[0] = math.sqrt(max(variance, 0.0))
 
         return True
 
     class Statistics:
-        def __init__(self, max=None, min=None, mean=None, stdd=None):
+        def __init__(self, max=None, min=None, mean=None, stdd=None) -> None:
             if not max and not min and not mean and not stdd:
                 self._max_interval = 0.0
                 self._min_interval = 0.0

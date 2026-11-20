@@ -24,7 +24,7 @@ import OpenRTM_aist
 #
 # @endif
 class NumberingPolicyBase:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def onCreate(self, obj):
@@ -38,7 +38,7 @@ numberingpolicyfactory = None
 
 
 class NumberingPolicyFactory(OpenRTM_aist.Factory):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)
 
     def instance():

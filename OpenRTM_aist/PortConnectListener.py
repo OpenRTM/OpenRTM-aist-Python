@@ -32,7 +32,7 @@ class Lock:
     # @else
     #
     # @endif
-    def __init__(self, mutex):
+    def __init__(self, mutex) -> None:
         self.mutex = mutex
         self.mutex.acquire()
 
@@ -48,7 +48,7 @@ class Lock:
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.mutex.release()
 
 # ============================================================
@@ -81,7 +81,7 @@ class PortConnectListenerType:
     ON_UPDATE_CONFIG_PARAM = 3
     PORT_CONNECT_LISTENER_NUM = 4
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
 
@@ -113,7 +113,7 @@ class PortConnectListener:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -139,7 +139,7 @@ class PortConnectListener:
     #
     # @endif
     # static const char* toString(PortConnectListenerType type);
-    def toString(status):
+    def toString(status: int):
         typeString = ["ON_NOTIFY_CONNECT",
                       "ON_NOTIFY_DISCONNECT",
                       "ON_UNSUBSCRIBE_INTERFACES",
@@ -159,7 +159,7 @@ class PortConnectListener:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -179,7 +179,7 @@ class PortConnectListener:
     # virtual void operator()(const char* portname,
     #                        RTC::ConnectorProfile& profile) = 0;
 
-    def __call__(self, portname, profile):
+    def __call__(self, portname, profile) -> None:
         return
 
 
@@ -216,7 +216,7 @@ class PortConnectRetListenerType:
     ON_DISCONNECTED = 5
     PORT_CONNECT_RET_LISTENER_NUM = 6
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
 
@@ -253,7 +253,7 @@ class PortConnectRetListener:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     ##
@@ -280,7 +280,7 @@ class PortConnectRetListener:
     # @endif
     # static const char* toString(PortConnectRetListenerType type);
 
-    def toString(status):
+    def toString(status: int):
         typeString = ["ON_PUBLISH_INTERFACES",
                       "ON_CONNECT_NEXTPORT",
                       "ON_SUBSCRIBE_INTERFACES",
@@ -301,7 +301,7 @@ class PortConnectRetListener:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -352,7 +352,7 @@ class PortConnectListenerHolder:
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         self._mutex = threading.RLock()
         return
@@ -364,7 +364,7 @@ class PortConnectListenerHolder:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -385,7 +385,7 @@ class PortConnectListenerHolder:
     # @endif
     # void addListener(PortConnectListener* listener);
 
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         guard = Lock(self._mutex)
         self._listeners.append(listener)
         del guard
@@ -409,7 +409,7 @@ class PortConnectListenerHolder:
     # @endif
     # void removeListener(PortConnectListener* listener);
 
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         guard = Lock(self._mutex)
         len_ = len(self._listeners)
         for i in range(len_):
@@ -438,7 +438,7 @@ class PortConnectListenerHolder:
     # @endif
     # void notify(const char* portname, RTC::ConnectorProfile& profile);
 
-    def notify(self, portname, profile):
+    def notify(self, portname: str, profile) -> None:
         guard = Lock(self._mutex)
         for listener in self._listeners:
             listener(portname, profile)
@@ -472,7 +472,7 @@ class PortConnectRetListenerHolder:
     # @brief Constructor
     # @endif
     # PortConnectRetListenerHolder();
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners = []
         self._mutex = threading.RLock()
         return
@@ -484,7 +484,7 @@ class PortConnectRetListenerHolder:
     # @brief Destructor
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -505,7 +505,7 @@ class PortConnectRetListenerHolder:
     # @endif
     # void addListener(PortConnectRetListener* listener);
 
-    def addListener(self, listener):
+    def addListener(self, listener) -> None:
         guard = Lock(self._mutex)
         self._listeners.append(listener)
         del guard
@@ -529,7 +529,7 @@ class PortConnectRetListenerHolder:
     # @endif
     # void removeListener(PortConnectRetListener* listener);
 
-    def removeListener(self, listener):
+    def removeListener(self, listener) -> None:
         guard = Lock(self._mutex)
         len_ = len(self._listeners)
         for i in range(len_):
@@ -561,7 +561,7 @@ class PortConnectRetListenerHolder:
     # void notify(const char* portname, RTC::ConnectorProfile& profile,
     #            ReturnCode_t ret);
 
-    def notify(self, portname, profile, ret):
+    def notify(self, portname: str, profile, ret) -> None:
         guard = Lock(self._mutex)
         for listener in self._listeners:
             listener(portname, profile, ret)
@@ -585,7 +585,7 @@ class PortConnectListeners:
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         ##
         # @if jp
         # @brief PortConnectListenerType リスナ配列
@@ -629,7 +629,7 @@ class PortConnectListeners:
     # @return
     #
     # @endif
-    def addListener(self, ltype, listener):
+    def addListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.portconnect_):
             self.portconnect_[ltype].addListener(listener)
             return True
@@ -654,7 +654,7 @@ class PortConnectListeners:
     # @return
     #
     # @endif
-    def removeListener(self, ltype, listener):
+    def removeListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.portconnect_):
             self.portconnect_[ltype].removeListener(listener)
             return True
@@ -679,7 +679,7 @@ class PortConnectListeners:
     # @return
     #
     # @endif
-    def addRetListener(self, ltype, listener):
+    def addRetListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.portconnret_):
             self.portconnret_[ltype].addListener(listener)
             return True
@@ -704,7 +704,7 @@ class PortConnectListeners:
     # @return
     #
     # @endif
-    def removeRetListener(self, ltype, listener):
+    def removeRetListener(self, ltype: int, listener) -> bool:
         if ltype < len(self.portconnret_):
             self.portconnret_[ltype].removeListener(listener)
             return True
@@ -729,7 +729,7 @@ class PortConnectListeners:
     # @param profile
     #
     # @endif
-    def notify(self, ltype, portname, profile):
+    def notify(self, ltype: int, portname: str, profile) -> None:
         if ltype < len(self.portconnect_):
             self.portconnect_[ltype].notify(portname, profile)
 
@@ -754,6 +754,6 @@ class PortConnectListeners:
     # @param ret
     #
     # @endif
-    def notifyRet(self, ltype, portname, profile, ret):
+    def notifyRet(self, ltype: int, portname: str, profile, ret) -> None:
         if ltype < len(self.portconnret_):
             self.portconnret_[ltype].notify(portname, profile, ret)

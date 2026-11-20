@@ -17,6 +17,7 @@
 
 import RTC
 import OpenRTM_aist
+import typing as _typing
 
 
 ##
@@ -46,7 +47,7 @@ class PortAdmin:
     #
     # @endif
     class comp_op:
-        def __init__(self, name=None, factory=None):
+        def __init__(self, name=None, factory=None) -> None:
             if name:
                 self._name = name
             if factory:
@@ -64,7 +65,7 @@ class PortAdmin:
     # @endif
 
     class find_port_name:
-        def __init__(self, name):
+        def __init__(self, name: str) -> None:
             self._name = name
 
         def __call__(self, p):
@@ -80,16 +81,16 @@ class PortAdmin:
     # @endif
 
     class del_port:
-        def __init__(self, pa):
+        def __init__(self, pa) -> None:
             self._pa = pa
             return
 
-        def __call__(self, p):
+        def __call__(self, p) -> None:
             self._pa.deletePort(p)
 
     class find_port:
         # find_port(const PortService_ptr& p) : m_port(p) {};
-        def __init__(self, p):
+        def __init__(self, p) -> None:
             self._port = p
 
         # bool operator()(const PortService_ptr& p)
@@ -110,7 +111,7 @@ class PortAdmin:
     # @brief Constructor
     # @endif
 
-    def __init__(self, orb, poa):
+    def __init__(self, orb, poa) -> None:
         # ORB オブジェクト
         self._orb = orb
 
@@ -204,7 +205,7 @@ class PortAdmin:
     #
     # @endif
 
-    def getPortRef(self, port_name):
+    def getPortRef(self, port_name: str):
         index = OpenRTM_aist.CORBA_SeqUtil.find(
             self._portRefs, self.find_port_name(port_name))
         if index >= 0:
@@ -238,7 +239,7 @@ class PortAdmin:
     #
     # @endif
 
-    def getPort(self, port_name):
+    def getPort(self, port_name: str):
         return self._portServants.find(port_name)
 
     ##
@@ -267,7 +268,7 @@ class PortAdmin:
     # @endif
     # void registerPort(PortBase& port);
 
-    def registerPort(self, port):
+    def registerPort(self, port) -> None:
         if not self.addPort(port):
             self._rtcout.RTC_ERROR("registerPort() failed.")
         return
@@ -325,13 +326,13 @@ class PortAdmin:
     #
     # @endif
 
-    def deletePort(self, port):
+    def deletePort(self, port) -> None:
         if not self.removePort(port):
             self._rtcout.RTC_ERROR("deletePort(PortBase&) failed.")
         return
 
     # new interface. since 1.0.0-RELEASE
-    def removePort(self, port):
+    def removePort(self, port) -> '_typing.Optional[bool]':
         try:
             if isinstance(port, RTC._objref_PortService):
                 OpenRTM_aist.CORBA_SeqUtil.erase_if(
@@ -377,7 +378,7 @@ class PortAdmin:
     #
     # @endif
 
-    def deletePortByName(self, port_name):
+    def deletePortByName(self, port_name: str) -> None:
         if not port_name:
             return
 
@@ -393,7 +394,7 @@ class PortAdmin:
     # @endif
     # void PortAdmin::activatePorts()
 
-    def activatePorts(self):
+    def activatePorts(self) -> None:
         ports = self._portServants.getObjects()
         for port in ports:
             port.activateInterfaces()
@@ -408,7 +409,7 @@ class PortAdmin:
     # @endif
     # void PortAdmin::deactivatePorts()
 
-    def deactivatePorts(self):
+    def deactivatePorts(self) -> None:
         ports = self._portServants.getObjects()
         for port in ports:
             port.deactivateInterfaces()
@@ -434,7 +435,7 @@ class PortAdmin:
     #
     # @endif
 
-    def finalizePorts(self):
+    def finalizePorts(self) -> None:
         self.deactivatePorts()
         ports = self._portServants.getObjects()
         for port in ports[::-1]:

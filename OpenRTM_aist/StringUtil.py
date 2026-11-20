@@ -15,11 +15,8 @@
 #     All rights reserved.
 
 import os
-import sys
 import glob
-
-if sys.version_info[0] == 3:
-    long = int
+import typing as _typing
 
 
 ##
@@ -45,7 +42,7 @@ if sys.version_info[0] == 3:
 # @return true: the character is escaped, false: the character is not escaped.
 #
 # @endif
-def isEscaped(_str, pos):
+def isEscaped(_str: str, pos: int):
     pos -= 1
 
     i = 0
@@ -64,10 +61,10 @@ def isEscaped(_str, pos):
 #
 # @endif
 class escape_functor:
-    def __init__(self):
+    def __init__(self) -> None:
         self._str = ""
 
-    def __call__(self, c):
+    def __call__(self, c: str) -> None:
         if c == '\t':
             self._str += "\\t"
         elif c == '\n':
@@ -90,11 +87,11 @@ class escape_functor:
 #
 # @endif
 class unescape_functor:
-    def __init__(self):
+    def __init__(self) -> None:
         self.count = 0
         self._str = ""
 
-    def __call__(self, c):
+    def __call__(self, c: str) -> None:
         if c == "\\":
             self.count += 1
             if not (self.count % 2):
@@ -129,10 +126,10 @@ class unescape_functor:
 #
 # @endif
 class unique_strvec:
-    def __init__(self):
+    def __init__(self) -> None:
         self._str = []
 
-    def __call__(self, s):
+    def __call__(self, s: str):
         if self._str.count(s) == 0:
             return self._str.append(s)
 
@@ -143,7 +140,7 @@ class unique_strvec:
 # @else
 #
 # @endif
-def for_each(_str, instance):
+def for_each(_str, instance: '_typing.Callable[..., object]'):
     for i in _str:
         instance(i)
 
@@ -173,7 +170,7 @@ def for_each(_str, instance):
 # Single quote and dobule quote are not processed.
 #
 # @endif
-def escape(_str):
+def escape(_str: str):
     return for_each(_str, escape_functor())._str
 
 
@@ -201,7 +198,7 @@ def escape(_str):
 # "\'" -> '  <br>
 # "\"" -> "  <br>
 # @endif
-def unescape(_str):
+def unescape(_str: str):
     return for_each(_str, unescape_functor())._str
 
 
@@ -224,7 +221,7 @@ def unescape(_str):
 #
 # @endif
 #
-def eraseBlank(_str):
+def eraseBlank(_str: str):
     _str = _str.strip(" ")
     l_str = _str.split(" ")
     tmp_str = ""
@@ -255,7 +252,7 @@ def eraseBlank(_str):
 # @else
 # @brief Erase the head blank characters of string
 # @endif
-def eraseHeadBlank(_str):
+def eraseHeadBlank(_str: str):
     _str = _str.lstrip('\t ')
     return _str
 
@@ -273,13 +270,12 @@ def eraseHeadBlank(_str):
 # @endif
 
 
-def eraseTailBlank(_str):
+def eraseTailBlank(_str: str):
     #_str = _str.rstrip('\t ')
     if _str == "":
         return _str
 
-    while (_str[-1] == " " or _str[-1] ==
-           '\t') and not isEscaped(_str, len(_str) - 1):
+    while (_str[-1] == " " or _str[-1] == '\t') and not isEscaped(_str, len(_str) - 1):
         _str = _str[:-1]
     return _str
 
@@ -292,7 +288,7 @@ def eraseTailBlank(_str):
 #
 
 
-def normalize(_str):
+def normalize(_str: str):
     _str = _str.strip().lower()
     return _str
 
@@ -311,7 +307,7 @@ def normalize(_str):
 # @else
 # @brief Replace string
 # @endif
-def replaceString(_str, _from, _to):
+def replaceString(_str: str, _from: str, _to: str):
     return _str.replace(_from, _to)
 
 
@@ -329,7 +325,7 @@ def replaceString(_str, _from, _to):
 # @else
 # @brief Split string by delimiter
 # @endif
-def split(input, delimiter):
+def split(input: str, delimiter: str):
     if not input:
         return []
 
@@ -364,7 +360,7 @@ def split(input, delimiter):
 # @else
 # @brief Convert given string to bool value
 # @endif
-def toBool(_str, yes, no, default_value=None):
+def toBool(_str: str, yes: str, no: str, default_value=None):
     if default_value is None:
         default_value = True
 
@@ -406,7 +402,7 @@ def toBool(_str, yes, no, default_value=None):
 #                bool ignore_case = true);
 
 
-def includes(_list, value, ignore_case=True):
+def includes(_list, value, ignore_case: bool = True) -> bool:
     if not (isinstance(_list, list) or isinstance(_list, str)):
         return False
 
@@ -441,7 +437,7 @@ def includes(_list, value, ignore_case=True):
 # @else
 # @brief Investigate whether the given string is absolute path or not
 # @endif
-def isAbsolutePath(str):
+def isAbsolutePath(str: str) -> bool:
     if str[0] == "/":
         return True
     if str[0].isalpha() and str[1] == ":" and (
@@ -468,7 +464,7 @@ def isAbsolutePath(str):
 # @else
 # @brief Investigate whether the given string is URL or not
 # @endif
-def isURL(str):
+def isURL(str: str) -> bool:
     pos = 0
     if str == "":
         return False
@@ -494,8 +490,7 @@ def isURL(str):
 # @brief Convert the given object to st::string.
 # @endif
 def otos(n):
-    if isinstance(n, int) or isinstance(n, str) or isinstance(
-            n, long) or isinstance(n, float):
+    if isinstance(n, (int, str, float)):
         return str(n)
 
 
@@ -512,7 +507,7 @@ def otos(n):
 # @else
 #
 # @endif
-def _stringToList(_type, _str):
+def _stringToList(_type: list, _str: str):
     list_ = split(_str, ",")
     len_ = len(list_)
 
@@ -532,8 +527,6 @@ def _stringToList(_type, _str):
     for i, l in enumerate(list_):
         if isinstance(_type[i], int):
             _type[i] = int(l)
-        elif isinstance(_type[i], long):
-            _type[i] = long(l)
         elif isinstance(_type[i], float):
             _type[i] = float(l)
         elif isinstance(_type[i], str):
@@ -558,16 +551,13 @@ def _stringToList(_type, _str):
 # @else
 # @brief Convert the given object to st::string.
 # @endif
-def stringTo(_type, _str):
+def stringTo(_type, _str: str):
     if not _str:
         return False, _type
 
     try:
         if isinstance(_type, int):
             _type = int(_str)
-            return True, _type
-        elif isinstance(_type, long):
-            _type = long(_str)
             return True, _type
         elif isinstance(_type, float):
             _type = float(_str)
@@ -599,7 +589,7 @@ def stringTo(_type, _str):
 # @else
 #
 # @endif
-def unique_sv(sv):
+def unique_sv(sv: list):
     return for_each(sv, unique_strvec())._str
 
 
@@ -628,7 +618,7 @@ def unique_sv(sv):
 # @return String of CSV creating result
 #
 # @endif
-def flatten(sv, delimiter=", "):
+def flatten(sv: list, delimiter: str = ", "):
     if not sv:
         return ""
 
@@ -652,7 +642,7 @@ def flatten(sv, delimiter=", "):
 # @else
 #
 # @endif
-def toArgv(args):
+def toArgv(args: list):
     return args
 
 
@@ -686,7 +676,7 @@ def toArgv(args):
 # @return decomposed key-values in map
 #
 # @endif
-def urlparam2map(_str):
+def urlparam2map(_str: str):
     qpos = _str.find("?")
     if qpos == -1:
         qpos = 0
@@ -727,7 +717,7 @@ def urlparam2map(_str):
 # @endif
 
 
-def replaceEnv(_str):
+def replaceEnv(_str: str):
     tmp = _str.split("${")
     if len(tmp) < 2:
         return _str
@@ -766,7 +756,7 @@ def replaceEnv(_str):
 #
 #
 # @endif
-def findFile(dir, filename, filelist):
+def findFile(dir: str, filename: str, filelist: list) -> None:
     dirs = glob.glob(os.path.join(dir, "*"))
     for d in dirs:
         if os.path.isdir(d):
@@ -796,7 +786,7 @@ def findFile(dir, filename, filelist):
 #
 #
 # @endif
-def getFileList(dir, ext, filelist=None):
+def getFileList(dir: str, ext: str, filelist=None):
     if filelist is None:
         filelist = []
     dirs = glob.glob(os.path.join(dir, "*"))
@@ -827,7 +817,7 @@ def getFileList(dir, ext, filelist=None):
 #
 #
 # @endif
-def parseArgs(args):
+def parseArgs(args: str):
     inArg = False
     inEscape = False
     inDquote = False

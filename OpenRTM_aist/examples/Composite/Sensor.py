@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import OpenRTM_aist
 import RTC
 import sys
@@ -62,7 +61,7 @@ def MyModuleInit(manager):
     SensorInit(manager)
 
     # Create a component
-    comp = manager.createComponent("Sensor")
+    _ = manager.createComponent("Sensor")
 
 
 def main():

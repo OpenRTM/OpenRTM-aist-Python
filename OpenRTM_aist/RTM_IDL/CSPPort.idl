@@ -2,6 +2,8 @@
 #define CSPPORT_IDL
 
 #include "DataPort.idl"
+#include "SDOPackage.idl"
+#include "BasicDataType.idl"
 
 #pragma prefix "openrtm.aist.go.jp"
 /*!
@@ -36,16 +38,31 @@
  */
 module CSP
 {
+  // READY means a data reservation was actually established.
+  // Other values describe why this request did not establish a reservation.
+  enum Readiness { NOT_READY, READY, SCANNING, NOT_SELECTING };
+
+  typedef SDOPackage::NVList NVList;
   interface InPortCsp
   {
     RTC::PortStatus put(in RTC::OctetSeq data);
-    boolean is_writable(in boolean retry);
+    Readiness is_writable(in boolean retry, in NVList option);
+    boolean match_condition(in NVList option);
   };
   
   interface OutPortCsp
   {
     RTC::PortStatus get(out RTC::OctetSeq data);
-    boolean is_readable(in boolean retry);
+    Readiness is_readable(in boolean retry, in InPortCsp provider);
+  };
+
+  #pragma version InPortCsp 2.0
+  #pragma version OutPortCsp 2.0
+
+  struct TimedNVList
+  {
+	  RTC::Time tm;
+	  NVList data;
   };
 };
 

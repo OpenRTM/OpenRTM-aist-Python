@@ -50,8 +50,7 @@ import RTC
 #
 
 
-class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
-                        OpenRTM_aist.CorbaConsumer):
+class OutPortDSConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
     """
     """
 
@@ -72,8 +71,9 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
     #
     # @endif
     #
-    def __init__(self):
-        OpenRTM_aist.CorbaConsumer.__init__(self, RTC.DataPullService)
+    def __init__(self) -> None:
+        OpenRTM_aist.OutPortCorbaConsumerBase.__init__(
+            self, RTC.DataPullService, "data_service")
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OutPortDSConsumer")
         self._buffer = None
         self._profile = None
@@ -93,43 +93,9 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
     #
     # @endif
     #
-    def __del__(self, CorbaConsumer=OpenRTM_aist.CorbaConsumer):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~OutPortDSConsumer()")
-        CorbaConsumer.__del__(self)
-        pass
-
-    ##
-    # @if jp
-    # @brief 設定初期化
-    #
-    # OutPortConsumerの各種設定を行う。実装クラスでは、与えられた
-    # Propertiesから必要な情報を取得して各種設定を行う。この init() 関
-    # 数は、OutPortProvider生成直後および、接続時にそれぞれ呼ばれる可
-    # 能性がある。したがって、この関数は複数回呼ばれることを想定して記
-    # 述されるべきである。
-    #
-    # @param prop 設定情報
-    #
-    # @else
-    #
-    # @brief Initializing configuration
-    #
-    # This operation would be called to configure in initialization.
-    # In the concrete class, configuration should be performed
-    # getting appropriate information from the given Properties data.
-    # This function might be called right after instantiation and
-    # connection sequence respectivly.  Therefore, this function
-    # should be implemented assuming multiple call.
-    #
-    # @param prop Configuration information
-    #
-    # @endif
-    #
-    # virtual void init(coil::Properties& prop);
-
-    def init(self, prop):
-        self._rtcout.RTC_TRACE("init()")
-        return
+        OpenRTM_aist.OutPortCorbaConsumerBase.__del__(self)
 
     ##
     # @if jp
@@ -158,7 +124,7 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
     #
     # virtual void setBuffer(CdrBufferBase* buffer);
 
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._rtcout.RTC_TRACE("setBuffer()")
         self._buffer = buffer
         return
@@ -166,7 +132,7 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
     # void OutPortDSConsumer::setListener(ConnectorInfo& info,
     #                                           ConnectorListeners* listeners)
 
-    def setListener(self, info, listeners):
+    def setListener(self, info, listeners) -> None:
         self._rtcout.RTC_TRACE("setListener()")
         self._listeners = listeners
         self._profile = info
@@ -237,112 +203,6 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
 
     ##
     # @if jp
-    # @brief データ受信通知への登録
-    #
-    # 指定されたプロパティに基づいて、データ受信通知の受け取りに登録する。
-    #
-    # @param properties 登録情報
-    #
-    # @return 登録処理結果(登録成功:true、登録失敗:false)
-    #
-    # @else
-    # @brief Subscribe the data receive notification
-    #
-    # Subscribe the data receive notification based on specified property
-    # information
-    #
-    # @param properties Subscription information
-    #
-    # @return Subscription result (Successful:true, Failed:false)
-    #
-    # @endif
-    #
-    # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-
-    def subscribeInterface(self, properties):
-        self._rtcout.RTC_TRACE("subscribeInterface()")
-        index = OpenRTM_aist.NVUtil.find_index(
-            properties, "dataport.data_service.outport_ior")
-
-        if index < 0:
-            self._rtcout.RTC_DEBUG(
-                "dataport.data_service.outport_ior not found.")
-            return False
-
-        if OpenRTM_aist.NVUtil.isString(
-                properties, "dataport.data_service.outport_ior"):
-            self._rtcout.RTC_DEBUG("dataport.data_service.outport_ior found.")
-            ior = ""
-            # try:
-            ior = any.from_any(properties[index].value, keep_structs=True)
-            # except:
-            #  self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
-
-            orb = OpenRTM_aist.Manager.instance().getORB()
-            obj = orb.string_to_object(ior)
-            ret = self.setObject(obj)
-            if ret:
-                self._rtcout.RTC_DEBUG("CorbaConsumer was set successfully.")
-            else:
-                self._rtcout.RTC_ERROR("Invalid object reference.")
-
-            return ret
-
-        return False
-
-    ##
-    # @if jp
-    # @brief データ受信通知からの登録解除
-    #
-    # データ受信通知の受け取りから登録を解除する。
-    #
-    # @param properties 登録解除情報
-    #
-    # @else
-    # @brief Unsubscribe the data receive notification
-    #
-    # Unsubscribe the data receive notification.
-    #
-    # @param properties Unsubscription information
-    #
-    # @endif
-    #
-    # virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
-
-    def unsubscribeInterface(self, properties):
-        self._rtcout.RTC_TRACE("unsubscribeInterface()")
-        index = OpenRTM_aist.NVUtil.find_index(properties,
-                                               "dataport.data_service.outport_ior")
-        if index < 0:
-            self._rtcout.RTC_DEBUG(
-                "dataport.data_service.outport_ior not found.")
-            return
-
-        ior = ""
-
-        try:
-            ior = any.from_any(properties[index].value, keep_structs=True)
-
-            if ior:
-                self._rtcout.RTC_DEBUG(
-                    "dataport.data_service.outport_ior found.")
-                orb = OpenRTM_aist.Manager.instance().getORB()
-                obj = orb.string_to_object(ior)
-                if self._ptr(True)._is_equivalent(obj):
-                    self.releaseObject()
-                    self._rtcout.RTC_DEBUG(
-                        "CorbaConsumer's reference was released.")
-                    return
-
-                self._rtcout.RTC_ERROR("hmm. Inconsistent object reference.")
-
-        except BaseException:
-            self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
-
-        return
-
-    ##
-    # @if jp
     # @brief リターンコード変換 (DataPortStatus -> BufferStatus)
     # @else
     # @brief Return codes conversion
@@ -385,7 +245,7 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
     #
     # inline void onBufferWrite(const cdrMemoryStream& data)
 
-    def onBufferWrite(self, data):
+    def onBufferWrite(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_BUFFER_WRITE, self._profile, data)
@@ -403,7 +263,7 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
 
     # inline void onReceived(const cdrMemoryStream& data)
 
-    def onReceived(self, data):
+    def onReceived(self, data: bytes):
         if self._listeners is not None and self._profile is not None:
             _, data = self._listeners.notifyData(
                 OpenRTM_aist.ConnectorDataListenerType.ON_RECEIVED, self._profile, data)
@@ -424,7 +284,7 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
     #
     # inline void onSenderEmpty()
 
-    def onSenderEmpty(self):
+    def onSenderEmpty(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
@@ -433,7 +293,7 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
 
     # inline void onSenderTimeout()
 
-    def onSenderTimeout(self):
+    def onSenderTimeout(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
@@ -442,7 +302,7 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
 
     # inline void onSenderError()
 
-    def onSenderError(self):
+    def onSenderError(self) -> None:
         if self._listeners is not None and self._profile is not None:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
@@ -450,7 +310,7 @@ class OutPortDSConsumer(OpenRTM_aist.OutPortConsumer,
         return
 
 
-def OutPortDSConsumerInit():
+def OutPortDSConsumerInit() -> None:
     factory = OpenRTM_aist.OutPortConsumerFactory.instance()
     factory.addFactory("data_service",
                        OpenRTM_aist.OutPortDSConsumer)
