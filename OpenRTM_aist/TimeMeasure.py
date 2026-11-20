@@ -296,8 +296,9 @@ class TimeMeasure:
                 min_interval[0] = trecord_
 
         mean_interval[0] = sum_ / len_
-        stddev[0] = math.sqrt(
-            sq_sum_ / len_ - (mean_interval[0] * mean_interval[0]))
+        # Floating-point rounding can make the variance slightly negative.
+        variance = sq_sum_ / len_ - (mean_interval[0] * mean_interval[0])
+        stddev[0] = math.sqrt(max(variance, 0.0))
 
         return True
 
