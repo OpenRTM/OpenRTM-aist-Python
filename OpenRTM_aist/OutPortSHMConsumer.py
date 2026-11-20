@@ -60,6 +60,9 @@ class OutPortSHMConsumer(OpenRTM_aist.OutPortCorbaConsumerBase):
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("OutPortSHMConsumer")
 
         self._shmem = OpenRTM_aist.SharedMemory()
+        self._buffer = None
+        self._listeners = None
+        self._profile = None
 
         self._mutex = threading.RLock()
 

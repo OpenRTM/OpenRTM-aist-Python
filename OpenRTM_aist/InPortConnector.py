@@ -244,6 +244,19 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
     def setIsWritableListener(self, listener):
         pass
 
+    ##
+    # @if jp
+    # @brief ガード条件判定時のリスナを設定する。
+    # この機能を使用しないコネクターでは何もしない。
+    # @param listener リスナ。
+    # @else
+    # @brief Set a guard matching listener.
+    # Connectors that do not use guard matching ignore this callback.
+    # @param listener Listener to install.
+    # @endif
+    def setMatchConditionListener(self, listener) -> None:
+        pass
+
     #
     # @if jp
     # @brief データを書き込める状態かを判定

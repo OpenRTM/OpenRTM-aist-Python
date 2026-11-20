@@ -62,25 +62,28 @@ def setProcessAffinity(cpu_num_list: list) -> bool:
 
     if os.name == "nt":
 
-        PROCESS_QUERY_INFORMATION = 0x0400
-        PROCESS_SET_INFORMATION = 0x0200
-
-        flag = PROCESS_QUERY_INFORMATION | PROCESS_SET_INFORMATION
-        ctypes.windll.kernel32.OpenProcess(flag, 0, pid)
-
-        result = ctypes.windll.kernel32.SetProcessAffinityMask(
-            ctypes.windll.kernel32.GetCurrentProcess(), cpu_num)
-        processMask = ctypes.c_long()
-        systemMask = ctypes.c_long()
-        result = ctypes.windll.kernel32.GetProcessAffinityMask(
-            ctypes.windll.kernel32.GetCurrentProcess(),
-            ctypes.byref(processMask),
-            ctypes.byref(systemMask))
-
-        if processMask.value != cpu_num:
+        if cpu_num >= 1 << (ctypes.sizeof(ctypes.c_size_t) * 8):
             return False
-        else:
-            return True
+
+        kernel32 = ctypes.windll.kernel32
+        kernel32.GetCurrentProcess.argtypes = []
+        kernel32.GetCurrentProcess.restype = ctypes.c_void_p
+        kernel32.SetProcessAffinityMask.argtypes = [ctypes.c_void_p, ctypes.c_size_t]
+        kernel32.SetProcessAffinityMask.restype = ctypes.c_int
+        kernel32.GetProcessAffinityMask.argtypes = [
+            ctypes.c_void_p, ctypes.POINTER(ctypes.c_size_t),
+            ctypes.POINTER(ctypes.c_size_t)]
+        kernel32.GetProcessAffinityMask.restype = ctypes.c_int
+
+        process = kernel32.GetCurrentProcess()
+        if not kernel32.SetProcessAffinityMask(process, cpu_num):
+            return False
+        process_mask = ctypes.c_size_t()
+        system_mask = ctypes.c_size_t()
+        if not kernel32.GetProcessAffinityMask(
+                process, ctypes.byref(process_mask), ctypes.byref(system_mask)):
+            return False
+        return process_mask.value == cpu_num
 
     else:
         from ctypes.util import find_library
@@ -126,14 +129,18 @@ def setThreadAffinity(cpu_num_list: list) -> bool:
 
     if os.name == "nt":
 
-        h = ctypes.windll.kernel32.GetCurrentThread()
-
-        result = ctypes.windll.kernel32.SetThreadAffinityMask(h, cpu_num)
-
-        if result != cpu_num:
+        if cpu_num >= 1 << (ctypes.sizeof(ctypes.c_size_t) * 8):
             return False
 
-        return True
+        kernel32 = ctypes.windll.kernel32
+        kernel32.GetCurrentThread.argtypes = []
+        kernel32.GetCurrentThread.restype = ctypes.c_void_p
+        kernel32.SetThreadAffinityMask.argtypes = [ctypes.c_void_p, ctypes.c_size_t]
+        kernel32.SetThreadAffinityMask.restype = ctypes.c_size_t
+
+        thread = kernel32.GetCurrentThread()
+        # Windows returns the previous mask, or zero on failure.
+        return kernel32.SetThreadAffinityMask(thread, cpu_num) != 0
 
     else:
         from ctypes.util import find_library

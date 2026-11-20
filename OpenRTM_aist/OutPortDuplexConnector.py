@@ -362,12 +362,12 @@ class OutPortDuplexConnector(OpenRTM_aist.OutPortConnector):
     # @if jp
     # @brief Buffer を取得する
     #
-    # Connector が保持している Buffer を返す
+    # Duplex Connector はバッファを保持しないため None を返す
     #
     # @else
     # @brief Getting Buffer
     #
-    # This operation returns this connector's buffer
+    # Duplex delivery uses callbacks and does not own a buffer.
     #
     # @endif
     #
