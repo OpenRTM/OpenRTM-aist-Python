@@ -63,8 +63,10 @@ class ROS2TopicManager(object):
     #
     # @endif
     def __init__(self):
+        self._node = None
         self._thread = None
-        self._loop = True
+        self._loop = False
+        self._owns_context = False
 
         #mgr = OpenRTM_aist.Manager.instance()
         # mgr.addManagerActionListener(ManagerActionListener(self))
@@ -108,18 +110,27 @@ class ROS2TopicManager(object):
         args = []
         for i, tmp_arg in enumerate(tmp_args):
             if i % 2 == 0:
-                args.extend(tmp_arg.strip().split(" "))
+                args.extend(tmp_arg.split())
             else:
                 args.append(tmp_arg)
 
         args.insert(0, "manager")
 
-        rclpy.init(args=args)
+        self._owns_context = not rclpy.ok()
+        if self._owns_context:
+            rclpy.init(args=args)
 
-        self._node = Node(prop.getProperty("node.name", "openrtm"))
+        try:
+            self._node = Node(prop.getProperty("node.name", "openrtm"))
+        except Exception:
+            if self._owns_context:
+                rclpy.try_shutdown()
+            raise
+
+        self._loop = True
 
         def spin():
-            while self._loop:
+            while self._loop and rclpy.ok():
                 rclpy.spin_once(self._node, timeout_sec=0.01)
         self._thread = threading.Thread(target=spin)
         self._thread.daemon = True
@@ -140,12 +151,16 @@ class ROS2TopicManager(object):
     # @endif
 
     def shutdown(self):
+        self._loop = False
+        if self._thread:
+            self._thread.join()
+            self._thread = None
         if self._node:
-            self._loop = False
             self._node.destroy_node()
-            # rclpy.try_shutdown()
-            # if self._thread:
-            #  self._thread.join()
+            self._node = None
+        if self._owns_context:
+            rclpy.try_shutdown()
+            self._owns_context = False
 
     ##
     # @if jp
@@ -234,8 +249,10 @@ class ROS2TopicManager(object):
 
         guard = OpenRTM_aist.ScopedLock(mutex)
         if manager is None:
-            manager = ROS2TopicManager()
-            manager.start(prop)
+            candidate = ROS2TopicManager()
+            candidate.start(prop)
+            manager = candidate
+        return manager
 
     init = staticmethod(init)
 
@@ -254,15 +271,7 @@ class ROS2TopicManager(object):
     # @endif
 
     def instance():
-        global manager
-        global mutex
-
-        guard = OpenRTM_aist.ScopedLock(mutex)
-        if manager is None:
-            manager = ROS2TopicManager()
-            manager.start()
-
-        return manager
+        return ROS2TopicManager.init(OpenRTM_aist.Properties())
 
     instance = staticmethod(instance)
 

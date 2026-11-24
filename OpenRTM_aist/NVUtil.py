@@ -200,7 +200,7 @@ def find(nv, name):
     index = OpenRTM_aist.CORBA_SeqUtil.find(nv, nv_find(name))
 
     if index < 0:
-        raise "Not found."
+        raise KeyError(name)
 
     return nv[index].value
 
@@ -314,6 +314,8 @@ def toString(nv, name=None):
         val = any.from_any(ret_value, keep_structs=True)
         if isinstance(val, str):
             str_value = val
+    except KeyError:
+        return ""
     except BaseException:
         print(OpenRTM_aist.Logger.print_exception())
         pass

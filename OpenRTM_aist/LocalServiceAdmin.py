@@ -64,8 +64,7 @@ class LocalServiceAdmin:
     # @endif
     def __init__(self):
         self._services = []
-        self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("LocalServiceAdmin")
-        self._rtcout.RTC_TRACE("LocalServiceAdmin.__init__()")
+        self._rtcout = OpenRTM_aist.LogStream()
         self._factory = OpenRTM_aist.LocalServiceFactory.instance()
         return
 
@@ -90,6 +89,7 @@ class LocalServiceAdmin:
     # void init(coil::Properties& props);
 
     def init(self, props):
+        self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("LocalServiceAdmin")
         self._rtcout.RTC_TRACE("LocalServiceAdmin.init()")
         svcs_ = props.getProperty("enabled_services").split(",")
         svcs_lower_ = [s.lower() for s in svcs_]
@@ -129,9 +129,12 @@ class LocalServiceAdmin:
     # void finalize();
 
     def finalize(self):
-        for svc_ in self._services:
-            svc_.finalize()
-        self._services = []
+        services, self._services = self._services, []
+        try:
+            for service in services:
+                service.finalize()
+        finally:
+            self._rtcout = OpenRTM_aist.LogStream()
 
         return
 
@@ -330,3 +333,8 @@ class LocalServiceAdmin:
         return localserviceadmin
 
     instance = staticmethod(instance)
+
+    @staticmethod
+    def shutdown():
+        if localserviceadmin is not None:
+            localserviceadmin.finalize()

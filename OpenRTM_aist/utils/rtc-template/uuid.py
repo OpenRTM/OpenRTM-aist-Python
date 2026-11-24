@@ -14,6 +14,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
+import hashlib
 import sys
 
 RESERVED_NCS, RFC_4122, RESERVED_MICROSOFT, RESERVED_FUTURE = [
@@ -396,11 +397,19 @@ def uuid1(node=None, clock_seq=None):
                         clock_seq_hi_variant, clock_seq_low, node), version=1)
 
 
+def _uuid_name_bytes(namespace, name):
+    namespace_bytes = namespace.bytes
+    if isinstance(namespace_bytes, str):
+        namespace_bytes = namespace_bytes.encode("latin-1")
+    if isinstance(name, str):
+        name = name.encode("utf-8")
+    return namespace_bytes + name
+
+
 def uuid3(namespace, name):
     """Generate a UUID from the MD5 hash of a namespace UUID and a name."""
-    import md5
-    hash = md5.md5(namespace.bytes + name).digest()
-    return UUID(bytes=hash[:16], version=3)
+    digest = hashlib.md5(_uuid_name_bytes(namespace, name)).hexdigest()
+    return UUID(hex=digest, version=3)
 
 
 def uuid4():
@@ -423,9 +432,8 @@ def uuid4():
 
 def uuid5(namespace, name):
     """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
-    import sha
-    hash = sha.sha(namespace.bytes + name).digest()
-    return UUID(bytes=hash[:16], version=5)
+    digest = hashlib.sha1(_uuid_name_bytes(namespace, name)).hexdigest()
+    return UUID(hex=digest[:32], version=5)
 
 # The following standard UUIDs are for use with uuid3() or uuid5().
 

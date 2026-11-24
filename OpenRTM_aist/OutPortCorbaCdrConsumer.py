@@ -263,16 +263,15 @@ class OutPortCorbaCdrConsumer(
 
     def subscribeInterface(self, properties):
         self._rtcout.RTC_TRACE("subscribeInterface()")
-        index = OpenRTM_aist.NVUtil.find_index(
-            properties, "dataport.corba_cdr.outport_ior")
+        key = self._outportIorKey(properties)
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
 
         if index < 0:
-            self._rtcout.RTC_DEBUG("dataport.corba_cdr.outport_ior not found.")
+            self._rtcout.RTC_DEBUG("%s not found.", key)
             return False
 
-        if OpenRTM_aist.NVUtil.isString(
-                properties, "dataport.corba_cdr.outport_ior"):
-            self._rtcout.RTC_DEBUG("dataport.corba_cdr.outport_ior found.")
+        if OpenRTM_aist.NVUtil.isString(properties, key):
+            self._rtcout.RTC_DEBUG("%s found.", key)
             ior = ""
             # try:
             ior = any.from_any(properties[index].value, keep_structs=True)
@@ -312,10 +311,10 @@ class OutPortCorbaCdrConsumer(
 
     def unsubscribeInterface(self, properties):
         self._rtcout.RTC_TRACE("unsubscribeInterface()")
-        index = OpenRTM_aist.NVUtil.find_index(properties,
-                                               "dataport.corba_cdr.outport_ior")
+        key = self._outportIorKey(properties)
+        index = OpenRTM_aist.NVUtil.find_index(properties, key)
         if index < 0:
-            self._rtcout.RTC_DEBUG("dataport.corba_cdr.outport_ior not found.")
+            self._rtcout.RTC_DEBUG("%s not found.", key)
             return
 
         ior = ""
@@ -324,7 +323,7 @@ class OutPortCorbaCdrConsumer(
             ior = any.from_any(properties[index].value, keep_structs=True)
 
             if ior:
-                self._rtcout.RTC_DEBUG("dataport.corba_cdr.outport_ior found.")
+                self._rtcout.RTC_DEBUG("%s found.", key)
                 orb = OpenRTM_aist.Manager.instance().getORB()
                 obj = orb.string_to_object(ior)
                 if self._ptr(True)._is_equivalent(obj):
@@ -339,6 +338,9 @@ class OutPortCorbaCdrConsumer(
             self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
 
         return
+
+    def _outportIorKey(self, properties):
+        return "dataport.corba_cdr.outport_ior"
 
     ##
     # @if jp
