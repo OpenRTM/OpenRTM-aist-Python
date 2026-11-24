@@ -580,15 +580,17 @@ class CSPEventPort(CSPConnectionInfo, OpenRTM_aist.InPortBase):
 
     def notify_connect(self, connector_profile):
         ret, prof = super(CSPEventPort, self).notify_connect(connector_profile)
-        _ = OpenRTM_aist.ScopedLock(self._connector_mutex)
-
-        for con in self._connectors:
-            from OpenRTM_aist.CSPArbitration import arbiter
-            arbiter.connect(con, self)
-            con._csp_write_admission = lambda con=con: self._admitWrite(con)
-            con.setIsWritableListener(self._writable_listener)
-            con.setWriteListener(self._write_listener)
-            con.setMatchConditionListener(self._condition_listener)
+        guard = OpenRTM_aist.ScopedLock(self._connector_mutex)
+        try:
+            for con in self._connectors:
+                from OpenRTM_aist.CSPArbitration import arbiter
+                arbiter.connect(con, self)
+                con._csp_write_admission = lambda con=con: self._admitWrite(con)
+                con.setIsWritableListener(self._writable_listener)
+                con.setWriteListener(self._write_listener)
+                con.setMatchConditionListener(self._condition_listener)
+        finally:
+            guard.unlock()
         return (ret, prof)
 
     ##

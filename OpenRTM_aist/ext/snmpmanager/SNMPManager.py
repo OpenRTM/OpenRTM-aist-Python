@@ -384,6 +384,12 @@ class SNMPManager:
         self._recovery_cooldown = {}   # キー -> この時刻までは同じ復旧をしない
         self._recovering = False
         self._plan_instances = {}      # 直前の計画で各 RTC が実際に使ったインスタンス名
+        self._module_lock = threading.Lock()
+        self._module_cache = {}
+        self._loadable_checked = set()
+        self._prefetching = False
+        self._loadable_prefetched = False
+        self._cgroup_reset_at = 0.0
         self._battery_enabled = conf.getProperty("snmp.battery.enabled", "NO").upper() == "YES"
         self._battery_extend = conf.getProperty("snmp.battery.extend", "batteryLevel")
         # 追加の監視の値 (snmp.metrics): {名前: OID}。条件・制約で "<名前>" / "<名前>_max" / "<名前>_min" として使う
@@ -1254,6 +1260,10 @@ class SNMPManager:
                 return
             if group is None or not group.get("enabled", True):
                 return
+            mig = config_data.get("migration")
+            if isinstance(mig, dict) and mig.get("mode", "manual") == "auto" and not self._loadable_prefetched:
+                self._loadable_prefetched = True
+                self._prefetch_loadable(config_data)
             if not self._isExecutor(config_data, group, config_data.get("migration"), purpose="migration"):
                 return
             if self._migration_done and not group.get("repeat", True):
@@ -1806,16 +1816,27 @@ class SNMPManager:
         existing = [c for c in plan["components"] if not c.get("create")]
 
         # 1. 各マスターマネージャで生成できるモジュール
-        loadable, languages = {}, {}
+        loadable, languages, fresh = {}, {}, []
         for name in names:
             mgr = self._migration_managers[name]
-            mods = [self._nvlist_to_dict(m.properties) for m in mgr.get_loadable_modules()]
-            loadable[name] = pl.loadable_index(mods)
-            self.__dict__.setdefault("_module_cache", {})[name] = loadable[name]
+            with self._module_lock:
+                checked = name in self._loadable_checked
+            if not checked:
+                idx = pl.loadable_index([self._nvlist_to_dict(m.properties) for m in mgr.get_loadable_modules()])
+                with self._module_lock:
+                    cache = self._module_cache.setdefault(name, {})
+                    for k, v in idx.items():
+                        cache.setdefault(k, v)
+                    self._loadable_checked.add(name)
+                fresh.append(name)
+            with self._module_lock:
+                loadable[name] = dict(self._module_cache.get(name, {}))
             langs = set()
             for slave in mgr.get_slave_managers():
                 langs.add(self._nvlist_to_dict(slave.get_configuration()).get("manager.language", ""))
             languages[name] = langs
+        if strict and fresh:
+            self._reset_cgroup_samples([self._findConditionRobot(n) for n in fresh])
         missing = []
         for c in creates:
             module = pl.module_name_of(c["create"])
@@ -2232,6 +2253,108 @@ class SNMPManager:
 
     ##
     # @~japanese
+    # @brief ロボットの CPU のサンプルを捨てて取り直す (それより前に snmpd が取った値も使わない)
+    #
+    # @param robots ロボット (None は飛ばす)
+    # @~english
+    # @brief Discards the CPU samples of robots and collects them again (values snmpd took before are not used either)
+    #
+    # @param robots robots (None is skipped)
+    # @~
+    def _reset_cgroup_samples(self, robots) -> None:
+        now_ns = int(time.time() * 1e9)
+        for r in robots:
+            if r is None:
+                continue
+            if r.cgroup:
+                r.cgroup["cpu_samples"] = []
+                r.cgroup["cpu_usage_pct"] = None
+            r.last_cg_cpu = None
+            r.cg_ignore_before_ns = now_ns
+
+    ##
+    # @~japanese
+    # @brief 各マスターマネージャの get_loadable_modules() を裏で先に取っておく (復旧・mode: auto のマイグレーションで使う)
+    #
+    # 起動時に自動配置をしない構成だと、最初の復旧 (別のロボットへの切り替え) や移動がその分遅れるため。
+    # 取っている間は相手のコンテナの CPU が一時的に高くなるので、終わったら CPU のサンプルを捨てて取り直す
+    #
+    # @param cfg 構成ファイルの内容
+    # @~english
+    # @brief Gets get_loadable_modules() of each master manager in the background in advance (used by recovery and mode: auto migration)
+    #
+    # Without auto placement at startup, the first recovery (switching to another robot) or migration would be delayed by it.
+    # Since the CPU of the other containers is temporarily high while getting them, the CPU samples are discarded and collected again afterwards
+    #
+    # @param cfg contents of the configuration file
+    # @~
+    def _prefetch_loadable(self, cfg) -> None:
+        import RTCPlacement as pl
+        refs = {n: m for n, m in dict(self._migration_managers).items() if n in cfg.get("managers", {})}
+        self._prefetching = True
+
+        def run() -> None:
+            t0 = time.monotonic()
+            done = []
+            try:
+                for n, mgr in refs.items():
+                    with self._module_lock:
+                        if n in self._loadable_checked:
+                            continue
+                    try:
+                        idx = pl.loadable_index([self._nvlist_to_dict(m.properties) for m in mgr.get_loadable_modules()])
+                    except Exception:
+                        continue
+                    with self._module_lock:
+                        cache = self._module_cache.setdefault(n, {})
+                        for k, v in idx.items():
+                            cache.setdefault(k, v)
+                        self._loadable_checked.add(n)
+                    done.append(n)
+                if done:
+                    self._log(f"prefetched loadable modules of {', '.join(done)} ({time.monotonic() - t0:.1f}s)")
+                    with self._robot_lock:
+                        robots = list(self._robotList) + ([self._robot] if self._robot is not None else [])
+                    self._reset_cgroup_samples(robots)
+                    self._cgroup_reset_at = time.monotonic()
+            finally:
+                self._prefetching = False
+
+        threading.Thread(target=run, daemon=True).start()
+
+    CgroupWaitSeconds = 30.0
+
+    ##
+    # @~japanese
+    # @brief 捨てた CPU のサンプル (get_loadable_modules() の先読みの後) がそろうまで待つ
+    #
+    # 応答のないロボットのサンプルはそろわないので、捨ててから CgroupWaitSeconds 秒までで打ち切る
+    # @~english
+    # @brief Waits until the CPU samples discarded after prefetching get_loadable_modules() are collected again
+    #
+    # Gives up CgroupWaitSeconds seconds after they were discarded, since robots not responding never get samples
+    # @~
+    def _wait_cgroup_samples(self) -> None:
+        min_samples = int(self._conf.getProperty("snmp.placement.min_cpu_samples", "3"))
+        waited, t0 = False, time.monotonic()
+        while self._cgroup_reset_at > 0 and self._running:
+            with self._robot_lock:
+                robots = list(self._robotList) + ([self._robot] if self._robot is not None else [])
+            missing = [r.name for r in robots if r.cgroup and len(r.cgroup.get("cpu_samples", [])) < min_samples]
+            expired = time.monotonic() - self._cgroup_reset_at >= self.CgroupWaitSeconds
+            if not missing or expired:
+                self._cgroup_reset_at = 0.0
+                if waited:
+                    self._log("recovery: CPU samples " + ("collected" if not missing else "still missing for " + ", ".join(missing))
+                              + f" after {time.monotonic() - t0:.1f}s")
+                return
+            if not waited:
+                self._log(f"recovery: waiting for CPU samples of {', '.join(missing)} (discarded after prefetching loadable modules)")
+            waited = True
+            time.sleep(0.5)
+
+    ##
+    # @~japanese
     # @brief 自動復旧の 1 回分の確認と処理
     #
     # @param cfg 構成ファイルの内容
@@ -2244,6 +2367,11 @@ class SNMPManager:
     # @~
     def _recovery_tick(self, cfg, rc) -> None:
         if not self._startup_completed or self._recovering:
+            return
+        if not self._loadable_prefetched:
+            self._loadable_prefetched = True
+            self._prefetch_loadable(cfg)
+        if self._prefetching:
             return
         if not self._isExecutor(cfg, rc, purpose="recovery"):
             self._recovery_first_seen.clear()
@@ -2335,6 +2463,7 @@ class SNMPManager:
                 if not done:
                     results.append(f"{n}: not recovered")
         if switching:
+            self._wait_cgroup_samples()
             try:
                 where = self._recovery_switch_other(cfg, rc, switching)
                 results += [f"{n}: other -> {where.get(n)}" for n, _, _ in switching]
@@ -3335,14 +3464,20 @@ class SNMPManager:
     # @~
     def _module_info(self, manager_name, module):
         import RTCPlacement as pl
-        cache = self.__dict__.setdefault("_module_cache", {})
-        if manager_name not in cache or module not in cache[manager_name]:
+        with self._module_lock:
+            known = module in self._module_cache.get(manager_name, {})
+        if not known:
             try:
-                mods = [self._nvlist_to_dict(m.properties) for m in self._mgr_ref(manager_name).get_loadable_modules()]
-                cache[manager_name] = pl.loadable_index(mods)
+                idx = pl.loadable_index([self._nvlist_to_dict(m.properties)
+                                         for m in self._mgr_ref(manager_name).get_loadable_modules()])
             except Exception:
-                cache.setdefault(manager_name, {})
-        return cache[manager_name].get(module, {})
+                idx = {}
+            with self._module_lock:
+                cache = self._module_cache.setdefault(manager_name, {})
+                for k, v in idx.items():
+                    cache.setdefault(k, v)
+        with self._module_lock:
+            return self._module_cache.get(manager_name, {}).get(module, {})
 
     ##
     # @~japanese
@@ -4626,6 +4761,8 @@ class SNMPManager:
             cpu_ts = int(raw["cpu_usage"][1]) if len(raw["cpu_usage"]) > 1 else int(time.monotonic() * 1e9)
         except (KeyError, ValueError, TypeError, IndexError):
             return
+        if len(raw["cpu_usage"]) > 1 and cpu_ts < robot.cg_ignore_before_ns:
+            return
         now = time.monotonic()
         cg = robot.cgroup or {"cpu_samples": [], "cpu_usage_pct": None}
         prev = robot.last_cg_cpu
@@ -5154,6 +5291,7 @@ class SNMPManager:
             self.cgroup = None          # コンテナ (cgroup) の制限と使用量
             self.metrics = {}           # 追加の監視の値 (snmp.metrics): {名前: 数値か None}
             self.last_cg_cpu = None
+            self.cg_ignore_before_ns = 0
             # 死活監視と通信品質
             self.status = "alive" if is_local else "unknown"   # unknown / alive / dead
             self.last_seen = None       # 最後に応答があった時刻 (monotonic。プローブ・ポーリング・ハートビート)
