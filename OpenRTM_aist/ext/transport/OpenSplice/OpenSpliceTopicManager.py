@@ -41,7 +41,7 @@ mutex = threading.RLock()
 # @endif
 
 
-class OpenSpliceTopicManager(object):
+class OpenSpliceTopicManager:
     """
     """
 

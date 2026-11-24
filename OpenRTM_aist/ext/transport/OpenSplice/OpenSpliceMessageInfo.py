@@ -33,7 +33,7 @@ import OpenRTM_aist
 # @endif
 
 
-class OpenSpliceMessageInfoBase(object):
+class OpenSpliceMessageInfoBase:
     ##
     # @if jp
     # @brief コンストラクタ

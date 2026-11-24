@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import sys
 import time
 
@@ -35,8 +34,7 @@ class SeqIn(OpenRTM_aist.DataFlowComponentBase):
         self._double = RTC.TimedDouble(RTC.Time(0, 0), 0)
 
         self._octetSeq = RTC.TimedOctetSeq(RTC.Time(0, 0), "")
-        if sys.version_info[0] == 3:
-            self._octetSeq.data = self._octetSeq.data.encode("utf-8")
+        self._octetSeq.data = self._octetSeq.data.encode("utf-8")
 
         self._shortSeq = RTC.TimedShortSeq(RTC.Time(0, 0), [])
         self._longSeq = RTC.TimedLongSeq(RTC.Time(0, 0), [])
@@ -81,10 +79,7 @@ class SeqIn(OpenRTM_aist.DataFlowComponentBase):
         floatSeq_ = self._floatSeqIn.read()
         doubleSeq_ = self._doubleSeqIn.read()
 
-        if sys.version_info[0] == 2:
-            octet_data = octetSeq_.data
-        else:
-            octet_data = octetSeq_.data.decode("utf-8")
+        octet_data = octetSeq_.data.decode("utf-8")
 
         octetSize_ = len(octet_data)
         shortSize_ = len(shortSeq_.data)

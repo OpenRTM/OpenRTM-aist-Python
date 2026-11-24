@@ -29,14 +29,10 @@ from ROSTopicManager import ROSTopicManager
 from ROSTopicManager import PublisherLink
 import ROSMessageInfo
 import struct
-import sys
 import os
 import time
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO, BytesIO
+from io import BytesIO
 
 
 ##
@@ -483,10 +479,7 @@ class ROSInPort(OpenRTM_aist.InPortProvider):
                 except rosgraph.network.ROSHandshakeException:
                     self._rtcout.RTC_ERROR("write ROS handshake header")
                     continue
-                if sys.version_info[0] == 3:
-                    read_buff = BytesIO()
-                else:
-                    read_buff = StringIO()
+                read_buff = BytesIO()
                 sock.setblocking(1)
 
                 try:
@@ -825,10 +818,7 @@ class SubListener:
         buff_size = 65536
         start = 0
         size = -1
-        if sys.version_info[0] == 3:
-            b = BytesIO()
-        else:
-            b = StringIO()
+        b = BytesIO()
         self._sock.setblocking(True)
         while not self._shutdown:
             try:

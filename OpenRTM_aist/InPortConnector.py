@@ -312,7 +312,7 @@ class InPortConnector(OpenRTM_aist.ConnectorBase):
 #
 # @endif
 #
-class WriteListenerBase(object):
+class WriteListenerBase:
     ##
     # @if jp
     # @brief 仮想コールバック関数
@@ -346,7 +346,7 @@ class WriteListenerBase(object):
 #
 
 
-class IsWritableListenerBase(object):
+class IsWritableListenerBase:
     ##
     # @if jp
     # @brief 仮想コールバック関数
@@ -383,7 +383,7 @@ class IsWritableListenerBase(object):
 #
 
 
-class MatchConditionListenerBase(object):
+class MatchConditionListenerBase:
     ##
     # @if jp
     # @brief 仮想コールバック関数

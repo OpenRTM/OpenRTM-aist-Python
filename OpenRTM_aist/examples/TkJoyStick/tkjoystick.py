@@ -21,21 +21,14 @@
 # $Log$
 #
 
-from __future__ import print_function
 
 import time
 import math
-import sys
 
 
-if sys.version_info[0] == 2:
-    from Tkinter import (
-        BOTTOM, Button, Canvas, Checkbutton, DoubleVar, Entry, Frame, GROOVE, HORIZONTAL, LEFT, Label, RIGHT, Scale, StringVar, TOP, W, X, Y,
-    )
-else:
-    from tkinter import (
-        BOTTOM, Button, Canvas, Checkbutton, DoubleVar, Entry, Frame, GROOVE, HORIZONTAL, LEFT, Label, RIGHT, Scale, StringVar, TOP, W, X, Y,
-    )
+from tkinter import (
+    BOTTOM, Button, Canvas, Checkbutton, DoubleVar, Entry, Frame, GROOVE, HORIZONTAL, LEFT, Label, RIGHT, Scale, StringVar, TOP, W, X, Y,
+)
 
 
 class ToggleItem:
@@ -138,10 +131,7 @@ class CanvasCircle(ToggleItem):
         else:
             circnum = max(self.width, self.height) / self.pitch
         circrange = range(int(circnum))
-        if sys.version_info[0] == 2:
-            circrange.reverse()
-        else:
-            circrange = list(reversed(circrange))
+        circrange = list(reversed(circrange))
         for i in circrange:
             x0 = self.x - self.pitch * i
             y0 = self.y - self.pitch * i

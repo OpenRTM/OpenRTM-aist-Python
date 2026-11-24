@@ -9,7 +9,6 @@
 #
 
 import binascii
-import sys
 from omniORB import CORBA
 from omniORB import any
 from omniORB import cdrMarshal
@@ -247,22 +246,14 @@ def toIOR(iorstr: str):
         return
 
     pos = len("IOR:")
-    if sys.version_info[0] == 2:
-        iorvalue = [chr(int(i + j, 16))
-                    for (i, j) in zip(iorstr[pos::2], iorstr[(pos + 1)::2])]
-    else:
-        iorvalue = [int(i + j, 16)
-                    for (i, j) in zip(iorstr[pos::2], iorstr[(pos + 1)::2])]
+    iorvalue = [int(i + j, 16)
+                for (i, j) in zip(iorstr[pos::2], iorstr[(pos + 1)::2])]
     # Endian flag
     pos = 0
     endian = (iorvalue[pos] != 0)
     pos += 4
-    if sys.version_info[0] == 2:
-        ior = cdrUnmarshal(_0__GlobalIDL._tc_IOR,
-                           "".join(iorvalue[pos:]), endian)
-    else:
-        ior = cdrUnmarshal(_0__GlobalIDL._tc_IOR,
-                           bytes(iorvalue[pos:]), endian)
+    ior = cdrUnmarshal(_0__GlobalIDL._tc_IOR,
+                       bytes(iorvalue[pos:]), endian)
     return ior
 
 
@@ -271,23 +262,15 @@ def getEndpoints(ior):
     for p in ior.profiles:
         # TAG_INTERNET_IOP
         if p.tag == IOP.TAG_INTERNET_IOP:
-            if sys.version_info[0] == 2:
-                pbody = cdrUnmarshal(_0__GlobalIDL._tc_ProfileBody,
-                                     "".join(p.profile_data), endian)
-            else:
-                pbody = cdrUnmarshal(_0__GlobalIDL._tc_ProfileBody,
-                                     p.profile_data, endian)
+            pbody = cdrUnmarshal(_0__GlobalIDL._tc_ProfileBody,
+                                 p.profile_data, endian)
             addr.append(pbody.address_)
             addr += extractAddrs(pbody.components)
 
         # TAG_MULTIPLE_COMPONENTS
         elif p.tag == IOP.TAG_MULTIPLE_COMPONENTS:
-            if sys.version_info[0] == 2:
-                profiles = cdrUnmarshal(_0__GlobalIDL._tc_MultipleComponentProfile,
-                                        "".join(p.profile_data), endian)
-            else:
-                profiles = cdrUnmarshal(_0__GlobalIDL._tc_MultipleComponentProfile,
-                                        p.profile_data, endian)
+            profiles = cdrUnmarshal(_0__GlobalIDL._tc_MultipleComponentProfile,
+                                    p.profile_data, endian)
             addr += extractAddrs(profiles)
         else:
             print("Other Profile")
@@ -299,28 +282,16 @@ def extractAddrs(comps: list):
     for c in comps:
         # print("TAG component type: ", IOP.ComponentID[c.tag])
         if c.tag == IOP.TAG_ALTERNATE_IIOP_ADDRESS:
-            if sys.version_info[0] == 2:
-                size = cdrUnmarshal(CORBA.TC_ulong,
-                                    "".join(c.component_data[0:4]), endian)
-                address = cdrUnmarshal(_0__GlobalIDL._tc_Address,
-                                       "".join(c.component_data[4:]), endian)
-            else:
-                size = cdrUnmarshal(CORBA.TC_ulong,
-                                    c.component_data[0:4], endian)
-                address = cdrUnmarshal(_0__GlobalIDL._tc_Address,
-                                       c.component_data[4:], endian)
+            size = cdrUnmarshal(CORBA.TC_ulong,
+                                c.component_data[0:4], endian)
+            address = cdrUnmarshal(_0__GlobalIDL._tc_Address,
+                                   c.component_data[4:], endian)
             addr.append(address)
         elif c.tag == IOP.TAG_ORB_TYPE:
-            if sys.version_info[0] == 2:
-                size = cdrUnmarshal(CORBA.TC_ulong,
-                                    "".join(c.component_data[0:4]), endian)
-                orb_type = cdrUnmarshal(CORBA.TC_ulong,
-                                        "".join(c.component_data[4:8]), endian)
-            else:
-                size = cdrUnmarshal(CORBA.TC_ulong,
-                                    c.component_data[0:4], endian)
-                orb_type = cdrUnmarshal(CORBA.TC_ulong,
-                                        c.component_data[4:8], endian)
+            size = cdrUnmarshal(CORBA.TC_ulong,
+                                c.component_data[0:4], endian)
+            orb_type = cdrUnmarshal(CORBA.TC_ulong,
+                                    c.component_data[4:8], endian)
     return addr
 
 ##
@@ -349,12 +320,8 @@ def replaceEndpoint(iorstr: str, endpoint: str):
     for p in ior.profiles:
         # TAG_INTERNET_IOP
         if p.tag == IOP.TAG_INTERNET_IOP:
-            if sys.version_info[0] == 2:
-                pbody = cdrUnmarshal(_0__GlobalIDL._tc_ProfileBody,
-                                     "".join(p.profile_data), endian)
-            else:
-                pbody = cdrUnmarshal(_0__GlobalIDL._tc_ProfileBody,
-                                     p.profile_data, endian)
+            pbody = cdrUnmarshal(_0__GlobalIDL._tc_ProfileBody,
+                                 p.profile_data, endian)
 
             pbody.address_.host = endpoint
             p.profile_data = cdrMarshal(

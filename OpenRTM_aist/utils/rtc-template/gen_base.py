@@ -19,7 +19,6 @@
 
 import typing as _typing
 import os
-from builtins import input as raw_input
 import re
 import time
 import yat
@@ -33,7 +32,7 @@ class gen_base:
         """
         msg = " already exists. Overwrite or merge? (y/n/m)"
         if (os.access(fname, os.F_OK)):
-            ans = raw_input("\"" + fname + "\"" + msg)
+            ans = input("\"" + fname + "\"" + msg)
             if (ans == "y" or ans == "Y"):
                 return open(fname, wmode), None
             elif (ans == "m" or ans == "M"):

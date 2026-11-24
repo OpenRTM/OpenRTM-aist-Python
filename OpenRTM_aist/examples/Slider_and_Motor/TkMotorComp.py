@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import time
 import tkmotor
 import OpenRTM_aist

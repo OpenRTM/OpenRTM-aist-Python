@@ -16,16 +16,13 @@
 
 import typing as _typing
 import hashlib
+from functools import total_ordering
 import subprocess
 import sys
 
 RESERVED_NCS, RFC_4122, RESERVED_MICROSOFT, RESERVED_FUTURE = [
     'reserved for NCS compatibility', 'specified in RFC 4122',
     'reserved for Microsoft compatibility', 'reserved for future definition']
-
-
-if sys.version_info[0] == 3:
-    long = int
 
 
 ##
@@ -40,7 +37,8 @@ if sys.version_info[0] == 3:
 # @else
 #
 # @endif
-class UUID(object):
+@total_ordering
+class UUID:
 
     def __init__(self, hex: '_typing.Optional[str]' = None, bytes: '_typing.Optional[_typing.Union[str, bytes]]' = None, fields: '_typing.Optional[_typing.Tuple[int, int, int, int, int, int]]' = None, int_value: '_typing.Optional[int]' = None,
                  version: '_typing.Optional[int]' = None) -> None:
@@ -73,11 +71,12 @@ class UUID(object):
             hex = hex.strip('{}').replace('-', '')
             if len(hex) != 32:
                 raise ValueError('badly formed hexadecimal UUID string')
-            int_value = long(hex, 16)
+            int_value = int(hex, 16)
         if bytes:
             if len(bytes) != 16:
                 raise ValueError('bytes is not a 16-char string')
-            int_value = long(('%02x' * 16) % tuple(map(ord, bytes)), 16)
+            data = bytes.encode("latin1") if isinstance(bytes, str) else bytes
+            int_value = int.from_bytes(data, byteorder="big")
         if fields:
             if len(fields) != 6:
                 raise ValueError('fields is not a 6-tuple')
@@ -111,9 +110,14 @@ class UUID(object):
             int_value |= version << 76
         self.__dict__['int_value'] = int_value
 
-    def __cmp__(self, other):
+    def __eq__(self, other) -> bool:
         if isinstance(other, UUID):
-            return (self.int_value > other.int_value) - (self.int_value < other.int_value)
+            return self.int_value == other.int_value
+        return NotImplemented
+
+    def __lt__(self, other) -> bool:
+        if isinstance(other, UUID):
+            return self.int_value < other.int_value
         return NotImplemented
 
     def __hash__(self) -> int:

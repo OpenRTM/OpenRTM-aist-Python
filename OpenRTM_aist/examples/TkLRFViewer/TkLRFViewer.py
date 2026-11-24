@@ -26,14 +26,9 @@ import RTC
 import math
 import time
 import sys
-if sys.version_info[0] == 2:
-    from Tix import (
-        BooleanVar, Button, Canvas, Checkbutton, DoubleVar, Frame, GROOVE, HORIZONTAL, LEFT, Label, Scale, StringVar, TOP, Tk, W, X,
-    )
-else:
-    from tkinter.tix import (
-        BooleanVar, Button, Canvas, Checkbutton, DoubleVar, Frame, GROOVE, HORIZONTAL, LEFT, Label, Scale, StringVar, TOP, Tk, W, X,
-    )
+from tkinter.tix import (
+    BooleanVar, Button, Canvas, Checkbutton, DoubleVar, Frame, GROOVE, HORIZONTAL, LEFT, Label, Scale, StringVar, TOP, Tk, W, X,
+)
 
 # Import RTM module
 # This module's spesification

@@ -214,7 +214,7 @@ class ConnectorDataListenerType:
 # @endif
 #
 # TODO: The "object" class inheritance must be removed in Python3
-class ConnectorDataListener(object):
+class ConnectorDataListener:
     """
     """
 

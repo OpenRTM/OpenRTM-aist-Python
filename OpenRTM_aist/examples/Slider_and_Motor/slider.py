@@ -2,19 +2,12 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 
 import time
 import threading
-import sys
-if sys.version_info[0] == 2:
-    from Tkinter import (
-        DoubleVar, Frame, LEFT, Scale, VERTICAL,
-    )
-else:
-    from tkinter import (
-        DoubleVar, Frame, LEFT, Scale, VERTICAL,
-    )
+from tkinter import (
+    DoubleVar, Frame, LEFT, Scale, VERTICAL,
+)
 #import thread
 
 

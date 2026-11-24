@@ -58,7 +58,7 @@ from OpenRTM_aist.CSPArbitration import arbiter
 #
 # @endif
 #
-class CSPManager(object):
+class CSPManager:
     ##
     # @if jp
     #

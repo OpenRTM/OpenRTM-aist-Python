@@ -2411,6 +2411,21 @@ class PortBase(RTC__POA.PortService):
             self._portconnListeners.notifyRet(type, portname, profile, ret)
         return
 
+    def _cleanupFailedConnector(self, connector, provider=None) -> None:
+        if connector is not None:
+            if connector in self._connectors:
+                self._connectors.remove(connector)
+            try:
+                connector.disconnect()
+                return
+            except BaseException:
+                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+        if provider is not None:
+            try:
+                provider.exit()
+            except BaseException:
+                self._rtcout.RTC_ERROR(OpenRTM_aist.Logger.print_exception())
+
     ##
     # @if jp
     #

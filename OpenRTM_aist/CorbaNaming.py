@@ -19,7 +19,6 @@ import omniORB.CORBA as CORBA
 import CosNaming
 import OpenRTM_aist.CORBA_RTCUtil
 import string
-import sys
 import traceback
 import typing as _typing
 
@@ -1226,12 +1225,7 @@ class CorbaNaming:
     # @endif
 
     def __print_exception(self) -> None:
-        if sys.version_info[0:3] >= (2, 4, 0):
-            print(traceback.format_exc())
-        else:
-            _exc_list = traceback.format_exception(*sys.exc_info())
-            _exc_str = "".join(_exc_list)
-            print(_exc_str)
+        print(traceback.format_exc())
 
         return
 

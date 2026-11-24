@@ -13,7 +13,6 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 
-from __future__ import print_function
 import sys
 
 import RTC

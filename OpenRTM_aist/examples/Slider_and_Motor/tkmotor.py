@@ -4,17 +4,10 @@
 
 import math
 import time
-import sys
-if sys.version_info[0] == 2:
-    from Tkinter import (
-        Canvas, Frame, Toplevel,
-    )
-    import thread
-else:
-    from tkinter import (
-        Canvas, Frame, Toplevel,
-    )
-    import _thread as thread
+from tkinter import (
+    Canvas, Frame, Toplevel,
+)
+import _thread as thread
 
 
 class TkMotor(Frame):

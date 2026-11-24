@@ -2,7 +2,6 @@
 # -*- coding:utf-8 -*-
 # -*- Python -*-
 
-from __future__ import print_function
 import NXTBrick20
 import OpenRTM_aist
 import RTC
