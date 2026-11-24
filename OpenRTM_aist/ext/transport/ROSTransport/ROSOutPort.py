@@ -20,10 +20,7 @@
 import OpenRTM_aist
 from ROSTopicManager import ROSTopicManager
 import ROSMessageInfo
-try:
-    import xmlrpclib
-except BaseException:
-    import xmlrpc.client as xmlrpclib
+import xmlrpc.client as xmlrpclib
 from rosgraph.network import write_ros_handshake_header
 import rosgraph.network
 try:
@@ -33,7 +30,6 @@ except ImportError:
 import socket
 import select
 import time
-import sys
 import threading
 import os
 
@@ -71,7 +67,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     #
     # @endif
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.InPortConsumer.__init__(self)
         self._rtcout = OpenRTM_aist.Manager.instance().getLogbuf("ROSOutPort")
         self._properties = None
@@ -103,7 +99,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         self._rtcout.RTC_PARANOID("~ROSOutPort()")
 
     ##
@@ -131,7 +127,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties') -> None:
         self._rtcout.RTC_PARANOID("init()")
 
         if not prop.propertyNames():
@@ -187,7 +183,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         if OpenRTM_aist.toBool(prop.getProperty(
                 "ros.node.anonymous"), "YES", "NO", False):
             self._callerid = self._callerid + "_" + \
-                str(os.getpid()) + "_" + str(int(time.time()*1000))
+                str(os.getpid()) + "_" + str(int(time.time() * 1000))
 
         self._rtcout.RTC_VERBOSE("caller id: %s", self._callerid)
 
@@ -246,7 +242,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     #
     # @endif
     #
-    def connect(self, client_sock, header):
+    def connect(self, client_sock, header) -> None:
         self._rtcout.RTC_PARANOID("connect()")
 
         topic_name = header['topic']
@@ -302,7 +298,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
         self._topicmgr = ROSTopicManager.instance()
         sub = self._topicmgr.getSubscriberLink(client_sock)
         if sub is not None:
-            guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
             sub.setTopic(topic_name)
             sub.setCallerID(caller_id)
             sub.setStatBytes(stat_bytes)
@@ -342,12 +338,12 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     #
     # virtual ReturnCode put(const cdrMemoryStream& data);
 
-    def put(self, data):
+    def put(self, data: bytes):
         self._rtcout.RTC_PARANOID("put()")
 
         ret = self.PORT_OK
         self._message_data_sent += len(data)
-        guard_con = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._con_mutex)
         for connector in self._tcp_connecters[:]:
             try:
                 connector.sendall(data)
@@ -357,8 +353,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
                     self._topicmgr.removeSubscriberLink(connector.getConnection())
                 except OSError as e:
                     self._rtcout.RTC_ERROR(e)
-                    
-                    
+
                 # connector.shutdown(socket.SHUT_RDWR)
 
                 #ret = self.CONNECTION_LOST
@@ -416,7 +411,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-    def subscribeInterface(self, properties):
+    def subscribeInterface(self, properties) -> bool:
         return True
 
     ##
@@ -437,7 +432,7 @@ class ROSOutPort(OpenRTM_aist.InPortConsumer):
     # @endif
     #
     # virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
-    def unsubscribeInterface(self, properties):
+    def unsubscribeInterface(self, properties: list) -> None:
         if self._client is not None:
             try:
                 ret, _, __ = self._client.unregisterPublisher(
@@ -532,7 +527,7 @@ ros_pub_option = [
 #
 
 
-def ROSOutPortInit():
+def ROSOutPortInit() -> None:
     prop = OpenRTM_aist.Properties(defaults_str=ros_pub_option)
     factory = OpenRTM_aist.InPortConsumerFactory.instance()
     factory.addFactory("ros",

@@ -47,7 +47,7 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._properties = []
         self._interfaceType = ""
         self._dataflowType = ""
@@ -81,7 +81,7 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
     # @else
     #
     # @endif
-    def publishInterfaceProfile(self, prop):
+    def publishInterfaceProfile(self, prop: list) -> None:
         self._rtcout.RTC_TRACE("publishInterfaceProfile()")
         OpenRTM_aist.NVUtil.appendStringValue(prop, "dataport.interface_type",
                                               self._interfaceType)
@@ -99,7 +99,7 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
     # @else
     #
     # @endif
-    def publishInterface(self, prop):
+    def publishInterface(self, prop: list) -> bool:
         self._rtcout.RTC_TRACE("publishInterface()")
         if not OpenRTM_aist.NVUtil.isStringValue(prop,
                                                  "dataport.interface_type",
@@ -122,7 +122,7 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
     #
     # @endif
 
-    def setInterfaceType(self, interface_type):
+    def setInterfaceType(self, interface_type: str) -> None:
         self._rtcout.RTC_TRACE("setInterfaceType(%s)", interface_type)
         self._interfaceType = interface_type
 
@@ -139,7 +139,7 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
     #
     # @endif
 
-    def setDataFlowType(self, dataflow_type):
+    def setDataFlowType(self, dataflow_type: str) -> None:
         self._rtcout.RTC_TRACE("setDataFlowType(%s)", dataflow_type)
         self._dataflowType = dataflow_type
 
@@ -156,11 +156,11 @@ class InPortProvider(OpenRTM_aist.DataPortStatus):
     #
     # @endif
 
-    def setSubscriptionType(self, subs_type):
+    def setSubscriptionType(self, subs_type: str) -> None:
         self._rtcout.RTC_TRACE("setSubscriptionType(%s)", subs_type)
         self._subscriptionType = subs_type
 
-    def setConnector(self, connector):
+    def setConnector(self, connector) -> None:
         self._connector = connector
 
 
@@ -168,7 +168,7 @@ inportproviderfactory = None
 
 
 class InPortProviderFactory(OpenRTM_aist.Factory, InPortProvider):
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.Factory.__init__(self)  # Call GlobalFactory.Factory()
         InPortProvider.__init__(self)
         return
@@ -183,5 +183,5 @@ class InPortProviderFactory(OpenRTM_aist.Factory, InPortProvider):
 
     instance = staticmethod(instance)
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass

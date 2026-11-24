@@ -30,14 +30,14 @@ class BufferStatus:
     TIMEOUT = 5
     PRECONDITION_NOT_MET = 6
 
-    def toString(self, status):
-        typeString = ["BUFFER_OK",
+    def toString(self, status: int) -> str:
+        typeString = ("BUFFER_OK",
                       "BUFFER_ERROR",
                       "BUFFER_FULL",
                       "BUFFER_EMPTY",
                       "NOT_SUPPORTED",
                       "TIMEOUT",
-                      "PRECONDITION_NOT_MET"]
+                      "PRECONDITION_NOT_MET")
         if status < len(typeString):
             return typeString[status]
         return ""

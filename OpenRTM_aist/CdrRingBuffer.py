@@ -23,11 +23,11 @@ class CdrRingBuffer(OpenRTM_aist.RingBuffer):
     """
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.RingBuffer.__init__(self)
         pass
 
 
-def CdrRingBufferInit():
+def CdrRingBufferInit() -> None:
     OpenRTM_aist.CdrBufferFactory.instance().addFactory("ring_buffer",
                                                         OpenRTM_aist.CdrRingBuffer)

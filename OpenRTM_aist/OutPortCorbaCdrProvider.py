@@ -66,7 +66,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     #
     # @endif
     #
-    def __init__(self):
+    def __init__(self) -> None:
         OpenRTM_aist.OutPortProvider.__init__(self)
         self.setInterfaceType("corba_cdr")
 
@@ -102,7 +102,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -116,7 +116,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     #
     # @endif
     #
-    def exit(self):
+    def exit(self) -> None:
         oid = self._default_POA().servant_to_id(self)
         self._default_POA().deactivate_object(oid)
 
@@ -148,7 +148,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # virtual void init(coil::Properties& prop);
-    def init(self, prop):
+    def init(self, prop: 'OpenRTM_aist.Properties'):
         pass
 
     ##
@@ -178,7 +178,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     #
     # virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
 
-    def setBuffer(self, buffer):
+    def setBuffer(self, buffer) -> None:
         self._buffer = buffer
         return
 
@@ -229,7 +229,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # virtual void setListener(ConnectorInfo& info,
     #                          ConnectorListeners* listeners);
 
-    def setListener(self, info, listeners):
+    def setListener(self, info: 'OpenRTM_aist.ConnectorInfo', listeners) -> None:
         self._profile = info
         self._listeners = listeners
         return
@@ -260,7 +260,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     #
     # virtual void setConnector(OutPortConnector* connector);
 
-    def setConnector(self, connector):
+    def setConnector(self, connector) -> None:
         self._connector = connector
         return
 
@@ -343,7 +343,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onBufferEmpty()
-    def onBufferEmpty(self):
+    def onBufferEmpty(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_EMPTY, self._profile)
@@ -357,7 +357,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onBufferReadTimeout()
-    def onBufferReadTimeout(self):
+    def onBufferReadTimeout(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_BUFFER_READ_TIMEOUT, self._profile)
@@ -371,7 +371,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onSenderEmpty()
-    def onSenderEmpty(self):
+    def onSenderEmpty(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_EMPTY, self._profile)
@@ -385,7 +385,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onSenderTimeout()
-    def onSenderTimeout(self):
+    def onSenderTimeout(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_TIMEOUT, self._profile)
@@ -399,7 +399,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # @endif
     #
     # inline void onSenderError()
-    def onSenderError(self):
+    def onSenderError(self) -> None:
         if self._listeners and self._profile:
             self._listeners.notify(
                 OpenRTM_aist.ConnectorListenerType.ON_SENDER_ERROR, self._profile)
@@ -415,7 +415,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
     # ::OpenRTM::PortStatus convertReturn(BufferStatus::Enum status,
     #                                     const cdrMemoryStream& data);
 
-    def convertReturn(self, status, data):
+    def convertReturn(self, status: int, data):
         if status == OpenRTM_aist.BufferStatus.BUFFER_OK:
             data = self.onBufferRead(data)
             data = self.onSend(data)
@@ -447,7 +447,7 @@ class OutPortCorbaCdrProvider(OpenRTM_aist.OutPortProvider,
             return (OpenRTM.UNKNOWN_ERROR, data)
 
 
-def OutPortCorbaCdrProviderInit():
+def OutPortCorbaCdrProviderInit() -> None:
     factory = OpenRTM_aist.OutPortProviderFactory.instance()
     factory.addFactory("corba_cdr",
                        OpenRTM_aist.OutPortCorbaCdrProvider)

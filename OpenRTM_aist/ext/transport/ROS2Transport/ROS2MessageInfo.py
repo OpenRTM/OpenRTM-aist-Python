@@ -48,7 +48,7 @@ class ROS2MessageInfoBase(object):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         pass
     ##
     # @if jp
@@ -68,7 +68,7 @@ class ROS2MessageInfoBase(object):
     # @endif
     #
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -87,7 +87,7 @@ class ROS2MessageInfoBase(object):
     #
     # @endif
     #
-    def datatype(self):
+    def datatype(self) -> None:
         return None
 
 
@@ -121,7 +121,7 @@ class ROS2MessageInfo(ROS2MessageInfoBase):
     #
     # @endif
 
-    def __init__(self, datatype):
+    def __init__(self, datatype: str) -> None:
         super(ROS2MessageInfo, self).__init__()
         self._datatype = datatype
     ##
@@ -137,7 +137,7 @@ class ROS2MessageInfo(ROS2MessageInfoBase):
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         pass
     ##
     # @if jp
@@ -189,7 +189,7 @@ class ROS2MessageInfoList:
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         self._data = {}
 
     ##
@@ -209,7 +209,7 @@ class ROS2MessageInfoList:
     #
     # @endif
     #
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -254,7 +254,7 @@ class ROS2MessageInfoList:
     #
     # @endif
     #
-    def addInfo(self, id, info):
+    def addInfo(self, id: str, info: 'ROS2MessageInfo') -> None:
         self._data[id] = info
 
     ##
@@ -274,7 +274,7 @@ class ROS2MessageInfoList:
     #
     # @endif
     #
-    def removeInfo(self, id):
+    def removeInfo(self, id: str) -> bool:
         if id in self._data:
             del self._data[id]
             return True
@@ -295,7 +295,7 @@ class ROS2MessageInfoList:
     #
     # @endif
     #
-    def getInfo(self, id):
+    def getInfo(self, id: str):
         if id in self._data:
             return self._data[id]
         return None

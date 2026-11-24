@@ -72,7 +72,7 @@ def MyModuleInit(manager):
     SliderCompInit(manager)
 
     # Create a component
-    comp = manager.createComponent("SliderComp")
+    _ = manager.createComponent("SliderComp")
 
     print("Componet created")
 

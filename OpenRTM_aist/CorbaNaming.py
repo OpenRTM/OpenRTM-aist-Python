@@ -21,6 +21,7 @@ import OpenRTM_aist.CORBA_RTCUtil
 import string
 import sys
 import traceback
+import typing as _typing
 
 ##
 # @if jp
@@ -79,7 +80,7 @@ class CorbaNaming:
     # @brief Consructor
     #
     # @endif
-    def __init__(self, orb, name_server=None):
+    def __init__(self, orb: 'CORBA.ORB', name_server: _typing.Optional[str] = None) -> None:
         self._orb = orb
         self._nameServer = ""
         self._rootContext = CosNaming.NamingContext._nil
@@ -112,7 +113,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
     ##
@@ -129,7 +130,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def init(self, name_server):
+    def init(self, name_server: str) -> None:
         self._nameServer = OpenRTM_aist.CORBA_RTCUtil.CorbaURI(
             name_server, "NameService").toString()
         obj = self._orb.string_to_object(self._nameServer)
@@ -154,7 +155,7 @@ class CorbaNaming:
     # @endif
     # bool CorbaNaming::isAlive()
 
-    def isAlive(self):
+    def isAlive(self) -> '_typing.Optional[bool]':
         try:
             if self._rootContext._non_existent():
                 return False
@@ -210,7 +211,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def bind(self, name_list, obj, force=None):
+    def bind(self, name_list: '_typing.List[CosNaming.NameComponent]', obj: 'CORBA.Object', force: _typing.Optional[bool] = None) -> None:
         if force is None:
             force = True
 
@@ -254,7 +255,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def bindByString(self, string_name, obj, force=True):
+    def bindByString(self, string_name: str, obj: 'CORBA.Object', force: bool = True) -> None:
         self.bind(self.toName(string_name), obj, force)
 
     ##
@@ -293,7 +294,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def bindRecursive(self, context, name_list, obj):
+    def bindRecursive(self, context, name_list: '_typing.List[CosNaming.NameComponent]', obj: 'CORBA.Object') -> None:
         length = len(name_list)
         cxt = context
         for i in range(length):
@@ -337,7 +338,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def rebind(self, name_list, obj, force=True):
+    def rebind(self, name_list: list, obj: 'CORBA.Object', force: bool = True) -> None:
         # if force is None:
         #  force = True
 
@@ -380,7 +381,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def rebindByString(self, string_name, obj, force=True):
+    def rebindByString(self, string_name: str, obj: 'CORBA.Object', force: bool = True) -> None:
         self.rebind(self.toName(string_name), obj, force)
 
         return
@@ -410,7 +411,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def rebindRecursive(self, context, name_list, obj):
+    def rebindRecursive(self, context, name_list: '_typing.List[CosNaming.NameComponent]', obj: 'CORBA.Object') -> None:
         length = len(name_list)
         for i in range(length):
             if i == length - 1:
@@ -453,7 +454,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def bindContext(self, name, name_cxt, force=True):
+    def bindContext(self, name: '_typing.List[CosNaming.NameComponent]', name_cxt, force: bool = True) -> None:
         if isinstance(name, str):
             self.bind(self.toName(name), name_cxt, force)
         else:
@@ -479,7 +480,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def bindContextRecursive(self, context, name_list, name_cxt):
+    def bindContextRecursive(self, context, name_list: '_typing.List[CosNaming.NameComponent]', name_cxt) -> None:
         self.bindRecursive(context, name_list, name_cxt)
         return
 
@@ -507,7 +508,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def rebindContext(self, name, name_cxt, force=True):
+    def rebindContext(self, name: '_typing.List[CosNaming.NameComponent]', name_cxt, force: bool = True) -> None:
         if isinstance(name, str):
             self.rebind(self.toName(name), name_cxt, force)
         else:
@@ -532,7 +533,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def rebindContextRecursive(self, context, name_list, name_cxt):
+    def rebindContextRecursive(self, context, name_list: '_typing.List[CosNaming.NameComponent]', name_cxt) -> None:
         self.rebindRecursive(context, name_list, name_cxt)
         return
 
@@ -564,7 +565,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def resolve(self, name):
+    def resolve(self, name: list):
         if isinstance(name, str):
             name_ = self.toName(name)
         else:
@@ -601,7 +602,7 @@ class CorbaNaming:
     # void unbind(const CosNaming::Name& name)
     #   throw(NotFound, CannotProceed, InvalidName);
 
-    def unbind(self, name):
+    def unbind(self, name: str) -> None:
         if isinstance(name, str):
             name_ = self.toName(name)
         else:
@@ -657,7 +658,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def bindNewContext(self, name, force=True):
+    def bindNewContext(self, name: '_typing.List[CosNaming.NameComponent]', force: bool = True):
         # if force is None:
         #  force = True
 
@@ -713,7 +714,7 @@ class CorbaNaming:
     #
     # @endif
 
-    def destroy(self, context):
+    def destroy(self, context) -> None:
         context.destroy()
 
     ##
@@ -736,7 +737,7 @@ class CorbaNaming:
     # @brief Destroy the naming context recursively
     # @endif
 
-    def destroyRecursive(self, context):
+    def destroyRecursive(self, context) -> None:
         cont = True
         bl = []
         bi = None
@@ -774,7 +775,7 @@ class CorbaNaming:
     # @brief Destroy all binding
     # @endif
 
-    def clearAll(self):
+    def clearAll(self) -> None:
         self.destroyRecursive(self._rootContext)
         return
 
@@ -793,7 +794,7 @@ class CorbaNaming:
     # @else
     # @endif
 
-    def list(self, name_cxt, how_many, rbl, rbi):
+    def list(self, name_cxt, how_many: int, rbl, rbi) -> None:
         bl, bi = name_cxt.list(how_many)
 
         for i in bl:
@@ -822,7 +823,7 @@ class CorbaNaming:
     # @brief Get string representation of given NameComponent
     # @endif
 
-    def toString(self, name_list):
+    def toString(self, name_list: '_typing.List[CosNaming.NameComponent]'):
         if not name_list:
             raise CosNaming.NamingContext.InvalidName
 
@@ -849,7 +850,7 @@ class CorbaNaming:
     # @brief Get NameComponent from gien string name representation
     # @endif
 
-    def toName(self, sname):
+    def toName(self, sname: str):
         if not sname:
             raise CosNaming.NamingContext.InvalidName
 
@@ -893,7 +894,7 @@ class CorbaNaming:
     # @brief Get URL representation from given addr and string_name
     # @endif
 
-    def toUrl(self, addr, string_name):
+    def toUrl(self, addr: str, string_name: str):
         return self._rootContext.to_url(addr, string_name)
 
     ##
@@ -916,7 +917,7 @@ class CorbaNaming:
     # @brief Resolve from name of string representation and get object
     # @endif
 
-    def resolveStr(self, string_name):
+    def resolveStr(self, string_name: str):
         return self.resolve(self.toName(string_name))
 
     # ============================================================
@@ -944,7 +945,7 @@ class CorbaNaming:
     # @brief Bind of resolve the given name component
     # @endif
 
-    def bindOrResolve(self, context, name_list, obj):
+    def bindOrResolve(self, context, name_list: '_typing.List[CosNaming.NameComponent]', obj: 'CORBA.Object'):
         try:
             context.bind_context(name_list, obj)
             return obj
@@ -974,7 +975,7 @@ class CorbaNaming:
     # @brief Bind of resolve the given name component
     # @endif
 
-    def bindOrResolveContext(self, context, name_list, new_context=None):
+    def bindOrResolveContext(self, context, name_list: '_typing.List[CosNaming.NameComponent]', new_context=None):
         if new_context is None:
             new_cxt = self.newContext()
         else:
@@ -1032,7 +1033,7 @@ class CorbaNaming:
     # @brief Whether the object is NamingContext
     # @endif
 
-    def objIsNamingContext(self, obj):
+    def objIsNamingContext(self, obj) -> bool:
         nc = obj._narrow(CosNaming.NamingContext)
         if CORBA.is_nil(nc):
             return False
@@ -1077,7 +1078,7 @@ class CorbaNaming:
     # @brief Get subset of given name component
     # @endif
 
-    def subName(self, name_list, begin, end=None):
+    def subName(self, name_list: '_typing.List[CosNaming.NameComponent]', begin: int, end: _typing.Optional[int] = None):
         if end is None or end < 0:
             end = len(name_list) - 1
 
@@ -1111,7 +1112,7 @@ class CorbaNaming:
     # @brief Get string representation of name component
     # @endif
 
-    def nameToString(self, name_list, string_name, slen):
+    def nameToString(self, name_list: '_typing.List[CosNaming.NameComponent]', string_name: str, slen):
         for n in name_list:
             for id_ in n.id:
                 if id_ == "/" or id_ == "." or id_ == "\\":
@@ -1147,7 +1148,7 @@ class CorbaNaming:
     # @brief Get string length of the name component's string representation
     # @endif
 
-    def getNameLength(self, name_list):
+    def getNameLength(self, name_list: '_typing.List[CosNaming.NameComponent]'):
         slen = 0
 
         for n in name_list:
@@ -1184,7 +1185,7 @@ class CorbaNaming:
     # @brief Split of string
     # @endif
 
-    def split(self, input, delimiter, results):
+    def split(self, input: str, delimiter: str, results: list):
         delim_size = len(delimiter)
         found_pos = 0
         begin_pos = 0
@@ -1224,7 +1225,7 @@ class CorbaNaming:
     #  Print exception information
     # @endif
 
-    def __print_exception(self):
+    def __print_exception(self) -> None:
         if sys.version_info[0:3] >= (2, 4, 0):
             print(traceback.format_exc())
         else:

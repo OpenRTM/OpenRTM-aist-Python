@@ -115,7 +115,7 @@ def MyModuleInit(manager):
     ConsoleInInit(manager)
 
     # Create a component
-    comp = manager.createComponent("ConsoleIn")
+    _ = manager.createComponent("ConsoleIn")
 
 
 def main():

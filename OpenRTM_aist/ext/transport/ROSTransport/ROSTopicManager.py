@@ -25,6 +25,7 @@ import socket
 import select
 import sys
 import os
+import typing as _typing
 
 try:
     from cStringIO import StringIO
@@ -67,7 +68,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @param self
     #
     # @endif
-    def __init__(self):
+    def __init__(self) -> None:
         super(ROSTopicManager, self).__init__()
         self._node = None
         self._server_sock = None
@@ -98,7 +99,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -114,7 +115,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @param self
     #
     # @endif
-    def start(self):
+    def start(self) -> None:
         self._node = rosgraph.xmlrpc.XmlRpcNode(self._port, self)
         self._node.start()
         self._server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -143,8 +144,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @param publisher
     #
     # @endif
-    def addPublisher(self, publisher):
-        guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
+    def addPublisher(self, publisher) -> None:
+        _ = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
         if self._publishers.count(publisher) == 0:
             self._publishers.append(publisher)
 
@@ -163,8 +164,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @param subscriber
     #
     # @endif
-    def addSubscriber(self, subscriber):
-        guard_sub = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
+    def addSubscriber(self, subscriber) -> None:
+        _ = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
         if self._subscribers.count(subscriber) == 0:
             self._subscribers.append(subscriber)
 
@@ -186,9 +187,9 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
 
-    def removePublisher(self, publisher):
+    def removePublisher(self, publisher) -> '_typing.Optional[bool]':
         try:
-            guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
             self._publishers.remove(publisher)
             return True
         except ValueError:
@@ -211,9 +212,9 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    def removeSubscriber(self, subscriber):
+    def removeSubscriber(self, subscriber) -> '_typing.Optional[bool]':
         try:
-            guard_sub = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
+            _ = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
             self._subscribers.remove(subscriber)
             return True
         except ValueError:
@@ -236,8 +237,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    def existPublisher(self, publisher):
-        guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
+    def existPublisher(self, publisher) -> bool:
+        _ = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
         if self._publishers.count(publisher) > 0:
             return True
         else:
@@ -260,8 +261,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    def existSubscriber(self, subscriber):
-        guard_sub = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
+    def existSubscriber(self, subscriber) -> bool:
+        _ = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
         if self._subscribers.count(subscriber) > 0:
             return True
         else:
@@ -291,7 +292,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    def publisherUpdate(self, caller_id, topic, publishers):
+    def publisherUpdate(self, caller_id, topic, publishers) -> '_typing.Tuple[int, str, int]':
         new_con = []
         old_con = []
         guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
@@ -363,7 +364,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @param self
     #
     # @endif
-    def run(self):
+    def run(self) -> None:
         while not self._shutdownflag:
             try:
                 (client_sock, _) = self._server_sock.accept()
@@ -428,7 +429,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @param self
     #
     # @endif
-    def shutdown(self):
+    def shutdown(self) -> None:
         self._shutdownflag = True
         try:
             self._server_sock.shutdown(socket.SHUT_RDWR)
@@ -495,9 +496,9 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return ret, msg, subs
     #
     # @endif
-    def getSubscriptions(self, caller_id):
+    def getSubscriptions(self, caller_id: str):
         subs = []
-        guard_sub = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._sub_mutex)
         for subscriber in self._subscribers:
             sub = [subscriber.getTopic(), subscriber.datatype()]
             subs.append(sub)
@@ -524,9 +525,9 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return ret, msg, pubs
     #
     # @endif
-    def getPublications(self, caller_id):
+    def getPublications(self, caller_id: str):
         pubs = []
-        guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
         for publisher in self._publishers:
             pub = [publisher.getTopic(), publisher.datatype()]
             pubs.append(pub)
@@ -550,7 +551,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    def getBusStats(self, caller_id):
+    def getBusStats(self, caller_id: str):
         pubStats = []
         guard_p = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
         for pub in self._publishers:
@@ -636,8 +637,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    def hasPublisher(self, topic):
-        guard_pub = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
+    def hasPublisher(self, topic: str) -> bool:
+        _ = OpenRTM_aist.Guard.ScopedLock(self._pub_mutex)
         for publisher in self._publishers:
             if publisher.getTopic() == topic:
                 return True
@@ -681,7 +682,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def getPublisherLinkList(self):
-        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
         return self._tcp_pub_connecters
 
     ##
@@ -700,7 +701,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def getSubscriberLinkList(self):
-        guard_sl = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
         return self._tcp_sub_connecters
 
     ##
@@ -732,8 +733,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    def addPublisherLink(self, connection, caller_id, topic, xmlrpc_uri, listener, task):
-        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+    def addPublisherLink(self, connection, caller_id, topic, xmlrpc_uri, listener, task) -> bool:
+        _ = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
         self._tcp_pub_connecters.append(PublisherLink(
             connection, self._pubnum, caller_id, topic, xmlrpc_uri, listener, task))
         self._pubnum += 1
@@ -756,8 +757,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    def removePublisherLink(self, connection):
-        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+    def removePublisherLink(self, connection) -> bool:
+        _ = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
         for con in self._tcp_pub_connecters[:]:
             if con.getConnection() == connection:
                 con.exit()
@@ -786,8 +787,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    def existPublisherLink(self, caller_id, topic, xmlrpc_uri):
-        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+    def existPublisherLink(self, caller_id: str, topic: str, xmlrpc_uri: str) -> bool:
+        _ = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
         for con in self._tcp_pub_connecters:
             if con.getCallerID() == caller_id and con.getTopic() == topic and con.getURI() == xmlrpc_uri:
                 return True
@@ -810,8 +811,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    def addSubscriberLink(self, connection):
-        guard_sl = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
+    def addSubscriberLink(self, connection) -> bool:
+        _ = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
         self._tcp_sub_connecters.append(
             SubscriberLink(connection, self._subnum))
         self._subnum += 1
@@ -834,8 +835,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @return
     #
     # @endif
-    def removeSubscriberLink(self, connection):
-        guard_sl = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
+    def removeSubscriberLink(self, connection) -> bool:
+        _ = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
         for con in self._tcp_sub_connecters[:]:
             if con.getConnection() == connection:
                 con.exit()
@@ -861,7 +862,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def getPublisherLink(self, connection):
-        guard_pl = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._publink_mutex)
         for con in self._tcp_pub_connecters:
             if con.getConnection() == connection:
                 return con
@@ -885,7 +886,7 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
     def getSubscriberLink(self, connection):
-        guard_sl = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(self._sublink_mutex)
         for con in self._tcp_sub_connecters:
             if con.getConnection() == connection:
                 return con
@@ -903,11 +904,10 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
 
-    def init():
+    def init() -> None:
         global manager
-        global mutex
 
-        guard = OpenRTM_aist.Guard.ScopedLock(mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(mutex)
         if manager is None:
             manager = ROSTopicManager()
             manager.start()
@@ -929,9 +929,8 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     # @endif
     def instance():
         global manager
-        global mutex
 
-        guard = OpenRTM_aist.Guard.ScopedLock(mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(mutex)
         if manager is None:
             manager = ROSTopicManager()
             manager.start()
@@ -952,11 +951,10 @@ class ROSTopicManager(rosgraph.xmlrpc.XmlRpcHandler):
     #
     # @endif
 
-    def shutdown_global():
+    def shutdown_global() -> None:
         global manager
-        global mutex
 
-        guard = OpenRTM_aist.Guard.ScopedLock(mutex)
+        _ = OpenRTM_aist.Guard.ScopedLock(mutex)
         if manager is not None:
             manager.shutdown()
 
@@ -1006,7 +1004,7 @@ class PublisherLink:
     # @param task
     #
     # @endif
-    def __init__(self, conn=None, num=0, caller_id="", topic="", xmlrpc_uri="", listener=None, task=None):
+    def __init__(self, conn=None, num: int = 0, caller_id: str = "", topic: str = "", xmlrpc_uri: str = "", listener=None, task=None) -> None:
         self._conn = conn
         self._num = num
         self._caller_id = caller_id
@@ -1028,7 +1026,7 @@ class PublisherLink:
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -1062,7 +1060,7 @@ class PublisherLink:
     # @param conn
     #
     # @endif
-    def setConnection(self, conn):
+    def setConnection(self, conn) -> None:
         self._conn = conn
 
     ##
@@ -1147,7 +1145,7 @@ class PublisherLink:
     #
     # @endif
 
-    def exit(self):
+    def exit(self) -> None:
         self._conn.shutdown(socket.SHUT_RDWR)
         self._conn.close()
         self._listener.shutdown()
@@ -1231,7 +1229,7 @@ class PublisherLink:
     #
     # @endif
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'PublisherLink') -> bool:
         if self._caller_id == other._caller_id and self._topic == other._topic and self._xmlrpc_uri == other._xmlrpc_uri:
             return True
         else:
@@ -1274,7 +1272,7 @@ class SubscriberLink:
     # @param caller_id
     #
     # @endif
-    def __init__(self, conn=None, num=0, topic="", caller_id=""):
+    def __init__(self, conn=None, num=0, topic="", caller_id="") -> None:
         self._conn = conn
         self._num = num
         self._topic = topic
@@ -1295,7 +1293,7 @@ class SubscriberLink:
     # @brief self
     #
     # @endif
-    def __del__(self):
+    def __del__(self) -> None:
         pass
 
     ##
@@ -1329,7 +1327,7 @@ class SubscriberLink:
     # @param conn
     #
     # @endif
-    def setConnection(self, conn):
+    def setConnection(self, conn) -> None:
         self._conn = conn
 
     ##
@@ -1361,7 +1359,7 @@ class SubscriberLink:
     # @brief self
     #
     # @endif
-    def exit(self):
+    def exit(self) -> None:
         self._conn.shutdown(socket.SHUT_RDWR)
         self._conn.close()
         self._done = True
@@ -1380,7 +1378,7 @@ class SubscriberLink:
     # @param topic
     #
     # @endif
-    def setTopic(self, topic):
+    def setTopic(self, topic: str) -> None:
         self._topic = topic
 
     ##
@@ -1414,7 +1412,7 @@ class SubscriberLink:
     # @param caller_id
     #
     # @endif
-    def setCallerID(self, caller_id):
+    def setCallerID(self, caller_id) -> None:
         self._caller_id = caller_id
 
     ##
@@ -1448,7 +1446,7 @@ class SubscriberLink:
     # @param stat_bytes
     #
     # @endif
-    def setStatBytes(self, stat_bytes):
+    def setStatBytes(self, stat_bytes) -> None:
         self._stat_bytes = stat_bytes
         self._stat_num_msg = 1
 
@@ -1506,7 +1504,7 @@ class SubscriberLink:
     # @endif
     #
 
-    def sendall(self, data):
+    def sendall(self, data) -> None:
         self._conn.sendall(data)
         self._stat_bytes += len(data)
         self._stat_num_msg += 1

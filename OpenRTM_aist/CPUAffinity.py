@@ -28,7 +28,7 @@ import ctypes
 #
 # @endif
 #
-def listToCUPNUM(cpu_num_list):
+def listToCUPNUM(cpu_num_list: list):
     cpu_num = 0
     try:
         for num in cpu_num_list:
@@ -54,7 +54,7 @@ def listToCUPNUM(cpu_num_list):
 #
 # @endif
 #
-def setProcessAffinity(cpu_num_list):
+def setProcessAffinity(cpu_num_list: list) -> bool:
     cpu_num = listToCUPNUM(cpu_num_list)
     if cpu_num == 0:
         return False
@@ -119,7 +119,7 @@ def setProcessAffinity(cpu_num_list):
 #
 # @endif
 #
-def setThreadAffinity(cpu_num_list):
+def setThreadAffinity(cpu_num_list: list) -> bool:
     cpu_num = listToCUPNUM(cpu_num_list)
     if cpu_num == 0:
         return False

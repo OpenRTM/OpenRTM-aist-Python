@@ -16,6 +16,7 @@
 #     All rights reserved.
 
 
+import typing as _typing
 from omniORB import any
 
 import OpenRTM_aist
@@ -46,7 +47,7 @@ import SDOPackage
 # @return NameValue
 #
 # @endif
-def newNV(name, value):
+def newNV(name: str, value):
     try:
         any_val = any.to_any(value)
     except BaseException:
@@ -81,7 +82,7 @@ def newNV(name, value):
 # @endif
 # void copyFromProperties(SDOPackage::NVList& nv, const coil::Properties&
 # prop);
-def copyFromProperties(nv, prop):
+def copyFromProperties(nv: list, prop: 'OpenRTM_aist.Properties') -> None:
     keys = prop.propertyNames()
     nv_len = len(nv)
     if nv_len > 0:
@@ -113,7 +114,7 @@ def copyFromProperties(nv, prop):
 #
 # @endif
 # void copyToProperties(coil::Properties& prop, const SDOPackage::NVList& nv);
-def copyToProperties(prop, nvlist):
+def copyToProperties(prop: 'OpenRTM_aist.Properties', nvlist: list) -> None:
     for nv in nvlist:
         try:
             val = str(any.from_any(nv.value, keep_structs=True))
@@ -129,10 +130,10 @@ def copyToProperties(prop, nvlist):
 # @brief NVList → Properties 変換用ファンクタ
 # @endif
 class to_prop:
-    def __init__(self):
+    def __init__(self) -> None:
         self._prop = OpenRTM_aist.Properties()
 
-    def __call__(self, nv):
+    def __call__(self, nv: 'SDOPackage.NameValue') -> None:
         self._prop.setProperty(nv.name, nv.value)
 
 
@@ -151,7 +152,7 @@ class to_prop:
 #
 # @endif
 # coil::Properties toProperties(const SDOPackage::NVList& nv);
-def toProperties(nv):
+def toProperties(nv: list):
     p = OpenRTM_aist.CORBA_SeqUtil.for_each(nv, to_prop())
     return p._prop
 
@@ -165,7 +166,7 @@ class nv_find:
     """
     """
 
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         self._name = name
 
     def __call__(self, nv):
@@ -196,7 +197,7 @@ class nv_find:
 # @param prop name to seartch in NVList
 #
 # @endif
-def find(nv, name):
+def find(nv: list, name: str):
     index = OpenRTM_aist.CORBA_SeqUtil.find(nv, nv_find(name))
 
     if index < 0:
@@ -221,7 +222,7 @@ def find(nv, name):
 # @else
 #
 # @endif
-def find_index(nv, name):
+def find_index(nv: list, name: str):
     return OpenRTM_aist.CORBA_SeqUtil.find(nv, nv_find(name))
 
 
@@ -241,7 +242,7 @@ def find_index(nv, name):
 # @else
 #
 # @endif
-def isString(nv, name):
+def isString(nv: list, name: str):
     try:
         value = find(nv, name)
         val = any.from_any(value, keep_structs=True)
@@ -268,7 +269,7 @@ def isString(nv, name):
 # @else
 #
 # @endif
-def isStringValue(nv, name, value):
+def isStringValue(nv: list, name: str, value) -> bool:
     if isString(nv, name):
         if toString(nv, name) == value:
             return True
@@ -303,7 +304,7 @@ def isStringValue(nv, name, value):
 # @return string value named by name
 #
 # @endif
-def toString(nv, name=None):
+def toString(nv: list, name: _typing.Optional[str] = None):
     if not name:
         str_ = ""
         return dump_to_stream(str_, nv)
@@ -346,7 +347,7 @@ def toString(nv, name=None):
 # @else
 #
 # @endif
-def appendStringValue(nv, name, value):
+def appendStringValue(nv: list, name: str, value: str) -> bool:
     index = find_index(nv, name)
     if index >= 0:
         tmp_str = nv[index].value.value()
@@ -380,7 +381,7 @@ def appendStringValue(nv, name, value):
 # @else
 #
 # @endif
-def append(dest, src):
+def append(dest: list, src: list) -> None:
     for s in src:
         OpenRTM_aist.CORBA_SeqUtil.push_back(dest, s)
 
@@ -392,7 +393,7 @@ def append(dest, src):
 # @brief Print information configured in NVList as a string type
 # @endif
 # std::ostream& dump_to_stream(std::ostream& out, const SDOPackage::NVList& nv)
-def dump_to_stream(out, nv):
+def dump_to_stream(out, nv: list):
     for n in nv:
         val = any.from_any(n.value, keep_structs=True)
         if isinstance(val, str):
@@ -417,6 +418,6 @@ def dump_to_stream(out, nv):
 # @else
 #
 # @endif
-def dump(nv):
+def dump(nv: list) -> None:
     out = ""
     print(dump_to_stream(out, nv))

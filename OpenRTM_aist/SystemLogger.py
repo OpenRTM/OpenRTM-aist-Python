@@ -66,7 +66,7 @@ class Logger:
     #
     # @endif
 
-    def strToLogLevel(lv):
+    def strToLogLevel(lv: str):
         if lv == "SILENT":
             return Logger.SILENT
         elif lv == "FATAL":
@@ -109,7 +109,7 @@ class Logger:
     #
     # @endif
 
-    def printf(fmt):
+    def printf(fmt: str):
         return fmt
 
     printf = staticmethod(printf)
@@ -171,7 +171,7 @@ class LogStream:
     # @brief constructor.
     #
     # @endif
-    def __init__(self, *args):
+    def __init__(self, *args) -> None:
         self._LogLock = False
         self._log_enable = False
 
@@ -181,16 +181,16 @@ class LogStream:
         self._log_enable = True
         self.guard = None
 
-    def __del__(self):
+    def __del__(self) -> None:
         return
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         for log in self._loggerObj:
             log.shutdown()
         self._loggerObj = []
         return
 
-    def addLogger(self, loggerObj):
+    def addLogger(self, loggerObj) -> None:
         self.acquire()
         self._loggerObj.append(loggerObj)
         self.release()
@@ -208,7 +208,7 @@ class LogStream:
     # @else
     #
     # @endif
-    def setLogLevel(self, level):
+    def setLogLevel(self, level: str) -> None:
         lvl = Logger.strToLogLevel(level)
         for log in self._loggerObj:
             log.setLogLevel(lvl)
@@ -227,7 +227,7 @@ class LogStream:
     #
     # @endif
 
-    def setLogLock(self, lock):
+    def setLogLock(self, lock) -> None:
         if lock == 1:
             self._LogLock = True
         elif lock == 0:
@@ -246,7 +246,7 @@ class LogStream:
     #
     # @endif
 
-    def enableLogLock(self):
+    def enableLogLock(self) -> None:
         self._LogLock = True
 
     ##
@@ -262,7 +262,7 @@ class LogStream:
     #
     # @endif
 
-    def disableLogLock(self):
+    def disableLogLock(self) -> None:
         self._LogLock = False
 
     ##
@@ -277,7 +277,7 @@ class LogStream:
     #
     # @endif
 
-    def acquire(self):
+    def acquire(self) -> None:
         if self._LogLock:
             self.guard = OpenRTM_aist.ScopedLock(self._mutex)
 
@@ -293,7 +293,7 @@ class LogStream:
     #
     # @endif
 
-    def release(self):
+    def release(self) -> None:
         if self._LogLock and self.guard:
             del self.guard
 
@@ -316,7 +316,7 @@ class LogStream:
     #
     # @endif
 
-    def RTC_LOG(self, LV, msg, opt=None):
+    def RTC_LOG(self, LV: int, msg: str, opt=None) -> None:
         if self._log_enable:
             self.acquire()
 
@@ -352,7 +352,7 @@ class LogStream:
     #
     # @endif
 
-    def RTC_FATAL(self, msg, opt=None):
+    def RTC_FATAL(self, msg: str, opt=None) -> None:
         if self._log_enable:
             self.acquire()
 
@@ -389,7 +389,7 @@ class LogStream:
     #
     # @endif
 
-    def RTC_ERROR(self, msg, opt=None):
+    def RTC_ERROR(self, msg, opt=None) -> None:
         if self._log_enable:
             self.acquire()
 
@@ -430,7 +430,7 @@ class LogStream:
     #
     # @endif
 
-    def RTC_WARN(self, msg, opt=None):
+    def RTC_WARN(self, msg, opt=None) -> None:
         if self._log_enable:
             self.acquire()
 
@@ -471,7 +471,7 @@ class LogStream:
     #
     # @endif
 
-    def RTC_INFO(self, msg, opt=None):
+    def RTC_INFO(self, msg: str, opt=None) -> None:
         if self._log_enable:
             self.acquire()
 
@@ -512,7 +512,7 @@ class LogStream:
     #
     # @endif
 
-    def RTC_DEBUG(self, msg, opt=None):
+    def RTC_DEBUG(self, msg, opt=None) -> None:
         if self._log_enable:
             self.acquire()
 
@@ -553,7 +553,7 @@ class LogStream:
     #
     # @endif
 
-    def RTC_TRACE(self, msg, opt=None):
+    def RTC_TRACE(self, msg: str, opt=None) -> None:
         if self._log_enable:
             self.acquire()
 
@@ -596,7 +596,7 @@ class LogStream:
     #
     # @endif
 
-    def RTC_VERBOSE(self, msg, opt=None):
+    def RTC_VERBOSE(self, msg: str, opt=None) -> None:
         if self._log_enable:
             self.acquire()
 
@@ -638,7 +638,7 @@ class LogStream:
     #
     # @endif
 
-    def RTC_PARANOID(self, msg, opt=None):
+    def RTC_PARANOID(self, msg: str, opt=None) -> None:
         if self._log_enable:
             self.acquire()
 
@@ -656,7 +656,7 @@ class LogStream:
 
             self.release()
 
-    def getLogger(self, name):
+    def getLogger(self, name: str):
         syslogger = copy.copy(self)
         syslogger._logger_name = name
         return syslogger

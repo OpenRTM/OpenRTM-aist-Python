@@ -22,7 +22,7 @@ import os
 import OpenRTM_aist
 
 
-def main():
+def main() -> None:
     manager = OpenRTM_aist.Manager.init(sys.argv)
 
     manager.activateManager()

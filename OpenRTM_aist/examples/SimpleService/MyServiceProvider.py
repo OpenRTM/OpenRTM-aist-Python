@@ -4,7 +4,6 @@
 
 from __future__ import print_function
 import sys
-import string
 import time
 
 import RTC
@@ -118,7 +117,7 @@ def MyModuleInit(manager):
     MyServiceProviderInit(manager)
 
     # Create a component
-    comp = manager.createComponent("MyServiceProvider")
+    _ = manager.createComponent("MyServiceProvider")
 
     """
   rtobj = manager.getPOA().servant_to_reference(comp)._narrow(RTC.RTObject)

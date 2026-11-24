@@ -51,7 +51,7 @@ class DataFlowComponentBase(OpenRTM_aist.RTObject_impl,
     # @else
     # @brief Constructor
     # @endif
-    def __init__(self, manager=None, orb=None, poa=None):
+    def __init__(self, manager=None, orb=None, poa=None) -> None:
         OpenRTM_aist.RTObject_impl.__init__(self, manager, orb, poa)
         self._objref = self._this()
 
@@ -112,7 +112,7 @@ class DataFlowComponentBase(OpenRTM_aist.RTObject_impl,
     #
     # @endif
 
-    def on_execute(self, ec_id):
+    def on_execute(self, ec_id: int):
         self._rtcout.RTC_TRACE("on_execute(%d)", ec_id)
         ret = RTC.RTC_ERROR
         try:
@@ -172,7 +172,7 @@ class DataFlowComponentBase(OpenRTM_aist.RTObject_impl,
     #
     # @endif
 
-    def on_state_update(self, ec_id):
+    def on_state_update(self, ec_id: int):
         self._rtcout.RTC_TRACE("on_state_update(%d)", ec_id)
         ret = RTC.RTC_ERROR
         try:
@@ -220,7 +220,7 @@ class DataFlowComponentBase(OpenRTM_aist.RTObject_impl,
     #
     # @endif
 
-    def on_rate_changed(self, ec_id):
+    def on_rate_changed(self, ec_id: int):
         self._rtcout.RTC_TRACE("on_rate_changed(%d)", ec_id)
         ret = RTC.RTC_ERROR
         try:

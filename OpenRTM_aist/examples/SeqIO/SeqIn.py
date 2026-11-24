@@ -145,7 +145,7 @@ def MyModuleInit(manager):
     SeqInInit(manager)
 
     # Create a component
-    comp = manager.createComponent("SeqIn")
+    _ = manager.createComponent("SeqIn")
 
 
 def main():
